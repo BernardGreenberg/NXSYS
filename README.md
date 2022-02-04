@@ -29,7 +29,7 @@ So Win32 NXSYS is frozen in time at 2016, at least for now, and cannot be easily
 
 ## Status of Mac Version
 
-I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about changes necessary to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of 1`708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013.  If I succeed, the changes will be compatible upon existent interlockings.
+I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about changes necessary to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013.  If I succeed, the changes will be compatible upon existent interlockings.
 
 I may or may not fix reported bugs and post changes. Contact me via GitHub. I expect to post fixes to bugs I encounter from hereon in.
 
