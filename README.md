@@ -13,7 +13,7 @@ This code builds completely and cleanly under XCode 13.2.1 (13C100) under MacOS 
 
 There remain (as expectable) some minor constraint irritations in the Interface  Builder layouts that do not impede or flag building.
 
-The file `NXSYS.html` in the Documentation folder is a comprehensive description of the application and its capabilities. It is the source for the distributed PDF (although building that PDF so that external and internal links work seems to be a challenging research problem that depends on one's own computer). Read everything in that folder.
+The file `NXSYS.html` in the Documentation folder is a comprehensive description of the application and its capabilities. It is the source for the distributed PDF (although building that PDF so that external and internal links work seems to be a challenging research problem that depends on one's own computer). Read everything in that folder.  There is a [Demo video on YouTube](https://www.youtube.com/watch?v=nAgy_TZ5Dcs).
 
 ## Code languages and Windows version
 
