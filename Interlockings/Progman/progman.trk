@@ -1,0 +1,1028 @@
+(route "Progman St. Interlocking  --  of 2/23/98" #\A 700 north
+		:CRUISING-FEET-PER-SECOND 75
+		:TRAIN-LENGTH-FEET 600
+		:YELLOW-FEET-PER-SECOND 40
+                :HELP-TEXT("Progman St. &Interlocking info"
+"Scenario specific help on Progman St. Interlocking
+
+Status: 30 Sept 2014
+
+Progman St. (named after the Windows 3.1 \"Program manager\" present at its inception) is an imaginary medium-sized interlocking constructed for didactic purposes.  While it resembles the two interlockings at what were once the ends of the erstwhile Brighton Express, 57th St. and Brighton Beach, it is simpler than either (omitting the far end), and sports an additional gratutious crossover (#21).
+
+This interlocking is for didactic purposes, and takes shortcuts and indulges in simplifications toward that end: unlike either real interlocking, it provides \"dangerous\" exits on the two Northbound tracks, with no traffic control, for didactic purposes.  Similarly, there is no southbound protection on the southbound express track (used as a terminal) because there is no off-screen right-of-way.  The interlocking also employs dwarf signals, which do not have stops, which are substandard in modern times.  The interlocking also lacks the chains of ST and GT signals that would protect a real terminal.  See the other Version 2 scenarios for examples of up-to-standard signalling with full and correct protections.
+
+Please see the main (Version 1) helpfile, section 4.1, for more about Progman St., and Section 1.2, \"Getting Started\", which uses this layout to explain NXSYS."
+))
+
+;; Definition For 57-th St.-type interlocking.
+(include "Progman_Layt.trk")
+;; Change history
+;; 8 December 1994   26D got left out -- implemented.
+;;  SWIFNC invented and put in HY circuits, some R's.
+;;  10x-14pb crosslocked properly, and 8/4 vs 20/26 over 15 rev.
+;; 10 December 1994 Installed RL/NL pseudolevers on all RLP/NLP's
+;; 13 December 1994 22 autocancel used "3714HY", didn't work (now 22HY).
+;; 15-16 Dec 1994 Simul Exits at 24 & 10 force 15 norm. instead of disallowed.
+;; 16 Dec 1994 XR's changed to disallow clearing occupied E-E rtes.
+;; 30 September 1996 23/25 LS tail was lacking NS .... fixed
+;; 1 October 1996 moved NWC check out of LS to 2-6-18 AS as correct 
+;;  implemented 10SXL, 24 XL, moved prev 10/24NXL to XL...
+;; 10 October 1996 - renamed 28/22 XL, much more AS/NS/SS locking out PBS.
+;; 11-16 Oct 96 Zillions of changes, more overlap AS, VS routing, CLK's, etc.
+;; 20 Oct 96 - 0RAS in rte locks, back-sequential XR/ZS behavior.
+;; 28 Oct 96 - xr, 2-try gt to standard. 24vs was buggy.
+;; 7 November 1996 fixed 18 through-routing - was moby broken
+;; 7 Nov - !LS, NS/SS/!NS/!SS in H checks, parallel through-routing,
+;;  A4727 timing fixes, !NS|!T check in H for preceding network
+;; 9/10 Nov - RVP/NVP, stop self-checking & LS locking
+;; 11 Nov - whoops - D relays should check HV, not H.  22/28 stops bad.
+;; 12 Nov - "UR exit" (10,24) quite broken by 20 oct changes. Fix discovered
+;;    by N.I., (PB(R) in XR), thanks!
+;; 15 Nov -- all back-to-back stops redone according to guidelines
+;; 29 Nov -- N/RWC checks to 32/34 H, !LS checks in overlaps
+;;    more stray D/H/HV's, cleanup A2725 GT (DR), make directional GT's
+;;    consider NS only in pickup circuit (NI & RB).  Rename some GT U's.
+;;    TC's 2693 and 4693 added, and to 2/6AS (DR & NI), 2700K->2AS etc
+;;    bogus 4707SS pulled from 8R (is in 8H).
+;; 4 Dec - defined secs & sigs  1700, 3700, added autos, pulled left
+;;    over RVP chks, some in H, on new blind-stop vs RVP theory.
+;; 8 Dec - 14HV created to make 4720 stop behave
+;; 10 Dec - trains slowed down.
+;; 15 Dec - B/B marker/auto pairs redone to NI's ideas (decoupled).
+;; 27 Dec - removed most PBS "rule-out" checks as per standard & NI's sugg.
+;; 10 Jan 97 - RGP's added to COS, 14<->10XS NV kickoffs, missing Rte Locks
+;;     for ovl'ped distant extents of H's (eg 32 vs 26 via route locking) 
+;;     CLK flashing in more cases. 18 AS lims, 18 "SP", reversed SWIFNC
+;;     subexp order. FP push of 15 extended to NS/SS->LS. Major VT/NV
+;;     splitups, XLAS/XL/KXL strategy. Fp push of 17.
+;; 15 Jan - 15/17 FPP LS's broken into L, LS, std !NWC!RWC hack added.
+;; 16 Jan - FacingPt !LS in overlap pulled out of H's - caused bobble.
+;; 30 Jan - NS-SS vs AS conditions in 15LS consistentized with latest Islgtn
+;;    !15LS pulled from 4/8H.
+;; 1  Feb - !15RWK added to 22KXL
+;; 20 February 1997 Macros moved out to stdmacs.trk
+;; 27 February 1997 LNprecond macros for new, aggressive switch keys.
+;; 26 December 1997 Removed duplicate exit lights!
+;; 6 January 1998 bogus 16XS removed, RGP bobbler added.
+;; 16 January 1998 Approach PBS's and many XS's made RGP-bobble-safe.
+;; 9 July 1998 Bug in 24COS, 24RGP/24COPB were in par. s/b in series!
+;; 23 February 1999 Added 1737T and 2737 to 10HY/28HY. These moves
+;;    really need approach signals protecting these blocks southbound.
+;;    3714T missing from 28AS, was added.(later) ditto 24 to tks A2/A4.
+
+(include "stdmacs.trk")
+
+;; Tracks must be in down-panel order.  Perhaps should compute from
+;; track number instead (this is BMT/IND -- parameter?)
+(comment
+(track 1 (tlabel 701)
+   (693 700 707 714 720 725 735))
+(track 3 (tlabel 701)
+   (693 700 707 714 720 727 737))
+(track 4 (tlabel 701)
+   (693 700 707 714 720 727 737))
+(track 2 (tlabel 701)
+   (693 700 707 714 720 725 735))
+)
+;; must appear/display before signals...
+(comment
+(platform island 727 734 15 85 "PROGMAN ST")
+(platform island 727 734 215 285 "STATION")
+
+
+
+(text "PROGMAN ST INTERLOCKING" 718 580 WEIGHT BOLD HEIGHT 30
+      color (196 196 196))
+;;; Switches must go next
+(switch 3 716 4 718 17)
+(switch 4 716 3 718 15)
+(switch 1 710 3 712 23)
+(switch 3 710 1 712 25)
+(switch 4 710 2 712 9)
+(switch 2 710 4 712 7)
+(switch 3 722 1 724 21)			; bogus
+
+(signal 2 700 (GYR)       2)
+(signal 2 707 (GYR GYR Y) 4)
+(signal 2 714 (GYR))
+(signal 2 720 (GYR S))
+(signal 2 725 (GYR S))
+(signal 2 (revdir 714 715) (RZR) 30)
+
+(signal 4 700 (GYR)       6)
+(signal 4 707 (GYR GYR Y) 8)
+(signal 4 714 (GYR S GYR Y) 10)
+(signal 4 720 (GYR S))
+(signal 4 (revdir 720 721) (YR) 14 nostop)
+(signal 4 727 (GYR S))
+
+(signal 1 700 (GYR))
+(signal 1 707 (GYR))
+(signal 1 (revdir 707 708) (YR) 34 nostop)
+(signal 1 714 (GYR GYR Y) 16)
+(signal 1 (revdir 720 721) (RZR) 38)	; declare marker first!
+(signal 1 720 (GYR) 18)
+(signal 1 725 (GYR GYR Y) 20)
+
+
+(signal 3 700 (GYR))
+(signal 3 707 (GYR))
+(signal 3 714 (GYR GYR Y) 22)
+(signal 3 (revdir 707 708) (YR) 32 nostop)
+(signal 3 (revdir 714 715) (GYR S GYR Y) 28)
+(signal 3 720 (GYR GYR Y) 24)
+(signal 3 727 (GYR GYR Y) 26)
+
+
+(exitlight 30   2 714 north)
+(exitlight 10   4 714 north)
+(exitlight 40   4 714 south)
+)
+;; PBS must be defined before HY or COS in order for cancel thing to work.
+;; This is because PBS must see track change before HY or COS sees it.
+(relay 4PBS !0CPB !9RN !4XS !9RWK
+			(OR 4PBS (AND 4PB !9BNS 2707SS))
+			(OR 4FL (AND (OR 2707T !4HY)(OR !2700T !4COS))))
+
+(relay 4HY
+	(OR 4NVP (AND 4HY 4R))
+	2707T 9NWC
+	    (swif 7 (AND 4707T (LABEL L4HY01 4714T 17NWC (swif2 15 3720T)))
+        	     (AND 2714T 30RVP)))
+(relay 4HV 4RVP 4H)
+(relay 4H !4COS 4HY (LABEL L4H01 4R !4AS 9NWC 2707SS !9LS !7LS
+				 (SWIF 7 
+                                      (LABEL L4H02 
+                                        17NWC !17LS !4707NS
+					(OR 15NWC 3727SSP)
+					 10XL)
+                                      (AND !2707NS)))) ;30RVP out
+
+(relay 4CO 4COS L4H01)
+(relay 4COS (OR 4COS (AND 4COPB 4RGP)) 4PBS !2700T)
+
+(HomeV 4V 2700 2707 9NWC)
+
+(relay 4VS (OR (AND 4VS !2707SS)
+               (AND 7RWC 10VS)))
+
+(relay 4R 4PBS 9NWK 2707SS
+      (or (and 7NWK 30XS)
+	  (and 7RWK
+               (label N10T 10XS 17NWK 
+		  (OR 15NWK (AND 4R 7RWK) (AND 8R 7NWK) (AND !24XS 3727SS))
+         	   (SWIFNC 15 !24R !14R)))))
+
+(relay 4D (swif 7 10HV 2714HV))
+(relay 4DR 7RWC)
+(relay 4RGP !0BRGP !4H !4HV !4CO)
+(relay 4AS (OR 4AS (AND 2693T 2700T (OR 7NWC (AND 2707T 4707T)))
+                   (SWIF 7 (AND !4707T !4714T) !2707T)
+		 4U 0RAS) 4RGP !4R)
+(timer 4U 7 !4AS 4RGP !4R)
+
+(relay 4CLK 4PBS (OR (AND 4CO !4V)
+                     (AND 7RWK (LABEL L4CLK1 10XS 
+				(OR (AND 15CLK !3727SS) 17CLK)))))
+
+(relay 2H (or 2H 2DV)
+	  2PBS !2AS 2700T 2707T 9NWC !9LS 2707SS
+	  (OR 7NWC
+              (and 4707T (label L2H01 (or 14AS 17RWC) (or 24AS 15NWC)))))
+(relay 2V (OR 2H !2700T))
+(relay 2DV (OR (AND !2HV 2NVP)(AND 2HV 4HV)))
+(relay 2HV  2RVP 2H)
+(relay 2PBS !0CPB (OR 2FL 2700T)
+       (OR 2PBS (AND 2PB 2707SS)) !4XS !9RWK)
+(relay 2RGP !0BRGP !2H !2HV)
+(relay 2AS (OR 2AS (AND 2693T 2700T) !2707T 2U 0RAS) (OR !2PBS !9NWC) 2RGP)
+(timer 2U 7 !2AS !2PBS !2H)
+
+(relay 9CLK (AND 8PBS !7BNS) 9NWK
+     (LABEL L9CLKT 4707NS 4707SS 2707NS 2707NS 2707T 4707T))
+(relay 7CLK (AND 4PBS !9BNS) 7NWK L9CLKT)
+
+(relay 2CLK 2PBS 9CLK)
+(relay 6CLK 6PBS 7CLK)	
+
+(relay 6H (or 6H 6DV)
+	  6PBS !6AS 4700T 4707T 7NWC !7LS 4707SS
+		(and (or 9nwc 2707T) (or 9rwc l2h01)))
+(relay 6PBS !0CPB (OR 6PBS (AND 6PB 4707SS))
+        (OR 6FL 4700T) !8XS !7RWK)
+(relay 6V (OR 6H !4700T))
+(relay 6RGP !0BRGP !6H !6HV)
+(relay 6AS (OR 6AS (AND 4693T 4700T) !4707T 6U 0RAS) (OR !6PBS !7NWC) 6RGP)
+(relay 6HV 6H 6RVP)
+(timer 6U 7 !6AS !6PBS !6H)
+(relay 6DV (OR (AND 6HV 8HV) (AND !6HV 6NVP)))
+
+(relay 8PBS !0CPB !7RN !8XS !7RWK
+		   (OR 8PBS (AND 8PB !7BNS 4707SS))
+		   (OR 8FL (AND (OR 4707T !8HY)(OR !4700T !8COS))))
+
+
+(relay 8HY (OR 8NVP (AND 8HY 8R))
+	   4707T 7NWC (swif 9 (AND 2707T 2714T) L4HY01)) ; 30RVP out 12/4/96
+(relay 8H !8COS 8HY (LABEL L8H01 8R !8AS 7NWC 
+			4707SS !7LS !9LS
+		        (OR 9RWC L4H02)))
+(relay 8HV 8RVP 8H)
+(relay 8CO 8COS L8H01)
+(relay 8COS (OR 8COS (AND 8COPB 8RGP)) 8PBS !4700T)
+(relay 8R 8PBS 7NWK (or (and 9RWK 30XS) (and 9NWK N10T)))
+(HomeV 8V 4700 4707 7NWC)
+(relay 8VS (OR (AND 8VS !4707SS)
+               (AND 7NWC 9NWC 10VS)))
+(relay 8D (swif 9 2714HV 10HV))
+(relay 8DR 9RWC)
+(relay 8RGP !0BRGP !8H !8HV !8CO)
+(relay 8AS (OR 8AS (AND 4693T 4700T (OR 9RWC 4707T))
+                   (AND !4707T (OR 9RWC !4714T)) 8U 0RAS) 8RGP !8R)
+(timer 8U 7 !8AS 8RGP !8R)
+(relay 8CLK 8PBS (OR (AND 8CO !8V)
+                     (AND 9NWK 7NWK L4CLK1)))
+	
+(relay 10PBS !0CPB !17RN (OR 10PBS
+	                       (AND 4714SS
+        	                    (OR
+				       (AND 10PB !10XR !17BNS)
+				       (AND 10XR 10ZS))))
+	       (OR 10FL (AND (OR 4714T !10HY)(OR !4707T !10COS))))
+
+
+(relay 10HY (OR 10NVP (AND 10HY 10R))
+	    17NWC 4714T (swif 15
+			      (AND 3720T (LABEL L10HY01
+						(AND 3727T 
+						     (swif 21
+							   (and 1725T 1735T)
+							   3737T))))
+			      4720T))
+
+
+(relay 10H 10HY !10COS (LABEL L10H01 10R !10AS 14AS 9NWC (OR !4707T !4707NS)
+			      !17LS !15LS 4714SS
+			      17NWC (OR 15NWC
+					(LABEL L10H02
+					       (AND 24NXL !3727NS
+						 (OR 21NWC !1725NS 20AS))))))
+
+(relay 10HV 10RVP 10H)
+(relay 10CO 10COS L10H01)
+(relay 10COS (OR 10COS (AND 10COPB 10RGP)) 10PBS 9NWC !4707T)
+
+(timer 4707US 5 (OR 4707US 4714T) (OR !4714T
+                                         (AND (OR !4707T (AND 7RWC !2707T))
+                                              !4707NS))
+                                !4714NS 9NWC 17NWK 15NWK)
+
+(timer 3714US 5 (OR 3714US (AND 3720T !3714NS)) (OR !3720T !4714T
+				   (AND (OR !3714T (AND 23RWC !1714T))))
+                                 !4714NS 25NWC 17RWK 15NWK)
+
+(relay 10R 10PBS 17NWK	(or (AND 15NWK 14XS)
+			    (AND 15RWK (OR (AND 21RWK 20XS)
+				           (AND 21NWK 26XS)))))
+
+(HomeV 10V 4707T 4714T (AND 9NWC 17NWC))
+
+(relay 10VS (OR (AND 10VS !4714SS)
+                (AND 14R 17NWC)
+                (AND 24R 15RWC)))
+
+(relay 10D (AND 15NWP 4720HV))
+(relay 10DR 15RWP)
+(relay 10RGP !0BRGP !10H !10HV !10CO)
+(relay 10AS (OR 10AS
+   		(OR 9RWC (AND 4707T (OR 7RWC 4700T) (OR 7NWC 
+							(AND 2700T 2707T))))
+
+		!4714T 10U 0RAS)
+             10RGP !10R)
+(timer 10U 7 !10AS 10RGP !10R)
+(relay 10SK 10H !10D 15NWC !4720H 4720HT)
+
+(comment
+(exitlight 8    4 707 south)
+(exitlight 4    2 707 south)
+(exitlight 28   3 714 south)
+(exitlight 24   3 720 south)
+(exitlight 42   3 720 north) ;really 24 exit
+(exitlight 14   4 720 north)
+(exitlight 26   3 727 north)
+(exitlight 20   1 725 north)
+(exitlight 18   1 720 south)
+)
+(relay 30VS
+	 7NWC
+         (OR (AND 30VS !2707NS)
+             (SWIF 9 8R 4R)))
+
+(relay 30V 30VS 7NWC (OR !2707T 2714T))
+(relay 2714H (OR 2714H 2714DV) 7NWC 2714T 2720T)
+(relay 2714V (OR 2714H !2714T))
+(relay 2714DV (OR (AND 2714HV 2720HV)(AND !2714HV 2714NVP)))
+(relay 2714HV 2714H 2714RVP 30RVP)
+
+(relay 2720H (OR 2720H 2720DV) 2720T 2725T)
+(relay 2720DV (OR (AND 2720HV 2725HV)(AND !2720HV 2720NVP)))
+(relay 2720V (OR 2720H !2720T))
+(relay 2720HV 2720H 2720RVP)
+(relay 2720SK 2720H !2720DV 2725HT !2725H)
+
+(relay 2725HT 2725T)
+(relay 2725H (OR 2725H 2725DV) (OR 2720U 2714US) 2725HT)
+(relay 2725V (OR 2725H !2725T))
+(relay 2725HV 2725H 2725RVP)
+(timer 2714US 5 (OR 2714US 2720T) (OR !2714T !2720T))
+(timer 2720U 4 (OR 2720U !2725H) !2720T 2725T)
+(relay 2725DV (OR 2725HV (AND !2725HV 2725NVP)))
+(relay 2725SK 2725H !2725DV)
+
+(relay 4720HT 15NWC 4720T 4727T 14AS)
+(relay 4720H (OR 4720H 4720DV) (OR 4714US 4707US 3714US) 4720HT)
+(relay 4720DV (OR (AND 4720HV 4727HV)(AND !4720HV 4720NVP)))
+(relay 4720V (OR 4720H 14H !4720T))
+(relay 4720HV 4720H 4720RVP)
+(timer 4714US 4 (OR 4714US (AND 4720T !4714NS))
+                15NWC (OR !4714T (AND 17RWC !3720T) !4720T))
+(relay 4720SK 4720H !4720D 4727HT !4727H)
+
+(relay 4727HT 4727T)
+(relay 4727H (OR 4727H 4727DV)(OR 4714US 4720U) 4727HT)
+(relay 4727V (OR 4727H !4727T))
+(relay 4727HV 4727H 4727RVP)
+(timer 4720U 5 (OR 4720U !4727H) !4720T 4727T) ; Thanks, Dave
+(relay 4727DV (OR 4727HV (AND !4727HV 4727NVP)))
+
+(relay 24PBS !0CPB !17RS
+		   (OR 24PBS
+		       (AND 24PB !24XR 3720NS !17ANN)
+                       (AND 24ZS 24XR))
+		   (OR 24FL (AND (OR 3720T !24HY) (OR !3727T !24COS))))
+
+(relay 24HY (OR (AND 24HY 24R) 24NVP)
+	    17NWC 3720T (SWIFNC 15 (AND 4714T 4707T 9NWC 
+					(OR 7NWC (AND 2707T 2700T 2693T))
+                                        (OR 7RWC (AND 4700T 4693T)))
+
+				   (AND 25NWC 3714T (SWIF2 23 1714T))))
+
+(relay 24H 24HY (LABEL L24H01 24R !24AS (OR !3727SS !3727T)
+			3720NS !17LS !15LS
+		       17NWC (SWIF 15 (LABEL L24H02
+					     10AS 9NWC 8AS 6AS !7LS !9LS
+					!4707SS
+					     (OR 7NWC (AND 4AS 2AS !2707SS)))
+
+				   (LABEL L24H03 28AS !3720SS
+					  (AND 25NWC !25LS (SWIFNC 23 34AS 32AS))))))
+(relay 24HV 24RVP 24H)
+(relay 24CO 24COS L24H01)
+(relay 24COS (OR 24COS (AND 24COPB 24RGP)) 24PBS !3727T)
+(HomeV 24V 3727T 3720T 17NWC)
+(relay 24VS 17NWC
+	    (OR (AND 24VS !3720NS)
+                (AND 15NWC 28R)
+                (AND 15RWC 10R)))
+
+(relay 24R 24PBS 17NWK (OR (AND 15NWK 25NWK 28XS)
+                           (AND 15RWK 9NWK (OR (AND 7NWK 8XS)(AND 7RWK 4XS)))))
+(relay 24D (SWIF 15 0 22HV))
+(relay 24DR 15RWC)
+(relay 24RGP !0BRGP !24H !24HV !24CO)
+(relay 24AS (OR 24AS 
+              (AND 3727T (OR 3720T 15RWC)
+                   (OR (AND 1725T 1735T) 21NWC)
+                   (OR (AND 3727T 3737T) 21RWC))
+              (AND !3720T (OR !3714T 15RWC))
+	      24U 0RAS)
+            24RGP !24R)
+(timer 24U 7 !24AS 24RGP !24R)
+(relay 24CLK 24PBS (OR (AND 24CO !24V)
+	                (AND 15NWK 17NWK 25CLK)))
+
+(relay 20PBS !0CPB !20XS
+		   (OR 20PBS (AND 20PB !21RN 1725NS))
+		   (OR 20FL (AND (OR 1725T !20HY)(OR !1735T !20COS))))
+
+
+(relay 20HY (OR (And 20HY 20R) 20NVP) 1725T
+       (SWIF 21 (label  L20HY01 3727T 3720T 17NWC (OR 15NWC 4714T))
+		(AND 1720T 38RVP)))
+(relay 20HV 20RVP 20H)
+(relay 20H 20HY !20COS 
+       (LABEL L20H01 20R !20AS
+		!21LS 1725NS
+	      (SWIF2 21 (label L20H02 3727NS !3727SS
+				      17NWC !17LS 28AS
+	;; don't check !15LS - doesn't lock 15, attempt to check it
+	;; will cause bobble when 15NWK picks 8H dropping rtlk, 15LS up.
+				      (OR 3714NSP 15RWC)
+                                      (OR
+					(AND 10AS 4714NS
+				             (OR (AND 8AS 4707NS) 9RWC)
+					     (OR 4AS 7NWC))
+					15NWC)))))
+
+(relay 20CO 20COS L20H01)
+(relay 20RGP !0BRGP !20H !20HV !20CO)
+(relay 20COS (OR 20COS (AND 20COPB 20RGP)) 20PBS !1735T)
+(relay 20R 20PBS !20XS (OR (AND 21NWK 38XS)
+                           (AND 21RWK 
+                                   (LABEL L20RT1
+				      24XS 17NWK
+					(OR (AND !10XS (OR 9RWC 4707NS))
+					    (AND 20R 21RWK)(AND 26R 21NWK)
+					    15NWK)))))
+(HomeV 20V 1735T 1725T T)
+(relay 20VS (OR (AND 20VS !1725NS)
+                (AND 21RWC 24VS)))
+(relay 20D (swif 21 24HV 18HV))
+(relay 20DR 21RWC)
+(relay 20AS (OR 20AS (AND 1735T (OR 21NWC 3727T))
+		     (SWIF 21 (AND !3727T !3720T) !1725T)
+		      20U 0RAS) 20RGP !20R)
+(timer 20U 7 !20AS !20H !20CO !20R)
+(relay 20CLK 20PBS (OR (AND 20CO !20V)
+		       (AND 21RWK (OR 17CLK 15CLK))))
+
+
+(relay 26PBS !0CPB !21RS !26XS
+                   (OR 26PBS (AND 26PB !21ANN 3727NS)) ;28XL out 1/10/97
+		   (OR 26FL (AND (OR 3727T !26HY)(OR !3737T !26COS))))
+
+(relay 26R 26PBS 21NWK L20RT1)
+(relay 26HY 21NWC L20HY01)
+(relay 26H 26HY !26COS (LABEL L26H01 26R !26AS !21LS 21NWC L20H02))
+(relay 26HV 26H 26RVP)
+(relay 26D (AND 21NWC 24HV))
+(relay 26CO 26COS L26H01)
+(relay 26COS (OR 26CO (AND 26COPB 26RGP)) 26PBS !3737T)
+(HomeV 26V 3737T 3727T T)
+(relay 26VS (OR (AND 26VS !3727NS)
+                (AND 21NWC 24VS)))
+(relay 26AS (OR 26AS (AND 3737T 3727T)
+                     (AND !3727T !3720T)
+		     26U 0RAS) !26R !26CO !26H)
+(timer 26U 7 !26AS !26R !26CO !26H)
+(relay 26CLK 26PBS (OR (AND 26CO !26V)
+		       (AND 21NWK
+                            (OR 15CLK 17CLK))))
+
+(relay 38VS 21NWC (OR (AND 38VS !1725SS) 20R))
+(relay 38V 21NWC 38VS (OR !1725T 1720T))
+(relay 18H (OR 18H 18DV) 18PBS 	!18AS
+	  21NWC 1720T 1714T 23NWC (OR 25NWC 3714T))
+(relay 18V (OR 18H !1720T))
+(relay 18HV 18RVP 38RVP 18H)
+(relay 18PBS !0CPB (OR 18FL 1720T) (OR 18PB 18PBS (AND 16ZS 16R)) !23RWK)
+(relay 18AS (OR 18AS (AND 1720T (OR 1725T 21RWC))
+                     !1714T 18U 0RAS) (OR !18PBS !23NWC) !18H)
+(timer 18U 9 !18AS !18PBS !18H)
+(relay 18DV (OR (AND 18HV 16HV)(AND !18HV 18NVP)))
+(relay 18CLK 18PBS 23CLK 23NWK)
+
+
+;;Dwarf H  ;;XL system needed.
+(relay 4714TP 4714T)
+(relay 4714TPP 4714TP)
+(relay 14PBS !0CPB !15RS !14XS
+           (OR 14PBS (AND 14PB 4714NS !15ANN))
+	   (OR 4714T !4714TPP))
+
+
+(relay 14H 14R !14AS 4714NS 15NWC !15LS !17LS 10AS 4714NS (SWIF 17 L24H03 L24H02))
+(relay 14HV 14H 4720RVP)		; hahaha
+(relay 14RGP !0BRGP !14H !14HV)
+(relay 14R 14PBS 15NWK !10XS
+       (OR (AND 17RWK 25NWK 28XS)
+	   (AND 17NWK 9NWK (OR (AND 7NWK 8XS)
+			       (AND 7RWK 4XS)))))
+(relay 14AS (OR 14AS (AND 4720T 4727T (OR 17NWC (AND 4714T 3720T)))
+		     (SWIF 17 (AND !3720T !3714T) !4714T)
+                     14U 0RAS) 14RGP !14R)
+(timer 14U 10 !14AS 14RGP !14R)
+(relay 14CLK 14PBS 15NWK 17RWK 25CLK)
+
+(relay 16PBS !0CPB !23RS
+	           (OR 16PBS (AND 16PB !23ANN) (AND 16XR 16ZS))
+		   (OR 16FL (AND (OR 1714T !16HY)(OR !1720T !16COS))))
+
+(relay 16R 16PBS 23NWK (OR (AND 25NWK 34XS) (AND 25RWK 32XS)))
+(relay 16HY (OR (AND 16HY 16R) 16NVP) 1714T 23NWC (SWIF 25 (AND 3714T 3707T) 1707T))
+(relay 16H 16HY !16COS (LABEL L16H01 16R !16AS 23NWC
+		 1714NS !23LS !25LS
+		 (SWIF 25 (AND 32AS !3714SS) (AND 34AS !1714SS))))
+(relay 16HV 16RVP 16H)
+(relay 16RGP !0BRGP !16H !16HV !16CO)
+(relay 16CO     16COS L16H01)
+(relay 16COS (OR 16COS (AND 16COPB 16RGP)) 16PBS !1720T)
+(HomeV 16V 1720T 1714T 23NWC)
+(relay 16D (SWIF 25 3707HV 1707HV))
+(relay 16DR 25RWC)
+(relay 16AS (OR 16AS (AND 1720T (OR 1725T 21RWC))!1714T 16U 0RAS) 16RGP !16R)
+(timer 16U 7 !16AS 16RGP !16R)
+
+(relay 22PBS !0CPB !28PBS !22XS !25RS
+		   (OR 22PBS
+		     (AND 28KXL (OR (AND 22PB !25ANN)(AND 22XR 22ZS))))
+		   (OR 22FL (AND (OR 3714T !22HY)(OR !3720T !22COS))))
+
+
+(relay 22R 22PBS 25NWK (OR (AND 23RWK 34XS) (AND 23NWK 32XS)))
+(relay 22HY (OR (AND 22HY 22R) 22NVP) 3714T 25NWC (SWIF 23 (AND 1714T 1707T) 3707T))
+(relay 22H 22HY !22COS (LABEL L22H01 22R !22AS !28R 25NWC 15NWC
+				3714NS !25LS !23LS
+			      (OR !3720T !3720SS)
+			      (SWIF 23 (AND 34AS !1714SS)
+                                       (AND 32AS !3714SS))))
+(relay 22HV 22RVP 28RVP 22H)
+(relay 22CO 22COS L22H01)
+(relay 22COS (OR 22COS (AND 22COPB 22RGP)) 22PBS !3720T 15NWC)
+(relay 22D (SWIF 23 1707HV 3707HV))
+
+(relay 22DR 23RWC)
+(relay 22RGP !0BRGP !22H !22HV !22CO)
+(relay 22AS (OR 22AS (AND 3720T (OR 17RWC (AND 3727T (OR 1725T 21NWC)))
+				(OR 17NWC (AND 4714T 4720T)))
+	     15RWC
+	     !3714T 22U 0RAS) 22RGP !22R)
+(timer 22U 9 !22AS 22RGP !22R)
+
+;Dwarf no more!
+
+(relay 28PBS !0CPB !22PBS !28XS !15RN
+		   (OR 28PBS
+                       (AND 28PB 22XLAS !15BNS) ; permit flashing
+		       (AND 28XR 28ZS))
+		   (AND (OR 3720T !28HY)(OR !3714T !28COS)))
+
+(relay 28HY (OR (AND 28HY 28R) 28NVP)
+	    15NWC 3720T (swif 17 (AND 4714T 4720T) L10HY01))
+
+(relay 28H 28HY !28COS (LABEL L28H01 28R !28AS 24AS 15NWC 25NWC 
+                              (OR !3714T !3714NS)
+			       3720SS !15LS !17LS 
+			      (OR (AND 17RWC 14AS !4714NS)
+				  (AND 17NWC L10H02))))
+(relay 28HV 28RVP 22RVP 28H)
+(relay 28CO 28COS L28H01)
+(relay 28COS (OR 28COS (AND 28COPB 28RGP)) 28PBS 15NWC 25NWC !3714T)
+
+(relay 22V 28V)
+(relay 28V (OR (AND 28V !3714T !3720T)
+	       28H 22H
+	       (AND (OR 22VPB 28V) 22CO)
+	       (AND (OR 28VPB 28V) 28CO))
+           25NWC 15NWC)
+
+(relay 28R 28PBS 15NWK (OR (AND 17NWK (OR (AND 21RWK 20XS) (AND 21NWK 26XS)))
+                           (AND 17RWK 14XS)))
+(relay 28RGP !0BRGP !28H !28HV !28CO)
+(relay 28AS (OR 28AS 
+		25RWC
+		(AND 3714T
+		     (OR (AND 3707T 3700T) 23RWC)
+                     (OR (AND 1714T 1707T 1700T) 23NWC))
+		!3720T 28U 0RAS) 28RGP !28R)
+(timer 28U 9 !28AS 28RGP !28R)
+(relay 28D (AND 17RWP 4720HV))
+(relay 28DR 17RWP)
+(relay 28SK 28H !28D 17RWC !4720H 4720HT)
+
+
+
+(relay 1707H  (OR 1707H 1707DV) 1707T 25NWC !34R 1700T)
+(relay 1707DV (OR (AND 1707HV 1700HV) (AND !1707HV 1707NVP)))
+(relay 1707HV 1707H 1707RVP)
+(relay 1707V (OR 1707H !1707T 34R))
+(relay 3707H (OR 3707H 3707DV) 3707T 23NWC !32R 3700T)
+(relay 3707DV (OR (AND 3707HV 3700HV) (AND !3707HV 3707NVP)))
+(relay 3707V (OR 3707H !3707T 32R))
+(relay 3707HV 3707H 3707RVP)
+
+(relay 1700H (OR 1700H 1700DV) 1700T)
+(relay 1700DV (OR 1700HV (AND !1700HV 1700NVP)))
+(relay 1700HV 1700H 1700RVP)
+(relay 1700V (OR 1700H !1700T))
+
+(relay 3700H (OR 3700H 3700DV) 3700T)
+(relay 3700DV (OR 3700HV (AND !3700HV 3700NVP)))
+(relay 3700HV 3700H 3700RVP)
+(relay 3700V (OR 3700H !3700T))
+
+(relay 2700K (OR !2AS 4VS))
+(relay 4700K (OR !6AS 8VS))
+
+(relay 2707NS (or 2707NS 2707T 0RAS) 4AS (OR 4707NS 9NWC))
+(relay 2707SS (or 2707SS 2707T 0RAS) (or 7NWC 4707SS))
+
+(relay 4707NS (or 4707NS 4707T 0RAS) 8AS (OR 2707NS 7NWC))
+(relay 4707SS (or 4707SS 4707T 0RAS) (or 9NWC 2707SS) ;not really
+              (or 17RWC 4714SS 0RAS))
+(relay 4714NS (or 4714NS 4714T 0RAS) 10AS (OR 17NWC 3720NS))
+(relay 4714SS (or 4714SS 4714T 0RAS) 14AS (or 15NWC 3720SS))
+
+(relay 3720SS (or 3720SS 3720T 0RAS) 24AS (or 17NWC 4714SS))
+(relay 3720NS (or 3720NS 3720T 0RAS) 28AS (or 15NWC 4714NS))
+
+(relay 3727SS (or 3727SS 3727T 0RAS) 26AS (or 21NWC 1725SS))
+(relay 3727SSP 3727SS) ;for timing in 8/4H (q.v.) versus 15LS.
+
+(relay 3727NS (or 3727NS 3727T 0RAS) (or 3720NS 17RWC))
+
+(relay 1725SS (or 1725SS 1725T 0RAS) 20AS)
+(relay 1725NS (or 1725NS 1725T 0RAS) (or 21NWC 3727NS))
+
+(relay 1714SS (or 1714SS 1714T 0RAS) 16AS (or 23NWC 3714SS))
+(relay 1714NS (or 1714NS 1714T 0RAS) 34AS)
+(relay 3714SS (or 3714SS 3714T 0RAS) 22AS (or 25NWC 1714SS))
+(relay 3714NSP 3714NS) ;see 3727SSP
+(relay 3714NS (or 3714NS 3714T 0RAS) 32AS (or 23NWC 1714NS))
+
+(relay 2707K (OR !2707SS !2707NS))
+(relay 4707K (OR !4707SS !4707NS))
+
+(relay 4714K 4714SP)
+(relay 3720K 3720SP)
+(relay 4714SP (OR !4714SS !4714NS))
+(relay 3720SP (OR !3720SS !3720NS))
+
+
+(relay 3727K (OR !3727SS !3727NS))
+
+(relay 1725K (OR !1725SS !1725NS))
+(relay 1735K 20VS)
+(relay 3737K 26VS)
+(relay 1714K (OR !1714SS !1714NS))
+(relay 3714K (OR !3714SS !3714NS))
+
+(relay 1720K !18AS)
+
+;;; what switch relays should be used here?
+(relay 7LS
+       (LSNPrecond 7)
+       6AS (LABEL X7LS 8NVP 4NVP 10NVP 30NVP 4707T 2707T 4707NS 4707SS 2707SS 2707NS))
+(relay 9LS 
+       (LSNPrecond 9)
+       2AS X7LS)
+
+(relay 15L 
+       (LNPrecond 15)
+       28XLAS (Label x15ls 10NVP 28NVP 24NVP
+		     4714T 3720T 4714NS 4714SS 3720NS 3720SS))
+
+(relay 15LS 15L (OR (AND 15LS !15RWC !15NWC)
+		    (AND (OR
+			   (AND
+			     (OR 4707NS 9RWC 24NXLAS)
+			     (OR 10SXLAS   3727SS))
+			   15RWP)
+			 (OR 24NXLAS 3714NS 15NWP))))
+
+;;		    (OR 24NXLAS (AND (OR 4707NS 9RWC 15RWP)
+;;                    	             (OR 3714NS 15NWP)))))
+		 
+
+(relay 17L
+       (LNPrecond 17)
+       10SXLAS 24NXLAS x15ls)
+
+(relay 17LS 17L (OR  (AND 17LS !17RWC !17NWC)
+		     (OR 3727SS 28XLAS 17NWP)))
+		     
+
+
+(relay 21LS
+       (LSNPrecond 21)
+        24NVP 20NVP 26NVP 38NVP 3727T 1725T 1725NS 1725SS 3727SS 3727NS)
+
+(relay 23LS
+       (LSNPrecond 23)
+       18AS
+       (LABEL x23LS 16NVP 22NVP 1714T 3714T 3714SS 1714SS 3714NS 1714NS))
+
+(relay 25LS
+       (LSNPrecond 25)
+       22XLAS x23LS)
+
+(relay 23CLK 23NWK 
+             !18AS
+             (OR
+	       (AND (OR 22PBS 22XR) !25ANN)
+               (AND 34PBS !25BNS))
+             (LABEL L23CLKT 1714NS 1714SS 3714NS 3714SS 3714T 1714T)) 
+
+(relay 25CLK 25NWK !22XL
+             (AND 23ANS !23ANN)  L23CLKT)
+
+
+(relay 9BNN !9RN (OR 4PBS 4XS) !9RWK)
+(relay 7ANN !7RS (OR 9BNN 9RN) !7RWK)
+(relay 9ANN !9RS (OR 7BNN 7RN) !9RWK)
+(relay 7BNN !7RN (OR 8PBS 8XS) !7RWK)
+
+(relay 9ANS !9RS (OR 10XS 10ZS 
+                      (and 17BNS !10PBS (OR (AND 15ANS 14PBS)
+					(AND 15RS (OR 24PBS 24XR)))))
+             !9RWK)
+(relay 7ANS !7RS  30XS         !7RWK)
+(relay 9BNS !9RN (OR 7ANS 7RS) !9RWK)
+(relay 7BNS !7RN (OR 9ANS 9RS) !7RWK)
+
+(relay 7RN !7BNN  !7ANS 9BNN         !7NWK)
+(relay 7RS !7ANS  !7BNN 9ANS         !7NWK)
+(relay 9RN !9BNN  !9ANS 7BNN         !9NWK)
+(relay 9RS !9ANS  !9BNN 7ANS         !9NWK)
+
+
+(relay 8K  7BNS (OR 6AS 8PBS) 4707SS 4707NS)
+(relay 4K  9BNS (OR 2AS 4PBS) 2707SS 2707NS)
+(relay 8XS  (OR 8XS (AND (OR 8XPB 8PB) 6AS 4707NS)) !8PBS 7BNS)
+(relay 4XS  (OR 4XS (AND (OR 4XPB 4PB)  2AS 2707NS))  !4PBS 9BNS)
+
+
+(relay 10SXLAS (OR 8AS 9RWC) (OR 4AS 7NWC)) ;VITAL
+
+(relay 10XL  4714SS			; VITAL
+	     (OR 15NWC 24NXL)
+             14AS)
+
+(relay 10KXL   			; NONVITAL 1/11/97
+	  4714SS
+	  (OR !15RWK 24NXL)
+          14AS)
+
+
+(relay 10K ;;!9ANS 
+ (OR !7RWK !4XS) 4707SS 4707NS 
+	10KXL
+       (LABEL L10XET 9ANN  (OR 10XS ;; conflict 10 vs 24 ;;out !14pbs 1/10/97
+				      !15RS (AND !24PBS !24XS)) 
+	      !8XS !17RWK))
+
+(relay 17CLK ;;
+	     (OR !15RWK !15CLK)
+	     (OR 
+		(AND 17NWK (OR !10SXLAS !24NXLAS)) ; really OR
+                (AND 17RWK !28XLAS !3727SS)) ;     really AND
+
+	     (OR (AND 14PBS !15ANN)
+		 (AND (OR 28XR 28PBS) !15BNS)
+	         (AND
+		   (OR
+                     (AND (OR 10PBS 10XR) !17BNS)
+                     (AND (OR 24PBS 24XR) !17ANN))
+                    17RWK))
+	  (LABEL L17CLKT 4714T 3720T !4714SP !3720SP))
+
+
+(relay 15CLK 
+	     (OR !17RWK !17CLK)
+	       (OR (AND
+                    (OR 15NWK 15RWK)
+	              (OR
+		        (AND (OR 10PBS 10XR) !17BNS)
+		        (AND (OR 24PBS 24XR) !17ANN)))
+                   (AND
+                      15RWK
+                	(AND 14PBS           !15ANN)))
+	L17CLKT)
+
+;; this is really 10 (entrance) K....
+(relay 40K 10PBS 17BNS !4714SP)
+
+(relay 30K 7ANN 2707NS) ;; had 1707T should have been 4707 but was better...
+
+(relay 10XS (OR 10XS (AND (OR 10XPB 10PB (AND 10ZS 10R)) 10KXL))
+                                (LABEL L10XST L10XET))
+
+(relay 30XS (OR 30XS 30XPB 30PB) 7ANN)
+(relay 10XR !10PBS
+		(LABEL L10XRT
+		 (OR !10XS (AND 10XR 10PB)) 
+		  4714SS 14AS		; 10KXL-- to allow flashing
+		 9ANN (OR 8PBS (AND 7RN 4PBS 2707T)) !14PBS 
+                 (OR !15RS !24PBS)  ; 17RWK out 1/11/97 for flashing
+                 4707T))
+
+(relay 10ZS (OR 10ZS 10XR) 17BNS (OR (AND 15ANS 14XS) 
+				     (AND 15RS (OR (AND 21RS 20XS)
+						   (AND 21ANS 26XS))))
+				 10KXL L10XRT)
+
+(stdswitch 7)(stdswitch 9)
+
+(relay 7NLP !7RLP (OR (AND 7ANN 7ANS) (AND 7BNN 7BNS) 6PBS 7NL))
+(relay 7RLP !7NLP (OR (AND 7RN 7RS) 7RL))
+(relay 9NLP !9RLP (OR (AND 9ANN 9ANS) (AND 9BNN 9BNS) 2PBS 9NL))
+(relay 9RLP !9NLP (OR (AND 9RN 9RS) 9RL))
+
+(relay 24K (OR (AND 21ANS !26XS) (AND 21RS !20XS))
+                 (OR !21RWK !20XS) 
+                 3727SS 3727NS !17RWK 24SKXL)
+(relay 42K 24PBS 17ANN 3720T !3720SP)
+(relay 28K 15BNS (OR (and !22XS 28KXL) 28PBS) !3720SP)
+(relay 14K 15ANN !4714SP)
+
+(relay 24NXLAS 26AS (OR 20AS 21NWC))	; VITAL
+(relay 24NXL 3727SS 3720SS 24AS 24NXLAS) ; VITAL
+
+(relay 24SKXL 3720NS 28AS 28XLAS        ;NONVITAL
+		     (OR 4707NS 9RWC 3714NS) ;no exit possible
+             ;this is not gratuitious - the exit must not be offered.
+		     (OR !15RWK
+			 (AND 10AS
+			      (OR 9RWC 4707NS)
+			      10SXLAS)))
+
+(relay 24XS (OR 24XS (AND 24SKXL (OR 24XPB (AND 24ZS 24R) 24PB) !17RWK ))
+			   (OR (AND 21ANS 26PBS) (AND 21RS 20PBS)))
+(relay 28XS (OR 28XS
+               (AND 28KXL
+                  (OR 28XPB (AND 22ZS 22R) 28PB))) 15BNS !28PBS !22XS)
+(relay 14XS (OR 14XS 14XPB 14PB) 15ANN !14PBS)
+
+(relay 24XR !24PBS 
+  (LABEL L24XRT
+	(OR !24XS (AND 24XR 24PB))
+	; 24SKXL
+       (OR (AND 21ANS 26PBS) (AND 21RS 20PBS))
+       !28PBS (OR !15RN !10PBS)
+       3727T))
+
+(relay 24ZS (OR 24ZS 24XR) 17ANN
+                (OR (AND 15BNN (OR 28XS 22ZS))
+                    (AND 15RN (OR (AND 7BNN 8XS)(AND 7RN 4XS))))
+            24SKXL L24XRT)
+
+(relay 17BNN !17RN (OR 10PBS 10XR
+			     (AND 9ANN !10XS (OR (AND 7BNN 8XS)
+					         (AND 7RN  4XS)))) 
+						!17RLP !17RWK)
+(relay 15ANN !15RS (OR 17BNN 17RN)  !15RLP !15RWK)
+(relay 17ANN !17RS (OR 15BNN 15RN) !17RLP !17RWK)
+(relay 15BNN !15RN (OR 28PBS 28XS 22ZS 28XR) !15RLP !15RWK)
+
+
+(relay 17ANS !17RS (OR 24PBS 24XR (AND !24PBS (OR (AND 21RS 20XS)
+					      (AND 21ANS 26XS))))
+       !17RLP !17RWK)
+
+(relay 15ANS !15RS (OR 14PBS 14XS) !15RLP !15RWK)
+(relay 17BNS !17RN (OR 15ANS 15RS) !17RWK !17RWK)
+(relay 15BNS !15RN (OR 17ANS 17RS) !15RLP !15RWK)
+
+(relay 15RS !15ANS  !15BNN 17ANS         !15NLP !15NWK)
+(relay 15RN !15BNN  !15ANS 17BNN         !15NLP !15NWK)
+(relay 17RN !17BNN  !17ANS 15BNN         !17NLP !17NWK)
+(relay 17RS !17ANS  !17BNN 15ANS         !17NLP !17NWK)
+
+(relay 15NLP !15RLP (OR (AND 15ANN 15ANS) (AND 15BNN 15BNS) 
+			(AND 24XS (OR 10XS (AND !4707NS 9NWC)))
+		        (AND 10XS !3727SS)
+			22XS 15NL))
+(relay 15RLP !15NLP (OR (AND 15RN 15RS) 
+		        (AND 24XS !3714NS)
+			15RL))
+(relay 17NLP !17RLP (OR (AND 17ANN 17ANS) (AND 17BNN 17BNS) 24XS 10XS 17NL))
+(relay 17RLP !17NLP (OR (AND 17RN 17RS)
+			(AND 22XS !3727SS)
+			 17RL))
+
+(stdswitch 15)(stdswitch 17)	
+(stdswitch 21)(stdswitch 23)(stdswitch 25)
+
+(relay 23NLP !23RLP (OR (AND 23ANN 23ANS) (AND 23BNN 23BNS) 18PBS 23NL))
+(relay 23RLP !23NLP (OR (AND 23RN 23RS) 23RL))
+(relay 25NLP !25RLP (OR (AND 25ANN 25ANS) (AND 25BNN 25BNS) 28XS 25NL))
+(relay 25RLP !25NLP (OR (AND 25RN 25RS) 25RL))
+
+
+(relay 21NLP !21RLP (OR (AND 21ANN 21ANS) (AND 21BNN 21BNS) 21NL))
+(relay 21RLP !21NLP (OR (AND 21RN 21RS) 21RL))
+
+(relay 24PXS !24PBS 
+          (OR (AND 15BNN (OR 28PBS 28XR))(AND 15RN (OR 10PBS 10XR))))
+(relay 21ANN (OR (AND 17ANN 24PXS) 24ZS 24XS) !21RS !21RWK)
+(relay 21ANS (OR 26XS 26PBS) !21RS !21RWK)
+(relay 21BNN (OR 38XS 16ZS) !21RN !21RWK)
+(relay 21BNS (OR 20PBS 20XS) !21RN !21RWK)
+(relay 21RN  (OR (AND 17ANN 24PXS) 24ZS 24XS) !21ANS !21BNN !21NWK)
+(relay 21RS  (OR 20PBS 20XS) !21ANS !21BNN !21NWK)
+
+(relay 20K (OR 21RN 21BNN) 1725NS 1725SS)
+(relay 26K 21ANN 3727SS 3727NS)
+
+(relay 20XS (OR 20XS (AND (OR 20XPB 20PB) 1725SS)) (OR 21BNN 21RN))
+(relay 26XS (OR 26XS (AND (OR 26XPB 26PB) 3727SS)) 21ANN)
+
+(relay 18K 21BNS  1725SS)
+(relay 38XS (OR 38XS 18XPB 38PB (AND 16ZS 16R)) 21BNS)
+
+(relay 23ANS (OR 16PBS 16XR) !23RS  !23RWK)
+(relay 23BNS (OR 25ANS 25RS) !23RN  !23RWK)
+(relay 23ANN (OR 25BNN 25RN) !23RS  !23RWK)
+(relay 23BNN (OR 32XS 32PBS) !23RN !23RWK)
+(relay 23RS  25ANS !23ANS !23BNN !23NWK)
+(relay 23RN  25BNN !23ANS !23BNN !23NWK)
+
+(relay 25ANS (OR 22PBS 28ZS 22XS 22XR) !25RS !25RWK)
+(relay 25BNS (OR 23ANS 23RS) !25RN !25RWK)
+(relay 25ANN (OR 23BNN 23RN) !25RS !25RWK)
+(relay 25BNN (OR 34XS  34PBS) !25RN !25RWK)
+(relay 25RN  23BNN !25ANS !25BNN !25NWK)
+(relay 25RS  23ANS !25ANS !25BNN !25NWK)
+
+(comment
+(exitlight 34  1 707 south)
+(exitlight 32  3 707 south)
+(exitlight 22  3 714 north)
+(exitlight 16  1 714 north)
+)
+(relay 34K 25BNS 1714SS 1714NS)
+(relay 32K 23BNS 3714SS 3714NS)
+(relay 16K 16PBS 23ANN 1714T 1714SS 1714NS) ; no phony exit!
+(relay 22K (OR (AND !28XS 22KXL) 22PBS) 25ANN  3714SS 3714NS) ;15RWK out 1/11/97
+
+
+;; Three exit-lockout versions
+;; XLAS - VITAL - overlapped AS relays - can lock ovlpd switches
+;; XL   - VITAL - overlapped AS+ ovlpd route locking, use in H relay.
+;; KXL  - NONVITAL version of XL with noncommittal *WK backs instead of 
+;;                              *WC fronts
+
+(relay 22XLAS (AND (OR 24AS 15RWC) (OR 14AS 17NWC)))  ;vital
+(relay 22XL 22XLAS 3720SS (OR 17RWC 3727SS))
+(relay 22KXL 22XLAS 3720SS 24NXLAS !15RWK (OR !17NWK 3727SS)) ; !15RWK 2/197
+
+(relay 28XLAS (AND (OR 32AS 25RWC) (OR 34AS 23NWC)))
+(relay 28XL 28XLAS 3714NS)
+(relay 28KXL 28XLAS 3714NS !25RWK)
+
+(relay 34XS (OR 34XS 34XPB 34PB) !34PBS 25BNS)
+(relay 32XS (OR 32XS 32XPB 32PB) !32PBS 23BNS)
+(relay 22XS !22PBS !28XS !15RWK (OR 22XS 
+	                            (AND 22KXL
+                                         (OR 22XPB (AND 28ZS 28R) 22PB)))
+            25ANN)  ;!24PBS pulled 1/10/97
+
+(relay 22XR 
+	!22PBS
+    (LABEL L22XRT !22XS !28XS 15BNS 3720T
+       (OR (AND 17RS 14PBS) (AND 17ANS (OR 24PBS 24XR))))) ;whee!
+(relay 22ZS (OR 22ZS 22XR) 25ANN (OR (AND 34XS 23RN)(AND 32XS 23BNN))
+                 L22XRT)
+
+(relay 16XR !16PBS
+    (LABEL L16XRT !38XS 21BNS 20PBS 1720T 1725T))
+(relay 16ZS (OR 16ZS 16XR) 23ANN (OR (AND 25BNN 34XS)(OR 25RS 32XS)) L16XRT)
+
+;Dwarves
+(relay 3714TP 3714T)			; auto-cancel kludge
+(relay 3714TPP 3714TP)
+(relay 32PBS !0CPB !32XS !23RN
+		!28XS			; general principles
+	        (OR 32PBS (AND 32PB !23BNS 3714SS))
+		(OR 3714T !3714TPP))
+
+(relay 32H 32R !32AS !22R 23NWC
+      (LABEL L32H1 3714SS 25NWC !23LS !25LS 15NWC !15LS !3714NS 22XL
+                      (or (AND 17RWC !17LS) 3727SSP)))
+(relay 32R 32PBS 23NWK 25NWK 
+			(LABEL L32RT1 22XS 15NWK
+                             (OR (AND 34R 23RWK)
+				 (AND 32R 23NWK)
+				 (OR 3727SSP 17RWK))))
+                                   
+(relay 32RGP !0BRGP !32H)
+(relay 32AS (OR 32AS (AND 3700T 3707T 3714T)
+                      (AND  !3714T !3720T) 32U 0RAS) 32RGP !32R)
+(timer 32U 9 !32AS 32RGP !32R)
+
+(relay 1714TP 1714T)
+(relay 1714TPP 1714TP)
+(relay 34PBS !0CPB !34XS !25RN  ;25RN gratuitous, no such route now
+			!28XS		; leave this anyway.
+			!23BNN
+		   (OR 34PBS (AND 34PB !25BNS 1714SS))
+		   (OR 1714T !1714TPP))
+
+(relay 34H 34R !34AS !22R 1714SS 23RWC L32H1)
+(relay 34RGP !0BRGP !34H)
+(relay 34R 34PBS 23RWK L32RT1)
+(relay 34AS (OR 34AS (AND 1707T 1714T 3714T)
+                     (AND !3714T !3720T) 34U 0RAS) 34RGP !34R)
+(timer 34U 9 !34AS 34RGP !34R)
+
+(relay 28XR !28R !25ANS (LABEL L28XRT 22XLAS 3720SS !22XS !28XS 25ANN))
+(relay 28ZS (OR 28ZS 28XR) 15BNS 
+			(OR (AND 17RN 14XS)
+                            (AND 17ANN (OR (AND 21ANN 26XS)(AND 21RN 20XS))))
+			22KXL L28XRT)
+
+(relay 32CLK 32PBS 23NWK 
+              (LABEL L32CLK1 (OR 15CLK (AND 17CLK !3727SS))))
+(relay 34CLK 34PBS 23RWK L32CLK1)

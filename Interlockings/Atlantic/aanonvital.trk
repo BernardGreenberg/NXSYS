@@ -1,0 +1,802 @@
+(relay 202PBS
+       (OR (AND 202PB !205RN !205BNN) 202PBS)
+       (OR !205ANS !215RS) ; 1-14-2021
+       (AND (OR !202HY 1564T 202FL)(OR !1544T !202COS)))
+
+(relay 206PBS
+       (OR (AND 206PB !207BNN !209BNN) 206PBS)
+       !205RS !207RS ; 1-14-2021
+       (AND (OR !206HY 1552T 206FL)(OR !1542T !206COS)))
+
+
+(relay 210PBS
+       (OR (AND (AND 210PB !210XR) !215BNN 1584NS) (AND 210XR 210ZS) 210PBS)
+       !212PBS !215RS
+       (AND (OR !210HY 1584T 210FL) (OR (AND !1564T 205NWC) !210COS)))
+
+(relay 212PBS
+       (OR (AND 212PB !213BNS 1584SS) 212PBS)
+       !212XS !210PBS !210XS !213RN !205RN (OR (AND !207ANN !209RN) 219FNS)
+       (AND (OR !212HY 1584T) (OR !1604T !1604COS)))
+
+(relay 214PBS
+       (OR (AND (AND 214PB !214XR) !213ANN 1582NS) (AND 214XR 214ZS) 214PBS)
+       !216PBS !213RS
+       (AND (OR !214HY 1582T 214FL) (OR (AND !1572T 209NWC 205NWC) !214COS)))
+
+(relay 216PBS
+       (OR (AND 216PB !215ANS 1582SS) 216PBS)
+       !216XS !214PBS !214XS !215RN 
+       (OR (AND !207ANN !209RN) 219FNS) !205RN
+       (AND (OR !216HY 1582T) (OR !1602T !216COS)))
+
+
+;;;(TrivHPBSxc 222  (OR !209ANN !221BNN !205ANN))
+
+(relay 222PBS
+       (OR (AND 222PB !209ANN (OR !221RN !207RN) !205RN) 222PBS)
+       !209RS !221RS ; 1-14-2021
+       (AND (OR !222HY 1579T) (OR !1569T !222COS)))
+
+(relay 224PBS
+       (OR (AND 224PB !221ANN !221RN 1571NS)
+	   (AND 224XR 224ZS) 224PBS)
+       !241RS !233RS ; 1-14-2021
+       !224XS !228PBS !241RN !241RWK !233RWK
+       (AND (OR !224HY 1571T) (OR !224COS !1561T)))
+
+
+(relay 226PBS
+       (OR (AND 226PB !229BNN 1561NS !241RWK) 226PBS)
+       !228PBS !224XS !229RS
+       (AND (OR !226HY 1561T)(OR !1541T !226COS)))
+
+(relay 230PBS
+       (OR (AND 230PB !227ANN 1563NS !241RWK) 230PBS)
+       !232PBS !227RS
+       (AND (OR !230HY 1543T)(OR !1523T !230COS)))
+
+(relay 228PBS
+       (OR (AND 228PB  !227BNS 1561SS)
+	   (AND 228XR 228ZS) 228PBS)
+       !228XS !224PBS !226PBS !227RWK !227RN
+       (AND (OR 228FL !228HY 1561T) (OR !228COS !1571T)))
+
+
+(relay 232PBS
+       (OR (AND 232PB !232XR !229ANS 1543SS) (AND 232XR 232ZS) 232PBS)
+       !230PBS !229RN
+       (AND (OR 232FL !232HY 1563T) (OR !232COS !1583T)))
+
+
+(relay 234PBS
+       (OR (AND 234PB !233RS !233NS 1601SS) 234PBS)
+       !241RN !221RN !221RWK
+       (AND (OR 234FL !234HY 1601T)(OR !1611T !234COS)))
+
+(relay 244PBS
+       (OR (AND 244PB !241ANS !241RS 1603SS) 244PBS)
+       (OR !229RWK !221RWK)
+       (AND (OR 244FL !244HY 1603T)(OR !1613T !244COS)))
+
+(relay 202K (OR 205BNN 205RN) (OR 202PBS (AND 200AS !200PBS 219FNS)))
+
+(relay 206K
+;;Here's one of the innovations of this implementation. Dispatch and
+;;collect multiple switch selectors in parallel (and collect their
+;;'parallel' results in electrical 'series'.  This way, the "odd branches"
+;;of the single slips are called for and required, but no 'devious'
+;;selection sequence getting them all which works for all cases needs
+;;be devised.  Nothing is lost and everything is gained. -BSG
+
+       207BNN 205ANN 221BNN
+       206PBS) ;no exit.
+
+(relay 222K 209ANN 221BNN 205ANN(OR 222PBS !220PBS))
+(relay 224K (OR 221ANN 221RN) 
+       (OR 225PBS  (AND !228XS 1561SS !227RWK)))
+
+(relay 932K 241ANN !229RWK (OR !241ANS 244PBS))
+
+(relay 208K 205ANS 209BNS (OR 214XS (AND !205ANN !209BNN))
+			   !213RS !213RWK !213RLP) ;etc
+(relay 910K 205BNS !215RS !215RWK (OR !205BNS 202PBS))
+(relay 210K 215BNN 210PBS)
+(relay 214K 213ANN 214PBS)
+(relay 212K 213BNS)
+(relay 216K 215ANS)
+(relay 234K 241BNS (OR 234PBS
+		       (AND !236BPBS !238PBS !240PBS !242PBS 236AS 238AS
+			    240AS 242AS)))
+(relay 244K (OR 241ANS 241RS)
+       (OR 244PBS
+	   (AND !246BPBS !248PBS !250PBS 246AS 248AS 250AS)))
+
+(relay 226K 229BNN)
+(relay 230K 227ANN (OR 230PBS 239FNS))
+(relay 228K 227BNS (OR 228PBS
+		       (AND 1571NS !224XS !233RWK !241RWK !209RWK !205RWK
+			    (OR !221RWK !207NWK))))
+(relay 232K 229ANS 232PBS)
+
+(relay 233RN     (OR  241BNN 241RN)   !233NS  (OR (AND 233L !236AS) !233NWK) !231NLP)
+(relay 233NN     241BNN               !233RS        (OR !233RWK (AND 233L
+					  (OR 220AS 236AS);smoke that!
+					          !205RWK) ) !231RLP)
+
+(relay 241CXLKA
+       (OR !233NWK
+	   (AND 220AS (OR !209RWK
+				 (AND 204AS !205RWK)))))
+
+(relay 241ANN    (OR  244PBS 244XS)   !241RS (OR 241CXLKA !241RWK) !241RLP)
+(relay 241BNN    (OR  234PBS 234XS)   !241RN           !241RWK !241RLP)
+(relay 241RN     (OR  244PBS 244XS)   !241ANS !241BNN
+                                              (OR 241L !241NWK) !241NLP)
+
+(relay 221ANN    233NN                !221RN           !221RWK !221RLP)
+(relay 221BNN    (OR 207RN 209BNN 233RN) !221RS           !221RWK !221RLP)
+(relay 221RN     207RN                !221ANN !221BNS  (OR 221L !221NWK) !221NLP)
+
+(relay 207ANN    233RN                !207RN           !207RWK !207RLP)
+(relay 207BNN    (OR 205RN (AND 205ANN 221BNN (OR 209BNN 209RN)))
+                                      !207RS      (OR 207L !207RWK) !207RLP)
+(relay 207RN     205ANN 209BNN        !207ANN !207BNS  
+                        (OR !233RWK 233L)
+                 ;; see 209RS -- this the same thing over 207
+                    (OR !213ANN 213ANS 214XS
+			(AND !222PBS (OR 221ANN (AND !224PBS !224XR))))
+
+				!233RLP !241RWK !241RLP;*bsg special see above
+
+                                                (OR 207L !207NWK) !207NLP)
+
+
+(relay 209ANN    (OR 207RN 207ANN)
+                                      !209RS    (OR 209L !209RWK) !209RLP)
+(relay 209RN     207ANN 221BNN                  
+                     ;the below disinvolves tks 1 & 2 from 234/244 if !219FNS
+                                     (OR 209RS 219FNS)
+
+                                     ;*NEW TECHNIQUE*
+                                      !209ANS !209BNN
+                  (OR (AND !202PBS !206PBS); see 209RS
+		      !233RN 233RS)
+						       !209NWK !209NLP)
+(relay 209BNN    
+                                     (OR 214XS 214ZS
+					   (AND 213ANN
+						(OR (AND 212PBS 215RN)
+						    (AND 216PBS 215ANN))))
+                                      !209RN           !209RWK !209RLP)
+
+(relay 205ANN    (OR 209RN 209ANN
+			   (AND (OR 214XS 214ZS
+					   (AND 213ANN
+						(OR (AND 212PBS 215RN)
+						    (AND 216PBS 215ANN))))
+				;;!214XR !214PBS ??
+				))
+                                      !205RS             !205RWK !205RLP)
+(relay 205BNN   (OR 210ZS 210XS
+		    (AND 212PBS 215BNN)
+		    (AND 216PBS 213RN))           ;;fp ovlp of 200
+                                      !205RN  (OR 205L !205RWK) !205RLP)
+(relay 205RN     209RN                (OR 205RS 219FNS)
+				      !205BNN !205ANS  !205NWK !205NLP)
+
+
+(relay 215ANN    (OR 216PBS 216XS)    !215RN     (OR 215L !215RWK) !215RLP)
+(relay 215BNN    (OR 213BNN 213RN)    !215RS           !215RWN !215RLP)
+(relay 215RN     213BNN               !215ANN !215BNS
+                                            (OR !212PBS (AND !214PBS !214XR))
+                                            (OR 215L !215NWK) !215NLP)
+
+
+(relay 213ANN    (OR 215RN 215ANN)    !213RS           !213RWK !213RLP)
+(relay 213BNN    (OR 212PBS 212XS)    !213RN           (OR 213L !213RWK) !213RLP)
+(relay 213RN     215ANN               !213ANS !213BNN
+                                             (OR !216PBS (AND !210PBS !210XR))
+					     ;; see 213 RS
+					     	 (OR (AND 213L 221L) !213NWK)
+					     	 !213NLP)
+
+
+(relay 227BNN    (OR 228PBS 228XS 228XR 224ZS)
+                                      !227RN           !227RWK !227RLP)
+(relay 227ANN    (OR 229RN 229ANN)    !227RS           (or 227L !227RWK) !227RLP)
+(relay 227RN     229ANN               (OR !226PBS (AND !232PBS !232XR))
+				      !227BNN !227ANS  (or 227L !227NWK) !227NLP)
+
+
+(relay 229ANN    (OR 232PBS 232XR (AND 241ANN 244XS))
+                                      !229RN           !229RWK !229RLP)
+(relay 229BNN    (OR 227BNN 227RN)    !229RS           !229RWK !229RLP)
+(relay 229RN     227BNN               (OR !230PS (AND !228PBS !228XR))
+				      !229ANN !229BNS  !229NWK !229NLP)
+
+
+;;; Goin' down South....
+
+
+(relay 221ANS    (OR 224PBS 224XS 224XR 228ZS) !221RN        !221RWK !221RLP)
+(relay 221BNS    (OR 209ANS 209BNS 209RS 206PBS) !221RS           !221RWK !221RLP)
+(relay 221RS     (OR 224PBS 224XS 224XR 228ZS) !221ANN !221BNS
+
+                    (OR !213ANN 213ANS 214XS ;; see 207RN -- allows 216/212->222
+			(OR 221ANN (AND !224PBS !224XR)))
+
+                                              (OR 221L !221NWK) !221NLP)
+
+(relay 233NS     221ANS               !233RS      (OR (AND 233L !205RWK) !233RWK) !233RLP)
+
+
+(relay 209ANS    (AND (OR 222PBS 222XS) 205ANS)
+                                      !209RS     (OR 209L !209RWK) !209RLP)
+(relay 209BNS    (OR 207BNS 207RS)    !209RN     (OR 209L !209RWK) !209RLP)
+(relay 209RS     (OR (AND 207BNS 205ANS) 205RS)
+          ;;here's an interesting one -- call 204, in. 202&234, cancel 204.
+          ;;unless this is done (and in 209NS), 202&234 confirm each other,
+          ;;move switches, and post entrance lights.
+                  (OR (AND !202PBS !206PBS); see 209RS
+		      !233RN 233RS)
+                                      !209ANS !209BNN
+                                               (OR 209L !209NWK) !209NLP)
+
+
+(relay 207ANS    (OR (AND 209ANS 221BNS) 209RS)   !207RN
+                                              (OR 207L !207RWK) !207RLP)
+(relay 207BNS    (AND 206PBS  221BNS) !207RS  
+                     ;; don't offer 207N if 220 is doing it -- 226EAS is OK.
+                      (OR (AND 207L 220AS) !207RWK) !207RLP)
+
+(relay 207RS     (OR (AND 209ANS 221BNS) 221RS)    
+                                 (OR !233RWK
+				     (AND 233L
+					  (OR 220AS 236AS));smoke that!
+				     ) ;;C/B 220 etc locking it
+                 ;; see 207RN
+                    (OR !213ANN 213ANS 214XS
+			(AND !222PBS (OR 221ANN (AND !224PBS !224XR))))
+
+					 !233RLP !241RWK !241RLP;**bsg special
+       				!207ANN !207BNS   (OR 207L !207NWK) !207NLP)
+
+(relay 205ANS    (OR 207BNS 207RS 222PBS 222XS) 
+				      !205RS           !205RWK !205RLP)
+                                              ;;(below) fp ovl of 200
+(relay 205BNS    (OR 202PBS 202XS)    !205RN  (OR 205L !205RWK) !205RLP)
+(relay 205RS     (OR 202PBS 202XS)    !205BNN !205ANS
+                  (OR !202PBS ; see 209RS -- this allows 234 to offer 222
+		      !233RN 233RS)
+                                              (OR 205L !205NWK) !205NLP)
+
+(relay 233RS     207ANS 221BNS !233NS       (OR (AND 233L !236AS) !233NWK) !233NLP)
+
+(relay 241ANS    (OR (AND 229ANS (OR (AND 227RS 226PBS)(AND 227ANS 230PBS)))
+		      232ZS 232XS)
+                                      !241RS (OR !241RWK 241CXLKA) !241RLP)
+(relay 241BNS    (OR 233RS 233NS)     !241RN           !241RWK !241RLP)
+(relay 241RS     233RS                !241ANS !241BNN
+                                              (OR 241L !241NWK) !241NLP)
+
+
+(relay 213ANS    (OR 214PBS 214XR
+		     (AND
+		       209BNS 205ANS 207RS (OR (AND 221RS (OR 224XS 228ZS))
+					       (AND 221BNS 222XS))))
+                                      !213RS           !213RWK !213RLP)
+(relay 213BNS    (OR 215RS 215BNS)    !213RN  (OR 213L !213RWK) !213RLP)
+(relay 213RS     215BNS               !213BNN !213ANS
+                                             (OR !216PBS (AND !210PBS !210XR))
+					     (OR (AND 213L 221L) !213NWK) 
+					     	 !213NLP)
+
+(relay 215ANS    (OR 213ANS 213RS)    !215RN  (OR 215L !215RWK) !215RLP)
+(relay 215BNS    (OR 210PBS 210XR
+		     (AND 202XS 205BNS))
+                                      !215RS           !215RWK !215RLP)
+(relay 215RS     213ANS              !215BNS !215ANN
+                                            (OR !212PBS (AND !214PBS !214XR))
+                                            (OR 215L !215NWK) !215NLP)
+		   
+
+(relay 227ANS    (OR 230PBS 230XS)   !227RS            (OR 227L !227RWK) !227RLP)
+(relay 227BNS    (OR 229BNS 229RS)   !227RN            !227RWK !227RLP)
+(relay 227RS     229BNS              (OR !226PBS (AND !232PBS !232XR))
+				     !227BNN           (OR 227L !227NWK) !227NLP)
+
+(relay 229ANS    (OR 227ANS 227RS)   !229RN            !229RWK !229RLP)
+(relay 229BNS    (OR 226PBS 226XS)   !229RS            !229RWK !229RLP)
+(relay 229RS     227ANS              (OR !230PS (AND !228PBS !228XR))
+	     	                     !229ANN !229BNS   !229NWK !229NLP)
+
+
+;;; Now some real fun.
+
+(relay 244XS
+       (OR (AND (OR 244XPB 244PB) 246AS 248AS 250AS) 244XS)
+       (OR 241ANS 241RS)
+       !244PBS
+       !244BPBS !248PBS !250PBS
+       )
+
+(relay 234XS
+       (OR (AND (OR 234XPB 234PB) 236AS 238AS 240AS 242AS) 234XS)
+       241BNS
+       !234PBS !236PBS !238PBS)
+
+(relay 210XS
+       (OR 910XPB (AND 210PB !215BNN) 210XS (AND 210R 210ZS))
+       205BNS !215RS
+       !212PBS (OR !216PBS !213RS)
+       !215RWK
+       )
+
+(relay 214XS
+       (OR 214XS 208XPB (AND 214R 214ZS)
+	   (AND 214PB !213ANN))
+       209BNS 205ANS
+       !216PBS (OR !212PBS !215RS)
+       !213RWK
+       )
+
+(relay 202XS
+       (OR 202XS (AND (OR 202XPB 202PB) 200AS))
+       (OR 205BNN 205RN)
+       !202PBS !200PBS
+       219FNS
+       )
+
+(relay 222XS
+       (OR 222XS (AND (OR 222XPB 222PB) 220AS))
+       209ANN 221BNN 205ANN
+       !222PBS !220PBS
+       )
+
+(relay 224XS
+       (OR 224XS (AND (OR 224PB 224XPB) 1561SS) (AND 228ZS 228R))
+       (OR 221ANN 221RN)
+       !227RWK
+       !224PBS !228XS !226PBS
+       )
+
+
+(relay 212XS
+       (OR  212XS 212XPB 212PB)
+       213BNS
+       !212PBS
+       )
+
+(relay 216XS
+       (OR 216XS 216XPB 216PB)
+       215ANS
+       !216PBS
+       )
+
+(relay 226XS
+       (OR 226XS 226XPB 226PB)
+       229BNN
+       !226PBS)
+
+(relay 230XS
+       (OR 230XS 230XPB 230PB)
+       227ANN
+       239FNS
+       !230PBS)
+
+(relay 228XS
+       (OR 228XS (AND (OR 228PB 228XPB) 1571NS) (AND 224ZS 224R))
+       !233RWK !241RWK !209RWK !205RWK
+       (OR !221RWK !207NWK)
+       227BNS
+       !228PBS !224XS)
+
+(relay 232XS
+       (OR 932XPB (AND 232PB !227BNS) 232XS (AND 232ZS 232R))
+       241ANN
+       !229RWK)
+
+;; through-routes
+
+(relay 228XR
+       (OR 228XR !227BNS)
+       !228PBS
+       (OR 221ANN 221RN)
+       (LABEL L228XRT
+	      !227RWK
+	      !224XS
+	      (OR (AND 221ANN 233NN 1601T 1581T 234PBS)
+		  (AND 221RN 207RN 1589T 1572T 1582T
+		       (OR (AND 215RN 1584T 212PBS)
+			   (AND 215ANN 216PBS))))
+	      !228XS
+	      1571T
+	      ))
+
+(relay 228ZS
+       (OR 228XR 228ZS)
+       227BNS
+       (OR (AND 229BNS 226XS)
+	   (AND 229RS  230XS))
+       L228XRT)
+
+(relay 224XR
+       (OR 224XR (AND !221ANN !221RN))
+       !224PBS
+       227BNS
+       (LABEL L224XRT
+	      !228XS
+	      !205RWK !209RWK ;****might need L rideout
+	      (OR (AND 226PBS 229BNS)
+		  (AND 230PBS 1563T 229RS))
+	      !224XS
+	      1561T
+	      )
+       )
+
+(relay 224ZS
+       (OR 224XR 224ZS)
+       (OR (AND 221ANN 233NN 234XS)
+	   (AND 221RN 207RN (OR 214XS 214ZS)))
+       L224XRT)
+
+(relay 232XR
+       (OR 232XR !229ANS)
+       !232PBS
+       241ANN
+       (LABEL L232XRT
+	      !229RWK
+	      (OR !232XS (AND 232PB 232XR))
+	      244PBS
+	      1603T 1593T 1583T
+	      ))
+       
+(relay 232ZS
+       (OR 232XR 232ZS)
+       229ANS
+       (OR 230XS (AND 226XS 227RS))
+       L232XRT)
+
+(relay 214XR
+       (OR 214XR !213ANN)
+       !214PBS !213RS
+       (AND 209BNS 205ANS)
+       (LABEL L214XRT
+	      (OR !214XS (AND 214XR 214PB))
+	      (OR (AND 207BNS 1552T 206PBS)
+		  (AND 207RS 1589T
+			     (OR (AND 221BNS 222PBS)
+				 (AND 221RS 1571T (OR 224PBS 224XR)))))
+	      1572T
+	      )
+       )
+
+(relay 214ZS
+       (OR 214XR 214ZS)
+       213ANN
+       (OR 216XS (AND 215RS 212XS))
+       L214XRT)
+
+(relay 210XR
+       (OR 210XR !215BNS)
+       !210PBS !215RS
+       205BNS
+       (LABEL L210XRT
+	      (OR !210XS (AND 210PB 210XR))
+	      202PBS
+	      1564T
+	      ))
+
+(relay 210ZS
+       (OR 210XR 210ZS)
+       215BNN
+       (OR 212XS (AND 213RS 216XS))
+       L210XRT)
+
+(relay 244R 244PBS !244XS 
+       (OR (AND 241NWK 232XS 229NWK)
+	   (AND 241RWK 233RWK
+		(LABEL L244R1
+		       207NWK 221NWK
+		       (OR (AND 209NWK 205NWK 222XS)
+			   (AND 209RWK (OR (AND 205RWK 202XS)
+					   (AND 205NWK 206XS))))))))
+
+(relay 234R 234PBS !234XS 
+       241NWK
+       (OR (AND 233NWK  221NWK 224XS 227NWK)
+	   (AND 233RWK  L244R1)))
+
+(relay 212R 212PBS !212XS 
+       213NWK
+       (OR (AND 215NWK 205NWK 202XS)
+	   (AND 215RWK
+		(LABEL L212R1
+		       205NWK 209NWK
+		       (OR (AND 207NWK 221NWK 222XS)
+			   (AND 207RWK (OR (AND 221RWK 233NWK 241NWK
+						 224XS 227NWK 227NWK)
+					   (AND 221NWK 222XS))))))))
+
+(relay 216R 216PBS !216XS 
+       215NWK
+       (OR (AND 213RWK 205NWK 202XS)
+	   (AND 213NWK L212R1)))
+
+(relay 228R 228PBS !228XS
+       227NWK
+       (OR (AND 229NWK 226XS)
+	   (AND 229RWK 230XS)))
+
+(relay 232R 232PBS
+       229NWK
+       (OR (AND 227RWK 226XS)
+	   (AND 227NWK 230XS)))
+
+;;sb
+
+(relay 226R 226PBS !226XS
+       229NWK
+       (OR (AND 227NWK
+		(LABEL L226R1
+		        228XS 233NWK 241NWK) 205NWK 209NWK
+			(AND
+			  (OR !221RWC
+			      (and 207RWK 213NWK))))
+	   (AND 227RWK 241NWK 244XS)))
+
+
+(relay 230R 230PBS !230XS
+       227NWK
+       (OR (AND 229RWK L226R1)
+	   (AND 229NWK 241NWK 244XS)))
+
+			      
+(relay 224R 224PBS !224XS
+       233NWK 241NWK
+       (OR (AND 221NWK 234XS)
+	   (AND 221RWK 207RWK 209NWK 205NWK 214XS 213NWK)))
+
+(relay 222R 222PBS !222XS
+       205NWK 209NWK 221NWK
+       (OR (AND 207RWK 214XS 213NWK 233NWK 241NWK)
+	   (AND 207NWK (LABEL L222R1
+			      233RWK
+			      (OR (AND 241RWK 244XS)
+				  (AND 241NWK 234XS))))))
+
+(relay 206R 206PBS  ; is no 206xs
+       205NWK 207NWK 221NWK
+       (OR (AND 209NWK 214XS 213NWK)
+	   (AND 209RWK L222R1)))
+
+(relay 202R 202PBS !202XS
+       (OR (AND 205NWK 210XS 215NWK)
+	   (AND 205RWK 209RWK 207NWK 221NWK L222R1)))
+
+(relay 210R 210PBS
+       215NWK
+       (OR (AND 213NWK 212XS)
+	   (AND 213RWK 216XS)))
+
+(relay 214R 214PBS
+       213NWK
+       (OR (AND 215NWK 216XS)
+	   (AND 215RWK 212XS)))
+
+
+
+		  
+;; Now put back those NLP/RLP's as needed -- some not easy.
+
+(relay 205NLP !205RLP (OR 205NL
+			  (AND !200AS !204NWC 233NWK !205RWK 241ANS 241ANN)
+			  (AND 205ANN 205ANS)(AND 205BNN 205BNS)
+			  (AND 233NS 233NN !200AS !205NWC)
+			  204PBS 220PBS 228XS
+			  (AND 200PBS 200AS (OR 209NWC 217RWC 221RWC
+						(AND 233NWC 241NWC)
+						))))
+(relay 205RLP !205NLP (OR 205RL
+			  (AND 205RN 205RS)))
+
+
+(relay 207NLP !207RLP (OR 207NL
+			  (AND 207ANN 207ANS)(AND 207BNN 207BNS)
+			  204PBS))
+(relay 207RLP !207NLP (OR 207RL
+			  (AND 220PBS 233NWC !207NWK 220AS)
+			  (AND 228XS 221RWC 226EAS) ;**rwc, not rwk...
+			  (AND 207RN 207RS)))
+
+
+(relay 209NLP !209RLP (OR 209NL
+			  (AND !204AS 205NWK 233NWK !209NWC 241ANS 241ANN)
+			  (AND 209ANN 209ANS)(AND 209BNN 209BNS)
+			  (AND 233NWC !233RWK 204PBS 204AS)
+			  220PBS 228XS))
+(relay 209RLP !209NLP (OR 209RL
+			  (AND 209RN 209RS)))
+
+
+(relay 221NLP !221RLP (OR 221NL
+			  (AND 221ANN 221ANS)(AND 221BNN 221BNS)
+;; do not with EAS/XS but with PBS+RS/BNS, lock out XS until moved.
+			  (AND 228XS (OR 207NWK 213RWK)
+			       ;; !226EAS)
+			       )			       
+			  236APBS
+			  220PBS 204PBS))
+(relay 221RLP !221NLP (OR 221RL
+			  (AND 221RN 221RS)))
+
+
+
+(relay 213NLP !213RLP (OR 213NL
+       	      	      	  (AND 228XS 221RWC 207RWC)
+			  (AND 213ANN 213ANS)(AND 213BNN 213BNS)
+			  214XS))
+(relay 213RLP !213NLP (OR 213RL
+			  (AND 213RN 213RS)))
+
+(relay 215NLP !215RLP (OR 215NL
+			  (AND 215ANN 215ANS)(AND 215BNN 215BNS)
+			  200PBS
+			  210XS))
+(relay 215RLP !215NLP (OR 215RL
+			  (AND 215RN 215RS)))
+
+
+(relay 227NLP !227RLP (OR 227NL
+			  (AND 227ANN 227ANS)(AND 227BNN 227BNS)
+			  224XS))
+(relay 227RLP !227NLP (OR 227RL
+			  (AND 227RN 227RS)))
+
+
+(relay 229NLP !229RLP (OR 229NL
+			  (AND 229ANN 229ANS)(AND 229BNN 229BNS)
+			  (AND 246APBS 241NWC)  ;; and nwc 26 Mar 2015
+			  232XS))
+(relay 229RLP !229NLP (OR 229RL
+			  (AND 229RN 229RS)))
+
+
+(relay 233NLP !233RLP (OR 233NL
+			  (AND 233NN 233NS)
+			  (AND 236BPBS !207NWC !207NLP 236AS)
+			  228XS
+			  (AND 207RN 207RS)))
+(relay 233RLP !233NLP (OR 233RL
+			  (AND !233RWC 209RWC (OR !204AS (AND 205RWC !200AS))
+			       241ANN 241ANS)
+			  (AND 233RN 233RS)))
+       
+
+;;; I declare that neither 241 nor 233 are permitted reverse for any
+;;; move over 207R (see below).  While "bad railroading" is perhaps one
+;;; excuse, a stronger one is that the crossover (and arguably the switch)
+;;; effectively end in TKcct 1589; if 1589 doesn't lock 241, what does?
+;;; But 1589 moves over 207R are legal and should not logically inhibit
+;;; 241 from moving normal.  So require 241/233 N for any move over
+;;; 207R-- there should be no legitimate reason for them to be reverse,
+;;; much less locked reverse.
+;;; Then add 241/233 !RWK!RLP terms to 207RN/RS (which prohibits the
+;;; offering/completion of routes not realizable), and require their NWK
+;;; in all R's in series with 207RWK wherever it appears.  This will
+;;; allow 233/241 LS to be realized without conditional rideout of 1589
+;;; and its route lockers, which seems patently unsafe.
+
+(relay 241NLP !241RLP (OR 241NL
+			  (AND 241ANN 241ANS)(AND 241BNN 241BNS)
+			  (AND 246APBS  246AS !241NWC !241RWK ;; was BPBS?
+			       (OR (AND !207NWC !207NLP)
+				   (AND !221NWC !221NLP)))
+			  (AND 207RN 207RS) ;;**bsg original
+			  228XS
+			  236BPBS
+			  238PBS
+			  ))
+(relay 241RLP !241NLP (OR 241RL
+			  (AND 241RN 241RS)))
+
+;; Now restore those approach PBS's
+
+
+(relay 200PBS
+       (OR (AND 200PB 1564NS) 200PBS)
+       !215RWK ;; see comments at 215LS
+       (OR !205RWK
+	   
+       ;;***The tail of the next line looks like "bad railroading"...
+	   (AND 209RWC 221NWC (OR 233RWC 241RWC)))
+
+       !202XS 219FXS
+       (OR 200FL 1544T))
+
+(relay 204PBS
+       (OR (AND 204PB 1564NS)
+	   (AND 204PBS !221RWK !205RWK !207RWK ;; allow flashing.
+		   (OR 233RWC 241RWC !209RWK)))
+	   ;; no xs
+       (OR 204FL 1542T))
+
+(relay 220PBS
+       (OR (AND 220PB 1579NS) 220PBS)
+       !222XS
+       (OR 233RWC !207NWK)
+       !221RWK !205RWK (OR !209RWK 209L)
+       1569T)
+
+
+(relay 7236PBS 236BPBS)
+(relay 8236PBS 236BPBS)
+(relay 236BPBS
+       (OR (AND (OR 7236PB 8236PB) 1611SS 1631SS 1641SS 1651SS)
+	   (AND 236BPBS 7236PBS 8236PBS))
+       !241RWK !234XS
+       (OR !233RWK 207NWC)
+       (OR 8236FL 1631T 1641T))
+
+(relay 236APBS
+       (OR 221NWC (AND !221RWK (OR 7236PB 8236PB)))
+       236BPBS)
+
+(relay 7246PBS 246BPBS)
+(relay 8246PBS 246BPBS)
+(relay 246BPBS
+       (OR (AND (OR 7246PB 8246PB) 1613SS 1623SS 1643SS 1653SS)
+	   (AND 246BPBS 7246PBS 8246PBS))
+       !244XS
+       (OR 8246FL 1643T))
+
+(relay 246APBS
+       (OR (AND
+	     (OR 241RWC 229NWC)
+	     (OR 241NWC (AND 221NWC 207NWC)))
+	   (AND !229RWK
+		(OR !241RWK (AND 207NWC 221NWC))
+		(OR 7246PB 8246PB)))
+       246BPBS)
+
+
+(relay 238PBS
+       ;;; The CL of 238 comes NOWHERE NEAR 221 -- I'm going to
+       ;;; ignore the comment mandating conditional switch locking.
+       ;; But it does lock 241.
+       (OR (AND 238PB 1651SS) 238PBS)
+       !234XS
+       !241RWK
+       (OR 238FL 1681T))
+
+
+(relay 240PBS
+       (OR (AND 240PB 1651SS) 240PBS)
+       !234XS
+       (AND (OR !240HY 1691T 240FL)(OR !1731T !240COS)))
+
+(relay 7242PBS 242PBS)
+(relay 8242PBS 242PBS)
+
+
+(relay 242PBS
+       (OR (AND (OR 7242PB 8242PB) 1651SS)
+	   (AND 242PBS 7242PBS 8242PBS))
+       !234XS
+       (OR 8242FL 1731T 1781T))
+
+(relay 248PBS
+       (OR (AND 248PB 1653SS) 248PBS)
+       !244XS
+       (AND (OR !248HY 1673T 248FL)(OR !1693T !248COS)))
+
+(relay 7250PBS 250PBS)
+(relay 8250PBS 250PBS)
+
+
+(relay 250PBS
+       (OR (AND (OR 7250PB 8250PB) 1653SS)
+	   (AND 250PBS 7250PBS 8250PBS))
+       !244XS
+       (OR 8250FL 1713T 1693T))

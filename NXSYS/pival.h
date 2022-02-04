@@ -1,0 +1,12 @@
+#ifndef _NXSYS_PI_CONSTANTS_H__
+#define _NXSYS_PI_CONSTANTS_H__
+
+#ifndef CONST_PI
+#define CONST_PI 3.141592653589793238462643383
+#define CONST_2PI (2.0*CONST_PI)
+#define CONST_PI_OVER_2 (CONST_PI/2.0)
+#define CONST_3PI_OVER_2 (3.0*CONST_PI/2.0)
+#define CONST_PI_OVER_4 (CONST_PI/4.0)
+#endif
+
+#endif

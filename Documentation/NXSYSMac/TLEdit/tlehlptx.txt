@@ -1,0 +1,68 @@
+.CRLF=1;
+:TLEditHelpText:
+NXSYS (version 2) Track Panel Editor --	Copyright Bernard S. Greenberg 1997-2001
+
+	BE SURE TO PAGE DOWN THROUGH WHOLE HELP TEXT.
+
+***THIS IS NOT FREEWARE. IF YOU HAVE THIS PROGRAM, IT HAD BETTER
+***BE BECAUSE I EXPLICITLY GRANTED YOU PERMISSION TO USE IT FOR YOUR
+***OWN PERSONAL USE. YOU ARE NOT PERMITTED TO REDISTRIBUTE IT, OR
+***USE IT FOR BUSINESS WITHOUT A LICENSE.
+
+Layouts consist of straight line "track segments" which connect "joints", which appear as red dots.  Tracks can only bend or join at joints. A joint can have one, two, or three segments ("branches") emanating from it -- one is the end of a track, two is an insulated joint, or a "kink" in a track, three is a switch.
+
+TLEdit TWO-LINE SUMMARY-------------------------------------------------------
+    MOUSE LEFT (click and drag) CREATES NEW TRACKAGE, including switches.
+    MOUSE RIGHT (click and drag) CREATES, MOVES, AND ALIGNS JOINTS.
+=======================================================================
+CREATING AND EDITING TRACK
+
+Read more below to create/edit signals and exit lights.
+
+Click and drag mouse left to create a new track segment.  Click left on either an extant joint which is not already "full" (3 branches), some other point on an extant segment, or elsewhere, and drag the mouse, left button held.  Drop the mouse on either an extant joint which is not full, some other point on an extant segment, or elsewhere - a new segment will be created.  To "cancel", i.e., change your mind and create no new segment, drop the mouse end of the rubber band back on the stationary end.  Slopes of less than 4% from the vertical or horizontal are assumed to be vertical or horizontal, and "snapped" into place.
+
+Click and drag an extant joint with mouse right to move it. Clicking and dragging mouse right in the middle of an extant segment creates a joint and moves it -- you can insert a "kink" this way. If you drag a joint to another joint, and there are no more than three branches among the two of them, the joints will merge into one.  The rubber-band lines will "click" onto a detente (and show as red) if the editor thinks it knows what you are trying to do.
+
+Placing a new joint in the middle of an extant segment via either tool splits the segment in twain at that point.  For mouse left, the new joint will not come into existence until you actually drag the mouse.  For mouse right, a new joint will come into existence immediately.
+
+Any object (joint, segment, signal, exit light, or switch key) may be selected, which turns it green, by clicking left on it. A newly-created object, or a joint just moved, is automatically selected.  Pressing the "Edit Properties" tool (or typing ctrl+p) when an object is selected brings up its "properties dialog", different for each type of object, allowing detailed control of its properties.
+
+"Cut" (use the tool or control-X) to delete a selected object.  Loose ends of a deleted segment will vanish with it.  "Cut" of a selected joint of two branches will remove the joint and collapse the two segments into one, joining the endpoints of the previous two.  You must delete signals and exit lights at an insulated joint before the joint may be deleted.  There is presently no undo or paste.
+
+A joint of two branches can be made insulated by selecting it and clicking the "insulate" tool (insulated joints appear as yellow dots.)  Creating a signal at an uninsulated joint of two branches it insulates it automatically.
+
+Scroll down or to the right to extend layout those ways.  To extend up or to the left, use View|Shift Layout (alt+s).  This takes much time to run.  To set the default view origin that comes up in NXSYS, scroll until you have it, and use View|Set Viewport here.
+
+=========================================================================
+CREATING AND EDITING OTHER OBJECTS
+
+TO CREATE A SIGNAL: select any joint of 1 or 2 branches (i.e., not a switch), or make one with mouse right.  Choose the one of the two "Create signal" with the closer of the two orientations.  Signals move around as you move the joint.  Click right on a signal calls up its properties dialog, which allows editing or assignment of lever numbers, lenses, absence of stop, etc.  "Station Number" is the decimal number that will be used to identify relays associated with the signal and from which the signal ID plate will be computed.  IRT and BMT/IND conventions for choosing this differ. Select and "Cut" to delete a signal.
+
+PANEL EXIT LIGHTS CAN only BE CREATED by selecting a signal and clicking the "Create or Select Exit Light" tool to create an exit light for exiting at that signal.  Normally, exit lights, other than a selected one, including one just created, are hidden. To show all exit lights, toggle the "Show/Don't Show Exit Lights" tool; they can only be clicked for cutting or properties (lever number) editing when lit. To create a same-direction exit (when there is no signal in the entrance direction), create such a signal, create its exit light, and delete the signal.  Exit lights, when created, inherit the lever number, if any, of their signals.
+
+INSULATED JOINT STATION NUMBERS and SWITCH MACHINE NUMBERS can be assigned via the joint's properties dialog.  All insulated joints and switch joints are automatically assigned unique numbers (to facilitate reload) over 10000, which do not display on the panel.  Set them as you want via the dialog.  You can "flip" IJ station numbers and switch numbers between sides of the track (to address visual collisions) with the "Flip Numbers" tool.
+
+AUXILIARY SWITCH KEYS are created by pressing the tool that resembles one: move the mouse to the final position, and click left to drop it there.  Type any character or click right to abort.  To edit a key's switch number or board position, click right on it or use the properties tool.  To move one, select it first, release the mouse button, and then click and drag left to a new position.  Cut to destroy.
+
+TRAFFIC LEVERS and GENERIC PANEL SWITCHES and LAMPS are created with the three tools that resemble them.  Creation and property editing is identical to that for auxiliary switch keys (above).  Traffic lever graphics in-line with track is not supported yet; use arbitrary text to label to taste.  "Normal" direction (left or right -- affects relay nomenclature and initial state) is set from the properties dialog.
+
+ARBITRARY TEXT STRINGS of any size or font are created by pressing the tool labelled "abc": move the mouse to the final position, click left to drop.  Dragging/moving, selection, destruction, and editing is the same as for auxiliary switch keys.  Click right or use the properties tool to set text content, font, size. etc.
+
+=======================================================================
+ASSIGNING TRACK CIRCUIT IDENTIFIERS
+
+Track segments collect into track sections (track circuits); NXSYS generates and manages T relays and "line-o-lite"s on a per-circuit basis.  Select and property edit a track segment to assign a numeric track circuit relay ID.  If "Wildfire spread by contact" is selected, all track segments reachable from the one being edited without passing an insulated joint will have their Circuit ID's changed as well.  NXSYS will not equip a track segment with the default ID (0).  Track segments with circuits assigned light with white "line-o-lites" in TLEdit.
+
+========================================================================
+SWITCH ORIENTATION (which route is "normal"?)
+
+TLEdit by default assigns the three branches emanating from a switch joint the designations "stem", "normal", and "reverse" based upon the angles between them.  In some cases, notably for slip switches, this default is not correct.  The two buttons "highlight normal" and "swap normal" on the switch's properties dialog can be used to see which branch is "normal" (selecting it) and swap the definitions of normal and reverse (highlighting the new "normal") to facilitate manual adjustment.
+========================================================================
+
+Control-w (or "New") to "wipe" the drawing clear.
+
+Use the "show joints" tool (an on/off button) to see what the panel will look like on NXSYS (i.e., no red dots).
+
+You can save and restore your creations, but no promise is made about back-compatibility during development.  The app will accept a file name as a command argument.
+
+You can (include "foo.trk") in an Version 2 NXSYS .trk file.  The outer file should contain all the relay definitions and include the TLEdit-generated file, which should not be hand-edited.  (The language is fairly obvious, and is left as an exercise for the user.)

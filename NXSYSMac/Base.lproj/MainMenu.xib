@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17700" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17700"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
+            <connections>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="GzC-gU-4Uq"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
+            <connections>
+                <outlet property="AutomaticOperation" destination="MkI-gw-431" id="L43-AY-fLD"/>
+                <outlet property="DraftspersonItem" destination="SHQ-1b-ICm" id="laH-v6-qvn"/>
+                <outlet property="ScenarioHelpItem" destination="f7O-Ji-tXJ" id="1Nt-zk-pwM"/>
+                <outlet property="demoView" destination="IGb-5y-3zk" id="J6F-l4-DCU"/>
+                <outlet property="myScrollView" destination="F5v-wg-OrU" id="OnW-nC-gWy"/>
+                <outlet property="theView" destination="7IB-SB-YBs" id="hgl-4O-tWJ"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
+            </connections>
+        </customObject>
+        <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+        <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
+            <items>
+                <menuItem title="NXSYSMac" id="1Xt-HY-uBw">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="NXSYSMac" systemMenu="apple" id="uQy-DD-JDr">
+                        <items>
+                            <menuItem title="About NXSYSMac" id="yaq-G3-4D5">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="NewAbout:" target="Voe-Tx-rLC" id="Qgw-Sj-YrL"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
+                            <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                <connections>
+                                    <action selector="Preferences:" target="-1" id="vQQ-7o-nAM"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
+                            <menuItem title="Services" id="NMo-om-nkz">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
+                            <menuItem title="Hide NXSYSMac" keyEquivalent="h" id="Olw-nP-bQN">
+                                <connections>
+                                    <action selector="hide:" target="-1" id="PnN-Uc-m68"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Hide Others" keyEquivalent="h" id="Vdr-fp-XzO">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="hideOtherApplications:" target="-1" id="VT4-aY-XCT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show All" id="Kd2-mp-pUS">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="unhideAllApplications:" target="-1" id="Dhg-Le-xox"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
+                            <menuItem title="Quit NXSYSMac" keyEquivalent="q" id="4sb-4s-VLi">
+                                <connections>
+                                    <action selector="terminate:" target="-1" id="Te7-pn-YzF"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="File" id="dMs-cI-mzQ">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="File" id="bib-Uj-vzu">
+                        <items>
+                            <menuItem title="Open..." keyEquivalent="o" id="IAo-SY-fd9">
+                                <connections>
+                                    <action selector="HandleFileOpen:" target="Voe-Tx-rLC" id="oN8-mu-DgL"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Open Recent" id="tXI-mr-wws">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="oas-Oc-fiZ">
+                                    <items>
+                                        <menuItem title="Clear Menu" id="vNY-rz-j42">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="File Info" keyEquivalent="i" id="mri-2y-qoC">
+                                <connections>
+                                    <action selector="FileInfo:" target="Voe-Tx-rLC" id="S5P-hb-JQm"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
+                            <menuItem title="Reload" keyEquivalent="r" id="dWo-74-t7S">
+                                <connections>
+                                    <action selector="HandleReload:" target="Voe-Tx-rLC" id="GFU-wl-r6D"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
+                                <connections>
+                                    <action selector="performClose:" target="-1" id="HmO-Ls-i7Q"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="aJh-i4-bef"/>
+                            <menuItem title="Demo" id="Lfz-qm-NFM">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="Demo:" target="Voe-Tx-rLC" id="HDu-BE-nX0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Print Logic" id="22M-JH-d6n">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="Print Logic File" id="2ud-vc-PPJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="hGI-B4-3Zo"/>
+                            <menuItem title="Page Setup…" keyEquivalent="P" id="qIS-W8-SiK">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                <connections>
+                                    <action selector="runPageLayout:" target="-1" id="Din-rz-gC5"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Print…" keyEquivalent="p" id="aTl-1u-JFS">
+                                <connections>
+                                    <action selector="print:" target="-1" id="qaZ-4w-aoO"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Interlocking" id="Ks8-lG-fqQ" userLabel="Menu Item - Interlocking">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Interlocking" autoenablesItems="NO" id="AgG-o1-6VD" userLabel="Menu - Interlocking">
+                        <items>
+                            <menuItem title="Clear all track" id="NL0-l9-SmX">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ClearAllTrack:" target="Voe-Tx-rLC" id="gaO-ji-awx"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Cancel all signals" id="6YX-UT-xUK">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="CancelAllSignals:" target="Voe-Tx-rLC" id="SdY-cX-KXg"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Release all approach locking" keyEquivalent="a" id="0QK-jD-MYf">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES"/>
+                                <connections>
+                                    <action selector="ReleaseAllApproachLocking:" target="Voe-Tx-rLC" id="AMU-ts-NmS"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Clear all aux switch keys" id="oUP-Ek-Q0L">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ClearAllAuxSwitches:" target="Voe-Tx-rLC" id="M73-9x-SCj"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Normal all switches" id="nzC-gZ-z6R">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="NormalAllSwitches:" target="Voe-Tx-rLC" id="kZh-bt-3qX"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="All of the Above" state="mixed" keyEquivalent="r" id="xbK-cf-vcr">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="ClearAllTheAbove:" target="Voe-Tx-rLC" id="4f3-ss-f0B"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="dbx-oq-a9t"/>
+                            <menuItem title="Bobble all signal repeaters" keyEquivalent="b" id="x5b-Da-JLo">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="Bobble:" target="Voe-Tx-rLC" id="NOr-Dh-bYu"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Q7h-oP-d1r"/>
+                            <menuItem title="Automatic Operation" id="MkI-gw-431">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="AutomaticOperation:" target="Voe-Tx-rLC" id="B9a-4Q-QPd"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Trains" id="NhH-qs-lFL">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Trains" id="eJU-kn-Gif">
+                        <items>
+                            <menuItem title="New" id="AYy-eZ-nZ5">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="Train:" target="Voe-Tx-rLC" id="X4C-bG-Nl5"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="New (stopped)" id="DO9-at-Zp5">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="TrainStopped:" target="Voe-Tx-rLC" id="I1v-ZJ-FmQ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Halt all" id="6dY-Ff-nnM">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="TrainHaltAll:" target="Voe-Tx-rLC" id="JSo-Sd-NJR"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Kill all" id="sl3-5e-Nqg">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="TrainKillAll:" target="Voe-Tx-rLC" id="XAG-oZ-MwU"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Relays" id="c8K-8o-N98">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Relays" id="JTU-DE-xJv">
+                        <items>
+                            <menuItem title="Query" id="DAZ-dB-I10">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="callRelayQuery:" target="Voe-Tx-rLC" id="nRP-w1-W4N"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Trace to console" id="M3P-cn-Cl4">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="TraceToConsole:" target="Voe-Tx-rLC" id="AQ9-AO-5NO"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Trace to window" id="tTX-ES-iqR">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="TraceToWindow:" target="Voe-Tx-rLC" id="GN6-aF-JFZ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Draw relay circuit" id="vFU-pe-Set">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="DrawRelayCmd:" target="Voe-Tx-rLC" id="XQS-Bv-eYM"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="View" id="H8h-7b-M4v">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="View" id="HyV-fh-RgO">
+                        <items>
+                            <menuItem title="Flush Full Signal Displays" id="kpz-UE-OR3">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="FlushFullsigWins:" target="Voe-Tx-rLC" id="TjS-TL-xAm"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Relay Draftsperson" keyEquivalent="d" id="SHQ-1b-ICm">
+                                <connections>
+                                    <action selector="DraftspersonClick:" target="Voe-Tx-rLC" id="oI0-lU-oRn"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom In" keyEquivalent="=" id="9cx-q7-7fC">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                <connections>
+                                    <action selector="ZoomIn:" target="Voe-Tx-rLC" id="hhh-UT-Bqz"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom Out" keyEquivalent="-" id="fke-8y-Y6o">
+                                <connections>
+                                    <action selector="ZoomOut:" target="Voe-Tx-rLC" id="FAh-Tc-VZT"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Window" id="aUF-d1-5bR">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
+                        <items>
+                            <menuItem title="Invalidate (debug)" id="FhL-Fy-rAr">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="Minimize" keyEquivalent="m" id="OY7-WF-poV">
+                                <connections>
+                                    <action selector="performMiniaturize:" target="-1" id="VwT-WD-YPe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom" id="R4o-n2-Eq4">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="performZoom:" target="-1" id="DIl-cC-cCs"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
+                            <menuItem title="Bring All to Front" id="LE2-aR-0XJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="arrangeInFront:" target="-1" id="DRN-fu-gQh"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Help" id="wpr-3q-Mcd">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
+                        <items>
+                            <menuItem title="NXSYS / Mac Help (start here)" keyEquivalent="?" id="FKE-Sm-Kum">
+                                <connections>
+                                    <action selector="MacHelp:" target="Voe-Tx-rLC" id="QTD-uB-Xnk"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Release Notes" id="hFM-ZT-NzP">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ReleaseNotes:" target="Voe-Tx-rLC" id="Ohq-ra-Zak"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="NXSYS Documentation and Help" id="aYW-EX-bfv" userLabel="NXSYS Documentation">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="NXV1Help:" target="Voe-Tx-rLC" id="yga-9J-rUq"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Scenario Help 1" id="f7O-Ji-tXJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ScenarioHelp1:" target="Voe-Tx-rLC" id="Qn3-To-8QI"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="-114" y="154"/>
+        </menu>
+        <window title="Version 2 NXSYS for OS/X Macintosh" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="NXSYS Main Frame" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" topStrut="YES"/>
+            <rect key="contentRect" x="335" y="300" width="799" height="500"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
+            <view key="contentView" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="799" height="500"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" horizontalScrollElasticity="allowed" verticalScrollElasticity="allowed" findBarPosition="belowContent" translatesAutoresizingMaskIntoConstraints="NO" id="F5v-wg-OrU">
+                        <rect key="frame" x="0.0" y="-1" width="799" height="501"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <clipView key="contentView" id="Eys-XY-U5g">
+                            <rect key="frame" x="1" y="1" width="797" height="499"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView appearanceType="aqua" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7IB-SB-YBs" customClass="MainView">
+                                    <rect key="frame" x="7" y="0.0" width="790" height="494"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES"/>
+                                </customView>
+                            </subviews>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="rYD-iY-SuW">
+                            <rect key="frame" x="1" y="477" width="797" height="15"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="VPO-ay-2TH">
+                            <rect key="frame" x="-100" y="-100" width="15" height="426"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                    <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R5Z-SE-zUi">
+                        <rect key="frame" x="94" y="30" width="625" height="47"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <clipView key="contentView" drawsBackground="NO" id="hM7-cG-dGg">
+                            <rect key="frame" x="1" y="1" width="623" height="45"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView editable="NO" selectable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" usesRuler="YES" allowsNonContiguousLayout="YES" id="IGb-5y-3zk">
+                                    <rect key="frame" x="0.0" y="0.0" width="623" height="45"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="623" height="45"/>
+                                    <size key="maxSize" width="638" height="10000000"/>
+                                    <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                </textView>
+                            </subviews>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="anv-wn-oGH">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="A0P-zu-r8j">
+                            <rect key="frame" x="-100" y="-100" width="15" height="76"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="-178" y="-193"/>
+        </window>
+        <menuItem title="Item" id="O0u-l7-nJA">
+            <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
+        <menuItem title="Item" id="Wni-rM-9de">
+            <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
+        <menuItem isSeparatorItem="YES" id="ouS-sP-uSw"/>
+        <menuItem title="Item" id="EcN-Bl-cE1">
+            <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
+        <menuItem title="File" id="siy-wc-PQe">
+            <modifierMask key="keyEquivalentModifierMask"/>
+            <menu key="submenu" title="File" id="1jd-Zz-Tmh">
+                <items>
+                    <menuItem title="New" keyEquivalent="n" id="d2p-FE-JLE">
+                        <connections>
+                            <action selector="newDocument:" target="-1" id="E5z-dL-R1C"/>
+                        </connections>
+                    </menuItem>
+                    <menuItem title="Open…" keyEquivalent="o" id="zte-o0-oX5">
+                        <connections>
+                            <action selector="openDocument:" target="-1" id="83J-Pf-Vfo"/>
+                        </connections>
+                    </menuItem>
+                    <menuItem title="Open Recent" id="GML-eL-lec">
+                        <modifierMask key="keyEquivalentModifierMask"/>
+                        <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="8fe-kE-XtV">
+                            <items>
+                                <menuItem title="Clear Menu" id="CP9-Ra-mXo">
+                                    <connections>
+                                        <action selector="clearRecentDocuments:" target="-1" id="wq5-CZ-APh"/>
+                                    </connections>
+                                </menuItem>
+                            </items>
+                        </menu>
+                    </menuItem>
+                    <menuItem isSeparatorItem="YES" id="Y0U-Sc-Mbv"/>
+                    <menuItem title="Close" keyEquivalent="w" id="7VL-MA-oSR">
+                        <connections>
+                            <action selector="performClose:" target="-1" id="oYN-Kq-qWP"/>
+                        </connections>
+                    </menuItem>
+                    <menuItem title="Save" keyEquivalent="s" id="qic-kh-iwq">
+                        <connections>
+                            <action selector="saveDocument:" target="-1" id="bJl-jp-IrC"/>
+                        </connections>
+                    </menuItem>
+                    <menuItem title="Save As…" keyEquivalent="S" id="h2u-aU-7D0">
+                        <connections>
+                            <action selector="saveDocumentAs:" target="-1" id="Qmh-dv-cfr"/>
+                        </connections>
+                    </menuItem>
+                    <menuItem title="Revert to Saved" id="mkb-xe-YSh">
+                        <modifierMask key="keyEquivalentModifierMask"/>
+                        <connections>
+                            <action selector="revertDocumentToSaved:" target="-1" id="foc-59-7Yf"/>
+                        </connections>
+                    </menuItem>
+                    <menuItem isSeparatorItem="YES" id="YnR-RY-hv8"/>
+                    <menuItem title="Page Setup…" keyEquivalent="P" id="gj7-Gb-aLo">
+                        <connections>
+                            <action selector="runPageLayout:" target="-1" id="rKZ-xj-4r2"/>
+                        </connections>
+                    </menuItem>
+                    <menuItem title="Print…" keyEquivalent="p" id="Eaa-BR-VvP">
+                        <connections>
+                            <action selector="print:" target="-1" id="jhJ-ue-AJn"/>
+                        </connections>
+                    </menuItem>
+                </items>
+            </menu>
+        </menuItem>
+    </objects>
+</document>

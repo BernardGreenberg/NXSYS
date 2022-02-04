@@ -1,0 +1,181 @@
+Broadway-Myrtle Interlocking (1998)
+
+The supplied interlocking (the "track object" file myrtle.tko) is an accurate
+reproduction of the BMT (Division B) interlocking on the Broadway-Jamaica
+line at Broadway (Brooklyn, NY), at the intersection with the remaining leg
+of the Myrtle Avenue El, demolished (geographic) South of this point
+in 1969.  Please use File | Open to use it.
+
+The layout is aligned in the usual orientation, geographic West to the left
+and East to the right.  The BMT defines railroad North as whichever direction
+is towards Manhattan, which, in this case, is to the left, and this
+determines all the North-South relay nomenclatures and track numberings.
+Note that this makes the two tracks at the top, which go up to the former
+"Myrtle El", "Railroad North" in the "Geographic South" direction.
+
+The IJ numbers being accurate, NXSYS causes the train timings to be
+accurate.
+
+It is important to note that at the default scale (1.0), you are initially
+viewing (on the typical monitor) about 1/3 of the interlocking; use the
+horizontal scroll-bars  to see the important portions to the left and right.
+
+The middle track is used for expresses running one way in the AM and the
+other way in the PM.  On the actual property it is "traffic-controlled"
+between interlockings (Marcy Ave to the West and East New York to the East),
+but NXSYS does not support that, nor have those (in the latter case)
+extremely large interlockings been modelled, so the "holdout" home signals
+204/206/172/174 implement a simple form of traffic control via route locking,
+which is, after all, a simple form of traffic control.
+
+The slip switches (165/167, 155/157) are organized and numbered as in real
+life, which takes some thinking-about and getting-used-to: 165 is a two-ended
+crossover that goes from J3 track to M2 track, and 167 (the "slip") is a
+singleton switch that joins M2 track to J2 track.  155 is a two-ended
+crossover from J1 to M1, and 157 (the "slip") is a singleton switch joining
+M1 to J3.  Each pair of switches, singleton and crossover, is identical to a
+"Y" (crotch) numbered the same way.  The key to the handling of the slip
+switches and grade-crossings is that the switches that feed the "Y" lock out
+conflicting moves across them when reversed.  This will be made patently
+clear by switch-flashing if you try to conflict with it.
+
+Due to exigencies of the implementation, the "slip" part of the switch must
+be "thrown" (reverse) when the "crossover" part is reverse, even though its
+state does not matter logically: this same exigency is taken on the actual
+property.  This creates a parallelism with the technique standardly used to
+manage diamond crossovers, which will be evident in the switch selection
+relays over the slip switches, should you choose to trace it.
+
+Some of the complexities of this interlocking are due to its compactness and
+the resulting pervasion of the control lines of the approach signals 152,
+162, 202, 194 across the entire length of the interlocking.  This gives rise
+to a large number of "conditional crosslock" situations, wherein switches
+must be moved in careful order to preserve these control lines intact without
+dropping the signals as routes are set up when the approach signals are clear
+(or have not timed out their approach locking).
+
+To see this in action, run the supplied demo "z.xdo".
+
+The approach signal "strings" A,B,(C) 152, 162, 194 operate (as on the real
+property) together, and each string is controlled by one "pushbutton" (GK
+light in NXSYS). Currently, that is the -last- (highest letter) one of
+the chain, (on actual panels it is the -first-; this may be changed
+in future releases; the current way has an advantage with limited screen width).
+
+Broadway/Myrtle is replete with 1- and 2-try GT and ST signals, which all
+behave accurately according to the prints, and implement their correct
+timings (GT's at 25, ST at 20).  The ST signals display the standard NYCTA
+aspect (lit "20" numerals) for the "ST" state (red only because 20mph timing
+section not yet timed out).  This applies to home, automatic, and approach
+signals.  There are also numerous "facing-point overlap" situations 
+where track occupancy beyond a switch causes an approach signal preceding
+it to lock out a move, yet the move is permitted to be lined in spite of that,
+preconditioned to "spring" automatically when the train moves out.
+
+Trains are 500', because the IJ's at the platform end are marked as being
+600' apart, which (currently) is definitive, meaning trains have to be
+something less to fit in the platform between signals without spuriously
+occupying extra track circuits.
+
+Approach signal string A/B 194 can clear in two degrees, as per its prints,
+"on time" (ST state indication) and "full"; in the former state, it only
+locks 195 and 185, in the latter, the control length pervades the
+interlocking and it locks all trailing switches in its path.
+
+As per NYCTA design standard, opposing approach signal control lines do -not-
+lock each other out (the assumption of impossibility, or not providing for,
+simultaneous double overrun, in the interest of flexibility/headway).  194 vs
+162 over the middle track is such a case.
+
+The automatic signals at the exits and intermediate exits of the interlocking
+(J8-240, J2-741, J4(actually 3)-240, J2-234, J4-234) are conditioned to only
+clear when a route is set up in approach to them, which in some cases is
+necessary to meaningfully condition GT and ST timers, and in other cases to
+give the signal reason to clear at all (in the absence of conflicting
+routes).  Such signals are best thought of as interlocked signals without
+levers.
+
+Not all termini of the interlocking are valid exits; trains may
+not proceed (railroad) northward on track J1 further than switch
+183B, or (railroad) southward on track J2 further than switch 187.
+
+The three intermediate areas of the interlocking, between homes 172 and 174,
+204 and 206, and 174 and 164, are route-locked: once movement into them is
+initiated, no opposing motion can be cleared into them until that train has
+left.  164-174, in the middle station pocket, can be used to reverse trains.
+
+The general rule for facing point "push" is that of NYCTA, that no switch
+will be -reversed- as a side-effect of another move (other than the
+slip-switch strategy mentioned above), "diverting" a control line to another
+track, so as not to block a potential move on that track.  There are many,
+many cases where seemingly uninvolved switches have to be moved to allow
+moves to be lined correctly, but they are all set normal, not reverse.
+
+=============================
+
+AUTOMATIC OPERATION
+
+Broadway-Myrtle implements the beginning of an "automatic operation" system.
+It is enabled only when you select "Enable Automatic Control" from
+NXSYS's "Interlocking" menu.
+
+When enabled, a menu designed to resemble as much as possible the trackside
+"Train Operator Train ID Pushbuttons" pops up in certain circumstances (the
+trackside ID pushbuttons on the real property are in fact a menu.).  Windows
+"Radio buttons" subsume the functions of both the buttons and the lights
+(Perhaps a color-true control is needed).  They pop up at the home signal
+with which each is associated, and may be moved around, but not dismissed,
+except by the absence of the situation which caused them to pop up.
+
+Such menus are associated with home signals 172, 164, and 154.  The
+conditions under which they pop up are slightly different for each:
+
+ 172 - any eastbound train at all in the very small track section at
+    the very left end of the interlocking on the middle track will
+    cause it to pop up.  In automatic mode, selecting any ID (not "Cancel") at
+    all will cause 172 and (later) 162 to clear, and the ID selected
+    will propagate via track sections (as per the ingenious track-based
+    "queue" circuit used in NY) to 164;  As soon as the train passes
+    172, which must be clear (as it's an absolute home signal), the
+    menu will pop down.
+
+ 164 - the menu will pop up when a train reaches the eastern two track
+    sections of the station pocket (4233/4234), with RR south (eastbound)
+    route-locking dropped.  When the menu pops up, if the route
+    is not "unidentified", the auto control circuit will attempt to
+    line the route. If "unidentified" pops up, you can choose a route to
+    be lined.  Or "cancel", if the train has not already accepted it.
+    If the train has not already accepted 164, pressing "cancel"
+    will cancel an entire end-to-end route, if the auto control circuit
+    created it to begin with.
+
+ 154 - menu pops up when the train reaches the eastern half of the J1
+    track pocket.  152 is automatically called two sections in approach
+    to it.  Operation same as 164.
+
+These features are best explored with the "train" system.  One method that
+can be used for a realistic "model" effect is to scale the interlocking down
+to .5 (no numbers then appear, and the whole is visible). With Automatic
+operation enabled, create trains and drop them on the very small 4215-4216
+section at the end of track J3, as well as at the other end of the
+interlocking.  Assign routes as soon as the menu pops up.  Deposit trains at
+the foot of the J1 track as well, and choose routes when they appear at 154.
+Trains may be started on the two Myrtle tracks at the top, as well - be sure
+to clear the approach signals - but there is no automatic operation from
+there yet.
+
+If you move a train westward (railroad north) into the center pocket at
+Myrtle Avenue, and then "reverse" the train so it is looking at 164, the
+button-box for 164 will appear at that time.
+
+The entire interlocking remains operable in the normal way and the
+auto-control circuit merely pushes entrance and exit buttons when it feels
+times are ripe; no conflict should be possible.
+
+In many circumstances, a great deal of action happens after 30-second
+approach lock timers time out.
+
+An interesting activity for exploration is to start trains at the right hand
+end, route them into the center pocket, reverse them, and send them back over
+J1 or J3 or M1.  Currently, there is no way to cause the 164 menu/ID box to
+pop up when you turn the train around in this way.

@@ -1,0 +1,286 @@
+
+;;; 5 January 2001  -bsg
+
+(relay 409CLK
+       !3983SP
+       (OR (AND 409NWK
+		415BNN !415BNS
+		!408AS)
+	   (AND 409RWK 417RWC !415AS 411BNN)))
+
+(relay 411CLK
+       !3963SP !3982SP
+       (OR (AND 411RWK
+		(OR 410PBS 410XR)
+		!408AS)
+	   (AND 411NWK
+		(OR 410PBS 410XR)
+		!414AS)
+	   ))
+
+(relay 415CLK
+       !4004SP !3992SP
+       (OR (AND 415RWK
+		(OR 420PBS 420XR 416PBS 416XR)
+		(OR !416AS (AND !408AS 411RWC)))
+
+	   (AND 415NWK
+		!415AS
+		417BNN !417BNS)))
+
+(relay 417CLK
+       !3984SP !3992SP
+	(OR (AND 417NWK
+		 (OR !417L 409NWK) ; 05-05-2021
+		 415ANN !415ANS
+		 (OR !414AS (AND !415AS)))
+	   ))
+
+(relay 386CLK
+       386PBS
+       (OR
+	(AND !415AS
+	     (OR (AND 386CO !386RVP)
+		 (AND 387NWC 389NWC
+		      (OR (AND 415NWK 415CLK)
+			  (AND 417NWK 417CLK)
+			  (AND 417RWC 409NWK 409CLK)))))
+	(AND 391CLK 389RWC 394PBS)))   ;10/21/2019
+
+(relay 408CLK
+       (AND 408PBS !408AS
+	    (OR (AND 409NWK 409CLK)
+		(AND 411RWK 411CLK)
+		(AND 415RWK 411RWC 415CLK)
+
+		)))
+
+(relay 414CLK
+       (AND 414PBS !414AS
+	    (OR (AND 411CLK 411NWK)
+		(AND 417CLK 417NWK))))
+
+
+
+;;======================================================
+;;
+;; 240th st
+
+(relay 357CLK
+       !3883SP !3892SP 3903T 3943T
+       357NWK !362AS
+       352PBS !357BNS)
+
+(relay 359CLK
+       !3884SP !3892SP 3894T
+       359NWK
+       (OR (AND 357ANS !357ANN
+       	        (OR 366PBS 366XR)) ;1-14-2021
+	   (AND 372PBS !359ANS))
+       (OR (AND
+	     (OR !362AS
+		 (AND
+		   (OR !388AS !380AS !396AS
+		       (AND !398AS (OR 389RWC 373RWC))))))
+	   (AND
+	     !370AS
+	     373RWC)))
+		 
+
+(relay 371CLK
+       !3904SP !3902SP
+       (OR (AND 371RWK
+		(OR (AND !371BNS !371ANN (OR 380PBS 380XR  368PBS 368XR))
+		    373BNN 370PBS 370XR)
+		371L)
+	   (AND 371NWK
+		!371BNS !371ANN 
+		(OR 380PBS 380XR  368PBS 368XR)
+		373L)))
+
+(relay 373CLK
+       !8390SP !3894SP  3884T
+       (OR (AND 373NWK 371NWC
+		(OR
+		  (AND
+		    (OR !390AS !388AS !380AS !400AS)
+		    (OR (AND (OR 384PBS 384XR) !373RN)
+			(AND 359ANN !359ANS)))
+		  (AND (OR !370AS !400AS)
+		       359RWC
+		       (AND (OR 384PBS 384XR) !373RN))))))
+
+(relay 387CLK
+       !3934SP !7393SP
+       (OR (AND !391AS
+		(OR (AND 387RWK 391RWC)
+		    (AND 387NWK 389RWC))
+		(OR (AND (OR 388PBS 388XR) !388BNN)
+		    (AND (OR 396PBS 396XR) !387ANN !387RN)
+		    (AND 389BNN !389BNS)
+		    (AND 387BNS !387BNN)))
+	   (AND 387NWK
+		(OR (AND
+		      (OR
+			!390AS
+			(AND
+			  !387AS 391NWC 389RWC))
+		      (OR (AND 389BNN !389BNS)
+			  (OR 396PBS 396XR)))
+		    ))))
+
+(relay 389CLK
+       !3934SP !8392SP
+       (OR (AND 389NWK
+		(OR 
+		   (AND
+		      (OR
+			!400AS
+			!390AS (AND !372AS 359NWC 373RWC)
+			(AND
+			  !387AS 391NWC 387RWC))
+		      (OR (AND 391RS !391RN)
+			  (AND 391NS !391NN)
+			  (OR 386PBS 386XR)))))
+	   (AND 389RWK 389L 387NWC
+		(OR 392PBS 392XR 386PBS 386XR))))
+
+(relay 391CLK
+       !8393SP
+       (OR (AND 391RWK
+		(OR (AND !400AS (OR (AND 387ANS !387ANN)
+				    (OR 394PBS 394XR)))
+		    (AND
+		      (OR (AND 387RWC
+			       (OR (AND 389RWC !387AS)
+				   (AND 389NWC !372AS 373RWC 359NWC))))
+		      (OR (AND 387ANS !387ANN) 394PBS 394XR 398PBS 398XR))
+		    (AND !392P386XAS !7396T !387RWK 394PBS))) ; 10/21/2019
+	   (AND 391NWK !392P3386XAS 394PBS)))  ; 
+
+			 
+		      
+
+(relay 390CLK
+       390PBS !390AS
+       (OR (AND 390CO !390RVP)
+	   387CLK 379CLK
+	   (AND 373CLK 371RWC)
+	   (AND 371CLK 389NWC 387NWC)
+	   (LABEL L390CLK1
+		  (OR 371CLK
+		      (AND 371NWC (OR (AND 373NWK 373CLK)
+				      (AND 359NWK 359CLK)))))))
+
+(relay 392CLK ;10/21/2019
+       392PBS !392AS
+       389NWC ; shouldn't be necessary
+       391CLK)
+
+
+(relay 368CLK
+       368PBS !368AS
+       (OR (AND 368CO !368RVP)
+	   (AND 371RWC !387AS
+		(OR (AND 389RWK 389CLK)
+		    (AND 389RWC 391RWK 391CLK)))))
+
+
+(relay 352CLK
+       352PBS
+       (OR (AND 352CO !352RVP)
+	   (AND
+	     357RWC
+	     (LABEL L352CLK1
+		    (OR (AND (OR !352AS !346AS)
+			     371CLK
+			     371NWK
+			     (OR 368PBS 368XR 380PBS 380XR))
+
+			(AND !387AS
+			     371RWC
+			     (LABEL L352CLK2
+				    (OR (AND 389L !389LS 389CLK)
+					(AND 389RWC
+					     (OR (AND 387RWC 391RWK 391CLK)
+						 (AND 391NWC 387NWK
+						      387NWK 387CLK)))))))))))
+
+(relay 362CLK
+       362PBS
+       (OR (AND 357NWK 357CLK)
+	   (AND 359NWK 359CLK)))
+
+
+(relay 364CLK
+       364PBS
+       (OR (AND 364CO !364RVP)
+	   (AND
+	     357NWC 359NWC
+	     L352CLK1)))
+
+(relay 370CLK
+       370PBS !370AS
+       (OR (AND 370CO !370RVP)
+	   (AND 357NWC (OR (AND 359RWC 373NWK 373CLK)
+			   359CLK))))
+
+
+(relay 372CLK
+       372PBS
+       (OR (AND 372CO !372RVP)
+	   (AND
+	     359NWC
+	     (OR (AND 373RWC 389NWK 389CLK)
+		 (AND 373NWC
+		      (OR (AND 389NWK 389CLK)
+			  (AND 389NWC (OR (AND 387RWC 391RWK 391CLK)
+					  (AND 391NWC 387NWK 387CLK)))
+			  (AND 359NWC 373NWC 371NWC L352CLK2)))))))
+
+(relay 380CLK
+       380PBS
+       (OR (AND 380CO !380RVP)
+	   (AND
+	     371NWC
+	     L390CLK1)))
+
+(relay 388CLK
+       388PBS !388AS
+       (OR (AND 388CO !388RVP)
+	   (AND 359NWK 359CLK)
+	   L390CLK1))
+
+(relay 396CLK
+       396PBS !373AS
+       (OR (AND 396CO !396RVP)
+	   371CLK
+	   (AND 387RWC (AND 387NWC 389RWC))
+	   (AND 373NWK 373CLK)
+	   (AND 359NWK 359CLK)))
+
+(relay 398CLK
+       398PBS !373AS
+       (OR (AND 398CO !398RVP)
+	   (AND
+	     389RWC
+	     (OR 371CLK
+		 (AND 373NWK 373CLK)
+		 (AND 359NWK 359CLK)))
+	   (AND
+	     389NWC 373RWC 359NWK 359CLK)))
+
+(relay 400CLK
+       400PBS !400AS
+       (OR (AND 391RWK 391CLK)
+	   (AND 389NWK 389CLK)
+	   (AND 373NWK 373CLK)))
+
+(relay 432CLK
+       432PBS !391AS
+       (OR (AND 387CLK (OR (AND 387NWK 389RWC)
+			   (AND 387RWK 391RWC)))
+	   (AND 387NWC 391NWK 391CLK)
+	   (AND 387RWC 389RWK 389CLK)))
+
+	   

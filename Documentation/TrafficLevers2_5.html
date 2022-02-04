@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+    <link rel="stylesheet" type="text/css" href="nxdoc.css">
+<title>NXSYS/Mac Release notes</title>
+<meta charset="UTF-8"/>
+</head>
+
+<body>
+<h1><span class="nxsys">NXSYS/Mac</span> v 2.5 TrafficLevers</h1>
+<h2>26 January 2021</h2>
+
+<a href="ReleaseNotes.html"><b>Back to Release Notes</b></a>.
+
+<p><span class="nxsys">NXSYS/Mac</span> Version 2.5 includes changes to the appearance, and conditionally, function of traffic levers. If Windows <span class="nxsys">NXSYS</span> is ever released again, these changes will be there, too.</p>
+<h2>Appearance change</h2>
+<table>
+<tr><td><img src="5_0TL.png" width=200</img></td>
+    <td style="margin-left:10px">
+    <p>The active &ldquo;pointer&rdquo; on a traffic control knob now looks more like a grip-turnable thin triangular handle extending across the diameter, with the classic dot now at its active, indicating end.  This looks more like their prototypes on real NYCT NX/UR panels.</p>
+<p>Furthermore, rather than &ldquo;all the way to the left&rdquo; and &ldquo;all the way to the right&rdquo;, the new knobs show at 45° to the left or right, again, more like real panels. The new &ldquo;tristate&rdquo; ones, to be described, can also show straight up, as in real panels. As at left.</p>
+</td></table>
+
+<h2>Function change</h2>
+
+<p>If the pair &ldquo;<tt>:TRAFFIC-LEVERS-TRISTATE&nbsp;<b>T</b></tt>&rdquo; appears in the route definition, all traffic lever knobs in the interlocking will be shown and operable as <i>Tristate</i>, that is, having three distinct states, left, right, and neutral.  When not being clicked on (i.e., click and not release), they will remain in the &ldquo;straight-up&rdquo; (neutral) position.  When clicked on, on their left or right halves, they will turn to that direction as long as the mouse is held and not released.  When released, they will snap back to &ldquo;neutral&rdquo;, as per their prototypes. It is not necessary to hold the mouse down; it merely looks realistic&mdash;the effect on the circuitry is the same if the desired half is simply clicked on.</p>
+
+<p>Tristate traffic levers are a global option rather than a traffic-lever option in order to facilitate forward and backward compatibility of interlockings and versions of <span class="nxsys">NXSYS</span>. If this new version is used with an older interlocking without the <tt>:TRAFFIC-LEVERS-TRISTATE</tt> specification, the traffic levers will act as before, and stick to the left or right, and assert the logic levels <b>NL</b> or <b>RL</b> continuously, as before, and merely appear a bit different; any click will flip the knob, but, of course, will not flip traffic unless the correct conditions apply. With <tt>:TRAFFIC-LEVERS-TRISTATE</tt>, one or the other of those relays will be pulsed by the mouse click, <i>and not held</i>.  That means that the old circuitry will fail if not rewritten to handle non-holding lever controls properly.</p>
+
+<p>It is possible to design the circuitry (of single-knob, single-panel traffic levers, at least) such that either temporary (pulsing) or holding-style knobs work properly.  The new 240th St. and Atlantic Ave., whose traffic circuitry has been massively simplified, are so designed. In a sentence, the traffic relays <b>FNS</b> (&ldquo;traffic entrance stick&rdquo;) and <b>FXS</b> (&ldquo;traffic exit stick&rdquo;) form a &ldquo;J-K flip flop&rdquo; whose J and K are set by the <b>NL</b> and <b>RL</b> levels (which by which depends upon the <b>NORMAL-LEFT/RIGHT</b> property), <i>both gated by a single condition, <b>L</b> (as in switch locking) which affirms vacancy of all contained track sections as well as reset/release (<b>AS</b>) of <b>all controlled signals and in-pointing route-locking in both directions</b></i>.  If the condition <b>L</b> is not met, manipulating the knob does not affect the underlying control, as in real panels, and as with auxiliary switch keys.  (This only applies to single-knob, single-panel controls;  If you actually have a double-ended traffic lever, I doubt that it worked heretofore.)</p>
+
+<h2>Differences from NYCT prototypes</h2>
+
+<p>Pre-Tristate (pre 2.5) traffic levers are two-position &ldquo;rocker&rdquo; switches, either left or right at any time, and may or may not reflect the underlying control, which, in real panels or old or new <span class="nxsys">NXSYS</span>, is indicated by the two indicator lights around it. Tristate levers look and &ldquo;work&rdquo; more like their prototype.  Real traffic control knobs only communicate to the circuitry at the time the are being turned, and snap back, as do the new knobs.</p>
+
+<p>Real NYCT traffic levers indicate red only when the controlled track extent/block is occupied.  If the block is vacant, but there are cleared or called signals in it, or route-locking at the ends pointing into it, the traffic lever indicators remain white, but are equally locked (i.e., manipulating the knob will not have any effect.)  There are conditions when attempted manipulation causes the indicators to flash (code).</p>
+
+<p>In <span class="nxsys">NXSYS</span>, with either dispensation (2.5 or earlier, Mac or Windows), a white indicator signifies that not only is the block vacant, but no controlled signals <b><i>in either direction</i></b> are not fully reset (of course, it is impossible that their could be conflicting signals active) as well as route-locking routing trains into it. If <i>either condition is not met</i>, the indicator will be red.  If the indicator is white, the lever can be flipped. If red, not. Only the opposing indicator is ever dark.  <span class="nxsys">NXSYS</span> traffic control indicators currently never flash.</p>
+
+<a href="ReleaseNotes.html"><b>Back to Release Notes</b></a>.
+
+
+</body>
+</html>
+

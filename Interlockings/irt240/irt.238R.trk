@@ -1,0 +1,148 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;238th Street Automatic Signals
+;;
+;;; 350AS made intelligent about  359 -- 8 February 2001
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 3743/B Automatic Signal
+(relay 3743H (OR 3743H 3743DV)            
+                3743T 3773T 3793T)
+(relay 3743HV    3743H 3743RVP)
+(relay 3743V     (OR 3743H !3743T))
+(relay 3743DV    (OR (AND  3743HV 3773HV)
+                    (AND !3743HV 3743NVP)))
+
+;; 3773/B Automatic Signal ST
+(relay 3773STR 3773T 3793T)
+(relay 3773H (OR 3773H 3773DV) (OR 3743US 3823T) 3773STR)
+(relay 3773DV (OR (AND 3773HV 3793HV)(AND !3773HV 3773NVP)))
+(relay 3773HV 3773H 3773RVP)
+(relay 3773V (OR 3773H !3773T))
+(timer 3743US 18 (OR 3743US !3773H) 3773STR !3743T)
+
+;; 3793/B Automatic Signal 
+(relay 3793H (OR 3793H 3793DV)            
+                3793T 3823T 3843T)
+(relay 3793HV    3793H 3793RVP)
+(relay 3793V     (OR 3793H !3793T))
+(relay 3793DV    (OR (AND  3793HV 350HV)
+                    (AND !3793HV 3793NVP)))
+
+;; 3874/B Automatic Signal (no Distant)
+;; Deeply emotionally involved with home signal 372 at 240th st.
+(relay 3874H (OR 3874H 3874DV)    
+             372VS 3874T 3854T 3834T 3814T)
+(relay 3874HV    3874H 3874RVP 372RVP)
+(relay 3874V     (OR 3874H !3874T 372H))
+(relay 3874DV    !3874HV 3874NVP)
+
+;; 3814/B Automatic Signal
+(relay 3814H (OR 3814H 3814DV)            
+                3814T 3794T 3744T)
+(relay 3814HV    3814H 3814RVP)
+(relay 3814V     (OR 3814H !3814T))
+(relay 3814DV    (OR (AND  3814HV 3744HV)
+                    (AND !3814HV 3814NVP)))
+
+;; 3744/B Automatic Signal
+(relay 3744H (OR 3744H 3744DV)            
+                3744T 3694T 3664T); 3644T)
+(relay 3744HV    3744H 3744RVP)
+(relay 3744V     (OR 3744H !3744T))
+(relay 3744DV    (OR (AND  3744HV 3694HV)
+                    (AND !3744HV 3744NVP)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;238th St Interlocking
+;;	Approach and Home Signals
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 3682/B 346 Hold Out 
+(relay 346PBS !0CPB  !348PBS !364XS
+       349FXS
+		(OR 346PBS (AND 346PB 3822SS)) 
+       (OR 346FL (AND (OR 3792T !346HY)(OR !3682T !346COS))))
+(relay 346HT 346PBS 3792T 3822T 3842T 3872T)
+(relay 346HY (OR 346HY 346NVP ) 348RVP 346HT) ;3137RVP
+(relay 346H 346HY !346COS 3682U (LABEL L346H01 !346AS  346PBS 349FXS));ns/ss
+(relay 346CO 346COS L346H01)
+(relay 346COS (OR 346COS (AND 346COPB 346RGP)) 346PBS !3682T)
+(HomeV 346V 3682T 3792T T)
+(relay 346VS (OR (AND 346VS !3792SS) 348PBS) 349FNS)
+(relay 346HV 346RVP 346H)
+(relay 346AS (OR 346AS(AND 3682T 3642T)!3792T 346U 0RAS)346RGP !346PBS)
+(relay 346RGP !0BRGP !346H !346HV !346CO )
+(timer 346U 9 !346AS !346PBS !346H )
+(relay 346DV  !346HV 346NVP)
+(relay 346LH !346H 346HT)
+(timer 3682U 5(OR 3682U !346H) !3682T 3792T)
+
+(relay 3822NS (OR 3822NS 3822T 0RAS) 3792NS)
+(relay 3842NS (OR 3842NS 3842T 0RAS) 3822NS)
+(relay 3822SS (OR 3822SS 3822T 0RAS) 3842SS)
+
+(relay 3822K (OR !3822NS !3822SS))
+
+;;3821/B 362 Approach Signal w/GT
+(relay 362PBS !0CPB !357RWK !359RWK
+       (OR 362FL 3842T)
+               (OR (AND 362PB 3822SS) 362PBS )
+       349FXS
+       !364XS)
+
+(relay 362HT 362PBS !362AS 3842T 3872T 3822SS
+       !359LS 359NWC !357LS 357NWC 349FXS)
+(relay 362H (OR 362H 362DV) 3822U 362HT)
+(relay 362V (OR 362H !3842T 362VS))
+(relay 362HV 362RVP 362H)
+(relay 362AS  (OR 362AS
+		  !3902T
+		  (AND 3842T 3822T 3792T)
+		  362U 0RAS)
+       (OR !362PBS !357NWC !359NWC) 362RGP)
+
+(relay 362RGP !0BRGP !362H !362HV)
+(timer 362U 9 !362AS !362PBS !362H )
+(relay 362DV  !362HV 362NVP)
+(relay 362LH !362H 362HT)
+(timer 3822U 5(OR 3822U !362H) !3822T 3842T)
+
+;;3823/B 350 Approach Signal (no Distant)
+(relay 350PBS !0CPB (OR 350FL 3823T) (OR 350PB 350PBS ))
+(relay 350H (OR 350H 350DV)350PBS !350AS 
+		3823T 3843T 3863T 3883T
+       (swif2 357
+	      (AND 3872T 3892T !359LS 359NWC 3902SS)))
+(relay 350V (OR 350H !3823T))
+(relay 350HV 350RVP 350H)
+(relay 350AS  (OR 350AS !3883T(AND 3823T 3793T)
+                      350U 0RAS)
+       (OR !350PBS (AND 357RWC !359NWC))
+       350RGP)
+(relay 350RGP !0BRGP !350H !350HV)
+(timer 350U 9 !350AS !350PBS !350H )
+(relay 350DV  !350HV 350NVP)
+
+;;3792/B 348 Home Signal
+(relay 348PBS !0CPB  !346PBS  349FNS
+		(OR 348PBS 348PB) 
+			(OR 348FL (AND (OR 3792T !348HY)(OR !3822T !348COS)))) 
+(relay 348HY (OR 348HY 348NVP )348PBS 3792T 3682T 3642T) 
+(relay 348H 348HY !348COS (LABEL L348H01  349FNS !348AS  348PBS));ns/ss
+(relay 348CO 348COS L348H01)
+(relay 348COS (OR 348COS (AND 348COPB 348RGP)) 348PBS !3822T)
+(HomeV 348V 3822T 3792T T)
+(relay 348VS (OR (AND 348VS !3792NS)
+	     346PBS))
+(relay 348HV 348RVP 348H)
+(relay 348AS (OR 348AS (AND 3822T 3842T 3872T)!3792T 348U 0RAS)348RGP !348PBS)
+(relay 348RGP !0BRGP !348H !348HV !348CO )
+(timer 348U 9 !348AS !348PBS !348H )
+(relay 348DV  (OR (AND 348HV 3652HV) 
+				(AND !348HV 348NVP)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;238th St Interlocking Switch Levers
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 3792NS (OR 3792NS 3792T 0RAS) 346AS)
+(relay 3792SS (OR 3792SS 3792T 0RAS) 348AS)
+(relay 3792SP (OR !3792NS !3792SS))
+(relay 3792K 3792SP)

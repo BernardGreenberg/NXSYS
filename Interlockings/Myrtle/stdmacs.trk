@@ -1,0 +1,28 @@
+(defrmacro SWIF   3 (OR (AND 1RWC (arg 2)) (AND 1NWC (arg 3))))
+(defrmacro SWIFNC 3 (AND (OR (arg 2) 1NWC) (OR (arg 3) 1RWC)));8 Dec 1994
+(defrmacro SWIF2 2 (OR 1NWC (arg 2)))
+(defrmacro HomeV 4
+            (relay 1V (OR 1H
+			  (AND (OR 1V 1VPB) 1CO)
+			  (AND (OR 1VS (AND 1V !2T))
+			       (OR 2T !3T)
+			       (arg 4)))))
+(defrmacro STDSWITCH 1
+  (FORMS
+    (relay 1NWZ (OR (AND 1NWZ !1RWZ) (AND 1NLP 1LS)))
+    (relay 1RWZ (OR (AND 1RWZ !1NWZ) (AND 1RLP 1LS)))
+    (relay 1NWC (AND 1NWZ 1NWP))
+    (relay 1RWC (AND 1RWZ 1RWP))
+    (relay 1NWK 1NWC (OR 1NLP !1LS))
+    (relay 1RWK 1RWC (OR 1RLP !1LS))
+    ))
+
+
+(defrmacro LSNPrecond 1
+  (OR 1LS
+      (AND (OR 1NWZ !1NLP)(OR 1RWZ !1RLP))))
+
+(defrmacro LNPrecond 1
+  (OR 1L
+      (AND (OR 1NWZ !1NLP)(OR 1RWZ !1RLP))))
+

@@ -1,0 +1,454 @@
+;; TLEdit output of Fri May 18 09:40:09 2001
+;;   by TLEdit of Sun Jan 07 15:50:18 2001
+;;      TLEdit Copyright (c) Basis Technology Corp. 1997, 1998
+;;   Do not edit by hand.
+
+(LAYOUT
+  (VIEW-ORIGIN 1010 0)
+  (PATH
+    (IJ                     1504     1720   122)
+     (TC 1504)
+    (IJ                     1524     1626)
+     (TC 1524)
+    (IJ                     1544     1512)
+     (TC 1544)
+    (IJ                     1564     1403)
+     (TC 1564)
+    (SWITCH STEM            205 B    1361)
+    (IJ                     1584     1217)
+     (TC 1584)
+    (SWITCH STEM            213 B    1165)
+    (SWITCH NORMAL          215 B    1076)
+    (IJ                     1604     1039)
+     (TC 1604)
+    (IJ                     1614      953 122 NUMFLIP)
+     (TC 1614)
+    (IJ                     1644      741 122 NUMFLIP)
+     (TC 1644)
+    (IJ                     1664      582)
+     (TC 1664)
+    (IJ                     1674      461)
+     (TC 1674)
+    (IJ                     1704      246)
+     (TC 1704)
+    (IJ                     1724        8)
+  )
+  (PATH
+    (IJ                     1502     1722   167)
+     (TC 1502)
+    (IJ                     1522     1628 167 NUMFLIP)
+     (TC 1522)
+    (IJ                     1542     1530)
+     (TC 1542)
+    (IJ                     1552     1416)
+     (TC 1552)
+    (IJ                     1572     1339)
+     (TC 1572)
+    (SWITCH STEM            209 B    1314)
+    (SWITCH NORMAL          207 B    1209   165)
+    (IJ                     1582     1183   166)
+     (TC 1582)
+    (SWITCH STEM            215 A    1166   167)
+    (SWITCH NORMAL          213 A    1076)
+    (IJ                     1602     1039)
+     (TC 1602)
+    (IJ                     1612      919)
+     (TC 1612)
+    (IJ                     1632      783)
+     (TC 1632)
+    (IJ                     1652      627)
+     (TC 1652)
+    (IJ                     1672      496)
+     (TC 1672)
+    (IJ                     1752       38)
+     (TC 1752)
+    (IJ                     1762        4)
+  )
+  (PATH
+    (IJ                     10023    1721   215)
+    (IJ                     1499     1708)
+     (TC 1529)
+    (IJ                     1529     1619)
+     (TC 1539)
+    (IJ                     1539     1557)
+     (TC 1549)
+    (IJ                     1549     1502)
+     (TC 1569)
+    (IJ                     1569     1410)
+     (TC 1579)
+    (IJ                     1579     1338)
+     (TC 1589)
+    (SWITCH STEM            207 A    1314)
+    (SWITCH STEM            241 B    1230)
+    (SWITCH NORMAL          209 A    1186)
+    (IJ                     1589     1176)
+     (TC 1601)
+    (SWITCH REVERSE         233 0    1074   259)
+    (IJ                     1601     1039)
+     (TC 1611)
+    (IJ                     1611      984)
+     (TC 1631)
+    (IJ                     1631      848)
+     (TC 1641)
+    (IJ                     1641      702)
+     (TC 1651)
+    (IJ                     1651      630)
+     (TC 1681)
+    (IJ                     1681      455)
+     (TC 1691)
+    (IJ                     1691      367)
+     (TC 1731)
+    (IJ                     1731      189)
+     (TC 1781)
+    (IJ                     1781       49)
+     (TC 1841)
+    (IJ                     1841       14)
+  )
+  (PATH
+    (IJ                     1501     1720   259)
+     (TC 1521)
+    (IJ                     1521     1621)
+     (TC 1541)
+    (IJ                     1541     1532)
+     (TC 1561)
+    (SWITCH STEM            227 B    1498)
+    (SWITCH NORMAL          229 B    1413)
+    (IJ                     1561     1389)
+     (TC 1571)
+    (SWITCH STEM            221 A    1361)
+    (IJ                     1571     1328)
+     (TC 1581)
+    (IJ                     1581     1216)
+     (TC 1601)
+    (SWITCH NORMAL          233 0)
+  )
+  (PATH
+    (IJ                     1503     1719   304)
+     (TC 1523)
+    (IJ                     1523     1637)
+     (TC 1543)
+    (IJ                     1543     1524)
+     (TC 1563)
+    (SWITCH STEM            229 A    1498)
+    (SWITCH NORMAL          227 A    1413)
+    (IJ                     1563     1381)
+     (TC 1583)
+    (IJ                     1583     1276)
+     (TC 1593)
+    (IJ                     1593     1155)
+     (TC 1603)
+    (SWITCH NORMAL          241 A    1073)
+    (IJ                     1603     1039)
+     (TC 1613)
+    (IJ                     1613      988)
+     (TC 1623)
+    (IJ                     1623      860)
+     (TC 1643)
+    (IJ                     1643      735)
+     (TC 1653)
+    (IJ                     1653      619)
+     (TC 1673)
+    (IJ                     1673      473)
+     (TC 1693)
+    (IJ                     1693      392)
+     (TC 1713)
+    (IJ                     1713      268)
+     (TC 1723)
+    (IJ                     1723      163)
+     (TC 1753)
+    (IJ                     1753       13)
+  )
+  (PATH
+    (IJ                     10043     641    71)
+    (                                 640   107)
+    (IJ                     10071    1005)
+  )
+  (PATH
+    (IJ                     10051    1021   350)
+    (                                1022   316)
+                                      846
+    (IJ                     10055     768)
+  )
+  (PATH
+    (IJ                     10041     710   244)
+    (IJ                     10037     872)
+                                     1017
+    (                                1017   178)
+                                      641
+    (                                 641   244)
+    (IJ                     10007     667   243)
+  )
+  (PATH
+    (IJ                     10049     651   314)
+    (IJ                     10047     712)
+  )
+  (PATH
+    (IJ                     10059     637   332)
+    (IJ                     10045     637   349)
+  )
+  (PATH
+    (IJ                     10063    1015    67)
+    (IJ                     10039    1016    89)
+  )
+  (PATH
+    (SWITCH REVERSE         205 B)
+     (TC 1564)
+    (IJ                     10009    1332   141)
+     (TC 1572)
+    (SWITCH REVERSE         205 A    1279   176)
+    (IJ                     10011    1260   187)
+     (TC 1589)
+    (SWITCH STEM            10251 0  1227   207)
+    (SWITCH REVERSE         209 A)
+  )
+  (PATH
+    (SWITCH REVERSE         213 B)
+     (TC 1584)
+    (IJ                     10019    1122   141)
+     (TC 1582)
+    (SWITCH REVERSE         213 A)
+  )
+  (PATH
+    (SWITCH REVERSE         215 B)
+     (TC 1584)
+    (IJ                     10017    1122   145)
+     (TC 1582)
+    (SWITCH REVERSE         215 A)
+  )
+  (PATH
+    (SWITCH REVERSE         209 B)
+     (TC 1572)
+    (SWITCH NORMAL          205 A)
+  )
+  (PATH
+    (SWITCH REVERSE         207 B)
+     (TC 1572)
+    (IJ                     10013    1244   187)
+     (TC 1589)
+    (SWITCH STEM            221 B    1279   209)
+    (SWITCH REVERSE         207 A)
+  )
+  (PATH
+    (SWITCH REVERSE         241 B)
+     (TC 1589)
+    (SWITCH NORMAL          10249 0  1194   227)
+    (IJ                     1580     1182   235)
+     (TC 1599)
+    (IJ                     1599     1117   276)
+     (TC 1603)
+    (SWITCH REVERSE         241 A)
+  )
+  (PATH
+    (SWITCH REVERSE         227 B)
+     (TC 1561)
+    (IJ                     10021    1456   279)
+     (TC 1563)
+    (SWITCH REVERSE         227 A)
+  )
+  (PATH
+    (SWITCH REVERSE         229 B)
+     (TC 1561)
+    (IJ                     10025    1457   280)
+     (TC 1563)
+    (SWITCH REVERSE         229 A)
+  )
+  (PATH
+    (SWITCH REVERSE         221 A)
+     (TC 1571)
+    (IJ                     10015    1321   235)
+     (TC 1589)
+    (SWITCH REVERSE         221 B)
+  )
+  (PATH
+    (SWITCH REVERSE         10251 0)
+     (TC 1589)
+    (SWITCH REVERSE         10249 0)
+  )
+
+
+  (SIGNAL   1604    212 R (GYR GYR Y) ID 1608)
+  (SIGNAL   1602    216 R (GYR GYR Y) ID 1606)
+  (SIGNAL   1569    222 L (ZYR GYR Y) ID 1550)
+  (SIGNAL   1561    228 R (GYR GYR Y) ID 1561)
+  (SIGNAL   1561    224 L (ZYR GYR Y) ID 1571)
+  (SIGNAL   1563    232 R (GYR T GYR Y) ID 1563)
+  (SIGNAL   1603    244 R (GYR GYR Y))
+  (SIGNAL   1601    234 R (GYR GYR Y))
+  (SIGNAL   1582    214 L (GYR GYR Y))
+  (SIGNAL   1584    210 L (GYR GYR Y))
+  (SIGNAL   1564    202 L (GYR GYR Y))
+  (SIGNAL   1552    206 L (GYR GYR Y))
+  (SIGNAL   1541    226 L (ZYR GYR Y))
+  (SIGNAL   1543        R (GYR T) ID 1543)
+  (SIGNAL   1523    230 L (ZYR ZYR Y) ID 1527)
+  (SIGNAL   1544    200 L (GYR) ID 1544)
+  (SIGNAL   1549    220 L (ZYR) ID 1540)
+  (SIGNAL   1541        R (GYR T) ID 1541)
+  (SIGNAL   1523        R (GYR T) ID 1523)
+  (SIGNAL   1521        R (GYR))
+  (SIGNAL   1529        R (ZYR W))
+  (SIGNAL   1499        R (RZR) ID 1509)
+  (SIGNAL   1504          (GYR))
+  (SIGNAL   1502          (ZYR) ID 1502)
+  (SIGNAL   1542    204 L (GYR W))
+  (SIGNAL   1631   8236 R (ZYR T) ID 1631)
+  (SIGNAL   1651   7236 R (GYR T) ID 1651)
+  (SIGNAL   1651        L (RZR) ID 1655)
+  (SIGNAL   1652        L (GYR))
+  (SIGNAL   1664        L (GYR))
+  (SIGNAL   1673    248 R (GYR T GZR Y))
+  (SIGNAL   1681    238 R (GYR T))
+  (SIGNAL   1691    240 R (GYR T S GZR Y))
+  (SIGNAL   1693   8250 R (GYR T))
+  (SIGNAL   1713   7250 R (GYR T))
+  (SIGNAL   1653        L (RZR) ID 1657)
+  (SIGNAL   1653   7246 R (GYR T) ID 1653)
+  (SIGNAL   1643   8246 R (ZYR T) ID 1643)
+  (SIGNAL   1602        L (ZYR))
+  (SIGNAL   1604        L (GYR) ID 1604)
+  (SIGNAL   1731   8242 R (GYR T S) ID 1731)
+  (SIGNAL   1781   7242 R (GYR T S))
+  (SIGNAL   1704        L (GYR T))
+  (SIGNAL   1752        L (GYR))
+  (SIGNAL   1641        L (ZYR W) ID 1645)
+  (SIGNAL   1753          (ZYR T))
+
+  (EXITLIGHT	 216)
+  (EXITLIGHT	 244)
+  (EXITLIGHT	 234)
+  (EXITLIGHT	 202)
+  (EXITLIGHT	 210)
+  (EXITLIGHT	 214)
+  (EXITLIGHT	 222)
+  (EXITLIGHT	 224)
+  (EXITLIGHT	 232)
+  (EXITLIGHT	 228)
+  (EXITLIGHT	 212)
+  (EXITLIGHT	 226)
+  (EXITLIGHT	 230)
+  (EXITLIGHT	 206)
+  (EXITLIGHT	 208 R  1582)
+  (EXITLIGHT	 932 L  1563)
+  (EXITLIGHT	 910 R  1584)
+
+  (SWITCHKEY	 213	1035   359)
+  (SWITCHKEY	 215	1065   359)
+  (SWITCHKEY	 233	1101   359)
+  (SWITCHKEY	 241	1135   359)
+  (SWITCHKEY	 205	1215   359)
+  (SWITCHKEY	 207	1309   359)
+  (SWITCHKEY	 209	1251   359)
+  (SWITCHKEY	 221	1342   359)
+  (SWITCHKEY	 227	1425   359)
+  (SWITCHKEY	 229	1463   359)
+
+  (TRAFFICLEVER 1	 219	1670    74 0)
+  (TRAFFICLEVER 1	 239	1670   352 1)
+
+  (TEXT	"ATLANTIC AVENUE INTERLOCKING"
+		1305	  45
+	HEIGHT	30
+	WEIGHT	BOLD
+	COLOR	(192 192 192))
+  (TEXT	"No N/B moves to tk 2/E"
+		1621	 153
+	HEIGHT	15
+	COLOR	(192 192 192))
+  (TEXT	"TRACK 4/E"
+		1670	  40
+	COLOR	(192 192 192))
+  (TEXT	"TRACK 3/E"
+		1670	 396
+	COLOR	(192 192 192))
+  (TEXT	"ATLANTIC"
+		 795	  80
+	HEIGHT	30
+	COLOR	(192 192 192))
+  (TEXT	"AVENUE"
+		 789	 208
+	HEIGHT	30
+	COLOR	(192 192 192))
+  (TEXT	"STATION"
+		 793	 346
+	HEIGHT	30
+	COLOR	(192 192 192))
+  (TEXT	"Copyright © 2001, 2014  Bernard S. Greenberg "
+		1351	  70
+	WEIGHT	BOLD
+	COLOR	(192 192 192))
+  (TEXT	"GT"
+		1538	 141
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		1518	 325
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		1631	 323
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		1365	  99
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"PLEASE READ \"Atlantic Avenue Info\" on the \"Help\" menu"
+		1309	  20
+	COLOR	(255 255 0))
+  (TEXT	"NORTH -->"
+		1309	  93
+	COLOR	(255 255 255))
+  (TEXT	"NO KEY BY"
+		 640	 143
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		 463	 329
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		 604	 328
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		 720	 329
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		 841	 285
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		 377	 330
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		 253	 328
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"GT-ST"
+		  38	 283
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"GT-ST"
+		 176	 283
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"GT-ST"
+		 355	 283
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"GT-ST"
+		 442	 284
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"ST"
+		 661	 282
+	HEIGHT	12
+	COLOR	(255 255 255))
+  (TEXT	"GT"
+		 695	 232
+	HEIGHT	12
+	COLOR	(255 255 255))
+)
+

@@ -1,0 +1,80 @@
+;; Original design by BSG 10 July 1998
+
+;;Problems
+
+;;  - the old 0AS initial-state crock
+;;  - stated switch is not right model for op that can fail.
+;;    That is, you should press for "move switch" and not precondition.
+;;   11 July 1998 preconditioning solved in relays.
+
+;;This is needed because of an insane problem in NXSYS that fails to pick up
+;;all circuits that should be picked up at load time unless they are
+;;in a crazy list of favored relay names (AS, D, DV, RGP).  As 4000AS
+;;is named AS, it will guarantee to pick up and propagate its results
+;;at load time.  (I will fix this madness somehow).  This is used in
+;;999BC below to make sure that it loads as picked.
+(relay 4000AS)
+
+
+;;Indicates whether the bridge may be unlocked.
+
+;; This is the "Bridge unlock" light.  The relay names are defined
+;; by input to the TLEdit panel light properties dialog.
+(relay 999BLK 999LSP !999BLZP)  ;yellow if LS happy, but bridge not enabled.
+(relay 999BLR !999LSP !999BLZP) ;red if if LS unhappy (routes).
+(relay 999BLG 999BLZP) ;green if bridge "unlocked" to move.
+
+;; This is the "Rail traffic safe" light, basically repeating 999BC.
+(relay 999LKG 999BC)  ;green
+(relay 999LKR !999BC) ;read
+
+;; This is "bridge in correspondence" relay. Picked for "safe for trains."
+(relay 999BC !999BLZP	;; if the bridge was unlocked by operator, unsafe
+       !999BUP !999BUPS !999BUUZ !999BDUZ ; control relays and timers
+       999RGP
+       4000AS)	;;this insanity makes sure NXSYS notices this at load time.
+
+;;This, B L Z P "Bridge lever control repeater", picks when the bridge
+;;is enabled and ready to move...
+
+(relay 999BLZP
+       (OR 999LSP 999BLZP) ;; pick up when safe, then stick
+       (OR
+	 999BLZ   ;;Pick up when key switch moved to "unlock bridge"
+	 !999RGP))	;;or bridge is actually up
+            ;; (if the bridge is up, don't let clearing the lock lever 
+	    ;; de-unlock the bridge)
+
+;;This  implements antipreconditioning on the bridge unlock.
+;;LSP is the "real" "bridge is unlocked by traffic", reported by the lights
+(relay 999LSP (OR 999LSP  ;or up legitimately
+		  !999BLZ ;or key switch is down
+		  )
+       999LS)
+
+
+;;Now do the same thing with antipreconditioning the bridge control
+
+(relay 999BZLSP (OR 999BZLSP !999BZ) 999BLZP)
+;;BZR is "raise the bridge" -- BZ is the switchkey control
+(relay 999BZR (OR 999BZR 999BZLSP) 999BZ)
+
+;;This relay means "the bridge is safely down". Its function
+;; is similar to RGP -- by our actually naming it RGP, NXSYS will
+;; initialize it correcly
+(relay 999RGP !999BZR !999BUP !999BUPS);really wants to check bridge contacts....
+
+(relay 999BKY 999BUP) ; yellow "bridge operated" light.
+(relay 999BKR !999RGP !999BUP) ;red "bridge operating" light.
+
+;; up-down timing simulation 12 July 1998
+(timer 999BUU 10 999BZR !999BUPS) ; timer for going up - control but not up
+(relay 999BUP ;;"bridge up" (safe for boats)
+       (OR 999BUP 999BUU) 999BZR !999BZC) ;timer+control+ not cancelled;
+;;this relay sticks when the bridge has gotten up, and stays up until
+;; the bridge is fully down.
+(relay 999BUPS (OR 999BUPS 999BUP) !999BZC) ;; up when BUP, stay till cancel
+;; this timer starts when the control is dropped, but bridge isup.
+(timer 999BDU 10 999BUPS !999BZR)
+;; timer flips this relay, which cancels BUP and BUPS when down cycle is done
+(relay 999BZC 999BDU)

@@ -1,0 +1,21 @@
+(clicktime 200 200)	
+(load "myrtle.trk")
+(say 2000 "Let's move a few switches here....")
+(mouseright switch 157 "")
+(mouseright switch 165 "")
+(mouseright switch 155 "")
+(mouseright switch 195 "")
+(mouseright switch 183 "")
+(mouseright switch 185 "")
+(say 4000 "OK, let's wait for the switches...")
+(say 2000 "Now impose constraints left and right with Approach 162")
+(signal 9162 "")
+(say 3000 "Wait for stops and stuff...")
+(signal 200 "Initiate...")
+(wait 2000)
+(signal 170 "Exit ...")
+(wait 8000)
+(say 3000 "Ta daa......!")
+
+
+

@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+    <meta charset="UTF-8" />
+<title>NXSYS for the Macintosh / OS X/MacOS</title>
+<link rel="stylesheet" type="text/css" href="nxdoc.css">
+</style>
+</head>
+
+<body>
+    <h1><span class="nxsys">NXSYS / Mac OS X</span><span class=h1little>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;December 2016</h1>
+<p>Welcome to <span class=nxsys>NXSYS / Mac</span>, the 64-bit Macintosh port of Version 2 <span class=nxsys>NXSYS</span> (&ldquo;E<b>N</b>trance-e<b>X</b>it system&rdquo;), a relay logic and interlocking panel simulator first written for Microsoft Windows.  <b>Interlockings</b> are intricately interlocked arrangements of railroad switches ("switch tracks") and their associated signalling (&ldquo;traffic lights&rdquo;) and control apparatus, of which latter interlocking panels are the control boards with models of the track and various buttons, lights, and other controls by which tower operators (earlier &ldquo;towermen&rdquo;) effect this control.  <span class=nxsys>NXSYS</span> allows the design and simulation of complete relay-logic interlockings. The paradigm employed is the classic practice of the New York City Transit system (&ldquo;the subway&rdquo;) from the 1950's to the present day, constructed
+    of &ldquo;relays&rdquo; (electromagnets opening and closing other circuits), the only &ldquo;logic family&rdquo; available a hundred years ago – only in the last decade have computer and communications-based technologies made significant inroads in New York, and they are integrated with the extant relay-logic plant.</p>
+    
+    <p>In order to use <span class="nxsys">NXSYS / Mac</span>, you will require two levels of understanding, both available on the <span class=menu>Help</span> menu here:
+    <ul>
+        <li><p><a href="NXSYSV1.html">Common <span class=nxsys>NXSYS</span> documentation</a>.  This document explains the features and use of <span class=nxsys>NXSYS</span>, in all Versions (Windows Version 1, Windows Version 2, Mac), as well as the rudiments of New York-style signalling.  Although certain Version 1 facilities have not been carried forward into Version 2 and <span class=nxsys>NXSYS / Mac</span>, it is accurate, describing all displays and controls of all versions of the application.</p></li>
+        
+        <li><p><span class="nxsys">NXSYS / Mac</span>.  The differences between Version 2 for Windows and the Macintosh port, including features specific to and exploiting the Macintosh User Interface environment, are detailed here <a href="#featuredif">below</a>.</p></li>
+    </ul>
+    
+    <p>In addition to the common document, there are several web sites, including abroad, that explain the concepts and terminology of classic block-based railway signalling, which all apply here, in particular the author's own sub-site on New York signalling rudiments, <a href="https://www.nycsubway.org/wiki/Subway_Signals:_A_Complete_Guide">Subway Signals: A Complete Guide</a> on David Pirmann's encyclopaedic <a href="https://nycsubway.org">nycsubway.org</a>.</p>
+            
+
+    <p>We will describe <span class="nxsys">NXSYS / Mac</span> in, fittingly, three divisions: <a href="#removed">features no longer present</a> in it, <a href="#modified">features modified</a> or operating differently from their behavior in previous versions, and <a href="#featuresnew">features entirely new</a>. There is a usually-empty list of <a href="#bugs">known bugs</a> as well. Do read this whole file, though.</p>
+
+
+<p><span class=nxsys>NXSYS</span> also provides <span class=nxsys>TLEdit</span>, the <span class=nxsys>NXSYS</span> track-layout editor, a related application used to prepare model board graphics for use in (Version 2) scenarios. <span class=nxsys>TLEdit</span> does <b><i>not</i></b> author relay logic: while it gives you the instruments and the concert hall, you still have to compose the symphony.</p>
+
+
+<p><span class=nxsys>NXSYS / Mac</span> <b>2.2.1</b> has been developed on, and tested against, <b>OS X El Capitan 10.11.6</b>, using XCode 7.3.1 on a 2012 MacBook Pro. It has not been tested against MacOS Sierra.  See the <a href="ReleaseNotes.html">release notes</a> for build and platform test status of newer versions (tested as high as Catalina (MacOS 10.15.2)).</p>
+
+    <p>If, after following links, you click right on <b>blank areas of</b> this documentation window, you will see a little menu with a
+    <span class=menu>Back</span> item with expectable function.</p>
+
+    <h3>Credits and disclaimers</h3>
+    <p><span class="nxsys">NXSYS</span> was conceived, implemented, debugged and continued by myself, Bernard Greenberg, initially engineered for 16-bit Microsoft Windows (3.1) in 1994, and adapted for Win32 (NT and Windows 95) in 1996.  Version 2, featuring arbitrary 2-dimensional track and panel geometry, was begun in 1997. This Macintosh adaptation of Version 2 was created in August 2014. Distributable Version 2 for Windows was created in November and December of 2016. I assert my <span style="color:#068">Copyright &copy; Bernard S. Greenberg 1994, 1996, 2001, 2014, 2016</span> upon the whole: software, scenarios, and documentation.</p>
+    
+    <p>The interlocking scenarios were developed by me all through this time; 240th St. features contributions by an erstwhile student of mine in this domain, Henry Sundermeyer.  The Version 2 interlockings were all designed from official &ldquo;control-line&rdquo; drawings; that is, the signal and switch numbers correspond to the real world (at some time in the 1990's, largely today), and the control implications of the signals as well.  Note that the <span class=warning>implementation and circuitry are my own and not those actually on the property, and feature bugs, flawed understandings, and errors</span>, although I certainly have striven to adhere to the official design principles.</p>
+    
+    <p>Two engineers actively involved with New York Transit signalling, Norm Ishler and David Rosenthal, contributed greatly by critiquing my interlocking designs and documentation in the mid-90's. Jeff Erlitz,  planner for NYC Transit, has contributed vastly in recent years by keeping this NYC expatriate informed of developments. Dave Barraza (see below) contributed greatly to the development
+        at testing of both Version 2 and the Mac port, pushing <span class=nxsys>NXSYS</span> 2 beyond its limits with gargantuan interlockings with hugely imaginative features. Dave Pirmann at nycsubway.org has been most gracious in providing this application an internet home.  In 1963-4, the late Martin Schachne of the NYC Transit Authority very graciously supplied me with countless discarded &ldquo;TA&rdquo; materials, whose study led me in 1966 to request of the TA the NX-UR prototype drawings <span style="color:red"><b>&ldquo;733-33&rdquo;</b></span>, which some exceedingly generous unknown employee granted me in June of that year, whence my knowledge begetting Version 1.</p>
+    
+    <p>Special mention and credit must be given to New York's Dave Barraza, who, with this application (Windows Version 2), not only found a continuing professional career in signal engineering, and has tested and used and critiqued both versions of this software extensively, but has designed, with his professional signal engineering skills now far superior to my amateur skills, a number of massive, master-tower multi-interlockings within it, including several of the &ldquo;masterpieces&rdquo; of the New York systems, some 10 or 20 times the extent of the none-too-simple sample interlockings supplied here.</p>
+    
+    <p class=warning>Please note that neither this software, nor its scenarios nor documentation, have been endorsed, vetted, or approved by NYCT or any other transit agency or provider or signalling contractor or engineering organization.  This software and these interlocking designs are not safe or suitable for real transportation or other life-critical applications.</p>
+
+    <p>Also note that while these circuit models are taken from New York designs, many, many railroads and rapid transit systems use NX/UR interlocking control as well, with nearly-identical operation and very similar, if not identical, circuitry.</p>
+    
+    <p style="font-size:smaller">The attractive application icon featuring a classic subway car, a home signal, and its relay cases was taken by David Pirmann, courtesy nycsubway.org. The car is a &ldquo;Type-D (triplex)&rdquo; articulated unit, of which only 120 existed, from the late 1920's to the early 1960's. They were the workhorse BMT expresses (Brighton, West End, Sea Beach).  As can be inferred from the signal plate, the photo was taken at Brighton Beach, about a mile from where I grew up, and depicts the back, not front, of a train. I edited it some to remove some of the obscuring platform rail and debris in the window.</p>
+    
+    <p>This new work is dedicated to the memory of <b>Dan Weinreb</b>, late of New York and Boston, who would have been more enthusiastic about it than anyone alive, who stood by my side interpreting me when I guided a tour of the New York Subways explaining this stuff for 20 MIT-affiliated people in December of 1978, whose clarity in thought, writing, and humor, and strength and friendship will remain an inspiration to me for the rest of my life.</p>
+    <hr/>
+    
+    <h2>Scenarios / "Getting Started. . ."</h2>
+    
+    <p>The <a href="NXSYSV1.html#startup">&ldquo;Getting Started&rdquo; chapter</a> in the Version 1 helpfile is still the best place, now that there is a Version 2 port of &ldquo;Progman St.&rdquo; (named jocularly after the Windows 3.1 launcher ("Program Manager")) Interlocking. You should start at the top of that document.</p>
+    
+    <p>In addition to <a href="NXSYSV1.html#progman">Progman St.</a> and <a href="NXSYSV1.html#islington">Toronto's Islington</a> (ported and documented from Version 1) we supply two comprehensive Version 2 interlockings designed starting from real prints, Atlantic Avenue on the Brooklyn subway-formerly-known-as-the-IRT, and Myrtle Avenue on the erstwhile-BMT Broadway (Brooklyn) line.  As there are no <span class=nxsys>NXSYS / Mac</span> <b>.tko</b> compiled files, we supply directories (folders) full of "Expr" code, named <b>Atlantic</b> and <b>Myrtle</b> (and <b>Progman</b>), which you must have seen as siblings to the application, <b>NXSYSMac.app</b> in the disk image (<b>.dmg</b>) in which you apparently successfully found this application. You can use them in place, or copy them out with the finder.  Each contains a <b>README.txt</b> which will tell you to open <b>atlantic.trk</b>, <b>myrtle.trk</b> or <b>progman.trk</b> (with the application <span class=menu>File | Open</span> menu item) in those respective directories to visit those interlockings.  Once you have done that, they will subsequently appear in the <span class=menu>Open Recent . . .</span> menu.  When inside the interlockings, read the interlocking-specific documentation which is the last item in the app <span class=menu>Help</span> menu.</p>
+    
+        <p>If you don't know how to use any version of <span class=nxsys>NXSYS</span>, you should visit the <a href="NXSYSV1.html">main help document</a> as already suggested.</p>
+
+
+    <a name="featuredif"/a><a name="removed"/>
+    <h2>Features in Windows V.2 <span class="nxsys">NXSYS</span> not present in <span class="nxsys">NXSYS / Mac</span></h2>
+    
+    <p>The most significant feature omitted on the Macintosh is <b>OLE/COM</b> remote control of interlockings, and the <span class="nxsys">NXSCRIPT</span> scripting language that it provides. OLE/COM (Online Linking and Embedding and Component Object Model) is a Microsoft Windows interoperability feature not present on the Macintosh.  While the Mac has its own &ldquo;Services&rdquo;/AppleScript interoperability feature, I'm ashamed to say I've never seen a use of it or benefit of it, and, as a result, don't even know enough about it to be able to say whether an OLE-like out-of-app control mechanism exploiting it is a reasonable future goal or not (I am fairly new to the Apple world). (It is to be noted that New York and similar subway systems have their own &ldquo;remote control&rdquo; paradigm, i.e., master towers.) Use the &ldquo;Demo system&rdquo; (Lisp-form based) to script interlockings.</p>
+    
+    <p>There is no <b>relay compiler</b> in <span class=nxsys>NXSYS / Mac</span> right now, and I don't expect there to be.  The runtime machine language environment of the Mac is wholly different from that of Windows and (deliberately) obscure (a bulwark against malware), and Apple provides no tools for manipulating or coding to it. More significantly, modern Macs are sufficiently fast that interpreted (&ldquo;EXPR&rdquo;) interlocking code loads and runs with no perceptible delay.  <span class=nxsys>NXSYS / Mac</span> is sufficiently performant without compiling relay code.</p>
+    
+    
+    <a name="modified"/>
+    <h2>Features differing in <span class="nxsys">NXSYS / Mac</span></h2>
+    
+    <p>The most significant differing feature is <b>scrolling</b>; happily, <span class="nxsys">NXSYS</span>' native model of a panel larger than the window, which can be scrolled through horizontally and vertically, relocating all features and clickable objects appropriately, coincides exactly with the Macintosh native scrolling model, and cedes to it:  <span class="nxsys">NXSYS / Mac</span> panels are scrolled with the Mac &ldquo;two-finger swipe&rdquo; gesture, as with all other Macintosh apps.  What is more, the &ldquo;pinch&rdquo; and &ldquo;unpinch&rdquo; gestures, which shrink and enlarge the display dynamically on all compliant Mac applications, are fully in service here.</p>
+    
+    <p>On the same note, the <span class=nxsys>NXSYS</span> <span class=menu>Scale Display</span> is no longer needed; the &ldquo;pinch&rdquo; and &ldquo;unpinch&rdquo; gestures fully replace it. If you do not have a trackpad, or simply wish to use them, the keystrokes <b>&#8984;-</b> and <b>&#8984;+</b>, as in most Mac apps, are available for scaling/magnification; note that the latter must be typed <b>&#8984;shift =</b> (to be fixed if we can figure out how).</p>
+    
+    <p>As a Mac user, you already know that (the Windows term) &ldquo;click right&rdquo; means &ldquo;two finger click or tap&rdquo;, &ldquo;lower-corner click&rdquo;, &ldquo;right button on a real mouse&rdquo; or however you have the &ldquo;Secondary gesture&rdquo; configured.  You will also not be surprised that the <span class=menu>Quit</span> command has been so-renamed from <span class=menu>Exit</span>, and appears, along with the moved <span class=menu>About</span> command under the app (<span class=menu>NXSYSMac</span>) menu between the &#xF8FF; and <span class=menu>File</span>.</p>
+
+    <a name="TrainDifferences"/>
+    <p>The new <b>Train system</b> is the same as the old, although the train (control) dialog has a new, larger, &ldquo;Mac&rdquo; look. There are a couple of differences: the dialogs can neither be &ldquo;minimized&rdquo; nor restored (the Mac &ldquo;dock&rdquo; being a more exclusive abode than the Windows taskbar), and the mouse cursor doesn't change during track selection (yet); to cancel track-selection, you now click the little &ldquo;close&rdquo; button on the track-choice &ldquo;dialog&rdquo;, not merely click somewhere else.  In keeping with the above, the <span class=menu>Minimize All</span> and <span class=menu>Show All</span> items have been removed from the <span class=menu>Trains</span> menu.</p>
+    
+    <p><b>Full-signal windows</b> are now offered in two styles; the default &ldquo;old style&rdquo;, and a <a href="#ViewFsd">new &ldquo;view&rdquo; style (follow link)</a>. The &ldquo;old-style&rdquo; windows differ slightly on the Mac; because Mac title bars usually force three little &ldquo;close, miniaturize, zoom (close, minimize, maximize)&rdquo; buttons, they would leave little space to grab full-signal display windows and move them about the screen; for this reason, the buttons have been eliminated, leaving a clean title (on the other hand, now you can grab them anywhere). In order to close a full-signal display window, <b>double-click anywhere on it</b>.  See <a href="#ViewFsd">the aforementioned</a> for more on this.</p>
+    
+    <p>The erstwhile <b>Relay Draftsman</b> is now a <b>Draftsperson</b>. He or she now attempts to ensure that relays drawn are visible in the scrolled view as they are requested. <b>&#8984;D</b> now hides or recalls him or her.  He or she has a new command, <span class=menu>Recede</span>, which caters to the ambivalence of wanting or not wanting to hide the Draftsperson during use, partially occluding the same in &ldquo;bashful mode&rdquo; until the next relay is drawn. Play with it.</p>
+    
+    <p>The <b>Relay Trace Window</b> is now a tall, thin, fully-scrolling text window whose last entries are always visible; All earlier text is available by scrolling. Output is not produced from the guts of running, but (like most Mac graphics) when the app has &ldquo;returned to command level&rdquo; after a mouse-click or timer expiration has put it through its paces. But this makes little difference, because <tt><b>MORE</b></tt> processing, provided by one permanent and one evanescent button at its bottom, runs the regular app command loop (although other windows are inhibited), allowing trace output to be shown. The <span class=menu>MORE</span> button or any character releases the break.  As on Windows, you have no option but to release the break.</p>
+    
+    <p><b>Reload Interlocking</b> is now <b>&#8984;R</b>, in keeping with Apple app standards, no longer control-R.</p>
+    
+    <p>Some <b>Context menu items</b> have been moved around, particularly <span class=menu>Draw Relay</span> to accelerate its use.</span>
+    
+    <a name="nocab"/><h2>No Cab View, likely ever.</h2>
+    
+    <p>Although the Open GL &ldquo;Cab View&rdquo; feature of Version 1 <span class="nxsys">NXSYS</span> has proven extremely popular, it is unlikely to ever have a continuation in Version 2 <span class="nxsys">NXSYS</span>, Windows or Mac.  The issue is that some of the best Version 2 layouts, especially those by Dave Barraza, employ tracks which pass over and under each other (and on the interlocking panel, seem to cross without consequence).  Without a model of track, as opposed to interlocking panel behavior in three dimensions, these representations would be confusing and seemingly &ldquo;dangerous.&rdquo;  Truly modeling three-dimensional layouts is beyond the descriptive power of the track language, and beyond the editing powers of the layout editor with which they are drawn.  What is more, even were these two problems to be solved, layouts in which trains rose over or ducked under tracks that seemed merely rails in a black tunnel space (as in Version 1 <span class="nxsys">NXSYS</span>) would not be very satisfying; real-time video game art incorporating photographic or other complex reality-based constructions of landscapes are called for, and that is far beyond the purpose and scope of this application.</p>
+    
+    <p>Perhaps if someone with video-game design skills were interested in pursuing this, there might be a future for interoperation with <span class="nxsys">NXSYS</span>, but it seems wildly beyond the scope and intent of this application.</p>
+    
+    <h3>Stop the presses</h3>
+    
+    <p><b>Hardcopy printing</b> appears to be of decreasing value as computers grow faster and more portable, not merely for subway interlockings but for all human writings.  Largely a nostalgic nod to old sheaves of interlocking prints, this feature was never really very valuable, and may never be added to <span class=menu>NXSYS / Mac</span>.  All the hard work is already done by the Relay Draftsperson.  The <span class=menu>Print</span> menu item currently prints the main screen (the visible portion) without any code having been written for it!</p>
+    
+    <a name="featuresnew"/>
+    <h2>Features new to <span class=nxsys>NXSYS / Mac</span></h2>
+    <a name="viewmenu"/>
+    <p>There is a <b><span class=menu>View</span> Menu</b> in the top-of-screen menu bar, as with most Mac apps. Among other items, it offers a command to (toggle, with check-mark) open or close the Relay Draftsperson (with the convenient accelerator <b>&#8984;&nbsp;D</b>) See also <a href="#ViewFsd">Full signals as Views</a>, a new item.</p>
+    
+    <p><b>&#8997;&#8984; R</b> (option-command R, adjacent modifier keys) is now <span class=menu>Reset all the Above</span> on a loaded interlocking. Yes, it correctly handles the traditional wait before clearing switches (although <b>&#8984;&nbsp;R</b>, <span class=menu>Reload Interlocking</span>, is so fast that you might as well do that to avoid this problem.)</p>
+        
+    <p>There is a new command under screen-top menu item <span class=menu>Relays</span>, <span class=menu><b>Trace to console</b></span>.  Mac apps but not Windows GUI apps can write to the console if invoked from a console window.  If invoked, this hides the Relay Trace window, and <i>vice versa</i>.  This was extremely useful before the latter was debugged (in which case it output to the debugger's console window), and still may have some utility.</p>
+    
+    <p><b>Open Recent ...</b>  The Windows versions should have had this a long time ago (it is not easy in the Windows frameworks I employed), but <span class=nxsys>NXSYS / Mac</span> features an <span class=menu>Open Recent</span> item on its <span class=menu>Files</span> menu as expected of modern apps, facilitating access to recently-visited right-of-way.  What is more, when the application either closes or even crashes, the next time it is launched (including automatically after crashes) it will automatically load the interlocking &ldquo;scenario&rdquo; it was visiting at that time. Unfortunately for your imaginary trains, routes established in the previous session, even fleeted ones, will not be relined (although that would surely be an impressive and amusing hack some day, the enumerated model of routes it suggests is at wide variance from the &ldquo;resultant/emergent route&rdquo; model of NX/UR as designed by its inventors and consequently realized in the relays of <span class=nxsys>NXSYS</span> interlockings.)</p>
+    
+    <a name="Preferences"/>
+    <p>There is now a &ldquo;standard&rdquo; <span class=menu>Preferences</span> dialog, accessible from the usual place, the &ldquo;App&rdquo; menu (between the &#xF8FF; and the <span class=menu>File</span> menu), with multiple tabs controlling various options, which are &ldquo;persisted&rdquo; between sessions.  Changes are not put into effect unless <span class=menu>OK</span> is clicked (or &ldquo;Enter&rdquo;, ... entered).  Cancelling the dialog discards the tentative changes. <b>&#8984;,</b> (Command-Comma) is the (standard) accelerator for <span class=menu>Properties</span>.</p>
+
+    <p><span class=nxsys>NXSYS</span> is &ldquo;shell aware&rdquo;, declaring the <b>.trk</b> file type as its choice fare.  This means that you can open <b>.trk</b> interlocking-definition files from the Finder, provided that
+    <ul>
+        <li>the file you pick is the correct &ldquo;top-level file&rdquo; for that interlocking (as documented), and that</li>
+        <li>you choose <span class=menu>Open With...</span> from the Finder right-click menu, whereupon you will see the icon and name of the app.  If you keep the app in a consistent place, you can choose <span class=menu>Other...</span> and form a default association, so that double-click (or the shell <b>open</b> command) will then suffice.</li>
+    </ul>
+    
+    <a name="ViewFsd"/>
+    <h3>Full Signals as Views, not Windows.</h3>
+        <p>This new feature gives you a choice of displaying Full Signals as &ldquo;views&rdquo;, instead of the familiar little white windows.  The &ldquo;views&rdquo; have no backing window, no title bar, no &ldquo;close&rdquo; button; the signal just hovers over the panel, in a more realistic-tunnel-looking way.  What is more, they <i><b>move and scale with the panel:</b></i> they adhere to a place on the panel, not a station relative to the window or screen; you can scroll them off-window as with tracks, GK lights, etc., but no longer move them out of the window (you may have to expand the bottom border to see some fully before repositioning them).  To close one, <b><i>double-click on it</i></b>; to move it, simply drag it with the left mouse button/trackpad.  The <span class=menu>View</a> menu item to flush them all is still obeyed.</p>
+        
+        <p>The behavior of &ldquo;old&rdquo; full-signal windows has been changed to be compatible; double-click will close one, and mouse-grab anywhere on the window, including the title bar, will drag it. Stop stems have been repainted yellow, as black stems are invisible in the tunnel.  (In fact, the &ldquo;old-style&rdquo; views are the identical views framed in their own windows.)</p>
+        <p>Whether new full-signal displays are created as views or windows (they can coexist) is controlled by the corresponding item on the <span class=menu>General</span> tab of the new <a href="#Preferences"><span class=menu>Preferences</span> dialog</a>, and, like all managed there, is &ldquo;persisted&rdquo; between sessions.</p>
+    <a name="bugs"/>
+        <h2>Known bugs</h2>
+        
+<ul>
+</ul>
+<hr>
+<!-- hhmts start -->Last modified: Fri Dec 16 2016 <!-- hhmts end -->
+</body> </html>

@@ -1,0 +1,286 @@
+;; File  myrautop.trk  -- included from myrtle.trk
+
+;; Train ID Automatic Operation for Myrtle Avenue Interlocking
+;; Original designs interfacing to the world's first (AFAIK) relay-operated
+;; Windows Menus.
+
+;;
+;;***************************************************************************
+;;*********THIS IS AN ONGOING EXPERIMENTAL DESIGN, AND DOES NOT FOLLOW ******
+;;*********NYCT DESIGN OR PROTOTYPES.  FOR PURPOSES OF THE NYCT        ******
+;;*********STANDARD, THIS WHOLE FILE CAN BE IGNORED AND THE REFERENCE *******
+;;*********TO IT REMOVED.****************************************************
+;;***************************************************************************
+;;
+;;***************************************************************************
+;;****THESE CIRCUITS ARE FOR DEMONSTRATION ONLY. THERE IS********************
+;;****NO CLAIM AS TO THE CORRECTNESS OR UTILITY OF THESE CIRCUITS.  IN*******
+;;****PARTICULAR, NO CLAIM IS MADE AS TO THEIR SAFETY, AND THE AUTHOR *******
+;;**********DISAVOWS ANY RESPONSIBILITY FOR DAMAGE OR HARM RESULTING ********
+;;****FROM THEIR USE IN REAL OR SIMULATED SYSTEMS.***************************
+;;***************************************************************************
+
+;; BSG 22-23 February 1997 ++
+
+(relay 164mnxk !164mnj1 !164mnj3 !164mnm1 (OR 164mnu !164mnu))
+
+(menu 164mnu
+      (AND (OR 164mnu
+	       164mnz
+	       !4234SS)
+	   (or !164mngr 4235T)
+	   (OR !4234T !4233T)
+	   0AZ)
+      "Southbound at J3-234"
+      ()
+      (("Unidentified" 164mnx 164mnxk)
+       ("J1 Local to E NY" 164mna 164mnj1)
+       ("J3 Express to E NY" 164mnb 164mnj3)
+       ("M1 to Metro Ave" 164mnc 164mnm1)
+       ("Cancel" 164mncpb)))
+
+(relay 164mncpb (or (and 164zrr !164R)))
+
+;;
+;; These relays simply stick the request which is punched
+;; holding until "Cancel" is pushed or the menu is dropped.
+;; They light the light on the button box, and hold the request
+;; until it can be honored.
+
+(relay 164mnj1
+       (or 164mna
+	   164rij1
+	   (and 164mnj1	!164mnj3 !164mnm1 !164mncpb))
+       164mnu)
+
+(relay 164mnj3
+       (or 164mnb
+	   164rij3
+	   (and 164mnj3 !164mnj1 !164mnm1 !164mncpb))
+       164mnu)
+(relay 164mnm1
+       (or 164mnc
+	   164rim1
+	   (and 164mnm1 !164mnj1 !164mnj3 !164mncpb))
+       164mnu)
+
+
+;;
+;; These relays operate when the route stuck above is available, and
+;; operate the entrance pb (AZ) at that time.
+;;
+
+(relay 164zpj1
+       (or (AND 164zpj1 !164R) 164mnj1)
+       (OR !165RWK 165L) !155RWK (OR !157RWK 157L) !183NWK !185RWK
+       !164mncpb 164mnu)
+
+
+(relay 164zpj3
+       (or (AND 164zpj3 !164R) 164mnj3)
+       (OR !165RWK 165L) !155RWK (OR !157RWK 157L) (OR !183RWK 183L) !187RWK !185RWK
+       !164mncpb 164mnu)
+
+(relay 164zpm1
+       (or (and 164zpm1 !164R) 164mnm1)
+       (OR !165RWK 165L) !155RWK !157NWK
+       !164mncpb 164mnu)
+
+(relay 164az (or 164zpj1 164zpj3 164zpm1))
+
+;; Route complete
+;;;
+;; These relays verify that the interlocking is really offering us
+;; the route we asked for, and operate the exit.
+;;
+;; must be haired up for 154 initiations
+
+(relay 180xaz
+       185BNS
+       (or (and 164zpj1      165BNS 157NS 183RS)
+	   (and 154zpj1      155BNS 183BNS)))
+
+(relay 192xaz
+       (or (and  164zpj3      165BNS 157NS 183ANS 187BNS 185ANS 195BNS)
+	   (and  154zpj3      155BNS 183BNS 185RS)))
+
+(relay 158xaz
+       157RS
+       (or
+	 (and 164zpm1      165bns)
+	 (and 154zpm1      155rs)))
+
+;;;
+;;; This picks up when the interlocking has actually responded
+;;; and lined the route.  The point of this is to cancel the
+;;; whole stack of relays when the route drops after this has "sticked."
+;;
+
+(relay 164zrr
+       (or 164zrr
+	   (and 164R 164az
+		(or (and 180xaz 183RS 185BNS)
+		    (and 192xaz 165NS 157NS 183ANS 185ANS)
+		    (and 158xaz 165NS 157RS 155ANS))))
+       !164mncpb 164mnu)
+
+;; This "general release" marks the train passing the high
+;; signal in the right direction, and drops the menu.
+;;
+
+(relay 164mngr (or 164mngr (and (or 164MNJ1 164MNM1 164MNJ3) !4235T)) !4235SS) ;164mnu term removed, !4234T=>!4235SS 8/25/2019
+
+;;; 172 remote stuff.  The "mn--" relays are the same as at 164.
+
+;; "unidentified". Note that Windows demands on buttons being pressed.
+;;
+(relay 172mnxk !172mnj1 !172mnj3 !172mnm1 (OR 172mnu !172mnu))
+
+(menu 172mnu
+      (AND 0AZ !4216T 4216NS (OR !172mngr 4221T))
+      "Southbound at Myrtle Ave"
+      ()
+      (("Unidentified" 172mnx 172mnxk)
+       ("J1 Local to E NY" 172mna 172mnj1)
+       ("J3 Express to E NY" 172mnb 172mnj3)
+       ("M1 to Metro Ave" 172mnc 172mnm1)
+       ("Cancel" 172mncpb)))
+
+(relay 172mncpb (or (and 172zrr !172PBS)))
+
+;; These stick the route until the menu is dismissed by the
+;; train passing the high home signal
+;;
+
+(relay 172mnj1   ;csa
+       (or 172mna
+	   (and 172mnj1	!172mnj3 !172mnm1 !172mncpb))
+       172mnu)
+
+(relay 172mnj3  ;csb
+       (or 172mnb
+	   (and 172mnj3 !172mnj1 !172mnm1 !172mncpb))
+       172mnu)
+(relay 172mnm1 ;  csa & csb
+       (or 172mnc
+	   (and 172mnm1 !172mnj1 !172mnj3 !172mncpb))
+       172mnu)
+
+;;
+;; This is the "standard" DeKalb Avenue route-locker-like distance-based
+;; queue miracle.
+;;
+
+(relay 4216csa (or 172mnj1 172mnm1) !4216T)
+(relay 4216csb (or 172mnj3 172mnm1) !4216T)
+
+(relay 4221csa (or 4221csa 4221T) (or !4221T 4216csa))
+(relay 4221csb (or 4221csb 4221T) (or !4221T 4216csb))
+(relay 4221csc !4221csa !4221csb !4216T !4221T)
+
+(relay 4223csa (or 4223csa 4223T) (or !4223T 4221csa))
+(relay 4223csb (or 4223csb 4223T) (or !4223T 4221csb))
+(relay 4223csc (or 4223csc 4223T) (or !4223T 4221csc))
+
+(relay 4228csa (or 4228csa 4228T) (or !4228T 4223csa))
+(relay 4228csb (or 4228csb 4228T) (or !4228T 4223csb))
+(relay 4228csc (or 4228csc 4228T) (or !4228T 4223csc))
+
+(relay 4230csa (or 4230csa 4230T) (or !4230T 4228csa))
+(relay 4230csb (or 4230csb 4230T) (or !4230T 4228csb))
+(relay 4230csc (or 4230csc 4230T) (or !4230T 4228csc))
+
+(relay 4232csa (or 4232csa 4232T) (or !4232T 4230csa))
+(relay 4232csb (or 4232csb 4232T) (or !4232T 4230csb))
+(relay 4232csc (or 4232csc 4232T) (or !4232T 4230csc))
+
+(relay 4233csa (or 4233csa 4233T) (or !4233T 4232csa))
+(relay 4233csb (or 4233csb 4233T) (or !4233T 4232csb))
+(relay 4233csc (or 4233csc 4233T) (or !4233T 4232csc))
+
+(relay 4234csa (or 4234csa 4234T) (or !4234T 4233csa) !164mncpb)
+(relay 4234csb (or 4234csb 4234T) (or !4234T 4233csb) !164mncpb)
+(relay 4234csc (or 4234csc 4234T) (or !4234T 4233csc) !164mncpb)
+
+
+;; These gate the queue's requested ID onto 164's pushbutton stick
+;; relays (mn--)
+
+(relay 164rij1 !164mngr 4234csa !4234csb !4234csc)
+(relay 164rij3 !164mngr !4234csa 4234csb !4234csc)
+(relay 164rim1 !164mngr 4234csa 4234csb !4234csc)
+
+
+(relay 172mngr 4216NS (or 172mngr (and 172pbs 4221T)) !4216T)
+
+;; Automatic control of approach signals
+
+(relay 162AZ 0AZ !164XS 4228NS !4228SS
+       4233T 4234T 4232T (OR 4228csa 4228csb 4228csc))
+(relay 172AZ 0AZ 4221NS 4230NS !164XS (OR 172mnj1 172mnj3 172mnm1) 172mnu)
+
+
+;; Control at 154   25 February 1997
+
+(relay 154mnxk !154mnj1 !154mnj3 !154mnm1 (OR 154mnu !154mnu))
+
+(menu 154mnu
+      (AND 0AZ !1231T (or !154mngr 1234T))
+      "Southbound at J1-234"
+      ()
+      (("Unidentified" 154mnx 154mnxk)
+       ("J1 Local to E NY" 154mna 154mnj1)
+       ("J3 Express to E NY" 154mnb 154mnj3)
+       ("M1 to Metro Ave" 154mnc 154mnm1)
+       ("Cancel" 154mncpb)))
+
+(relay 154mncpb (or (and 154zrr !154R)))
+
+(relay 154mnj1
+       (or 154mna
+	   154rij1
+	   (and 154mnj1	!154mnj3 !154mnm1 !154mncpb))
+       154mnu)
+
+(relay 154mnj3
+       (or 154mnb
+	   154rij3
+	   (and 154mnj3 !154mnj1 !154mnm1 !154mncpb))
+       154mnu)
+
+(relay 154mnm1
+       (or 154mnc
+	   154rim1
+	   (and 154mnm1 !154mnj1 !154mnj3 !154mncpb))
+       154mnu)
+
+(relay 154zpj1
+       (or (AND 154zpj1 !154R) 154mnj1)
+       !155RWK !183RWK !185RWK 180AS
+       !154mncpb 154mnu)
+
+
+(relay 154zpj3
+       (or (AND 154zpj3 !154R) 154mnj3)
+       (OR !155RWK 155L) !155RLP !183RWK !185NWK 192AS 194AS 194AAS
+       !154mncpb 154mnu)
+
+(relay 154zpm1
+       (or (and 154zpm1 !154R) 154mnm1)
+       !155NWK !157NWK 160AS 158AS
+       !154mncpb 154mnu)
+
+(relay 154az (or 154zpj1 154zpj3 154zpm1))
+
+(relay 154zrr
+       (or 154zrr
+	   (and 154R 154az
+		(or
+		  (and 180xaz 183BNS 155BNS 154zpj1)
+		  (and 192xaz 183BNS 185RS 155BNS 154zpj3)
+		  (and 158xaz 155RS 154zpm1))))
+       !154mncpb 154mnu)
+
+(relay 152az 0az (OR !1222T !1224T !1226T) (OR !183RWK 155RWC))
+(relay 204az 0az !4250SS !204AZS 4258T)
+(relay 204azs 0az (or 204azs 204pbs) !4250SS)

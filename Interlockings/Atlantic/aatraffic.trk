@@ -1,0 +1,42 @@
+;; Rewritten to new sane J-K flipflop way
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;a
+;;Traffic Control Lever 219
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 219L 1544T 1524T 1504T
+       !202XS 1564NS 200AS)
+
+(relay 219nFK  219FXS 219L)
+(relay 219nFKR 219FXS !219L )
+(relay 219rFK  219FNS  219L)
+(relay 219rFKR 219FNS !219L)
+
+
+(relay 219FNS (OR (AND 219FNS !219FXS)
+		  (AND 219L 219RL)))
+
+
+(relay 219FXS (OR (AND 219FXS !219FNS)
+		  (AND 219L 219NL)))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;Traffic Control Lever 239
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 239L 1523T !230XS 1543NS)
+
+
+(relay 239rFK  239FXS 239L)
+(relay 239rFKR 239FXS !239L )
+(relay 239nFK 239FNS  239L)
+(relay 239nFKR 239FNS !239L)
+
+
+(relay 239FNS (OR (AND 239FNS !239FXS)
+		  (AND 239L 239NL)))
+
+(relay 239FXS (OR (AND 239FXS !239FNS)
+		  (AND 239L 239RL)))

@@ -1,0 +1,1428 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;									;;;;
+;;;        An interlocking definition file for ...			;;;;
+;;;									;;;;
+;;;        NXSYS -- NX/UR Interlocking simulator for MS(R) Windows(TM)  ;;;;
+;;;         Copyright(C) Bernard S. Greenberg 1994, 1996		;;;;
+;;;        All rights reserved.						;;;;
+;;;									;;;;
+;;;        These circuits are for amusement/educational value only, and ;;;;
+;;;        are not to be construed as suitable for use in real railroads;;;;
+;;;        or other life-critical situations.  The author disavows any  ;;;;
+;;;        responsibility for any harm or injury resulting from use     ;;;;
+;;;        or study of this software or these circuits.  Use at your    ;;;;
+;;;        own risk.							;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Yet to be done
+;; Signal 4, 38 and 52 - left scroll needed in sim
+;; "toronto track section nomenclature" in sim?
+
+;;;Islington initially laid out and programmed by BSG in February 1997
+;;;Layout recast in TLEdit/V2nxsys by Dave Barraza, October 2014
+(defrmacro exitlight 4 (comment)) ;; ignore embedded v1 exitlights
+
+(route "Islington Station Interlocking  --  27 February 1997" #\B 115 north
+		:SIM-FEET-PER-SCREEN 2400
+		:CRUISING-FEET-PER-SECOND 60
+		:TRAIN-LENGTH-FEET 448
+		:YELLOW-FEET-PER-SECOND 30
+		:TORONTO T                ;;signal plate format
+                :BASIC-HELP-FILE-ID ("Islington Interlocking Help" 780 "NXSYSV1#islington")
+)
+
+(include "stdmacs.trk")
+(comment
+;; note that declaration order is display order, which can be critical.
+(track 1 
+   (114 116 121 125 128 132 137 140))
+
+(track 3 
+   (125 128 133 137))
+
+(track 2
+  (112 115 121 125 127 131 136 138))
+
+(platform island 116 121 40 160 "ISLINGTON")
+
+(switch 1 122 2 124 13)
+(switch 1 124 2 122 15)
+
+
+(switch 3 127 2 126 27)
+(switch 1 126 3 127 29 SINGLETON)
+
+
+(signal 2 (revdir 115 116) (ZZR ZZR) 6)
+(signal 2  115 (GYR GZR Y) 2)
+(signal 2  121 (GYR GYR Y) 10)
+(signal 2  125 (GYR GYR Y) 26)
+(signal 2 131 (GYR GYR Y) 42)
+(signal 2 (revdir 125 126) (ZYR GYR Y W) 14)
+(signal 2 (revdir 121 122) (GYR))
+(signal 2 (revdir 136 134) (ZYR GYR Y) 50)
+
+(signal 3 128 (GYR GYR Y) 30)
+(signal 3 (revdir 133 133) (GYR GZR Y) 44)
+
+(switch 1 135 3 134 45)
+(switch 2 135 3 134 49 SINGLETON)
+
+(signal 1 116 (ZYR GZR Y W) 8)
+(signal 1 (displace 137 136) (GYR GYR Y) 48)
+(signal 1 132 (GYR GZR Y) 20)
+(signal 1 128 (GYR GZR Y) 18)
+(signal 1 (displace 125 126) (ZYR GYR Y W) 16)
+(signal 1 (revdir 125 125) (ZYR ZYR Y) 28)
+(signal 1 (revdir 121 121) (GYR GYR Y) 12)
+(signal 1 (displace 121 122) (GYR))
+)
+
+(stdswitch 13)
+(stdswitch 15)
+(stdswitch 27)
+(stdswitch 29)
+(stdswitch 45)
+(stdswitch 49)
+
+(include "Islington_Layout.trk")
+;; Toronto track circuit names
+(defrmacro tkequiv 2 (relay 1TP 2T))
+(defrmacro HomeVACO 4
+            (relay 1V (OR 1H
+			  (AND (OR 1V 1VPB 1COU) 1CO)
+			  (AND (OR 1VS (AND 1V !2TP))
+			       (OR 2TP !3TP)
+			       (arg 4)))))
+
+(tkequiv 4  2112)
+(tkequiv 2  2115)
+(tkequiv 10 2121)
+(tkequiv 26 2125)
+;;(tkequiv 42A 2127) 
+(relay 42ATP 2127T)
+(tkequiv 42 2131)
+(relay 50ATP 2136T)
+
+(tkequiv 8  1116)
+(tkequiv 16 1125)
+(tkequiv 18 1128)
+(tkequiv 20 1132)
+(tkequiv 48 1137)
+
+(tkequiv 30 3128)
+(relay 30ATP 3133T)
+(tkequiv 44 3137)
+(relay 48ATP 1140T)
+
+;;--------------------------------------------------------------------------
+
+(relay 2D  10H)
+
+(relay 2H 2GTU !2COS (LABEL L2HT !2AS !2NS 2HY
+			    (LABEL L2HT1  2PBS 2SS 13NWK
+				   !13LS 10SS
+				   (OR (AND 18SS 20AS 48AS) 15NWC)
+				   (OR 26SS 15RWC)
+				   (OR (AND 30AS 27AS)
+				       (AND 27NWC 29RWC 15NWC)))))
+
+(relay 2HV 2H 2RVP)
+(timer 2GTU 8 (or 2GTU !2H) !2COS !4TP L2HT)
+(HomeVArgs 2 4TP 2TP T)
+(relay 2CO 2COS L2HT1)
+
+(relay 2NS (OR 2NS 2TP) 2AS)
+(relay 2SS (OR 2SS 2TP) (OR 13RWC 10SS))
+
+(Relay 6V 2V)
+
+(relay 8H 8HY !8COS (LABEL L8HT 8PBS !8AS))
+(relay 8HV 8H 8RVP)
+(relay 8CO 8COS L8HT)
+(HomeVArgs 8 1121T 8TP T)
+
+
+(relay 10D  (SWIF 15 28HV 26HV))
+(relay 10DR 15RWC)
+(relay 10H 10HY !10COS
+     (LABEL L10H
+        10R !10VS !10AS 13NWC !13LS !15LS !10NS 10SS !15LS
+          (SWIF 15 (AND 16AS 16XL) (AND 14AS 14XL))))
+        
+(relay 10HV 10H 10RVP)
+(relay 10CO 10COS L10H)
+
+(HomeVArgs 10 2TP 10TP 13NWC)
+
+(relay 12D (SWIF 13 26HV 28HV))
+(relay 12DR 13NWC) ; note that Toronto assigns green to "normal way!"
+(relay 12H 12HY !12COS
+  (LABEL L12HT
+    12R !12VS !12AS 15NWC !15LS !13LS !16NS 16SS !13LS
+       (SWIF 13 (AND 14AS 14XL) (AND 16AS 16XL))))
+(relay 12HV 12H 12RVP)
+(relay 12CO 12COS L12HT)
+(HomeVArgs 12 1121T 16TP 15NWC)
+
+(relay 10XL (AND 10AS 4AS 2AS 2NS))	; VITAL
+
+(relay 14DR 13NWC) ; note that Toronto assigns green to "normal way!"
+(relay 14H 14HY !14COS
+     (LABEL L14H 14R !14AS 15NWC !15LS !13LS (OR !26SS !26TP) 10NS  2AS 4AS 
+		(SWIF 13 12AS 10XL)))
+(relay 14HV 14H 14RVP 26RVP)
+(relay 14CO 14COS L14H)
+(relay 14V ;; double duty for 26
+	   (OR (AND 14V !10TP !26TP)	; completely wrong fixed 1/20/97
+               14H 26H
+	       (AND (OR 14VPB 14V 14COU) 14CO)
+	       (AND (OR 26VPB 14V) 26CO))
+	    15NWC)
+
+(relay 16DR 15RWC)
+(relay 16H 16HY !16COS 
+	(LABEL L16H 16R !16AS 13NWC (OR !18SS !18TP) !15LS !13LS 16NS
+                (SWIF 15 10XL 12AS)))
+(relay 16HV 16H 16RVP 28RVP)
+(relay 16CO 16COS L16H)
+(relay 16V ;; double duty for 28
+	   (OR (AND 16V !16TP !18TP)
+               16H 28H
+	       (AND (OR 16VPB 16V 16COU) 16CO)
+	       (AND (OR 28VPB 16V) 28CO))
+	    13NWC)
+
+
+(relay 26D (AND 27NWC 42HV))
+(relay 26DR 27RWC)
+(relay 26H 26HY !26COS
+   (LABEL L26HT 26R !26AS 15NWC (OR !10NS !10TP) !27LS
+          (SWIF 27 (LABEL L26HT1 
+                      30SS 30AS  30ASS 49RWC !49LS 42SS 50AS);45nwc out 2/1/7
+                   (AND 42SS 50AS))))
+(relay 26HV 26H 14RVP 26RVP)
+(relay 26V 14V)
+(relay 26CO 26COS L26HT)
+
+(relay 28DR 29RWC)
+(relay 28H 28HY !28COS
+	(LABEL L28H 28R !28AS 13NWC (OR !16NS !16TP)
+					  !29LS 29RWC !27LS 27NWC L26HT1))
+(relay 28HV 28H 16RVP 28RVP)
+(relay 28V 16V)
+(relay 28CO 28COS L28H)
+
+(relay 42D 42HV)			; hahah until better layout
+(relay 42H 42HY !42COS
+     (LABEL L42HT 27NWC (OR !42ANS !42ATP) 42R
+                       !42AS !49LS 49NWC 42SS !42NS 50AS))
+(relay 42HV 42H 42RVP)
+(HomeVArgs 42  42ATP 42TP 49NWC)
+(relay 42CO 42COS L42HT)
+
+(relay 44DR 44NWC)
+(relay 44H  44HY !44COS
+     (LABEL L40HT 44R !44VS !44AS 44SS !45LS !49LS
+           (SWIF 45  (AND 48NS !48SS 48AS) (AND 42SS !42NS 50AS))))
+(relay 44HV 44H 44RVP)
+(HomeVArgs 44 30ATP 44TP T)
+(relay 44CO 44COS L40HT)
+
+(relay 30DR 27RWC)
+(relay 30D (SWIF 27 14HV 16HV))
+(relay 30H 30HY !30COS 
+    (LABEL L30HT 30R !30VS !30AS !27LS !29LS 30NS !30SS
+          (SWIF 27 
+		   (AND 29NWC 26NS 
+	                   (LABEL L30HT2 26XL 15NWC 10NS
+                                (OR 13RWC 10XL)
+        	                (OR 13NWC 12AS)))
+		   (AND 29RWC
+			13NWC		; not wanted for 18.
+			28XL 28AS
+ 		    (LABEL L30HT1
+		     (AND  18NS  16NS 12AS 
+			  (OR 15NWC 10XL)))))))
+(relay 30HV 30H 30RVP)
+(HomeVArgs 30 30ATP 30TP T)
+(relay 30CO 30COS L30HT)
+(relay 18D 16HV)
+
+(relay 18H 18HY !18COS		; is no 18vs
+    (OR 18AR 18US)
+    (LABEL L18HT 18R !18AS !29LS 29NWC 18NS !18SS 28XL 28AS (OR 18US L30HT1)))
+(relay 18HV 18H 18RVP)
+(HomeVACO 18  20TP 18TP 29NWC)
+(relay 18CO 18COS L18HT)
+
+(relay 20D 18HV)
+(HomeVArgs 20  48TP 20TP 45NWC)
+
+(relay 20H 20HY !20COS (OR !48TP !48SS) 45NWC
+		       (OR (AND 20APBS !20AS 13NWK 16NS) 20US)
+            (LABEL L20HT 20BPBS 29NWK 18NS 28XL (OR 15NWC 10XL)))
+(relay 20HV 20H 20RVP)
+(relay 20CO 20COS L20HT)
+
+
+(relay 48DR 45RWC)
+(relay 48D (SWIF 45 30HV 20HV))
+(relay 48H  48HY !48COS  (OR 48AR 48STU 45RWK)
+   (LABEL L48H 48R !48VS !48AS !45LS
+	(SWIF 45 (LABEL L48HT1
+			44AS 44NS 30ANS (SWIFNC 27 (AND 26AS 26XL 15NWC)
+						(AND 29RWC 28AS 28XL 13NWC)))
+              (AND 18NS 28AS 28XL))))
+(relay 48HV 48H 48RVP)
+(HomeVArgs 48 48ATP 48TP T)
+(relay 48CO 48COS L48H)
+
+(relay 50DR 49RWC)
+(relay 50H  50HY !50COS
+    (LABEL L50HT 50R !50VS !50AS 42NS !49LS
+		49RWC !45LS 45NWC L48HT1))
+;; 50 over Westbound track removed 20 February 1997
+;;		(SWIF 49 (AND  !45LS 45NWC L48HT1)
+;;                         (AND 42AS 42ANS !42ASS 26NS !26SS L30HT2))))
+(relay 50HV 50H 50RVP)
+(HomeVArgs 50 50ATP 42TP T)
+(relay 50CO 50COS L50HT)
+(relay 50COS (OR 50COS 50COPB) 50PBS !50ATP)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;   13-15 selection network
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 13ANN !13RS (OR 15ANN 15RN) (LABEL L13SELN (OR !13RWK 13L) !13RLP))
+(relay 13BNN !13RN (OR 10PBS 10XS) L13SELN)
+(relay 15ANN !15RN (OR 12PBS 12XS) (LABEL L15SELN (OR !15RWK 15L) !15RLP))
+(relay 15BNN !15RS (OR 13BNN 13RN) L15SELN)
+(relay 13RN  15ANN !13ANS !13BNN   (LABEL L13SELR (OR !13NWK 13L) !13NLP))
+(relay 15RN  13BNN !15ANN !15BNS   (LABEL L15SELR (OR !15NWK 15L) !15NLP))
+
+(relay 13ANS !13RS (OR 16PBS 16XR 16XS 28ZS) L13SELN)
+(relay 13BNS !13RN (OR 15BNS 15RS)      L13SELN)
+;; Don't allow through-route over overlap lock.
+(relay 15ANS !15RN (OR 13ANS 13RS)      (OR !15RWK (AND 15L !16XR)) !15RLP)
+
+(relay 15BNS (OR 15BNS !14XR 14PBS 15BNN
+		 !27RS !30XR !45RS 29RS
+		 13NWK 13RWK 15NWK !16TP !18TP)
+             (OR 14PBS 14XR 14XS 26ZS)
+             !15RS  L15SELN)
+(relay 13RS 
+	     (OR 13RS !14XR 14PBS 15RN 27BNS
+		 13RWK 29NWK (AND 27RWK (OR !27L 27RLP)) !18TP)
+                    
+             (OR 14PBS 14XS 27AS !27BNS)
+             15BNS !13BNN !13ANS  L13SELR)
+(relay 15RS  
+		(OR 15RS !16XR !14XR 16PBS 16RN
+                  !30XR !29RS 27NWK 15RWK !26TP)
+                (OR 16PBS 16XS 27AS !29NS)
+		  13ANS !15BNS !15ANN  
+		  L15SELR)
+
+(relay 13NLP !13RLP (OR (AND 13ANN 13ANS)
+			(AND 13BNN 13BNS)
+			(AND 44XS 27NWC (OR !27RN !27RS))
+			(AND 28XS 27ANS)	; 18 exit in 13NXZ
+			(AND 26XS 27BNS !27AS) ; 3 February 1997
+
+			13NXZ
+			2PBS
+			13NL))
+(relay 13RLP !13NLP (OR (AND 13RS 13RN)
+			(AND 26XS !2NS)
+			 13RL))
+
+(relay 13NXZ
+ (AND !13RWK	
+   (OR (AND 46XS (OR !48ARS 13NWC))
+       20APBS
+       (AND 18PBS 28XS (OR !18ARS 13NWC)))))
+
+;; BSG invention 26 October 1996
+;; "A (full AS) R (route) Stick" - picks up when AR -would-want-to-
+;; pick up but can't because the switch is locked. Prevents
+;; preconditioning in NXZ above.
+
+(relay 48ARS
+       (OR 48ARS 13RWK)
+       (AND 48R 46XS))
+
+(relay 18ARS
+       (OR 18ARS 13RWK)
+       18R)
+
+
+(relay 15NXZ (OR
+	       (AND (OR 28XS 20BPBS)
+		    (OR !2NS
+			(AND !2AS !15NWC)))
+	       (AND (OR 46XS 20BPBS)
+		    !2AS)
+	       (AND (OR 46XS 20BPBS (AND 28XS 29NS))
+		    !27AS)
+	       (AND 2PBS (OR (AND 45NWC !48AS)
+			     !20AS
+			     !18SS
+			     !27AS))
+	       (AND 44XS
+		    (OR (AND 27RWC (OR !27ANS !27ANN))
+			(AND (OR !2AS !4AS))))
+	       26XS))
+
+
+(relay 15NLP !15RLP (OR (AND 15ANN 15ANS)
+			(AND 15BNN 15BNS)
+			15NXZ
+			15NL))
+
+(relay 15RLP !15NLP (OR (AND 15RS 15RN)
+			(AND 2PBS !26SS)
+			15RL))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;          Dept of stubbed relays
+;;;
+;;           This is necessary because these relays must be indicated
+;;           as picked for the circuits that refer to them to work properly.
+;;         The 0II kludge is necessary because (relay 123foo T) has
+;;         a million problems in the interpreter and compiler and doesn't
+;;         work at all.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Ain't no more, all implemented.
+;(relay 0II (OR 0II  26PB 42PB 50PB 44PB 48PB 20PB 2PB))
+
+(relay 4AS)
+
+
+;;;;;;;;;;;;;Let's set up some PBS ;;;;;;;;;;;;;;;;
+
+(exitlight  10  2 121 south)
+(exitlight  12  1 121 south)
+(exitlight  14  2 125 north)
+(exitlight  16  1 125 north)
+
+(relay 14XL 26SS (OR 27NWC (AND 30AS 30ASS)))
+(relay 16XL 20AS (AND 48AS 30SS 30ASS))
+
+(relay 10K 13BNS !10SP (OR (AND !2PBS 10XL) 10PBS))
+(relay 12K 15ANS !16SP)
+(relay 14KXL (OR (AND 26SS (OR 13BNN 27AS))  14XS)
+                !26XS 
+                (OR (OR !27RWK (AND 27L !29NWK !13RWK))
+
+		    (AND (OR 14XS (AND 30AS 27AS)) !44XS)))
+(relay 14K 15BNN (OR 14PBS 14KXL) !10SP) ; st overlap of 48, too
+(relay 16K 13ANN (OR 16PBS (AND 16XL !28XS !29NWK !29NLP !27RWK !27RLP !18PBS))
+		  !16SP)
+
+(relay 10PBS
+       (OR 10FL (AND (OR 10TP !10HY)(OR !2TP !10COS)))
+       (OR (AND 10PB !13BNS 10SS) 10PBS)
+       !13RN !26XS !10XS !13RWK !13RLP)
+
+(relay 12PBS (OR 12FL (AND (OR 16TP !12HY)(OR !1121T !12COS)))
+                   (OR (AND 12PB !15ANS 16SS) 12PBS)
+		;; 28xs removed 28 October 1996 for 18 st...
+                    !15RN  !12XS !15RWK !15RLP) ;20APBS out 2/1/97
+
+(relay 16PBS
+        (OR 16FL (AND (OR 16TP !16HY)(OR !18TP !16COS)))
+       (OR (AND 16PB !13ANN 16NS) 16ZS 16PBS)
+       (LABEL L16PBT
+	      !13RS !28PBS !16XS !13RWK !13RLP))
+
+(relay 14PBS
+       (OR 10TP !14HY)(OR !26TP !14COS)
+       (OR (AND 14PB !15BNN 10NS) 14ZS 14PBS)
+       (LABEL L14PBT
+	      !15RS !26PBS !14XS !15RWK !15RLP))
+
+;;hy must come after pbs
+(relay 10HY (OR (AND 10HY 10R) 10NVP)
+	    10TP (SWIFNC 15 (AND 16TP (LABEL L10HYA 18TP 29RWC 30TP 30ATP))
+                            (LABEL L10HYB
+				(AND 26TP (SWIFNC 27
+				 (AND 30TP 30ATP) 42ATP)))))
+(relay 10COS (OR 10COS 10COPB) 10PBS !2TP)
+
+
+(relay 12HY (OR (AND 12HY 12R) 12NVP)
+	    16TP (SWIFNC 13 (AND 10TP L10HYB) L10HYA))
+(relay 12COS (OR 12COS 12COPB) 12PBS !1121T)
+
+(relay 14HY (OR (AND 14HY 14R) 14NVP)
+	    10TP (SWIFNC 13 (AND 16TP (LABEL L14HYA
+                                          (AND 1121T 8TP)))
+                            (LABEL L14HYB 2TP 4TP)))
+(relay 14COS (OR 14COS 14COPB 14COU) 14PBS !26TP)
+(timer 14COU 10 (OR 14COU (AND 14NVP !14COS)) 14R !26TP !14HY L14H)
+
+
+(relay 16HY (OR (AND 16HY 16R) 16NVP)
+	    16TP (SWIFNC 15  (AND 10TP L14HYB) L14HYA))
+(relay 16COS (OR 16COS 16COPB 16COU) 16PBS !18TP)
+(timer 16COU 10  (OR 16COU (AND 16NVP !16COS))  16R !18TP !16HY L16H)
+
+
+;;;;
+;;;
+;;  And a little exit work ...
+;;
+;;;
+;;;;
+
+(relay 10XS 13BNS  (OR 10XS (AND 10NS 10XL (OR 10XPB 10PB))) !10PBS !2PBS)
+(relay 12XS 15ANS (OR 12XS (AND 16NS (OR 12XPB 12PB))) !12PBS)
+(relay 14XS 15BNN (OR 14XS (AND 10SS 14KXL (OR 14XPB 14PB (AND 26ZS 26R))))
+                       !26XS !14PBS)
+(relay 16XS 13ANN (OR 16XS (AND 16XL 16SS (OR 16XPB 16PB (AND 28ZS 28R))))
+		  !29NWK !29NLP !27RWK !27RLP
+		  !28XS !16PBS)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;  OK, that was easy. Now let's do the 27-29 network ...
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 27ANN 29RN !27RN             (LABEL L27SELN (OR !27RWK 27L) !27RLP))
+(relay 27BNN (OR 26PBS 26XR 26XS 14ZS) !27RS    L27SELN)
+(relay 27RN  (OR 27RN !26XR !13RN 13RWK !18TP 29NWK 27RWK) ; e-e-pref
+	     (OR 26PBS 26XR 26XS 14ZS) !27ANN !27BNS
+       (LABEL L27SELR
+	      (OR !27NWK 27L) !27NLP
+	      (OR !29RWK 29L)
+	      !29RLP))
+		      
+(relay 29NN  (OR 28PBS 28XR 28XS 16ZS) !29RS
+       (LABEL L29NT
+	      (OR !29RWK (AND 29L
+			      (OR 27AS
+				  (OR !27NWK
+				      ;; these as's will be shorted by !29RWK
+				      ;; if this move succeeds.
+				      (AND 27L 10TP 2AS 4AS)))))
+	      !29RLP))
+(relay 29NS  (OR 18PBS 18XR) !29RS L29NT)
+
+
+(relay 29RN
+       (OR 29RN !28XR !15RN 15RWK !26TP 27NWK 29RWK) ; end-end pref.
+       (OR 28PBS 28XR 28XS 16ZS) !29NS  (LABEL L29RT (OR !29NWK 29L) !29NLP))
+(relay 29RS  27ANS !29NS L29RT)
+
+
+(relay 27ANS
+       (or 27ANS !30XR !45RS 27ANN 45RWK !20TP 29RWK)
+       (OR 30PBS 30XR 30XS 44ZS)
+       !27RN  L27SELN)
+
+(relay 27BNS (OR 42XS 42ZS
+		(AND !42XS !42PBS !42XR !26PBS !26XR 49NS))
+	     !27RS L27SELN)
+(relay 27RS     (OR 30PBS 30XR 30XS 44ZS) !27ANN !27BNS L27SELR)
+
+(relay 27N1XZ (OR 
+		(AND 44XS
+		     (OR 15RWK 14XS 
+			 (AND !15RWC 
+			      (OR !2AS 2PBS !4AS))))
+		(AND !27AS
+		     (OR 15RWK
+			 14XS 
+			 (AND !15RWC 2PBS)))
+		(AND !27AS 27BNN 27BNS)))
+
+
+(relay 27NLP !27RLP (OR (AND 27ANN 27ANS)
+			(AND 27BNN 27BNS)
+			27N1XZ
+			16XS
+			27NL))
+(relay 27RLP !27NLP (OR (AND 27RS 27RN) 
+			(AND 44XS !27RWC (OR 29NWK 13RWK !28KXLY))
+			(AND 29NS 29NN (OR !27AS 44XS))
+			(AND (OR 20BPBS 46XS) !27AS)
+			27RL))
+
+
+(relay 29NLP !29RLP (OR (AND 29NN 29NS)
+                        (AND 27RN 27RS)	; special crotch-layout feature!
+			(AND !29NWC !27RWC
+				44XS (OR 27RWK 13RWK !28KXLY))
+			46XS
+			20BPBS
+			29NL))
+
+(relay 29RLP !29NLP (OR (AND 29RS 29RN) 
+			(AND !29RWC 44XS !27RWC !13RWK !27RWK 28KXLY)
+			27N1XZ
+			16XS
+			29RL)) 
+
+;;; exitlights
+(exitlight  18  1 128 north)
+(exitlight  26  2 125 south)
+(exitlight  28  1 125 south)
+(exitlight  30  3 128 north)
+(exitlight  40  2 131 north)
+
+(relay 30XL !44XS 30ASS !49NWK !45RWK)
+
+(relay 27AS (OR 27AS
+		27U
+		(AND
+		  (OR 45RWC 42TP)
+		  (OR 45NWC 48TP)
+		  44TP 30ATP 30TP
+		  (OR 27RWC 18TP)
+		  (OR 27NWC 26TP)))
+       (LABEL L27AS1
+	      (OR 49NWC 50AS)
+	      (OR 45NWC 48AS)))
+
+(timer 27U 20 !27AS L27AS1)
+
+(relay 30ASS (OR 30ASS 30ATP) 44SS)
+(relay 30ANS (OR 30ANS 30ATP) 30NS)
+
+(relay 18K (AND 18PBS) 29NN  !18SP)
+
+(relay 26KXL !14XS !15RWK !15RLP (OR 26XS 
+                                     (AND 26XL 2AS 4AS (OR 2NS !13NWK))))
+
+(relay 26K (OR 27BNS 27RS)
+           (OR 26PBS 26KXL) !26SP)
+
+(relay 28KXL !16XS (OR 2NS !15RWK) 
+                 (OR 18PBS 18XR (AND !13RWK !13RLP)) 28XL)
+
+(relay 28K (OR 29RS 29NS) (OR 28PBS 28KXL) !18SP)
+(relay 30K (AND (OR 30PBS 30XL) (OR 27ANN 27RN)) !30SP)
+(relay 40K 27BNN (OR 26PBS 26XR) 42SS !49RWK !42ASP)
+
+(relay 18PBS
+       (OR 18FL (AND (OR 18TP !18HY)(OR !20TP !18COS)))
+       (OR (AND 18PB !29NN 18NS) 18ZS 18PBS)
+       (LABEL L18PBT !29RS !28PBS))
+
+(relay 28PBS
+       (OR 18TP !28HY)(OR !16TP !28COS)
+       (OR (AND (OR (AND 28PB !29RS !29NS) 28ZS) 18SS) 28PBS)
+       (LABEL L28PBT !16PBS !18PBS !28XS !44XS !29NWK !29NLP))
+
+(relay 26PBS
+       (OR 26FL (AND (OR 26TP !26HY)(OR !10TP !26COS)))
+       (OR (AND (OR (AND 26PB !27BNS !27RS) 26ZS) 26SS) 26PBS)
+       (LABEL L26PBT
+	      !14PBS !26XS !50PBS	; really, 50pbs!
+	      (OR !49RWK !44XS)	
+	      (OR !27RWK !29RWK 27L 29L)))
+
+(relay 30PBS
+       (OR 30FL (AND (OR 30TP !30HY)(OR !30ATP !30COS)))
+       (OR (AND 30PB !29RN !27RN 30NS) 30ZS 30PBS)
+       (LABEL L30PBT
+	      (OR !29NWK !27NWK)
+	      !28PBS !30XS))
+
+(relay 18HYX 16TP 13NWC (SWIFNC 15 (AND 10TP 2TP) 1121T))
+(relay 18HY (OR (AND 18HY 18R) 18NVP)
+	    18TP (OR 18US !18AR 18HYX))
+(relay 18COS (OR 18COS 18COPB 18COU) 18PBS !20TP)
+(timer 18COU 10  (OR 18COU !18COS)  18R !20TP  !18HY L18HT)
+
+(timer 18US 8
+        (OR 18US (AND !20TP !20H))
+           18R !18COS (OR 18TP !20TP))
+
+(relay 26HY (OR (AND 26HY 26R) 26NVP)
+	    26TP (SWIFNC 27 (AND 30TP 30RVP 30ATP 44TP) 42ATP) 42TP 50ATP)
+(relay 26COS (OR 26COS 26COPB) 26PBS !10T)
+
+(relay 28HY (OR (AND 28HY 28R) 28NVP)
+	    18TP 29RWC 30TP 30RVP 30ATP 44TP 49RWC 50ATP)
+(relay 28COS (OR 28COS 28COPB) 28PBS !16T)
+
+(relay 30HY (OR (AND 30HY 30R) 30NVP)
+	    30TP (SWIFNC 27 (LABEL L30HY1 26TP 10TP (SWIFNC 13 (AND 16TP 1121T) 2TP))
+                            (AND 18TP 16TP (SWIFNC 15 (AND 10TP 2TP)  1121T))))
+(relay 30COS (OR 30COS 30COPB) 30PBS !30ATP)
+
+ ;; now the old "exit work...."
+
+;; THERE IS NO 18xs
+
+(relay 26XLX 10NS 2AS 10AS 4AS)
+(relay 26XL 26XLX 26XLY 4AS)
+(relay 26XLY (OR 12AS 13NWC) 10AS 2AS)
+(relay 28XLAS (OR 12AS 13RWC) (OR 10AS 15NWC))
+(relay 28XL  (OR 16NS 13RWC) (OR (AND 10NS (OR 15RWC (AND 2AS 4AS)))
+				  15NWC))
+(relay 28KXLY (OR 16NS 13RWC)(OR (AND 10NS (OR !15NWK (AND 2AS 4AS)))
+				 15NWC))
+				         
+(relay 26XS (OR 27BNS 27RS) !26PBS (OR 26XS (AND 14ZS 14R) (AND 26KXL (OR 26XPB 26PB)))
+                 !14XS !10PBS !15RWK)
+
+(relay 28XS (OR 29NS 29RS) !28PBS (OR 28XS (AND 16ZS 16R) 
+                                    (AND 28KXL (OR 28XPB 28PB)))
+                 !16XS (OR (AND !12PBS !13RWK) 18PBS 18XR)) ; st route...
+
+(relay 30XS (OR 27RN 27ANN) !30PBS (OR 30XS 
+                             (AND 30XL (OR 30XPB 30PB (AND 44ZS 44R))))
+                 !44XS)	; need 44 AS down
+
+(relay 42XS 27BNN ;;!49RN
+			(OR 26PBS 26XR)		; too flaky without...
+                   (OR 42XS (AND 42ZS 42R)
+                       (AND 42SS 26SS (OR 40XPB )))  ;;need 42 pb demux
+                 !50PBS !49RWK !49RLP)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;  Now 45-49 network
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 45ANN (OR 46XS 18ZS)           !45RWK !45RLP)
+(relay 45BNN (OR 45BNN !44XR !42ATP !26TP
+		 (AND 27NWK 28XR)
+		 (AND 27RWK 26XR)
+		 45NWK 49RWK
+		 (AND 28XR 13ANN)
+		 (AND 28PBS 29RN))
+		 (OR 44PBS 44XR 44XS 30ZS)
+		  !45RS  !45RWK !45RLP)
+(relay 45RN  (OR 44XS 30ZS)     !45BNS !45ANN !45NWK !45NLP) ; no 44pbs etc
+(relay 49NN  (OR 42PBS 42XR
+		(AND 26XS 27BNN !42PBS !42XR !42XS))
+	      !49RN  !49RWK !49RLP)
+(relay 49RN  45BNN         !49NN  !49NWK !49NLP)
+
+(relay 45ANS 48PBS                !45RN  !45RWK !45RLP)
+(relay 45BNS 49RS                 !45RS  !45RWK !45RLP)
+(relay 45RS  48PBS   !44PBS !45ANN !45BNS !45NWK !45NLP) ;note !44pbs!!
+;; 50pbs->49ns removed 20 February 1997 as per reality.
+(relay 49NS  (OR       50XS)      !49RN  !49RWK !49RLP)
+(relay 49RS  (OR 50PBS 50XS)      !49NN  !49NWK !49NLP)
+
+(relay 45NLP !45RLP (OR (AND 45ANN 45ANS)
+			(AND 45BNN 45BNS) ; 30xs out 2/1/97
+			45NL))
+(relay 45RLP !45NLP (OR (AND 45RS 45RN) 45RL))
+
+(relay 49NLP !49RLP (OR (AND 49NN 49NS)
+                        (AND 45RN 45RS)
+			42XS
+			49NL))
+(relay 49RLP !49NLP (OR (AND 49RS 49RN) 30XS 49RL))
+
+(exitlight 46 1 132 south)
+(exitlight 48 1 137 north)
+(exitlight 44 3 133 south)
+(exitlight 42 2 131 south)
+(exitlight 50 2 136 north)
+
+(relay 46KXL !29RWK 18NS !16XS (OR 13RWC 16NS) (OR !15RWK (AND 2AS 10AS)))
+(relay 44KXL !30XS			; non-vital
+             (OR 44XS
+		 (AND
+		   30ANS
+		   (OR (AND 2AS 4AS)
+		       (AND !15RWK !27RWK !29NWK))))
+             (OR (AND !29NWK !27RWK !13RWK (OR 44XS 28KXLY))
+		 (AND !27NWK !15RWK (OR 44XS 26XLX))))
+
+(relay 46K 45ANS !48SP 46KXL)
+(relay 48K 48PBS (OR 45ANN 45RN) !48SP)
+(relay 44K (OR 44PBS 44KXL) (OR 45BNS 45RS) !44SP)
+(relay 42K 42PBS 49NS !42SP)
+(relay 50K (OR 49RN 49NN) !42SP)
+
+(relay 42PBS
+       (OR 42FL (AND (OR 42TP !42HY)(OR !42ATP !42COS)))
+       (OR 42ZS (AND 42PB !49RS 42SS) 42PBS)
+       (LABEL L42PBT
+	      !49RN !50PBS !44PBS)) ;; out 10/15 !49RWK !49RLP)
+
+(relay 44PBS (OR 44FL (AND (OR 44TP !44HY)(OR !30ATP !44COS)))
+       (OR (OR 44ZS
+	       (AND 44PB !45BNS !45RS 44SS)) 44PBS)
+       (LABEL L44PBT !49NN !50PBS !42PBS !44XS)) ;; !49NWK !49NLP)
+
+(relay 48PBS (OR 48FL (AND (OR 48TP !48HY)(OR !48ATP !48COS)))
+       (OR (AND 48PB !45ANN !45RN) 48PBS))
+
+
+(relay 50PBS (OR 42TP !50HY)(OR !50ATP !50COS)
+       (OR (AND 50PB 42NS !49RN !49NN) 50PBS) 
+       (OR !45RWK !49RWK)
+       !50XS !44PBS !30XS !26PBS !42PBS) ; 30 xs sneeekeeee...
+
+
+(relay 50XS !50PBS
+       (OR 49NN 49RN)
+       (OR 50XS (AND 42NS (OR 50XPB 50PB))))
+
+(relay 44XS (OR 45BNS 45RS) 
+            (OR 44XS (AND 44KXL (OR 44XPB 44PB)) (AND 30ZS 30R))
+             !44PBS !30XS);;crosslock on 49/45 needed
+
+(relay 46XS 45ANS  !45RN
+                   (AND (OR 46XS 46KXL) (OR 46XS 46XPB (AND 18ZS 18R)))  ;;need 20 pb demux
+		   !29RWK)
+
+(relay 42HY (OR (AND 42HY 42R) 42NVP)
+	    42TP 50ATP 50RVP)
+(relay 42COS (OR 42COS 42COPB) 42PBS !42AT)
+
+
+(relay 44HY (OR (AND 44HY 44R) 44NVP)
+	    44TP 45NWC 42TP 50ATP 50RVP)
+(relay 44COS (OR 44COS 44COPB) 44PBS !30ATP)
+
+(relay 50HY (OR (AND 50HY 50R) 50NVP)
+	    42TP
+
+       (SWIF 49
+	     (AND 45NWC 
+		  (LABEL L50HYA 44TP 30ATP 30TP 
+			 (SWIFNC 27
+				 (AND 26TP 10TP (OR 13NWC 16TP))
+				 (AND 18TP 16TP (OR 15NWC 10TP)))))
+	     (AND 42ATP L30HY1)))
+
+(relay 48HY (OR (AND 48HY 48R) 48NVP)
+	    48TP (SWIFNC 45 L50HYA (AND 20TP 18TP 29NWC 
+						(OR 48STU !48AR 18HYX))))
+(relay 48COS (OR 48COS 48COPB) 48PBS !48ATP)
+
+
+(timer 48STU 8
+        (OR 48STU (AND !48ATP !48H))
+	           (OR 48TP !48ATP))
+;;
+;; Do these approach guys....
+
+
+
+(relay 2PBSKXL
+       (OR 26SS !15NWK)
+       (OR (AND 20AS 48AS 18SS) !15RWK)
+       (OR 26SS (AND 20AS 48AS 18SS)))
+
+(relay 2PBS
+       (OR 2FL  (AND (OR 2TP !2HY) (OR !4TP !2COS)))
+       (OR (AND 2PBS !13RWK)
+	   (AND 2PB
+		10SS
+		2PBSKXL
+		(OR (AND 27AS !44XS) (AND (OR !27RWK
+					      (AND 27L !29NWK))
+					  !15RWK))))
+       !10XS  !26XS (OR !15RWK !28XS)
+       !13RLP)
+
+(relay 2HY (OR (AND 2HY 2PBS) 2NVP)
+	   2TP 10TP (SWIFNC 15 (AND 16TP 18TP) 26TP))
+(relay 2COS (OR 2COS 2COPB) 2PBS !4TP)
+
+
+(relay 2AS (OR 2AS !10TP (AND 4TP 2TP) 2U 0RAS) !2CO !2H 
+               (OR !2PBS
+		   !13NWC
+                   (AND 2AS
+			(OR (AND !26SS !15RWC)
+			    (AND
+			      !27AS
+			      (OR !27NWC
+				  (AND !27RWC !15NWC)))
+			    (AND
+			      !15NWC (OR !20AS !18SS (AND !48AS 45NWC)))))))
+
+(timer 2U 7 !2AS !2CO !2H)
+
+
+;; Simulator has been changed 27 October 1996 to accept BPBS for GK light
+;; control and de-fleeting if PBS is not defined.
+;; BPBS (vs APBS, q.v.) is the 733-33 standard for this function (ST
+;; signal "bare bones' initiate).
+(relay 20BPBS  (OR 20FL  (AND (OR 20TP !20HY) (OR !48TP !20COS)))
+               (OR (AND 20BPBS (OR !29RWK 29L) !29RLP)
+		   (AND 20PB 18NS (OR 2AS (OR 15L !15RWK)))
+		   (AND 18ZS 18R))
+               !16XS)
+
+(relay 20APBS 20BPBS (OR (AND (OR 20PB 20ZS) !13RWK) 13NWC))
+
+(relay 20HY (OR (AND 20HY 20BPBS) 20NVP)
+	    20TP 18TP (OR 20US 18HYX))
+(relay 20COS (OR 20COS 20COPB) 20BPBS !48TP (OR !20APBS !20AS))
+
+(timer 20US 8 
+            (OR 20US (AND !48TP 45NWC !20H))
+           20BPBS !20COS 20TP 18TP)
+
+(relay 20AS
+       (OR 20AS !18TP (AND 20TP (OR 48TP 45RWC)) 20U 0RAS)
+       !20CO !20H
+       (OR !20BPBS
+	   !29NWC
+	   (AND !2AS !15NWC)))
+
+
+(timer 20U 7 !20AS !20CO !20H)
+
+
+
+(relay 8PBS  (OR 8FL  (AND (OR 8TP !8HY) (OR !1121T !8COS)))
+                   (OR  8PB 8PBS))
+
+(relay 8HY (OR (AND 8HY 8PBS) 8NVP)
+	   8TP)
+(relay 8COS (OR 8COS 8COPB) 8PBS !1121T)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;             Now come the R relays ....
+;;;
+;;;
+
+(relay 10R 10PBS !10XS 13NWK
+       (OR (AND 15NWK
+		(LABEL L10RTA 14XS
+		       (OR (AND 10R 13BNN)
+			   (AND 12R 13RN)
+			   (OR 27NWK 27AS))))
+	   (AND 15RWK 15RN 
+		(LABEL L10RTB 16XS 29RWK 27NWC))))
+
+(relay 12R 12PBS !12XS 15NWK (OR (AND 13NWK L10RTB)
+			         (AND 13RWK 13RN L10RTA)))
+
+(relay 14R 14PBS !14XS 15NWK (OR (AND 13NWK 10XS)
+				 (AND 13RWK 13RS 12XS)))
+(relay 16R 16PBS !16XS 13NWK (OR (AND 15NWK 12XS)
+				 (AND 15RWK 15RS 10XS)))
+
+
+
+(relay 18R 18PBS       29NWK   28XS)	; 13nwk removed for ST 26 oct 96
+(relay 18AR 18R  13NWK)
+
+(relay 28R 28PBS !28XS 29RWK 27NWK 49RWK 30XS)
+
+(relay 26R 26PBS !26XS (OR (AND 27NWK 49NWK 42XS)
+                           (AND 27RWK 49RWK 30XS)))
+
+(relay 30R 30PBS !30XS (OR (AND 27NWK 29RWK 13NWK 28XS)
+                           (AND 27RWK 29NWK 15NWK 26XS)))
+
+
+(relay 42R 42PBS 49NWK 50XS)
+
+(relay 50R 50PBS !50XS 
+  (OR (AND 49NWK !42XS !42PBS 27NWK 26XS 15NWK)
+      (AND 49RWK 45NWK 44XS 
+
+	(LABEL L50RT
+	  (OR (AND 45RS 48R)(AND 45BNS 50R)
+	      (AND 13RWK 15NWK 27RWK)
+              (AND 15RWK 13NWK 27NWK 29RWK)
+              (AND !26XL 13NWK 27NWK
+		   (OR (AND 2AS 4AS) 15NWK))
+              (AND !13RWK !15RWK 26XL 28XL))))))
+
+(relay 48R 48PBS        (OR (AND 45NWK 29NWK 46XS
+				 (OR 48R 2AS 15NWK))
+                            (AND 45RWK 49NWK 44XS L50RT)))
+(relay 48AR 48R 13NWK)
+
+(relay 44R 44PBS !44XS (OR (AND 45RWK 49NWK 48XS)
+                           (AND 45NWK 49RWK 50XS)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;                                          ;;;;
+;;;;;;;;;Dept of Approach locking                ;;;;
+;;;;;;;                                          ;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(relay 10AS (OR 10AS !10TP 2TP 10U 0RAS) !10R !10CO !10H)
+(timer 10U 7 !10AS !10R !10CO !10H)
+
+
+(relay 12AS (OR 12AS !16TP 1121T 12U 0RAS) !12R !12CO !12H)
+(timer 12U 7 !12AS !12R !12CO !12H)
+
+
+(relay 14AS (OR 14AS !10TP (AND 26TP (SWIFNC 27 (AND 30TP 30ATP)
+                                        (AND 42ATP (OR 49RWC 42TP))))
+                   14U 0RAS) !14R !14CO !14H)
+(timer 14U 12 !14AS !14R !14CO !14H)
+
+(relay 16ASX  18TP
+	      (SWIFNC 29		; blows out drawing system if not
+		 (AND 30TP 30ATP 44TP (SWIFNC 45 48TP 42TP))
+		 (AND 20TP 48TP)))
+(relay 16AS (OR 16AS !16TP 16ASX 16U 0RAS) !16R !16CO !16H)
+(timer 16U 12 !16AS !16R !16CO !16H)
+
+
+
+(relay 18AS (OR 18AS (AND !18TP !16TP) (AND 20TP 18TP (OR 45RWC 48TP))
+                   18U 0RAS) !18R !18CO !18H)
+(timer 18U 10 !18AS !18R !18CO !18H)
+
+(relay 26AS (OR 26AS !26TP (AND 10TP (OR 13NWC 16TP))
+                   26U 0RAS) !26R !26CO !26H)
+(timer 26U 10 !26AS !26R !26CO !26H)
+
+(relay 28AS (OR 28AS !18TP (AND 16TP (OR 15NWC 10TP))
+                   28U 0RAS) !28R !28CO !28H)
+(timer 28U 10 !28AS !28R !28CO !28H)
+
+(relay 30ASX (AND (OR 27RWC 18TP)(OR 27NWC 26TP)
+		     30TP 30ATP (SWIFNC 45 (AND 44TP 48TP)
+                	(OR 49NWC (AND 44TP 42TP))))) ; too complex for dwg
+
+(relay 30AS (OR 30AS
+                (AND (OR 27RWC (AND !18TP !16TP))
+               	     (OR 27NWC (AND !10TP !26TP)))
+		30ASX
+                30U 0RAS) !30R !30CO !30H)
+(timer 30U 10 !30AS !30R !30CO !30H)
+
+
+
+(relay 42AS (OR 42AS !42TP (AND 42ATP (OR 27RWC 26TP))
+                   42U 0RAS) !42R !42CO !42H)
+(timer 42U 10 !42AS !42R !42CO !42H)
+
+
+(relay 44AS (OR 44AS !44TP (AND 30ATP (SWIFNC 27 26TP (OR 29NWC 18TP)))
+                   44U 0RAS) !44R !44CO !44H)
+(timer 44U 10 !44AS !44R !44CO !44H)
+
+(relay 48AS (OR 48AS !48TP 48ATP
+                   48U 0RAS) !48R !48CO !48H)
+(timer 48U 10 !48AS !48R !48CO !48H)
+
+
+(relay 50AS (OR 50AS !42TP 50ATP
+                   50U 0RAS) !50R !50CO !50H)
+(timer 50U 10 !50AS !50R !50CO !50H)
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;
+;;;;     Route locking
+;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 10NS (or 10NS 10TP 0RAS) 10AS (OR 16NS 13NWC))
+(relay 10SS (or 10SS 10TP 0RAS) 14AS (OR 16SS 15NWC))
+(relay 16NS (or 16NS 16TP 0RAS) 12AS (OR 10NS 15NWC))
+(relay 16SS (or 16SS 16TP 0RAS) 16AS (OR 10SS 13NWC))
+
+(relay 10SP (or !10NS !10SS))
+(relay 16SP (or !16NS !16SS))
+
+(relay 18NS (or 18NS 18TP 0RAS) 28AS)
+(relay 18SS (or 18SS 18TP 0RAS) 18AS (OR 30SS 27RWC))
+(relay 26NS (or 26NS 26TP 0RAS) 26AS)
+(relay 26SS (or 26SS 26TP 0RAS) (OR 30SS 27NWC) 42ASS)
+(relay 30NS (or 30NS 30TP 0RAS) 18NS (OR 26NS 27NWC))
+(relay 30SS (or 30SS 30TP 0RAS) 30AS)
+
+(relay 18SP (or !18NS !18SS))
+(relay 26SP (or !26NS !26SS))
+(relay 30SP (or !30NS !30SS))
+(relay 30ASP (or !30ANS !30ASS))
+(relay 20SP !20AS )			; no 8vs
+
+(relay 42ASS (or 42ASS 42ATP 0RAS) (or 42SS 49RWC))
+(relay 42ANS (or 42ANS 42ATP 0RAS) (or 26NS 27RWC))
+(relay 42NS  (or 42NS  42TP 0RAS)  42AS (or 45RWC 44NS))
+(relay 42SS  (or 42SS  42TP 0RAS)  50AS)
+
+(relay 44NS  (or 44NS  44TP 0RAS)  44AS)
+(relay 44SS  (or 44SS  44TP 0RAS)  (or 49NWC 42SS) (or 45NWC 48SS))
+
+(relay 48SS  (or 48SS  48TP 0RAS)  48AS)
+
+(relay 42ASP (or !42ANS !42ASS))
+
+
+(relay 42SP (or !42NS !42SS))
+(relay 44SP (or !44NS !44SS))
+(relay 48SP !48SS)                       ;no 48NS
+
+
+(relay 2121K 10SP)
+(relay 1125K 16SP)
+(relay 2115K (OR !2AS 10VS))
+
+(relay 1128K 18SP)
+(relay 2125K 26SP)
+(relay 3128k 30SP)
+(relay 1132k 20SP)
+(relay 2127k 42ASP)
+(relay 2131k 42SP)
+(relay 3137k 44SP)
+(relay 1137K 48SP)
+(relay 3133K 30ASP)
+(relay 1116K 8PBS)			; don't know what 8 locks.
+(relay 1121K 12VS)
+	
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;
+;;;;      Switch locking
+;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(relay 13L 
+       (LNPrecond 13)			; 27 February 1997
+	   2AS (OR 13AS !13NWC)  (OR !29RWC !27NWC 30AS)
+	;; 18 as removed 10/26/96 for 18 ST feature
+   (LABEL L13LST 16TP 10TP 10NVP 12NVP 14NVP 16NVP 16NS 16SS 10NS 10SS)) ; 4 needed
+
+(relay 13LS 13L (OR (AND 13LS !13NWC !13RWC)
+		    (AND 
+		      (OR 27AS 27RWC 13RWP)
+		      (OR
+			(SWIFNC 27 30AS (or 49RWC 50AS))
+			(AND (OR 1121T 13RWP)(OR (AND 2TP 2NS) 13NWP))))))
+
+
+(relay 15L
+       (LNPrecond 15)
+       (OR !27RWC 30AS) (OR 49RWC 50AS) L13LST)
+
+(relay 15LS 15L (OR (AND 15LS !15NWC !15RWC)
+		  (AND
+		    (OR 27AS 27NWC 15RWP)
+		    (OR 2AS (AND (OR 48AS 45RWC) 20AS) 15NWP)
+		    (OR
+	              (SWIFNC 29 30AS 13AS) ; does it all?!?
+                      (AND (OR 1121T 15NWP)(OR (AND 2TP 2NS) 15RWP)))
+             	    (OR
+                      2AS
+                      (AND (OR (AND 18TP 18SS (OR 29NWC 27RWC 27AS)) 15RWP)
+                           (OR (AND 26TP 26SS (OR 27AS 27NWC)) 15NWP))))))
+
+(relay 27L
+       (LNPrecond 27)
+       (OR !27NWC !29RWC 28XL)
+       42ATP			; roll-back; 42tp remains issue
+       26NVP 42NVP 30NVP
+       30NS 30SS 30TP 26NS 26SS 26TP (OR 29NWC (AND 18TP 28NVP)))
+
+(relay 27LS 27L (OR (AND 27LS !27NWC !27RWC)
+		    (AND
+		      (OR
+			27AS
+			(AND (OR (AND 16TP 13NWC 29RWC) 27NWP)
+			     (OR (AND 10TP 15NWC) 27RWP)))
+		      (OR
+			26XLY		; 29 November 1996
+			(OR (AND 30ATP 27AS) 27RWP)))))
+
+
+(relay 29LS 29L
+        (OR (AND 29LS !29NWC !29RWC)
+	    (AND
+	      (OR 28XLAS 29NWP)
+	      (OR 27AS
+		  27RWC
+		  (AND (OR 27RWC 29NWP)
+		       (OR 13NWC 29RWP))))))
+
+(relay 29L
+       (LNPrecond 29)
+       28NVP 18NVP 30NVP 20AS
+       29AS 30NS 30SS 30TP 18NS 18SS 18TP (OR 27NWC (AND 26TP 26NVP)))
+
+(relay 45LS
+       (LSNPrecond 45)
+       44NS 44SS 44TP  44NVP 20NVP 48NVP  48SS 48TP
+       (OR 49NWC (AND 42TP 50NVP)))
+
+(relay 49LS
+       (LSNPrecond 49)
+       49AS 
+       44NS 44SS 44TP 42NS 42SS 42TP 42NVP 50NVP 44NVP
+       (OR 45NWC (AND 48TP 48NVP)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;      Dept of hair - roots and follicles ...
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 13CLK 
+     (OR (AND 13NWK
+	       (OR (AND 12PBS !13ANS)
+                   (AND (OR 14PBS 14XR) !13BNN)))
+         (AND 13RWK
+	       (OR (AND 12PBS !13RS)
+                   (AND (OR 14PBS 14XR) !13RN))))
+       (LABEL L13CLKT !10SP !16SP 10TP 16TP))
+
+
+(relay 15CLK 
+       (OR (AND 15NWK
+		(OR  (AND 10PBS !15BNS)
+                     (AND (OR 16PBS 16XR) !15ANN)))
+	   (AND 15RWK
+                (OR (AND 10PBS !15RS)
+                    (AND (OR 16PBS 16XR) !15RN))))
+        L13CLKT)
+
+(relay 2CLK 2PBS  (OR (AND 2CO !2V)
+                      (AND 15RWK 29RWK 29CLK)
+		      (AND (OR 15RWK 15NWK) 15CLK)
+                      (AND 13NWK 13CLK)))
+
+(relay 18CLK 18PBS (OR (AND 18CO !18V)
+                       (AND (OR 15NWK 15RWK) 15CLK)
+                       (AND (OR 13NWK 13RWK) 13CLK)))
+
+(relay 30CLK 30PBS (OR (AND 30CO !30V)
+		       (AND (OR 15NWK 15RWK) 15CLK)
+                       (AND (OR 13NWK 13RWK) 13CLK)))
+(relay 27CLK
+       !26SP 26TP !30SP 30TP 42ATP
+	(OR (AND 27NWK
+                 (OR (AND (OR 30PBS 30XR) !27ANN)
+                     (AND (OR 26PBS 26XR) !27BNS)))
+            (AND 27RWK
+	         (OR (AND (OR 30PBS 30XR) !27RN)
+                     (AND (OR 26PBS 26XR)
+			  !27RS
+			  (OR !27L
+			      (AND !27AS 29NWK)))))))
+;;		     (AND 50PBS !27BNS))))) ;; out 20 February 1997
+
+(relay 29CLK
+       !18SP 18TP !30SP 30TP
+       (OR (AND 29NWK (OR (AND 27ANS !27ANN)
+			  (AND 30PBS !27ANN !27RN)
+			  (AND 13ANN !13ANS !20BPBS)
+			  (AND !30PBS
+				 (OR (AND 45RS !45RN)
+	                             (AND 45BNS !45BNN)))))
+
+           (AND 29RWK
+		(OR 27AS
+		    !29L
+		    (AND 27NWK !27L)
+		    15RLP
+		    (AND 15RWK !15L))
+
+		      (OR (AND 27BNN !27BNS !44XS) ; if 44xs, it's obvious
+			  18PBS		; remember, 29rwk is over this
+			  20BPBS	; flashing no lock
+	   		  (AND 15BNN !15BNS)
+			  (AND !30PBS
+			       (OR
+				  (AND 45BNS !45BNN) ; e.g., from 50,
+				  (AND 45ANS !45ANN)))))))
+
+
+(relay 20CLK 20BPBS (OR (AND 20CO !20V)
+                       (AND 29NWK 29CLK)
+		       (AND 20APBS
+                            (OR (AND 13NWK 13CLK)
+                                (AND (OR 15NWK 15RWK) 15CLK)))))
+
+(relay 13AS (OR 13AS !10TP !16TP
+                (AND 18TP 20TP (OR 45RWC 48TP))
+                13U 0RAS)
+	      (LABEL L13AST
+		  (OR 45RWK !48AR)
+                  !20APBS
+		  !18AR
+			  (OR !13NWC  ; must be back!
+			;; need research...
+			;; is any of the below correct? had CO term
+				(AND !18H !20H (OR 45RWK !48H)))))
+
+(timer 13U 15 !13AS L13AST)
+
+(relay 29AS (OR 29AS !18TP 
+                    (AND 18TP (OR 29RWC 20TP) (OR 29NWC 30ATP) 48TP 48ATP)
+                 29U 0RAS)
+              (LABEL L29AST
+                  (OR (AND 45RWC ) (AND !48CO !48H !48R))))
+(timer 29U 15 !29AS L29AST)
+
+(relay 49ASX       (AND
+		      (OR 49NWC (AND 30TP 30ATP 44TP))
+                      (OR 29NWC (AND 16TP (OR 15RWC 10TP) 18TP))
+		      (OR 29RWC (AND 10TP (OR 13RWC 16TP) 42ATP))))
+
+(relay 49AS (OR 49AS !42TP
+                    
+		49ASX			; too hairy for drawer
+                 49U 0RAS)
+              (LABEL L49AST
+                   !26H !26CO !26R	; MUST go to 49!!
+ 		    (OR (AND !28H !28CO !28R)
+                        !49RWC)))
+
+(timer 49U 15 !49AS L49AST)
+
+
+(relay 49CLK !42SP 42TP (OR 44TP 45RWC) 
+               (OR (AND 49RWK (OR (AND !28AS 27NWC) (AND !26AS 27RWC))
+                              (OR 42PBS
+                                  (AND 27BNN !27BNS)))
+                   (AND 49NWK !26AS 27NWC 
+                             (OR (AND 45BNN !45BNS !45RN)
+                                 (AND 27ANN !27ANS !27RN)))))
+
+(relay 26CLK 26PBS (OR (AND 26CO !26V)
+		       (AND 49CLK (SWIF 27 49RWK 49NWK))))
+
+
+(relay 28CLK 28PBS (OR (AND 28CO !28V)
+		       (AND 49CLK 29RWK 27NWK 49RWK)))
+
+(relay 12CLK 12PBS (OR (AND 12CO !12V)
+		       (AND 27CLK 13RWK 27NWK)
+                       (AND 29CLK (OR (AND 29RWK 13NWK 16XS)
+				      (AND 29NWK 13RWK 14XS 27RWC)))))
+
+(relay 10CLK 10PBS (OR (AND 10CO !10V)
+		       (AND 27CLK 15NWK 27NWK)
+                       (AND 29CLK (OR (AND 29RWK 15RWK 16XS)
+                                      (AND 29NWK 15NWK 14XS 27RWC)))))
+
+(relay 48CLK 48PBS (OR (AND 48CO !48V)
+		       (AND (OR (AND 29NWK 45NWK)
+                                45RWK)
+			 (OR 13CLK 15CLK))
+		       (AND 27CLK 44XS 45RWK) ; clk has rwk/nwk buitlin
+                       (AND 29CLK (OR (AND 29RWK 44XS 45RWK)
+                                      (AND 29NWK 46XS 45NWK)))))
+
+(relay 50CLK 50PBS (OR (AND 50CO !50V)
+                       (AND 27CLK 49RWK (OR 27RWK 27NWK))
+		       (AND 13CLK 49NWK 27NWK) ; clk has rwk/nwk
+		       (AND 15CLK 26XS 27NWK 49NWK)
+                       (AND 29CLK 29RWK 44XS 45NWK 49RWK)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;								    ;;;
+;;;             Do some stop-locking where the results will be sexy ;;;
+;;;		Stop locking for b-b's removed 15 November 1996
+;;;								    ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 10VS (OR (AND 10VS !10SS) (AND 13NWC (SWIF 15 16R 14R))))
+(relay 12VS (OR (AND 12VS !16SS) (AND 15NWC (SWIF 13 14R 16R))))
+
+(relay 30VS (OR (AND 30VS !30NS) (SWIF 27 26R (AND 29RWC 28R))))
+(relay 44VS (OR (AND 44VS !44SS) (SWIF 45 48R (AND 49RWC 50R))))
+(relay 42VS (OR (AND 42VS !42SS) (AND  49NWC 50R)))
+(relay 50VS (OR (AND 50VS !42NS) (SWIF 49 (AND 45NWC 44R) 42R)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;             Use that to put some life into these automatics
+;;;
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(relay 1122D 8H)
+(relay 1122H 1122U (LABEL L1122HT 12VS 1121T 8TP))
+(timer 1122U 8 (OR 1122U !1122H) 15NWC (OR !16TP (AND 13RWC !10TP)) L1122HT)
+(relay 1122HV 1122H 1122RVP)
+
+
+(relay 1122V (OR 1122H !1121T 12R))
+
+;(relay 2122D )                    ;huh??? why does it have green?
+(relay 2122H 2122U (LABEL L2122HT 10VS 2TP 4TP))
+(timer 2122U 8 (OR 2122U !2122H) 13NWC (OR !10TP (AND 15RWC !16TP)) L2122HT)
+(relay 2122V (OR 2122H !2TP 10R))
+(relay 2122HV 2122H 2122RVP)
+
+(relay 16LH 16R (SWIF 15 (AND 10TP L2122HT !2122U)(AND !1122U L1122HT)))
+(relay 14LH 14R (SWIF 13 (AND 16TP L1122HT !1122U)(AND !2122U L2122HT)))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;   Real hair - end-to-end
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(relay 26XR !26PBS !15BNS (LABEL L26XRT !14XS 14KXL 15BNN 10TP 26SS L26PBT))
+(relay 26ZS (OR 26ZS 26XR) (OR (AND 27BNS (OR 42XS 42ZS))
+                            (AND 27RS (OR 30XS 44ZS)))
+					 L26XRT)
+
+(relay 28XR !28PBS !13ANS (LABEL L28XRT !16XS !28XS 13ANN 16TP 18SS L28PBT))
+(relay 28ZS (OR 28ZS 28XR) 29RN (AND 29RS 27ANS (OR 30XS 44ZS)) L28XRT)
+
+(relay 44XR !44PBS  (OR (AND 27RN !27RS) (AND 27ANN !27ANS))
+		    (LABEL L44XRT
+                    	!30XS !44XS
+		     !30PBS !30XR (OR 27RN 27ANN)
+		      (OR !27RN 26TP) (OR !27ANS 18TP)
+                      30TP 30ATP 44SS L44PBT))
+(relay 44ZS (OR 44ZS 44XR) (OR (AND 45BNS 50XS)(AND 45RS 48XS)) L44XRT)
+
+(relay 42XR !42PBS !42XS !27BNS (LABEL L42XRT
+                                !42XS 27BNN  26TP  42ATP L42PBT))
+(relay 42ZS (OR 42ZS 42XR)  49NS 50XS L42XRT)
+
+(relay 30XR !30PBS (LABEL L30XRT !44XS !44PBS !44XR !30XS (OR (AND 45BNS 48TP)
+				 (AND  45RS 42TP)) 30ANS 30ATP 44TP L30PBT))
+(relay 30ZS (OR 30ZS 30XR)
+            (OR (AND (OR 26XS 14ZS) 27RN)
+                (AND (OR 28XS 16ZS)  27ANN 29RN))
+             L30XRT)
+
+(relay 16XR !16PBS !13ANN
+              (LABEL L16XRT 
+                  !28XS !16XS 
+			      (OR (AND 29RS 30TP) 29NS) 18TP 16NS L16PBT))
+(relay 16ZS (OR 16ZS 16XR) 
+		13ANN (OR (AND 15ANN 12XS)(AND 15RN 10XS)) L16XRT)
+
+(relay 14XR !14PBS
+		 !15BNN
+          (LABEL L14XRT !14XS !26XS 
+				     (OR (AND 27BNS 42ATP 42TP)
+				     (AND 27RS 30TP))
+                 26TP 10NS L14PBT))
+(relay 14ZS (OR 14ZS 14Xr)  15BNN (OR (AND 13BNN 10XS)(AND 13RN 12XS))
+                    L14XRT)
+
+(relay 18XR !18PBS  (LABEL L18XRT !46XS 45ANS 48TP 20TP 18NS L18PBT))
+(relay 18ZS (OR 18ZS 18XR) 29NN (OR 28XS 16ZS) L18XRT)

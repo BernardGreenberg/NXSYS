@@ -1,0 +1,35 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;Traffic Control Lever 349/299
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; rewritten 1/19/2021 by modelling after Atlantic Ave 219
+;;; rewritten 1/25/2021 to work just like a switch. Remove LPX, FN, FXK. One L.
+
+;; 1-25-2021 : any track or active signal or entrance disables both levers
+;; works with either (old) 2-state levers or (realistic) pulsing levers.
+(relay 349L
+       3262T 3302T 3212T (OR 3193T 265NWC) (OR 3204T 267NWC)
+       (OR 3182T 267RWC 265RWC)
+       3342T 3422T 3432T 3502T 3512T 3562T
+       3572T 3642T 3682T 3792T 3822T 3842T 3872T (or 3892T 359RWC 357RWC)
+       268AS 290AS 292AS 348AS 3822SS 
+       3212NS 284AS 286AS 346AS 362AS)
+
+;; This is THE SOUTHbound permission relay
+(relay 349FNS (OR (AND 349FNS !349FXS)
+		  (AND 349L 349NL)))
+
+;; This is THE NORTHbound permission relay
+(relay 349FXS (OR (AND 349FXS !349FNS)
+	       	  (AND 349L 349RL)))
+
+;; TL Indicator lights
+(relay 349rFK  349FXS 349L)
+(relay 349rFKR 349FXS !349L)
+(relay 349nFK  349FNS 349L)
+(relay 349nFKR 349FNS !349L)
+
+;; obsolete entrances depending on it at 215th
+;; NORTHBOUND permission
+(relay 299FNS 349FXS)
+
+

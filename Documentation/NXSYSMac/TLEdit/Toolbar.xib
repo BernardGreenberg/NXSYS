@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ToolbarController">
+            <connections>
+                <outlet property="window" destination="QvC-M9-y7g" id="Nyt-QZ-GPn"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="TLENeverSelectPanel">
+            <windowStyleMask key="styleMask" texturedBackground="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="1000" y="400" width="255" height="392"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+            <view key="contentView" toolTip="Show joints" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="255" height="392"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button toolTip="Create or select signal up or right" fixedFrame="YES" tag="4213" translatesAutoresizingMaskIntoConstraints="NO" id="0SZ-zW-aBA">
+                        <rect key="frame" x="12" y="291" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="SignalNE" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" tag="4213" imageScaling="proportionallyDown" inset="2" id="rLW-fP-96J">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="lzk-de-ETf"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Create or select signal down or left" fixedFrame="YES" tag="4214" translatesAutoresizingMaskIntoConstraints="NO" id="LKT-UP-9lE">
+                        <rect key="frame" x="12" y="222" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="SignalSW" imagePosition="overlaps" alignment="center" controlSize="small" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="y5c-bz-ckc">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="m2H-kN-NXN"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Create auxiliary switch key" fixedFrame="YES" tag="4218" translatesAutoresizingMaskIntoConstraints="NO" id="qPZ-xY-1Xb">
+                        <rect key="frame" x="94" y="291" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="auxkey" imagePosition="overlaps" alignment="center" borderStyle="border" tag="4218" imageScaling="proportionallyUpOrDown" inset="2" id="l2F-WP-fd7">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                            <connections>
+                                <action selector="ToolbarButton:" target="-2" id="zhU-Qi-U0Z"/>
+                            </connections>
+                        </buttonCell>
+                    </button>
+                    <button toolTip="Cut selected object" fixedFrame="YES" tag="4207" translatesAutoresizingMaskIntoConstraints="NO" id="ZjD-6P-djn">
+                        <rect key="frame" x="173" y="291" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Cut-icon" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2pB-di-lr2">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="qsn-08-TjV"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Create or select exit light at signal" fixedFrame="YES" tag="4216" translatesAutoresizingMaskIntoConstraints="NO" id="DQ5-s0-Abb">
+                        <rect key="frame" x="12" y="150" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="crxl" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="UKH-bq-7MP">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                            <connections>
+                                <action selector="ToolbarButton:" target="-2" id="R1n-XC-kca"/>
+                            </connections>
+                        </buttonCell>
+                    </button>
+                    <button toolTip="Create general panel switch" fixedFrame="YES" tag="4222" translatesAutoresizingMaskIntoConstraints="NO" id="Mo4-qZ-qeo">
+                        <rect key="frame" x="94" y="222" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Pswitch" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="J61-sz-jdj">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="Ucg-fv-3fe"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Create traffic lever" fixedFrame="YES" tag="4220" translatesAutoresizingMaskIntoConstraints="NO" id="4co-Ei-hUi">
+                        <rect key="frame" x="94" y="77" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="traffic" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iyM-s5-MF6">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                            <connections>
+                                <action selector="ToolbarButton:" target="-2" id="Qh8-PN-aKT"/>
+                            </connections>
+                        </buttonCell>
+                    </button>
+                    <button toolTip="Create text (must edit props)" fixedFrame="YES" tag="4219" translatesAutoresizingMaskIntoConstraints="NO" id="tM4-bm-ea1">
+                        <rect key="frame" x="94" y="5" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" title="Text" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BIe-Ew-t5r">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" size="16" name="LucidaGrande"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="H8u-pr-H91"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Show exit lights" fixedFrame="YES" tag="4217" translatesAutoresizingMaskIntoConstraints="NO" id="D21-gu-nqk">
+                        <rect key="frame" x="173" y="5" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="showex" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="l0b-cg-ocV">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="IsH-5T-xSm"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Show Joints" fixedFrame="YES" tag="4206" translatesAutoresizingMaskIntoConstraints="NO" id="PAc-m0-abw">
+                        <rect key="frame" x="173" y="77" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="joints" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="imq-d4-F3F">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="ZbH-Mc-Ezx"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Insulate track joint" fixedFrame="YES" tag="4202" translatesAutoresizingMaskIntoConstraints="NO" id="ydj-cc-JEc">
+                        <rect key="frame" x="173" y="222" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="insulate" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="oLA-dh-YeV">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="kmY-Kt-eLa"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Flip position of #" fixedFrame="YES" tag="4215" translatesAutoresizingMaskIntoConstraints="NO" id="FFo-Vo-RKy">
+                        <rect key="frame" x="173" y="150" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="flipno" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="f1A-Lk-AUA">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="3QS-k2-dgj"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Create panel light" fixedFrame="YES" tag="4221" translatesAutoresizingMaskIntoConstraints="NO" id="8ed-Be-zIP">
+                        <rect key="frame" x="94" y="150" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Plights" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jDW-Iv-suz">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                            <connections>
+                                <action selector="ToolbarButton:" target="-2" id="gKW-hE-ffF"/>
+                            </connections>
+                        </buttonCell>
+                    </button>
+                    <button toolTip="Edit selected object's properties" fixedFrame="YES" tag="4211" translatesAutoresizingMaskIntoConstraints="NO" id="ZCu-6j-t9g">
+                        <rect key="frame" x="12" y="5" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="document_properties" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="LjS-v7-lzW">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                            <connections>
+                                <action selector="ToolbarButton:" target="-2" id="6Jl-Hl-lch"/>
+                            </connections>
+                        </buttonCell>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="253.5" y="394"/>
+        </window>
+    </objects>
+    <resources>
+        <image name="Cut-icon" width="256" height="256"/>
+        <image name="Plights" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="Pswitch" width="10.466959953308105" height="19.665197372436523"/>
+        <image name="SignalNE" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="SignalSW" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="auxkey" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="crxl" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="document_properties" width="81.198234558105469" height="81.198234558105469"/>
+        <image name="flipno" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="insulate" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="joints" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="showex" width="40.599117279052734" height="40.599117279052734"/>
+        <image name="traffic" width="65.656387329101562" height="46.62554931640625"/>
+    </resources>
+</document>
