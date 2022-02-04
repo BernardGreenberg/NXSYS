@@ -642,6 +642,8 @@
 		5BFB49F827AD6084006BE311 /* Islington */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Islington; sourceTree = "<group>"; };
 		5BFB49FA27AD6147006BE311 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5BFB49FB27AD8187006BE311 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		5BFB4A0027ADD720006BE311 /* StartShut.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartShut.h; sourceTree = "<group>"; };
+		5BFB4A0127ADD738006BE311 /* xtgload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xtgload.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -853,6 +855,7 @@
 		5B5AE6462311529700348612 /* Random Headers */ = {
 			isa = PBXGroup;
 			children = (
+				5BFB4A0027ADD720006BE311 /* StartShut.h */,
 				5BFB49E327AC626B006BE311 /* pival.h */,
 				5BFB49E227AC622E006BE311 /* nxhelp.h */,
 				5BFB49E027AC617E006BE311 /* RLYINDEX.H */,
@@ -906,6 +909,7 @@
 		5B5AE6632311763800348612 /* V2 Headers */ = {
 			isa = PBXGroup;
 			children = (
+				5BFB4A0127ADD738006BE311 /* xtgload.h */,
 				5BFB49E127AC61D0006BE311 /* dynmenu.h */,
 				5BFB49DF27AC614A006BE311 /* SwitchConsistency.h */,
 				5B5AE632230DD48B00348612 /* AppAbortRestart.h */,
