@@ -717,7 +717,6 @@ Sexpr CreateAtom (const char * s) {
 //        The prototype is not in lisp.h due to header file disorganization,
 //        i.e. FILE is not declared in the right place
 Sexpr read_sexp (FILE * f);
-static std::string show_sexp_0(Sexpr);
 
 Sexpr read_sexp (FILE * f) {
     Stack_count = 0;
@@ -761,27 +760,27 @@ Sexpr read_sexp_LIS (LispInputSource &Lis) {
     return read_sexp_i (Lis, 0);
 }
 
-static std::string show_sexp_0 (Sexpr s) {
-    switch (s.type) {
+std::string Sexpr::PRep() {
+    switch (type) {
 	case L_NULL:
-            if (s.u.v == nullptr)
+            if (u.v == nullptr)
                 return "%L_NULL<0>";
             else
-                return FormatString("%%L_NULL<%s>", s.u.s);
+                return FormatString("%%L_NULL<%s>", u.s);
 	case L_ATOM:
-            return s.u.a;
+            return u.a;
 	case L_NUM:
-            return std::to_string(s.u.n);
+            return std::to_string(u.n);
 	case L_RATIONAL:
-            return std::to_string((long)s.u.rat->Numerator) + FRACTION_BARs +
-                    std::to_string((long)s.u.rat->Denominator);
+            return std::to_string((long)u.rat->Numerator) + FRACTION_BARs +
+                    std::to_string((long)u.rat->Denominator);
 	case L_FLOAT:
-            return std::to_string(*s.u.f);
+            return std::to_string(*u.f);
 	case L_STRING:
         {
             std::string b;
 	    b += '"';
-	    for (const char * q = s.u.s; *q; q++) {
+	    for (const char * q = u.s; *q; q++) {
 		if (*q == '"' || *q == ESC_CHAR)
 		    b += ESC_CHAR;
 		b += *q;
@@ -790,18 +789,19 @@ static std::string show_sexp_0 (Sexpr s) {
             return b;
         }
 	case L_CHAR:
-	    return "#" + ESC_CHARs + s.u.c;
+	    return "#" + ESC_CHARs + u.c;
 	case L_CONS:
         {
+            Sexpr s = *this;
             std::string b;
             b += '(';
-            while(true) {
-		b += show_sexp_0 (CAR(s));
+            while(1) {
+                b += CAR(s).PRep();
 		if (NILP (CDR(s)))
 		    break;
 		if (!(CONSP (CDR(s)))) {
 		    b += " . ";
-		    b += show_sexp_0(CDR(s));
+                    b += CDR(s).PRep();
 		    break;
 		}
                 s = CDR(s);
@@ -814,9 +814,9 @@ static std::string show_sexp_0 (Sexpr s) {
 	{
             std::string b;
 	    b += "[";
-	    int lim = (int)s.u.l[0].u.n;
+	    int lim = (int)u.l[0].u.n;
 	    for (int i = 0; i < lim; i++) {
-		b += show_sexp_0 (s.u.l[i+1]);
+                b += u.l[i+1].PRep();
 		if (i < lim-1)
 		    b += ' ';
 	    }
@@ -824,18 +824,14 @@ static std::string show_sexp_0 (Sexpr s) {
 	    return b;
 	}
 	case L_RLYSYM:
-            return s.u.r->PRep();
+            return u.r->PRep();
         case L_LAST_TYPE:
             return "<LAST-TYPE>";
     }
 }
 
-std::string Sexpr::PRep() {
-    return show_sexp_0(*this);
-}
-
 void show_sexp (Sexpr s) {
-    MessageBoxA (0, show_sexp_0(s).c_str(), "Lisp Exp", MB_OK);
+    MessageBoxA (0, s.PRep().c_str(), "Lisp Exp", MB_OK);
 }
 
 void dealloc_ncyclic_sexp (Sexpr s) {
