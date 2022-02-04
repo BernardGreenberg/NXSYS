@@ -644,6 +644,7 @@
 		5BFB49FB27AD8187006BE311 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		5BFB4A0027ADD720006BE311 /* StartShut.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartShut.h; sourceTree = "<group>"; };
 		5BFB4A0127ADD738006BE311 /* xtgload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xtgload.h; sourceTree = "<group>"; };
+		5BFB4A0227ADEC56006BE311 /* blisp_test.lisp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blisp_test.lisp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -848,6 +849,7 @@
 		5B5AE61C230C77E900348612 /* BLISP */ = {
 			isa = PBXGroup;
 			children = (
+				5BFB4A0227ADEC56006BE311 /* blisp_test.lisp */,
 			);
 			path = BLISP;
 			sourceTree = "<group>";

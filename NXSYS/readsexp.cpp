@@ -717,17 +717,14 @@ Sexpr CreateAtom (const char * s) {
 //        The prototype is not in lisp.h due to header file disorganization,
 //        i.e. FILE is not declared in the right place
 Sexpr read_sexp (FILE * f);
-static void show_sexp_1(Sexpr, std::string&);
+static std::string show_sexp_0(Sexpr);
 
 Sexpr read_sexp (FILE * f) {
     Stack_count = 0;
     LispFileInputSource F(f);
     Sexpr S = read_sexp_i (F, 0);
 #if 0
-    std::string b;
-    show_sexp_1(S, b);
-    printf("%s\n", b.c_str());
-
+    printf("%s\n", show_sexp_0(S));
 #endif
     return S;
 }
@@ -764,28 +761,25 @@ Sexpr read_sexp_LIS (LispInputSource &Lis) {
     return read_sexp_i (Lis, 0);
 }
 
-static void show_sexp_1 (Sexpr s, std::string& b) {
+static std::string show_sexp_0 (Sexpr s) {
     switch (s.type) {
 	case L_NULL:
             if (s.u.v == nullptr)
-                b = "%L_NULL<0>";
+                return "%L_NULL<0>";
             else
-                b = FormatString("%%L_NULL<%s>", s.u.s);
-	    return;
+                return FormatString("%%L_NULL<%s>", s.u.s);
 	case L_ATOM:
-            b += s.u.a;
-	    return;
+            return s.u.a;
 	case L_NUM:
-            b += std::to_string(s.u.n);
-            return;
+            return std::to_string(s.u.n);
 	case L_RATIONAL:
-            b += std::to_string((long)s.u.rat->Numerator) + FRACTION_BARs +
-                 std::to_string((long)s.u.rat->Denominator);
-	    return;
+            return std::to_string((long)s.u.rat->Numerator) + FRACTION_BARs +
+                    std::to_string((long)s.u.rat->Denominator);
 	case L_FLOAT:
-            b += std::to_string(*s.u.f);
-	    return;
+            return std::to_string(*s.u.f);
 	case L_STRING:
+        {
+            std::string b;
 	    b += '"';
 	    for (const char * q = s.u.s; *q; q++) {
 		if (*q == '"' || *q == ESC_CHAR)
@@ -793,58 +787,55 @@ static void show_sexp_1 (Sexpr s, std::string& b) {
 		b += *q;
 	    }
 	    b += '"';
-	    break;
+            return b;
+        }
 	case L_CHAR:
-	    b += "#" + ESC_CHARs + s.u.c;
-	    break;
+	    return "#" + ESC_CHARs + s.u.c;
 	case L_CONS:
+        {
+            std::string b;
             b += '(';
-            while(1) {
-		show_sexp_1 (CAR(s), b);
+            while(true) {
+		b += show_sexp_0 (CAR(s));
 		if (NILP (CDR(s)))
 		    break;
 		if (!(CONSP (CDR(s)))) {
 		    b += " . ";
-		    show_sexp_1(CDR(s), b);
+		    b += show_sexp_0(CDR(s));
 		    break;
 		}
                 s = CDR(s);
                 b += ' ';
             }
    	    b += ')';
-	    return;
+	    return b;
+        }
 	case L_VECTOR:
 	{
+            std::string b;
 	    b += "[";
 	    int lim = (int)s.u.l[0].u.n;
 	    for (int i = 0; i < lim; i++) {
-		show_sexp_1 (s.u.l[i+1], b);
+		b += show_sexp_0 (s.u.l[i+1]);
 		if (i < lim-1)
 		    b += ' ';
 	    }
             b += ']';
-	    return;
+	    return b;
 	}
 	case L_RLYSYM:
-            b += s.u.r->PRep();
-	    return;
+            return s.u.r->PRep();
         case L_LAST_TYPE:
-            b += "<LAST-TYPE>";
-            break;
+            return "<LAST-TYPE>";
     }
 }
 
 std::string Sexpr::PRep() {
-    std::string output;
-    show_sexp_1(*this, output);
-    return output;
+    return show_sexp_0(*this);
 }
 
-
 void show_sexp (Sexpr s) {
-    std::string buffer;
-    show_sexp_1 (s, buffer);
-    MessageBoxA (0, buffer.c_str(), "Lisp Exp", MB_OK);
+    MessageBoxA (0, show_sexp_0(s).c_str(), "Lisp Exp", MB_OK);
 }
 
 void dealloc_ncyclic_sexp (Sexpr s) {
