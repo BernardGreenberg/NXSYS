@@ -514,9 +514,6 @@
 		5BAC931A19C8FE7200673BDC /* TLEditAppDelegate.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = TLEditAppDelegate.mm; sourceTree = "<group>"; };
 		5BAC931D19C8FE7200673BDC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TLEdit.xib; sourceTree = "<group>"; };
 		5BAC931F19C8FE7200673BDC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		5BAC932C19C8FE7200673BDC /* TLEditTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TLEditTests-Info.plist"; sourceTree = "<group>"; };
-		5BAC932E19C8FE7200673BDC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		5BAC933019C8FE7200673BDC /* TLEditTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TLEditTests.m; sourceTree = "<group>"; };
 		5BAC936A19C8FFAA00673BDC /* tledit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tledit.cpp; sourceTree = "<group>"; };
 		5BAC936C19C8FFC600673BDC /* appwin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = appwin.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BAC937019C9B63400673BDC /* assignid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assignid.cpp; sourceTree = "<group>"; };
@@ -566,9 +563,6 @@
 		5BE487E5199D0A5C007BD6BF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5BE487E7199D0A5C007BD6BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5BE487EE199D0A5C007BD6BF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		5BE487F5199D0A5C007BD6BF /* NXSYSMacTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NXSYSMacTests-Info.plist"; sourceTree = "<group>"; };
-		5BE487F7199D0A5C007BD6BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		5BE487F9199D0A5C007BD6BF /* NXSYSMacTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NXSYSMacTests.m; sourceTree = "<group>"; };
 		5BE49431199D0B2D007BD6BF /* readsexp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = readsexp.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BE49436199D1A14007BD6BF /* lisp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lisp.h; sourceTree = "<group>"; tabWidth = 8; };
 		5BE4A069199D1D6D007BD6BF /* oscond.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oscond.h; sourceTree = "<group>"; };
@@ -1089,24 +1083,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		5BAC932A19C8FE7200673BDC /* TLEditTests */ = {
-			isa = PBXGroup;
-			children = (
-				5BAC933019C8FE7200673BDC /* TLEditTests.m */,
-				5BAC932B19C8FE7200673BDC /* Supporting Files */,
-			);
-			path = TLEditTests;
-			sourceTree = "<group>";
-		};
-		5BAC932B19C8FE7200673BDC /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				5BAC932C19C8FE7200673BDC /* TLEditTests-Info.plist */,
-				5BAC932D19C8FE7200673BDC /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		5BAC936919C8FF5200673BDC /* TLEdit */ = {
 			isa = PBXGroup;
 			children = (
@@ -1181,9 +1157,7 @@
 				5B256F0B19B4E68200F41527 /* V1HelpImages */,
 				5BE487D6199D0A5C007BD6BF /* Supporting Files */,
 				5BE487D5199D0A5C007BD6BF /* App Windows */,
-				5BE487F3199D0A5C007BD6BF /* NXSYSMacTests */,
 				5BAC930D19C8FE7200673BDC /* TLEdit */,
-				5BAC932A19C8FE7200673BDC /* TLEditTests */,
 				5B5AE61C230C77E900348612 /* BLISP */,
 				5B4DF39A2314ABB5001FDE00 /* Relay Compiler */,
 				5B25511925B87D2B00A68D73 /* RelayIndex */,
@@ -1272,24 +1246,6 @@
 			);
 			name = "Supporting Files";
 			path = NXSYS;
-			sourceTree = "<group>";
-		};
-		5BE487F3199D0A5C007BD6BF /* NXSYSMacTests */ = {
-			isa = PBXGroup;
-			children = (
-				5BE487F9199D0A5C007BD6BF /* NXSYSMacTests.m */,
-				5BE487F4199D0A5C007BD6BF /* Supporting Files */,
-			);
-			path = NXSYSMacTests;
-			sourceTree = "<group>";
-		};
-		5BE487F4199D0A5C007BD6BF /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				5BE487F5199D0A5C007BD6BF /* NXSYSMacTests-Info.plist */,
-				5BE487F6199D0A5C007BD6BF /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		5BE49430199D0AF3007BD6BF /* NXMac */ = {
@@ -1951,14 +1907,6 @@
 			name = TLEdit.xib;
 			sourceTree = "<group>";
 		};
-		5BAC932D19C8FE7200673BDC /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5BAC932E19C8FE7200673BDC /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		5BE487D8199D0A5C007BD6BF /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1974,14 +1922,6 @@
 				5BE487E5199D0A5C007BD6BF /* Base */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		5BE487F6199D0A5C007BD6BF /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5BE487F7199D0A5C007BD6BF /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
