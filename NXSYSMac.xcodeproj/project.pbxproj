@@ -956,6 +956,7 @@
 				5B687ADE19B725840006FA4F /* ReleaseNotes.html */,
 				5B8A110E25C07E91007857A8 /* 5_0TL.png */,
 				5B2CD8BD25E7E4EF0095C17F /* TrafficKnob.png */,
+				5B256F0B19B4E68200F41527 /* V1HelpImages */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
@@ -1154,7 +1155,6 @@
 				5BFB49FB27AD8187006BE311 /* LICENSE */,
 				5BFB49EF27AD5667006BE311 /* Interlockings */,
 				5B65677B25C1B17000411B8F /* Documentation */,
-				5B256F0B19B4E68200F41527 /* V1HelpImages */,
 				5BE487D6199D0A5C007BD6BF /* Supporting Files */,
 				5BE487D5199D0A5C007BD6BF /* App Windows */,
 				5BAC930D19C8FE7200673BDC /* TLEdit */,
