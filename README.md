@@ -8,7 +8,7 @@ This application is posted and offered under the terms of the GNU General Public
 
 This code builds completely and cleanly under XCode 13.2.1 (13C100) under MacOS Monterey 12.1.  It builds for 64-bit Intel Mac; no configurations for M1 Macs are present. An `xcodeproj` file exists in the top directory; it contains no external references. **The Apple tool `PlistBuddy` is expected** to be in /usr/libexec (where it should be if XCode is properly installed); it is used for packing build number and date signature into the Info plist.  Tools for packaging the whole for distribution (BASH scripting) are not provided.  Code Signing is, of course, now your responsibility, if desired.
 
-There remain (as expectable) some minor constraint irritations in the Interface  Builder layouts that do not impede or flag building.
+There remain (as expectable) some minor constraint irritations in the Interface  Builder layouts that do not impede building or raise warning flags at build time.
 
 The file `NXSYS.html` in the Documentation folder is a comprehensive description of the application and its capabilities. It is the source for the distributed PDF (although building that PDF so that external and internal links work seems to be a challenging research problem that depends on one's own computer). Read everything in that folder.  There is a [demo video on YouTube](https://www.youtube.com/watch?v=nAgy_TZ5Dcs).
 
@@ -20,27 +20,27 @@ The Windows build was last offered in 2016, and is fully operable. See [`https:/
 
 I do take pains in distributed interlockings not to exploit incompatible new features, and the scenario language has features that make it possible only to exploit newer features in newer builds.  All five of these interlockings are fully functional in the distributed (2016) Windows build. 
 
-None of the OpenGL code of the popular erstwhile Cab View feature of Version 1 is present in this repository.  It cannot handle, nor be obviously extended to handle, the arbitrary track geometries of Version 2, and reaches aesthetic limitations at that point.
+None of the OpenGL code of the popular erstwhile Cab View feature of Version 1 is present in this repository.  It cannot handle, nor be obviously extended to handle, the arbitrary track geometries of Version 2, and its black-grey tunnels reach aesthetic limitations at that point.
 
-So Win32 NXSYS is frozen in time at 2016, at least for now, and cannot be easily built.  I don't want to buy another computer and a Visual Studio subscription just to be able to edit out this line.
+Win32 NXSYS is thus frozen in time at 2016, at least for now, and cannot be easily built.  I don't want to buy another computer and a Visual Studio subscription at this time.
 
 ## Status of Mac Version
 
-I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about changes necessary to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013.  If I succeed, the changes will be compatible upon existent interlockings.  I won't merge until I have solid code.
+I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about changes necessary to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013. If I successfully implement this or other new features, they will not break extant interlockings, and I won't "push" until I have solid code.
 
 I may or may not fix reported bugs and post changes. I want to know if you can't build it. Contact me via GitHub. I expect to post fixes to bugs I encounter from hereon in.
 
 There are five build targets in this project:
 
-- **NXSYSMac**. This is the Mac GUI application, complete with resources when built, and invocable as Mac GUI application.   It opens interlockings, displays control panels, accepts their operation, and runs scenarios.
+- **NXSYSMac**. This is the Mac GUI application, complete with resources when built, and invocable as `.app` Mac GUI application.   It opens interlocking scenarios, displays control panels, accepts their operation, and runs them.
 
-- **TLEdit**.  The track-layout editor.  A separate Mac GUI application (A Windows version exists, too, but not buildable here) that allows the creation and maintenance of `.trk` files containing layout information (and only layout information).  This is how you create the track-maps/panel layouts of scenarios, not any part of their logic. It is (poorly) self-documenting.
+- **TLEdit**.  The track-layout editor.  A separate Mac GUI application (a Windows version exists, too, but not buildable here) that allows the creation and maintenance of `.trk` files containing layout information (and only layout information).  This is how you create the track-maps/panel layouts of scenarios, not any part of their logic. It is (poorly) self-documenting.
 
-- **Relay Compiler**. This is presently a joke, because even though this command-line application runs perfectly on the Mac, *it only produces Windows object code*.  It is simply not necessary with the speed of modern machines; interlockings run rapidly enough "interpreted" (Lisp taxonomy).  Prior to Mac NXSYS, though, it was quite a feat. It is a tribute to Apple that I have never had to learn the Mac machine-language environment.
+- **Relay Compiler**. This is presently a joke, because even though this command-line application runs perfectly on the 64-bit Mac, *it only produces Windows object code*, 32- as well as 16-bit, actually.  It is simply no longer necessary with the speed of modern machines; interlockings run rapidly enough "interpreted" (Lisp taxonomy).  Prior to Mac NXSYS, though, it was quite neat. It is a tribute to Apple that I have never had to learn the Mac machine-language environment.
 
-- **BLISP** (B for Bernie).  A command-line program, being a test-build of the native quasi-Lisp reader (`readsexp.cpp`) used by NXSYS to read interlocking definitions.  `READ-PRINT` only, though, C(++)-no-`EVAL`. 10 cdr trains are handled :).
+- **BLISP** (B for Bernie).  A command-line program, being a test-build of its native reader (`readsexp.cpp`) for the quasi-Lisp used for interlocking definitions.  `READ-PRINT` only, though, C(++)-no-`EVAL`. 10 cdr trains are handled :).
 
-- **Relay Indexer**.  This recent innovation is another command-line C++11 program (no Objective C/C++) built from this tree that produces a text-format "relay index", a cross-reference of which relays are referenced as logic inputs by other relays, including "built-in" relays to the system,   Direct it to the top-level file of an interlocking.  While this can be useful, it even more usefully produces an Emacs/Aquamacs `TAGS` table for all of the relays in the interlocking, allowing `meta-.` to be used with relays, and allowing relay source to be located from NXSYS' Relay Draftsperson. If you want to use `m-.` on relays, you must change the syntax of exclamation point (logic negation) in `.trk` buffers:  `(modify-syntax-entry ?! ".")` in your startup where appropriate.
+- **Relay Indexer**.  This recent innovation is another command-line C++11 program (no Objective C/C++) built from this tree that produces a text-format "relay index", a cross-reference of which relays are referenced as logic inputs by other relays, including "built-in" relays to the system. While this can be useful, it even more usefully produces an Emacs/Aquamacs `TAGS` table for all of the relays in the interlocking, allowing `meta-.` to be used with relays, and allowing relay source to be located from NXSYS' Relay Draftsperson.
 
 The distribution of the sources into folders is somewhat chaotic, and I apologize.  The subdirectory `NXSYS` is supposed to contain all sources (and headers) that are shared with the Windows build, although it includes some inexcusable others. But other directories contain Mac-only code and headers.
 
