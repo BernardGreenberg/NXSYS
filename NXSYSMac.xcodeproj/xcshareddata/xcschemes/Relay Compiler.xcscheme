@@ -61,15 +61,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = ""
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/Users/bsg/NXMac/Progman.trk"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
             argument = "-L"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "$(PROJECT_DIR)/Interlockings/Progman/Progman.trk"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

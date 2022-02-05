@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/bsg/NXMac/u/Henry/irt240/irt.240tl.trk"
+            argument = "$(PROJECT_DIR)/Interlockings/irt240/irt.240tl.trk"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
