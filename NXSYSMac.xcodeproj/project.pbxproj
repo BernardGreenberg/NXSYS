@@ -696,7 +696,7 @@
 			path = RelayIndex;
 			sourceTree = "<group>";
 		};
-		5B256F0B19B4E68200F41527 /* V1HelpImages */ = {
+		5B256F0B19B4E68200F41527 /* HelpImages */ = {
 			isa = PBXGroup;
 			children = (
 				5BBF67E71DFF13E700BC7DDA /* bmyrt.bmp */,
@@ -732,7 +732,7 @@
 				5B256F1819B4E68200F41527 /* st.bmp */,
 				5B256F1919B4E68200F41527 /* sts.bmp */,
 			);
-			path = V1HelpImages;
+			path = HelpImages;
 			sourceTree = "<group>";
 		};
 		5B256F4719B52B4700F41527 /* Stop Policy Dialog */ = {
@@ -956,7 +956,7 @@
 				5B687ADE19B725840006FA4F /* ReleaseNotes.html */,
 				5B8A110E25C07E91007857A8 /* 5_0TL.png */,
 				5B2CD8BD25E7E4EF0095C17F /* TrafficKnob.png */,
-				5B256F0B19B4E68200F41527 /* V1HelpImages */,
+				5B256F0B19B4E68200F41527 /* HelpImages */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
