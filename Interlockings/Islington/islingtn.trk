@@ -29,7 +29,7 @@
 		:TRAIN-LENGTH-FEET 448
 		:YELLOW-FEET-PER-SECOND 30
 		:TORONTO T                ;;signal plate format
-                :BASIC-HELP-FILE-ID ("Islington Interlocking Help" 780 "NXSYSV1#islington")
+                :BASIC-HELP-FILE-ID ("Islington Interlocking Help" 780 "NXSYS#islington")
 )
 
 (include "stdmacs.trk")

@@ -91,7 +91,7 @@ void ValidateRelayWorld();
    #ifdef RT_PRODUCT
    #define HELP_FNAME "rt-designer"
    #else
-   #define HELP_FNAME "Pages\\NXSYSV1.html"
+   #define HELP_FNAME "Pages\\NXSYS.html"
    #endif
 #else
    #define HELP_FNAME "nxxlkg"
@@ -152,7 +152,7 @@ static char MWPKey[] = "Main Window Placement";
 static char FTitle[MAXPATH], DFName[MAXPATH] = "";
 static char MainWindow_Class[] = PRODUCT_NAME ":Main";
 #endif
-char HelpPath[MAXPATH] = "Pages/NXSysV1.html";
+char HelpPath[MAXPATH] = "Pages/NXSYS.html";
 
 #ifdef NXOLE
 static char ScriptName [MAXPATH];

@@ -431,7 +431,7 @@ static NSString* buildSignature;
     ScenarioHelp(1);
 }
 - (IBAction)NXV1Help:(id)sender {
-    [self.helpController HTMLHelp:@"NXSYSV1" tag:nil];
+    [self.helpController HTMLHelp:@"NXSYS" tag:nil];
 }
 - (IBAction)MacHelp:(id)sender {
     [self.helpController HTMLHelp:@"MacNXSYS" tag:nil];

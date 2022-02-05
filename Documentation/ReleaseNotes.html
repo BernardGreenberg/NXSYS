@@ -61,7 +61,7 @@ since the initial release of <nxf>NXSYS / MAC 2.0M</nxf> on 2 Sept 2014.  All ch
 <h2>Release 2.2.1 Mac – 12 December 2016</h2>
 <p>This version incorporates some largely invisible changes:</p>
 <ul>
-    <li>Integrates source and documentation changes reflecting the arrival of Version 2.1 for Microsoft Windows (built from shared source).  The “Version 2 help text” has been retired. Major additions have been made to the now single HTML helpfile (e.g., <a href="NXSYSV1.html#traffic">traffic control</a>, <a href="NXSYSV1.html#autoop">automatic operation</a>, and <a href="NXSYSV1.html#vital">vital/nonvital relays</a>).</li>
+    <li>Integrates source and documentation changes reflecting the arrival of Version 2.1 for Microsoft Windows (built from shared source).  The “Version 2 help text” has been retired. Major additions have been made to the now single HTML helpfile (e.g., <a href="NXSYS.html#traffic">traffic control</a>, <a href="NXSYS.html#autoop">automatic operation</a>, and <a href="NXSYS.html#vital">vital/nonvital relays</a>).</li>
     <li>Incorporates a diagnostic “switch coherency” feature, preventing (in <nxf>TLEdit</nxf>) the creation of scenarios in which there are unmatched crossover-ends (e.g., 217A but no 217B), as well as inconsistency between paired switches and singletons.  <nxf>NXSYS</nxf>, which would previously crash when loading such (no matter how they arose), now diagnoses such explicitly and refuses to load them. <nxf>TLEdit</nxf> lets you load them so you can fix them.</li>
     <li>A bug (in <nxf>NXSYS</nxf> proper) causing crashes loading scenarios with <i>no</i> switches was fixed.</li>
     <li>A bug in <nxf>TLEdit</nxf> not crashing but corrupting storage (a classic old-unchecked-function buffer overrun, caught by Mac debugger traps) in the <b>Save</b> function was fixed.</li>
@@ -82,7 +82,7 @@ since the initial release of <nxf>NXSYS / MAC 2.0M</nxf> on 2 Sept 2014.  All ch
 
 <ul>
     <li>Incorporates <b>Toronto's Islington Interlocking</b>, originally dating from 1997, when <nxf>NXSYS</nxf> Version 2 was considered for use by the Toronto Transit Commission.  Recently converted to Version 2 (layout conversion and single-line plan by Dave Barraza), this
-        interlocking features <a href="NXSYSV1.html#islington">extensive extant documentation</a> in the <a href="NXSYSV1.html">Version 1 Helpfile</a>. As with the other interlockings, its folder is in the delivery <b>.dmg</b> top-level.  Adds and exploits a means for interlockings to provide HTML documentation.</li>
+        interlocking features <a href="NXSYS.html#islington">extensive extant documentation</a> in the <a href="NXSYS.html">Version 1 Helpfile</a>. As with the other interlockings, its folder is in the delivery <b>.dmg</b> top-level.  Adds and exploits a means for interlockings to provide HTML documentation.</li>
     <li>Weeds out some <b>stale "nib" references</b> to obsolete "properties", which are now diagnosed under Mac OS/X "Yosemite" (10.10) (but are benign).</li>
     <li>Fixes a recent bug that caused <b>Full Signal views</b> not to reappear after hidden by <mf>Flush Full Signal Displays</mf>.</li>
     <li>Fixes bugs with <b>Signal 224 at Atlantic Avenue</b> with its Diverging Route indication and southbound selection over switch 221.</li>
@@ -140,7 +140,7 @@ since the initial release of <nxf>NXSYS / MAC 2.0M</nxf> on 2 Sept 2014.  All ch
 <h2>Release 2.1.0 Mac — 30 Sept 2014</h2>
 <ul>
     <li>Releases the Macintosh port of <b>TLEdit</b>, the <span class=nxsys>NXSYS</span> layout editor ("does not create working interlockings").  Start it up and read its own documentation.</li>
-    <li>Releases the Version 2 port of the venerable (fictitious) <a href="NXSYSV1.html#progman"><b>Progman St. Interlocking</b></a>, with all its didactic warts, enabling the Version 1 <a href="NXSYSV1.html">Introductory Documentation</a> to be usable.</li>
+    <li>Releases the Version 2 port of the venerable (fictitious) <a href="NXSYS.html#progman"><b>Progman St. Interlocking</b></a>, with all its didactic warts, enabling the Version 1 <a href="NXSYS.html">Introductory Documentation</a> to be usable.</li>
     <li>Fixes the Mac-new problem where <span class=menu>(Clear) All the Above</span> didn't wait for stops to clear before normalling switches; it now uses the extant Version 2/Windows mechanism and strategy, i.e., a short real-time wait after all other resets before switch normalling.</li>
     <li>Paints the <span class=menu>Draw</span> button on the <b>relay selector dialog</b> blue as it should be (as an "enter"-accelerated button, which it now is). Thanks, <a href="https://stackoverflow.com">stackoverflow.com</a>.</li>
 </ul>
@@ -176,9 +176,9 @@ since the initial release of <nxf>NXSYS / MAC 2.0M</nxf> on 2 Sept 2014.  All ch
 <h2>Release 2.0.12 Mac — 15 Sept 2014</h2>
 <ul>
 <li>A very major <b>bug troubling interlocking unloading</b>, which caused crashes during startup, loading, and unloading, was found and fixed.  The same bug exists in the Windows Version 2, but does not cause crashes because of differing runtime heap-management policies.</li>
-<li>The <b>Demo System </b> as in earlier versions is now up in <span class=nxsys>NXSYS / Mac</span>.   This allows some scripting via Lisp-like forms.  See the <a href="NXSYSV1.html#demos">Version 1 documentation</a> and the demo script file <b>Myrtle.xdo</b> in the Myrtle Avenue folder for repertoire and a runnable example, respectively.</li>
+<li>The <b>Demo System </b> as in earlier versions is now up in <span class=nxsys>NXSYS / Mac</span>.   This allows some scripting via Lisp-like forms.  See the <a href="NXSYS.html#demos">Version 1 documentation</a> and the demo script file <b>Myrtle.xdo</b> in the Myrtle Avenue folder for repertoire and a runnable example, respectively.</li>
 <li>The internal timer system (used by panel flashing, stop and switch motion, and timer relays) was completely rewritten for  the Mac to fully exploit OS/X's automatic memory-management features, greatly improving the robustness, reliability, and cleanliness of this area of the application and comprising a marked departure from the overall strategy of the port (viz., Cocoa implementation of Windows APIs) in order to accrue these boons.</li>
-<li>All formatting and functionality problems in the <a href="NXSYSV1.html">Version 1 Document</a> have been fixed, and some markup for the Mac added.  While there may be further improvements, it now is up to par.</li>
+<li>All formatting and functionality problems in the <a href="NXSYS.html">Version 1 Document</a> have been fixed, and some markup for the Mac added.  While there may be further improvements, it now is up to par.</li>
 <li>A moderately serious bug in graphics scheduling (at least inhibiting GK-light coding ("flashing") at call-on) time was fixed.  Another bug that caused automatic reloading of incorrect files was fixed.</li>
 </ul>
 
@@ -186,7 +186,7 @@ since the initial release of <nxf>NXSYS / MAC 2.0M</nxf> on 2 Sept 2014.  All ch
 <ul>
 <li>A generic misfeature whereby you had to click the main window twice after a train dialog, full signal display, or other child window pops up, the first time to focus the main window and the second to achieve your desired purpose, has been fixed.  <span class=nxsys>NXSYS</span> will now refocus the main window for you automatically.  This does not include the Relay Draftsperson, because you might more want to click on it more than on the main window, and may or may not be right for train dialogs.  Use the mouse to choose windows to focus. Full signal windows even refocus the main window when you finish moving them.</li>
 <li>A new bug whereby the open Relay Draftsperson would block full shutdown was fixed.</li>
-<li>All the internal links in the <a href="NXSYSV1.html">Version 1 Document</a> have been resolved. Sections describing features not available on the Mac have been so marked in <b><span style="color:#D00">prominent type.</span></b></li>
+<li>All the internal links in the <a href="NXSYS.html">Version 1 Document</a> have been resolved. Sections describing features not available on the Mac have been so marked in <b><span style="color:#D00">prominent type.</span></b></li>
 </ul>
 <h2>Release 2.0.10 Mac — 9 Sept 2014</h2>
 <ul>
