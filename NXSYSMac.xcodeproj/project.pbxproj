@@ -18,35 +18,6 @@
 		5B25515D25B87FAE00A68D73 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B25516525B87FB800A68D73 /* RelayLispSubstrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */; };
 		5B2551A225B8FC4400A68D73 /* RelayIndex in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B25511825B87D2B00A68D73 /* RelayIndex */; };
-		5B256F1B19B4E6E400F41527 /* ad.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F0C19B4E68200F41527 /* ad.bmp */; };
-		5B256F1C19B4E6E400F41527 /* auxkeys.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F0D19B4E68200F41527 /* auxkeys.bmp */; };
-		5B256F1D19B4E6E400F41527 /* btob.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F0E19B4E68200F41527 /* btob.bmp */; };
-		5B256F1E19B4E6E400F41527 /* clbogus.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F0F19B4E68200F41527 /* clbogus.bmp */; };
-		5B256F1F19B4E6E400F41527 /* clen.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1019B4E68200F41527 /* clen.bmp */; };
-		5B256F2019B4E6E400F41527 /* crotch.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1119B4E68200F41527 /* crotch.bmp */; };
-		5B256F2119B4E6E400F41527 /* ledblx.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1219B4E68200F41527 /* ledblx.bmp */; };
-		5B256F2219B4E6E400F41527 /* lunar.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1319B4E68200F41527 /* lunar.bmp */; };
-		5B256F2319B4E6E400F41527 /* mnet.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1419B4E68200F41527 /* mnet.bmp */; };
-		5B256F2419B4E6E400F41527 /* nxgl.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1519B4E68200F41527 /* nxgl.bmp */; };
-		5B256F2519B4E6E400F41527 /* nxgl2.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1619B4E68200F41527 /* nxgl2.bmp */; };
-		5B256F2619B4E6E400F41527 /* rboard24.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1719B4E68200F41527 /* rboard24.bmp */; };
-		5B256F2719B4E6E400F41527 /* st.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1819B4E68200F41527 /* st.bmp */; };
-		5B256F2819B4E6E400F41527 /* sts.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F1919B4E68200F41527 /* sts.bmp */; };
-		5B256F2A19B4EB1D00F41527 /* gk.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F2919B4EB1D00F41527 /* gk.bmp */; };
-		5B256F2C19B4EC8E00F41527 /* aplock.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F2B19B4EC8E00F41527 /* aplock.bmp */; };
-		5B256F2E19B4ECBF00F41527 /* auto.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F2D19B4ECBF00F41527 /* auto.bmp */; };
-		5B256F3019B4ECD200F41527 /* home.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F2F19B4ECD200F41527 /* home.bmp */; };
-		5B256F3219B4EF3700F41527 /* divrt.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F3119B4EF3700F41527 /* divrt.bmp */; };
-		5B256F3419B4EF4900F41527 /* trkij.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F3319B4EF4900F41527 /* trkij.bmp */; };
-		5B256F3619B4EFE400F41527 /* exit.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F3519B4EFE400F41527 /* exit.bmp */; };
-		5B256F3819B4EFF400F41527 /* stop.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F3719B4EFF400F41527 /* stop.bmp */; };
-		5B256F3A19B4F09600F41527 /* fpsw.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F3919B4F09600F41527 /* fpsw.bmp */; };
-		5B256F3C19B4F0A600F41527 /* swdiv.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F3B19B4F0A600F41527 /* swdiv.bmp */; };
-		5B256F3E19B4F0FD00F41527 /* fsd.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F3D19B4F0FD00F41527 /* fsd.bmp */; };
-		5B256F4019B4F10F00F41527 /* relay.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F3F19B4F10F00F41527 /* relay.bmp */; };
-		5B256F4219B4F16C00F41527 /* dwarf.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F4119B4F16C00F41527 /* dwarf.bmp */; };
-		5B256F4419B4F17800F41527 /* marker.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F4319B4F17800F41527 /* marker.bmp */; };
-		5B256F4619B4F18400F41527 /* fleet.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F4519B4F18400F41527 /* fleet.bmp */; };
 		5B256F4919B52B6D00F41527 /* StopPolicy.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B256F4819B52B6D00F41527 /* StopPolicy.xib */; };
 		5B256F4C19B5300400F41527 /* StopPolicyController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B256F4B19B5300400F41527 /* StopPolicyController.mm */; };
 		5B2B336923021CDF004007A9 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
@@ -189,9 +160,6 @@
 		5BAFFBA919B894CC00AEE791 /* nxdoc.css in Resources */ = {isa = PBXBuildFile; fileRef = 5BAFFBA819B894CC00AEE791 /* nxdoc.css */; };
 		5BAFFBAE19BA4C4900AEE791 /* TrainDlg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */; };
 		5BB322512668062E00F4A611 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B47F34819AFAFE800CBB80A /* WebKit.framework */; };
-		5BBF67E41DFAD6A200BC7DDA /* dynmenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BBF67E31DFAD6A200BC7DDA /* dynmenu.png */; };
-		5BBF67E61DFAD6B600BC7DDA /* TrafficLever.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BBF67E51DFAD6B600BC7DDA /* TrafficLever.png */; };
-		5BBF67E81DFF13E700BC7DDA /* bmyrt.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 5BBF67E71DFF13E700BC7DDA /* bmyrt.bmp */; };
 		5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
 		5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AC19DDA738006C590E /* dialog_warning.png */; };
 		5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
@@ -266,12 +234,8 @@
 		5BFB49E427AC725D006BE311 /* SwitchConsistency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */; };
 		5BFB49E627AC7606006BE311 /* NXSYS.html in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49E527AC7606006BE311 /* NXSYS.html */; };
 		5BFB49E827AC7682006BE311 /* argparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB49E727AC7682006BE311 /* argparse.cpp */; };
-		5BFB49F127AD589B006BE311 /* Atlantic in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49F027AD589B006BE311 /* Atlantic */; };
-		5BFB49F327AD5995006BE311 /* Myrtle in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49F227AD5995006BE311 /* Myrtle */; };
-		5BFB49F527AD5E52006BE311 /* irt240 in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49F427AD5E52006BE311 /* irt240 */; };
-		5BFB49F727AD5FCD006BE311 /* Progman in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49F627AD5FCD006BE311 /* Progman */; };
-		5BFB49F927AD6084006BE311 /* Islington in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49F827AD6084006BE311 /* Islington */; };
 		5BFB49FC27AD8187006BE311 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49FB27AD8187006BE311 /* LICENSE */; };
+		5BFB4A0927AF00FA006BE311 /* HelpBMPs in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4A0827AF00FA006BE311 /* HelpBMPs */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -310,35 +274,6 @@
 		5B1948A7264B5FFA001EBEFE /* NXSYSMac.build_log.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NXSYSMac.build_log.txt; sourceTree = SOURCE_ROOT; };
 		5B25511825B87D2B00A68D73 /* RelayIndex */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RelayIndex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B25511A25B87D2B00A68D73 /* RelayIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayIndex.cpp; sourceTree = "<group>"; };
-		5B256F0C19B4E68200F41527 /* ad.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = ad.bmp; sourceTree = "<group>"; };
-		5B256F0D19B4E68200F41527 /* auxkeys.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = auxkeys.bmp; sourceTree = "<group>"; };
-		5B256F0E19B4E68200F41527 /* btob.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = btob.bmp; sourceTree = "<group>"; };
-		5B256F0F19B4E68200F41527 /* clbogus.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = clbogus.bmp; sourceTree = "<group>"; };
-		5B256F1019B4E68200F41527 /* clen.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = clen.bmp; sourceTree = "<group>"; };
-		5B256F1119B4E68200F41527 /* crotch.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = crotch.bmp; sourceTree = "<group>"; };
-		5B256F1219B4E68200F41527 /* ledblx.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = ledblx.bmp; sourceTree = "<group>"; };
-		5B256F1319B4E68200F41527 /* lunar.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = lunar.bmp; sourceTree = "<group>"; };
-		5B256F1419B4E68200F41527 /* mnet.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = mnet.bmp; sourceTree = "<group>"; };
-		5B256F1519B4E68200F41527 /* nxgl.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = nxgl.bmp; sourceTree = "<group>"; };
-		5B256F1619B4E68200F41527 /* nxgl2.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = nxgl2.bmp; sourceTree = "<group>"; };
-		5B256F1719B4E68200F41527 /* rboard24.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = rboard24.bmp; sourceTree = "<group>"; };
-		5B256F1819B4E68200F41527 /* st.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = st.bmp; sourceTree = "<group>"; };
-		5B256F1919B4E68200F41527 /* sts.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = sts.bmp; sourceTree = "<group>"; };
-		5B256F2919B4EB1D00F41527 /* gk.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = gk.bmp; sourceTree = "<group>"; };
-		5B256F2B19B4EC8E00F41527 /* aplock.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = aplock.bmp; sourceTree = "<group>"; };
-		5B256F2D19B4ECBF00F41527 /* auto.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = auto.bmp; sourceTree = "<group>"; };
-		5B256F2F19B4ECD200F41527 /* home.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = home.bmp; sourceTree = "<group>"; };
-		5B256F3119B4EF3700F41527 /* divrt.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = divrt.bmp; sourceTree = "<group>"; };
-		5B256F3319B4EF4900F41527 /* trkij.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = trkij.bmp; sourceTree = "<group>"; };
-		5B256F3519B4EFE400F41527 /* exit.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = exit.bmp; sourceTree = "<group>"; };
-		5B256F3719B4EFF400F41527 /* stop.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = stop.bmp; sourceTree = "<group>"; };
-		5B256F3919B4F09600F41527 /* fpsw.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = fpsw.bmp; sourceTree = "<group>"; };
-		5B256F3B19B4F0A600F41527 /* swdiv.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = swdiv.bmp; sourceTree = "<group>"; };
-		5B256F3D19B4F0FD00F41527 /* fsd.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = fsd.bmp; sourceTree = "<group>"; };
-		5B256F3F19B4F10F00F41527 /* relay.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = relay.bmp; sourceTree = "<group>"; };
-		5B256F4119B4F16C00F41527 /* dwarf.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = dwarf.bmp; sourceTree = "<group>"; };
-		5B256F4319B4F17800F41527 /* marker.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = marker.bmp; sourceTree = "<group>"; };
-		5B256F4519B4F18400F41527 /* fleet.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = fleet.bmp; sourceTree = "<group>"; };
 		5B256F4819B52B6D00F41527 /* StopPolicy.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StopPolicy.xib; sourceTree = "<group>"; };
 		5B256F4A19B5300400F41527 /* StopPolicyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopPolicyController.h; sourceTree = "<group>"; };
 		5B256F4B19B5300400F41527 /* StopPolicyController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = StopPolicyController.mm; sourceTree = "<group>"; };
@@ -531,9 +466,6 @@
 		5BAD56011A014B09006AEEAB /* DumbStubs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DumbStubs.cpp; sourceTree = "<group>"; };
 		5BAFFBA819B894CC00AEE791 /* nxdoc.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = nxdoc.css; sourceTree = "<group>"; };
 		5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrainDlg.xib; sourceTree = "<group>"; };
-		5BBF67E31DFAD6A200BC7DDA /* dynmenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dynmenu.png; sourceTree = "<group>"; };
-		5BBF67E51DFAD6B600BC7DDA /* TrafficLever.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrafficLever.png; sourceTree = "<group>"; };
-		5BBF67E71DFF13E700BC7DDA /* bmyrt.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = bmyrt.bmp; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -639,6 +571,7 @@
 		5BFB4A0027ADD720006BE311 /* StartShut.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartShut.h; sourceTree = "<group>"; };
 		5BFB4A0127ADD738006BE311 /* xtgload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xtgload.h; sourceTree = "<group>"; };
 		5BFB4A0227ADEC56006BE311 /* blisp_test.lisp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blisp_test.lisp; sourceTree = "<group>"; };
+		5BFB4A0827AF00FA006BE311 /* HelpBMPs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HelpBMPs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -694,45 +627,6 @@
 				5BFA498625BB4A7000886135 /* SourceLoc.hpp */,
 			);
 			path = RelayIndex;
-			sourceTree = "<group>";
-		};
-		5B256F0B19B4E68200F41527 /* HelpImages */ = {
-			isa = PBXGroup;
-			children = (
-				5BBF67E71DFF13E700BC7DDA /* bmyrt.bmp */,
-				5BBF67E51DFAD6B600BC7DDA /* TrafficLever.png */,
-				5BBF67E31DFAD6A200BC7DDA /* dynmenu.png */,
-				5B256F4519B4F18400F41527 /* fleet.bmp */,
-				5B256F4319B4F17800F41527 /* marker.bmp */,
-				5B256F4119B4F16C00F41527 /* dwarf.bmp */,
-				5B256F3F19B4F10F00F41527 /* relay.bmp */,
-				5B256F3D19B4F0FD00F41527 /* fsd.bmp */,
-				5B256F3B19B4F0A600F41527 /* swdiv.bmp */,
-				5B256F3919B4F09600F41527 /* fpsw.bmp */,
-				5B256F3719B4EFF400F41527 /* stop.bmp */,
-				5B256F3519B4EFE400F41527 /* exit.bmp */,
-				5B256F3319B4EF4900F41527 /* trkij.bmp */,
-				5B256F3119B4EF3700F41527 /* divrt.bmp */,
-				5B256F2F19B4ECD200F41527 /* home.bmp */,
-				5B256F2D19B4ECBF00F41527 /* auto.bmp */,
-				5B256F2B19B4EC8E00F41527 /* aplock.bmp */,
-				5B256F2919B4EB1D00F41527 /* gk.bmp */,
-				5B256F0C19B4E68200F41527 /* ad.bmp */,
-				5B256F0D19B4E68200F41527 /* auxkeys.bmp */,
-				5B256F0E19B4E68200F41527 /* btob.bmp */,
-				5B256F0F19B4E68200F41527 /* clbogus.bmp */,
-				5B256F1019B4E68200F41527 /* clen.bmp */,
-				5B256F1119B4E68200F41527 /* crotch.bmp */,
-				5B256F1219B4E68200F41527 /* ledblx.bmp */,
-				5B256F1319B4E68200F41527 /* lunar.bmp */,
-				5B256F1419B4E68200F41527 /* mnet.bmp */,
-				5B256F1519B4E68200F41527 /* nxgl.bmp */,
-				5B256F1619B4E68200F41527 /* nxgl2.bmp */,
-				5B256F1719B4E68200F41527 /* rboard24.bmp */,
-				5B256F1819B4E68200F41527 /* st.bmp */,
-				5B256F1919B4E68200F41527 /* sts.bmp */,
-			);
-			path = HelpImages;
 			sourceTree = "<group>";
 		};
 		5B256F4719B52B4700F41527 /* Stop Policy Dialog */ = {
@@ -956,7 +850,7 @@
 				5B687ADE19B725840006FA4F /* ReleaseNotes.html */,
 				5B8A110E25C07E91007857A8 /* 5_0TL.png */,
 				5B2CD8BD25E7E4EF0095C17F /* TrafficKnob.png */,
-				5B256F0B19B4E68200F41527 /* HelpImages */,
+				5BFB4A0827AF00FA006BE311 /* HelpBMPs */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
@@ -1576,52 +1470,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B256F4619B4F18400F41527 /* fleet.bmp in Resources */,
 				5B1948A8264B5FFA001EBEFE /* NXSYSMac.build_log.txt in Resources */,
 				5B65680F25C331D100411B8F /* icon_256x256.png in Resources */,
 				5B4E1810222AC4AF00DED5AE /* Credits.rtf in Resources */,
-				5B256F1B19B4E6E400F41527 /* ad.bmp in Resources */,
-				5BBF67E41DFAD6A200BC7DDA /* dynmenu.png in Resources */,
-				5B256F4419B4F17800F41527 /* marker.bmp in Resources */,
 				5B687ADF19B725840006FA4F /* ReleaseNotes.html in Resources */,
 				5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */,
-				5B256F2A19B4EB1D00F41527 /* gk.bmp in Resources */,
-				5B256F1C19B4E6E400F41527 /* auxkeys.bmp in Resources */,
 				5BFB49E627AC7606006BE311 /* NXSYS.html in Resources */,
-				5BBF67E81DFF13E700BC7DDA /* bmyrt.bmp in Resources */,
-				5B256F1D19B4E6E400F41527 /* btob.bmp in Resources */,
-				5B256F1E19B4E6E400F41527 /* clbogus.bmp in Resources */,
-				5B256F1F19B4E6E400F41527 /* clen.bmp in Resources */,
-				5B256F2019B4E6E400F41527 /* crotch.bmp in Resources */,
-				5B256F4019B4F10F00F41527 /* relay.bmp in Resources */,
 				5B65680625C3144B00411B8F /* CustomAbout.xib in Resources */,
-				5B256F2119B4E6E400F41527 /* ledblx.bmp in Resources */,
-				5B256F2E19B4ECBF00F41527 /* auto.bmp in Resources */,
 				5BC911C119DEE5EA006C590E /* Preferences.xib in Resources */,
-				5B256F2219B4E6E400F41527 /* lunar.bmp in Resources */,
-				5B256F3219B4EF3700F41527 /* divrt.bmp in Resources */,
-				5B256F3819B4EFF400F41527 /* stop.bmp in Resources */,
-				5B256F2C19B4EC8E00F41527 /* aplock.bmp in Resources */,
-				5B256F2319B4E6E400F41527 /* mnet.bmp in Resources */,
-				5BFB49F727AD5FCD006BE311 /* Progman in Resources */,
 				5B256F4919B52B6D00F41527 /* StopPolicy.xib in Resources */,
-				5B256F2419B4E6E400F41527 /* nxgl.bmp in Resources */,
-				5B256F4219B4F16C00F41527 /* dwarf.bmp in Resources */,
-				5BFB49F927AD6084006BE311 /* Islington in Resources */,
-				5B256F2519B4E6E400F41527 /* nxgl2.bmp in Resources */,
-				5BFB49F527AD5E52006BE311 /* irt240 in Resources */,
-				5B256F3619B4EFE400F41527 /* exit.bmp in Resources */,
-				5B256F2619B4E6E400F41527 /* rboard24.bmp in Resources */,
 				5B65681825C3388700411B8F /* About.html in Resources */,
 				5BAFFBA919B894CC00AEE791 /* nxdoc.css in Resources */,
 				5B8A110F25C07E91007857A8 /* 5_0TL.png in Resources */,
+				5BFB4A0927AF00FA006BE311 /* HelpBMPs in Resources */,
 				5B8A10FF25C06DB4007857A8 /* TrafficLevers2_5.html in Resources */,
-				5B256F2719B4E6E400F41527 /* st.bmp in Resources */,
-				5B256F3C19B4F0A600F41527 /* swdiv.bmp in Resources */,
-				5B256F2819B4E6E400F41527 /* sts.bmp in Resources */,
 				5B79D2B519B39D9C0029D74E /* MacNXSYS.html in Resources */,
-				5BFB49F127AD589B006BE311 /* Atlantic in Resources */,
-				5B256F3019B4ECD200F41527 /* home.bmp in Resources */,
 				5B50EE4919BA9455004CAABE /* ChooseTrack.xib in Resources */,
 				5BC911B619DED5DD006C590E /* RelayState.xib in Resources */,
 				5BA92A7619DD72690098DBEC /* NXMessageBox.xib in Resources */,
@@ -1630,14 +1493,9 @@
 				5B133A582649F5B800120B10 /* TrainWreck256.png in Resources */,
 				5BE487E8199D0A5C007BD6BF /* Images.xcassets in Resources */,
 				5B47F34419AE70AB00CBB80A /* Help.xib in Resources */,
-				5BFB49F327AD5995006BE311 /* Myrtle in Resources */,
-				5B256F3A19B4F09600F41527 /* fpsw.bmp in Resources */,
-				5BBF67E61DFAD6B600BC7DDA /* TrafficLever.png in Resources */,
 				5BAFFBAE19BA4C4900AEE791 /* TrainDlg.xib in Resources */,
-				5B256F3E19B4F0FD00F41527 /* fsd.bmp in Resources */,
 				5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */,
 				5BFB49FC27AD8187006BE311 /* LICENSE in Resources */,
-				5B256F3419B4EF4900F41527 /* trkij.bmp in Resources */,
 				5BABB89919A82E3E00ECA09A /* RelayTrace.xib in Resources */,
 				5B54429519B0F00F00FB5537 /* RelaySelector.xib in Resources */,
 				5B46BA0519AC03870041C4FE /* RelayDrafter.xib in Resources */,
