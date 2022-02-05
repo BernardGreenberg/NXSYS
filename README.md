@@ -1,4 +1,4 @@
-#  NXSYS (v2)  sources for MacOS, complete
+#  NXSYS (v2)  sources, complete
 ###  By and ©Copyright 1992-2022, Bernard S. Greenberg
 #### First Posted 4 February 2022
 
@@ -6,7 +6,7 @@ This is the buildable, runnable source code for **NXSYS** (*enn-ex-sys*), my New
 
 This application is posted and offered under the terms of the GNU General Public License Version 3. See the file `LICENSE` for details. These sources are offered "AS-IS", with no warranty or guarantee of operability or suitability for any purpose made or implied, and use is at your own risk — all the code is available here for inspection.  Do not attempt to use this code to control actual railroads with live crews and passengers (I would be *extremely* impressed and flattered, but not responsible for the outcome).
 
-This code builds completely and cleanly under XCode 13.2.1 (13C100) under MacOS Monterey 12.1.  It builds for 64-bit Intel Mac; no configurations for M1 Macs are present. An `xcodeproj` file exists in the top directory; it contains no external references. **The Apple tool `PlistBuddy` is expected** to be in /usr/libexec (where it should be if XCode is properly installed); it is used for packing build number and date signature into the Info plist.  Tools for packaging the whole for distribution (BASH scripting) are not provided.  Code Signing is, of course, now your responsibility, if desired.
+This code builds completely and cleanly under XCode 13.2.1 (13C100) under MacOS Monterey 12.1.  It builds for 64-bit Intel Mac; no configurations for M1 Macs are present. An `xcodeproj` file exists in the top directory; it contains no external references. **The Apple tool `PlistBuddy` is expected** to be in /usr/libexec (where it should be if XCode is properly installed); it is used for packing build number and date signature into the Info plist.  Tools for packaging the whole for distribution (BASH scripting) are not provided.  Code Signing is, of course, now your responsibility, if desired. Read below for MS Windows information.
 
 There remain (as expectable) some minor constraint irritations in the Interface  Builder layouts that do not impede building or raise warning flags at build time.
 
@@ -18,7 +18,7 @@ Please ignore admonitions in the interlocking and other help texts about not red
 
 This application is currently in C++11 (the 2011 standard of C++), exploiting STL.  The core of the functionality is in that language only, and, in principle, can run on MS Windows, for which it was originally written  (Win16 then Win32). It presently contains preprocessor conditionalizations to that end; it was ported to the Mac in late 2014.  The User Interface artifacts in this tree are in Objective C++ (embedded in C++11), an Apple proprietary storage-management regime and Object-Oriented GUI system which preceded Swift as their   preferred application development language, but still supported. Its syntax extends that of C++ incompatibly; it is well-documented, but difficult to master.  Also in Objective C++ is my original simulation of the Win32 API, which was my solution to maximizing the code that ran compatibly on both platforms.  Foolishly, I rejected the advice of those wiser than myself suggesting the use of Qt or other cross-platform GUI substrates, which may or may not have been easier, but would surely have introduced other problems.
 
-The Windows build was last offered in 2016, and is fully operable. See [`https://BernardGreenberg.com/Subway`](https://BernardGreenberg.com/Subway) for a download.  For a more detailed description of the Windows version, including its complete source tree, see the `MSWindows2016` folder in this repository, and read the `README.md` in it.
+The Windows build was last offered in 2016, and is fully operable. See [`https://BernardGreenberg.com/Subway`](https://BernardGreenberg.com/Subway) for a download.  For a more detailed description of the Windows version, including its complete source tree, see the [MSWindows2016 folder](https://github.com/BernardGreenberg/NXSYS/tree/master/MSWindows2016) in this repository, and read the [README.md](https://github.com/BernardGreenberg/NXSYS/tree/master/MSWindows2016#readme) in it.
 
 I do take pains in distributed interlockings not to incompatibly exploit new features; the scenario language makes it possible only to exploit newer features in newer builds, downward compatibly.  All five of these interlockings are thus fully functional in the distributed (2016) Windows build. 
 
