@@ -236,6 +236,7 @@
 		5BFB49E827AC7682006BE311 /* argparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB49E727AC7682006BE311 /* argparse.cpp */; };
 		5BFB49FC27AD8187006BE311 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49FB27AD8187006BE311 /* LICENSE */; };
 		5BFB4A0927AF00FA006BE311 /* HelpBMPs in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4A0827AF00FA006BE311 /* HelpBMPs */; };
+		5BFB4AF127AF2745006BE311 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF027AF2745006BE311 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -662,7 +663,7 @@
 		5BFB4AEC27AF11A0006BE311 /* compat32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = compat32.h; sourceTree = "<group>"; };
 		5BFB4AED27AF11A0006BE311 /* traincmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = traincmn.cpp; sourceTree = "<group>"; };
 		5BFB4AEE27AF11A0006BE311 /* LOADOBJ.CPP */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LOADOBJ.CPP; sourceTree = "<group>"; };
-		5BFB4AEF27AF13D6006BE311 /* WindowsStatus.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = WindowsStatus.md; sourceTree = "<group>"; };
+		5BFB4AF027AF2745006BE311 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1382,10 +1383,10 @@
 		5BFB4A0A27AF119F006BE311 /* MSWindows2016 */ = {
 			isa = PBXGroup;
 			children = (
+				5BFB4AF027AF2745006BE311 /* README.md */,
 				5BFB4A0B27AF119F006BE311 /* Visual Studio 2015 */,
 				5BFB4AA827AF11A0006BE311 /* bsglib */,
 				5BFB4AAD27AF11A0006BE311 /* NXMac */,
-				5BFB4AEF27AF13D6006BE311 /* WindowsStatus.md */,
 			);
 			path = MSWindows2016;
 			sourceTree = "<group>";
@@ -1808,6 +1809,7 @@
 				5B65680F25C331D100411B8F /* icon_256x256.png in Resources */,
 				5B4E1810222AC4AF00DED5AE /* Credits.rtf in Resources */,
 				5B687ADF19B725840006FA4F /* ReleaseNotes.html in Resources */,
+				5BFB4AF127AF2745006BE311 /* README.md in Resources */,
 				5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */,
 				5BFB49E627AC7606006BE311 /* NXSYS.html in Resources */,
 				5B65680625C3144B00411B8F /* CustomAbout.xib in Resources */,
