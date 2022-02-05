@@ -1,0 +1,17 @@
+;; TLEdit output of Wed Nov 23 11:24:14 2016
+;;      TLEdit Copyright (c) Bernard Greenberg 2013
+;;   Do not edit by hand.
+
+(LAYOUT
+  (VIEW-ORIGIN 0 0)
+  (PATH
+    (IJ                     10005     427    72)
+    (IJ                     10001     232   115)
+   ; (IJ                     10007     150)
+  )
+
+
+  (SIGNAL  10001      2 R (GYR) ID 1522 NOSTOP)
+)
+
+	

@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5E803B12-7332-4ADD-B579-9D5C56E1E759}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>WinNX2016</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>NXSYS</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\bsg.BASIS\Documents\bsglib\inc;$(IncludePath)</IncludePath>
+    <CustomBuildBeforeTargets>
+    </CustomBuildBeforeTargets>
+    <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <TargetName>nxv2</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <CustomBuildBeforeTargets>Build</CustomBuildBeforeTargets>
+    <TargetName>nxv2</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;NXV2;NXOLE;XTG;_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS;_DEBUG_</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>c:\users\bsg.basis\Documents\bsglib\inc;C:\Users\bsg.BASIS\Documents\NXMac;C:\Users\bsg.BASIS\Documents\NXMac\v2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <UndefinePreprocessorDefinitions>stricmp</UndefinePreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>comctl32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NX32;WIN32;XTG;NXOLE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <CustomBuildStep>
+      <Command>@echo Copying texts
+copy \Users\bsg.BASIS\Documents\NXMac\v2\v2NXHelp.txt "$(SolutionDir)$(Configuration)"
+robocopy \Users\bsg.Basis\Documents\NXMac  "$(SolutionDir)$(Configuration)\Pages" NXSYSV1.html *.bmp
+</Command>
+      <Message>Performing runtime resource copy</Message>
+      <Outputs>$(SolutionDir)$(Configuration)\NXV2HelpText.txt;%(Outputs)</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NXV2;NXOLE;XTG;_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
+      <AdditionalIncludeDirectories>c:\users\bsg.basis\Documents\bsglib\inc;C:\Users\bsg.BASIS\Documents\NXMac;C:\Users\bsg.BASIS\Documents\NXMac\v2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>comctl32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NX32;WIN32;XTG;NXOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <CustomBuildStep>
+      <Command>@echo Copying texts
+copy \Users\bsg.BASIS\Documents\NXMac\v2\v2NXHelp.txt "$(SolutionDir)$(Configuration)"
+robocopy \Users\bsg.Basis\Documents\NXMac  "$(SolutionDir)$(Configuration)\Pages" NXSYSV1.html *.bmp
+</Command>
+      <Message>Performing runtime resource copy</Message>
+      <Outputs>$(SolutionDir)$(Configuration)\NXV2HelpText.txt;%(Outputs)</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\..\NXMac\nx.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\NXMac\nxgo.h" />
+    <ClInclude Include="..\..\..\..\NXMac\nxhelp.h" />
+    <ClInclude Include="..\..\..\..\NXMac\nxldapi.h" />
+    <ClInclude Include="..\..\..\..\NXMac\nxole.h" />
+    <ClInclude Include="..\..\..\..\NXMac\nxproduct.h" />
+    <ClInclude Include="..\..\..\..\NXMac\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\bsglib\src\fnmerge.cpp" />
+    <ClCompile Include="..\..\..\..\bsglib\src\getmodtm.c" />
+    <ClCompile Include="..\..\..\..\bsglib\src\PARSARGS.C" />
+    <ClCompile Include="..\..\..\..\bsglib\src\syserr32.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\demo.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\dialogs.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\fullsig.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\helpdlg.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\incexppt.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ldgut.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\lispmath.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\lspmacro.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\nxgo.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\nxldwin.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\nxsldrly.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\nxsys.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\auto.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\cexitlt.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\cnxapp.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\csignal.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\cswitch.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\ctrack.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\ctrafficlever.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\ctrain.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\nxautcli.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\nxinterp.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\nxole.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\nxscript.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\oleobjbas.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\ole\oleregistry.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\plight.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\pswitch.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\purinto.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\rdtrkcmn.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\readsexp.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\relays.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\rlyindex.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\rtracwin.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\signal.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\STLfnsplit.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\stop.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\swkey.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\text.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\timers.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\trafficlever.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\traincmn.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\trkgdi.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\turncomn.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\txlayout.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\dynmenu.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\joint.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\tcircuit.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\trackseg.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xexlight.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xsignal.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xstop.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xtgload.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xtrains.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xturnout.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\WinReadResText.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\NXMac\nx.ico" />
+    <Image Include="..\..\..\..\NXMac\relay.ico" />
+    <Image Include="..\..\..\..\NXMac\tracetb.bmp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

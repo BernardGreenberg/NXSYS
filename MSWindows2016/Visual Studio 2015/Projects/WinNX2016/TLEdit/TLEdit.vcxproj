@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B716C903-064B-4138-80F0-D90329C5444F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>TLEdit</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;XTG;_CRT_SECURE_NO_WARNINGS;TLEDIT;NXV2;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>c:/users/bsg.basis/Documents/NXMac;c:/users/bsg.basis/Documents/NXMac/v2;c:/users/bsg.basis/Documents/NXMac/tled;C:\Users\bsg.BASIS\Documents\bsglib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>copy c:\Users\bsg.BASIS\Documents\NXMac\tled\tlehlptx.txt "$(SolutionDir)$(Configuration)"</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copying help text</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>$(SolutionDir)$(Configuration)\tlehlptx.txt</Outputs>
+    </CustomBuildStep>
+    <ResourceCompile>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;XTG;_CRT_SECURE_NO_WARNINGS;TLEDIT;NXV2;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>c:/users/bsg.basis/Documents/NXMac;c:/users/bsg.basis/Documents/NXMac/v2;c:/users/bsg.basis/Documents/NXMac/tled;C:\Users\bsg.BASIS\Documents\bsglib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>copy c:\Users\bsg.BASIS\Documents\NXMac\tled\tlehlptx.txt "$(SolutionDir)$(Configuration)"</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copying help text</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>$(SolutionDir)$(Configuration)\tlehlptx.txt</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\bsglib\src\getmodtm.c" />
+    <ClCompile Include="..\..\..\..\bsglib\src\PARSARGS.C" />
+    <ClCompile Include="..\..\..\..\bsglib\src\syserr32.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\fnmerge.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\incexppt.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\nxgo.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\plight.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\pswitch.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\readsexp.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\STLfnsplit.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\swkey.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\text.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\appwin.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\assignid.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\dialogs.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\dragger.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\edexlt.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\editsig.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\edplight.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\edpswitch.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\edswkey.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\edtext.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\edtraflev.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\objdlgs.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\objreg.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\rubberbd.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\save.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\tledit.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\tlehelp.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\tled\tletoolb.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\trafficlever.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\trkgdi.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\txlayout.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\joint.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\tcircuit.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\trackseg.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xexlight.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xsignal.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xstop.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\v2\xtgload.cpp" />
+    <ClCompile Include="..\..\..\..\NXMac\WinReadResText.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\..\NXMac\tled\tled.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\NXMac\tled\tledit.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\NXMac\Win10TBD.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
