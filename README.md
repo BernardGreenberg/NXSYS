@@ -26,7 +26,9 @@ The Windows build was last offered in 2016, and while fully operable, is not now
 
 I do take pains in distributed interlockings to avoid incompatible use of new features; the scenario language makes it possible to exploit newer features only in newer builds, downward compatibly.  All five of these interlockings are thus fully functional in the distributed (2016) Windows build.  The interlockings here in the eponymous folder are newer and better than those in the distributions.
 
-None of the code of the popular erstwhile Cab View feature of Version 1 is present in this repository.  It cannot handle, nor be obviously extended to handle, the arbitrary track geometries of Version 2, and its black-grey tunnels reach aesthetic limitations at that point.
+None of the code of the popular erstwhile Cab View feature of Version 1 is present in this repository.  It cannot handle, nor can it be obviously extended to handle, the arbitrary track geometries of Version 2. In a world where spectacular interactive animated graphics such as [this (threejs)](https://threejs.org/examples/#webgl_animation_keyframes) are available, Cab View's black, grey-walled tunnels with only rails and signals visible would be ... inadequate.
+
+, and its black-grey tunnels reach aesthetic limitations at that point.
 
 ## Status of the Mac Version
 
