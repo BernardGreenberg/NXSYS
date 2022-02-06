@@ -28,8 +28,6 @@ I do take pains in distributed interlockings to avoid incompatible use of new fe
 
 None of the code of the popular erstwhile Cab View feature of Version 1 is present in this repository.  It cannot handle, nor can it be obviously extended to handle, the arbitrary track geometries of Version 2. In a world where spectacular interactive animated graphics such as [this (threejs)](https://threejs.org/examples/#webgl_animation_keyframes) are available, Cab View's black, grey-walled tunnels with only rails and signals visible would be ... inadequate.
 
-, and its black-grey tunnels reach aesthetic limitations at that point.
-
 ## Status of the Mac Version
 
 The Mac Version is targeted in XCode to (minimum) [macOS Sierra (10.12)](https://en.wikipedia.org/wiki/MacOS_Sierra) (released Sept. 2019); that is the SDK level it uses.   While this can easily be set as current as you wish in XCode, and most Mac users keep their systems up-to-date, I see no reason to bring it closer to currency: back-compatibility is a virtue. See **Related Resources** below for the latest "released" Mac installable. I may move it here and use the GitHub "release" mechanism.
