@@ -709,7 +709,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5B25511925B87D2B00A68D73 /* RelayIndex */ = {
+		5B25511925B87D2B00A68D73 /* Relay Index */ = {
 			isa = PBXGroup;
 			children = (
 				5BFB49EA27AC76AE006BE311 /* argparse.hpp */,
@@ -718,7 +718,7 @@
 				5BFA498525BB4A7000886135 /* SourceLoc.cpp */,
 				5BFA498625BB4A7000886135 /* SourceLoc.hpp */,
 			);
-			path = RelayIndex;
+			path = "Relay Index";
 			sourceTree = "<group>";
 		};
 		5B256F4719B52B4700F41527 /* Stop Policy Dialog */ = {
@@ -1146,7 +1146,7 @@
 				5BAC930D19C8FE7200673BDC /* TLEdit */,
 				5B5AE61C230C77E900348612 /* BLISP */,
 				5B4DF39A2314ABB5001FDE00 /* Relay Compiler */,
-				5B25511925B87D2B00A68D73 /* RelayIndex */,
+				5B25511925B87D2B00A68D73 /* Relay Index */,
 				5BFB4A0A27AF119F006BE311 /* MSWindows2016 */,
 				5BE487CE199D0A5C007BD6BF /* Frameworks */,
 				5BE487CD199D0A5C007BD6BF /* Products */,
