@@ -2,7 +2,7 @@
 ### Status report, 5 February 2022
 About 30 years after NXSYS was born on 16-bit Windows 3.1.
 
-Included here, in folder `MSWindows2016` in this XCode tree, is just that, the exact tree which built Windows NXSYS version 2 in 2016, whose output, with two MS redistributable dll's, is downloadable at [https://BernardGreenberg.com/Subway](https://BernardGreenberg.com/Subway).  This was done in Visual Studio 2015, and all the Visual Studio 2015 control files are here, although the pathnames in them, of course, need  to change if this is ever resurrected.  But all the non-system files are present in this subtree, including the NXOLE system having no analogue in the Mac build.
+Included here, in folder `MSWindows2016` in this XCode tree, is just that, i.e., the exact tree which built Windows NXSYS version 2 in 2016, whose output, with two MS redistributable dll's, is downloadable at [https://BernardGreenberg.com/Subway](https://BernardGreenberg.com/Subway).  This was done in Visual Studio 2015, and all the Visual Studio 2015 control files are here, although the pathnames in them, of course, need  to change if this is ever resurrected.  But all the non-system files are present in this subtree, including the NXOLE system having no analogue in the Mac build.
 
 I have deleted all the "Release" and "Debug" object directories to save uploads and space.
 
@@ -16,9 +16,10 @@ Some words about the content of the three directories that sibl this .md file ar
 
 You do not need a Mac to clone this repository and engage with this code.
 
-To build a new Windows NXSYS, the "solution" and its projects have to be opened and upgraded by a current Visual Studio environment, the embedded pathnames changed, and such problems as crop up in integrating newer code solved.  Anyone attempting this project for amusement should try building the entire 2016 image with a newer Visual Studio before attempting to integrate the newer code.
+To build a new Windows NXSYS, the "solution" and its projects have to be opened and upgraded by a current Visual Studio environment, the embedded pathnames changed, and such problems as crop up fixed. Anyone attempting this project for amusement should try building the entire 2016 image as it stands with a newer Visual Studio before attempting to integrate the newer code from the Mac build.
 
 The reasons I'm not eager to do this myself any time soon are:
+
 - I love the Mac and dislike MS-Windows. I know that the MS System is much more popular, and ubiqitous. I don't particularly like debugging on Windows, but these reasons are irrational.
 
 - I don't have a modern machine running modern Windows, and it's not worth my while to buy one just to upgrade NXSYS.  That opinion may change,
@@ -27,6 +28,6 @@ The reasons I'm not eager to do this myself any time soon are:
 
 - I'm not eager to re-migrate to MinGW or other non-Microsoft Win32 solutions.
 
-The eccentric stragegy I chose for creating the Mac Build leaves NXSYS at its core a Windows program with Mac-simulated user-interface elements, so the Windows version is ***considerably simpler than the Mac version*** for the exact same functionality, as the operating system supports its windows (hence, ...) and dialogs natively.  Debugging the Windows build is considerably simpler than debugging in the hirsute Objective C++ ARC (Automatic Reference Counting) regime.  So let that be an inspiration if anyone wants to try.
+The arguably eccentric (but effective) strategy I chose for creating the Mac Build leaves NXSYS at its core a Windows program with Mac-simulated user-interface elements, so the Windows codebase is ***considerably simpler than the Mac version*** for the exact same functionality, as the operating system supports its windows (hence, ...) and dialogs natively!  Debugging the Windows build is thus considerably simpler than debugging its simulation in the hirsute Objective C++ ARC (Automatic Reference Counting) regime.  So let that be an inspiration to anyone inclined to try.
 
-Note also that `NXSYSV1.html` is now called `NXSYS.html`, in the Documentation folder (it's named in the Windows code/project files.)
+Note also that `NXSYSV1.html` is now called `NXSYS.html`, in the Documentation folder (it's named in the Windows code/project files).
