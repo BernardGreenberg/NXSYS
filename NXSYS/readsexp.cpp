@@ -156,7 +156,7 @@ int LispStringInputSource::Getc() {
 }
 
 int LispNarrowStringInputSource::Getc () {
-    if ( s[i] == '\0')
+    if (s[i] == '\0')
 	return EOF;
     else return s[i++];
 }
@@ -778,23 +778,20 @@ std::string Sexpr::PRep() {
             return std::to_string(*u.f);
 	case L_STRING:
         {
-            std::string b;
-	    b += '"';
+            std::string b{'"'};
 	    for (const char * q = u.s; *q; q++) {
 		if (*q == '"' || *q == ESC_CHAR)
 		    b += ESC_CHAR;
 		b += *q;
 	    }
-	    b += '"';
-            return b;
+            return b + '"';
         }
 	case L_CHAR:
 	    return "#" + ESC_CHARs + u.c;
 	case L_CONS:
         {
             Sexpr s = *this;
-            std::string b;
-            b += '(';
+            std::string b{'('};
             while(1) {
                 b += CAR(s).PRep();
 		if (NILP (CDR(s)))
@@ -807,21 +804,18 @@ std::string Sexpr::PRep() {
                 s = CDR(s);
                 b += ' ';
             }
-   	    b += ')';
-	    return b;
+	    return b + ')';
         }
 	case L_VECTOR:
 	{
-            std::string b;
-	    b += "[";
+            std::string b{'['};
 	    int lim = (int)u.l[0].u.n;
 	    for (int i = 0; i < lim; i++) {
                 b += u.l[i+1].PRep();
 		if (i < lim-1)
 		    b += ' ';
 	    }
-            b += ']';
-	    return b;
+            return b + ']';
 	}
 	case L_RLYSYM:
             return u.r->PRep();
