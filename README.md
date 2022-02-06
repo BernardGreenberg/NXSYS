@@ -18,23 +18,25 @@ Please ignore admonitions in the interlocking and other help texts about not red
 
 This application is currently in C++11 (the 2011 standard of C++), exploiting STL.  The core of the functionality is in that language only, and, in principle, can run on MS Windows, for which it was originally written  (Win16 then Win32). It presently contains preprocessor conditionalizations to that end; it was ported to the Mac in late 2014.  The User Interface artifacts in this tree are in Objective C++ (embedded in C++11), an Apple proprietary storage-management regime and Object-Oriented GUI system which preceded Swift as their   preferred application development language, but still supported. Its syntax extends that of C++ incompatibly; it is well-documented, but difficult to master.  Also in Objective C++ is my original simulation of the Win32 API, which was my solution to maximizing the code that ran compatibly on both platforms.  Foolishly, I rejected the advice of those wiser than myself suggesting the use of Qt or other cross-platform GUI substrates, which may or may not have been easier, but would surely have introduced other problems.
 
-The Windows build was last offered in 2016, and is fully operable, but not now buildable.  See [`https://BernardGreenberg.com/Subway`](https://BernardGreenberg.com/Subway) for a download.  For a more detailed description of the Windows version, including its complete source tree, see the [MSWindows2016 folder](https://github.com/BernardGreenberg/NXSYS/tree/master/MSWindows2016) in this repository, and read the [README.md](https://github.com/BernardGreenberg/NXSYS/tree/master/MSWindows2016#readme) in it. It is thus frozen in time in 2016 for now,
+The Windows build was last offered in 2016, and while fully operable, is not now buildable.  See [`https://BernardGreenberg.com/Subway`](https://BernardGreenberg.com/Subway) for a download of the executable.  For a more detailed description of the status of the Windows version, including its complete source tree, see the [MSWindows2016 folder](https://github.com/BernardGreenberg/NXSYS/tree/master/MSWindows2016) in this repository, and read the [README.md](https://github.com/BernardGreenberg/NXSYS/tree/master/MSWindows2016#readme) in it. It is thus frozen in time in 2016 for now.
 
-I do take pains in distributed interlockings not to incompatibly exploit new features; the scenario language makes it possible only to exploit newer features in newer builds, downward compatibly.  All five of these interlockings are thus fully functional in the distributed (2016) Windows build. 
+I do take pains in distributed interlockings to avoid incompatible use of new features; the scenario language makes it possible to exploit newer features only in newer builds, downward compatibly.  All five of these interlockings are thus fully functional in the distributed (2016) Windows build.  The interlockings here in the eponymous folder are newer and better than those in the distributions.
 
-None of the OpenGL code of the popular erstwhile Cab View feature of Version 1 is present in this repository.  It cannot handle, nor be obviously extended to handle, the arbitrary track geometries of Version 2, and its black-grey tunnels reach aesthetic limitations at that point.
+None of the code of the popular erstwhile Cab View feature of Version 1 is present in this repository.  It cannot handle, nor be obviously extended to handle, the arbitrary track geometries of Version 2, and its black-grey tunnels reach aesthetic limitations at that point.
 
 ## Status of Mac Version
 
 I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about changes necessary to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013. If I successfully implement this or other new features, they will not break extant interlockings, and I won't "push" until I have solid code.
 
-I may or may not fix reported bugs and post changes, but I want to know if you can't build it. Contact me via GitHub. I expect to post fixes to bugs I encounter and gratuitous enhancements from hereon in.
+I may or may not fix reported bugs and post changes, but I want to know if you can't build it; contact me via GitHub. I expect to post fixes to bugs I encounter and gratuitous enhancements from hereon in.
 
-There are five build targets in this project:
+## Build targets
+
+There are five in this project:
 
 - **NXSYSMac**. This is the Mac GUI application, complete with resources when built, invocable as a standard `.app` Mac GUI application.   It opens interlocking scenarios, displays control panels, accepts their operation, and runs them.
 
-- **TLEdit**.  The track-layout editor.  A separate Mac GUI application (a Windows version exists, too, but not buildable here) that allows the creation and maintenance of `.trk` files containing layout information (and only layout information).  This is how you create the track-maps/panel layouts of scenarios, not any part of their logic. It is (poorly) self-documenting.
+- **TLEdit**, the track-layout editor.  A separate Mac GUI application (a Windows version exists, too, but not yet buildable here) that allows the creation and maintenance of `.trk` files containing layout information (and only layout information).  This is how you create the track-maps/panel layouts of scenarios, not any part of their logic. It is (poorly) self-documenting.
 
 - **Relay Compiler**. This is presently a joke, because even though this command-line application runs perfectly on the 64-bit Mac, *it only produces Windows object code*, 32- as well as 16-bit, actually.  It is simply no longer necessary with the speed of modern machines; interlockings run rapidly enough "interpreted" (Lisp taxonomy).  Prior to Mac NXSYS, though, it was quite neat. It is a tribute to Apple that I have never had to learn the Mac machine-language environment.
 
@@ -47,9 +49,9 @@ The distribution of the sources into folders is somewhat chaotic, and I apologiz
 The TLEdit `buttons` directory contains, in addition to png's for its tool-panel buttons, Pixelmator (pre-Pro) files from which they were created.
 
 
-## Et in fine....
+## *Et in fine* ...
 
-Relay-based fixed-block color-light signalling was in use in the New York Subways before *Titanic* was built, before anyone knew that silicon could be used for building anything except deserts and glass, and when "computer" meant an accountant. In the present century, newer, computer- and communications-based technologies have finally begun to make their need and presence felt there, and this stuff is ... *como se dice*, "a bit long in the tooth", like this author, who grew up with and learned to understand and admire it.  Nevertheless, the principles of safety design herein embodied survive even in the latest programmed-logic controller (PLC) plants, in New York and globally.  NXSYS has already brought pleasure and learning to many, and even inspired imitators.
+Relay-based fixed-block color-light signalling was in use in the New York Subways before *Titanic* sailed, before anyone knew that silicon could be used for building anything except deserts and glass, and when "computer" meant an accountant. In the present century, newer, computer- and communications-based technologies have finally begun to make inroads in New York, and this stuff is ... *como se dice*, "a bit long in the tooth", like this author, who grew up with and learned to understand and admire it.  Nevertheless, the principles of safety design herein embodied survive even in the latest programmed-logic controller (PLC) plants, in New York and globally.  NXSYS has already brought pleasure and learning to many, and even inspired imitators.
 
 Go to town, or Coney Island Yard, with it, but keep my name and credit as you add your own.  It is my invention, my "baby", my work, my gift, and, with my music, my legacy.
 
