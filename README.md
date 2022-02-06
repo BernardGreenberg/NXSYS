@@ -50,14 +50,14 @@ There are five in this project:
 
 - **Relay Indexer**.  This recent innovation is another command-line C++11 program (no Objective C/C++) built from this tree that produces a text-format "relay index", a cross-reference of which relays are referenced as logic inputs by other relays, including "built-in" relays to the system. While this can be useful, it even more usefully produces an Emacs/Aquamacs `TAGS` table for all of the relays in the interlocking, allowing `meta-.` to be used with relays, and allowing relay source to be located from NXSYS' Relay Draftsperson.
 
-The distribution of the sources into XCode "groups" is somewhat chaotic, and I apologize.  The [folder `NXSYS`](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYS) is supposed to contain all sources (and headers) that are shared with the Windows build, although it includes some inexcusable others. But other directories contain Mac-only code and headers.
+The distribution of the sources into XCode "groups" is somewhat chaotic, and I apologize.  The [folder `NXSYS`](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYS) is supposed to contain all sources (and headers) that are shared with the Windows build, although it includes some inexcusable others. But other folders contain Mac-only code and headers.
 
-The TLEdit `buttons` directory contains, in addition to png's for its tool-panel buttons, Pixelmator (pre-Pro) files from which they were created.
+The TLEdit `buttons` folder contains, in addition to png's for its tool-panel buttons, Pixelmator (pre-Pro) files from which they were created.
 
 
 ## *Et in fine* ...
 
-Relay-based wayside color-light block signalling was in use in the New York Subways before *Titanic* sailed, before anyone knew that silicon could be used for building anything except deserts and glass, and when "computer" meant an accountant. In the present century, newer, computer- and communications-based technologies have finally begun to make inroads in New York, and this stuff is ... *como se dice*, "a bit long in the tooth", like this author, who grew up with and learned to understand and admire it.  Nevertheless, the principles of safety design herein embodied survive even in the latest programmed-logic controller (PLC) plants, in New York and globally.  NXSYS has already brought pleasure and learning to many, and even inspired imitators.
+Relay-based wayside color-light block signalling was in use in the New York Subways before *Titanic* sailed, before anyone knew that silicon could be used for building anything except deserts and glass, and when "computer" meant an accountant. In the present century, newer, computer- and communications-based technologies have finally begun to make inroads in New York, and this stuff is ... *como se dice*, "a bit long in the tooth", like its author, who grew up with it and learned to understand and admire it.  Nevertheless, the principles of safety design herein embodied survive even in the latest programmed-logic controller (PLC) plants, in New York and globally.  And NXSYS has already brought pleasure and learning to many, and even inspired imitators.
 
 Go to town, or Coney Island Yard, with it, but keep my name and credit as you add your own.  It is my invention, my "baby", my work, my gift, and, with my music, my legacy.
 
