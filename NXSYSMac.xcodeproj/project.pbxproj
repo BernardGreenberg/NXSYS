@@ -682,6 +682,7 @@
 		5BFB4AFA27B172A9006BE311 /* db1.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db1.trk; sourceTree = "<group>"; };
 		5BFB4AFB27B172A9006BE311 /* db3.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db3.trk; sourceTree = "<group>"; };
 		5BFB4AFC27B172A9006BE311 /* db2.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db2.trk; sourceTree = "<group>"; };
+		5BFB4B0727B1D697006BE311 /* RelayLanguage.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RelayLanguage.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -960,6 +961,7 @@
 				5B687ADE19B725840006FA4F /* ReleaseNotes.html */,
 				5B8A110E25C07E91007857A8 /* 5_0TL.png */,
 				5B2CD8BD25E7E4EF0095C17F /* TrafficKnob.png */,
+				5BFB4B0727B1D697006BE311 /* RelayLanguage.md */,
 				5BFB4A0827AF00FA006BE311 /* HelpBMPs */,
 			);
 			path = Documentation;
