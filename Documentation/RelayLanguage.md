@@ -62,14 +62,9 @@ The following are available to parameterize the "train" system:
 		:TRAIN-LENGTH-FEET number
 		:YELLOW-FEET-PER-SECOND number
 
-The spec
-		`:IRT T`
+The spec `:IRT T` causes IRT-style default directions to be chosen for tracks, (odd=North), IRT-style signal numbering to be displayed on the plates, and track section circuit ID numbers to be assigned in the IRT fashion, i.e., 
 
-causes IRT-style default directions to be chosen for tracks,
-(odd=North), IRT-style signal numbering to be displayed on the
-plates, and track section circuit ID numbers to be assigned in the IRT fashion, i.e., 
-
-			10*stationing_point + track_number. 
+			10*stationing_point + track_number
 
 The spec `:TORONTO T` causes Toronto-style signal numbering to be displayed on the signal plates.
 
@@ -93,7 +88,7 @@ Enables three-state, center-neutral traffic-control knobs. If elected, the inter
 
 **USE TLEdit!**
 
-Documentation describing the track/panel layout forms, all from Version 1, was removed from here (they are all different, anyway).  With Version 2, you create track and panel layout with TLEdit, including all the traffic levers, random keys/controls, etc.  The forms are fairly straightforward, but you should never need to look at them.  You must include the TLEdit-generated track layout with an `include` form, e.g.,**
+Documentation describing the track/panel layout forms, all from Version 1, was removed from here (they are all different, anyway).  With Version 2, you create track and panel layout with TLEdit, including all the traffic levers, random keys/controls, etc.  The forms are fairly straightforward, but you should never need to look at them.  You must include the TLEdit-generated track layout with an `include` form, e.g.,
 
 			(include "GrandCentralLayout.trk")
      
@@ -292,11 +287,12 @@ The Common Lisp special forms `COMMENT`, `EVAL-WHEN`, and `INCLUDE` are supporte
  *tags* is a list, either (), `(EVAL), (LOAD), (LOAD )` etc.
              if EVAL appears among the keys, the forms will be processed when the interpreted file is loaded.  If LOAD appears among the keys, the forms will be processed by the compiler as though  they had appeared at top level, but (unless EVAL appears) ignored when the file is loaded interpreted. **[2022: Don't use it or try to understand it.]**
              
-`INCLUDE`    e.g., `(INCLUDE "stdmacs.trk")`.  The single argument is a pathname relative to the file which contains the INCLUDE.  The forms and defintions in the file will be treated by NXSYS and by the compiler as though they appeared in the file at the point of the INCLUDE form.
+`INCLUDE`    e.g., `(INCLUDE "stdmacs.trk")`.  The single argument is a pathname relative to the file which contains the INCLUDE.  The forms and definitions in the file will be treated by NXSYS and by the compiler as though they appeared in the file at the point of the INCLUDE form.
 
 A special relay called `0LogicHalt` has been defined.  If you provide a definition for this relay, and it ever picks, at that time a message box will pop up stating this: if you press "Yes", the relay simulator engine will halt and allow you to examine its state in detail with the Draftsperson and other tools.  You must (currently) reload the interlocking after such a breakpoint.
 
 **2022: Description and usage of the Relay Compiler removed.  It can't compile for the Mac, and interlockings run rapidly enough on both platforms without compilation.**
 
 =======================================
+
 (END)
