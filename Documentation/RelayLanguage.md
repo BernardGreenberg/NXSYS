@@ -183,7 +183,7 @@ Note that numeric part of a relay name is the lever number for those relays that
 |RFK|Reverse direction white indicator|
 |RFKR|Reverse direction red indicator|
 
-###Relays operated by the simulator
+### Relays operated by the simulator
 
 The following are the relays operated by the simulator in response to the panel, providing input to rest of the relay system from the user interface. They are called *Quisling relays* in the code, in dishonor of Vidkun Quisling (1887-1945), the Norwegian traitor who operated his government on orders from the Nazi regime.
 
