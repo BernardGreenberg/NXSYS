@@ -43,20 +43,20 @@ A `ROUTE` form must appear first:
      #\A     700   north)
 ~~~
         ROUTE  "String to be displayed" Line-ID Origin  direction
+        
+*Line-ID* is the single letter used on signal plates for the whole layout, e.g., `#\F` in **F4-334** (i.e., Fourth Avenue BMT). Note that in 2.5 and later, `:EXTENDED-ROUTE-LETTER` can override this with a string of more than one character.
    
-*Origin* is the station number (hundreds of simulated feet) of left-hand edge of the initial window - it may or may not be the leftmost stationing nubmer in the layout.
+*Origin* is the station number (hundreds of simulated feet) of left-hand edge of the initial window - it may or may not be the leftmost stationing number in the layout. **[2022: This is ignored in Version 2, where 00 will suffice.]**
 
-*north* can be `NORTH` or `SOUTH`. If NORTH, to the *RIGHT* is *NORTH*. If `SOUTH`, to the RIGHT is *SOUTH*  and to the LEFT is *NORTH*.  This affects the directions of tracks (which affects track section numbering) based on track numbers. **[2022: I don't think this is still important.]**
+*north* can be `NORTH` or `SOUTH`. If NORTH, to the *RIGHT* is *NORTH*. If `SOUTH`, to the RIGHT is *SOUTH*  and to the LEFT is *NORTH*.  This affects the directions of tracks (which affects track section numbering) based on track numbers. **[2022: This can be ignored in Version 2.]**
 
-(10/96) After *north*, zero or more *property pairs* can appear, each being a Symbol and a value. The names of the properties are reserved, but unknown/unsupported/misspelled properties are ***guaranteed to be ignored***.  This opens the door to downward-compatible, conditionally-used features.
+(10/96) After *north*, zero or more *property pairs* can appear, each being a **Symbol** and a value. Unknown/unsupported/misspelled properties are ***guaranteed to be ignored***.  This opens the door to downward-compatible, conditionally-used features.
 
 Currently known are
 
          :SIM-FEET-PER-SCREEN   number
 
-This controls the horizontal scale of the display. The default is
-3000 simulated right-of-way feet per the width of your screen.
-The following are available to parameterize the "train" system:
+This controls the horizontal scale of the display. The default is 3000 simulated right-of-way feet per the width of your screen. The following are available to parameterize the "train" system:
 
 		:CRUISING-FEET-PER-SECOND number
 		:TRAIN-LENGTH-FEET number
@@ -86,9 +86,9 @@ Enables three-state, center-neutral traffic-control knobs. If elected, the inter
 
 ### Defining track, signals, and switches
 
-**USE TLEdit!**
+**Use TLEdit!**
 
-Documentation describing the track/panel layout forms, all from Version 1, was removed from here (they are all different, anyway).  With Version 2, you create track and panel layout with TLEdit, including all the traffic levers, random keys/controls, etc.  The forms are fairly straightforward, but you should never need to look at them.  You must include the TLEdit-generated track layout with an `include` form, e.g.,
+Documentation describing the track/panel layout forms, all from Version 1, was removed from here (they are all different now, anyway).  With Version 2, you create track and panel layout with TLEdit, including all the traffic levers, random keys/controls, etc.  The forms are fairly straightforward, but you should never need to look at them.  You must include the TLEdit-generated track layout with an `include` form, e.g.,
 
 			(include "GrandCentralLayout.trk")
      
@@ -106,7 +106,7 @@ i.e.,
 
 		RELAY name  expressions.
 
-The *name* must be a Relay Symbol for the relay being defined.  The *expressions* are zero or more terms to be *and*'ed, i.e., wired in series.  Valid expressions are:
+*name* must be a Relay Symbol for the relay being defined.  The *expressions* are zero or more terms to be *and*'ed, i.e., wired in series.  Valid expressions are:
 
 |     Type       |          Example|
 |-------|------|
