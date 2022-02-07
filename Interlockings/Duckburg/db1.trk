@@ -1,0 +1,312 @@
+;; Duckburg Tower A Interlocking for explanatory purposes
+;; Copyright (c) Bernard S. Greenberg 16 January 1998 All rights reserved.
+;;
+(route "DB1: Duckburg Tower A of 17 January 1998 (switch selection only)"
+        #\D 00 north)
+
+;; Hack V2 "interlocking" to demonstrate switch selector paradigm.
+;; There are no vital circuits or routes, and there's no slotting
+;; or locking here AT ALL.  All you get is entrance and exit lights
+;; and switch motion.  The K lights don't check against route lockers
+;; and track relays as they should, because there are none.
+
+;; There are no overlap implications at all -- the trailing switch
+;; immediately beyond an exit is not forced, just to keep the circuit
+;; simple.  This implies that the approach signals (6, 32, 52, 54...)
+;; are essentially meaningless and worthless.
+
+;; For the absolute easiest case, go to the end of the file and
+;; read "47 Switch, Huey Ave. Extension".  You must also understand
+;; the macros below, which are intended to allow building temporary
+;; "scaffold" wiring to test the code and see it work as soon as possible
+;; without having to implement the whole interlocking.
+
+;; This file contains a lot of elementary commentary that does not
+;; appear in later files.
+
+(include "dburg.trk")
+
+(include "stdmacs.trk")
+
+;; Below are defined and employed "scaffolding" macros, which quickly
+;; produce rubber-stamp circuits with very basic capabilities in order
+;; to allow you to sooner experiment with, design,  and debug more
+;; interesting logic.  As more levels of the correct implementation are
+;; added, these macros are discarded as full, correct, detailed designs,
+;; with differing capabilities, for the relays they describe are added
+;; to the interlocking.
+
+
+;;Kludgey 'Trivial' PBS relays with no cancel, no fleeting, no call on, and
+;;no checking of route-lockers holding opposing routes.
+;;The second argument to TrivHPBS is the most important contact in PBS
+;;other than PB and its own stick, namely, the switch selector relay
+;;that is yearning for an exit at this signal, which MUST NOT be picked
+;;for PBS to pick up, but WILL pick up when the selectors answer back,
+;;and must thus not be in the stick leg.
+
+(defrmacro TrivAppPBS 1 (RELAY 1PBS (OR 1PB 1PBS))) ;;approach
+(defrmacro TrivHPBS 2 (RELAY 1PBS (OR (and 1PB !(arg 2)) 1PBS))) ;;home
+
+
+(TrivHPBS 2 5BNN)
+(TrivHPBS 4 3BNN)
+(TrivAppPBS 6)
+(TrivHPBS 8 5ANS)
+(TrivHPBS 10 3ANS)
+(TrivAppPBS 12)
+(TrivHPBS 14 (OR 15RN 15NN))
+(TrivHPBS 16 17NS)
+(TrivHPBS 18 17RS)
+(TrivHPBS 20 19NS)
+(TrivHPBS 22 19RS)
+(TrivHPBS 24 (or 25RN 25NN))
+(TrivHPBS 26 25RS)
+(TrivHPBS 28 (or 27RS 27NS))
+(TrivHPBS 30 27RN)
+(TrivAppPBS 32)
+(TrivHPBS 34 35NS)
+(TrivHPBS 36 35RS)
+(TrivHPBS 38 37NS)
+
+(TrivAppPBS 40)(TrivAppPBS 42)
+
+(TrivHPBS 46 (or 47NN 47RN))
+(TrivHPBS 48 47RS)
+(TrivHPBS 50 47NS)
+
+(TrivAppPBS 52)
+(TrivAppPBS 54)
+(TrivAppPBS 56)
+(relay 0AS T)				; nxsys precomputes this at load time
+					; name 'AS' has magic power to sim.
+
+;; These scaffold/kludge macros define standard switch control and repeater
+;; relays, but kludge LS (switch lock stick) relays that always leave the
+;; switch unlocked (else the switch control would not work), and basic
+;; switch lever repeaters (NLP/RLP) that only allow for control by
+;; auxiliary keys and standard route selection (i.e., no approach signal or
+;; other overlap-necessitated control -- see DB3 for that.).
+
+
+(defrmacro singxsw 1
+   (forms (stdswitch (arg 1))
+	  (relay 1LS 0AS); kludge to get it picked - always unlocked
+	  (relay 1NLP (and 1LS !1RLP (OR 1NL (AND 1NN 1NS))))
+	  (relay 1RLP (and 1LS !1NLP (OR 1RL (AND 1RN 1RS))))))
+
+(defrmacro dblxsw 1
+   (forms (stdswitch (arg 1))
+	  (relay 1LS 0AS)		; kludge to get it picked
+	  (relay 1NLP (and 1LS !1RLP (OR 1NL (AND 1ANN 1ANS)(AND 1BNN 1BNS))))
+	  (relay 1RLP (and 1LS !1NLP (OR 1RL (AND 1RN 1RS))))))
+
+(dblxsw 3)
+(dblxsw 5)
+(singxsw 15)
+(singxsw 17)
+(singxsw 19)
+(singxsw 25)
+(singxsw 27)
+(singxsw 35)
+(singxsw 37)
+(singxsw 47)
+
+;;
+;; Mainline yard leads -- "Mainline Crossing"
+;;
+
+;; This is the typical Diamond Crossover layout.  The switch selection
+;; for a diamond crossover is rather tricky, if standard- it is
+;; recommended you study switch 47 at the bottom first.
+
+(relay 5BNS 2PBS !5RS !5RWK !5RLP)
+(relay 3ANS (OR 5BNS 5RS) !3RN !3RWK !3RLP)
+(relay 3RS  5BNS !3ANN !3BNS !3NWK !3NLP)
+
+;; This is the exit light for a potential exit
+(relay 10K				
+       3ANS				; this is the "exit seeker" sw selectr
+       ;; These are the terms that lock the exit out. so
+       (OR 10PBS	; they are all ridden out by use as an entrance
+	   ;; in the "real circuit", some XL with appropriate AS would be used
+	   (AND !14XS !12PBS)))		; no conflicting exit or approach
+
+(relay 5ANS (OR 3RS 3BNS) !5RN !5RWK !5RLP)
+(relay 8K 5ANS (OR 8PBS !24XS))
+(relay 3BNS (OR 4PBS 4XS) !3RS !3RLP !3RWK)
+(relay 5RS 3BNS !5BNS !5ANN !5NLP !5NWK)
+
+;; The XS relay must verify all the conditions for a good exit, and
+;; stick around its own button.
+
+(relay 10XS 
+       (OR 10XPB 10PB 10XS)		; stick around two types of buttons
+       3ANS			; this is a potential route come calling
+       !10PBS				; initiation at same signal N/G
+       !14XS				; exit at opposing signal N/G
+       !12PBS)				; opposing approach signal called N/G
+
+(relay 8XS (OR 8XPB 8PB 8XS) 5ANS !8PBS !24XS)
+
+(relay 3ANN (OR 10PBS 10XS) !3RN !3RLP !3RWK)
+(relay 5BNN (OR 3ANN 3RN)   !5RS !5RLP !5RWK)
+(relay 2K 5BNN 2PBS)
+(relay 5ANN (OR 8PBS 8XS) !5RN !5RLP !5RWK)
+(relay 3BNN (OR 5ANN 5RN) !3RS !3RLP !3RWK)
+(relay 3RN  5ANN !3BNS !3ANN !3NLP !3NWK)
+(relay 5RN 3ANN !5BNS !5ANN  !5NLP !5NWK)
+(relay 4K 3BNN)
+(relay 4XS (OR 4XPB 4PB 4XS) 3BNN !4PBS)
+
+;;
+;; Barksville Yards
+;;
+
+;;This is a typical "ladder layout", which (in this file) shows the
+;;basic paradigm of nonvital switch selection in its simplest and
+;;clearest form.
+
+(relay 14K (OR 15RN 15NN) (OR 14PBS !10XS))
+(relay 15RS (OR 14PBS 14XS) !15NN !15NLP !15NWK)
+(relay 15RN (OR 19NN 19RN)  !15NN !15NLP !15NWK)
+(relay 15NN (OR 17NN 17RN)  !15RN !15RLP !15RWK)
+(relay 15NS (OR 14PBS 14XS) !15RN !15RLP !15RWK)
+
+(relay 17RS 15NS            !17NN !17NLP !17NWK)
+(relay 17NS 15NS            !17RN !17RLP !17RWK)
+(relay 17RN (OR 18XS 18PBS) !17NN !17NLP !17NWK)
+(relay 17NN (OR 16XS 16PBS) !17RN !17RLP !17RWK)
+(relay 16XS (OR 16XPB 16PB 16XS) 17NS !16PBS)
+(relay 18XS (OR 18XPB 18PB 18XS) 17RS !18PBS)
+(relay 16K 17NS)
+(relay 18K 17RS)
+
+(relay 19RS 15RS            !19NN !19NLP !19NWK)
+(relay 19NS 15RS            !19RN !19RLP !19RWK)
+(relay 19RN (OR 22XS 22PBS) !19NN !19NLP !19NWK)
+(relay 19NN (OR 20XS 20PBS) !19RN !19RLP !19RWK)
+(relay 20XS (OR 20XPB 20PB 20XS) 19NS !20PBS)
+(relay 22XS (OR 22XPB 22PB 22XS) 19RS !22PBS !54PBS); check approach signal!
+(relay 20K 19NS)
+;; really need route lockers etc here...
+(relay 22K 19RS (OR 22PBS !54PBS))
+(relay 14XS (OR 14XPB 14PB 14XS) (OR 15NN 15RN) !14PBS !10XS)
+
+(relay 25RS (OR 24PBS 24XS) !25NN !25NLP !25NWK)
+(relay 25NS (OR 24PBS 24XS) !25RN !25RLP !25RWK)
+(relay 25NN 27NN            !25RN !25RLP !25RWK)
+;; this hair is necessary because of the asymmetrical end-to-end sig 26
+;; (see notes below)
+(relay 25RN (OR 26PBS 26XR (OR (AND 37NN 38XS)
+			       (AND 37RN (or (AND 35NN 34XS)
+					     (AND 35RN 36XS)))))
+                            !25NN !25NLP !25NWK)
+(relay 26K 25RS 26PBS)
+
+;; Duckburg Yards and Donald St. Spur
+;;
+
+;; 27-25 looks like a simple crossover, but is actually two independent
+;; singleton switches, with "normal" defined as the "crossing-over"
+;; route, which also happens to be straight track.  Correct handling
+;; of the interaction between these two switches is immensely complicated
+;; by the overlaps of the control lengths of signals 40, 2, and 4, which,
+;; when clear, cause the locking of each switch to be dependent upon
+;; the state of the other.  This is called "conditional crosslock", and
+;; is handled in state DB5.  Right now, just ignore it, as none of the
+;; approach signals or other overlaps have any effect.
+
+(relay 27NS 25NS            !27RS !27RLP !27RWK)
+(relay 27RS (OR 30PBS 30XS) !27NS !27NLP !27NWK)
+(relay 27NN (or 28PBS 28XS) !27RS !27RLP !27RWK)
+(relay 27RN (or 28PBS 28XS) !27NS !27NLP !27NWK)
+(relay 28K (or 27NS 27RS))
+(relay 24K (or 25NN 25RN) (OR 24PBS !8XS))
+(relay 30K 27RN)
+(relay 30XS (or 30XPB 30PB 30XS) 27RN !30PBS !32PBS)
+(relay 24XS (or 24XPB 24PB 24XS) (OR 25NN 25RN) !24PBS !8XS)
+(relay 28XS (or 28XPB 28PB 28XS) (OR 27NS 27RS) !28PBS !40PBS !46XS)
+
+;; Because of the asymmetrical end-to-end, 377NS/RS must prove that 24
+;; is really initiated and 26 is not merely answering an exit at 24.
+;; Southbound motion through 26 is one route, but northbound motion
+;; ends or begins at 26.  24 to 34(/6/8) is one route, but 34(/6/8)
+;; to 24 is two routes, 34(/6/8) to 26 and 26 to 24.  Normally
+;; through-routing handles this, but there is no through-routing
+;; in this file (but is handled in DB2 and later).
+
+(relay 37NS (OR 26XS (AND 25RS 24PBS)) !37RN !37RLP !37RWK)
+(relay 37RS (OR 26XS (AND 25RS 24PBS)) !37NN !37NLP !37NWK)
+(relay 38K 37NS)
+(relay 38XS (or 38XPB 38PB 38XS) 37NS !38PBS)
+(relay 37NN (OR 38PBS 38XS)  !37RN !37RLP !37RWK)
+(relay 37RN (OR 35NN 35RN)   !37NN !37NLP !37NWK)
+(relay 34K 35NS)
+(relay 34XS (or 34XPB 34PB 34XS) 35NS !34PBS)
+(relay 35RS 37RS             !35NN !35NLP !35NWK)
+(relay 35NS 37RS             !35RN !35RLP !35RWK)
+(relay 36K 35RS)
+(relay 36XS (or 36XPB 36PB 36XS) 35RS !36PBS)
+(relay 35NN (or 34PBS 34XS)  !35RN !35RLP !35RWK)
+(relay 35RN (or 36PBS 36XS)  !35NN !35NLP !35NWK)
+
+;; 60 is the exit light BEHIND 26, which is used for exits from routes
+;; in the yards.  In a full implementation, it would through-route (XR/ZS)
+;; through 26, too.  60K/26XS must verify that there is really an
+;; initiation in the yards, and 37NN/RN is not just "answering back" for
+;; a southbound move.
+
+(relay 60K (OR (AND 37NN 38PBS)
+	       (AND 37RN (or (AND 35NN 34PBS)
+			     (AND 35RN 36PBS)))))
+(relay 26XS (or 60XPB 26XS)
+	    (OR (AND 37NN 38PBS)
+	       (AND 37RN (or (AND 35NN 34PBS)
+			     (AND 35RN 36PBS)))))
+
+;;
+;; 47 Switch, Huey Ave. Extension
+;; This is the easiest case to study, the simplest singleton switch
+
+(relay 47NN ;; A tentative northbound probe over switch 47 NORMAL
+       (or 50PBS	; can come from an ENTRANCE at 50
+	   50XS)	; or an EXIT at 50.
+       !47RN		; but NOT if there is already a tentative northbound
+			; probe over 47 REVERSE, because those CONFLICT
+			; in the NORTHBOUND direction, but not SOUTHBOUND
+       !47RLP !47RWK) ;but if 47 is already called for or locked reverse,
+		        ; FORGET IT, 47 normal north is not a possibility.
+
+(relay 47RN (or 48PBS 48XS) !47NN !47NLP !47NWK) ;very much like 47NN
+
+;; Note that 47 Normal South and 47 Reverse South DO NOT CONFLICT-- they
+;; are alternate possibilities, whereas 47 Normal North and 47 Reverse North
+;; are ==NOT== mutual possibilities, but irreconcilable conflict.
+;; Note also that Reverse North and Normal north prevent these two
+;; relays, respectively -- ex., a probe over 47 reverse north locks out
+;; 47 normal, be it south or north.  This is the key to the switch
+;; selection network.
+(relay 47NS (or 46PBS 46XS) !47RN !47RLP !47RWK)
+(relay 47RS (or 46PBS 46XS) !47NN !47NLP !47NWK)
+
+;; These are the entrance exit lights, which operate off the switch selectors
+(relay 50k		;N/X light at 50 lights when
+       47NS		;either an exit is sought or an exit has answered back
+			;47NS represents both those possibilities.
+       (OR 50PBS !52PBS)) ;If 52 Approach is clear, exit at 50 is prevented
+			  ;But answer-back entrance light is still ok (50PBS)
+(relay 48K 47RS (OR 48PBS !56PBS))
+(relay 46K (OR 47NN 47RN) (OR 46PBS !28XS))
+
+;;XS relay is picked up by pressing the exit button...
+(relay 46XS				; exit stick relay
+        (OR 46XPB 46PB			; pick it up by pressing the button
+	    46XS)			; and stick as long as remainder OK
+       (or 47NN 47RN)	;either of these sw selectors "seek an exit" here( 46)
+       !46PBS !28XS)	;don't do it if there is an initation here (46PBS)
+			;or an exit at 28. Failure to check this signal's PBS
+			;will result in 2-headed routes that never drop.
+
+(relay 48XS (OR 48XPB 48PB 48XS) 47RS !48PBS !56PBS) ; check opp. app PBS
+(relay 50XS (OR 50XPB 50PB 50XS) 47NS !50PBS !52PBS)

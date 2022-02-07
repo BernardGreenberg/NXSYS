@@ -1,0 +1,752 @@
+;; Duckburg Tower A Interlocking for explanatory purposes
+;; Copyright (c) Bernard S. Greenberg 16 January 1998 All rights reserved.
+;;
+
+(route "DB2: Duckburg Tower A (with through-routing) of 17 January 1998"
+        #\D 00 north)
+
+
+;; db2.trk - Duckburg Tower A, with correct through-routing and R relays...
+;; This multiplies the length of the file by THREE:
+;;
+;;     7216   db1.trk            db1.trk
+;;    22833 * db2.trk            db2.trk
+
+;; In all the below, "DOWNSTREAM" means the place where the river (train)
+;; hasn't gone yet, further in the direction of train travel, and "UPSTREAM"
+;; the place whence the river (train) is come.
+
+;; Hack V2 "interlocking" to demonstrate switch selector paradigm.
+;; There are no vital circuits and no locking or slotting in this
+;; version, but there are routes, but there is no route locking,
+;; or any other kind of locking.  All you get is entrance and exit lights
+;; and switch motion.  The K lights don't check against route lockers
+;; and track relays as they should, because there are none, and the
+;; "lines-of-lite" are lit by R relays, not the required route lockers.
+
+;; There are no overlap implications at all -- the trailing switch
+;; immediately beyond an exit is not forced, just to keep the circuit
+;; simple.  This implies that the approach signals (6, 32, 52, 54...)
+;; are essentially meaningless and worthless.
+
+(include "dburg.trk")
+(include "stdmacs.trk")
+
+;;Crocky 'Trivial' PBS relays with no cancel, no fleeting, no call on, and
+;;no checking of route-lockers holding opposing routes.
+;;The second argument to TrivHPBS is the most important contact in PBS
+;;other than PB and its own stick, namely, the switch selector relay
+;;that is yearning for an exit at this signal, which MUST NOT be picked
+;;for PBS to pick up, but WILL pick up when the selectors answer back,
+;;and must thus not be in the stick leg.
+
+;; The ones involved in through-routing can't use these macros because
+;; of the XR & ZS term needed.
+
+;; This is a "demo" macro developed to make the switch selection
+;; and through-routing look as though it's really doing the right thing,
+;; and clearing signals and driving stops. It is not "correct" or safe.
+
+(defrmacro kludgey-hv-r 1
+  (forms
+    (RELAY 1H 1R) 		;kludgey substitute for vital logic
+    (RELAY 1HV 1H 1RVP)		; not so far from reality....
+    (RELAY 1V 1H)))		; kludgey crock to make it look real...
+
+(defrmacro TrivHPBS 2		; home
+  (forms 
+    (RELAY 1PBS (OR (and 1PB !(arg 2)) 1PBS))
+    (kludgey-hv-r (arg 1))))
+
+
+;; Homes 10 and 14, 24, 8, 26 no longer "trivial"...see below 10PBS/14PBS etc
+;; below
+(kludgey-hv-r 10) (kludgey-hv-r 14) (kludgey-hv-r 24) (kludgey-hv-r 8)
+(kludgey-hv-r 26)(kludgey-hv-r 28)(kludgey-hv-r 46) (kludgey-hv-r 40)
+
+(defrmacro TrivAppPBS 1
+  (forms
+    (RELAY 1PBS (OR 1PB 1PBS))
+    (kludgey-h-pbs 1PBS)
+    )) ;;approach
+
+;; Define kludgey-h-pbs for approach signals, like kludgey-hv-r...
+;; this too, is a kludge for vital circuitry yet to be designed in
+;; later "lessons".  PBS will clear the signal, which is certainly
+;; not right if a switch is being moved, but that's for the next lesson.
+;; This will do in the meantime.
+
+(defrmacro kludgey-h-pbs 1
+  (forms
+    (RELAY 1H 1PBS)	;kludgey substitute for vital logic
+    (RELAY 1HV 1H 1RVP)		; not so far from reality....
+    (RELAY 1V 1H)))		; kludgey crock to make it look real...
+
+(TrivHPBS 2 5BNN)
+(TrivHPBS 4 3BNN)
+(TrivAppPBS 6)
+(TrivHPBS 16 17NS)
+(TrivHPBS 18 17RS)
+(TrivHPBS 20 19NS)
+(TrivHPBS 22 19RS)
+(TrivHPBS 30 27RN)
+(TrivAppPBS 32)
+(TrivHPBS 34 35NS)
+(TrivHPBS 36 35RS)
+(TrivHPBS 38 37NS)
+
+(TrivAppPBS 42)
+
+(TrivHPBS 48 47RS)
+(TrivHPBS 50 47NS)
+
+(TrivAppPBS 52)
+(TrivAppPBS 54)
+(TrivAppPBS 56)
+
+;; These macros include kludgey implementations of AS and LS
+;; just to get the switches unlocked so that the selection circuitry
+;; can be played with.
+
+(relay 0AS T)				; kludge to get a true logic source
+
+(defrmacro singxsw 1
+   (forms (stdswitch (arg 1))
+	  (relay 1LS 0AS); kludge to get it picked - always unlocked
+	  (relay 1NLP (and 1LS !1RLP (OR 1NL (AND 1NN 1NS))))
+	  (relay 1RLP (and 1LS !1NLP (OR 1RL (AND 1RN 1RS))))))
+
+(defrmacro dblxsw 1
+   (forms (stdswitch (arg 1))
+	  (relay 1LS 0AS)		; kludge to get it picked
+	  (relay 1NLP (and 1LS !1RLP (OR 1NL (AND 1ANN 1ANS)(AND 1BNN 1BNS))))
+	  (relay 1RLP (and 1LS !1NLP (OR 1RL (AND 1RN 1RS))))))
+
+(dblxsw 3)
+(dblxsw 5)
+(singxsw 15)
+(singxsw 17)
+(singxsw 19)
+(singxsw 25)
+(singxsw 27)
+(singxsw 35)
+(singxsw 37)
+(singxsw 47)
+
+;;
+;; Mainline Crossing.
+;;
+
+(relay 5BNS 2PBS !5RS !5RWK !5RLP)
+(relay 3ANS (OR 5BNS 5RS) !3RN !3RWK !3RLP)
+(relay 3RS  5BNS !3ANN !3BNS !3NWK !3NLP)
+
+(relay 10K 3ANS (OR 10PBS !14XS))
+(relay 5ANS (OR 3RS 3BNS) !5RN !5RWK !5RLP)
+(relay 8K 5ANS (OR 8PBS !24XS))
+(relay 3BNS (OR 4PBS 4XS) !3RS !3RLP !3RWK)
+(relay 5RS 3BNS !5BNS !5ANN !5NLP !5NWK)
+
+;; Note that when there is end-to-end (through-route) control, XS
+;; requires quite a bit of additional care (see below):
+;; ('downstream' means where the train is going, 'upstream' is whence it came)
+(relay 10XS (OR 10XS   ;Stick around any of these "pick me up" terms--viz.,
+		10XPB  ;Clicking on the NXSYS exit light (not in real world)
+		       ;but GRS machines have an "exit button" which is close
+		10PB   ;Entrance button for signal there, used as exit
+		(AND 14ZS 14R) ;Automatic exit selection by the downstream
+		;; network in a through-route.  XS picks when end-to-end
+		;; routing is in progres (14ZS) and the route
+		;; downstream has lined successfully (14R).
+		;; Note that switches in this network have already moved
+		;; because of ZS 'shadowing' XS in all its customers.
+		)
+       3ANS ;this term is the "exit beckoner", someone looking for a
+            ;;potential exit here (10). Its back term (!3ANS) locks out
+            ;;initiations (10PBS and 10XR) at this location/direction.
+       !10PBS				; Initiation at this signal N/G
+       !10XR;***DB2 - note that end-to-end conflict bad, too.
+       !14XS)		; various conflicting initiations/exs
+
+(relay 8XS (OR 8XPB 8PB 8XS (AND 24ZS 24R)) 5ANS !8PBS !8XR !24XS)
+
+;; Here the XR of the upstream network simulates an initiation by "shadowing"
+;; PBS, and the ZS of the same network shadows XS when it is returning a
+;; through-route from downstream.
+
+(relay 3ANN (OR		; terms that start selection over crossover
+	       10PBS	; initiation facing (to) that switch
+	       10XR	; simulated, tentative through-route initiation
+	       10XS	; exit facing (from) that switch
+	       14ZS)	; simulated exit by downstream through-route
+       !3RN !3RLP !3RWK)		; normal split/lockout terms.
+(relay 5BNN (OR 3ANN 3RN)   !5RS !5RLP !5RWK)
+(relay 2K 5BNN 2PBS)
+(relay 5ANN (OR 8PBS 8XR 8XS 24ZS) !5RN !5RLP !5RWK)
+(relay 3BNN (OR 5ANN 5RN) !3RS !3RLP !3RWK)
+(relay 3RN  5ANN !3BNS !3ANN !3NLP !3NWK)
+(relay 5RN 3ANN !5BNS !5ANN  !5NLP !5NWK)
+(relay 4K 3BNN)
+(relay 4XS (OR 4XPB 4PB 4XS) 3BNN !4PBS)
+
+;;
+;; Barksville Yards
+;;
+
+(relay 14K (OR 15RN 15NN) (OR 14PBS !10XS))
+(relay 15RS (OR 14PBS 14XR 14XS 10ZS) !15NN !15NLP !15NWK)
+(relay 15RN (OR 19NN 19RN)  !15NN !15NLP !15NWK)
+(relay 15NN (OR 17NN 17RN)  !15RN !15RLP !15RWK)
+(relay 15NS (OR 14PBS 14XR 14XS 10ZS) !15RN !15RLP !15RWK)
+
+(relay 17RS 15NS            !17NN !17NLP !17NWK)
+(relay 17NS 15NS            !17RN !17RLP !17RWK)
+(relay 17RN (OR 18XS 18PBS) !17NN !17NLP !17NWK)
+(relay 17NN (OR 16XS 16PBS) !17RN !17RLP !17RWK)
+(relay 16XS (OR 16XPB 16PB 16XS) 17NS !16PBS)
+(relay 18XS (OR 18XPB 18PB 18XS) 17RS !18PBS)
+(relay 16K 17NS)
+(relay 18K 17RS)
+
+(relay 19RS 15RS            !19NN !19NLP !19NWK)
+(relay 19NS 15RS            !19RN !19RLP !19RWK)
+(relay 19RN (OR 22XS 22PBS) !19NN !19NLP !19NWK)
+(relay 19NN (OR 20XS 20PBS) !19RN !19RLP !19RWK)
+(relay 20XS (OR 20XPB 20PB 20XS) 19NS !20PBS)
+(relay 22XS (OR 22XPB 22PB 22XS) 19RS !22PBS !54PBS); check approach signal!
+(relay 20K 19NS)
+;; really need route lockers etc here...
+(relay 22K 19RS (OR 22PBS !54PBS))
+(relay 14XS (OR 14XPB 14PB 14XS
+		;;Normally, this would be
+		;; (AND 10ZS 10R)
+		;;But because of the intervening approach signal 12,
+		;;we are required to make sure it picks before dropping XR/ZS
+		(AND 12ZS 12PBS))
+       (OR 15NN 15RN) !14PBS !14XR !10XS)
+
+(relay 25RS (OR 24PBS 24XR 24XS 8ZS) !25NN !25NLP !25NWK)
+(relay 25NS (OR 24PBS 24XR 24XS 8ZS) !25RN !25RLP !25RWK)
+(relay 25NN 27NN            !25RN !25RLP !25RWK)
+;; this hair is necessary because of the asymmetrical end-to-end sig 26
+;; (see notes below)
+(relay 25RN (OR 26PBS 26XR (OR (AND 37NN 38XS)
+			       (AND 37RN (or (AND 35NN 34XS)
+					     (AND 35RN 36XS)))))
+                            !25NN !25NLP !25NWK)
+(relay 26K 25RS 26PBS)
+
+;;
+;; End to End ("through-routing") -- fully commented for this first case, 
+;; which is the easy (symmetrical) one, from Mainline Crossing to Barksville
+;; Yards. Barksville Yards to Mainline Crossing is also easy, and follows
+;; immediately below this.
+;;
+
+;; XR is the extended hand of the "exit seeker" switch selector (here 3ANS)
+;; reaching out to simulate the PBS (here 14PBS) in the next network.
+
+;; Carry southbound selection from Mainline Crossing into Barksville Yards.
+(relay 14XR 
+       ;; 14XR simulates 14PBS in all of 14PBS's clients, but does not
+       ;; stick as 14PBS does.
+
+       (OR 14XR (AND !15NN !15RN)) ; check conflicting initiation and don't
+       				; pick if so - same check as in 14PBS, but
+       				; stick around it, as it -will- come up when
+				; the route "answers back" (return chain).
+       !14PBS			; When PBS picks, XR's job finished; if
+       				; it's already picked, we're not needed.
+        3ANS			; this is the "exit seeker" that triggers us
+       (LABEL L14XRT		; hereon out shared with ZS
+	!10XS			; if local exit at 10 selected, call it quits
+				; alternatively, when 10XS picks, we're done.
+        (OR (AND 5BNS 2PBS)	; verify that this really legit, not ans-back
+	    (AND 5RS 1741T 4PBS))	; check remote track
+	!14XS			; not exiting in other direction, please
+	;; Normally, we'd put some route locker, AS etc terms here.
+        2741T 2738T))		; must have intervening track clear
+
+;; ZS is the "answer-back" (return selection chain) coupler, which "returns"
+;; the reverse selection chain of the downstream network to the upstream
+;; network.  When this is done sequentially, all selection chains in
+;; an end-to-end route line as one, although the actual clearing of the
+;; routes is delayed until the R and XS relays (q.v.) pass down sequential
+;; completed segments.
+
+;; Propagate northbound answer-back from Barksville Yards to Mainline Crossing
+
+(relay 14ZS			; backward chainer -- see 10XS above.
+
+       ;; This simulates 10XS in all 10XS's clients, but does not stick as
+       ;; 10XS does.  Note that this causes all components of a through
+       ;; route to line simultaneously.
+       
+       (OR 14XR 14ZS)		; require 14XR to start, but not to stay.
+       (OR (AND 15RN (OR (AND 19NN 20XS) ; verify actual XS at other end
+			 (AND 19RN 22XS))) ;and progression of SB selection
+	   (AND 15NN (OR (AND 17NN 16XS)   ;chain all the way through to the
+			 (AND 17RN 18XS)))) ;point of answer-back at 14.
+       L14XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Can't use "trivial" macro anymore - XR/ZS now part of term.
+(relay 14PBS
+       (OR 14PBS		; lock around these terms.
+	   (AND 14PB !15RN !15NN) ; push button, and not seeking exit here
+	   (AND 14XR 14ZS))	; through-route ready to push 14 for us.
+       ;; Leave out all other stuff (track kickoff, slotting etc)
+       ;; because this is only a learning-tool interlocking stage...
+       )
+
+;;*** We need to implement 14R for end-to-end to work properly - only 14R
+;; (meaning "Barksville yards switches all set up") will pick 10XS and
+;; drop XR and ZS out of the picture.  See 10XS circuit.
+
+;; R verifies initation (PBS), exit (XS), and all switches in correspondence
+;; and called-for and locked in between.
+(relay 14R 14PBS (OR (AND 15NWK (OR (AND 17NWK 16XS)
+				    (AND 17RWK 18XS)))
+		     (AND 15RWK (OR (AND 19NWK 20XS)
+				    (AND 19RWK 22XS)))))
+			  
+
+;; This is a kludge to make the automatic 2741 clear when the through-route
+;; through it is routed, as it were.  Automatics don't have R relays, but
+;; giving this one one will let us use the kludgey-hv-r macro, and
+;; it will look like the right thing.  In reality, it should be driven
+;; off !2738SS (route locker)
+
+(relay 2741R 14R (or 2741R 10XS))
+(kludgey-hv-r 2741)
+
+
+;; implement R relays for 2 and 4 just to get them to "clear"...
+(relay 2R 2PBS 5NWK (OR (AND 3NWK 10XS)(AND 3RWK 8XS)))
+(relay 4R 4PBS 3NWK (OR (AND 5NWK 8XS)(AND 5RWK 10XS)))
+
+;; ******************************************
+;; Now do same thing for Northbound route out of
+
+;;		  BARKSVILLE YARDS TO MAINLINE CROSSING
+
+;;, 14 intermediate exit, 10 intermediate entrance...
+
+(relay 10XR
+        (OR 10XR !3ANS)         ; don't pick if wrong-dir exit probe in progr.
+       !10PBS			; when PBS picks, XR's job finished.
+        (OR 15RN 15NN)		; this is the "exit seeker" that wants us
+       (LABEL L10XRT		; hereon out shared with ZS
+	!14XS			; check local exit, no need for us if so.
+        (OR (AND 15NN (OR (AND 17NN 16PBS) ; verify that we really have
+			  (AND 17RN 18PBS))) ; the initiation out there
+	    (AND 15RN (OR (AND 19NN 20PBS) ; in Barksville
+			  (AND 19RN 22PBS))))
+	!10XS			; no exit in north direction, please!
+	2741T 2742T))		; must have intervening track clear
+
+;; Carry southbound answer-back from Mainline Crossing to Barksville
+(relay 10ZS			; backward chainer
+       (OR 10XR 10ZS)		; require 10XR to start, but not to stay.
+       (OR (AND 5RN 4XS)
+	   (AND 5BNN 2XS))
+       L10XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Can't use "trivial" macro anymore - XR/ZS now part of term.
+(relay 10PBS
+       (OR 10PBS		; lock around these terms.
+	   (AND 10PB !3ANS)	; push button, and not seeking exit here
+	   (AND 10XR 10ZS))	; through-route ready to push 10 for us.
+       )
+
+;; Implement 10R.  See comments above at 14R.
+
+(relay 10R 10PBS 3NWK  5RWK 4XS) ; there's no exit at 2.
+			  
+(relay 2738K (OR 10R 2R
+		 (AND (or 8R 4R) (or 3RWK 5RWK))));kludgey route lights.
+
+;;; Implement R relays for yard dwarfs so they clear, not needed for E/E.
+
+(relay 16R 16PBS 17NWK 15NWK 14XS)
+(relay 18R 18PBS 17RWK 15NWK 14XS)
+(relay 20R 20PBS 19NWK 15RWK 14XS)
+(relay 22R 22PBS 19RWK 15RWK 14XS)
+;; This is -not-the-right-way- -- supposed to use route-locker back contacts,
+;; but this level of the teaching tool doesn't include route lockers.
+(relay 2742K (OR 14R 16R 18R 20R 22R)) ; light up l-o-l from R just for fun
+				; ):line-o-lite, not "laughing out loud" :(
+
+;;
+;; Gyro Junction (Jct.)
+;;
+
+(relay 27NS 25NS            !27RS !27RLP !27RWK)
+(relay 27RS (OR 30PBS 30XS) !27NS !27NLP !27NWK)
+(relay 27NN (or 28PBS 28XR 28XS 46ZS) !27RS !27RLP !27RWK)
+(relay 27RN (or 28PBS 28XR 28XS 46ZS) !27NS !27NLP !27NWK)
+(relay 28K (or 27NS 27RS))
+(relay 24K (or 25NN 25RN) (OR 24PBS !8XS))
+(relay 30K 27RN)
+(relay 30XS (or 30XPB 30PB 30XS) 27RN !30PBS !32PBS)
+(relay 24XS (or 24XPB 24PB 24XS (AND 8ZS 8R))
+        (OR 25NN 25RN) !24PBS !24XR !8XS)
+(relay 28XS (or 28XPB 28PB 28XS (AND 46ZS 46R))
+       (OR 27NS 27RS) !28PBS !28XR !40PBS !46XS)
+
+;;
+;; End-to-end routing from Mainline Crossing Southbound to Gyro Junction
+;;
+
+(relay 24XR 
+       (OR 24XR (AND !25RN !25RS)) ; don't pick up if conflicting initiation
+       !24PBS			; when PBS picks, XR's job finished.
+        5ANS			; this is the "exit seeker" that wants us
+       (LABEL L24XRT		; hereon out shared with ZS
+	!8XS			; check local exit, no need for us if so.
+	!24XS			; no established northbound traffic!
+        (OR (AND 3RS 2PBS)
+	    (AND 3BNS 4PBS))
+	1741T 1742T))		; must have intervening track clear
+
+;; Propagate Northbound answer-back from Gyro Jct back to Mainline Crossing
+(relay 24ZS			; backward chainer -- see 8XS
+       (OR 24XR 24ZS)		; require 24XR to start, but not to stay.
+       (OR (AND 25NN 27NN (or 28XS 46ZS)); when the xs/zs's come calling...
+	   (AND 25RN (OR (AND 37NN 38XS)
+			 (AND 37RN (OR (AND 35NN 34XS)
+				       (AND 35RN 36XS))))))
+       L24XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Hairy 24PBS for E/E control...
+(relay 24PBS
+       (OR 24PBS		; lock around these terms.
+	   (AND 24PB !25RN !25NN); push button, and not seeking exit here
+	   (AND 24XR 24ZS))	; through-route ready to push 24 for us.
+       )
+
+;; Implement 24R.  See comments above at 14R.
+(relay 24R 24PBS (OR (AND 25NWK 27NWK 28XS)
+		     (AND 25RWK (OR (AND 37NWK 38XS)
+				    (AND 37RWK (OR (AND 35NWK 34XS)
+						   (AND 35RWK 36XS)))))))
+			  
+(relay 1743K (OR 24R 26R (AND 28R 27NWK))) ; kludgey route lights.
+
+(relay 9745K (OR (AND 24R 25RWK) 34R 36R 38R));this is -not- the right way!!!
+
+;;
+;; OK, now Gyro Jct north to Mainline Crossing, exit 24, entrance 28.
+;; Still the so-called "easy" (symmetrical) case...
+;;
+
+(relay 8XR
+        (OR 8XR !5ANS)		; Don't pick if we are contemplated as exit
+        !8PBS			; when PBS picks, XR's job finished.
+        (OR 25RN 25NN)		; this is the "exit seeker" that wants us
+       (LABEL L8XRT		; hereon out shared with ZS
+	!24XS			; if local exit at 24 selected, call it quits
+				; alternatively, when 24XS picks, we're done.
+        (OR (AND 25RN		; steer with switch selector
+		 (OR 26PBS 26XR))	; PBS *OR* yet remoter XR!
+	    (AND 25NN 27NN
+		 (OR 28PBS 28XR) 1744T)) ;verify that remote track, too
+	!8XS			; no established southbound exit
+	1743T 1742T))
+
+;; Carry southbound answer-back from Mainline Crossing to Gyro Jct.
+(relay 8ZS			; backward chainer -- see 24XS
+       (OR 8XR 8ZS)		; require 8XR to start, but not to stay.
+       (AND 5ANS 4XS)		; only one possible exit.
+       L8XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Can't use "trivial" macro anymore - XR/ZS now part of term.
+(relay 8PBS
+       (OR 8PBS		; lock around these terms.
+	   (AND 8PB !5ANS) ; push button, and not seeking exit here
+	   (AND 8XR 8ZS))	; through-route ready to push 8 for us.
+       )
+
+;; Implement 8R for end-to-end to work properly - only 8R
+(relay 8R 8PBS 3NWK 5NWK 4XS)	; no exit at 2, so it's real easy.
+
+			  
+(relay 1741K (OR 8R 4R
+		 (AND (OR 3RWK 5RWK) (OR 2R 10R))))
+		;light up l-o-l from R just for fun
+
+;;
+;; Duckburg Yards
+;;
+
+;; Because of the asymmetrical end-to-end, 377NS/RS must prove that 24
+;; is really initiated and 26 is not merely answering an exit at 24.
+;; Southbound motion through 26 is one route, but northbound motion
+;; ends or begins at 26.  24 to 34(/6/8) is one route, but 34(/6/8)
+;; to 24 is two routes, 34(/6/8) to 26 and 26 to 24.  Normally
+;; through-routing handles this, but there is no through-routing
+;; in this illustrative sample.
+
+(relay 37NS (OR 26XS
+		(AND 25RS ; exit seeker
+		     (OR 24XR 24PBS 26ZS))) ; PB and end to end conditions
+       !37RN !37RLP !37RWK)
+(relay 37RS (OR 26XS (AND 25RS (OR 24XR 24PBS 26ZS)))
+       !37NN !37NLP !37NWK)
+(relay 38K 37NS)
+(relay 38XS (or 38XPB 38PB 38XS) 37NS !38PBS)
+(relay 37NN (OR 38PBS 38XS)  !37RN !37RLP !37RWK)
+(relay 37RN (OR 35NN 35RN)   !37NN !37NLP !37NWK)
+(relay 34K 35NS)
+(relay 34XS (or 34XPB 34PB 34XS) 35NS !34PBS)
+(relay 35RS 37RS             !35NN !35NLP !35NWK)
+(relay 35NS 37RS             !35RN !35RLP !35RWK)
+(relay 36K 35RS)
+(relay 36XS (or 36XPB 36PB 36XS) 35RS !36PBS)
+(relay 35NN (or 34PBS 34XS)  !35RN !35RLP !35RWK)
+(relay 35RN (or 36PBS 36XS)  !35NN !35NLP !35NWK)
+
+;; 60 is the exit light BEHIND 26, which is used for exits from routes
+;; in the yards.  In a full implementation, it would through-route (XR/ZS)
+;; through 26, too.  60K/26XS must verify that there is really an
+;; initiation in the yards, and 37NN/RN is not just "answering back" for
+;; a southbound move.
+
+(relay 60K (OR (AND 37NN 38PBS)
+	       (AND 37RN (or (AND 35NN 34PBS)
+			     (AND 35RN 36PBS)))))
+(relay 26XS (or 26XS
+		(OR 60XPB	; unambiguous NXSYS exit light
+		     (AND 26XR 26PB)) ; ambiguous 26 button must be
+				; demultiplexed -see right below...
+		(AND 26ZS 26R))	; the normal "simple" end-to-end condition
+	    (OR (AND 37NN 38PBS)
+	       (AND 37RN (or (AND 35NN 34PBS)
+			     (AND 35RN 36PBS)))))
+
+;; This is the hard one, Duckburg Yards to Gyro Jct, northbound to
+;; Mainline Crossing.  26 is essentially multiplexed as an entrance
+;; (for the GJ->MC case already done) and an exit for 38 etc. (actually
+;; exit light 60 at the site).  The literature calls this
+;; "End-to-end control by a signal with entrance and exit in same direction".
+;; The reverse-dir case (GJct->DYard) is already handled as a simple route
+;; (which nonetheless needs extra checking, see 37NS/37RS, because of
+;; this possibility.
+
+
+(relay 26XR
+       (OR 26XR !25RS)          ; no S/B exit here, but bug out if there
+				; are potential moves probing southward
+       !26PBS			; when PBS picks, XR's job finished.
+        (OR 37RN 37NN)		; these are the "exit seekers" that want us
+       (LABEL
+	 L26XRT		; hereon out shared with ZS
+
+	 ;; This is the special hack for N/X in same direction ---
+	 ;; !26XS would be normally be here, but that's not good enough.
+	 ;; Pressing local exit at 16 would otherwise drop XR when XS
+	 ;; picked causing PBS to pick falsely. See 26PBS
+
+	 (OR
+	   !26XS		; When 26PB selects local exit at 26XS(60K)
+	    (AND 26XR 26PB))	; hold XR up as long as button is held.
+	 ;; lest 26PBS (which see, below) pick up falsely.
+	 ;; but don't pick if not up already if 26XS up (hence "AND 26XR")
+
+	 (OR (AND 37NN 38PBS)
+	     (AND 37RN (OR (AND 35NN 34PBS)(AND 35RN 36PBS))))
+	 9745T))		; intervening track must be clear up to 26
+
+;; Carry southbound answer-back from Gyro Jct to Duckburg Yards.
+(relay 26ZS			; backward chainer
+       (OR 26XR 26ZS)		; require 26XR to start, but not to stay.
+       25RS			; answer-back itself
+       (OR 24XS 8ZS)		; actual exit, OR successive chained E/E exit
+       L26XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Can't use "trivial" macro anymore - XR/ZS now part of term.
+(relay 26PBS
+       (OR 26PBS		; lock around these terms.
+	   ;; Note that 26XR steers 26PB to 26XS, preventing 26PBS
+	   ;; via the !26XR term below -- for that reason, 26XR must stay up
+	   ;; as long as 26PB is being pressed. See comment above in 26XR.
+	   (AND 26PB !26XR !25RS)	; push button, and not seeking exit here
+	   (AND 26XR 26ZS))	; through-route ready to push 26 for us.
+       )
+
+;; Implement 26R.  See comments above at 14R.
+
+(relay 26R 26PBS 25RWK 24XS)	; no route choice- very easy!
+
+;; 30R
+(relay 30R 30PBS 27RWK 28XS)
+			  
+;;
+;; Implement dwarf R relays for Duckburg Yard - needed for E/E 26 to work
+;;
+(relay 34R 34PBS 35NWK 37RWK 26XS)
+(relay 36R 36PBS 35RWK 37RWK 26XS)
+(relay 38R 38PBS       37NWK 26XS)
+
+
+;;
+;; 47 Switch, Huey Ave. Extension
+;;
+(relay 47NN (or 50PBS 50XS) !47RN !47RLP !47RWK)
+(relay 47RN (or 48PBS 48XS) !47NN !47NLP !47NWK)
+(relay 47NS (or 46PBS 46XR 46XS 28ZS) !47RN !47RLP !47RWK)
+(relay 47RS (or 46PBS 46XR 46XS 28ZS) !47NN !47NLP !47NWK)
+
+(relay 50k 47NS (OR 50PBS !52PBS))
+(relay 48K 47RS (OR 48PBS !56PBS))
+(relay 46K (OR 47NN 47RN) (OR 46PBS !28XS))
+
+(relay 46XS (OR 46XPB 46PB 46XS
+		;;Normally, we would have
+		;;(AND 28ZS 28R)) to do the end-to-end answerback,
+		;;but because of the intervening approach, 40, we can't
+		;;say "all complete" until 40PBS is verified(in context);
+		(AND 40PBS ;verified
+		     40ZS)) ;in (end-to-end route context...)
+       (OR 47NN 47RN)			; exit beckoners
+       !46PBS !46XR !28XS)		; lockouts
+(relay 48XS (OR 48XPB 48PB 48XS) 47RS !48PBS !56PBS);check opp. app PBS
+(relay 50XS (OR 50XPB 50PB 50XS) 47NS !50PBS !52PBS)
+
+;; Through routing.  Handle Southbound, Gyro Jct --> Huey Ave first.
+
+;; Carry southbound selection from Gyro Jct to Huey Ave.
+(relay 46XR
+        (OR 46XR (AND !47NN !47RN)) ;bug out if conflicting initation
+        !46PBS			; when PBS picks, XR's job finished.
+        (OR 27RS 27NS)		; exit seekers
+       (LABEL
+	  L46XRT		; hereon out shared with ZS
+	 !28XS			; if local exit at 28 selected, call it quits
+	 (OR (AND 27RS 30PBS)	; verify real PBS's out there
+	     (AND 27NS 25NS 1743T (OR 24PBS 24XR)))
+	 !46XS			; not exiting in other direction, please
+	 ;; Normally, we'd put some route locker, AS etc terms here.
+	 1744T 1745T))
+
+;; Propagate northbound answer-back from Barksville Yards to Mainline Crossing
+
+(relay 46ZS			; backward chainer -- see 28XS.
+       (OR 46XR 46ZS)		; require 46XR to start, but not to stay.
+       (OR (AND 47RN 48XS)	; verify real XS out there
+	   (AND 47NN 50XS))
+       L46XRT)			; verify PBS, track lockouts, etc., too.
+
+(relay 46PBS
+       (OR 46PBS		; lock around these terms.
+	   (AND 46PB !47RN !47NN) ; push button, and not seeking exit here
+	   (AND 46XR 46ZS))	; through-route ready to push 46 for us.
+       ;; Leave out all other stuff (track kickoff, slotting etc)
+       )
+
+(relay 46R 46PBS (OR (AND 47RWK 48XS)(AND 47NWK 50XS)))
+
+(relay 1747K (OR 46R 48R 50R))	; kludgey line-o-line
+
+;; intermendiate automatic signal hack -- not the right way, should
+;; use route lockers.
+(relay 1746R 46R (OR 1746R !1745T 28XS))
+(kludgey-hv-r 1746)
+
+;;
+;;; Now the other way, Huey Ave. to Gyro Jct.  This is hard because
+;;; of the embedded approach signal 40.  But, because we're not doing
+;;; approach signal semantics in this pass, we'll pick it up in passing
+;;; kludgily and do everything else right, which is easy.
+;
+;;; Carry Northbound selection from Huey Ave. to Gyro Jct
+(relay 28XR 
+       (OR 28XR (AND !27RS !27NS)) ;lock out on wrong-dir exit seekers
+       !28PBS			; when PBS picks, XR's job finished.
+       (OR 47NN 47RN)		; right-dir exit seekers that call for us
+       (LABEL
+	  L28XRT		; hereon out shared with ZS
+	 !46XS			; if local exit at 28 selected, call it quits
+	 (OR (AND 47NN 50PBS)	; verify real PBS's out there
+	     (AND 47RN 48PBS))
+	 !28XS			; not exiting in other direction, please
+	 ;; Normally, we'd put some route locker, AS etc terms here.
+	 1747T 1746T 1745T))
+
+;; Propagate southbound answer-back Gyro Jct to Huey Ave.
+
+(relay 28ZS			; backward chainer -- see 46XS
+       (OR 28XR 28ZS)		; require 28XR to start, but not to stay.
+       (OR (AND 27RS 30XS)	; verify real XS out there
+	   (AND 27NS 25NS (OR 24XS 8ZS))) ;don't forget iterated route
+       L28XRT)			; verify PBS, track lockouts, etc., too.
+
+(relay 28PBS
+       (OR 28PBS		; lock around these terms.
+	   (AND 28PB !27RS !27NS) ; push button, and not seeking exit here
+	   (AND 28XR 28ZS))	; through-route ready to push 28 for us.
+       ;; Leave out all other stuff (track kickoff, slotting etc)
+       )
+
+(relay 28R 28PBS (OR (AND 27RWK 30XS) (AND 27NWK 25NWK 24XS)))
+
+(relay 1744K (OR 28R 30R (AND 24R 25NWK)))	; kludgey line-o-line
+;
+;; Need some R's for 50/52
+(relay 50R 50PBS 47NWK 46XS)
+(relay 48R 48PBS 47RWK 46XS)
+
+;; Intermediate strategy for intermediate approach signal
+
+(relay 40ZS (OR 40ZS 28ZS) L28XRT)
+
+(relay 40PBS
+       (or 40PBS
+	   40PB
+	   (and 28R 40ZS))
+	   !28XS)			; no exit at 28.
+(kludgey-h-pbs 40)
+(relay 1745K (OR 28XS 40PBS)); another kludge -- no route lockers here...
+
+;;Do same thing for 12... 14XS should drop it all
+(relay 12ZS (OR 12ZS 10ZS) L10XRT)
+
+(relay 12PBS
+       (or 12PBS
+	   12PB
+	   (and 10R 12ZS))
+       !10XS			; no exit at 10...
+       )
+(kludgey-h-pbs 12)
+
+(relay 2741K (OR 12PBS 10XS))  ; another kludge -- no route lockers here...
+
+;; Do some lower heads for nice aspects
+
+(relay 2DR 3RWP)
+(relay 4DR 5RWP)
+(relay 8DR 3RWP)		; shouldn't happen
+(relay 10DR 5RWP)
+(relay 24DR 25RWP)
+(relay 14DR 15RWP)		; perhaps should be yard signal
+(relay 28DR 27RWP)
+(relay 46DR 47RWP)
+;; more easy fun
+(relay 26D 8HV)
+(relay 40D 28HV)
+(relay 48D 40HV)
+(relay 24D 25NWP 1746HV)
+(relay 24CO 24HV !24D)			; three yellows
+(relay 1746D 46HV)
+(relay 2D (OR (AND 3RWP 24HV)(AND 3NWP 2741HV)))
+(relay 4D (OR (AND 5NWP 24HV)(AND 5RWP 2741HV)))
+(relay 6D 2HV)
+(relay 12D 10HV)
+(relay 22D 12HV)
+(relay 30D 1746HV)
+(relay 32D 30HV)
+(relay 50D 40HV)
+(relay 52D 50HV)
+(relay 54D 22HV)
+(relay 56D 48D)
+
+(relay 2741D 14HV)

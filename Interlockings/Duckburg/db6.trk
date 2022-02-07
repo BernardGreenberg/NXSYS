@@ -1,0 +1,2025 @@
+;; Duckburg Tower A Interlocking for explanatory purposes
+;; Copyright (c) Bernard S. Greenberg 18 January 1998 All rights reserved.
+;;
+
+(route
+  "DB6: Duckburg A (With rte&sw locking and slotting) of 30 January 1998"
+  #\D 00 north)
+
+;;@DB6 Add slotting, proper home relays (H) and signal auto-cancel.
+;;@DB6 This not only does the obvious, but (with the proper expression
+;;@DB6 of control lengths) handles facing-point-overlap (another type of
+;;@DB6 crosslock), treated (in modern times) just like conditional crosslock.
+;;@DB6 We'll also start dropping some DB3/DB4/DB5 comments that cancelled each
+;;@DB6 other, and drop out some DB2 comments to get the file shorter.
+;;@DB6 You can actually run trains around it now fairly correctly.
+;;@DB6 Still all 0-length approach limits & no call-on, otherwise we're done
+;;@DB6 (but NXSYS trains currently disappear when tripped and don't overrun!;)
+
+;;#DB5 We'll use a pound sign for visual variety.
+;;#DB5 DB5.TRK adds switch locking, filling out the LS's with the real,
+;;#DB5 full logic, including conditional crosslocking ("C-Xlk", etc) at 25-27.
+;;#DB5 This gets CLK flashing working, which makes the panel a lot more
+;;#DB5 fun and interesting.  Red lock lights now work, too.
+;;#DB5 Some checks that were appropriate in earlier versions have been
+;;#DB5 excised (and noted), to make the conditions for allowing initiation
+;;#DB5 and approach button-calling more liberal, to faciliate CLK flashing.
+
+;;*DB4 This version incorporates route-locking and crude approach locking
+;;*DB4 The "approach locking" is really just AS relays that drop when
+;;*DB4 R (or PBS for approach) picks -- the point of it is to get route
+;;*DB4 locking working so all the kludgey "lines-o-lite" and exit lights
+;;*DB4 that don't go off and dark sections in the middle of end-to-end
+;;*DB4 can be dispensed with: at least the panel will look right when
+;;*DB4 routes are all lined, and a lot of bogus (scaffold) wiring can
+;;*DB4 be discarded.
+
+;;*DB4 Now that there is route locking, most approach signals and exits
+;;*DB4 can be carefully locked against routes (sticking around such
+;;*DB4 contacts bcause of RGP bobble).  AS and route locking still do NOT
+;;*DB4 lock switches.
+
+;;*DB4 We will also do VS's (stop route locking) in this pass, because it is
+;;*DB4 (1) easy after route locking has been done (2) very much akin to
+;;*DB4 route locking (3) packs a lot of bang for the buck in terms of panel
+;;*DB4 behavior (stops on NXSYS panels).  VS's are at the end.
+;;*DB4 All DB4 sections and changes are marked "*DB4".
+
+;;**DB3 db3.trk - this version adds approach overlap implications,
+;;**DB3 both approach signals and exits looking at trailing point switches.
+;;**DB3 Still no approach or other locking.
+;;
+;;**DB3 The "call side" of some conditional crosslocks (25 and 27 by Approach
+;;**DB3 40 and exit at 8) are handled, but LS programming (not done here)
+;;**DB3 is required to get this right.
+;;**DB3 Everything changed for this version is marked *DB3 or **DB3.
+
+;;**DB3 This version also adds "conflicting initiation in same direction"
+;;**DB3 protection, mainly the TrivHPBS3 macro below, and !3RN/!5RN
+;;**DB3 checks in 8/10 PBS/XR/ZS.
+
+;; db2.trk - Duckburg Tower A, with correct through-routing and R relays...
+
+
+(include "dburg.trk")
+(include "stdmacs.trk")
+
+;;@DB6 This macro is the standard autocancel H-tail, which cancels the signal
+;;@DB6 when a train passes, unless fleeted, or when the train accepting a
+;;@DB6 call-on leaves the approach section.
+;;@DB6 args -
+;;@DB6 1 - signal
+;;@DB6 2 - home section (cancels high)
+;;@DB6 3 - approach section (sticks callon)
+
+(defrmacro H-autocancel 3
+  (OR 1FL (AND (OR 2T !1HY)(OR !3T !1COS))))
+
+;;@DB6 Rewrite TrivHPBS3 as BasicHomePBS
+;;@DB6 args:
+;;@DB6   1  - the signal number
+;;@DB6   2  - "exit seeker" switch selector, as in DB5 and down
+;;@DB6   3  - "Conflicting parallel initiation" switch selector, as in DB5--
+;;@DB6   4  - Home track section, used to auto-cancel high signal
+;;@DB6   5  - Approach track section, used to auto-cancel call-on signal
+
+;;@DB6  This is the full, standard home PBS circuit when there are
+;;@DB6  no complicating factors such as end-to-end routes.
+
+(defrmacro BasicHomePBS 5
+  (RELAY 1PBS
+	 (OR (and 1PB !(arg 2)) 1PBS) (arg 3)
+	 (H-autocancel 1H (arg 4) (arg 5))))
+
+;;@DB6    Signal exit Conflicting-initn      home sec approach sec
+(BasicHomePBS 2  5BNN !5RS			2738T 6T)
+(BasicHomePBS 4  3BNN !3RS			1741T 7T)
+;;@DB6 Dwarves removed - they do not autocancel, need a different circuit.
+(BasicHomePBS 22 19RS (AND !19NN !15NN)         2742T 2745T)
+(BasicHomePBS 30 27RN !27NS			1744T 3739T)
+(BasicHomePBS 48 47RS !47NN			1747T 2749T)
+(BasicHomePBS 50 47NS !47RN			1747T 1748T)
+
+
+;;@DB6 Do something similar for approaches.  The only ways kludgey-hv-r
+;;@DB6 is deficient are (1) H is a stub (2) no DV (3) no autocancel
+;;@DB6 (4) stop has no AK.  So fix these, with the assumptions that
+;;@DB6 (A) all app sigs have VS on this layout (B) all have distant.
+;;@DB6 So add two more args and redefine kludgey-h-pbs to
+;;@DB6 BasicApproach. Leave H relays to be coded for real.
+;;@DB6 Args:
+;;@DB6    1          Signal #
+;;@DB6    2          AK stop-down/autocancel section
+;;@DB6    3          Next signal for distant,.
+;;@DB6    4          Possible back-to-back RVP
+;;@DB6  We'll do the approach signal H relays for real right here.
+
+(defrmacro BasicHVDV 3
+ (forms
+  (RELAY 1HV 1H 1RVP (arg 3))
+  (RELAY 1DV (OR (AND !1HV 1NVP) ; stop self-cycle-check
+		 (AND 1HV (arg 2))))))
+
+(defrmacro BasicApproach 4
+  (forms
+    (BasicHVDV 1H 3HV (arg 4))
+;;@DB6 -- again, no sweat if VS doesn't exist...
+    (RELAY 1V (OR 1H 1VS !2T))))
+
+(BasicApproach 6  6T     2HV    T)
+
+(relay 6H			; define the Home relay -clears the signal
+       (OR 6H 6DV)		; stop self-cycle check (see DV above)
+       6PBS			; the calling relay
+       !6AS			; verify that our locking is down
+       2738NS			; no reverse motion pointing at us
+       5NWC !5LS ; verify that switch we exist for is correct and locked
+       ;;@DB6 now slotting (track sections for the control length)
+       6T 2738T (or 3NWC 1741T))
+
+(BasicHVDV 12 10HV   14RVP)
+
+;;@DB6 12 must be done explicitly because of shared stop with 14
+(relay 12V (OR 12H 14H 12VS !2741T))
+
+(relay 12H (OR 12H 12DV) 12PBS !12AS 2741SS 3NWC !3LS 5RWC !5LS
+       ;;@DB6;   same as above, but no comments
+       2741T 2738T 1741T)
+
+(BasicApproach 32 3739T  30HV 3739RVP)
+(relay 32H (OR 32H 32DV) 32PBS !32AS 3739NS 27RWC !27LS 3739T 1744T 1745T)
+
+(BasicApproach 40 1745T 28HV 1746RVP) ;; whoops was wrong T 24 January 1998
+(relay 40H (OR 40H 40DV)
+	   40PBS !40AS 1745SS 1745T 1744T
+	       ;;@DB6 slotting and switch-checking here is conditional ....
+       ;;@DB6 must use "swif normally closed" macro in H...
+       (SWIFNC 27
+	       3739T		; if reverse, look at 3739
+	       (AND 1743T 25NWC
+;;NB This rightly should be here, becaue 40AS locks 25LS when 27 is normal,
+;;and what locks something should verify that it has done so before
+;;clearing.
+;;		    !25LS
+;;But it doesn't work, because when 25 is moved from R to N with 40
+;;-already- clear, the lack of 25 AS bobbles 40 if this term is left here.
+;;733-33, 1958 or 1944, does NOT show approach H checking !LS of either
+;;switch of a conditional crosslock, even though no explanation is given
+;;of why not.  So we omit it, too.
+		    1742T)))
+
+	       
+(BasicApproach 52  1748T  50HV  T)
+(relay 52H (OR 52H 52DV)
+       52PBS !52AS 1747SS 47NWC !47LS 1748T 1747T 1746T 1745T)
+
+(BasicApproach 54  2747T  22HV  2749RVP)
+(relay 54H (OR 54H 54DV)
+       54PBS !54AS  2747SS 19RWC !19LS 15RWC !15LS
+       2747T 2745T 2742T 2741T)
+
+(BasicApproach 56  3749T 48HV  T)
+(relay 56H (OR 56H 56DV)
+       56PBS !56AS 3749SS 47RWC !47LS 3749T 1747T 1746T 1745T)
+
+;;@DB6 Now do some home signal stops uncomplicated by double-home
+;;@DB6 back-to-back pairing, using the the NXSYS standard macro.
+;;@DB6 We have enough of them... See stdmacs.trk for arg definitions.
+
+(HomeV 2  2737T 2738T 5NWC)  (relay 2HV  2H  2RVP)
+(HomeV 4  7T    1741T 3NWC)  (relay 4HV  4H  4RVP)
+(HomeV 8  1742T 1741T 5NWC)  (relay 8HV  8H  8RVP)
+(HomeV 10 2741T 2738T 3NWC)  (relay 10HV 10H 10RVP)
+
+(HomeV 14 2741T 2742T T)     (relay 14HV 14H 14RVP 12RVP)
+(HomeV 22 2745T 2742T (AND 19RWC 15RWC)) (relay 22HV 22H 22RVP)
+
+(HomeV 24 1742T 1743T (OR 25RWC 27NWC))  (relay 24HV 24H 24RVP)
+(HomeV 26 9745T 1743T     25RWC       )  (relay 26HV 26H 26RVP)
+(HomeV 28 1745T 1744T (OR 27RWC 25NWC))  (relay 28HV 28H 28RVP)
+(HomeV 30 3739T 1744T     27RWC       )  (relay 30HV 30H 30RVP)
+
+(HomeV 46 1746T 1747T T)     (relay 46HV 46H 46RVP)
+(HomeV 48 3749T 1747T 47RWC) (relay 48HV 48H 48RVP)
+(HomeV 50 1748T 1747T 47NWC) (relay 50HV 50H 50RVP)
+
+;;@DB6 The dwarves are basically like call-on's - no slotting, need
+;;@DB6 train in front of it to clear....no HV, no DV, otherwise looks
+;;@DB6 like HomeV.  This macro really belongs in stdmacs.trk...
+
+(defrmacro DwarfV 4
+            (relay 1V (OR 1H
+			  (AND (OR 1VS (AND 1V !2T))
+			       (OR 2T !3T)
+			       (arg 4)))))
+
+;;@DB6 PBS's for dwarves are going to be identical, too...
+(defrmacro DwarfPBS 3 ;; signal, approach sec, conflict -- no fleeting,
+  ;;@DB6 no through routes.
+	  (relay 1PBS (OR 1PBS (AND (arg 3) 1PB)) !2T))
+ ; must be train -- no fun to demol
+
+
+;;@DB6 - now combine these in one macro
+;;@DB6 - now combine these in one macro
+(defrmacro StdDwarf 6 ;; same args as DwarfV/HomeV
+  ;;@DB6 5th arg will be "exit seeker, must not be up to initiate"
+  ;;@DB6 6th arg will be "conflicting initiation" ...
+  (forms
+    (DwarfPBS 1PBS (arg 2)(arg 5)(arg 6))
+    (DwarfV (arg 1) (arg 2) (arg 3)(arg 4))))
+
+(StdDwarf 16 6745T 2742T (AND 17NWK 15NWK) !17NS (AND !17RN !15RN))
+(StdDwarf 18 5745T 2742T (AND 17RWK 15NWK) !17RS (AND !17NN !15RN))
+(StdDwarf 20 4745T 2742T (AND 19NWK 15RWK) !19NS (AND !19RN !15NN))
+
+(StdDwarf 34 7744T 9745T (AND 35NWK 37RWK) !35NS (AND !35RN !37NN))
+(StdDwarf 36 8744T 9745T (AND 35RWK 37RWK) !35RS (AND !35NN !37NN))
+(StdDwarf 38 9744T 9745T 37NWK             !37NS !37RWK)
+
+;;@DB6 kludgey-auto-h macro gone -- done for real at bottom.
+
+;;@DB6 -- 0AS has been removed, no longer needed.
+
+;;#DB5 - all LS's chopped out, LS will be coded near NLP and RLP
+(stdswitch 3)	;Circuits moved down to Mainline Crossing
+(stdswitch 5)
+(stdswitch 15)
+(stdswitch 17)
+(stdswitch 19)
+(stdswitch 25)
+(stdswitch 27)
+(stdswitch 35)
+(stdswitch 37)
+(stdswitch 47)
+
+;;*DB4 Here are some macros for kludgey *DB4 implementation -- the route
+;;*DB4 lockers (NS/SS), SP, and K (panel light) will not be scaffolding,
+;;*DB4 but "the real thing"
+
+;;*DB4 Kludge AS for home signals -- RGP is pretty much right
+(defrmacro kludge-home-AS 1
+  (forms
+    (relay 1RGP !0BRGP !1HV !1H !1CO)		; real thing ...
+    (relay 1AS 1RGP !1R)))
+
+;;@DB6 better define one for Dwarves that doesn't implicitly define HV!!!
+(defrmacro kludge-dwarf-AS 1
+  (forms
+    (relay 1RGP !0BRGP !1H !1CO)		; real thing ...
+    (relay 1AS 1RGP !1R)))
+
+;;*DB4 Same thing for approach signals
+
+(defrmacro kludge-approach-AS 2
+  (forms
+    (relay 1RGP !0BRGP !1HV !1H)
+
+    (relay 1AS 1RGP
+	    (OR (arg 2) ; this is a switch back contact, normally NWC,
+		; which is necessary to prevent AS from dropping until PBS
+		;; has succeeded in forcing the switches necessary for
+		;; the signal to clear.  But for this, PBS would drop AS,
+		;; which would drop LS, and the switch would never move
+		;; and the approach signal never clear.
+
+		!1PBS))))
+
+;;
+;; Mainline Crossing.
+;;
+
+(relay 5BNS 2PBS !5RS !5RWK !5RLP)
+(relay 3ANS (OR 5BNS 5RS) !3RN !3RWK !3RLP)
+(relay 3RS  5BNS !3ANN !3BNS !3NWK !3NLP)
+
+;;*DB4 !2738SP added to 10K to turn off entrance/exit light when route lined
+;;*DB4 and 12AS/2741NS added to lockout exit if northbound conflicting move
+(relay 10K 3ANS (OR 10PBS		; so only applies to exits, not entr.
+		    (AND 12AS 2741NS	; *DB4 if NB move, don't offer exit
+			 !14XS)) !2738SP)
+(relay 5ANS (OR 3RS 3BNS) !5RN !5RWK !5RLP)
+(relay 8K 5ANS (OR 8PBS !24XS)
+       ;;**DB3 as exit light, prohibit if 25-27 unusable. See 25RWK/27NWK
+       (OR 8PBS
+	   ;;*DB4- check 1742 northbound motion in progress
+	   (AND (OR !25NWK !27RWK) 1742NS))
+;;*DB4 !1741SP added to 8K to turn off entrance/exit light when route lined
+	!1741SP)
+(relay 3BNS (OR 4PBS 4XS) !3RS !3RLP !3RWK)
+(relay 5RS 3BNS !5BNS !5ANN !5NLP !5NWK)
+
+;;*DB4 Approach locking kludges (no real approach, no time, no QR)
+;;*DB4 but correct handling of call (PBS), clear sig (RGP) and AS drop delay
+(kludge-approach-AS 6 !5NWC) ;don't expose !6PBS until 5NWC
+(kludge-approach-AS 12 (OR !3NWC !5RWC)) ;; hold while either switch wrong
+(kludge-approach-AS 32 !27RWC)
+(kludge-approach-AS 40 (AND !27RWC !25NWC)) ;;conditional XLOCK
+(kludge-approach-AS 52 !47NWC)
+(kludge-approach-AS 54 (OR !19RWC !15RWC))
+(kludge-approach-AS 56 !47RWC)
+
+;;*DB4 Create kludgey AS's for home signals.
+(kludge-home-AS 2)
+(kludge-home-AS 4)
+(kludge-home-AS 8)
+(kludge-home-AS 10)
+
+;;*DB4 Now create proper route locking for Mainline Crossing
+;;*DB4
+(relay 2738SS
+       ;; Fundamental purpose of route locking:
+
+        (OR 2738SS 2738T) ;If there is a train in this section, and
+       ;; this relay is down, it cannot pick up as long as the train remains
+       ;; there, even if other terms pick up
+
+        (OR 1741SS 5NWC) ; If 5 is not normal, 1741SS cascades into this.
+        2AS)		; if 2 is clear, we drop unconditionally.
+
+(relay 1741SS				; same thing, other side, but
+					; not exactly...
+       (OR 1741SS 1741T)		; basic "locking/stick" exact same.
+       ;; but we can't cascade the exact same across the crossover, because
+       ;; of a potential infinite lockout if power fails, so
+       (OR 3NWC				; either 3 is normal, or...
+	   (AND 2AS (OR 1741T 1741SS))) ; simulate 2738SS
+       4AS)				; 4AS unconditionally drops us.
+
+(relay 1741NS				; northbound route locking
+       (OR 1741NS 1741T)		; basic locking/sticking function
+       (OR 2738NS 5NWC)			; cascade from other track
+       8AS)				; unconditional drop if 8 clear
+
+(relay 2738NS
+       (OR 2738NS 2738T)
+       ;; but there's no exit at 2, so we don't need the cascade from 1741
+       10AS)				; 8 unconditionally drops it.
+
+;;*DB4 The SP relay picks if the line of light should be lit, also turning off
+;;*DB4 exit lights.  It merely combines (and logic-sense) inverts the two
+;;*DB4 (or one if there aren't two)...
+
+(relay 1741SP (OR !1741NS !1741SS))
+(relay 2738SP (OR !2738NS !2738SS))
+
+;;*DB4 Now the track-section K's can be expressed properly...
+(relay 1741K 1741SP)
+(relay 2738K 2738SP)
+
+;;@DB6 kludgey D1-738 gone, done right at bottom.
+
+(relay 10D 1738HV)
+
+;;*DB4 Now do the two intermediate sections, 2741 between Mainline and
+;;*DB4 Barksville Yards, and 1742 between Mainline and Gyro Jct.
+;;*DB4 These route lockers drop by cascading the "outflow" of the upstream
+;;*DB4 section, carrying it to the next home signal.  This is a form
+;;*DB4 of traffic locking.
+
+(relay 2741SS
+       (OR 2741SS 2741T)		; basic route locker hack (see above)
+       (OR 3RWC 2738SS))		; cascade if pointed this way.
+
+(relay 2741NS
+       (OR 2741NS 2741T)
+       2742NS)				; cascade unconditionally.
+
+(relay 2741SP (OR !2741SS !2741NS !12AS)); line-o-lite relay
+					   ;note that !12AS can light it, too
+(relay 2741K 2741SP)			; this is the correct expression
+
+(relay 10XS (OR 10XS   ;Stick around any of these "pick me up" terms--viz.,
+             (AND 2741NS 12AS ;*DB4 - don't pick up unless no N/B move..
+               (OR            ;*DB4 - continue OR of other terms...
+			      ;*DB4 - note the all-important OR 10XS above!!!
+		10XPB  ;Clicking on the NXSYS exit light (not in real world)
+		       ;but GRS machines have an "exit button" which is close
+		10PB   ;Entrance button for signal there, used as exit
+		(AND 14ZS 14R) ;Automatic exit selection by downstream network
+		)))
+       3ANS ;this term is the "exit beckoner", someone looking for a
+            ;;potential exit here (10). Its back term (!3ANS) locks out
+            ;;initiations (10PBS and 10XR) at this location/direction.
+       !10PBS !10XR !14XS)		; various conflicting initiations/exs
+
+(relay 8XS (OR 8XS (AND 1742NS ;;*DB4- check no northbound motion in progress
+			(OR
+			  8XPB 8PB (AND 24ZS 24R))))
+           5ANS !8PBS !8XR !24XS)
+
+;; Here the XR of the upstream network simulates an initiation by "shadowing"
+;; PBS, and the ZS of the same network shadows XS when it is returning a
+;; through-route from downstream.
+
+(relay 3ANN (OR		; terms that start selection over crossover
+	       10PBS	; initiation facing (to) that switch
+	       10XR	; simulated, tentative through-route initiation
+	       10XS	; exit facing (from) that switch
+	       14ZS)	; simulated exit by downstream through-route
+       !3RN !3RLP !3RWK)		; normal split/lockout terms.
+(relay 5BNN (OR 3ANN 3RN)   !5RS !5RLP !5RWK)
+;;*DB4 !2738SP added to to 2K to turn off entrance/exit light when route lined
+(relay 2K 5BNN 2PBS !2738SP)
+(relay 5ANN (OR 8PBS 8XR 8XS 24ZS) !5RN !5RLP !5RWK)
+(relay 3BNN (OR 5ANN 5RN) !3RS !3RLP !3RWK)
+(relay 3RN  5ANN !3BNS !3ANN !3NLP !3NWK)
+(relay 5RN 3ANN !5BNS !5ANN  !5NLP !5NWK)
+;;*DB4 !1741SP added to to 4K to turn off entrance/exit light when route lined
+(relay 4K 3BNN !1741SP)
+(relay 4XS (OR 4XPB 4PB 4XS) 3BNN !4PBS)
+
+
+;;#DB5 Mainline Crossing Switch Locking(Lock-stick relay LS)
+;;#DB5 Note that the vast common sum of the two is shared...
+
+;;#DB5 invent 5AS double-remote AS -- do it right when we do AS's
+;;#DB4 in some later version, but for now, just repeat them Northward.
+
+(relay 5AS 26AS (OR 27RWC 28AS))
+
+(relay 3LS
+       (LSNPrecond 3)		; stdmacs macro needed in standard LS
+       12AS				; 12 locks 3 normal
+       (LABEL L3LST			;shared with 5
+	      2738T 1741T		; track occupancy locks it (detector)
+	      2738NS 2738SS 1741NS 1741SS ; route locking (includes appr. lkg)
+	      2NVP 4NVP 8NVP 10NVP))	; and all 4 train stops
+;;#DB5
+(relay 5LS
+       (LSNPrecond 5)			; need this macro
+       6AS				; 6 locks 5 normal
+       12AS				; 12 locks 5 reverse
+       5AS				; 26-28 locks us by long arm
+       L3LST)				; all rest shared with 3.
+
+;;*DB3 Mainline Crossing Switch Lever Repeaters (NLP/RLP)
+
+
+(relay 3NLP (and 3LS !3RLP
+		 (OR 3NL
+		     12PBS             ;12 forces 3 normal
+		     (AND 3ANN 3ANS)
+		     (AND 3BNN 3BNS))))
+
+(relay 3RLP (and 3LS !3NLP (OR 3RL (AND 3RN 3RS))))
+
+
+(relay 5NLP (and 5LS !5RLP
+		 (OR 5NL
+;;*DB3 5 Must now be forced normal by Approach 6, which checks !5RWK.
+		     6PBS               ;do as we say
+		     (AND 5ANN 5ANS)
+;;*DB3 The control lengths of 26 and 28 also overlap 5, and must force
+;;*DB3 5 normal.  This is summarized as "an exit at 24..."
+;;*DB3 See 26R and 28R, too.
+
+		     24XS               ;do as we say
+
+		     (AND 5BNN 5BNS))))
+(relay 5RLP (and 5LS !5NLP (OR 5RL
+;;**DB3 - Signal 12 should force 5 reverse, so overrun goes to
+;;**DB3 - the outbound track.  See 12PBS - 12 checks !3RWK !5NWK.
+			       12PBS
+			       (AND 5RN 5RS))))
+
+
+;;
+;; Barksville Yards
+;;
+
+;;*DB4 - !2742SP must be added to turn off K light when line-o-lite lit.
+;;*DB4 - 2741NS must be added to prevent exit light when S/B move in progress
+(relay 14K (OR 15RN 15NN) (OR 14PBS (AND !10XS 2741SS)) !2742SP)
+(relay 15RS (OR 14PBS 14XR 14XS 10ZS) !15NN !15NLP !15NWK)
+(relay 15RN (OR 19NN 19RN)  !15NN !15NLP !15NWK)
+(relay 15NN (OR 17NN 17RN)  !15RN !15RLP !15RWK)
+(relay 15NS (OR 14PBS 14XR 14XS 10ZS) !15RN !15RLP !15RWK)
+
+(relay 17RS 15NS            !17NN !17NLP !17NWK)
+(relay 17NS 15NS            !17RN !17RLP !17RWK)
+(relay 17RN (OR 18XS 18PBS) !17NN !17NLP !17NWK)
+(relay 17NN (OR 16XS 16PBS) !17RN !17RLP !17RWK)
+(relay 16XS (OR 16XPB 16PB 16XS) 17NS !16PBS)
+(relay 18XS (OR 18XPB 18PB 18XS) 17RS !18PBS)
+;;*DB4 - !2742SP must be added to turn off K light when line-o-lite lit.
+(relay 16K 17NS !2742SP)
+(relay 18K 17RS !2742SP)
+
+(relay 19RS 15RS            !19NN !19NLP !19NWK)
+(relay 19NS 15RS            !19RN !19RLP !19RWK)
+(relay 19RN (OR 22XS 22PBS) !19NN !19NLP !19NWK)
+(relay 19NN (OR 20XS 20PBS) !19RN !19RLP !19RWK)
+(relay 20XS (OR 20XPB 20PB 20XS) 19NS !20PBS)
+(relay 22XS 
+;;*DB4 -- 2745NS must be added to prevent exit at 22 if train is headed
+;;*DB4 towards it -- note that check must be in non-stick branch to prevent
+;;*DB4 dropping for RGP bobble.
+       (OR 22XS (AND 2745NS (OR 22XPB 22PB)))
+       19RS !22PBS !54PBS); check approach signal!
+;;*DB4 - !2742SP must be added to turn off K light when line-o-lite lit.
+(relay 20K 19NS !2742SP)
+;;*DB4 - 2745NS (drooped) added to terms that would prevent an exit at 22
+(relay 22K 19RS (OR 22PBS (AND !54PBS 2745NS)) !2742SP)
+(relay 14XS (OR 14XS			; stick around all button pressers
+		;;*DB4 lock out all exits if S/B move in progress
+		(AND 2741NS		; *DB4 note that this is non-stick cct
+		     (OR
+		       14XPB 14PB	; 2 kinds of normal buttons
+		       (AND 12ZS 12PBS)))) ; end/end with intervening approach
+       ;;Note that 14 exit route control lengths end before Mainline Xing,
+       ;;so we don't require !3RWK.
+       (OR 15NN 15RN)			; exit seekers
+       !14PBS !14XR !10XS)		; lockouts
+
+
+(relay 15NLP (and 15LS !15RLP (OR 15NL (AND 15NN 15NS))))
+(relay 15RLP (and 15LS !15NLP (OR 15RL
+				  ;;**DB3 - 54 approach forces 15, 19 R
+				  54PBS
+				  (AND 15RN 15RS))))
+
+;;#DB5 - must do 17NLP/RLP, too now, because kludge macro won't cut it.
+(relay 17NLP (and 17LS !17RLP (OR 17NL (AND 17NN 17NS))))
+(relay 17RLP (and 17LS !17NLP (OR 17RL (AND 17RN 17RS))))
+
+(relay 19NLP (and 19LS !19RLP (OR 19NL (AND 19NN 19NS))))
+(relay 19RLP (and 19LS !19NLP (OR 19RL
+				  ;;**DB3 - 54 approach forces 15, 19 R
+				  54PBS
+				  (AND 19RN 19RS))))
+
+;;#DB5 - now do LS for all of these, all pretty easy, they're almost
+;;#DB5 identical.  Any of the dwarves, which should be mutually
+;;#DB5 exclusive, should lock the whole works. 19 and 15 a bit harder
+;;#DB5 because of 54 approach pushing through...
+
+(relay 15LS
+       (LSNPrecond 15)			; needed anti-preconditioning macro
+       (LABEL L1915LS
+	      54AS			; approach AS
+	      (LABEL L1517LS
+		     2742T		; single detector section for whole
+		     2742SS 2742NS      ; route lockers (include AS)
+		     14NVP 16NVP 18NVP 20NVP 22NVP)))	; and all  stops
+;;#DB5 - these two switch lockers just share most logic with 15LS
+(relay 17LS (LSNPrecond 17) L1517LS)
+(relay 19LS (LSNPrecond 19) L1915LS)
+
+
+;;*DB4 -- kludgey AS relays for the nonce..
+(kludge-dwarf-AS 16)(kludge-dwarf-AS 18)(kludge-dwarf-AS 20)(kludge-home-AS 22)
+(kludge-home-AS 14)
+
+;;*DB4 -- route locking on the two sections
+(relay 2742NS
+       (OR 2742NS 2742T)		; normal locking
+       16AS 18AS 20AS 22AS)		; any of these drop it
+(relay 2742SS
+       (OR 2742SS 2742T)		; normal lockage
+       14AS)				; 14AS feeds it
+
+(relay 2742SP (OR !2742NS !2742SS))	; line-o-lite relay
+(relay 2742K 2742SP)
+
+(relay 25RS (OR 24PBS 24XR 24XS 8ZS) !25NN !25NLP !25NWK)
+(relay 25NS (OR 24PBS 24XR 24XS 8ZS) !25RN !25RLP
+;;#DB5;#DB5;#DB5;#DB5;#DB5;#DB5;#DB5
+;;#DB5 This is REALLY CRITICAL DB5 stuff - ride out !25RWK with 25L --
+;;#DB5 If 25 is locked ONLY by conditional crosslock, it's not "really
+;;#DB5 locked" for our purposes, and a potential selection over it
+;;#DB5 remains possible is possible.  See 25LS and 25L.
+        (OR !25RWK 25L))
+(relay 25NN 27NN            !25RN !25RLP !25RWK)
+
+;; this hair is necessary because of the asymmetrical end-to-end sig 26
+;; (see notes below)
+(relay 25RN (OR 26PBS 26XR (OR (AND 37NN 38XS)
+			       (AND 37RN (or (AND 35NN 34XS)
+					     (AND 35RN 36XS)))))
+                            !25NN !25NLP !25NWK)
+;;*DB4  -- turn off if line-o-lite
+(relay 26K 25RS 26PBS !1743SP)
+
+;;
+;; End to End ("through-routing") -- fully commented for this first case, 
+;; which is the easy (symmetrical) one, from Mainline Crossing to Barksville
+;; Yards. Barksville Yards to Mainline Crossing is also easy, and follows
+;; immediately below this.
+;;
+
+;; XR is the extended hand of the "exit seeker" switch selector (here 3ANS)
+;; reaching out to simulate the PBS (here 14PBS) in the next network.
+
+;; Carry southbound selection from Mainline Crossing into Barksville Yards.
+(relay 14XR 
+       ;; 14XR simulates 14PBS in all of 14PBS's clients, but does not
+       ;; stick as 14PBS does.
+
+       (OR 14XR (AND !15NN !15RN)) ; check conflicting initiation/answer back
+        3ANS			; this is the "exit seeker" that triggers us
+       (LABEL L14XRT		; hereon out shared with ZS
+	!10XS			; if local exit at 10 selected, call it quits
+        (OR (AND 5BNS 2PBS)	; verify that this really legit, not ans-back
+	    (AND 5RS 1741T 4PBS))	; check remote track
+	!14XS			; not exiting in other direction, please
+;*DB4 Lock out when northbound move in progress from Barksville, or
+;*DB4 the approach signal has been cleared and not reset.  Note that no
+;*DB4 "stick rideout" (see XS) is necessary, because XR/ZS are transient.
+        12AS 2741NS
+        2741T 2738T))		; must have intervening track clear
+
+;; Propagate northbound answer-back from Barksville Yards to Mainline Crossing
+
+(relay 14ZS			; backward chainer -- see 10XS above.
+
+       ;; This simulates 10XS in all 10XS's clients, but does not stick as
+       ;; 10XS does.  Note that this causes all components of a through
+       ;; route to line simultaneously.
+       
+       (OR 14XR 14ZS)		; require 14XR to start, but not to stay.
+       (OR (AND 15RN (OR (AND 19NN 20XS) ; verify actual XS at other end
+			 (AND 19RN 22XS))) ;and progression of SB selection
+	   (AND 15NN (OR (AND 17NN 16XS)   ;chain all the way through to the
+			 (AND 17RN 18XS)))) ;point of answer-back at 14.
+       L14XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Can't use "trivial" macro anymore - XR/ZS now part of term.
+(relay 14PBS
+       (OR 14PBS		; lock around these terms.
+	   (AND 14PB !15RN !15NN) ; push button, and not seeking exit here
+	   (AND 14XR 14ZS))	; through-route ready to push 14 for us.
+;;@DB6 Add proper autocancel via macro
+       (H-autocancel 14 2742T 2741T)
+       )
+
+(relay 14R 14PBS (OR (AND 15NWK (OR (AND 17NWK 16XS)
+				    (AND 17RWK 18XS)))
+		     (AND 15RWK (OR (AND 19NWK 20XS)
+				    (AND 19RWK 22XS)))))
+			  
+
+
+;;*DB4 intermediate track section 1742 route locker relays
+;;*DB4
+
+(relay 1742SS
+       (OR 1742SS 1742T)		; lock route
+       (OR 1741SS 5RWC))		; cascade from 1741 unless switched
+(relay 1742NS
+       (OR 1742NS 1742T)
+       1743NS)				; cascade North unconditionally
+(relay 1742SP (OR !1742NS !1742SS))	; line-o-lite controller relay
+(relay 1742K 1742SP)			; actual line-o-lite
+
+
+;; implement R relays for 2 and 4 just to get them to "clear"...
+(relay 2R 2PBS 5NWK (OR (AND 3NWK 10XS)(AND 3RWK 8XS)))
+(relay 4R 4PBS 3NWK (OR (AND 5NWK 8XS)(AND 5RWK 10XS)))
+
+;; ******************************************
+;; Now do same thing for Northbound route out of
+
+;;		  BARKSVILLE YARDS TO MAINLINE CROSSING
+
+;;, 14 intermediate exit, 10 intermediate entrance...
+
+(relay 10XR
+        (OR 10XR !3ANS)         ; don't pick if wrong-dir exit probe in progr.
+       !10PBS			; when PBS picks, XR's job finished.
+        (OR 15RN 15NN)		; this is the "exit seeker" that wants us
+       (LABEL L10XRT		; hereon out shared with ZS
+	!14XS			; check local exit, no need for us if so.
+        (OR (AND 15NN (OR (AND 17NN 16PBS) ; verify that we really have
+			  (AND 17RN 18PBS))) ; the initiation out there
+	    (AND 15RN (OR (AND 19NN 20PBS) ; in Barksville
+			  (AND 19RN 22PBS))))
+	!10XS			; no exit in north direction, please!
+;;**DB3 - must be able to get 3 normal for motion into 10.
+        !3RWK
+;;**DB3 - punt end-to-end if conflicting initiation (even XR) from 8 ..
+        !3RN
+;;**DB3 -- well, since there's no exit at 2 and 5ANN->3RN might go away..
+        !5ANN
+;;*DB4 -- but no through-motion if S/B route already on the xover or between..
+        2741SS
+	2741T 2742T))		; must have intervening track clear
+
+;; Carry southbound answer-back from Mainline Crossing to Barksville
+(relay 10ZS			; backward chainer
+       (OR 10XR 10ZS)		; require 10XR to start, but not to stay.
+       (OR (AND 5RN 4XS)
+	   (AND 5BNN 2XS))
+       L10XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Can't use "trivial" macro anymore - XR/ZS now part of term.
+(relay 10PBS
+       (OR 10PBS		; lock around these terms.
+	   (AND 10PB !3ANS)	; push button, and not seeking exit here
+	   (AND 10XR 10ZS))	; through-route ready to push 10 for us.
+       ;;**DB3 -- conflicting initiation in same direction (8) check...
+       ;;**DB3 (although there's really no exit at 2, 8 PBS will still
+       ;;**DB3 lock out 8PBS if it gets to that).			 
+       !3RN
+       ;;**DB3 Since there's no exit at 2, check 5ANN as well (3RN might
+       ;;**DB3 go away one day)
+       !5ANN
+;;@DB6 add autocancel
+       (H-autocancel 10 2738T 2741T)
+       )
+
+(relay 10R 10PBS 3NWK  5RWK 4XS) ; there's no exit at 2.
+
+;;*DB4 kludgey 2738K excised; a real, correct one exists above (search for it)
+
+;;; R relays for yard dwarfs
+
+(relay 16R 16PBS 17NWK 15NWK 14XS)
+(relay 18R 18PBS 17RWK 15NWK 14XS)
+(relay 20R 20PBS 19NWK 15RWK 14XS)
+(relay 22R 22PBS 19RWK 15RWK 14XS) ; "dwarf no more"
+
+;;
+;; Gyro Junction (Jct.)
+;;
+
+(relay 27NS 25NS            !27RS !27RLP
+;;@DB6 - handle 40 overlap lock as conditional crosslock - ignore 27RWK
+;;@DB6 if 27L
+       (OR !27RWK 27L))
+(relay 27RS (OR 30PBS 30XS) !27NS !27NLP
+;;#DB5 - allow 27RS if 27 only NWK by conditional crosslock...
+       (OR !27NWK 27L)) ; see below
+(relay 27NN (or 28PBS 28XR 28XS 46ZS) !27RS !27RLP
+
+;;#DB5;#DB5;#DB5;#DB5;#DB5;#DB5;#DB5
+;;#DB5 This is REALLY CRITICAL DB5 stuff - ride out !27RWK with 27L --
+;;#DB5 If 27 is locked ONLY by conditional crosslock, it's not "really
+;;#DB5 locked" for our purposes, and a potential selection over it
+;;#DB5 remains possible is possible.  See 27LS and 27L.
+
+        (OR !27RWK 27L))	; #DB5 - ride out with L relay for xlock
+
+(relay 27RN (or 28PBS 28XR 28XS 46ZS) !27NS !27NLP
+;;#DB5 same thing - see 25RLP for why this one's neede
+       (OR !27NWK
+;;#DB5 27 not quite good enough - need to say
+            (AND 27L (OR 27RN ;stick around these terms
+			 40AS 27AS))))
+;;#DB5 -if both overlappers are pointed into 27/25, neither can move
+;;#DB5 and we are deadlocked, so don't offer an exit we can't realize.
+
+(relay 28K (or 27NS 27RS)
+;;**DB3 No exit at 28 if exit at 46 or approach 40 -- see 46XR/ZS, 28XS
+       (OR 28PBS		;; only do this as exit light
+;;*DB4 don't forget 1745NS -- don't offer exit if train headed north from
+;;*DB4 Huey ave...
+	   (AND !46XS !40PBS 1745NS))
+;;*DB4  -- turn off if line-o-lite
+			!1744SP)
+
+(relay 24K (or 25NN 25RN) (OR 24PBS ;; still good as entrance light...
+			      (AND
+			        !8XS
+;;**DB3 - 5 must be gettable normal, or can't exit at 24.
+                                !5RWK
+;;*DB4 -- cannot be southbound motion in progress..
+				1742SS))
+;;*DB4  --and turn off if "line-o-lite" already lit.
+			!1743SP)
+       
+;;*DB4  -- turn off if line-o-lite, or approach not timed-out or called
+(relay 30K 27RN !1744SP !32PBS 32AS)
+;;*DB4 same here
+(relay 30XS (or 30XPB 30PB 30XS) 27RN !30PBS !32PBS 32AS)
+(relay 24XS (or 24XS
+;;*DB4- can't be Southbound motion already in progress...
+		(AND 1742SS
+		     (OR 24XPB 24PB (AND 8ZS 8R))))
+       (OR 25NN 25RN) !24PBS !24XR !8XS
+;;**DB3 -- no exit at 24 if 5 not normallable
+	!5RWK
+       )
+(relay 28XS (OR 28XS
+;;*DB4 - don't allow XS if northbound train headed up at us...
+		(AND 1745NS
+		     (OR 28XPB 28PB (AND 46ZS 46R)))) ;buttons, through-route
+       (OR 27NS 27RS) !28PBS !28XR !40PBS !46XS)
+
+;;**DB3 Switch lever repeaters for 25, 27
+
+(relay 25NLP (and 25LS !25RLP
+		  (OR 25NL
+;;**DB3 Conditional crosslock of 25 and 27 by 40. If 27 is NWK,
+;;**DB3 calling 40 should call 25 normal.  It must be possible -see 40PBS.
+;;**DB3 This also makes the default decision that if 27 is normal and 25R,
+;;**DB3 move 25, not 27. Call outstanding as long as no correspondence.
+		      (AND 40PBS !27RWC !25NWC)
+		      (AND 25NN 25NS))))
+
+(relay 25RLP (and 25LS !25NLP (OR 25RL
+
+;;*DB3 25 Must now be forced reverse by Sigs 34-38, whose control length
+;;*DB3 extends to the main track and require this signal clear.
+;;*DB3 26XS (and 60K and 26ZS) must check the availability of 25 R (!25NWK)
+
+				  26XS ; do as we say.
+
+;;*DB3 25 must also be forced reverse by an exit at 8 (overlap crosslock)
+;;*DB3 if 27 normal can't be had...
+				  (AND 8XS 27RWK)
+;;#DB5
+;;#DB5   If 2-4 are pointing south to Gyro Jct, and 27 and 25 are normal
+;;#DB5   and Operator starts a deliberate move over 27R (such as from 30).
+;;#DB5   divert 2-4 into Duckburg yards by pushing 25 reverse. C/Xlk
+;;#DB5   will cause the switches to sequence
+
+				  (AND !27AS ; 2-4 cleared down this way
+				       27RN 27RS) ;deliberate 27R move.
+
+				  (AND 25RN 25RS))))
+
+(relay 27NLP (and 27LS !27RLP
+		  (OR 27NL
+		      ;;*DB3 -- if 25 is locked normal, an exit at 8
+		      ;;*DB3 must force 27 normal for 2/4 control length.
+		      (AND 8XS 25NWC)
+		      (AND 27NN 27NS))))
+(relay 27RLP (and 27LS !27NLP (OR 27RL
+;;**DB3 27 Must now be forced reverse by Approach 32, which checks !27NWK.
+				  32PBS               ;do as we say
+;;**DB3 Now we have the conditional crosslock of 27 and 25 by 40 --
+;;**DB3 If 25 is RWK, 27 should be forced reversed by 40 - see 40PBS
+				  (AND 40PBS 25RWK)
+				  (AND 27RN 27RS))))
+
+;;#DB5 Switch locking for Gyro Junction.
+
+;;#DB5 This is tricky, because of overlaps forcing "conditional crosslock"
+;;#DB5 in both directions.  This will require LS and L to be separated,
+;;#DB5 with all except the conditional crosslock in L and LS incorporating
+;;#DB5
+
+;;#DB5 Let's define 27AS, a long-armed AS representing 2 and 4 pointing
+;;#DB5 to Gyro Junction -- right now we'll just repeat the real AS's, but when
+;;#DB5 we put real AS's together with control lengths, we'll have to
+;;#DB5 do it right.
+
+(relay 27AS
+       (AND (OR 4AS 5RWC)(OR 2AS 3NWC)))
+
+;;#DB5 - now do 25, which is crosslocked by 2 and 4 from the north..
+(relay 25LS
+       25L			; all the usual stuff besides conditional xlk
+       ;;#DB5 Hairy conditional crosslock terms.
+       (OR (AND 25LS !25NWC !27RWC)	; this term is obscure, but critical
+	   ;; WP rides out the terms below -- it unlocks the switch when
+	   ;; the switch is in the conflicting (bad) position, and will drop
+	   ;; out immediately when the switch starts to move (the switch
+           ;; should be LOCKED once in the -good- position). This term
+	   ;; keeps the LS up while the switch is moving and drops out
+	   ;; exposing the other terms once either correspondence is achieved.
+
+	   (AND
+	     (OR 27AS		; no overlap, no crosslock
+		 27NWC		; no bad second switch, no crosslock
+		 25NWP)		; when we're ALREADY normal, we're unlocked
+	   ;; other crosslock
+	     (or 40AS			; no signal, no crosslock
+		 27RWC		; 27 is reverse, we have no problem.
+		 25RWP)		; if we're reverse, we must be free to go norm
+		)))
+
+(relay 25L
+       (LNPrecond 25)		; standard antipreconditioning macro
+       1743T			; track detector locking
+       1743NS 1743SS		; all routes and approach locks.
+       24NVP 26NVP		; immediate stops
+       (OR 27RWC (AND 28NVP 1744T)) ; southern half, conditionally.
+       34AS 36AS 38AS)		; these are simple overlap AS's....
+				; to be explained later, but note that
+				; these guys expect to lock 25...
+
+;;#DB5 Let's do 27 crosslocked by a simple approach signal from the south
+(relay 27LS
+       27L   ;All the usual LS stuff besides the conditional crosslock
+
+       ;;#DB5 Hairy conditional crosslock terms
+
+       (OR (AND 27LS !27NWC !27RWC) ;allow move while out of correspondence
+	   (AND
+	     (OR 40AS		; this problem only arises if 40 is clear...
+;;@DB6 - add AND term for 3739T - if 40 is clear, may not throw
+;;@DB6 reverse if 3739 occupied ("facing-point overlap lock")
+;;@DB6 - we are allowed to precondition the switch in this one case
+;;@DB6 (N/X will light , but route will not complete).
+               (AND		; see DB5 for more explanation of this hair
+		 (OR 27NWP
+		     (AND 1742T 25NWC))
+		 (OR 27RWP 3739T)))
+	     ;; The above will pick us up as soon as we get reverse...
+       
+	     ;; The second problem concerns locking 25 by remote AS of 2 and 4...
+	     (OR 27AS			; as I just said...
+		 25RWC          ; if 25 is reverse, no problem.
+		 27RWP)		; if reverse, be free to move normal.
+	     
+	     )))
+
+;;#DB5 - 27L - normal locking terms.
+(relay 27L (LNPrecond 27)	;usual precond - note altered form.
+       1744T				; track
+       (OR 25RWC (AND 24NVP 1743T)) ;conditional track and stop
+       1744NS 1744SS		; unconditional route locking, gets it all.
+       32AS			; unconditional - Approach 32.
+       28NVP 30NVP)		; remaining stops.
+
+
+;;*DB4 Approach and Route Locking for Gyro Junction
+;;*DB4
+;;*DB4 Kludgey approach relays until real ones put in.
+(kludge-home-AS 24)(kludge-home-AS 26)(kludge-home-AS 28)(kludge-home-AS 30)
+
+(relay 1743SS
+       (OR 1743SS 1743T)		; normal locker-inner
+       24AS)				; 24 AS does it unconditionally.
+(relay 1743NS
+       (OR 1743NS 1743T)		; lock-stick
+       26AS				; unconditionally feed N from 26
+       (OR 27RWC 1744NS))		; cascade N of 27 normal...
+(relay 1743SP (OR !1743NS !1743SS))
+(relay 1743K 1743SP)			; line-o-lite
+
+(relay 1744NS
+       (OR 1744NS 1744T)
+       28AS)				; unconditional 28 north
+(relay 1744SS
+       (OR 1744SS 1744T)
+       30AS				; 30AS drops us unconditionally
+       (OR 25RWC 1743SS))		; cascade south if 25 normal
+(relay 1744SP (OR !1744NS !1744SS))
+(relay 1744K 1744SP)
+
+(relay 3739NS				; approach sec needs N/B rte lkg
+       (OR 3739NS 3739T)		; for VS and auto hackery...
+       (OR 27NWC 1744NS))		; cascade off interlocked sec'n.
+(relay 3739SP (OR !3739NS !32AS))	; lights on approach sig, too.
+(relay 3739K 3739SP)
+
+(relay 3739VS 32PBS !32AS)		; need this - verify it really goes.
+;;
+;; End-to-end routing from Mainline Crossing Southbound to Gyro Junction
+;;
+
+(relay 24XR 
+       (OR 24XR (AND !25RN !25RS)) ; don't pick up if conflicting initiation
+       !24PBS			; when PBS picks, XR's job finished.
+        5ANS			; this is the "exit seeker" that wants us
+       (LABEL L24XRT		; hereon out shared with ZS
+	!8XS			; check local exit, no need for us if so.
+	!24XS			; no established northbound traffic!
+        (OR (AND 3RS 2PBS)
+	    (AND 3BNS 4PBS))
+	1742NS			;*DB4 and no northbound route in progress!
+	1741T 1742T))		; must have intervening track clear
+
+;; Propagate Northbound answer-back from Gyro Jct back to Mainline Crossing
+(relay 24ZS			; backward chainer -- see 8XS
+       (OR 24XR 24ZS)		; require 24XR to start, but not to stay.
+       (OR (AND 25NN 27NN (or 28XS 46ZS)); when the xs's (or ZS) come calling
+	   (AND 25RN (OR (AND 37NN 38XS)
+			 (AND 37RN (OR (AND 35NN 34XS)
+				       (AND 35RN 36XS))))))
+       L24XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Hairy 24PBS for End-to-end E control...
+(relay 24PBS
+       (OR 24PBS		; lock around these terms.
+	   (AND 24PB !25RN !25NN); push button, and not seeking exit here
+	   (AND 24XR 24ZS))	; through-route ready to push 24 for us.
+;;@DB6 Add proper autocancel via macro...
+       (H-autocancel 24 1743T 1742T))
+
+;; Implement 24R.  See comments above at 14R.
+(relay 24R 24PBS (OR (AND 25NWK 27NWK 28XS)
+		     (AND 25RWK (OR (AND 37NWK 38XS)
+				    (AND 37RWK (OR (AND 35NWK 34XS)
+						   (AND 35RWK 36XS)))))))
+			  
+;;
+;; OK, now Gyro Jct north to Mainline Crossing, exit 24, entrance 28.
+;; Still the so-called "easy" (symmetrical) case...
+;;
+
+(relay 8XR
+        (OR 8XR !5ANS)		; Don't pick if we are contemplated as exit
+        !8PBS			; when PBS picks, XR's job finished.
+        (OR 25RN 25NN)		; this is the "exit seeker" that wants us
+       (LABEL L8XRT		; hereon out shared with ZS
+	!24XS			; if local exit at 24 selected, call it quits
+				; alternatively, when 24XS picks, we're done.
+        (OR (AND 25RN		; steer with switch selector
+		 (OR 26PBS 26XR))	; PBS *OR* yet remoter XR!
+	    (AND 25NN 27NN
+		 (OR 28PBS 28XR) 1744T)) ;verify that remote track, too
+	!8XS			; no established southbound exit
+;;*DB4 - and no southbound move already in progress (with signals cancelled)
+        1742SS
+	1743T 1742T))			; no trains sitting in middle
+
+;; Carry southbound answer-back from Mainline Crossing to Gyro Jct.
+(relay 8ZS			; backward chainer -- see 24XS
+       (OR 8XR 8ZS)		; require 8XR to start, but not to stay.
+       (AND 5ANS 4XS)		; only one possible exit.
+       L8XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Can't use "trivial" macro anymore - XR/ZS now part of term.
+(relay 8PBS
+       (OR 8PBS		; lock around these terms.
+	   (AND 8PB !5ANS) ; push button, and not seeking exit here
+	   (AND 8XR 8ZS))	; through-route ready to push 8 for us.
+       ;;**DB3 -- conflicting initiation in same direction check
+       !5RN
+;;@DB6 add autocanceller
+       (H-autocancel 8 1741T 1742T)
+       )
+
+;; Implement 8R for end-to-end to work properly - only 8R
+(relay 8R 8PBS 3NWK 5NWK 4XS)	; no exit at 2, so it's real easy.
+
+			  
+;;
+;; Duckburg Yards
+;;
+
+;; Because of the asymmetrical end-to-end, 377NS/RS must prove that 24
+;; is really initiated and 26 is not merely answering an exit at 24.
+;; Southbound motion through 26 is one route, but northbound motion
+;; ends or begins at 26.  24 to 34(/6/8) is one route, but 34(/6/8)
+;; to 24 is two routes, 34(/6/8) to 26 and 26 to 24. [..obsolete comments
+;; excised]
+
+(relay 37NS (OR 26XS
+		(AND 25RS ; exit seeker
+		     (OR 24XR 24PBS 26ZS))) ; PB and end to end conditions
+       !37RN !37RLP !37RWK)
+(relay 37RS (OR 26XS (AND 25RS (OR 24XR 24PBS 26ZS)))
+       !37NN !37NLP !37NWK)
+
+;;*DB4 !9745SP must now be included in 34-36-38K to turn off when routed
+(relay 38K 37NS !9745SP)
+(relay 38XS (or 38XPB 38PB 38XS) 37NS !38PBS)
+(relay 37NN (OR 38PBS 38XS)  !37RN !37RLP !37RWK)
+(relay 37RN (OR 35NN 35RN)   !37NN !37NLP !37NWK)
+(relay 34K 35NS !9745SP)
+(relay 34XS (or 34XPB 34PB 34XS) 35NS !34PBS)
+(relay 35RS 37RS             !35NN !35NLP !35NWK)
+(relay 35NS 37RS             !35RN !35RLP !35RWK)
+(relay 36K 35RS !9745SP)
+(relay 36XS (or 36XPB 36PB 36XS) 35RS !36PBS)
+(relay 35NN (or 34PBS 34XS)  !35RN !35RLP !35RWK)
+(relay 35RN (or 36PBS 36XS)  !35NN !35NLP !35NWK)
+
+;;*DB4 Kludgey approach locking for dwarves in Duckburg Yard
+;;@DB6 - must use kludge-dwarf-AS so as not to defined HV lest display
+;;@DB6 use it instead of H to light the signal.
+(kludge-dwarf-AS 34)(kludge-dwarf-AS 36)(kludge-dwarf-AS 38)
+
+;;*DB4 Route-lock the one track circuit (9745)
+
+(relay 9745SS
+       (OR 9745SS 9745T)		; standard track/route memory latch
+       (OR 25NWC 1743SS))		; cascade from 1743 when sw not norm
+(relay 9745NS
+       (OR 9745NS 9745T)		; track/route memory latch
+       34AS 36AS 38AS)			; any of these dwarves drop us.
+;;*DB4               ;note that this doesn't cascade past 26.
+(relay 9745SP (OR !9745NS !9745SS))
+(relay 9745K 9745SP)			; panel lighting line-o-lite
+
+
+;;#DB5 - must do explicit lever repeaters for 35-37, macro no longer good..
+(relay 35NLP (and 35LS !35RLP (OR 35NL (AND 35NN 35NS))))
+(relay 35RLP (and 35LS !35NLP (OR 35RL (AND 35RN 35RS))))
+(relay 37NLP (and 37LS !37RLP (OR 37NL (AND 37NN 37NS))))
+(relay 37RLP (and 37LS !37NLP (OR 37RL (AND 37RN 37RS))))
+
+;;#DB5 - now LS -- this really isn't too bad, because the route lockers
+;;#DB5 have worried about all the hard stuff for us.  Note that 26
+;;#DB5 stop  is part of the locking term, even though it's in the
+;;#DB5 other direction.
+
+(relay 35LS (LSNPrecond 35)
+       (Label L3537LST
+	      9745T			; our own track section
+	      (OR 1743T 25NWC)		; 26's, not protected from us here
+	      9745NS 9745SS		; all signals and routes
+	      34NVP 36NVP 38NVP		; all the obvious stops
+	      26NVP))			; the non-obvious stop - see 26H
+(relay 37LS (LSNPrecond 37) L3537LST)	; all identical, just share.
+
+;; 60 is the exit light BEHIND 26, which is used for exits from routes
+;; in the yards.  In a full implementation, it would through-route (XR/ZS)
+;; through 26, too.  60K/26XS must verify that there is really an
+;; initiation in the yards, and 37NN/RN is not just "answering back" for
+;; a southbound move.
+
+(relay 60K (OR (AND 37NN 38PBS)
+	       (AND 37RN (or (AND 35NN 34PBS)
+			     (AND 35RN 36PBS))))
+;;**DB3 - don't exit at 60 if can't get 25 reverse
+       !25NWK
+;;*DB4 -- no exit at 60 if route-locked southbound motion sitting on 1743
+       1743SS
+;;*DB4 - 60K should extinguish when route established.
+       !9745SP)
+;;
+
+(relay 26XS (or 26XS
+;;*DB4 - don't permit 26 exit if southbound train in block ahead.
+		(AND 1743SS ;= "(no) southbound train in block ahead"
+		     (OR 60XPB	; unambiguous NXSYS exit light
+			 (AND 26XR 26PB) ; ambiguous 26 button must be
+				; demultiplexed -see right below...
+			 (AND 26ZS 26R)))) ;normal "simple" end-to-end case
+;;**DB3 - don't exit at 60 if can't get 25 reverse
+            !25NWK
+	    (OR (AND 37NN 38PBS)
+	       (AND 37RN (or (AND 35NN 34PBS)
+			     (AND 35RN 36PBS)))))
+
+;; This is the hard one, Duckburg Yards to Gyro Jct, northbound to
+;; Mainline Crossing.  26 is essentially multiplexed as an entrance
+;; (for the GJ->MC case already done) and an exit for 38 etc. (actually
+;; exit light 60 at the site).  The literature calls this
+;; "End-to-end control by a signal with entrance and exit in same direction".
+;; The reverse-dir case (GJct->DYard) is already handled as a simple route
+;; (which nonetheless needs extra checking, see 37NS/37RS, because of
+;; this possibility.
+
+
+(relay 26XR
+       (OR 26XR !25RS)          ; no S/B exit here, but bug out if there
+				; are potential moves probing southward
+       !26PBS			; when PBS picks, XR's job finished.
+        (OR 37RN 37NN)		; these are the "exit seekers" that want us
+       (LABEL
+	 L26XRT		; hereon out shared with ZS
+	 ;; This is the special hack for N/X in same direction ---
+	 (OR  ;;See DB2 for full comments.
+	   !26XS		; When 26PB selects local exit at 26XS(60K)
+	    (AND 26XR 26PB))	; hold XR up as long as button is held.
+	 (OR (AND 37NN 38PBS)
+	     (AND 37RN (OR (AND 35NN 34PBS)(AND 35RN 36PBS))))
+;;*DB4 -- disallow through-route if southbound train in 1743 ahead of 26
+         1743SS
+	 9745T))		; intervening track must be clear up to 26
+
+;; Carry southbound answer-back from Gyro Jct to Duckburg Yards.
+(relay 26ZS			; backward chainer
+       (OR 26XR 26ZS)		; require 26XR to start, but not to stay.
+       25RS			; answer-back itself
+       (OR 24XS 8ZS)		; actual exit, OR successive chained E/E exit
+       L26XRT)			; verify PBS, track lockouts, etc., too.
+
+;; Can't use "trivial" macro anymore - XR/ZS now part of term.
+(relay 26PBS
+       (OR 26PBS		; lock around these terms.
+	   ;; Note that 26XR steers 26PB to 26XS, preventing 26PBS
+	   ;; via the !26XR term below -- for that reason, 26XR must stay up
+	   ;; as long as 26PB is being pressed. See comment above in 26XR.
+	   (AND 26PB !26XR !25RS)	; push button, and not seeking exit here
+	   (AND 26XR 26ZS))	; through-route ready to push 26 for us.
+;;@DB6 Add proper autocancel via macro
+       (H-autocancel 26 1743T 9745T))
+
+;; Implement 26R.  See comments above at 14R.
+
+(relay 26R 26PBS 25RWK 24XS  ; no route choice- very easy!
+;;**DB3 Add 5NWK -- 26 can only exit at 24, and 24XS requires 5NWK.
+        5NWK)	
+			  
+;; Implement 30R
+(relay 30R 30PBS 27RWK 28XS)
+
+;;
+;; Implement dwarf R relays for Duckburg Yard - needed for E/E 26 to work
+;;
+;;**DB3 - add 25RWK -- these require 25 in reverse corr and locked/cf to clear
+;;**DB3 -- see 25RLP, 26XS
+
+(relay 34R 34PBS 35NWK 37RWK 26XS 25RWK)
+(relay 36R 36PBS 35RWK 37RWK 26XS 25RWK)
+(relay 38R 38PBS       37NWK 26XS 25RWK)
+
+
+;;
+;; 47 Switch, Huey Ave. Extension
+;;
+(relay 47NN (or 50PBS 50XS) !47RN !47RLP !47RWK)
+(relay 47RN (or 48PBS 48XS) !47NN !47NLP !47NWK)
+(relay 47NS (or 46PBS 46XR 46XS 28ZS) !47RN !47RLP !47RWK)
+(relay 47RS (or 46PBS 46XR 46XS 28ZS) !47NN !47NLP !47NWK)
+
+;;*DB4 - !1747SP added to all these to turn off N/X light when line-o-lite on
+;;*DB4 -- check approach AS, too..
+(relay 50k 47NS (OR 50PBS (AND !52PBS 52AS)) !1747SP)
+(relay 48K 47RS
+;;*DB4 - 3749NS must prevent exit at 48 (train headed ccw around loop)
+;;*DB4 - check 56 approach locking, too
+       (OR 48PBS (AND !56PBS 3749NS 56AS))
+       !1747SP)
+;;*DB4 - 1746SS must be added to prevent an exit with no routes, but
+;;*DB4 destined train already en route S/B from Gyro J to here.
+(relay 46K (OR 47NN 47RN) (OR 46PBS (AND !28XS 1746SS)) !1747SP)
+
+(relay 46XS (OR 46XS
+;;*DB4 -- non-stick leg must check 1746 to lock out exit if S/B train
+;;*DB4 -- still headed down from Gyro Junction...
+		(AND 1746SS
+		     (OR 46XPB
+			 46PB
+		     (AND 40PBS ;verified
+			  40ZS)))) ;in (end-to-end route context...)
+       (OR 47NN 47RN)			; exit beckoners
+       !46PBS !46XR !28XS)		; lockouts
+(relay 48XS
+;;*DB4 - 3749NS must prevent exit at 48 (train headed ccw around loop)
+;;*DB4 - must be done in non-stick branch to prevent against RGP bobble.
+       (OR 48XS
+	   (AND 3749NS 56AS (OR 48XPB 48PB))) ; *DB4- check 56AS, too
+        47RS !48PBS !56PBS);check opp. app PBS
+(relay 50XS (OR 50XS (AND 56AS		; *DB4 - check approach approach lock
+			  (OR 50XPB 50PB 50XS)))
+        47NS !50PBS !52PBS)
+
+(relay 47NLP (and 47LS !47RLP
+		  (OR 47NL
+;;**DB3 47 called normal by 52, no matter what.
+		      52PBS
+		      (AND 47NN 47NS))))
+(relay 47RLP (and 47LS !47NLP (OR 47RL
+;;**DB3 47 called reverse by 56, no matter what
+		      56PBS
+		      (AND 47RN 47RS))))
+
+
+;;#DB5 Switch locking for 47. Extremely easy, no conditional crosslocks
+;;#DB5 or the like...
+
+(relay 47LS (LSNPrecond 47)		; preconditioning macro
+       1747T				; detector 
+       1747NS 1747SS			; route locking (includes approach)
+       46NVP 48NVP 50NVP		; all home stops
+       52AS 56AS)			; and both approach signals governing
+					; trailing point.
+
+;;*DB4 Approach and route locking, Huey Ave. Ext.
+;;*DB4
+;;*DB4 kludge-version AS
+(kludge-home-AS 46)(kludge-home-AS 48)(kludge-home-AS 50)
+
+;;*DB4 One section (1747, when Bach visited Potsdam), 2 rte lockers
+;;*DB4
+
+(relay 1747NS
+       (OR 1747NS 1747T)		; std latch
+       48AS 50AS)			; either dropping drops us out.
+(relay 1747SS
+       (OR 1747SS 1747T)		; this is pretty easy, too
+       46AS)				; 46 drops southbound
+(relay 1747SP (OR !1747NS !1747SS))	; route repeater for line-o-lite
+(relay 1747K 1747SP)			; and the actual panel lights.
+
+(relay 1748NS				; approach section, needed for VS
+       (OR 1748NS 1748T)		; (see below 52VS)
+       (OR 46AS 47RWC))			; steer the AS.
+
+
+;; Through routing.  Handle Southbound, Gyro Jct --> Huey Ave first.
+
+;; Carry southbound selection from Gyro Jct to Huey Ave.
+(relay 46XR
+       
+        (OR 46XR (AND !47NN !47RN)) ;bug out if conflicting initation
+        !46PBS			; when PBS picks, XR's job finished.
+        (OR 27RS 27NS)		; exit seekers
+       (LABEL
+	  L46XRT		; hereon out shared with ZS
+	 !28XS			; if local exit at 28 selected, call it quits
+	 (OR (AND 27RS 30PBS)	; verify real PBS's out there
+	     (AND 27NS 25NS 1743T (OR 24PBS 24XR)))
+	 !46XS			; not exiting in other direction, please
+	 !40PBS			; 40 locks otu this end-end
+;;*DB4 - do it right as asked... ... no S/B through route allowed if
+         1745NS          ;;(dropped if) N/B train still in there or
+	 40AS            ;;40 is clear or not timed out, no through-route.
+	 1744T 1745T))		; intermediate track sections.
+
+;; Propagate northbound answer-back from Barksville Yards to Mainline Crossing
+
+(relay 46ZS			; backward chainer -- see 28XS.
+       (OR 46XR 46ZS)		; require 46XR to start, but not to stay.
+       (OR (AND 47RN 48XS)	; verify real XS out there
+	   (AND 47NN 50XS))
+       L46XRT)			; verify PBS, track lockouts, etc., too.
+
+(relay 46PBS
+       (OR 46PBS		; lock around these terms.
+	   (AND 46PB !47RN !47NN) ; push button, and not seeking exit here
+	   (AND 46XR 46ZS))	; through-route ready to push 46 for us.
+;;@DB6 - add proper autocancel via macro
+       (H-Autocancel 46 1747T 1746T))
+
+(relay 46R 46PBS (OR (AND 47RWK 48XS)(AND 47NWK 50XS)))
+
+;;; Now the other way, Huey Ave. to Gyro Jct.  This is hard because
+;;; of the embedded approach signal 40.[*DB3 -- obsolete comments removed]
+
+;;; Carry Northbound selection from Huey Ave. to Gyro Jct
+(relay 28XR 
+       (OR 28XR (AND !27RS !27NS)) ;lock out on wrong-dir exit seekers
+       !28PBS			; when PBS picks, XR's job finished.
+       (OR 47NN 47RN)		; right-dir exit seekers that call for us
+       (LABEL
+	  L28XRT		; hereon out shared with ZS
+	 !46XS			; if local exit at 28 selected, call it quits
+	 (OR (AND 47NN 50PBS)	; verify real PBS's out there
+	     (AND 47RN 48PBS))
+	 !28XS			; not exiting in other direction, please
+;;**DB3 Approach 32 called should lock out any northbound movement
+;;**DB3 through 28 -- see 28PBS below.
+;;#DB5 - delete this check for flashing - it would inhibit flashing.
+;;#DB5	!32PBS
+;;*DB4 - time for the real thing -- lock out of 1746SS (S/B train headed here)
+;;*DB4 dropped.
+         1746SS      ;note we don't have to worry about RGP drop because
+	 1747T 1746T 1745T))    ;XR/ZS is only transient setup.
+
+;; Propagate southbound answer-back Gyro Jct to Huey Ave.
+
+(relay 28ZS			; backward chainer -- see 46XS
+       (OR 28XR 28ZS)		; require 28XR to start, but not to stay.
+       (OR (AND 27RS 30XS)	; verify real XS out there
+	   (AND 27NS 25NS (OR 24XS 8ZS))) ;don't forget iterated route
+       L28XRT)			; verify PBS, track lockouts, etc., too.
+
+(relay 28PBS
+       (OR 28PBS		; lock around these terms.
+	   (AND 28PB !27RS !27NS) ; push button, and not seeking exit here
+	   (AND 28XR 28ZS))	; through-route ready to push 28 for us.
+;;@DB6 add autocancel via macro
+       (H-Autocancel 28 1744T 1745T))
+
+(relay 28R 28PBS (OR (AND 27RWK 30XS)
+		     (AND 27NWK 25NWK 24XS
+;;**DB3 if through 24, needs 5 assured and held normal. (see 5NLP)
+			  5NWK)))
+
+;; Need some R's for 50/52
+(relay 50R 50PBS 47NWK 46XS)
+(relay 48R 48PBS 47RWK 46XS)
+
+;;*DB4 Route locking for connecting sections 1745, 1746 between Gyro Jct
+;;*DB4 and Huey Ave.
+
+(relay 1745SS
+       (OR 1745SS 1745T)		; standard track latch
+       1744SS)				; cascade from 1744 southward
+(relay 1746SS
+       (OR 1746SS 1746T)
+       1745SS)				; cascade from above (1745) southward
+
+;;*DB4 Northward....
+
+(relay 1746NS
+       (OR 1746NS 1746T)
+       1747NS)				; simply cascades out from 46X
+(relay 1745NS
+       (OR 1745NS 1745T)
+       1746NS)				; cascade north
+
+(relay 1745SP (OR !1745NS !1745SS !40AS));40AS can light this, too
+(relay 1745K 1745SP)
+(relay 1746SP (OR !1746NS !1746SS))
+(relay 1746K 1746SP)
+
+;; Handle intermediate approach signal
+
+(relay 40ZS (OR 40ZS 28ZS) L28XRT)
+
+
+;;Do same thing for 12... 14XS should drop it all
+(relay 12ZS (OR 12ZS 10ZS) L10XRT)
+
+(relay 12PBS
+       (or (and 12PBS
+		!3RWK !5NWK)  ;#DB5 -- move !3RWK !5NWK here -- see 12CLK
+	   12PB
+	   (and 10R 12ZS))
+       !10XS				; can't be called if exit at 10
+;;;@DB6 add kickoff term to cancel the signal when passed, and fleeting term
+       (OR 2741T 12FL))
+
+;;@DB6 12D removed, 12DV now done right, at the top...
+
+
+;; Do some lower heads for nice aspects
+
+(relay 2DR 3RWP)
+(relay 4DR 5RWP)
+(relay 8DR 3RWP)		; shouldn't happen
+(relay 10DR 5RWP)
+(relay 24DR 25RWP)
+(relay 14DR 15RWP)		; perhaps should be yard signal
+(relay 28DR 27RWP)
+(relay 46DR 47RWP)
+;; more easy fun
+(relay 26D 8HV)
+(relay 24D 25NWP 1746HV)
+(relay 24CO 24HV !24D)			; three yellows
+(relay 1746D 46HV)
+(relay 2D (OR (AND 3RWP 24HV)(AND 3NWP 2741HV)))
+(relay 4D (OR (AND 5NWP 24HV)(AND 5RWP 2741HV)))
+(relay 6D 2HV)
+(relay 8D 1738HV)
+(relay 22D 12HV)
+(relay 28D (SWIF 27 3739HV 8HV))
+(relay 30D 1746HV)
+(relay 32D 30HV)
+(relay 48D 40HV)
+(relay 50D 40HV)
+(relay 52D 50HV)
+(relay 2741D 14HV)
+
+;;**DB3 Let's do some approach signals.
+
+;;#DB5 - allow 6 to flash 5 non-stuck by moving !5RWK into stick-only term
+(relay 6PBS
+       (OR (AND 6PBS !5RWK) 6PB)	; stick around button
+       ;;!5RWK			; if 5 locked against us, we can't go.
+;;;@DB6 add kick-off term - track 6T kills the signal when passed, and fleeter
+       (OR 6T 6FL))
+
+(relay 32PBS (OR (and 32PBS !27NWK) 32PB)	; stick around button
+;;#DB5 move !27NWK to stick loop for flashing
+;;#DB5       !27NWK			; if 5 locked against us, we can't go.
+      !40PBS			; 40 should definitely lock out 32.
+       ;;*DB3 There is no way 32 and 40 can both be clear, regardless of
+       ;;*DB3 the position of switch 27.
+;;@DB6 add kickoff term and fleeter
+       (OR 3739T 32FL))
+
+(relay 40PBS
+       (OR 40PBS 40PB	; stick around button
+	   (AND 28R 40ZS))  ;and end-to-end picker term (see DB2.TRK)
+       (OR !27NWK !25RWK)
+       ;;*DB3 32 is locked out by 40, so 40 must be locked out by 32...
+       !32PBS
+       !28XS             ;since 28XS locked out by 40PBS, return the honor.
+;;@DB6 add kickoff term to cancel the signal when passed, and fleeter
+       (OR 1745T 40FL))
+
+(relay 52PBS (OR (AND 52PBS !47RWK) 52PB)    ; regular stick circuit
+;;#DB5 - move !47RWK up into pbs stick term for flashing
+;;#DB5 delete        !56PBS to allow flashing.
+       !50XS                   ; or an exit at 50.
+;;@DB6 Add autocancel/kickoff term  1748T to cancel the signal when passed
+       (OR 1748T 52FL))
+
+(relay 54PBS (OR 54PBS 54PB)		; loop approaches
+       !19NWK !15NWK			; yard tree must comply
+       !22XS				; and not conflict with exit.
+;;@DB6 Add autocancel/kickoff term 2747T to cancel the signal when passed
+       (OR 2747T 54FL))
+
+(relay 56PBS (OR (AND 56PBS !47NWK) 56PB)
+;;#DB5 - move !47NWK up into pbs stick term for flashing
+;;#DB5 - delete !52PBS to allow flashing
+       !48XS				; and no exit looking at us at 48
+;;@DB6 - add autocancel/kickoff track sec 3749T
+       (OR 3749T 56FL))
+       
+
+;;*DB4 Now some approach signal AS work into the panel lights...
+(relay 6K !6AS)
+(relay 1748K !52AS)
+(relay 32K !32AS)
+
+;;*DB4  The YARD LOOP needs some serious route-locking -- this will be
+;;*DB4 very cool - it will drive the automatics on the loop, and lock out
+;;*DB4 exits at the other end, effectively implementing traffic control
+;;*DB4 on the loop....
+
+;;*DB4 Clockwise first...
+(relay 3749SS (OR 3749SS 3749T) (OR 1747SS 47NWC)) ;;cascade from 47->48
+(relay 3751SS (OR 3751SS 3751T) 3749SS)
+;;*DB4 North and south turn around here
+(relay 2752NS (OR 2752NS 2752T) 3751SS)
+(relay 2747NS (OR 2747NS 2747T) 2752NS)
+(relay 2745NS (OR 2745NS 2745T) 2747NS)
+;;*DB4 Now counterclockwise
+(relay 2745SS (OR 2745SS 2745T) (OR 15NWC 19NWC 2742SS))
+(relay 2747SS (OR 2747SS 2747T) 2745SS)
+(relay 2752SS (OR 2752SS 2752T) 2747SS)
+;;*DB4 turn around..
+(relay 3751NS (OR 3751NS 3751T) 2752SS)
+(relay 3749NS (OR 3749NS 3749T) 3751NS)
+
+;;*DB4 now sp/k...
+(relay 3749SP (OR !3749NS !3749SS !56AS))(relay 3749K 3749SP)
+(relay 3751SP (OR !3751NS !3751SS))(relay 3751K 3751SP)
+(relay 2752SP (OR !2752NS !2752SS))(relay 2752K 2752SP)
+(relay 2747SP (OR !2747NS !2747SS !54AS))(relay 2747K 2747SP)
+(relay 2745SP (OR !2745NS !2745SS !54AS))(relay 2745K 2745SP)
+
+
+;;*DB4  Implement VS relays, a lot of of fun.  Like NS/SS route lockers,
+;;*DB4  but in positive logic; picked by R or cascading VS, held by
+;;*DB4  normal route locking.  These circuits are "final" (not scaffoldry).
+
+;;*DB4 Mainline Crossing Stop route locking (VS)
+
+(relay 1738VS 4R)			; why not.
+
+(relay 4VS
+       (OR 4VS				; stick around the R's that pick us
+	    10R 8R)			; NO EXIT at 2, so 10 or 8 VS us (4)
+       !1741NS)				; hold as long as N/B rte locked.
+
+(relay 8VS
+       (OR 8VS (SWIF 3 2R 4R))		; steer the R relays over the switch
+       5NWC				; don't falsely hear 4 etc to 10
+       !1741SS)				; stick as long as S/B route locked
+
+
+(relay 10VS
+       (OR 10VS (SWIF 5 4R 2R))
+       3NWC
+       !2738SS)
+
+(relay 12VS				; approach VS - cascade off home
+       (OR 12VS 10VS)			; pick up when 10 VS'ed
+       !2741SS)				; but hold on our own section.
+
+;;*DB4 Barksville Yards Stop route locking (VS)
+
+(relay 14VS
+       (OR 14VS 16R 18R 20R 22R)	; any of these R'd is adequte
+       !2742NS)				; the R's are mutually exclusive.
+
+(relay 2741VS				; automatic VS
+       (OR 2741VS 14VS 12PBS)		; cascade from preceding VS'ed home
+;;*DB4 --- NOTE WELL -- 12PBS must drive 2741 stop, too...
+;; This doesn't quite work- this is an interesting issue.
+       (OR !2741NS !12AS)) ; but stick on our own section OR 12AS...
+
+(relay 16VS
+       (OR 16VS 14R)
+       17NWC 15NWC ;steer with switches -- IRL these would be shared tails.
+       !2742SS)
+(relay 18VS  (OR 18VS 14R)      17RWC 15NWC    !2742SS)
+(relay 20VS  (OR 20VS 14R)      19NWC 15RWC    !2742SS)
+(relay 22VS  (OR 22VS 14R)      19RWC 15RWC    !2742SS)
+
+;;*DB4 Loop, for counterclockwise (Barksville->Huey Ave) direction.
+;;*DB4 All done with cascades.
+
+(relay 54VS   (OR 54VS 22VS)     !2747SS)
+(relay 3754VS (OR 3754VS 54VS)   !2752SS)
+(relay 3751VS (OR 3751VS 3754VS
+;;@DB6 - add 56PBS, anded with !56AS to make sure it's not just "flashing".
+;;@DB6 this kludge is again because approach sig's don't have R relays.
+                  (AND 56PBS !56AS))
+       !3751NS)
+
+;;*DB4 Now Gyro Junction...
+
+(relay 24VS (OR 24VS 26R		; either of 2 home sig's  can VS 24
+		(AND 28R 27NWC))	; 26 uncond, and 28 steered thru 27
+       !1743NS)				; hold on 1743 route locked N/B
+(relay 26VS (OR 26VS 24R)
+       25RWC				; only us if 24 steered our way
+       !1743SS)				; stick on S/B route.
+
+(relay 30VS (OR 30VS 28R) 27RWC !1744NS)
+(relay 32VS (OR 32VS 30VS)
+       !3739NS)
+(relay 28VS (OR 30R			; either of 2 home sig;s can do it,
+		(AND 24R 25NWC))	; but 24 must be steered through 25
+       !1744SS)				; hold while route locked S/B
+
+(relay 40VS				; tricky approach VS- cascade off
+					; associated home sig (28)
+       (OR 40VS 28VS)
+       !1745SS)				; stick as long as south rte.
+
+;;*DB4 Duckburg Yards stop route-locking (VS) -- merely cascade off 26VS
+
+(relay 34VS (or 34VS 26VS) 35NWC 37RWC !9745SS)
+(relay 36VS (or 36VS 26VS) 35RWC 37RWC !9745SS)
+(relay 38VS (or 38VS 26VS)       37NWC !9745SS)
+
+;;*DB4 Huey Ave Ext. and surrounding approach signals
+
+(relay 46VS
+       (OR 46VS 48R 50R) ;either unconditionally, very easy
+       !1747NS)
+(relay 48VS
+       (OR 48VS 46R) 47RWC		; steer 46...
+       !1747SS)				; lock on southbound rte lkg
+(relay 50VS
+       (OR 50VS 46R) 47NWC		; steer 46...
+       !1747SS)				; lock on southbound rte lkg
+
+;;*DB4 -- approaches cascade off associated home.
+(relay 52VS
+       (or 52VS 50VS)			; 50 is 52's associated home
+       !1747SS)				; "protected" track section
+					; (for 52 stop, "approach")
+
+;;*DB4 - 1746 is automatic, not approach, but treat like approach here,
+(relay 1746VS
+       (or 1746VS 46VS)			; cascade off associated home (46)
+       !1746NS)				; lock on "protected" track cct
+
+;;*DB4 Appr. 56 and counterclockwise stops for clockwise trips around yard..
+(relay 56VS
+       (or 56VS 48VS)			; cascade from home
+       !3749SS)
+(relay 2754VS (OR 2754VS 56VS  )  !3751SS)
+(relay 2749VS (OR 2749NS 2754VS
+;;@DB6 add 54pbs to VS - check !AS to make sure we're not just "flashing"...
+                 (AND 54PBS !54AS))
+       !2752NS) ;note loop changes our directions
+
+;#DB5 Now let's have some real fun by implementing CLK relays for
+;#DB5 switches and signals....These cause flashing
+
+;#DB5 Mainline crossing.
+
+(relay 3CLK
+       !2738SP !1741SP		; no lines-o-lite already locking it
+       2738T    1741T		; must be unoccupied, too. - not red, not wht
+       3NWK			; don't have any reverse lockers.
+       !12AS			; this is the only guy who can do this
+       (AND 5BNS !5BNN))	; that's about it - 2 is the only place
+				; a 3-reverse move can originate.
+
+(relay 5CLK			; flash switch 5 if...
+       !2738SP !1741SP		; no lines-o-lite already locking it
+       2738T    1741T		; must be unoccupied, too. - not red, not wht
+       (OR (AND 5NWK		; that which locks 5 normal
+		(OR !6AS	; 6 being clear/nonas
+		    !5AS)	; the long AS from Gyro Jct
+		(OR (AND 3BNS	; the thing that would try it reverse
+			 !3BNN)	; but hasn't succeeded normal...
+		    (AND 3ANN !3ANS) ;;same thing from 10 xr/init
+		    12PBS))		; push-but-not-hold -see 12PBS cct
+	   (AND 5RWK		; that which locks 5 reverse.
+		!12AS		; 12 is about the sum of it.
+		(OR 2PBS 4PBS 8PBS 8XR 6PBS)))) ;; things that try 5...
+
+(relay 12CLK			; 12 is responsible for locking ..
+       12PBS			; can't flash if not on..
+       (OR (AND 3CLK 3NWK)
+	   (AND 5CLK 5RWK)))  ;;5 if 5clk and 5RWK
+
+(relay 6CLK			; pretty easy
+       6PBS			; no click if no button
+       5CLK			; 5 must be clicking
+       5NWK)			; and locked normal (presumably by us)
+
+;;;#DB5 Barksville yards - no interesting cases at all, only 54 approach
+;;;#DB5 locking 15 and 19
+
+(relay 19CLK
+       !2742SP 2742T		; no red or white lines of lite
+       !54AS			; 54 must be non-as'ed (clearish)
+       19RWK			; must be locked
+       (OR 20PBS 14PBS 14XR))	; possible initiators.
+
+(relay 15CLK			; nary identical
+       !2742SP 2742T		; no red or white lines of lite
+       !54AS			; 54 must be non-as'ed (clearish)
+       15RWK			; must be locked
+       (OR 16PBS 18PBS 14PBS 14XR))	; possible initiators.
+
+(relay 54CLK 54PBS (OR 19CLK 15CLK) (OR 19RWK 15RWK))
+
+(relay 26CLK			; home overlap
+       26R			; has to really be clear meaning route
+       25RWC			; and 25 reverse
+       !5AS			; this the complainer
+       5NWK 5CLK)		; and 5 has to b complaining normal
+
+(relay 28CLK			; home overlap
+       28R			; has to really be clear meaning route
+       25NWC 27NWC		; and really headed this way
+       !5AS			; this the complainer
+       5NWK 5CLK)		; and 5 has to b complaining normal...
+       
+	      
+;;#DB5 Huey Avenue - this is the extremely easy case.
+(relay 47CLK
+       1747T !1747SP		; no red or white lines-o-lite
+       (OR (AND 47NWK		; if locked normal,
+		!52AS		; this is the only serious lockr
+		(OR 56PBS 48PBS 46PBS 46XR)) ;the reverse-wanters
+	   (AND 47RWK
+		!56AS
+		(OR 52PBS 50PBS 46PBS 46XR))))
+
+(relay 52CLK 52PBS 47CLK 47NWK)	; reflect to signals when they cause it...
+(relay 56CLK 56PBS 47CLK 47RWK)
+
+;;#DB5 Hairy mess at Gyro Jct because of conditional crosslocks
+;;#DB5 and overlap from Duckburg yard.
+
+(relay 25CLK
+       !1743SP 1743T		; normal no-l-o-l checks
+       (OR (AND 25NWK
+;;@DB6 -- if we don't check 25LS, preconditioning switch selection would
+;;@DB6 pick us.
+		!25LS		; has to really be locked for c/c
+		(OR (AND 27NWC !40AS 
+			 (OR 26PBS 26XR 24PBS 24XR))))
+	   ;;Flash reverse when the yard dwarves are holding us reverse
+	   (AND 25RWK (or !34AS !36AS !38AS)
+		(OR 27NWC 27L) !27RLP ;only if 27 normal or could be normal
+		(or 28XR 28PBS))
+	   ;;Flash reverse when the yard dwarves are holding us reverse
+	   (AND 25RWK (or !34AS !36AS !38AS)
+		(OR 27NWC 27L) !27RLP ;only if 27 normal or could be normal
+		(or 28XR 28PBS))))
+
+
+
+(relay 40CLK
+       40PBS !40AS
+       (OR
+	 (AND 27NWC 25NWK 25CLK)
+;;@DB6 add 27NWK for preconditioning flashing, and 27L for good luck
+;;@DB6 (stronger assurance that it's -really- the c/xlk terms doing it)
+	 (AND (OR 27RWK 27NWK) 27L 27CLK)))
+       
+(relay 34CLK 34PBS !34AS 25CLK)
+(relay 36CLK 36PBS !34AS 25CLK)
+(relay 38CLK 38PBS !34AS 25CLK)
+
+
+(relay 27CLK
+       !1744SP 1744T		; normal l-o-l checks.
+       (OR (AND 27RWK		; reverse locked first...
+		(OR (AND !32AS	; locked by approach 32
+			 (OR (AND 25NS !25NN) ;southbound from Mainline
+			     28PBS
+			     28XR))
+;;@DB6 add flashing for facing overlap lock -  detect preconditioning
+		    (AND !40AS 27NN 27NS))) ; can't be any other way this
+;;@DB6				; happens.
+	   (AND 27NWK
+		(OR (AND !27AS
+			 25NWC
+			 (OR 32PBS
+			     (AND  ; if 27L, we can really do it, dont flash
+				  (OR !27L !40AS)
+				   ;; but if 40 is out, it's the Killer Case!
+				  (OR 28PBS 28XR 30PBS))))
+;;@DB6 add flashing for reverse preconditioning...
+		    (AND !40AS 27RN 27RS))
+		)))
+			 
+(relay 32CLK
+       32PBS
+       27RWK
+       27CLK)			; when we are responsible for flashing 27
+
+(relay 2CLK
+       2R			; not just initiation
+       3RWC
+       (LABEL L2CLKT
+	      !27AS
+	      (OR (AND 25RWK 25CLK)
+		  (AND 27NWK 25NWC 27CLK))))
+
+(relay 4CLK 4R 5NWC 3NWC L2CLKT)
+
+;;#DB5 -- we need this H relay for real because of the adjacent-network
+;;#DB5 stop-locking problem...
+;;@DB6 -- 26 H,HV,V temporaries thrown away for real ones below
+;;#DB5
+
+
+;;@DB6 -- Home signal home and slotting relays
+
+(relay 2HY (OR (AND 2HY 2R) 2NVP
+		    ) ; require stop to be up and signal
+       ;;called to pick  - standard stop cycle check for home signal
+       2738T (SWIF 3		; conditional on 3
+		   (LABEL L2HYT1	; shared with 4...
+			  (AND 8RVP 1741T 1742T 1743T 
+			       (OR 25RWC 1744T)))
+		   (LABEL L2HYT2
+			  (AND 2741H 10RVP)))) ; normal motion checks stops
+
+
+
+(RELAY 2H !2COS			; don't clear high if COS
+       2R			; you actually have to CALL the signal!
+       2HY			; slotting relay for high signal
+       !3LS !5LS		; check immediate switches locked
+       5NWC			; trailing switch gotta be correct way
+       2738NS			; has to be no traffic pointing this way
+       !2AS			; our AS must be dropped
+       !2738SS			; must have dropped our own locking
+       (SWIF 3			; over two routes...
+	     (LABEL L2HT1
+		    !27AS	; make sure we dropped this kludge.
+		    (AND 8AS		; verify exit signal at stop
+			 !1741SS !1742SS ; check 'em all dropped
+			 1742NS	; no reverse motion out there...
+			 5AS	; check that loser
+			 (SWIFNC 25 ; allow swinging with both ccts complete
+				 26AS 
+			       (AND 27NWC 1743NS))))
+	     (AND 10AS 2741NS)))
+
+(RELAY 4HY (OR (AND 4HY 4R) 4NVP)
+       1741T (SWIF 5 (AND 2738T L2HYT2)
+
+		    L2HYT1))
+(RELAY 4H !4COS 4HY 4R
+       !3LS !5LS 1741NS !4AS !1741SS
+       (SWIF 5  (AND 10AS 2741NS)
+	     L2HT1))
+
+(RELAY 8HY (OR 8HY 8NVP)	; easy - only one route
+       1741T 7T 4RVP)
+
+(RELAY 10HY (OR (and 10HY 10R) 10NVP) 2738T 1741T 7T 4RVP)
+
+(RELAY 8H !8COS 8R 8HY !8AS 5NWC
+        (LABEL L8HT !3LS !5LS 3NWC 4AS !1741NS 1741SS))
+(RELAY 10H !10COS 10R 10HY !10AS 2738SS !2738NS 5RWC L8HT)
+
+(relay 14HY (or (and 14HY 14R) 14NVP)
+       2742T			; unconditionally
+       (OR (AND 15RWP 19RWP 2745T 2747T 2752T)
+	   15NWP 19NWP))	; yard signal
+
+(relay 14H !14COS 14HY 14R !14AS !14VS
+       2742T 2742NS !2742SS
+       !15LS (SWIF 15 (AND !19LS (SWIF 19 (AND 54AS 2745NS)
+				       20AS))
+		   (AND !17LS (SWIF 17 16AS 18AS))))
+
+;@DB6 - dwarf H's.  No HY, no HV.
+
+(relay 16H (OR 16NVP 16H)
+       16R !16AS 14AS 2742SS !2742NS 17NWC !15LS 15NWC !17LS)
+(relay 18H (OR 18NVP 18H)
+       18R !18AS 14AS 2742SS !2742NS 17RWC !15LS 15NWC !17LS)
+(relay 20H (OR 20NVP 20H)
+       20R !20AS 14AS 2742SS !2742NS 19NWC !19LS 15RWC !17LS)
+
+(relay 22HY (or (AND 22HY 22R) 22NVP)
+       2742T 14RVP		; why not
+       2741T)
+
+(relay 22H !22COS 22HY 22R !22AS
+       2742SS !2742NS 19RWC 15RWC !15LS !19LS
+       14AS 2741SS)
+
+;;@DB6 Gyro Junction complex hair
+(relay 24HY (or (and 24HY 24R) 24NVP) ; slotting relay
+       1743T (SWIF 25
+		   (AND 26RVP 9745T) ; 25 reverse to yard
+		   (AND 1744T 28RVP 1745T 1746T 1747T))) ; 25 normal
+
+(relay 24H !24COS 24HY
+       24R !24AS !24VS 1743NS !25LS
+       (SWIF 25
+	     (AND 26AS 9745NS)	; reverse
+	     (AND !27LS 28AS 1745NS !1745SS !1746SS 40AS)))
+
+;;@DB6 26 and 28 extend all the way to affect sw 5 ...
+(relay 26HY (or (and 26HY 26R) 26NVP)
+       (LABEL L26HYT
+	      1743T  24RVP 1742T 1741T))
+(relay 26H !26COS 26HY
+       (OR !9745NS !9745T) ;we cannot clear unless there is a route
+       ;; or a (possibly reversing) train facing us,
+       ;; otherwise  35-37 would be locked by our stop and unable to move.
+       26R !26AS !26VS 25RWC
+       (LABEL L26HT
+	      !5AS		; make sure this kludge dropped.
+	      !25LS 24AS 1743SS !1743NS 1742SS !1742NS 27AS
+	      ;;@DB6 - overlap must lock 5
+	      5NWC !5LS))
+
+(relay 28HY (or (and 28HY 28R) 28NVP)
+       1744T
+       (SWIF 27
+	     (AND 3739T 30RVP 3736T)
+	     L26HYT))		; normal
+(relay 28H !28COS 28HY
+       28R !28AS !28VS !27LS 1744SS !1744NS
+       (SWIF 27
+	     (AND 30AS 32AS)	; reverse
+	     (AND !25LS 25NWC L26HT))) ; share with 26
+
+
+;;@DB6 let's get the other dwarves out of the way, they're easy
+
+(relay 34H (OR 34NVP 34H)
+       34R !34AS (LABEL L34HT 24AS 9745SS !9745NS 25RWC 1743SS))
+(relay 36H (OR 36NVP 36H)
+       36R !36AS L34HT)
+(relay 38H (OR 38NVP 38H)
+       38R !38AS L34HT)
+
+;;@DB6 30 has no issues at all.
+
+(relay 30HY (or (and 30HY 30R) 30NVP)
+       1744T 28RVP 1745T 1746T 1747T)
+
+(relay 30H !30COS 30HY
+       30R !30AS !30VS !27LS 27RWC 1744NS !1744SS 1745NS !1746SS 28AS 40AS)
+
+;;@DB6 46/48/50 are pretty easy, too
+
+(relay 46HY (or (and 46HY 46R) 46NVP)
+       1747T
+       (SWIF 47
+	     (AND 48RVP 3749T 3751T)
+	     (AND 50RVP 1748T 1749T)))
+
+(relay 48HY (or (and 48HY 48R) 48NVP)
+       (LABEL L48HYT
+	      1747T 46RVP 1746T 1745T 1744T))
+(relay 50HY (or (and 50HY 50R) 50NVP) L48HYT)
+
+
+(relay 46H !46COS 46HY
+       46R !46AS !46VS !47LS !1747SS
+       (SWIF 47
+	     (AND 48AS 56AS 3749NS !3749SS !2745NS) ;yup, all the way around
+	     (AND 50AS 52AS)))
+(relay 48H !48COS 48HY
+       48R !48AS !48VS 47RWC
+       (LABEL L48HT !47LS !1747NS 46AS 1747SS 1746SS))
+(relay 50H !50COS 50HY
+       50R !50AS !50VS 47NWC L48HT)
+
+;;@DB6 now, finally, slot these automatics properly.
+;;@DB6 these are "semi-automatics"(tm) who are controlled by back
+;;@DB5 contacts of route lockers.
+
+(relay 2741H (OR 2741H 2741DV)	; stop cycle/self-check
+       2741T 2742T !2738SS 2741NS 3NWC)
+(relay 2741HV 2741H 2741RVP 10RVP)
+(relay 2741DV (OR (AND 2741HV 14HV)(AND !2741HV 2741NVP)))
+(relay 2741V (OR 2741H !2741T 2741VS))       
+
+(relay 1746H (OR 1746H 1746DV) !1745SS 1746T 1747T)
+;;@DB6 whoops, better call it quits there,
+;;@DB6 or else it would have to be an approach to control the swinging
+;;@DB6 overlap.  Gotta think about that in advance!  Too bad!
+;;@DB6 Yes, one ought design the control lines FIRST. Whoops. :( :(
+(relay 1746HV 1746H 1746RVP)
+(relay 1746DV (OR (AND 1746HV 46HV)(AND !1746HV 1746NVP)))
+(relay 1746V (OR 1746H 1746VS !1746T))
+
+(relay 3739H (or 3739H 3739NVP) 3736T 3730T !3739NS)
+(relay 3739HV 3739H 3739RVP 32RVP)
+(relay 3739V (OR 3739H !3739T 3739VS))
+
+(relay 1738H (or 1738H 1738NVP) 7T !1741NS)	; no DV
+(relay 1738HV 1738H 1738RVP 4RVP)
+(relay 1738V (OR 1738H !7T 1738VS))
+
+;;@DB6 loop guys...
+;;@DB6 working from
+;;@DB6   (kludgey-auto-h 2749) (relay 2749H !2747SS) (relay 2749D 2754HV)
+;;@DB6 etc
+
+(relay 2749H (OR 2749H 2749DV) !2747SS 2752T 3751T)
+(relay 2749HV 2749H 2749RVP 54RVP)
+(relay 2749DV (OR (AND 2749HV 2754HV)(AND !2749HV 2749NVP)))
+(relay 2749V (OR 2749H !2752T 2749VS ))
+
+(relay 2754H (OR 2754H 2754DV) !2752SS  3751T 3749T)
+(relay 2754HV 2754H 3751RVP 3754RVP)
+(relay 2754DV (OR (AND 2754HV 56HV)(AND !2754HV 2754NVP)))
+(relay 2754V (OR 2754H !2752T 2754VS))
+
+(relay 3751H (OR 3751H 3751DV) !3749SS 2752T 3751T)
+(relay 3751HV 3751H 3751RVP 56RVP)
+(relay 3751DV (OR (AND 3751HV 3754HV)(AND !3751HV 3751NVP)))
+(relay 3751V (OR 3751H !3751T 3751VS))
+
+(relay 3754H (OR 3754H 3754DV) !3751SS 2752T 2747T)
+(relay 3754HV 3754H 3754RVP 2754RVP)
+(relay 3754DV (OR (AND 3754HV 54HV)(AND !3754HV 3754NVP)))
+(relay 3754V (OR 3754H !2752T 3754VS))
