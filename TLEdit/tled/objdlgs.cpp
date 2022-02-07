@@ -16,6 +16,7 @@
 #include "resource.h"
 #include "objreg.h"
 #include <string>
+#include <utility>
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
 
@@ -106,7 +107,7 @@ BOOL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 		    if (!Organized)
 			Organize();
 
-		    XCHG(TrackSeg*, TSA[TSA_NORMAL], TSA[TSA_REVERSE]);
+		    std::swap (TSA[TSA_NORMAL], TSA[TSA_REVERSE]);
 		    BufferModified = TRUE;
 		    TSA[TSA_NORMAL]->Select();
 		    break;

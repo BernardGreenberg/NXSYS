@@ -53,7 +53,6 @@ extern BOOL ExitLightsShowing;
 #define PRODUCT_NAME "TLEdit (Windows)"
 #endif
 
-#define XCHG(type,x,y) {type xchg_temp_ = (x); x = (y); y = xchg_temp_;}
 #define MoveTo(d,x,y) MoveToEx(d,x,y,NULL)
 
 #endif
