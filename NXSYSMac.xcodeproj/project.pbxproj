@@ -234,9 +234,17 @@
 		5BFB49E427AC725D006BE311 /* SwitchConsistency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */; };
 		5BFB49E627AC7606006BE311 /* NXSYS.html in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49E527AC7606006BE311 /* NXSYS.html */; };
 		5BFB49E827AC7682006BE311 /* argparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB49E727AC7682006BE311 /* argparse.cpp */; };
-		5BFB49FC27AD8187006BE311 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49FB27AD8187006BE311 /* LICENSE */; };
 		5BFB4A0927AF00FA006BE311 /* HelpBMPs in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4A0827AF00FA006BE311 /* HelpBMPs */; };
-		5BFB4AF127AF2745006BE311 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF027AF2745006BE311 /* README.md */; };
+		5BFB4AFD27B172A9006BE311 /* stdmacs.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF327B172A9006BE311 /* stdmacs.trk */; };
+		5BFB4AFE27B172A9006BE311 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF427B172A9006BE311 /* README.md */; };
+		5BFB4AFF27B172A9006BE311 /* db6.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF527B172A9006BE311 /* db6.trk */; };
+		5BFB4B0027B172A9006BE311 /* db7.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF627B172A9006BE311 /* db7.trk */; };
+		5BFB4B0127B172A9006BE311 /* db5.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF727B172A9006BE311 /* db5.trk */; };
+		5BFB4B0227B172A9006BE311 /* db4.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF827B172A9006BE311 /* db4.trk */; };
+		5BFB4B0327B172A9006BE311 /* dburg.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF927B172A9006BE311 /* dburg.trk */; };
+		5BFB4B0427B172A9006BE311 /* db1.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AFA27B172A9006BE311 /* db1.trk */; };
+		5BFB4B0527B172A9006BE311 /* db3.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AFB27B172A9006BE311 /* db3.trk */; };
+		5BFB4B0627B172A9006BE311 /* db2.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AFC27B172A9006BE311 /* db2.trk */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -664,6 +672,16 @@
 		5BFB4AED27AF11A0006BE311 /* traincmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = traincmn.cpp; sourceTree = "<group>"; };
 		5BFB4AEE27AF11A0006BE311 /* LOADOBJ.CPP */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LOADOBJ.CPP; sourceTree = "<group>"; };
 		5BFB4AF027AF2745006BE311 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5BFB4AF327B172A9006BE311 /* stdmacs.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stdmacs.trk; sourceTree = "<group>"; };
+		5BFB4AF427B172A9006BE311 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5BFB4AF527B172A9006BE311 /* db6.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db6.trk; sourceTree = "<group>"; };
+		5BFB4AF627B172A9006BE311 /* db7.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db7.trk; sourceTree = "<group>"; };
+		5BFB4AF727B172A9006BE311 /* db5.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db5.trk; sourceTree = "<group>"; };
+		5BFB4AF827B172A9006BE311 /* db4.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db4.trk; sourceTree = "<group>"; };
+		5BFB4AF927B172A9006BE311 /* dburg.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dburg.trk; sourceTree = "<group>"; };
+		5BFB4AFA27B172A9006BE311 /* db1.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db1.trk; sourceTree = "<group>"; };
+		5BFB4AFB27B172A9006BE311 /* db3.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db3.trk; sourceTree = "<group>"; };
+		5BFB4AFC27B172A9006BE311 /* db2.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db2.trk; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1371,6 +1389,7 @@
 		5BFB49EF27AD5667006BE311 /* Interlockings */ = {
 			isa = PBXGroup;
 			children = (
+				5BFB4AF227B172A9006BE311 /* Duckburg */,
 				5BFB49F827AD6084006BE311 /* Islington */,
 				5BFB49F627AD5FCD006BE311 /* Progman */,
 				5BFB49F427AD5E52006BE311 /* irt240 */,
@@ -1622,6 +1641,23 @@
 			path = tled;
 			sourceTree = "<group>";
 		};
+		5BFB4AF227B172A9006BE311 /* Duckburg */ = {
+			isa = PBXGroup;
+			children = (
+				5BFB4AF327B172A9006BE311 /* stdmacs.trk */,
+				5BFB4AF427B172A9006BE311 /* README.md */,
+				5BFB4AF527B172A9006BE311 /* db6.trk */,
+				5BFB4AF627B172A9006BE311 /* db7.trk */,
+				5BFB4AF727B172A9006BE311 /* db5.trk */,
+				5BFB4AF827B172A9006BE311 /* db4.trk */,
+				5BFB4AF927B172A9006BE311 /* dburg.trk */,
+				5BFB4AFA27B172A9006BE311 /* db1.trk */,
+				5BFB4AFB27B172A9006BE311 /* db3.trk */,
+				5BFB4AFC27B172A9006BE311 /* db2.trk */,
+			);
+			path = Duckburg;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1807,10 +1843,14 @@
 			files = (
 				5B1948A8264B5FFA001EBEFE /* NXSYSMac.build_log.txt in Resources */,
 				5B65680F25C331D100411B8F /* icon_256x256.png in Resources */,
+				5BFB4AFF27B172A9006BE311 /* db6.trk in Resources */,
 				5B4E1810222AC4AF00DED5AE /* Credits.rtf in Resources */,
 				5B687ADF19B725840006FA4F /* ReleaseNotes.html in Resources */,
-				5BFB4AF127AF2745006BE311 /* README.md in Resources */,
+				5BFB4B0527B172A9006BE311 /* db3.trk in Resources */,
+				5BFB4B0227B172A9006BE311 /* db4.trk in Resources */,
+				5BFB4AFE27B172A9006BE311 /* README.md in Resources */,
 				5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */,
+				5BFB4B0627B172A9006BE311 /* db2.trk in Resources */,
 				5BFB49E627AC7606006BE311 /* NXSYS.html in Resources */,
 				5B65680625C3144B00411B8F /* CustomAbout.xib in Resources */,
 				5BC911C119DEE5EA006C590E /* Preferences.xib in Resources */,
@@ -1819,6 +1859,7 @@
 				5BAFFBA919B894CC00AEE791 /* nxdoc.css in Resources */,
 				5B8A110F25C07E91007857A8 /* 5_0TL.png in Resources */,
 				5BFB4A0927AF00FA006BE311 /* HelpBMPs in Resources */,
+				5BFB4B0327B172A9006BE311 /* dburg.trk in Resources */,
 				5B8A10FF25C06DB4007857A8 /* TrafficLevers2_5.html in Resources */,
 				5B79D2B519B39D9C0029D74E /* MacNXSYS.html in Resources */,
 				5B50EE4919BA9455004CAABE /* ChooseTrack.xib in Resources */,
@@ -1831,10 +1872,13 @@
 				5B47F34419AE70AB00CBB80A /* Help.xib in Resources */,
 				5BAFFBAE19BA4C4900AEE791 /* TrainDlg.xib in Resources */,
 				5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */,
-				5BFB49FC27AD8187006BE311 /* LICENSE in Resources */,
+				5BFB4AFD27B172A9006BE311 /* stdmacs.trk in Resources */,
 				5BABB89919A82E3E00ECA09A /* RelayTrace.xib in Resources */,
 				5B54429519B0F00F00FB5537 /* RelaySelector.xib in Resources */,
+				5BFB4B0027B172A9006BE311 /* db7.trk in Resources */,
+				5BFB4B0127B172A9006BE311 /* db5.trk in Resources */,
 				5B46BA0519AC03870041C4FE /* RelayDrafter.xib in Resources */,
+				5BFB4B0427B172A9006BE311 /* db1.trk in Resources */,
 				5BE487E6199D0A5C007BD6BF /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
