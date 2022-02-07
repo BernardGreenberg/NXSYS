@@ -36,7 +36,7 @@ studying them.
   on switch position, including approach signals.  The approach signals
   become functional.
 
--`db4` adds route locking (including stop route-locking), and "stubs" for
+- `db4` adds route locking (including stop route-locking), and "stubs" for
   approach-locking relays just to get the route-locking operative, and
   the result is a quite convincing approximation of the real thing.
   (although you cannot run trains through it because there is no slotting).
