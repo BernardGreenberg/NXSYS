@@ -37,20 +37,18 @@ Top-level (not contained in other forms) forms define the track layout, its sign
 
 ### Interlocking definitions
  
-A `ROUTE` form must appear first:
-~~~
-  (route "Progman St. Interlocking  --  of 12/8/94"
-     #\A     700   north)
-~~~
-        ROUTE  "String to be displayed" Line-ID Origin  direction
+A `ROUTE` form must appear first in the first file.  Unfortunately, it bears a couple of Version 1 compatibility artifacts presently devoid of meaning, but extant interlockings have them.
+
+		(route "Progman St. Interlocking  --  of 12/8/94" #\A  00       north ...
+		(ROUTE  "Title string for window              " Line-ID Origin  direction
         
-*Line-ID* is the single letter used on signal plates for the whole layout, e.g., `#\F` in **F4-334** (i.e., Fourth Avenue BMT). Note that in 2.5 and later, `:EXTENDED-ROUTE-LETTER` can override this with a string of more than one character.
+*Line-ID* is the single letter used on signal plates for the whole layout, e.g., `#\F` in **F4-334** (i.e., Fourth Avenue BMT). Note that in 2.5 and later, `:EXTENDED-ROUTE-LETTER` can override this with a string of more than one character.  Yes, multiple subway lines joining don't work well.
    
-*Origin* is the station number (hundreds of simulated feet) of left-hand edge of the initial window - it may or may not be the leftmost stationing number in the layout. **[2022: This is ignored in Version 2, where 00 will suffice.]**
+*Origin* is a Version 1 artifact that is ignored in Version 2 NXSYS. It must be a number, and 00 will do well.
 
-*north* can be `NORTH` or `SOUTH`. If NORTH, to the *RIGHT* is *NORTH*. If `SOUTH`, to the RIGHT is *SOUTH*  and to the LEFT is *NORTH*.  This affects the directions of tracks (which affects track section numbering) based on track numbers. **[2022: This can be ignored in Version 2.]**
+*Direction* is another Version 1 artifact meaningless in Version 2 NXSYS, but anything other than `NORTH` or `SOUTH` will err. Sorry.
 
-(10/96) After *north*, zero or more *property pairs* can appear, each being a **Symbol** and a value. Unknown/unsupported/misspelled properties are ***guaranteed to be ignored***.  This opens the door to downward-compatible, conditionally-used features.
+After *direction*, zero or more **property pairs** can appear, each being a **Symbol** and a value. Unknown or misspelled properties are ***guaranteed to be ignored***.  This opens the door to downward-compatible, conditionally-used features. These are most definitely still relevant.
 
 Currently known are
 
@@ -62,7 +60,7 @@ This controls the horizontal scale of the display. The default is 3000 simulated
 		:TRAIN-LENGTH-FEET number
 		:YELLOW-FEET-PER-SECOND number
 
-The spec `:IRT T` causes IRT-style default directions to be chosen for tracks, (odd=North), IRT-style signal numbering to be displayed on the plates, and track section circuit ID numbers to be assigned in the IRT fashion, i.e., 
+The pair `:IRT T` causes IRT-style default directions to be chosen for tracks, (odd=North), IRT-style signal numbering to be displayed on the plates, and track section circuit ID numbers to be assigned in the IRT fashion, i.e., 
 
 			10*stationing_point + track_number
 
@@ -70,7 +68,7 @@ The spec `:TORONTO T` causes Toronto-style signal numbering to be displayed on t
 
 Any number (up to 10) of specs
 
-           :HELP-MENU ("Menu string" "Help string... ")
+		:HELP-MENU ("Menu string" "Help string... ")
 
 create interlocking-specific documentation offered on the "Help" menu with the string used as *Menu string* (which also is used as the help window title, so avoid ampersands (i.e., to designate menu accelerators).
 
@@ -82,7 +80,7 @@ Enables three-state, center-neutral traffic-control knobs. If elected, the inter
 
 		:EXTENDED-ROUTE-LETTER "BB"
 		
-(or "MM" or whatever), a *string*, which 2.5 and later will use in signal plates instead of the `LINE-ID` letter.
+(or "MM" or whatever), a *string*, which NXSYS 2.5 and later will use in signal plates instead of the `LINE-ID` letter.
 
 ### Defining track, signals, and switches
 
@@ -120,7 +118,7 @@ i.e.,
 
 Labels are used to define common subexpressions that would implemented in real relays by shared wires. `(LABEL name expr1 expr2 ....)` defines the AND (series wiring) of all the *expr*'s in it as *name*, and allows that name to be used as a synonym in subsequent relay definitions.
 
-(2022: `LABEL`s were a weak attempt to "share wiring" between relays, both to reduce error-prone code duplication and strive towards what I call "topomorphic circuits", that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious technique used ubiquitously by the real circuitry, brought forward from ancient lever-frame interlockings. At its most potent, bidirectional current flow maps the bidirectional movement of trains.  Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)
+(2022: `LABEL`s were a weak attempt to "share wiring" between relays, both to reduce error-prone code duplication and strive towards what I call "topomorphic circuits", that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious technique used ubiquitously by the real circuitry, brought forward from ancient lever-frame interlockings, where it minimized contacts and wires. At its most potent, bidirectional current flow mirrors the bidirectional movement of trains.  Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)
 
 **Macros** are used to define standardized identical relay definitions, identical in shape but not in relay numbers.  For example.
 
@@ -132,16 +130,16 @@ In general,
 
     (DEFRMACRO  name  n template)
 
-The name must be a symbol, and *n* is the number of arguments expected. The actual arguments may be numbers or relay names:
+*Name* must be a symbol, and *n* is the number of arguments expected. The actual arguments may be numbers or relay names:
   
     (SWIFINC 23 10AS 12AS)
              1   2    3
 
 In the *template*, `(arg 2)` substitutes all of the second argument to the macro call, and references to relay symbols cause the switch or signal numbers of the corresponding argument to be substituted, i.e., `(OR 1NWC...` becomes `(OR 23NWC` in the above.
 
-Note that macros may be used both as top-level forms or as subforms of other relay definitions.
+Note that macros may be used both as "top-level forms" in a file, or as subforms of other relay definitions, even in other macros.
 
-TIMER forms are just like other relay forms, except that a time in seconds appears after the timer name:
+TIMER forms are just like other relay forms, except that a time in seconds appears after the relay name:
 
     (timer 4U 7 (OR 4AS......
  
