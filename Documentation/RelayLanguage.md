@@ -25,7 +25,7 @@ A **form** is either an **atom** or a **list**.  A **list** starts and ends with
 |Example | Description|
 ---------|-----------
 |2345 |Integer, must be 32-bit (signed), decimal|
-|foobar|Symbol (string of alphanumerics starting               with alphabetic). Used to cause references to the same thing.  CASE is INSigGNiFICANt!|
+|foobar|Symbol (string of alphanumerics starting               with alphabetic). Used to cause references to the same thing.  CASE is INSigGNiFICANt! Colon (:) and hyphen (-) are legal "alphabetics", e.g. `:ALL-GROUNDHOGS` is a legal symbol name.
 |17NWK|Relay Symbol.  Starts with digits, ends with alphabetics and/or digits. CASE IS INSIGNIFICANT! (NB: I hope to expand this syntax).
 |"Title"|Quoted string.  Used where text must appear.  Backslash escapes backslash or quote.|
 |#\A|Single character object—used for subway line designations. (I know, doesn't handle BB or MM.)|
