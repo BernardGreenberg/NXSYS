@@ -3,7 +3,7 @@
 **Copyright ©Bernard S. Greenberg** 1994, 1995, 1996, 1997
   18 June 1995 (upd: 10 November 1996, 2 February 1997. 19 Feb 97, 18 Nov1997, 2 Dec97., 6 Jan 98, 14 Jan 98, 23 April 98, 16 May 98, 16 January 01, 26 July 01, 7 February 2022
 
-This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts (no, it is not trivial).  Pay particular attention to the 1998 tutorial [Duckburg Tower A](https://github.com/BernardGreenberg/NXSYS/Interlockings/Duckburg)!
+This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts (no, it is not trivial).  Pay particular attention to the 1998 tutorial [Duckburg Tower A](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg)!
 
 The term *the simulator* is used below to denote the NXSYS application in such contexts where there is a need to draw a clear distinction between logic and actions effected by that application, and that effected by the relays whose definitions you supply to it.  The simulator operates some of your relays, and is operated by others of them, as described below.
 
