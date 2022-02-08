@@ -522,6 +522,22 @@ void RegisterHelpMenuTextCRLF1 (const char* text, const char* title) {
     RegisterHelpMenuText (fixed.c_str(), title); //help system copies it. STL now 8/2019
 }
 
+typedef std::pair<bool, std::string> LassieRet;
+
+static LassieRet LassieGetHelp(std::string path) {
+    FILE* f = fopen(path.c_str(), "r");
+    if (f) {
+        fseek(f, 0L, SEEK_END);
+        std::vector<char>b(ftell(f));
+        rewind(f);
+        fread(b.data(), 1, b.size(), f);
+        fclose(f);
+        return LassieRet(true, std::string(b.data(), b.size()));
+    }
+    else
+        return LassieRet(false, "");
+}
+
 int ProcessRouteForm (Sexpr s, const char* fname) {
     if (ListLen(s) < 4)
 	LERROR ("Should be at least 5 items in ROUTE?", s);
@@ -572,18 +588,11 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
 		LERROR ("Members of :HELP-TEXT not strings.", value);
             std::string helpMenuTitle(s1.u.s), helpMenuText(s2.u.s);
             if (helpMenuText.length() && helpMenuText[0] == '@') {
-                std::string path = STLincexppath(fname, helpMenuText.substr(1));
-                FILE* f = fopen(path.c_str(), "r");
-                if (!f)
+                auto retvals = LassieGetHelp(STLincexppath(fname, helpMenuText.substr(1)));
+                if (retvals.first)
+                    helpMenuText = retvals.second;
+                else
                     LERROR("Cannot open referenced text help file", s2); // macro returns 0.
-                fseek(f, 0L, SEEK_END);
-                size_t flen = ftell(f);
-                rewind(f);
-
-                std::vector<char>b(flen);
-                fread(&b[0], 1, flen, f);
-                fclose(f);
-                helpMenuText = std::string(&b[0], flen);
             }
             RegisterHelpMenuTextCRLF1 (helpMenuText.c_str(), helpMenuTitle.c_str());
 	}
