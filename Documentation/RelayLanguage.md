@@ -9,7 +9,7 @@ The term *the simulator* is used below to denote the NXSYS application in such c
 
 **NB: This document was first written around the turn of the century for Version 1 NXSYS.  While the relay language has not changed at all, the Version 2 track-definition language differs completely, and with the advent of TLEdit, the Track Layout Editor, there is no need ever to code in, or understand, the track definition language (it's not really very complicated, anyway).  So all that has been removed.**
 
-Making the signals and switches actually work is not so easy: one must design all the signal circuitry, which is not easily explained in a short (or even long) helpfile - that is a whole study.  The authoritative source document for that study is NYCTA/MTA drawing-set 733-33, their "typical signal/interlocking prints", not readily available.  More stuff coming from me, though (2022) --
+Making the signals and switches actually work is not so easy: one must design all the signal circuitry, which is not easily explained in a short (or even long) helpfile - that is a whole study.  The authoritative source document for that study is NYCTA/MTA drawing-set 733-33, their "typical signal/interlocking prints", not readily available.  More stuff coming from me, hopefully, though (2022) --
 
 Of course, you are free and encouraged to study and mimic the circuitry provided in the examples; you can start with what we supply and modify until it becomes something else.  With NXSYS, you can actually *watch* the relays in operation and experiment with modifying their circuits, privileges I never had when learning this material from paper in the mid-1960's.  (However, I warn and declare unequivocally that my designs are for entertainment and educational purposes only and include certain simplifications and possible errors, and are not fit for use for controlling real railroads or other life-critical systems, and I assume no risk or responsibility should any of this information, or designs correctly or incorrectly derived from it, be faulty and lead to harm, damage, loss, or injury. Use it at your own risk.)
 
@@ -24,14 +24,14 @@ A **form** is either an **atom** or a **list**.  A **list** starts and ends with
 
 |Example | Description|
 ---------|-----------
-|2345 |Integer, must be 32-bit (signed), decimal|
-|foobar|Symbol (string of alphanumerics starting               with alphabetic). Used to cause references to the same thing.  CASE is INSigGNiFICANt! Colon (:) and hyphen (-) are legal "alphabetics", e.g. `:ALL-GROUNDHOGS` is a legal symbol name.
-|17NWK|Relay Symbol.  Starts with digits, ends with alphabetics and/or digits. CASE IS INSIGNIFICANT! (NB: I hope to expand this syntax).
-|"Title"|Quoted string.  Used where text must appear.  Backslash escapes backslash or quote.|
-|#\A|Single character object—used for subway line designations. (I know, doesn't handle BB or MM.)|
-|!24HY|Back contact Relay Symbol. Used for back (closed when dropped) contacts.|
-|782.3|Floating-point number - not supported yet in compiler (10/96)|
-|355/113|Rational number—not supported yet in compiler (10/96)|
+|2345       | Integer, must be 32-bit (signed), decimal|
+|foobar     | Symbol (string of alphanumerics starting               with alphabetic). Used to cause references to the same thing.  CASE is INSigGNiFICANt! Colon (:) and hyphen (-) are legal "alphabetics", e.g. `:ALL-GROUNDHOGS` is a legal symbol name.
+|17NWK      |Relay Symbol.  Starts with digits, ends with alphabetics and/or digits. CASE IS INSIGNIFICANT! (NB: I hope to expand this syntax).
+|"Title"    |Quoted string.  Used where text must appear.  Backslash escapes backslash or quote.|
+|#\A        |Single character object—used for subway line designations. (See below for handling BB & MM.)|
+|!24HY      |Back contact Relay Symbol. Used for back (closed when dropped) contacts.|
+|782.3      |Floating-point number - not supported yet in compiler (10/96)|
+|355/113    |Rational number—not supported yet in compiler (10/96)|
 
 Top-level (not contained in other forms) forms define the track layout, its signals, and its relays.
 
@@ -42,29 +42,25 @@ A `ROUTE` form must appear first in the first file.  Unfortunately, it bears a c
 		(route "Progman St. Interlocking  --  of 12/8/94" #\A  00       north ...
 		(ROUTE  "Title string for window              " Line-ID Origin  direction
         
-*Line-ID* is the single letter used on signal plates for the whole layout, e.g., `#\F` in **F4-334** (i.e., Fourth Avenue BMT). Note that in 2.5 and later, `:EXTENDED-ROUTE-LETTER` can override this with a string of more than one character.  Yes, multiple subway lines joining don't work well.
+*Line-ID* is the single letter used on signal plates for the whole layout, e.g., `#\F` in **F4-334** (i.e., Fourth Avenue BMT). Note that in 2.5 and later, `:EXTENDED-ROUTE-LETTER` can override this with a string of more than one character.  Yes, multiple subway lines joining don't work well (planned).
    
-*Origin* is a Version 1 artifact that is ignored in Version 2 NXSYS. It must be a number, and 00 will do well.
-
-*Direction* is another Version 1 artifact meaningless in Version 2 NXSYS, but anything other than `NORTH` or `SOUTH` will err. Sorry.
+*Origin* is a Version 1 artifact that is ignored in Version 2 NXSYS. It must be a number, and 00 will do well. *Direction* is another Version 1 artifact meaningless in Version 2 NXSYS, but anything other than `NORTH` or `SOUTH` will err. Sorry.
 
 After *direction*, zero or more **property pairs** can appear, each being a **Symbol** and a value. Unknown or misspelled properties are ***guaranteed to be ignored***.  This opens the door to downward-compatible, conditionally-used features. These are most definitely still relevant.
 
-Currently known are
-
-         :SIM-FEET-PER-SCREEN   number
-
-This controls the horizontal scale of the display. The default is 3000 simulated right-of-way feet per the width of your screen. The following are available to parameterize the "train" system:
+The following are available to parameterize the "train" system:
 
 		:CRUISING-FEET-PER-SECOND number
 		:TRAIN-LENGTH-FEET number
 		:YELLOW-FEET-PER-SECOND number
 
-The pair `:IRT T` causes IRT-style default directions to be chosen for tracks, (odd=North), IRT-style signal numbering to be displayed on the plates, and track section circuit ID numbers to be assigned in the IRT fashion, i.e., 
+*Cruising* refers to the target speed for distant (green) indications. *Yellow* refers to the home indication (prepare to stop at next signal).  Train kinematics are inferred from these parameters and distances inferred from signal/IJ stationing in hundreds of feet.
+
+The pair `:IRT T` causes IRT-style signal numbering to be displayed on the plates, and track section circuit ID numbers to be interpreted by the IRT convention, i.e., 
 
 			10*stationing_point + track_number
 
-The spec `:TORONTO T` causes Toronto-style signal numbering to be displayed on the signal plates.
+The pair `:TORONTO T` causes Toronto-style signal numbering to be displayed on the signal plates.
 
 Any number (up to 10) of specs
 
