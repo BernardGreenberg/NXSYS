@@ -301,15 +301,11 @@ forms:
 	return 1;
 #if NXCMPOBJ
     else if (symcmp (fn, "LOAD")) {
-        std::string pathbuf;
 	return LoadRelayObjectFile
-		(fname, include_expand_path (fname, CADR(s).u.s, pathbuf));
-    }
+                (STLincexppath(fname, CADR(s).u.s).c_str());
 #endif
-    else if (symcmp (fn, "INCLUDE")) {
-        std::string pathbuf;
-	return LoadExprcodeFile (include_expand_path (fname, CADR(s).u.s, pathbuf));
-    }
+    else if (symcmp (fn, "INCLUDE"))
+        return LoadExprcodeFile (STLincexppath(fname, CADR(s).u.s).c_str());
     else if (symcmp (fn, "RELAY"))
 	return (DefineRelayFromLisp (rest) != NULL);
     else if (symcmp (fn, "TIMER"))
@@ -572,30 +568,24 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
 		LERROR ("Value of :HELP-TEXT is not a list at least two long", value);
 	    Sexpr s1 = CAR(value);
 	    Sexpr s2 = CAR(CDR(value));
-            const char * helpMenuTitle = s1.u.s;
-            const char * helpMenuText = s2.u.s;
 	    if (s1.type != L_STRING || s2.type != L_STRING)
 		LERROR ("Members of :HELP-TEXT not strings.", value);
-            std::string temptext;
-            std::string pathbuf;
-            if (strlen(helpMenuText) > 3 && helpMenuText[0] == '@') {
-                const char * fp = include_expand_path(fname, helpMenuText+1, pathbuf);
-                FILE* f = fopen(fp, "r");
-                if (!f) {
-                    LERROR("Cannot open referenced text help file", s2);
-                    return 0;
-                }
-                std::vector<char>b(1000);
-                while (true) {
-                    size_t haveRead = fread(&b[0], 1, b.size(), f);
-                    temptext.append(&b[0], haveRead);
-                    if (haveRead < b.size())
-                        break;
-                }
+            std::string helpMenuTitle(s1.u.s), helpMenuText(s2.u.s);
+            if (helpMenuText.length() && helpMenuText[0] == '@') {
+                std::string path = STLincexppath(fname, helpMenuText.substr(1));
+                FILE* f = fopen(path.c_str(), "r");
+                if (!f)
+                    LERROR("Cannot open referenced text help file", s2); // macro returns 0.
+                fseek(f, 0L, SEEK_END);
+                size_t flen = ftell(f);
+                rewind(f);
+
+                std::vector<char>b(flen);
+                fread(&b[0], 1, flen, f);
                 fclose(f);
-                helpMenuText = temptext.c_str();
+                helpMenuText = std::string(&b[0], flen);
             }
-	    RegisterHelpMenuTextCRLF1 (helpMenuText, helpMenuTitle);
+            RegisterHelpMenuTextCRLF1 (helpMenuText.c_str(), helpMenuTitle.c_str());
 	}
 	else if (symcmp (p, ":BASIC-HELP-FILE-ID")) {
 	    Sexpr value = CADR(s);

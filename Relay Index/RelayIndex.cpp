@@ -219,8 +219,8 @@ void CompileTopLevelForm (Sexpr s, const char * fname, long filepos) {
         else if (fn == TIMER)
             CompileTimerRelayDef (CDR(s), fname, filepos);
         else if (fn == INCLUDE) {
-            std::string path;
-            FILE * ff = fopen (include_expand_path(fname, CADR(s).u.s, path), "r");
+            std::string path(STLincexppath(fname, CADR(s).u.s));
+            FILE * ff = fopen (path.c_str(), "r");
             if (ff == NULL)
                 RC_error (1, "Cannot open include file %s", path.c_str());
             CompileFile (ff, path.c_str());

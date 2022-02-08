@@ -1121,8 +1121,7 @@ forms:
 	else if (fn == TIMER)
 	    CompileTimerRelayDef (CDR(s));
 	else if (fn == INCLUDE) {
-            std::string path;
-	    include_expand_path (fname, CADR(s).u.s, path);
+            std::string path (STLincexppath(fname, CADR(s).u.s));
 	    FILE * ff = fopen (path.c_str(), "r");
 	    if (ff == NULL)
 		RC_error (1, "Cannot open include file %s", path.c_str());
