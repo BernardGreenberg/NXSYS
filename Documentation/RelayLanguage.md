@@ -187,6 +187,7 @@ The "PB"'s are pulsed by the simulator.
 |-----|-----------|
 |0CPB|is a huge simulated relay which is pulsed to drop every signal in the simulator, so a back contact appears in all PBS's. As of 19 Feb 97, this is no longer necessary; the simulator drops all PBS's known to its signals when required.  0CPB is still pulsed, though, and can be used elsewhere.|
 |0RAS|is similar, and pulsed to release all approach locking on menu command (and must be used in all AS relays).
+|0BRGP|"Bobble red signal repeaters".  This relay is pulsed by the `Interlocking > Bobble red signal repeaters` menu command, and simulates temporary track power failures. `RGP` circuits must include its contact.|
 |**For signal**||
 |PB|Push button (initiate or exit) at signal on control panel.|
 |COPB|Trackside call-on push-button on home signals.|
