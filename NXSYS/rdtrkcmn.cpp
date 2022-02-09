@@ -118,7 +118,7 @@ static void FinishUpLoad () {
 
 /* this is a big crock.  Some much better theory is necessary */
 
-static std::set<const std::string> NormallyPickedRelays
+static std::set<std::string> NormallyPickedRelays
    = {"AS", "D", "DV", "RGP"};
 
 int symcmp (Sexpr& s, const char * str) {

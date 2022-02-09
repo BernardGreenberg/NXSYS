@@ -15,7 +15,7 @@ struct TextKey {
     const char * key;
 };
 
-typedef const std::initializer_list<const TextKey> DefVector;
+typedef const std::initializer_list<TextKey> DefVector;
 
 typedef void (^TLEditDlgCreator)(void*);
 

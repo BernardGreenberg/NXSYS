@@ -41,7 +41,7 @@ using std::stringstream;
 namespace fs = std::__fs::filesystem;
 
 std::unordered_map<RLID, std::vector<RLID>> BackRefMap;
-std::unordered_map<const char *, Sexpr>LabelMap; //atom strings guaranteed EQ
+std::unordered_map<char *, Sexpr>LabelMap; //atom strings guaranteed EQ
 std::unordered_set<RLID> RelaysReferenced;
 std::unordered_set<RLID> RelaysDefined;
 

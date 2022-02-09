@@ -157,7 +157,7 @@ static std::vector<char *> Obarray;
 #endif
 static char Goodsymchar[256], Gsci =0, Fsci = 0;
 static Rlysym **RObarray = NULL;
-static std::vector<const char *> RelayTypeTable;
+static std::vector<char *> RelayTypeTable;
 static char RprBuf[20];
 
 Sexpr NIL, NOT, ARG, FORMS, EOFOBJ, DEFRMACRO, QUOTE, BACKQUOTE,

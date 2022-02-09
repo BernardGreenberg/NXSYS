@@ -181,7 +181,7 @@ Train* ValidateWanderedPointer(void* vp, bool allow_null=FALSE) {
 
 DLGPROC_DCL Train_DlgProc (HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
 {
-    bool trs;
+    BOOL trs;
     int train_no;
     
   switch (message) {
