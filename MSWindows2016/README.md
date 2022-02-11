@@ -1,7 +1,7 @@
 # NXSYS for Mac ... for MS Windows!
 
-## Status 9 Feb 2022:
-###I have acquired sufficient resources to upgrade and debug the Windows build, and am doing so!!
+## Status 10 Feb 2022:
+###I have acquired sufficient resources to upgrade and debug the Windows build, and am doing so. It is well under way, and I expect to to have a VS2022 version in C++14 operative in some days.   The OLE feature has been dropped.  Don't bother doing it yourself.
 
 ## Status report, 5 February 2022
 About 30 years after NXSYS was born on 16-bit Windows 3.1.
