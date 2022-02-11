@@ -1,13 +1,6 @@
-.CRLF=1;
-:TLEditHelpText:
-NXSYS (version 2) Track Panel Editor --	Copyright Bernard S. Greenberg 1997-2001
+NXSYS (version 2) Track Panel Editor --	Copyright Bernard S. Greenberg 1997-2022
 
 	BE SURE TO PAGE DOWN THROUGH WHOLE HELP TEXT.
-
-***THIS IS NOT FREEWARE. IF YOU HAVE THIS PROGRAM, IT HAD BETTER
-***BE BECAUSE I EXPLICITLY GRANTED YOU PERMISSION TO USE IT FOR YOUR
-***OWN PERSONAL USE. YOU ARE NOT PERMITTED TO REDISTRIBUTE IT, OR
-***USE IT FOR BUSINESS WITHOUT A LICENSE.
 
 Layouts consist of straight line "track segments" which connect "joints", which appear as red dots.  Tracks can only bend or join at joints. A joint can have one, two, or three segments ("branches") emanating from it -- one is the end of a track, two is an insulated joint, or a "kink" in a track, three is a switch.
 
