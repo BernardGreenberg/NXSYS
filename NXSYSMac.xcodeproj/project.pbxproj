@@ -577,7 +577,7 @@
 		5BF06F5219A10AA3008CDCA0 /* dynmenu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dynmenu.cpp; path = v2/dynmenu.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F5419A10D03008CDCA0 /* CompiledCodeInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompiledCodeInterface.cpp; path = NXSYSMac/CompiledCodeInterface.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacNxldwin.cpp; path = NXSYSMac/MacNxldwin.cpp; sourceTree = SOURCE_ROOT; };
-		5BF06F5C19A12727008CDCA0 /* RelayGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RelayGraphics.cpp; sourceTree = "<group>"; };
+		5BF06F5C19A12727008CDCA0 /* RelayGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RelayGraphics.cpp; path = ../NXSYSMac/RelayGraphics.cpp; sourceTree = "<group>"; };
 		5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = edtraflev.cpp; sourceTree = "<group>"; };
 		5BF7CEB419CA2A4200DF6ECE /* edswkey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = edswkey.cpp; sourceTree = "<group>"; };
 		5BF7CEB619CA2AFD00DF6ECE /* dragger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dragger.cpp; sourceTree = "<group>"; };
