@@ -9,7 +9,7 @@ This re-adaptation work, however, is still in progress: some things still don't 
 
 ### What ***does*** work (today) in the new build:
 
-- NXSYS (the main app) can open, display, and operate the latest interlockings, now including [Duckburg](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg). The command menu works.  Signals, switches, and the whole relay logic engine, including the trace window, all seem to work as designed and as the do on the Mac.
+- NXSYS (the main app) can open, display, and operate the latest interlockings, now including [Duckburg](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg). The command menu works.  Signals, switches, and the whole relay logic engine, including the trace window, all seem to work as designed and as they do on the Mac.
 
 - TLEdit, the track layout editor, seems to work, too, with its toolbar (a little different from the Mac’s beautiful one) and rodentation all in order, as well as object detail dialogs.
 
