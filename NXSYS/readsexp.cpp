@@ -760,7 +760,7 @@ Sexpr read_sexp_LIS (LispInputSource &Lis) {
     return read_sexp_i (Lis, 0);
 }
 
-std::string Sexpr::PRep() {
+std::string Sexpr::PRep() const {
     switch (type) {
 	case L_NULL:
             if (u.v == nullptr)

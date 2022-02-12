@@ -85,7 +85,7 @@ struct Sexpr {
     int operator == (Sexpr& r) {return r.type == type && r.u.l == u.l;};
     int operator != (Sexpr& r) {return r.type != type || r.u.l != u.l;};
 
-    std::string PRep();
+    std::string PRep() const;
 };
 
 //#ifndef _NX_SYS_RELAYS_H__
@@ -136,7 +136,7 @@ Sexpr MaybeExpandMacro (Sexpr s);
 struct Rlysym {
     Rlysym (long nomenc, short type_index, Relay* relay)
     : n(nomenc), type(type_index), rly(relay) {}
-    std::string PRep();                 /* printed rep */
+    std::string PRep() const;                 /* printed rep */
 
     long    n;				/* 4732 of 4732TP */
     short   type;			/* index to "TP" in relay-type tbl */
