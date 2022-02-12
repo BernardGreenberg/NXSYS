@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TLEDIT;_CRT_SECURE_NO_WARNINGS;NXV2;XTG;WIN32;_WIN32;WINDOWS;_DEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\bsg\Desktop\NX2\TLEdit;C:\Users\bsg\Desktop\NX2\TLEdit\tled;C:\Users\bsg\Desktop\NX2\NXSYS\v2;C:\Users\bsg\Desktop\NX2\NXSYS;C:\Users\bsg\Desktop\NX2\NXSYSWindows\NXSYS;C:\Users\bsg\Desktop\NX2\NXSYSWindows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\TLEdit;$(SolutionDir)..\TLEdit\tled;$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -97,7 +97,7 @@
       <AdditionalDependencies>comctl32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>C:\Users\bsg\Desktop\NX2\TLEdit\tled;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
