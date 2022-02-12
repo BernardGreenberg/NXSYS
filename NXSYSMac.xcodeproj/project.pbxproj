@@ -409,7 +409,7 @@
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
 		5B8A10FE25C06DB4007857A8 /* TrafficLevers2_5.html */ = {isa = PBXFileReference; lastKnownFileType = text.html.documentation; path = TrafficLevers2_5.html; sourceTree = "<group>"; };
 		5B8A110E25C07E91007857A8 /* 5_0TL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5_0TL.png; sourceTree = "<group>"; };
-		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacRlyDlg.h; sourceTree = "<group>"; };
+		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
 		5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tlehlptx.txt; sourceTree = "<group>"; };
 		5BA6F73019CCA375002551F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SignalProperties.xib; sourceTree = "<group>"; };
 		5BA6F73519CCBB1A002551F7 /* GenericWindlgController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericWindlgController.h; sourceTree = "<group>"; };
