@@ -168,7 +168,7 @@ public:
 
 #if NXSYSMac
     void SendSelfToMac(HWND dlg) {
-        SetWindowText(GetDlgItem(dlg, ControlId), String);
+        SetWindowTextS(GetDlgItem(dlg, ControlId), String);
     }
 #endif
 };
@@ -215,7 +215,7 @@ public:
         MacKludgeParam2(Dlg, (int)Entries.size(), 0);  // Mac Dlg must know the # entries a priori
         for (auto& entry : Entries)
             entry.SendSelfToMac(Dlg);
-        SetWindowText(Dlg, Title);
+        SetWindowTextS(Dlg, Title);
     }
 #endif
 

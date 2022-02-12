@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 #ifndef NXSYSMac
-#include <syserr32.h>
+//#include <syserr32.h>
 #include <stdarg.h>
 #include <parsargs.h>
 #endif
@@ -97,8 +97,8 @@ static void SetMainWindowTitle(const char * s) {
 	if (s)
         title = std::string("TLEdit - ") + s;
 	else
-        title = "Track Layout Editor");
-	SetWindowText(AppWindow, title);
+        title = "Track Layout Editor";
+	SetWindowTextS(AppWindow, title);
 }
 #endif
 
@@ -234,18 +234,22 @@ BOOL SaveItForReal(const char * path) {
 
 #ifndef NXSYSMac
 static BOOL OpenIt() {
-	if (FileOpenDlg(AppWindow, FileName, NULL, MAXPATH - 1, 1))
-		return ReadIt();
-	return FALSE;
+    char fnbuf[MAXPATH];
+    if (FileOpenDlg(AppWindow, fnbuf, NULL, MAXPATH - 1, 1)) {
+	FileName = fnbuf;
+	return ReadIt();
+    }
+    return FALSE;
 }
 
 static BOOL SaveIt(BOOL force_query) {
-	if (!strcmp(FileName, ""))
+	if (!strcmp(FileName.c_str(), ""))
 		force_query = TRUE;
-	if (force_query && !FileOpenDlg(AppWindow,
-		FileName, NULL, MAXPATH - 1, 0))
-		return FALSE;
-	return SaveItForReal(FileName);
+	char fnbuf[MAXPATH];
+	if (force_query && !FileOpenDlg(AppWindow, fnbuf, NULL, MAXPATH - 1, 0))
+	    return FALSE;
+	FileName = fnbuf;
+	return SaveItForReal(FileName.c_str());
 }
 
 static BOOL CheckBufferModified() {
@@ -700,7 +704,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 	}
 
 	if (!(S_Statusbar && S_Toolbar)) {
-		usererr("Cannot create statusbar/toolbar: %s", SysLastErrstr());
+//		usererr("Cannot create statusbar/toolbar: %s", SysLastErrstr());
+	    usererr("Cannot create statusbar/toolbar:no good reason right yet.");
 		DestroyWindow(AppWindow);
 		return 0;
 	}
@@ -715,7 +720,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 	ShowWindow(AppWindow, nCmdShow);	/* don't gratuitously update */
 
 	if (argc >= 1) {
-		strcpy(FileName, argv[0]);
+		FileName = argv[0];
 		ReadIt();
 	}
 
@@ -743,7 +748,7 @@ void StatusMessage(const char * control_string, ...) {
 #ifdef NXSYSMac
 	DisplayStatusString(msg.c_str());
 #else
-	SetWindowText(S_Statusbar, msg);
+	SetWindowTextS(S_Statusbar, msg);
 #endif
 }
 

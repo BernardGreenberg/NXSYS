@@ -101,7 +101,7 @@ BOOL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
             for (auto& aspect : Aspects) {
                 for (auto& colord : ColorData)
 		    if (aspect.Colorstring == colord.color_letter)
-                        SetDlgItemText (hDlg, colord.control_id, aspect.RelayName);
+                        SetDlgItemTextS (hDlg, colord.control_id, aspect.RelayName);
 	    }
 	    return TRUE;
 	}

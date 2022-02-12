@@ -876,7 +876,9 @@ loop:
 
 #if ! _BLISP
 void dealloc_lisp_sys() {
+#if !TLEDIT
     MacroCleanup();
+#endif
     AtomMap.clear();
 #if ! RELAYS
     ClearRelayMaps();

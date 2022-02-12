@@ -118,7 +118,9 @@ void ClearRelayMaps() {
 // (don't know what function he's referring to 20 years later)
 
 void LispCleanOutRelays() {
+#ifndef TLEDIT
     MacroCleanup();
+#endif
     ClearRelayMaps();  // what the heck is this difference between these cleaner-uppers?
     
 }

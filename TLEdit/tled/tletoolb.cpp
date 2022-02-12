@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include "tlecmds.h"
 #include "tletoolb.h"
-
+#undef _strdup
 /* stolen from RJ, to which I have unlimited source rights */
 
 struct _ButtonData {
     int Bmx;
     int Style;
     int Command;
-    char * String;
+    const char * String;
 } ButtonData []
    = {
     {0,TBSTYLE_BUTTON, CmQuit, "Exit Layout editor"},
@@ -59,7 +59,7 @@ int HandleToolbarNotification (WPARAM wParam, LPARAM lParam) {
 	    if (idButton != 0)
 		for (int i = 0; i < BUTTON_DATA_COUNT;i++)
 		    if (ButtonData[i].Command == idButton) {
-			lpttt->lpszText = ButtonData[i].String;
+			lpttt->lpszText = _strdup(ButtonData[i].String);
 			return 1;
 		    }
     } 

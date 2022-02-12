@@ -86,7 +86,7 @@ BOOL SaveLayout(const char * path) {
     std::string complaint;
     if (!SwitchConsistencyTotalCheck(complaint)) {
         complaint += " -- NXSYS cannot load it until you fix this.  Won't save.";
-        MessageBox(G_mainwindow, complaint, app_name, MB_ICONEXCLAMATION);
+        MessageBox(G_mainwindow, complaint.c_str(), app_name, MB_ICONEXCLAMATION);
         return FALSE;
     }
 	if (!MakeBackupCopy(path)) {
@@ -432,7 +432,7 @@ static int DROComparer(const void * v1, const void * v2) {
 }
 
 static void DumpRemainingObjects(FILE * f) {
-	SaveState SS;
+    SaveState SS{};
 	SS.Index = 0;
 	SS.Counting = TRUE;
 	SS.Table = NULL;

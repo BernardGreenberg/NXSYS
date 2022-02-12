@@ -229,15 +229,15 @@ BOOL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 #ifdef NXSYSMac
     BOOL es;
 #else
-    static CHOOSEFONT Cf;	/* says should be static, beats me */
+    static CHOOSEFONT Cf{};	/* says should be static, beats me */
 #endif
     WP_cord new_wp_x = wp_x, new_wp_y = wp_y;
 
     switch (message) {
 	case WM_INITDIALOG:
-            SetDlgItemText (hDlg, IDC_TEXT_TEXT, String);
+            SetDlgItemTextS (hDlg, IDC_TEXT_TEXT, String);
 #ifdef NXSYSMac
-            SetDlgItemText (hDlg, IDC_ETEXT_SAMPLE, String);
+            SetDlgItemTextS (hDlg, IDC_ETEXT_SAMPLE, String);
             SetDlgItemInt(hDlg, IDC_ETEXT_WPX, (int)wp_x, TRUE); // upd win dlg some day
             SetDlgItemInt(hDlg, IDC_ETEXT_WPY, (int)wp_y, TRUE);
 #endif

@@ -76,12 +76,12 @@ BOOL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message) {
 	case WM_INITDIALOG:
 	    SetDlgItemInt (hDlg, IDC_EDIT_XLIGHT_XLNO, XlkgNo, FALSE);
-	    SetDlgItemText (hDlg, IDC_EDIT_XLIGHT_IJNO,
+	    SetDlgItemTextS (hDlg, IDC_EDIT_XLIGHT_IJNO,
                             FormatString("Exit Light at IJ %ld",
                                          Seg->Ends[EndIndex].Joint->Nomenclature));
 
 	    o = Seg->EndOrientationKey(EndIndex);
-	    SetDlgItemText (hDlg, IDC_EDIT_XLIGHT_ORIENT,
+	    SetDlgItemTextS (hDlg, IDC_EDIT_XLIGHT_ORIENT,
                             FormatString("Orientation: %c", o));
 	    return TRUE;
 	case WM_COMMAND:

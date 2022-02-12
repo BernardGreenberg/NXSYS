@@ -15,7 +15,7 @@
 #include "resource.h"
 
 
-static char *GFilter = "Interpreted Xlkgs\0*.TRK\0All Files (*.*)\0*.*\0\0";
+static const char *GFilter = "Interpreted Xlkgs\0*.TRK\0All Files (*.*)\0*.*\0\0";
 
 BOOL FileOpenDlg (HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
 		  int bufl, int rsw) {

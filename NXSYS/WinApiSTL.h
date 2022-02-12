@@ -17,7 +17,8 @@ static inline void SetDlgItemTextS(HWND hWnd, UINT control_id, const std::string
 static inline void SetWindowTextS(HWND hWnd, const std::string& s) {
 	SetWindowText(hWnd, s.c_str());
 }
-static std::string GetDlgItemText(HWND hWnd, int control_id) {
+
+static inline std::string GetDlgItemText(HWND hWnd, int control_id) {
     char buff[128];
     UINT len = GetDlgItemText(hWnd, control_id, buff, 128);
     if (len == 0)
@@ -33,4 +34,5 @@ static std::string GetDlgItemText(HWND hWnd, int control_id) {
     }
     return cp;
 }
+
 #endif /* WinApiSTL_h */

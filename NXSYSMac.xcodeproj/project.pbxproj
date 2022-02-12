@@ -334,7 +334,6 @@
 		5B5AE616230C57B300348612 /* RelayLispSubstrate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RelayLispSubstrate.h; sourceTree = "<group>"; };
 		5B5AE61B230C77E800348612 /* BLISP */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BLISP; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B5AE627230C8B8B00348612 /* libc.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libc.tbd; path = usr/lib/libc.tbd; sourceTree = SDKROOT; };
-		5B5AE62D230D749F00348612 /* WinApiSTL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WinApiSTL.h; path = NXSYSMac/WinApiSTL.h; sourceTree = SOURCE_ROOT; };
 		5B5AE62E230D74D000348612 /* WinApiSTL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WinApiSTL.cpp; path = NXSYSMac/WinApiSTL.cpp; sourceTree = SOURCE_ROOT; };
 		5B5AE632230DD48B00348612 /* AppAbortRestart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppAbortRestart.h; sourceTree = "<group>"; };
 		5B5AE637230DDBEA00348612 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main.mm; path = NXSYSMac/main.mm; sourceTree = SOURCE_ROOT; };
@@ -1724,7 +1723,6 @@
 				5BA92A7319DD72690098DBEC /* NXMessageBox.mm */,
 				5BA92A7419DD72690098DBEC /* NXMessageBox.xib */,
 				5BAD56011A014B09006AEEAB /* DumbStubs.cpp */,
-				5B5AE62D230D749F00348612 /* WinApiSTL.h */,
 				5B5AE62E230D74D000348612 /* WinApiSTL.cpp */,
 			);
 			name = WinSys;
