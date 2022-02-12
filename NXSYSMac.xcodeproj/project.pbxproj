@@ -455,33 +455,6 @@
 		5BABBE1527B7143100AED491 /* parsargs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parsargs.h; sourceTree = "<group>"; };
 		5BABBE1627B7143100AED491 /* getmodtm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = getmodtm.h; sourceTree = "<group>"; };
 		5BABBE1727B7143100AED491 /* dialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialogs.cpp; sourceTree = "<group>"; };
-		5BABBE1A27B7143100AED491 /* project-colors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "project-colors.json"; sourceTree = "<group>"; };
-		5BABBE1C27B7143100AED491 /* Solution.VC.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = Solution.VC.db; sourceTree = "<group>"; };
-		5BABBE1D27B7143100AED491 /* .suo */ = {isa = PBXFileReference; lastKnownFileType = file; path = .suo; sourceTree = "<group>"; };
-		5BABBE2127B7143100AED491 /* DIALOGS.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = DIALOGS.ipch; sourceTree = "<group>"; };
-		5BABBE2427B7143100AED491 /* GETMODTM.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = GETMODTM.ipch; sourceTree = "<group>"; };
-		5BABBE2627B7143100AED491 /* TLETOOLB.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = TLETOOLB.ipch; sourceTree = "<group>"; };
-		5BABBE2927B7143100AED491 /* GETMODTM.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = GETMODTM.ipch; sourceTree = "<group>"; };
-		5BABBE2B27B7143100AED491 /* APPWIN.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = APPWIN.ipch; sourceTree = "<group>"; };
-		5BABBE2E27B7143100AED491 /* NXSYS.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = NXSYS.ipch; sourceTree = "<group>"; };
-		5BABBE3027B7143100AED491 /* SWITCHCONSISTENCY.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = SWITCHCONSISTENCY.ipch; sourceTree = "<group>"; };
-		5BABBE3227B7143100AED491 /* LSPMACRO.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = LSPMACRO.ipch; sourceTree = "<group>"; };
-		5BABBE3427B7143100AED491 /* JOINT.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = JOINT.ipch; sourceTree = "<group>"; };
-		5BABBE3627B7143100AED491 /* FULLSIG.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = FULLSIG.ipch; sourceTree = "<group>"; };
-		5BABBE3827B7143100AED491 /* RDTRKCMN.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = RDTRKCMN.ipch; sourceTree = "<group>"; };
-		5BABBE3A27B7143100AED491 /* RTRACWIN.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = RTRACWIN.ipch; sourceTree = "<group>"; };
-		5BABBE3D27B7143100AED491 /* XSTOP.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = XSTOP.ipch; sourceTree = "<group>"; };
-		5BABBE4227B7143100AED491 /* EDITSIG.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = EDITSIG.ipch; sourceTree = "<group>"; };
-		5BABBE4427B7143100AED491 /* XTGLOAD.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = XTGLOAD.ipch; sourceTree = "<group>"; };
-		5BABBE4727B7143100AED491 /* LISPMATH.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = LISPMATH.ipch; sourceTree = "<group>"; };
-		5BABBE4927B7143100AED491 /* NXGO.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = NXGO.ipch; sourceTree = "<group>"; };
-		5BABBE4B27B7143100AED491 /* LDGUT.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = LDGUT.ipch; sourceTree = "<group>"; };
-		5BABBE4D27B7143100AED491 /* DIALOGS.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = DIALOGS.ipch; sourceTree = "<group>"; };
-		5BABBE5227B7143200AED491 /* READSEXP.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = READSEXP.ipch; sourceTree = "<group>"; };
-		5BABBE5527B7143200AED491 /* EDTEXT.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = EDTEXT.ipch; sourceTree = "<group>"; };
-		5BABBE5727B7143200AED491 /* SIGNAL.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = SIGNAL.ipch; sourceTree = "<group>"; };
-		5BABBE5A27B7143200AED491 /* STOP.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = STOP.ipch; sourceTree = "<group>"; };
-		5BABBE5B27B7143200AED491 /* Browse.VC.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = Browse.VC.db; sourceTree = "<group>"; };
 		5BABBE5C27B7143200AED491 /* PARSARGS.C */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PARSARGS.C; sourceTree = "<group>"; };
 		5BABBE5D27B7143200AED491 /* tled.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = tled.rc; sourceTree = "<group>"; };
 		5BABBE5E27B7143200AED491 /* timers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timers.cpp; sourceTree = "<group>"; };
@@ -493,13 +466,12 @@
 		5BABBE6527B7143200AED491 /* NXSYS.vcxproj.filters */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = NXSYS.vcxproj.filters; sourceTree = "<group>"; };
 		5BABBE6627B7143200AED491 /* compat32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = compat32.h; sourceTree = "<group>"; };
 		5BABBE6727B7143200AED491 /* nx.aps */ = {isa = PBXFileReference; lastKnownFileType = file; path = nx.aps; sourceTree = "<group>"; };
-		5BABBE6927B7143200AED491 /* NXSYS.pdb */ = {isa = PBXFileReference; lastKnownFileType = file; path = NXSYS.pdb; sourceTree = "<group>"; };
-		5BABBE6A27B7143200AED491 /* NXSYS.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = NXSYS.exe; sourceTree = "<group>"; };
-		5BABBE6B27B7143200AED491 /* TLEdit.pdb */ = {isa = PBXFileReference; lastKnownFileType = file; path = TLEdit.pdb; sourceTree = "<group>"; };
-		5BABBE6C27B7143200AED491 /* TLEdit.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = TLEdit.exe; sourceTree = "<group>"; };
 		5BABBE6D27B7F4F300AED491 /* MessageBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MessageBox.h; path = NXSYS/MessageBox.h; sourceTree = SOURCE_ROOT; };
 		5BABBE6E27B7F4F300AED491 /* NXSYSMinMax.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NXSYSMinMax.h; path = NXSYS/NXSYSMinMax.h; sourceTree = SOURCE_ROOT; };
 		5BABBE6F27B7F6E400AED491 /* WinApiSTL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinApiSTL.h; sourceTree = "<group>"; };
+		5BABBE7127B839D700AED491 /* tracetb.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = tracetb.bmp; sourceTree = "<group>"; };
+		5BABBE7227B839D700AED491 /* WindowsStatus.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = WindowsStatus.md; sourceTree = "<group>"; };
+		5BABBE7327B839D700AED491 /* nxvc.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = nxvc.rc; sourceTree = "<group>"; };
 		5BAC92B419C78AE400673BDC /* BigYellowXView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BigYellowXView.h; sourceTree = "<group>"; };
 		5BAC92B519C84A9000673BDC /* WinMacCalls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinMacCalls.h; sourceTree = "<group>"; };
 		5BAC930B19C8FE7100673BDC /* TLEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TLEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1030,7 +1002,11 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5BABBE6227B7143200AED491 /* NXSYS */,
 				5BABBE0C27B7143100AED491 /* TLEdit */,
+				5BABBE7327B839D700AED491 /* nxvc.rc */,
+				5BABBE7127B839D700AED491 /* tracetb.bmp */,
+				5BABBE7227B839D700AED491 /* WindowsStatus.md */,
 				5BABBE1027B7143100AED491 /* WindowsMysteriousAbsences.cpp */,
 				5BABBE1127B7143100AED491 /* nxsldrly.cpp */,
 				5BABBE1227B7143100AED491 /* WinReadResText.cpp */,
@@ -1039,17 +1015,14 @@
 				5BABBE1527B7143100AED491 /* parsargs.h */,
 				5BABBE1627B7143100AED491 /* getmodtm.h */,
 				5BABBE1727B7143100AED491 /* dialogs.cpp */,
-				5BABBE1827B7143100AED491 /* .vs */,
 				5BABBE5C27B7143200AED491 /* PARSARGS.C */,
 				5BABBE5D27B7143200AED491 /* tled.rc */,
 				5BABBE5E27B7143200AED491 /* timers.cpp */,
 				5BABBE5F27B7143200AED491 /* rtracwin.cpp */,
 				5BABBE6027B7143200AED491 /* getmodtm.c */,
 				5BABBE6127B7143200AED491 /* nx.rc */,
-				5BABBE6227B7143200AED491 /* NXSYS */,
 				5BABBE6627B7143200AED491 /* compat32.h */,
 				5BABBE6727B7143200AED491 /* nx.aps */,
-				5BABBE6827B7143200AED491 /* Debug */,
 			);
 			path = NXSYSWindows;
 			sourceTree = "<group>";
@@ -1064,360 +1037,6 @@
 			path = TLEdit;
 			sourceTree = "<group>";
 		};
-		5BABBE1827B7143100AED491 /* .vs */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE1927B7143100AED491 /* NXSYSWindows */,
-			);
-			path = .vs;
-			sourceTree = "<group>";
-		};
-		5BABBE1927B7143100AED491 /* NXSYSWindows */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE1A27B7143100AED491 /* project-colors.json */,
-				5BABBE1B27B7143100AED491 /* v17 */,
-			);
-			path = NXSYSWindows;
-			sourceTree = "<group>";
-		};
-		5BABBE1B27B7143100AED491 /* v17 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE1C27B7143100AED491 /* Solution.VC.db */,
-				5BABBE1D27B7143100AED491 /* .suo */,
-				5BABBE1E27B7143100AED491 /* ipch */,
-				5BABBE5B27B7143200AED491 /* Browse.VC.db */,
-			);
-			path = v17;
-			sourceTree = "<group>";
-		};
-		5BABBE1E27B7143100AED491 /* ipch */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE1F27B7143100AED491 /* AutoPCH */,
-			);
-			path = ipch;
-			sourceTree = "<group>";
-		};
-		5BABBE1F27B7143100AED491 /* AutoPCH */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE2027B7143100AED491 /* d259d929448fc40d */,
-				5BABBE2227B7143100AED491 /* 6aec6fcc0229f68 */,
-				5BABBE2327B7143100AED491 /* 3cba869327ddbb82 */,
-				5BABBE2527B7143100AED491 /* b5257570d5c7e6de */,
-				5BABBE2727B7143100AED491 /* 46cc831d836692ff */,
-				5BABBE2827B7143100AED491 /* 94ec9c7603139780 */,
-				5BABBE2A27B7143100AED491 /* 730b44314888d90 */,
-				5BABBE2C27B7143100AED491 /* d0046a752eb25059 */,
-				5BABBE2D27B7143100AED491 /* 4be904777710540e */,
-				5BABBE2F27B7143100AED491 /* 2c1a334186676eed */,
-				5BABBE3127B7143100AED491 /* e32cb62cdf261040 */,
-				5BABBE3327B7143100AED491 /* a3b81bb3078a1a79 */,
-				5BABBE3527B7143100AED491 /* 698fdf62d2eb659f */,
-				5BABBE3727B7143100AED491 /* 7a0baf730f8a63dc */,
-				5BABBE3927B7143100AED491 /* cb8d5b231ed1e934 */,
-				5BABBE3B27B7143100AED491 /* 33ab6daaef6ea77 */,
-				5BABBE3C27B7143100AED491 /* 2b17f2ce9d150055 */,
-				5BABBE3E27B7143100AED491 /* 697fa02572372ad3 */,
-				5BABBE3F27B7143100AED491 /* ef5152675ae80925 */,
-				5BABBE4027B7143100AED491 /* 77f450b20fdd2a96 */,
-				5BABBE4127B7143100AED491 /* 1a01256cee557f16 */,
-				5BABBE4327B7143100AED491 /* 264b597194cfef68 */,
-				5BABBE4527B7143100AED491 /* 2958ddfb8319da94 */,
-				5BABBE4627B7143100AED491 /* 12b0cedf43ebc16b */,
-				5BABBE4827B7143100AED491 /* 3fa260fc2b51c935 */,
-				5BABBE4A27B7143100AED491 /* c0917bc81af7881 */,
-				5BABBE4C27B7143100AED491 /* 79465e0523a6e2d6 */,
-				5BABBE4E27B7143200AED491 /* da86d0bf3bd425e9 */,
-				5BABBE4F27B7143200AED491 /* 2d1acdbccf12b1bd */,
-				5BABBE5027B7143200AED491 /* c5216598845e7598 */,
-				5BABBE5127B7143200AED491 /* 3bdd99ecbc140c41 */,
-				5BABBE5327B7143200AED491 /* 2f50a70a2f7f4314 */,
-				5BABBE5427B7143200AED491 /* c22ed5684b7b4031 */,
-				5BABBE5627B7143200AED491 /* c8eddd1b847fc941 */,
-				5BABBE5827B7143200AED491 /* 19455aa44f6508d9 */,
-				5BABBE5927B7143200AED491 /* 6c913534ccdca541 */,
-			);
-			path = AutoPCH;
-			sourceTree = "<group>";
-		};
-		5BABBE2027B7143100AED491 /* d259d929448fc40d */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE2127B7143100AED491 /* DIALOGS.ipch */,
-			);
-			path = d259d929448fc40d;
-			sourceTree = "<group>";
-		};
-		5BABBE2227B7143100AED491 /* 6aec6fcc0229f68 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 6aec6fcc0229f68;
-			sourceTree = "<group>";
-		};
-		5BABBE2327B7143100AED491 /* 3cba869327ddbb82 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE2427B7143100AED491 /* GETMODTM.ipch */,
-			);
-			path = 3cba869327ddbb82;
-			sourceTree = "<group>";
-		};
-		5BABBE2527B7143100AED491 /* b5257570d5c7e6de */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE2627B7143100AED491 /* TLETOOLB.ipch */,
-			);
-			path = b5257570d5c7e6de;
-			sourceTree = "<group>";
-		};
-		5BABBE2727B7143100AED491 /* 46cc831d836692ff */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 46cc831d836692ff;
-			sourceTree = "<group>";
-		};
-		5BABBE2827B7143100AED491 /* 94ec9c7603139780 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE2927B7143100AED491 /* GETMODTM.ipch */,
-			);
-			path = 94ec9c7603139780;
-			sourceTree = "<group>";
-		};
-		5BABBE2A27B7143100AED491 /* 730b44314888d90 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE2B27B7143100AED491 /* APPWIN.ipch */,
-			);
-			path = 730b44314888d90;
-			sourceTree = "<group>";
-		};
-		5BABBE2C27B7143100AED491 /* d0046a752eb25059 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = d0046a752eb25059;
-			sourceTree = "<group>";
-		};
-		5BABBE2D27B7143100AED491 /* 4be904777710540e */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE2E27B7143100AED491 /* NXSYS.ipch */,
-			);
-			path = 4be904777710540e;
-			sourceTree = "<group>";
-		};
-		5BABBE2F27B7143100AED491 /* 2c1a334186676eed */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE3027B7143100AED491 /* SWITCHCONSISTENCY.ipch */,
-			);
-			path = 2c1a334186676eed;
-			sourceTree = "<group>";
-		};
-		5BABBE3127B7143100AED491 /* e32cb62cdf261040 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE3227B7143100AED491 /* LSPMACRO.ipch */,
-			);
-			path = e32cb62cdf261040;
-			sourceTree = "<group>";
-		};
-		5BABBE3327B7143100AED491 /* a3b81bb3078a1a79 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE3427B7143100AED491 /* JOINT.ipch */,
-			);
-			path = a3b81bb3078a1a79;
-			sourceTree = "<group>";
-		};
-		5BABBE3527B7143100AED491 /* 698fdf62d2eb659f */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE3627B7143100AED491 /* FULLSIG.ipch */,
-			);
-			path = 698fdf62d2eb659f;
-			sourceTree = "<group>";
-		};
-		5BABBE3727B7143100AED491 /* 7a0baf730f8a63dc */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE3827B7143100AED491 /* RDTRKCMN.ipch */,
-			);
-			path = 7a0baf730f8a63dc;
-			sourceTree = "<group>";
-		};
-		5BABBE3927B7143100AED491 /* cb8d5b231ed1e934 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE3A27B7143100AED491 /* RTRACWIN.ipch */,
-			);
-			path = cb8d5b231ed1e934;
-			sourceTree = "<group>";
-		};
-		5BABBE3B27B7143100AED491 /* 33ab6daaef6ea77 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 33ab6daaef6ea77;
-			sourceTree = "<group>";
-		};
-		5BABBE3C27B7143100AED491 /* 2b17f2ce9d150055 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE3D27B7143100AED491 /* XSTOP.ipch */,
-			);
-			path = 2b17f2ce9d150055;
-			sourceTree = "<group>";
-		};
-		5BABBE3E27B7143100AED491 /* 697fa02572372ad3 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 697fa02572372ad3;
-			sourceTree = "<group>";
-		};
-		5BABBE3F27B7143100AED491 /* ef5152675ae80925 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ef5152675ae80925;
-			sourceTree = "<group>";
-		};
-		5BABBE4027B7143100AED491 /* 77f450b20fdd2a96 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 77f450b20fdd2a96;
-			sourceTree = "<group>";
-		};
-		5BABBE4127B7143100AED491 /* 1a01256cee557f16 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE4227B7143100AED491 /* EDITSIG.ipch */,
-			);
-			path = 1a01256cee557f16;
-			sourceTree = "<group>";
-		};
-		5BABBE4327B7143100AED491 /* 264b597194cfef68 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE4427B7143100AED491 /* XTGLOAD.ipch */,
-			);
-			path = 264b597194cfef68;
-			sourceTree = "<group>";
-		};
-		5BABBE4527B7143100AED491 /* 2958ddfb8319da94 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 2958ddfb8319da94;
-			sourceTree = "<group>";
-		};
-		5BABBE4627B7143100AED491 /* 12b0cedf43ebc16b */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE4727B7143100AED491 /* LISPMATH.ipch */,
-			);
-			path = 12b0cedf43ebc16b;
-			sourceTree = "<group>";
-		};
-		5BABBE4827B7143100AED491 /* 3fa260fc2b51c935 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE4927B7143100AED491 /* NXGO.ipch */,
-			);
-			path = 3fa260fc2b51c935;
-			sourceTree = "<group>";
-		};
-		5BABBE4A27B7143100AED491 /* c0917bc81af7881 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE4B27B7143100AED491 /* LDGUT.ipch */,
-			);
-			path = c0917bc81af7881;
-			sourceTree = "<group>";
-		};
-		5BABBE4C27B7143100AED491 /* 79465e0523a6e2d6 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE4D27B7143100AED491 /* DIALOGS.ipch */,
-			);
-			path = 79465e0523a6e2d6;
-			sourceTree = "<group>";
-		};
-		5BABBE4E27B7143200AED491 /* da86d0bf3bd425e9 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = da86d0bf3bd425e9;
-			sourceTree = "<group>";
-		};
-		5BABBE4F27B7143200AED491 /* 2d1acdbccf12b1bd */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 2d1acdbccf12b1bd;
-			sourceTree = "<group>";
-		};
-		5BABBE5027B7143200AED491 /* c5216598845e7598 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = c5216598845e7598;
-			sourceTree = "<group>";
-		};
-		5BABBE5127B7143200AED491 /* 3bdd99ecbc140c41 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE5227B7143200AED491 /* READSEXP.ipch */,
-			);
-			path = 3bdd99ecbc140c41;
-			sourceTree = "<group>";
-		};
-		5BABBE5327B7143200AED491 /* 2f50a70a2f7f4314 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 2f50a70a2f7f4314;
-			sourceTree = "<group>";
-		};
-		5BABBE5427B7143200AED491 /* c22ed5684b7b4031 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE5527B7143200AED491 /* EDTEXT.ipch */,
-			);
-			path = c22ed5684b7b4031;
-			sourceTree = "<group>";
-		};
-		5BABBE5627B7143200AED491 /* c8eddd1b847fc941 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE5727B7143200AED491 /* SIGNAL.ipch */,
-			);
-			path = c8eddd1b847fc941;
-			sourceTree = "<group>";
-		};
-		5BABBE5827B7143200AED491 /* 19455aa44f6508d9 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 19455aa44f6508d9;
-			sourceTree = "<group>";
-		};
-		5BABBE5927B7143200AED491 /* 6c913534ccdca541 */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE5A27B7143200AED491 /* STOP.ipch */,
-			);
-			path = 6c913534ccdca541;
-			sourceTree = "<group>";
-		};
 		5BABBE6227B7143200AED491 /* NXSYS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1426,17 +1045,6 @@
 				5BABBE6527B7143200AED491 /* NXSYS.vcxproj.filters */,
 			);
 			path = NXSYS;
-			sourceTree = "<group>";
-		};
-		5BABBE6827B7143200AED491 /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-				5BABBE6927B7143200AED491 /* NXSYS.pdb */,
-				5BABBE6A27B7143200AED491 /* NXSYS.exe */,
-				5BABBE6B27B7143200AED491 /* TLEdit.pdb */,
-				5BABBE6C27B7143200AED491 /* TLEdit.exe */,
-			);
-			path = Debug;
 			sourceTree = "<group>";
 		};
 		5BAC930D19C8FE7200673BDC /* TLEdit */ = {
