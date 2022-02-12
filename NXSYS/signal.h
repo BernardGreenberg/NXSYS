@@ -41,7 +41,7 @@ public:
 };
  
 
-typedef std::vector<std::string> HeadsArray; // no containers of consts, please!
+typedef std::vector<std::string> HeadsArray;
 class Signal
 #ifndef XTG
    : public GraphicObject

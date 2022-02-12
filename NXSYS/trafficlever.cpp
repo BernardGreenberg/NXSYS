@@ -18,8 +18,10 @@
 #include "rlyapi.h"
 #include "lyglobal.h"
 #include "PolyKludge.h"
-
-
+#include <cassert>
+#ifndef M_PI
+#define M_PI  3.14159265358979323846264
+#endif
 #include "nxsysapp.h"
 
 #define TL_TRISTATE 1
@@ -118,7 +120,7 @@ void InitTrafficLeverData () {
     LinePen = CreateSPen(1, RGB(0,0,0));
     HDC hDC = GetDC (G_mainwindow);
     SelectObject (hDC, Fnt);
-    RECT r;
+    RECT r{};
     r.top = r.left = 0;
     DrawText (hDC, "1", 1, &r, NUM_DT_OPTS | DT_CALCRECT);
     NumHeight = r.bottom;
@@ -151,7 +153,7 @@ Virtual void TrafficLever::Display (HDC hdc) {
 #endif
 
     int rad = BigRadius;
-    RECT tr;
+    RECT tr{};
     tr.top = sc_y + rad + BottomMargin;
     tr.bottom = tr.top + NumHeight;
     tr.left = sc_x - rad;
@@ -185,8 +187,8 @@ void TrafficLeverIndicator::Draw(HDC hdc, int l_xcen, int y) {
     int xvleft = x + PlusMinusOne*floor(doff*.6); // "virtual" left...
     int xvright = x - PlusMinusOne*doff;
     Rectangle (hdc, xvleft, y - rectht+1, xvright, y + rectht-1);
-    POINT points[3];
-    points[0].x = xvleft + PlusMinusOne*(floor(doff/2));
+    POINT points[3]{};
+    points[0].x = (int)(xvleft + PlusMinusOne*(floor(doff/2)));
     points[0].y = y;
     points[1].x = xvleft;
     points[1].y = y + arht;
@@ -195,14 +197,14 @@ void TrafficLeverIndicator::Draw(HDC hdc, int l_xcen, int y) {
     Polygon(hdc, points, 3);
 }
 
-void TrafficLever::LocateKnobPoint(float radius, float angle, int& x, int& y) {
-    x = sc_x + radius*sin(angle);
-    y = sc_y - radius*cos(angle);
+void TrafficLever::LocateKnobPoint(double radius, double angle, int& x, int& y) {
+    x = (int)(sc_x + radius*sin(angle));
+    y = (int)(sc_y - radius*cos(angle));
 }
 
 void TrafficLever::DrawKnob(HDC hdc) {
 
-    float angle = 0.0;
+    double angle = 0.0;
 #if !TLEDIT
     if (RelayState(NL)) angle = KnobAngle;
     else if (RelayState(RL)) angle = -KnobAngle;
@@ -230,14 +232,14 @@ void TrafficLever::DrawKnob(HDC hdc) {
     float ctrangtap = atan2(xdisptanp, radprojp);
     float tradhyp =  sqrt(pow(xdisptanp,2) + pow(radprojp,2));
 #else
-    float PZ = 2*BigRadius - trad;
+    double PZ = 2*BigRadius - trad;
     // PU::PT = PT::PZ  (trad = PT)
-    float PU = trad*(trad/PZ);
-    float UO = BigRadius - trad - PU;
-    float UZ = UO + BigRadius;
-    float TU = sqrt(PU*UZ); // rt tri PTZ altitude
-    float ctrangtap = atan2(TU, UO);
-    float tradhyp =  hypot(TU, UO);
+    double PU = trad*(trad/PZ);
+    double UO = BigRadius - trad - PU;
+    double UZ = UO + BigRadius;
+    double TU = sqrt(PU*UZ); // rt tri PTZ altitude
+    double ctrangtap = atan2(TU, UO);
+    double tradhyp =  hypot(TU, UO);
 #endif
     int tpx, tpy;
     LocateKnobPoint(tradhyp, angle+ctrangtap, tpx, tpy);

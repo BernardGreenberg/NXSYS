@@ -200,7 +200,7 @@ public:
 
     BOOL PushValidButton(int control_id) {
         int possible_index = control_id - CONTROL_ID_BASE;
-        if (possible_index >= 0 && possible_index < Entries.size()) {
+        if (possible_index >= 0 && possible_index < (int)Entries.size()) {
             Entries[possible_index].PushTheButton();
             return TRUE;
         } else {
@@ -233,9 +233,9 @@ static std::unique_ptr<DynMenu>& ValidateMenuCallback(void * ptr) {
         if ((void*)rmenup.get() == ptr)
             return rmenup;
     }
-    assert(!"Alleged DynMenu relay callback ptr not found");
+    assert(!"Alleged DynMenu relay callback ptr not found"); 
 }
-
+;
 /* DynMenu general constructor; destructor is inline */
 DynMenu::DynMenu(Sexpr rlysym, const char* title, Sexpr items) {
     /* Initialize POD values appropriately */
@@ -513,7 +513,7 @@ void TrySignalIDBox (long nomenclature) {
         
 #if !(NXSYSMac)
         
-static int nCopyAnsiToWideChar (LPWORD lpWCStr, LPSTR lpAnsiIn)
+static int nCopyAnsiToWideChar (LPWORD lpWCStr, const char * lpAnsiIn)
 {
     int nChar = 0;
             
@@ -535,9 +535,17 @@ static LPWORD lpwAlign ( LPWORD lpIn)
     ul <<=2;
     return (LPWORD) ul;
 }
+
+static INT_PTR staticDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    if (msg == WM_INITDIALOG) {
+        SetWindowLong(hWnd, DWL_USER, lParam);
+    }
+    DynMenu* dmp = (DynMenu*)(void*)GetWindowLong(hWnd,DWL_USER);
+    return dmp->DlgProc(hWnd, msg, wParam, lParam);
+}
                               /*   MS-Windows  ifdef continues ... */
 
-static HWND DynMenu::CreateSystemDialog () {
+ HWND DynMenu::CreateSystemDialog () {
             
     WORD  *p, *pdlgtemplate;
 
@@ -550,21 +558,21 @@ static HWND DynMenu::CreateSystemDialog () {
     
     /* start to fill in the dlgtemplate information.  addressing by WORDs */
     lStyle = DS_MODALFRAME | DS_3DLOOK | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION;
-    
+  
     *p++ = LOWORD (lStyle);
     *p++ = HIWORD (lStyle);
     *p++ = 0;          // LOWORD (lExtendedStyle)
     *p++ = 0;          // HIWORD (lExtendedStyle)
-    *p++ = Entries.size();
-    *p++ = 10*NMenus;         // x
-    *p++ = 10*NMenus;         // y
+    *p++ = (WORD)Entries.size();
+    *p++ = (WORD)(10*Menus.size());         // x
+    *p++ = (WORD)(10*Menus.size());         // y
     *p++ = 100;        // cx
-    *p++ = 10+(Entries.size())*20;
+    *p++ = (WORD)(10+(Entries.size())*20);
     *p++ = 0;          // Menu
     *p++ = 0;          // Class
     
     /* copy the title of the dialog */
-    nchar = nCopyAnsiToWideChar (p, md->Title.c_str());
+    nchar = nCopyAnsiToWideChar (p, Title.c_str());
     p += nchar;
     
     /* add in the wPointSize and szFontName here iff the DS_SETFONT bit on */
@@ -593,8 +601,8 @@ static HWND DynMenu::CreateSystemDialog () {
         /* fill in class i.d. Button in this case */
         *p++ = (WORD)0xffff;
         *p++ = (WORD)0x0080;
-        mes        /* copy the text of the item */
-        nchar = nCopyAnsiToWideChar (p, md->Entries[bno].String.c_str());
+       /* copy the text of the item */
+        nchar = nCopyAnsiToWideChar (p, Entries[bno].String.c_str());
         p += nchar;
         
         *p++ = 0;  // advance pointer over nExtraStuff WORD
@@ -602,10 +610,18 @@ static HWND DynMenu::CreateSystemDialog () {
     
     Dlg = CreateDialogIndirectParam
         (app_instance, (LPDLGTEMPLATE) pdlgtemplate,
-         G_mainwindow, (DLGPROC) DlgProc, (LPARAM)(void*) this);
+         G_mainwindow, (DLGPROC)staticDialogProc, (LPARAM)(void*) this);
     
     LocalFree (LocalHandle (pdlgtemplate));
     return Dlg;
 }
+
+BOOL IsMenuDlgMessage(MSG* m) {
+     for (size_t i = 0;i < Menus.size(); i++) {
+         if (IsDialogMessage(Menus[i]->Dlg, m))
+             return TRUE;
+     }
+     return FALSE;
+ }
 #endif
 

@@ -399,7 +399,7 @@ nostick:        stick = 0;
 }
 
 void GNode::CTriangle (HDC dc, Scord x, Scord y) {
-    POINT point[3];
+	POINT point[3]{};
     Scord trx = x;
     Scord trb =  (Scord)(.1*CellW);
     Scord trh = (Scord)(.866*trb);
@@ -438,8 +438,8 @@ void GNode::CDot (HDC dc, Scord x, Scord y) {
 
 
 void GNode::DrawCoil (HDC dc, Scord scx, Scord scy, int timer_p) {
-    RECT txr;
-    POINT point[3];
+	RECT txr{};
+	POINT point[3]{};
     short statereport = !(LDrawFlags & LDRAW_NO_STATEREPORT);
     if (statereport) {
 	const char * s = *Statep ? "PICKED" : "DROPPED";
@@ -472,7 +472,7 @@ void GNode::DrawCoil (HDC dc, Scord scx, Scord scy, int timer_p) {
     DrawText (dc, text.c_str(), text.size(), &txr,
 	      DT_TOP | DT_CENTER |DT_SINGLELINE| DT_NOCLIP);
 
-    RECT box;
+	RECT box{};
     box.top = scy-CellH/2;
     box.bottom = scy;
     box.left = (Scord)(scx + .35*CellW);
@@ -565,7 +565,7 @@ void GNode::DrawBaseLine (HDC dc, Scord scx, Scord scy, Drawing & D) {
 void GNode::DrawContactLabel (HDC dc, Scord scx, Scord scy) {
     
     int flgs = DT_TOP |DT_SINGLELINE|DT_NOCLIP; 
-    RECT txr;
+	RECT txr{};
     txr.top = (int)(scy - CellH*.55);
     txr.bottom = scy;
     if (type == CT_FRONT) {

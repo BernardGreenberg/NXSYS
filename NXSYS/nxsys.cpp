@@ -33,9 +33,6 @@
 #include "AppAbortRestart.h"
 
 #ifdef NXSYSMac
-char ** ParseArgString(const char *);
-int ParseArgsArgCount(char **);
-void ParseArgsFree(char **);
 #include "AppDelegateGlobals.h"
 #else
 #include "WinReadResText.h"
@@ -61,7 +58,7 @@ long RTExpireTime = 0; //0x35D57840;
 
 #if WINDOWS
 #include <parsargs.h>
-#include <heapchk.h>
+//#include <heapchk.h>
 #endif
 
 void ValidateRelayWorld();
@@ -223,7 +220,7 @@ static void SetGlobalMenuState (BOOL enable) {
 #endif
 }
 
-#if WINDOWS
+#if WIN32
 static void
 SetHelpFilePath () {
 
@@ -243,7 +240,7 @@ SetHelpFilePath () {
     GetModuleFileName (app_instance, HelpPath, sizeof(HelpPath) - 1);
     STLfnsplit (HelpPath, drive, dir, name, ext);
    // fnmerge (std::string, drive, dir, HELP_FNAME, ".hlp");
-	std::string hp1 = drive + dir + '\\' + HELP_FNAME
+	std::string hp1 = drive + dir + '\\' + HELP_FNAME;
 	hp1 = drive;
 	hp1 += dir;
 	hp1 += '\\';
@@ -614,14 +611,14 @@ static void NXSYS_Command(unsigned int cmd) {
 				"version or use Print Logic File.");
 			break;
 		}
-		PrintInterlocking(InterlockingName);
+		PrintInterlocking(InterlockingName.c_str());
 		break;
 
 	case CmPrintLogicFile:
 		if (InterlockingLoaded)
 			if (FileOpenDlg(G_mainwindow, DFName, FTitle, sizeof(DFName),
 				1, FDE_Interpreted))
-				DrawInterlockingFromFile(InterlockingName, DFName);
+				DrawInterlockingFromFile(InterlockingName.c_str(), DFName);
 			else;
 		else
 			usermsgstop("No interlocking loaded.  Load it first.");
@@ -1279,7 +1276,7 @@ void CleanUpNXSYS() {
 
 static int umsgcmn (va_list ap, const char * ctlstr, UINT ctl) {
     std::string msg = FormatStringVA(ctlstr, ap);
-    return MessageBox (G_mainwindow, msg, app_name, ctl);
+    return MessageBox (G_mainwindow, msg.c_str(), app_name, ctl);
 }
 
 void usermsg (const char * ctlstr, ...) {
@@ -1316,7 +1313,7 @@ int GraphicObject::RunContextMenu (int resource_id) {
     HMENU hMenu = LoadMenu(app_instance, MAKEINTRESOURCE(resource_id));
     if (!hMenu)
 	return 0;
-    POINT p;
+	POINT p{};
     p.x = NXGOHitX;
     p.y = NXGOHitY;
     ClientToScreen (G_mainwindow, &p);
@@ -1336,7 +1333,7 @@ int ContextMenu (int resource_id) {
     HMENU hMenu = LoadMenu(app_instance, MAKEINTRESOURCE(resource_id));
     if (!hMenu)
 	return 0;
-    POINT p;
+	POINT p{};
     p.x = NXGOHitX;
     p.y = NXGOHitY;
     ClientToScreen (G_mainwindow, &p);
@@ -1363,7 +1360,7 @@ void GraphicObject::EditContextMenu(HMENU m) {
 
 void NxsysAppAbort (int reserved, const char* message) {
     std::string amessage = FormatString(NxsysAppAbortMsg, message);
-    int val = MessageBox (G_mainwindow, amessage, PRODUCT_NAME " Layout fatal error",
+    int val = MessageBox (G_mainwindow, amessage.c_str(), PRODUCT_NAME " Layout fatal error",
                           MB_YESNOCANCEL | MB_ICONEXCLAMATION);
     throw nxterm_exception(val);
 };

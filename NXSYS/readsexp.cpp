@@ -821,6 +821,9 @@ std::string Sexpr::PRep() {
             return u.r->PRep();
         case L_LAST_TYPE:
             return "<LAST-TYPE>";
+	default:
+	    return "<UNKNOWN-TYPE>";
+
     }
 }
 

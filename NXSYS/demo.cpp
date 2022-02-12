@@ -40,7 +40,7 @@ void UnShowBigYellowX();
 #include "timers.h"
 
 int FindHitSignal (long id, int&x, int&y, int but);
-int RelayShowString (const char *);
+void RelayShowString (const char *);
 
 static HWND DemoWindow = NULL;
 
@@ -163,7 +163,7 @@ static void DemoErrmsg (const char * text, ...) {
     va_start (ap, text);
     std::string msg = FormatStringVA(text, ap);
     va_end (ap);
-    MessageBox (G_mainwindow, msg, PRODUCT_NAME " demo script", MB_OK|MB_ICONEXCLAMATION);
+    MessageBox (G_mainwindow, msg.c_str(), PRODUCT_NAME " demo script", MB_OK | MB_ICONEXCLAMATION);
 }
 
 

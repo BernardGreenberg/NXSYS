@@ -123,8 +123,8 @@ static std::set<std::string> NormallyPickedRelays
 
 int symcmp (Sexpr& s, const char * str) {
     if (s.type != L_ATOM)
-	return 0;
-    return (!strcmp (s.u.a, str));
+	    return 0;
+    return (0==strcmp (s.u.a, str));
 }
 
 static void Goose_Generale (Rlysym *rs, void* env) {
@@ -232,7 +232,7 @@ const char * ReadLayout (const char* fname) {
 	em += fname;
 	em += "\n";
 	em += ".TKO compiled interlockings are not supported by this version of NXSYS.";
-	MessageBox(NULL, em, "NXSYS Layout Loader", MB_ICONSTOP | MB_OK);
+	MessageBox(NULL, em.c_str(), "NXSYS Layout Loader", MB_ICONSTOP | MB_OK);
 	return NULL;
 #endif
     }

@@ -13,6 +13,7 @@
 #define _FILE_DEFINED
 #endif
 #endif
+#include <string>
 
 class TrafficLever;
 
@@ -21,7 +22,7 @@ class TrafficLever;
 
 class TrafficLeverIndicator {
 public:
-    TrafficLeverIndicator (int plusorminus) : PlusMinusOne(plusorminus) {
+    TrafficLeverIndicator (int plusorminus) : PlusMinusOne(plusorminus) , Lever(nullptr) {
         White = Coding = Red = FALSE;
     }
     static void DataInit();
@@ -69,7 +70,7 @@ class TrafficLever : public GraphicObject {
 private:
     void DrawKnob(HDC hdc);
     void SetNormalReverseStatus (int right_normal);
-    void LocateKnobPoint(float radius, float angle, int& x, int& y);
+    void LocateKnobPoint(double radius, double angle, int& x, int& y);
 
     int  NormalIndex;
     int  ReverseIndex;

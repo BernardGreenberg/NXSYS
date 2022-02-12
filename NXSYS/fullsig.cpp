@@ -201,7 +201,7 @@ char Signal::ComputeState() {
 
 
 static void DrawPipe(HDC dc, int x, int y, int length) {
-    RECT r;
+    RECT r{};
     r.left = x - SigWinPipeWidth / 2;
     r.right = x + SigWinPipeWidth / 2;
     r.top = y + 1;
@@ -224,7 +224,7 @@ void Signal::WinDisp(HDC dc, int lights_only) {
     int xc = SigWinWidth / 2;
     int stp = (MiscG & SIGF_STR) && Heads[0].State == 'R';
     int i = 0;
-    for (auto h : Heads) {
+    for (auto& h : Heads) {
         y = h.DisplayWin(this, xc, y, dc, lights_only, stp);
         int pipel = SigWinInterHead;
         if (i == Heads.size() - 1)
@@ -259,7 +259,7 @@ void Signal::UpdateStop() {
 
 void Signal::DisplayStop(HDC dc) {
 
-    RECT cli, sb;
+    RECT cli{}, sb{};
 
     if (TStop == NULL)
         return;
@@ -282,7 +282,7 @@ int SigHead::UnitHeight() {
 
 static void DrawAlphanumericAspect(HDC dc, const char* sd, int sdlen, int x, int y)
 {
-    RECT r;
+    RECT r{};
     SelectObject(dc, SFont);
     r.left = r.top = 0;
     DrawText(dc, sd, sdlen, &r, DT_NOCLIP | DT_CENTER | DT_TOP | DT_CALCRECT);
@@ -324,7 +324,7 @@ static void DrawLens(HDC dc, int x, int y, char c) {
 
 
 static void DrawSTBox(HDC dc, int x, int y) {
-    RECT r;
+    RECT r{};
     r.left = x - (SigWinHeadWidth / 2);
     r.right = x + (SigWinHeadWidth / 2);
     r.top = y - SigWinInterCenter / 2;
@@ -336,7 +336,7 @@ static void DrawSTBox(HDC dc, int x, int y) {
 static void DrawPlate(Signal* S, HDC dc, int x, int y, int height, const char * plate) {
 	int hw = SigWinHeadWidth / 2;
 	int yb = y + height;
-	RECT r;
+        RECT r{};
 	MoveTo(dc, x - hw, y);
 	LineTo(dc, x - hw, yb);
 	LineTo(dc, x + hw, yb);
@@ -384,7 +384,7 @@ int SigHead::DisplayWin(Signal* S,
     int hw = SigWinHeadWidth / 2;
 
     if (!lights_only) {
-        RECT hr;
+        RECT hr{};
         hr.left = xc - hw;
         hr.right = xc + hw;
         hr.top = headtop;

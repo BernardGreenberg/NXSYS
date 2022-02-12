@@ -11,6 +11,7 @@
 #include <string.h>
 #include <math.h>
 #include <vector>
+#include <cassert>
 #include "nxgo.h"
 
 extern HWND G_mainwindow;

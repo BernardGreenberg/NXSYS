@@ -56,7 +56,7 @@ static void CmplrErr(Relay * err_relay, Sexpr s, const char * string, ...) {
         message += ": ";
         message += s.PRep();
     }
-    MessageBox(G_mainwindow, message, "Interpretive Relay Logic Loader", MB_OK | MB_ICONEXCLAMATION);
+    MessageBoxS(G_mainwindow, message, "Interpretive Relay Logic Loader", MB_OK | MB_ICONEXCLAMATION);
     throw NXSYSCompilerException();
 }
 

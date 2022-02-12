@@ -1,14 +1,18 @@
 //
 //  MessageBox.h
-//  NXSYSMac
+//  for NXSYSMac, but moved to NXSYS shared 2/12/2022
 //
 //  Created by Bernard Greenberg on 9/24/14.
 //  Copyright (c) 2014 Bernard Greenberg. All rights reserved.
 //
 
-#ifndef NXSYSMac_MessageBox_h
-#define NXSYSMac_MessageBox_h
+#ifndef NXSYS_MessageBox_h
+#define NXSYS_MessageBox_h
+#include <string>
 
+
+
+#ifndef WIN32
 #define MB_ICONSTOP 0x2000
 #define MB_ICONEXCLAMATION 0x4000
 #define MB_OK 0x0100
@@ -30,5 +34,15 @@ int MessageBox(void* hWnd, const std::string& message, const std::string& title,
 #ifdef NXSYSMac
 int MessageBoxWithImage(void* hWnd, const char * text, const char * hdr, const char * image, int flags);
 #endif
+#endif
 
+#ifdef WIN32
+int inline MessageBoxS(HWND hWnd, const std::string& message, const char* title, int flags) {
+    return MessageBox(hWnd, message.c_str(), title, flags);
+}
+#else
+int inline MessageBoxS(void* hWnd, const std::string& message, const char* title, int flags) {
+    return MessageBox(hWnd, message.c_str(), title, flags);
+}
+#endif
 #endif

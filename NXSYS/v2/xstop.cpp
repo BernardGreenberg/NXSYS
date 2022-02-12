@@ -55,7 +55,7 @@ Stop::Stop (Signal * s) {
     SelectObject (dc, NullPen);
     SelectObject (dc, brush);
 
-    POINT point[3];
+    POINT point[3]{};
 
     point[0].x = WPXtoSC (x1);
     point[1].x = WPXtoSC (x2);

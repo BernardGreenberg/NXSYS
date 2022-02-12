@@ -10,6 +10,7 @@
 #define STLExtensions_h
 #include <string>
 #include <cstdarg>
+#include <memory>
 
 std::string FormatStringVA(const char* fmt, va_list args);
 std::string FormatString(const char* fmt, ...);

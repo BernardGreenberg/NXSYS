@@ -21,6 +21,7 @@ typedef char LispTChar;
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <cassert>
 
 struct Rlysym;
 

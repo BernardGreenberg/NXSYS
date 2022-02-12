@@ -125,7 +125,7 @@ void ComputeFileLines(const char * pathname, FILE* f) {
     FileRecord& FR = frmap[pathname];
     auto& Relays = FR.Relays;
     size_t flen = get_file_size(pathname);
-    fseek(f, 0, SEEK_SET);
+    rewind(f);
     std::vector<char>Buf(flen+1);
     size_t count = fread(&Buf.data()[0], 1, flen, f);
     assert(count == flen);

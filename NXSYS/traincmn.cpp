@@ -40,11 +40,14 @@ double YellowFeetPerSecond = DEFAULT_YELLOW_SPEED;
 #include <math.h>
 #include "commands.h"
 #include <vector>
+#include <algorithm>
+#include <cassert>
 #include "nxsysapp.h"
 #if NXV2
 #include "xtgtrack.h"
 #include "signal.h"
 #include "dynmenu.h"
+#include "NXSYSMinMax.h"
 
 #include "track.h" /// ?? otherwise TrackDef not defined!?!?!
 
@@ -315,7 +318,7 @@ void Train::UpdatePositionReport () {
 Train::Train (int train_no, GraphicObject * g, int options) {
 
     id = train_no;
-    TrainNoMax = std::max(TrainNoMax, train_no);
+    TrainNoMax = NXMAX(TrainNoMax, train_no);
     observant = ((options & TRAIN_CTL_HALTED) == 0);
    
     TimerPending = false;
@@ -339,7 +342,7 @@ Train::Train (int train_no, GraphicObject * g, int options) {
     X_Of_Next_Signal = 0.0;
     InitPositionTracking(ts);
     NextSig = NULL;
-    SetWindowText (Dialog, FormatString("#%d Train Control", id));
+    SetWindowTextS (Dialog, FormatString("#%d Train Control", id));
     Time = GetTickCount();
     StringFld(TRD_TRAIN_ID, std::to_string(id));
     StringFld(TRD_LENGTH, std::to_string((int)Length));
@@ -539,7 +542,7 @@ void Train::Trip (Signal * g) {
 #if NXSYSMac
     MessageBoxWithImage (0, msg.c_str(), PRODUCT_NAME " Train Manager", "TrainWreck256.png", MB_OK|MB_ICONSTOP);
 #else
-    MessageBox (0, msg, PRODUCT_NAME " Train Manager", MB_OK|MB_ICONSTOP);
+    MessageBox (0, msg.c_str(), PRODUCT_NAME " Train Manager", MB_OK|MB_ICONSTOP);
 #endif
     vanish();
 }
@@ -730,7 +733,7 @@ void Train::ExplicitSpeed (double speed) {
     
     double was_speed = Speed;
 
-    speed = std::min(Cruise, std::max(0.0, speed));
+    speed =NXMIN(Cruise, NXMAX(0.0, speed));
 
     if (speed < Cruise/100.0)
 	speed = 0.0;
@@ -907,7 +910,7 @@ double TrainAutoGetSpeed (int train_no) {
 }
 
 BOOL TrainAutoLookupCommand (const char * scmd, int&icmd) {
-    for (auto command : TrainAutoCmds) {
+    for (auto& command : TrainAutoCmds) {
         if (command.name == scmd) { //must already be upcased.
 	    icmd = command.cmd;
 	    return TRUE;
@@ -923,3 +926,18 @@ BOOL WindowToTopFromTrackUnit (TrackUnit * tu) {
     }
     return FALSE;
 }
+#if WINDOWS
+
+extern HWND ChooseTrackDlg;
+
+int FilterTrainDialogMessages(MSG* mp) {
+    if (ChooseTrackDlg != NULL)
+        if (IsDialogMessage(ChooseTrackDlg, mp))
+            return 1;
+    for (decltype(Trains.begin()) it = Trains.begin(); it != Trains.end(); it++) {
+        if (IsDialogMessage((it->second)->Dialog, mp))
+            return 1;
+    }
+    return 0;
+}
+#endif

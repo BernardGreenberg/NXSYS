@@ -26,7 +26,7 @@
 
 
 #ifdef TLEDIT
-void MacroCleanup() {}; 
+
 #else
 #include "xturnout.h"
 #include <signal.h>
@@ -273,7 +273,7 @@ static int ProcessPathForm (Sexpr f) {
     TrackJoint * last_joint = NULL;
     BOOL first = TRUE, last_was_switch = FALSE;
     int last_switch_arc_type = 0;
-    struct ppf_coords coords;
+	struct ppf_coords coords {};;
     coords.last_y = 0; /* placate flow-analyzer */
     TrackSeg * ts;
     TrackSeg * last_ts = NULL;
@@ -783,7 +783,7 @@ static int ProcessViewOriginForm (Sexpr s) {
 #if NXSYSMac
     Mac_SetDisplayWPOrg (CAR(s), CADR(s));
 #else
-    NXGO_SetDisplayWPOrg (CAR(s), CADR(s);
+    NXGO_SetDisplayWPOrg (CAR(s), CADR(s));
 #endif
 
     return 1;

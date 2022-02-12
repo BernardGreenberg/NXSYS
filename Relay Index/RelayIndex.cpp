@@ -22,7 +22,6 @@
 #include <filesystem>
 
 #include "STLExtensions.h"
-#include "incexppt.h"
 #include "argparse.hpp"
 
 #include "lisp.h"
@@ -38,10 +37,11 @@ using std::cout;
 using std::endl;
 using std::cerr;
 using std::stringstream;
+
 namespace fs = std::__fs::filesystem;
 
 std::unordered_map<RLID, std::vector<RLID>> BackRefMap;
-std::unordered_map<char *, Sexpr>LabelMap; //atom strings guaranteed EQ
+std::unordered_map<const char *, Sexpr>LabelMap; //atom strings guaranteed EQ
 std::unordered_set<RLID> RelaysReferenced;
 std::unordered_set<RLID> RelaysDefined;
 
@@ -164,21 +164,21 @@ void CompileExpr (Sexpr s, RLID being_defined) {
         LispBarf (1, "Unknown form (2) in Relay Xreffer", s);
 }
 
-void CompileRelayDef (Sexpr s, const char * fname, long filepos) {
+void CompileRelayDef (Sexpr s, fs::path path, long filepos) {
     Sexpr rlysexpr = CAR(s);
     RLID relay_sym = rlysexpr.u.r;
     if (RelaysDefined.count(relay_sym))
         RC_error (1, "Relay already defined: %s", relay_sym->PRep().c_str());
-    SourceLoc::RecordRelay(fname, relay_sym->PRep().c_str(), filepos);
+    SourceLoc::RecordRelay(path.c_str(), relay_sym->PRep().c_str(), filepos);
     RelaysDefined.insert(relay_sym);
     CompileList (CDR(s), relay_sym);
 }
 
-void CompileTimerRelayDef (Sexpr s, const char * fname, long filepos) {
+void CompileTimerRelayDef (Sexpr s, fs::path path, long filepos) {
     Sexpr nam = SPopCar(s);
     //long time = CAR(s).u.n;  long time no C
     CAR(s) = nam;            /* compile as 422U */
-    CompileRelayDef(s, fname, filepos);
+    CompileRelayDef(s, path, filepos);
 }
 
 void close_report(fs::path path, std::ofstream& ofs) {
@@ -192,9 +192,9 @@ void CleanUpRelaySys () {
         dealloc_ncyclic_sexp (lte.second);
 }
 
-void CompileFile(FILE* f, const char * fname);  // for recursive call for INCLUDE
+void CompileFile(FILE* f, fs::path path);  // for recursive call for INCLUDE
 
-void CompileTopLevelForm (Sexpr s, const char * fname, long filepos) {
+void CompileTopLevelForm (Sexpr s, fs::path path, long filepos) {
     if (s.type != L_CONS)
         RC_error (1, "Item definition not a list?");
     if (CAR(s).type != L_ATOM) {
@@ -203,7 +203,7 @@ void CompileTopLevelForm (Sexpr s, const char * fname, long filepos) {
         Sexpr fn = CAR(s);
         Sexpr f2 = MaybeExpandMacro (s);
         if (f2 != EOFOBJ) {
-            CompileTopLevelForm (f2, fname, filepos);
+            CompileTopLevelForm (f2, path, filepos);
             dealloc_ncyclic_sexp (f2);
         }
         else if (fn == DEFRMACRO)
@@ -212,18 +212,19 @@ void CompileTopLevelForm (Sexpr s, const char * fname, long filepos) {
             SPop (s);
         forms:
             while (s.type == L_CONS)
-                CompileTopLevelForm (SPopCar(s), fname, filepos);
+                CompileTopLevelForm (SPopCar(s), path, filepos);
         }
         else if (fn == RELAY)
-            CompileRelayDef (CDR(s), fname, filepos);
+            CompileRelayDef (CDR(s), path, filepos);
         else if (fn == TIMER)
-            CompileTimerRelayDef (CDR(s), fname, filepos);
+            CompileTimerRelayDef (CDR(s), path, filepos);
         else if (fn == INCLUDE) {
-            std::string path(STLincexppath(fname, CADR(s).u.s));
-            FILE * ff = fopen (path.c_str(), "r");
+            fs::path newpath (path);
+            newpath.replace_filename(CADR(s).u.s);
+            FILE * ff = fopen (newpath.c_str(), "r");
             if (ff == NULL)
-                RC_error (1, "Cannot open include file %s", path.c_str());
-            CompileFile (ff, path.c_str());
+                RC_error (1, "Cannot open include file %s", newpath.c_str());
+            CompileFile (ff, newpath);
         }
         else if (fn == COMMENT);
         else if (fn == EVAL_WHEN) {
@@ -241,25 +242,25 @@ void CompileTopLevelForm (Sexpr s, const char * fname, long filepos) {
     }
 }
 
-void CompileFile (FILE* f, const char * fname) {
+void CompileFile (FILE* f, fs::path path) {
     for (;;) {
-        SourceLoc::RecordFile(fname);
+        SourceLoc::RecordFile(path.c_str());
         skip_lisp_file_whitespace(f);
         long sexp_pos = ftell(f);
         Sexpr s = read_sexp (f);
         if (s == EOFOBJ)
             break;
-        CompileTopLevelForm (s, fname, sexp_pos);
+        CompileTopLevelForm (s, path, sexp_pos);
         dealloc_ncyclic_sexp (s);
     }
-    SourceLoc::ComputeFileLines(fname, f);
+    SourceLoc::ComputeFileLines(path.c_str(), f);
     fclose (f);
 }
 
 
-void CompileLayout (FILE* f, const char * fname) {
+void CompileLayout (FILE* f, fs::path path) {
     SetLispBarfString ("Relay Xreffer");
-    CompileFile (f, fname);
+    CompileFile (f, path);
 }
 
 string padit (string s, long n) {

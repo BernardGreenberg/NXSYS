@@ -30,6 +30,7 @@ int CountRelaySyms();
 #include "objid.h"
 #include "signal.h"
 #include "xtgtrack.h"
+#include <time.h>
 
 void getFileTime(const char* filename, std::string& result) {
      struct stat st;

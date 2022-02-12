@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <algorithm>
+#include <cassert>
 
 #include "compat32.h"
 #include "nxgo.h"
@@ -12,6 +13,7 @@
 #include "brushpen.h"
 
 #include "pival.h"
+#include "NXSYSMinMax.h"
 
 #ifdef TLEDIT
 #include "assignid.h"
@@ -75,10 +77,10 @@ void TrackSeg::Align (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2){
 
     GraphicBlips = (int) ((Length-1*fBlipLength)/Track_Seg_Len);
 
-    WP_cord higher_y  = std::min(wpy1, wpy2);
-    WP_cord lower_y   = std::max(wpy1, wpy2);
-    WP_cord lefter_x  = std::min(wpx1, wpx2);
-    WP_cord righter_x = std::max(wpx1, wpx2);
+    WP_cord higher_y  = NXMIN(wpy1, wpy2);
+    WP_cord lower_y   = NXMAX(wpy1, wpy2);
+    WP_cord lefter_x  = NXMIN(wpx1, wpx2);
+    WP_cord righter_x = NXMAX(wpx1, wpx2);
 
     Ends[0].wpx = wpx1;
     Ends[1].wpx = wpx2;
