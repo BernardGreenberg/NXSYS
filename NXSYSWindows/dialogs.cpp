@@ -13,6 +13,7 @@
 #include "nxsysapp.h"
 #include <vector>
 #include <winver.h>
+#include <cassert>
 #include "getmodtm.h"
 
 #define TIME_FORMAT_STR "%#d %b %Y %H:%M"
@@ -96,11 +97,18 @@ BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
 	ofn.lpstrFileTitle = lpstrTitleName;
 	ofn.nMaxFileTitle = 256;
 	ofn.lpstrInitialDir = NULL;
-	ofn.lpstrTitle = (dsw == 2) ?
-		"Expr code file for interlocking definition" :
-		(dsw ? "Run Interlocking Demo File" :
-		(rsw ? "Read Interlocking Definition" :
-			"Save out"));
+	switch (dsw) {
+	case FDE_Layout:
+	    ofn.lpstrTitle = "Open Interlocking definition file.";
+	    break;
+	case FDE_Interpreted:
+	    ofn.lpstrTitle = "Open NXSYS-Lisp code for interlocking definition";
+	    break;
+	case FDE_XDO:
+	    ofn.lpstrTitle = "Run Interlocking Demo file.";
+	    break;
+	}
+	assert(rsw);
 	ofn.Flags = (rsw ? OFN_FILEMUSTEXIST : OFN_OVERWRITEPROMPT)
 		| OFN_HIDEREADONLY;
 	ofn.nFileOffset = 0;
@@ -141,7 +149,7 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 		WORD fv4 = LOWORD(pFileInfo->dwFileVersionLS);
 		char sversion[128];
 		sprintf_s<COUNTOF(sversion)>
-			(sversion, "Version %d.%d.%d.%d (MS Windows 10, 64 bit)", fv1, fv2, fv3, fv4);
+			(sversion, "Version %d.%d.%d.%d (MS Windows 10, 32 bit)", fv1, fv2, fv3, fv4);
 		SetDlgItemText(dialog, ABOUT_NUM_VSN, sversion);
 		const char * build_type = (pFileInfo->dwFileFlags & VS_FF_DEBUG) ? "Debug" : "Release";
 		sprintf_s <COUNTOF(sversion)>(sversion, "Built (%s)", build_type);
@@ -157,8 +165,8 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 		//Get the string from the resource data
 		LPTSTR lpProdName = nullptr;
 		UINT cbBufSize{};
-		//if (VerQueryValue(vdp, sversion, (LPVOID*)&lpProdName,&cbBufSize))	
-		//	SetDlgItemText(dialog, ABOUT_PRODUCT_NAME, lpProdName);
+		if (VerQueryValue(vdp, sversion, (LPVOID*)&lpProdName,&cbBufSize))	
+		    SetDlgItemText(dialog, ABOUT_PRODUCT_NAME, lpProdName);
 		return TRUE;
 	}
 	case WM_COMMAND:

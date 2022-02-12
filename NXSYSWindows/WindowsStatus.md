@@ -23,7 +23,6 @@ This re-adaptation work, however, is still in progress: some things still don't 
 - Relay prompt and show-state dialogs don't work yet.
 - The Relay Draftsperson doesn’t show his or her face yet.
 - Right-click in NXSYS seems not to work yet, with or without modifier keys it brings up Full Signal Windows, which work.
-- The Open File dialog gives the wrong prompt.
 - The Interlocking Status Report dialog/display, which has never before been in the Windows version, but is in intended to be, isn't there yet.
 
 ##### System-wise,
