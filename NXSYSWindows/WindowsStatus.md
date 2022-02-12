@@ -19,7 +19,7 @@ This re-adaptation work, however, is still in progress: some things still don't 
 
 - The help dialogs and their texts don't work yet.
 - The Interlocking Status Report dialog/display, which has never before been in the Windows version, but is in intended to be, isn’t there yet.
-    - The OLE Automation server and control aren’t there.  I haven’t used it in the 21st century, and I don’t suppose anyone has, so it likely won't be revived.  *¡Olé!, como se dice en España*).
+- The OLE Automation server and control aren’t there.  I haven’t used it in the 21st century, and I don’t suppose anyone has, so it likely won't be revived.  *¡Olé!, como se dice en España*).
 - The cool 2.5 feature that allows you to click right in the Relay Draftsperson to send a relay name to another application isn't there. Maybe it should look for the command line in the Registry (it's in the `info-plist` on the Mac).
 - I have not checked executables into the Repository. I may.
 
