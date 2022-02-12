@@ -125,15 +125,14 @@ int CreateRelayGraphicsWindow () {
 }
 
 
-int RelayShowString (const char *rnm) {
+void RelayShowString (const char *rnm) {
 
     if (!S_RelayGraphicsWindow && !CreateRelayGraphicsWindow())
-	return 0;
+	return ;
     if (!DrawRelayFromName ((const char *)rnm))
-	return 0;
+	return ;
     PlaceDrawing(S_RelayGraphicsWindow);
     ShowWindow (S_RelayGraphicsWindow, SW_SHOWNORMAL);
-    return 1;
 }
 
 void CheckRelayDisplay() {
@@ -170,10 +169,11 @@ static Relay * GetSelRelayFromListDlg (HWND hDlg) {
 }
 
 
+
 static DLGPROC_DCL RlystateDlgProc (HWND hDlg, unsigned message, WPARAM wParam, LPARAM lParam)
 {
     char buf [100];
-    Relay * r;
+    const Relay * r;
     switch (message) {
 	case WM_INITDIALOG:
 	{
@@ -182,23 +182,22 @@ dorelay:
 	    SetWindowLong (hDlg, DWL_USER, (LONG)r);
 	    EnableWindow (GetDlgItem (hDlg, IDC_DRAW_RELAY),
 			  !(r->Flags & LF_CCExp));
-	    wsprintf (buf, "Relay %s", RlysymPRep (r->RelaySym));
+	    wsprintf (buf, "Relay %s", r->RelaySym.PRep().c_str());
 	    SetDlgItemText (hDlg, IDC_RLYQUERY_NAME, buf);
 	    wsprintf (buf, "State is %s", r->State ? "PICKED" : "DROPPED");
 	    SetDlgItemText (hDlg, IDC_RLYQUERY_STATE, buf);
 	    wsprintf (buf, "%d dependent%s:",
-		      r->NDependents, (r->NDependents) == 1 ? "" : "s");
+		      r->Dependents.size(), (r->Dependents.size()) == 1 ? "" : "s");
 	    SetDlgItemText (hDlg, IDC_RLYQUERY_NDEPS, buf);
 	    SendDlgItemMessage (hDlg, IDC_RLYQUERY_LIST, LB_RESETCONTENT,0,0);
-	    for (int j = 0; j < r->NDependents; j++) {
-		Relay * dep = r->Dependents[j];
-		wsprintf (buf, "%s\t%d", RlysymPRep(dep->RelaySym), dep->State);
+	    for (const Relay* dep : r->Dependents) {
+		wsprintf (buf, "%s\t%d", dep->RelaySym.PRep().c_str(), dep->State);
 		int index
 			=  SendDlgItemMessage
 			   (hDlg, IDC_RLYQUERY_LIST, LB_ADDSTRING, 0, (LPARAM)(LPSTR)buf);
 		SendDlgItemMessage
 			(hDlg, IDC_RLYQUERY_LIST, LB_SETITEMDATA,
-			 index, (LPARAM)dep);
+			 index, (LPARAM)&dep);
 	    }
 	    return TRUE;
 	}
@@ -209,7 +208,7 @@ dorelay:
 	    }
 	    else if (wParam == IDC_DRAW_RELAY) {
 		Relay * r = (Relay*)GetWindowLong (hDlg, DWL_USER);
-		RelayShowString(RlysymPRep (r->RelaySym));
+		RelayShowString(r->RelaySym.PRep().c_str());
 	    }
 	    else if (NOTIFY_CODE(wParam,lParam) == LBN_DBLCLK) {
 		r = GetSelRelayFromListDlg (hDlg);
@@ -258,9 +257,8 @@ void DraftsbeingCleanupForOneLayout () {
 }
 
 struct ListRelayStruct {
-    Relay ** Array;
-    int N;
-    Relay * Result;
+    std::vector<Relay *>Array;
+    const Relay * Result;
     char Title[64];
 };
 
@@ -276,11 +274,11 @@ static DLGPROC_DCL RelayListDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPA
 	    S = (pLRS)lParam;
 	    SetWindowText (hDlg, S->Title);
 	    HWND lb = GetDlgItem (hDlg, IDC_RELAY_LIST);
-	    for (int i = 0; i < S->N; i++) {
-		Relay * r = S->Array[i];
-		const char * rp = RlysymPRep(r->RelaySym);
+	    for (auto r : S->Array) {
+		std::string rs = r->RelaySym.PRep();
+		const char* rp = rs.c_str();
 		while (isdigit((unsigned char)*rp)) rp++;
-		int ix = SendMessage (lb, LB_ADDSTRING, 0,(LPARAM)rp);
+		int ix = SendMessage (lb, LB_ADDSTRING, 0,(LPARAM)rp); //hope he copies it!
 		SendMessage (lb, LB_SETITEMDATA, ix, (LPARAM)r);
 	    }
 	    return TRUE;
@@ -324,35 +322,45 @@ Relay * ListRelaysForObjectDialog (const char * funcdesc,
     sprintf (S.Title, "%s relay for %s %d",
 	     funcdesc, classdesc, object_number);
     
-    S.N = get_relay_array_for_object_number (object_number, NULL);
-    if (S.N == 0) {
+    S.Array = get_relay_array_for_object_number (object_number);
+    if (S.Array.size() == 0) {
 	usermsg ("No relays found for %s %d.", classdesc, object_number);
 	return NULL;
     }
-    S.Array = new Relay*[S.N];
-    get_relay_array_for_object_number (object_number, S.Array);
     
     DialogBoxParam (app_instance,
 		    MAKEINTRESOURCE(IDD_OBJECT_RELAY_LIST),
 		    G_mainwindow, RelayListDlgProc, (LPARAM) &S);
-    delete [] S.Array;
-    return S.Result;
+   
+    return const_cast<Relay*>(S.Result);
 }
 
 
-int ShowStateRelaysForObject (int object_number, const char * classdesc) {
+void ShowStateRelaysForObject (int object_number, const char * classdesc) {
     Relay * r = ListRelaysForObjectDialog ("Show State", classdesc, object_number);
+    if (r)
+    ShowStateRelay (r);
+}
+#if 0
+int ShowStateRelaysForObject(int object_number, const char* classdesc) {
+    Relay* r = ListRelaysForObjectDialog("Show State", classdesc, object_number);
     if (!r)
 	return 0;
-    ShowStateRelay (r);
+    ShowStateRelay(r);
     return 1;
 }
-
 int DrawRelaysForObject (int object_number, const char * classdesc) {
     Relay * r = ListRelaysForObjectDialog ("Draw", classdesc, object_number);
     if (!r)
 	return 0;
-    RelayShowString(RlysymPRep (r->RelaySym));
+    RelayShowString(r->RelaySym.PRep().c_str());
     return 1;
 }
+#endif
 
+void DrawRelaysForObject(int object_number, const char* classdesc) {
+    Relay* r = ListRelaysForObjectDialog("Draw", classdesc, object_number);
+    if (!r)
+	return;
+    RelayShowString(r->RelaySym.PRep().c_str());
+}
