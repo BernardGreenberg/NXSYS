@@ -539,7 +539,7 @@
 		5BCD1EFE19BD189E007B0447 /* DynmenuController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = DynmenuController.mm; sourceTree = "<group>"; };
 		5BCD1F0219BE3D9E007B0447 /* LittleYellowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LittleYellowView.h; sourceTree = "<group>"; };
 		5BCD1F0319BE3D9E007B0447 /* LittleYellowView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = LittleYellowView.mm; sourceTree = "<group>"; };
-		5BCEA76519C24A8C003BA3A7 /* NXTimers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NXTimers.mm; sourceTree = "<group>"; };
+		5BCEA76519C24A8C003BA3A7 /* NXTimers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NXTimers.mm; path = ../NXSYSMac/NXTimers.mm; sourceTree = "<group>"; };
 		5BD064D319CDCC3700564BD5 /* JointProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JointProperties.xib; sourceTree = "<group>"; };
 		5BD064DA19CE44A600564BD5 /* SwitchProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchProperties.xib; sourceTree = "<group>"; };
 		5BD064DE19CEE9E300564BD5 /* TLEditMainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TLEditMainView.mm; sourceTree = "<group>"; };

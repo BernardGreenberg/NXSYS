@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "relays.h"
 #include "ldraw.h"
-#include "MacRlyDlg.h"
+#include "MacRlyDlg.h"  //Shared for now until real Windows Rlydlg is fixed.
 #include <vector>
 #include <string>
 

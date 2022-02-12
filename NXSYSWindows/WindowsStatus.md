@@ -34,7 +34,7 @@ This re-adaptation work, however, is still in progress: some things still don't 
 
 ### Layout of Source
 
-In this repository, the top-level directory `NXSYS` contains everything that is shared between the Mac and Windows builds of the app (and hopefully little else).  The top-level directory TLEdit/tled, unsymmetrically, contains everything shared by both builds of TLEdit (perhaps I will reorganize this) "and hopefully little else".  TLEdit depends upon the `NXSYS` directory, too, for sources and headers.
+In this repository, the top-level directory `NXSYS` contains everything that is shared between the Mac and Windows builds of the app (and nothing else).  The top-level directory TLEdit/tled, unsymmetrically, contains everything shared by both builds of TLEdit (perhaps I will reorganize this) "and hopefully little else".  TLEdit depends upon the `NXSYS` directory, too, for sources and headers.
 
 The top-level directory `NXSYSWin` contains everything specific to Windows, and *nothing* used on the Mac.  All Windows-specific code and resources (about 20 files) for both apps are in it, directly.  The solution file `NXSYSWindows.sln` is there, as well as subdirectories for the two (current) VS projects contained therein, which *do not contain code*, but only VS artifacts such as project, object, and precompiled header cache files.
 
