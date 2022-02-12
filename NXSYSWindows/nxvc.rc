@@ -1,0 +1,224 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+//#include "afxres.h"
+#define IDC_STATIC -1
+#include "commands.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""commands.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_TRACETOOLS          BITMAP  DISCARDABLE     "tracetb.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_RELAYSTATE DIALOG DISCARDABLE  100, 18, 163, 114
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Relay State Query"
+FONT 8, "System"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,7,93,50,14
+    LTEXT           "Relay 123XYZ",IDC_RLYQUERY_NAME,7,7,73,8
+    LTEXT           "State is 0",IDC_RLYQUERY_STATE,95,7,61,8
+    LTEXT           "14 Dependents:",IDC_RLYQUERY_NDEPS,7,28,59,8
+    LISTBOX         IDC_RLYQUERY_LIST,73,22,83,82,LBS_SORT | LBS_USETABSTOPS | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Double-click to inspect",IDC_STATIC,7,64,44,20
+    PUSHBUTTON      "&Draw",IDC_DRAW_RELAY,6,43,50,14
+END
+
+RELAY_ID DIALOG DISCARDABLE  50, 18, 123, 45
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enter Relay ID"
+FONT 8, "System"
+BEGIN
+    LTEXT           "Relay ID:",-1,5,6,36,10
+    COMBOBOX        IDC_RELAY_ID_EDIT,39,5,79,83,CBS_DROPDOWN | 
+                    CBS_UPPERCASE | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,15,25,36,14
+    PUSHBUTTON      "Cancel",IDCANCEL,72,25,35,14
+END
+
+IDD_OBJECT_RELAY_LIST DIALOG DISCARDABLE  100, 18, 186, 95
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Draw relay for Signal 122"
+FONT 8, "System"
+BEGIN
+    LISTBOX         IDC_RELAY_LIST,19,14,85,68,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | LBS_WANTKEYBOARDINPUT | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,24,50,14
+END
+
+IDD_HELPDLG DIALOG DISCARDABLE  100, 100, 329, 258
+STYLE DS_ABSALIGN | DS_MODALFRAME | DS_SETFOREGROUND | DS_3DLOOK | DS_CENTER | 
+    WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "NXSYS Version 2 Info"
+FONT 12, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_HELPDLG_TEXT,7,7,315,224,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL
+    DEFPUSHBUTTON   "&OK",IDOK,128,235,73,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_RELAYMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Control"
+    BEGIN
+        MENUITEM "&Clear",                      CmTrClear
+        MENUITEM "&Hide",                       CmTrHide
+        MENUITEM "&Draw relay...",              CmShowRelayCircuit
+    END
+END
+
+IDR_SIGNAL_CONTEXT_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "Show &Full Signal",           IDC_FULL_SIGNAL_DISPLAY
+        MENUITEM SEPARATOR
+        MENUITEM "Toggle f&leeting",            ID_TOGGLE_FLEETING
+        MENUITEM "Press (Initiate) &PB",        ID_INITIATE
+        MENUITEM "Ca&ncel",                     ID_CANCEL
+        MENUITEM "&Call on (initiate)",         ID_CALL_ON
+        MENUITEM "CO Stop Release (&VPB)",      ID_VPB
+        MENUITEM SEPARATOR
+        MENUITEM "&Draw relay",                 ID_DRAW_RELAY
+        MENUITEM "&Query Relay",                ID_RELAY_QUERY
+        MENUITEM SEPARATOR
+        MENUITEM "Reset &Approach locking",     ID_RESET_APPROACH
+    END
+END
+
+IDR_TRACK_CONTEXT_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "&Occupy",                     ID_OCCUPY
+        MENUITEM "&Vacate",                     ID_VACATE
+        MENUITEM "&Train...",                   ID_TRAIN
+        MENUITEM SEPARATOR
+        MENUITEM "&Draw relay...",              ID_DRAW_RELAY
+        MENUITEM "&Query relay...",             ID_RELAY_QUERY
+    END
+END
+
+IDR_SWITCH_CONTEXT_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "Call &Reverse",               ID_REVERSE
+        MENUITEM "Call &Normal",                ID_NORMAL
+        MENUITEM SEPARATOR
+        MENUITEM "&Draw relay...",              ID_DRAW_RELAY
+        MENUITEM "&Query relay...",             ID_RELAY_QUERY
+    END
+END
+
+IDR_SWITCH_KEY_CONTEXT_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "Call &Reverse",               ID_REVERSE
+        MENUITEM "Call &Normal",                ID_NORMAL
+        MENUITEM "Call Reverse, &HOLD",         ID_REVERSE_HOLD
+        MENUITEM "Call Normal, HO&LD",          ID_NORMAL_HOLD
+        MENUITEM "&Unlatch hold",               ID_UNHOLD
+        MENUITEM SEPARATOR
+        MENUITEM "&Draw relay...",              ID_DRAW_RELAY
+        MENUITEM "&Query relay...",             ID_RELAY_QUERY
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_OBJECT_RELAY_LIST, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
