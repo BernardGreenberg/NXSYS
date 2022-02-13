@@ -9,7 +9,7 @@ This re-adaptation work is pretty much done.  A usable up-to-date product can be
 
 ### What ***does*** work (today) in the new build:
 
-- NXSYS (the main app) can open, display, and operate the latest interlockings, now including [Duckburg](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg). The command menu works.  Signals, switches, and the whole relay logic engine, including the trace window, all seem to work as designed and as they do on the Mac. Even “trains” work, and the Relay Draftsperson and Relay Query dialogs!
+- NXSYS (the main app) can open, display, and operate the latest interlockings, now including [Duckburg](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg). The command menu works.  Signals, switches, and the whole relay logic engine, including the trace window, all seem to work as designed and as they do on the Mac. Even “trains” work, and the Relay Draftsperson and Relay Query dialogs! The Interlocking Status dialog, until now Mac-only, is now on the `File` menu where it belongs.
 
 - TLEdit, the track layout editor, seems to work, too, with its toolbar (a little different from the Mac’s beautiful one) and rodentation all in order, as well as object detail dialogs. Documentation needs upgrade.
 
@@ -21,6 +21,7 @@ This re-adaptation work is pretty much done.  A usable up-to-date product can be
 
 - The OLE Automation server and control aren’t there.  I haven’t used it in the 21st century, and I don’t suppose anyone has, so it likely won't be revived.  *¡Olé!, como se dice en España*).
 - The cool 2.5 Mac feature that allows you to click right in the Relay Draftsperson to send a relay name to another application (e.g., Emacs) isn't there. Maybe it should look for the command line in the Registry (it's in the `info-plist` file on the Mac).
+- Printing (never enabled on the Mac) claims to work, queues a file, but it doesn't print.
 - I have not checked executables into the Repository. I may.
 
 ##### System-wise,
@@ -28,7 +29,7 @@ This re-adaptation work is pretty much done.  A usable up-to-date product can be
 - I'd like to build this for 64-bit (The Mac version is 64-bit).  The advantage is that the services and DLL's of the Windows 32-bit compatibility subsystem in Windows 10 (which latter is 64-bit) would not be needed.
 - I have not yet determined which DLL's need to be redistributed, but if you can build it, you can run it. The 2016 Windows build required redistributing `concrt140.dll`, `vccorlib140.dll`, `msvcp140.dll` and `vcruntime140.dll`. It now seems Microsoft [makes it easy to get “VC DLL’s”](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
-The text-based help dialogs are gone.  All help is HTML with illustrations, via your browser (from local files).  New, definitive help files (including a new tutorial on logic design).  The new “text-based help dialog”, the Interlocking Status report, from the Mac, is now on the `File` Menu, too.
+The text-based help dialogs are gone.  All help is HTML with illustrations, via your browser (from local files).  New, definitive help files (including a new tutorial on logic design).
 
 ### Layout of Source
 
