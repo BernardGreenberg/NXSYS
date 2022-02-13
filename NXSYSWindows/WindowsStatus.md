@@ -11,7 +11,7 @@ This re-adaptation work is pretty much done.  A usable up-to-date product can be
 
 - NXSYS (the main app) can open, display, and operate the latest interlockings, now including [Duckburg](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg). The command menu works.  Signals, switches, and the whole relay logic engine, including the trace window, all seem to work as designed and as they do on the Mac. Even “trains” work, and the Relay Draftsperson and Relay Query dialogs!
 
-- TLEdit, the track layout editor, seems to work, too, with its toolbar (a little different from the Mac’s beautiful one) and rodentation all in order, as well as object detail dialogs.
+- TLEdit, the track layout editor, seems to work, too, with its toolbar (a little different from the Mac’s beautiful one) and rodentation all in order, as well as object detail dialogs. Documentation needs upgrade.
 
 - The basic help document needs refreshing, i.e., removal of Version 1 nonsense, etc.
 
@@ -28,7 +28,7 @@ This re-adaptation work is pretty much done.  A usable up-to-date product can be
 - I'd like to build this for 64-bit (The Mac version is 64-bit).  The advantage is that the services and DLL's of the Windows 32-bit compatibility subsystem in Windows 10 (which latter is 64-bit) would not be needed.
 - I have not yet determined which DLL's need to be redistributed, but if you can build it, you can run it. The 2016 Windows build required redistributing `concrt140.dll`, `vccorlib140.dll`, `msvcp140.dll` and `vcruntime140.dll`. It now seems Microsoft [makes it easy to get “VC DLL’s”](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
-The text-based help dialogs are gone.  All help is HTML with illustrations, via your browser (from local files).  New, definitive help files (including a new tutorial on logic design).  The new “text-based help dialog”, the Interlocking Status report, from the Mac, is now on the `File` Menu, too.
+The text-based help dialogs are gone.  All help is HTML with illustrations, via your browser (from local files).  New, definitive help files (including a new tutorial on logic design).  The new “text-based help dialog”, the Interlocking Status report, from the Mac, is now on the `File` Menu, too.
 
 ### Layout of Source
 
