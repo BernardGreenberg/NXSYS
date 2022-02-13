@@ -9,7 +9,7 @@
 
 static time_t Cache = (time_t) 0;
 
-static time_t KludgeW32GMT (HANDLE h) {
+static time_t KludgeW32GMT (HMODULE h) {
     char buf[200];
 
     DWORD aa;
@@ -34,7 +34,7 @@ rn:	if (rh != INVALID_HANDLE_VALUE)
     return Cache = (time_t) (((PIMAGE_NT_HEADERS)buf)->FileHeader.TimeDateStamp);
 }
 
-time_t GetModuleTime (HANDLE h) {
+time_t GetModuleTime (HMODULE h) {
     if (h == NULL)
 	h = GetModuleHandle (NULL);
 
