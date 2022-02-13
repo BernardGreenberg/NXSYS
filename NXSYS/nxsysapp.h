@@ -8,7 +8,7 @@
 extern HWND G_mainwindow;
 extern HINSTANCE app_instance;
 extern HFONT Fnt, LargeFnt;
-extern char app_name[], HelpPath[];
+extern char app_name[];
 extern WORD WindowsMessageLoop (HWND window, HACCEL hAccel, UINT Quitmsg = 0);
 void NBDSetWindowText (HWND window, const char* text);
 

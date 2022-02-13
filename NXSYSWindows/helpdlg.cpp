@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
 
 #include "nxsysapp.h"
 #include "helpdlg.h"
@@ -17,6 +18,7 @@
 #endif
 
 static WNDPROC wpOrigEditProc;
+extern std::string HelpPath;
 
 #define MAX_HELP_TEXTS 10
 
@@ -106,7 +108,7 @@ void HelpDialog (const char * text, const char * title) {
 
 void HelpText::Display () {
     if (FixedId)
-	WinHelp (G_mainwindow, HelpPath, HELP_CONTEXT, FixedId);
+	WinHelp (G_mainwindow, HelpPath.c_str(), HELP_CONTEXT, FixedId);
     else
 	Dialog();
 }

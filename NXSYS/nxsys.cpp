@@ -36,7 +36,11 @@
 #include "AppDelegateGlobals.h"
 #else
 #include "WinReadResText.h"
+#include <filesystem>
+namespace fs = std::filesystem;
 #endif
+using std::string;
+using std::vector;
 
 #ifdef NXOLE
 #include "nxole.h"
@@ -123,7 +127,7 @@ HWND G_mainwindow;
 HINSTANCE app_instance;
 HICON TrainMinimizedIcon;
 
-std::string GlobalFilePathname;
+string GlobalFilePathname;
 #ifdef NXV2
 #ifdef RT_PRODUCT
 char IniFileName [] = "RTDESIGNER.INI";
@@ -141,7 +145,7 @@ char IniFileName [] = "NXSYS.INI";
 
 #endif
 
-static char FName[MAXPATH] = "";
+static char FName[MAX_PATH]{};
 
 
 #ifndef NXSYSMac
@@ -149,7 +153,7 @@ static char MWPKey[] = "Main Window Placement";
 static char FTitle[MAXPATH], DFName[MAXPATH] = "";
 static char MainWindow_Class[] = PRODUCT_NAME ":Main";
 #endif
-char HelpPath[MAXPATH] = "Pages/NXSYS.html";
+string HelpPath("Pages/NXSYS.html");
 
 #ifdef NXOLE
 static char ScriptName [MAXPATH];
@@ -223,29 +227,24 @@ static void SetGlobalMenuState (BOOL enable) {
 #if WIN32
 static void
 SetHelpFilePath () {
-
-    DWORD bufsize = sizeof(HelpPath), type;
+    char buf[MAX_PATH];
+    DWORD bufsize = sizeof(buf), type;
     HKEY hKey;
     DWORD ec = RegOpenKeyEx
 	       (HKEY_LOCAL_MACHINE, NXSYS_LM_REG_KEY, 0, KEY_READ, &hKey);
     if (ec == ERROR_SUCCESS) {
 	ec = RegQueryValueEx(hKey, "HelpFilePathname",
-			     NULL, &type, (PBYTE)HelpPath, &bufsize);
+			     NULL, &type, (PBYTE)buf, &bufsize);
 	RegCloseKey(hKey);
-	if (ec == ERROR_SUCCESS)
+	if (ec == ERROR_SUCCESS) {
+	    HelpPath = string(buf, bufsize);
 	    return;
+	}
     }
-
-    std::string drive, dir, name, ext;
-    GetModuleFileName (app_instance, HelpPath, sizeof(HelpPath) - 1);
-    STLfnsplit (HelpPath, drive, dir, name, ext);
-   // fnmerge (std::string, drive, dir, HELP_FNAME, ".hlp");
-	std::string hp1 = drive + dir + '\\' + HELP_FNAME;
-	hp1 = drive;
-	hp1 += dir;
-	hp1 += '\\';
-	hp1 += HELP_FNAME;
-	strcpy(HelpPath, hp1.c_str());
+    GetModuleFileName (app_instance, buf, sizeof(buf) - 1);
+    fs::path modpath = string(buf);
+    modpath.replace_filename("");
+    HelpPath = (fs::path(modpath / HELP_FNAME)).string();
 }
 #endif
 
@@ -533,10 +532,10 @@ static void NXSYS_Command(unsigned int cmd) {
 
 	case CmNews:
 		//obsolete 2016, no UI
-		WinHelp(G_mainwindow, HelpPath, HELP_CONTEXT, IDH_NEWS);
+		WinHelp(G_mainwindow, HelpPath.c_str(), HELP_CONTEXT, IDH_NEWS);
 	case CmUsage:
 #ifdef WIN32
-		ShellExecute(G_mainwindow, "open", HelpPath, NULL, NULL, SW_SHOWNORMAL);
+		ShellExecute(G_mainwindow, "open", HelpPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
 #else
 		WinHelp(G_mainwindow, HelpPath, HELP_CONTENTS, 0);
 #endif
@@ -1236,7 +1235,7 @@ void CleanUpNXSYS() {
     DeleteObject (LargeFnt);
 #ifndef NXSYSMac
 	
-	WinHelp(G_mainwindow, HelpPath, HELP_QUIT, 0);
+	WinHelp(G_mainwindow, HelpPath.c_str(), HELP_QUIT, 0);
 #endif
     /* Why isn't DeInstallLayout good enough here? --11 January 2001 */
     ClearHelpMenu();
