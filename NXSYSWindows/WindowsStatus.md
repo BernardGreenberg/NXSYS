@@ -3,7 +3,7 @@
 
 This repository contains (in addition to working Mac builds of NXSYS and TLEdit), enough content to build Debug Windows 10 executables (32-bit Win32) of both, in Visual Studio (VS) 2022, C++ Language Level C++17, platform toolset VS2022 level 143, Windows SDK “latest installed version“ 10.0, my Windows 10 at current updates 12 February 2022.
 
-This re-adaptation work, however, is still in progress: some things still don't work and are being worked on; the readaptation of the last 6 years of Mac NXSYS has gone quite smoothly to this point (less than 3 days work).
+This re-adaptation work, however, is still in progress: a few things don't work, but it is pretty much done.  A usable up-to-date product can be built (if not yet downloaded executable).
 
 **You can still download a fully operative 2016 Windows NXSYS from [the NXSYS page on my site](https://BernardGreenberg.com/NXSYS).**
 
@@ -17,10 +17,9 @@ This re-adaptation work, however, is still in progress: some things still don't 
 
 (Of course I’ll update this as more is made to work).
 
-- The help dialogs and their texts don't work yet.
 - The Interlocking Status Report dialog/display, which has never before been in the Windows version, but is in intended to be, isn’t there yet.
 - The OLE Automation server and control aren’t there.  I haven’t used it in the 21st century, and I don’t suppose anyone has, so it likely won't be revived.  *¡Olé!, como se dice en España*).
-- The cool 2.5 feature that allows you to click right in the Relay Draftsperson to send a relay name to another application isn't there. Maybe it should look for the command line in the Registry (it's in the `info-plist` on the Mac).
+- The cool 2.5 Mac feature that allows you to click right in the Relay Draftsperson to send a relay name to another application (e.g., Emacs) isn't there. Maybe it should look for the command line in the Registry (it's in the `info-plist` file on the Mac).
 - I have not checked executables into the Repository. I may.
 
 ##### System-wise,
@@ -28,6 +27,7 @@ This re-adaptation work, however, is still in progress: some things still don't 
 - I'd like to build this for 64-bit (The Mac version is 64-bit).  The advantage is that the services and DLL's of the Windows 32-bit compatibility subsystem in Windows 10 (which latter is 64-bit) would not be needed.
 - I have not yet determined which DLL's need to be redistributed, but if you can build it, you can run it. The 2016 Windows build required redistributing `concrt140.dll`, `vccorlib140.dll`, `msvcp140.dll` and `vcruntime140.dll`. It now seems Microsoft [makes it easy to get “VC DLL’s”](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
+The text-based help dialogs are gone.  All help is HTML with illustrations, via your browser (from local files).  New, definitive help files (including a new tutorial on logic design).
 
 ### Layout of Source
 
