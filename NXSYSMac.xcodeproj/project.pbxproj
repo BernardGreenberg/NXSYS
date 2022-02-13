@@ -447,7 +447,6 @@
 		5BABBE0D27B7143100AED491 /* TLEdit.vcxproj.filters */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TLEdit.vcxproj.filters; sourceTree = "<group>"; };
 		5BABBE0E27B7143100AED491 /* TLEdit.vcxproj */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TLEdit.vcxproj; sourceTree = "<group>"; };
 		5BABBE0F27B7143100AED491 /* TLEdit.vcxproj.user */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TLEdit.vcxproj.user; sourceTree = "<group>"; };
-		5BABBE1027B7143100AED491 /* WindowsMysteriousAbsences.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WindowsMysteriousAbsences.cpp; sourceTree = "<group>"; };
 		5BABBE1127B7143100AED491 /* nxsldrly.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nxsldrly.cpp; sourceTree = "<group>"; };
 		5BABBE1227B7143100AED491 /* WinReadResText.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WinReadResText.cpp; sourceTree = "<group>"; };
 		5BABBE1327B7143100AED491 /* NXSYSWindows.sln */ = {isa = PBXFileReference; lastKnownFileType = text; path = NXSYSWindows.sln; sourceTree = "<group>"; };
@@ -472,6 +471,8 @@
 		5BABBE7127B839D700AED491 /* tracetb.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = tracetb.bmp; sourceTree = "<group>"; };
 		5BABBE7227B839D700AED491 /* WindowsStatus.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = WindowsStatus.md; sourceTree = "<group>"; };
 		5BABBE7327B839D700AED491 /* nxvc.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = nxvc.rc; sourceTree = "<group>"; };
+		5BABBE7427B8A16400AED491 /* print.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = print.cpp; sourceTree = "<group>"; };
+		5BABBE7527B8A17F00AED491 /* nxldwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nxldwin.cpp; sourceTree = "<group>"; };
 		5BAC92B419C78AE400673BDC /* BigYellowXView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BigYellowXView.h; sourceTree = "<group>"; };
 		5BAC92B519C84A9000673BDC /* WinMacCalls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinMacCalls.h; sourceTree = "<group>"; };
 		5BAC930B19C8FE7100673BDC /* TLEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TLEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1002,12 +1003,13 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5BABBE7527B8A17F00AED491 /* nxldwin.cpp */,
+				5BABBE7427B8A16400AED491 /* print.cpp */,
 				5BABBE6227B7143200AED491 /* NXSYS */,
 				5BABBE0C27B7143100AED491 /* TLEdit */,
 				5BABBE7327B839D700AED491 /* nxvc.rc */,
 				5BABBE7127B839D700AED491 /* tracetb.bmp */,
 				5BABBE7227B839D700AED491 /* WindowsStatus.md */,
-				5BABBE1027B7143100AED491 /* WindowsMysteriousAbsences.cpp */,
 				5BABBE1127B7143100AED491 /* nxsldrly.cpp */,
 				5BABBE1227B7143100AED491 /* WinReadResText.cpp */,
 				5BABBE1327B7143100AED491 /* NXSYSWindows.sln */,
