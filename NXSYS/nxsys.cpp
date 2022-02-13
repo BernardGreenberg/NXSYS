@@ -1,6 +1,9 @@
 #define NXSYS_APP_BASE_MINOR_VERSION 3
 
 #include "windows.h"
+#include <string>
+#include <vector>
+#include <utility>
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -62,7 +65,6 @@ long RTExpireTime = 0; //0x35D57840;
 
 #if WINDOWS
 #include <parsargs.h>
-//#include <heapchk.h>
 #endif
 
 void ValidateRelayWorld();
@@ -70,16 +72,10 @@ void ValidateRelayWorld();
 /* time to wait for Normal All Switches */
 #define NORMAL_ALL_WAIT_TIME_MS 1500L
 
-#ifdef RT_PRODUCT
- #define INITIAL_BLURB "Please use   Help | Info  for usage information."
- #define NXSYS_LM_REG_KEY "Software\\Basis Technology\\RT Designer"
-#else
- #define INITIAL_BLURB "Please try   File | Demo  for an animated demo of " PRODUCT_NAME "."
- #define NXSYS_LM_REG_KEY "Software\\B.Greenberg\\NXSYS"
+#define INITIAL_BLURB "Please try   File | Demo  for an animated demo of " PRODUCT_NAME "."
+#define NXSYS_LM_REG_KEY "Software\\B.Greenberg\\NXSYS"
 
 #define APP_KEY NXSYS_LM_REG_KEY
-
-#endif
 
 #define MAIN_FRAME_SCREEN_X_FRACTION (1.0)
 #ifdef NXV2
@@ -89,11 +85,8 @@ void ValidateRelayWorld();
 #endif
 
 #ifdef WIN32
-   #ifdef RT_PRODUCT
-   #define HELP_FNAME "rt-designer"
-   #else
+
    #define HELP_FNAME "Pages\\NXSYS.html"
-   #endif
 #else
    #define HELP_FNAME "nxxlkg"
 #endif
@@ -214,41 +207,43 @@ static void SetGlobalMenuState (BOOL enable) {
 	    }
 	}
     }
-#ifdef NXV2
     if (AutoControlRelayExists()) {
 	EnableMenuItem (m, CmAutoOp, MF_BYCOMMAND | MF_ENABLED);
 	EnableAutomaticOperation (EnableAutoOperation);
     }
     else
 	EnableMenuItem (m, CmAutoOp, MF_GRAYED);
-#endif
 }
 
 #if WIN32
+std::pair<bool, std::string> getStringRegItem(HKEY hKey, const char* name, size_t size=MAX_PATH) {
+    std::vector<char> buff(size);
+    DWORD bufsize = size;
+    DWORD type;
+    DWORD ec = RegOpenKeyEx(HKEY_LOCAL_MACHINE, NXSYS_LM_REG_KEY, 0, KEY_READ, &hKey);
+    if (ec == ERROR_SUCCESS) {
+	ec = RegQueryValueEx(hKey, name, NULL, &type, (PBYTE)buff.data(), &bufsize);
+	RegCloseKey(hKey);
+	if (ec == ERROR_SUCCESS)
+	    return std::pair(true, std::string(buff.data(), bufsize));
+    }
+    return std::pair<bool, std::string>(false, "");
+}
+
 static void
 SetHelpFilePath () {
-    char buf[MAX_PATH];
-    DWORD bufsize = sizeof(buf), type;
-    HKEY hKey;
-    DWORD ec = RegOpenKeyEx
-	       (HKEY_LOCAL_MACHINE, NXSYS_LM_REG_KEY, 0, KEY_READ, &hKey);
-    if (ec == ERROR_SUCCESS) {
-	ec = RegQueryValueEx(hKey, "HelpFilePathname",
-			     NULL, &type, (PBYTE)buf, &bufsize);
-	RegCloseKey(hKey);
-	if (ec == ERROR_SUCCESS) {
-	    HelpPath = string(buf, bufsize);
-	    return;
-	}
+    auto result = getStringRegItem(HKEY_LOCAL_MACHINE, "HelpFilePathname");
+    if (result.first) {
+	HelpPath = result.second;
+	return;
     }
-    GetModuleFileName (app_instance, buf, sizeof(buf) - 1);
-    fs::path modpath = string(buf);
+    std::vector<char>buf(MAX_PATH);
+    GetModuleFileName (app_instance, buf.data(), buf.size() - 1);
+    fs::path modpath = string(buf.data());
     modpath.replace_filename("");
     HelpPath = (fs::path(modpath / HELP_FNAME)).string();
 }
-#endif
 
-#ifdef WIN32
 long smeasure (HDC dc, const char * str) {
     SIZE ss;
     GetTextExtentPoint32 (dc, str, strlen (str), &ss);
@@ -565,6 +560,12 @@ static void NXSYS_Command(unsigned int cmd) {
 		))
 			GetLayout(FName, TRUE);
 		break;
+#ifdef WINDOWS
+	case CmFileInfo:
+	    if (InterlockingLoaded)
+		StatusReportDialog(G_mainwindow, GetModuleHandle(NULL));
+	    break;
+#endif
 #ifndef	NODEMO
 	case CmHaltDemo:
 		DemoPause(1);
@@ -654,7 +655,7 @@ static void NXSYS_Command(unsigned int cmd) {
 		CheckMainMenuItem(CmAutoOp, EnableAutoOperation);
 		EnableAutomaticOperation(EnableAutoOperation);
 		break;
-#if defined(APPDEMO) | defined(RT_PRODUCT)
+#if defined(APPDEMO) 
 	case CmV2Info:
 		DoV2Dialog();
 		break;
@@ -728,21 +729,6 @@ static void NXSYS_Command(unsigned int cmd) {
 } //  some conditionalizing problem
 #endif
 
-#ifdef EVALUATION_EDITION
-static void ComplainExpired () {
-    char BasisAddress[500];
-    char Text[2000];
-    LoadString (GetModuleHandle(NULL),
-		IDS_BASIS_ADDRESS, BasisAddress, sizeof(BasisAddress));
-    wsprintf (Text, "This evaluation copy of %s has expired.\r\n"
-	      "For licensing information, please contact:\r\n\r\n%s",
-	      PRODUCT_NAME, BasisAddress);
-    MessageBox (0, Text, PRODUCT_NAME " Evaluation License",
-		MB_ICONSTOP | MB_OK);
-}
-#endif
-
-
 #ifndef NXSYSMac
 WNDPROC_DCL MainWindow_WndProc
       (HWND window, unsigned message, WPARAM wParam, LPARAM lParam)
@@ -750,15 +736,6 @@ WNDPROC_DCL MainWindow_WndProc
   switch (message) {
 
     case WM_COMMAND:
-
-#ifdef EVALUATION_EDITION
-	time_t exptime;
-	if (time(&exptime) >= RTExpireTime) {
-	    ComplainExpired();
-	    SendMessage (window, WM_CLOSE, 0, 0);
-	    return 0;
-	}
-#endif
 
       if (ChooseTrack)
 	  EndChooseTrack ();
@@ -777,24 +754,6 @@ WNDPROC_DCL MainWindow_WndProc
 	EndPaint (window, &ps);
 	break;
     }
-
-#ifndef NXV2
-    /* V2 trains can't possibly use track numbers.  There aren't any. */
-    case WM_CHAR:
-	wParam &= 0x7F;
-	if (wParam >= '1' && wParam <= '9')
-	    SendMessage (window, WM_NXSYS_SELTRACK, wParam-'0', 0L);
-	break;
-
-    case WM_NXSYS_SELTRACK:
-	if (ChooseTrack) {
-	    EndChooseTrack();
-	    GraphicObject * g = ChooseTrackNumber (wParam);
-	    if (g != NULL)
-		TrainDialog (g, TrainType);
-	}
-	return 0;
-#endif
 
     case WM_LBUTTONDOWN:
 	if (wParam & MK_SHIFT)
@@ -872,12 +831,7 @@ WNDPROC_DCL MainWindow_WndProc
 	break;
     }
 #endif
-          
-#if 0
-    case WM_QUERYNEWPALETTE:
-    case WM_PALETTECHANGED:
-	return NXGLForwardPalmsg (message, wParam);
-#endif
+  
 #ifndef NXSYSMac
    default:
        	return DefWindowProc (window, message, wParam, lParam);
@@ -1012,10 +966,7 @@ badcpl:		 usermsg ("Missing or bad number after -contacts_per_line arg.");
 	      initial_script_file = argv[++ano];
 	  }
 #endif
-#ifdef NXOGL
-	  else if (!strcmpi (argb, "nocab")) /* knio knio */
-	      UseNXGL = FALSE;		/* no motorman cab view */
-#endif
+
 	  else
 	      usermsg ("Bad/unknown control arg: %s", argv[ano]);
       }
@@ -1146,12 +1097,6 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 #endif
     ShowWindow (window, nCmdShow);	/* don't gratuitously update */
 
-#ifdef NXOGL
-  if (UseNXGL) {
-      CheckMainMenuItem (CmAutoEngageTrains, AutoEngageTrains);
-      NXGL_Loaded = NXGLMaybeInit(FALSE);
-  }
-#endif
 #ifdef NXV2
   CheckMainMenuItem(CmAutoOp, EnableAutoOperation);
 #endif

@@ -6,6 +6,7 @@
 #define CmPrintLogic    4117
 #define CmPrintLogicFile 4118
 #define CmDemoScript     4119
+#define CmFileInfo      4120
 
 #define CmClearTrack    4121
 #define CmCancelSignals 4122

@@ -205,6 +205,7 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\nx.rc" />
+    <ResourceCompile Include="..\Resources2022.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\nx2.ico" />
@@ -213,6 +214,7 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\resource.h" />
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

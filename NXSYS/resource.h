@@ -30,6 +30,7 @@
 #define ID_REVERSE_HOLD                 40016
 #define ID_NORMAL_HOLD                  40017
 #define ID_UNHOLD                       40018
+#define ID_STATUS_REPORT                40019
 #define ID_EXTHELP0                     40020
 #define ID_EXTHELP1                     40021
 #define ID_EXTHELP2                     40022

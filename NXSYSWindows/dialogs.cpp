@@ -15,12 +15,14 @@
 #include <winver.h>
 #include <cassert>
 #include "getmodtm.h"
+#include "StatusReport.h"
+#include "Resources2022.h"
 
 #define TIME_FORMAT_STR "%#d %b %Y %H:%M"
 //#include <getmodtm.h>
 #define COUNTOF(x) (sizeof(x)/sizeof(x[0]))
 
-
+using std::string;
 extern struct tm far nxtime_time_;
 const int MaxFilesMenu = 20;
 
@@ -120,6 +122,38 @@ BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
 	ofn.hwndOwner = hwnd;
 
 	return rsw ? GetOpenFileName(&ofn) : GetSaveFileName(&ofn);
+}
+#include <string>
+static std::string fixnl(std::string s) {
+    std::string out;
+    for (char c : s) {
+	if (c == '\n')
+	    out += "\r\n";
+	else
+	    out += c;
+    }
+    return out;
+}
+
+DLGPROC_DCL status_report_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message) {
+    case WM_INITDIALOG:
+	SetDlgItemText(dialog, IDC_STATUS_REPORT, fixnl(InterlockingFileStatus().Report()).c_str());
+	return TRUE;
+
+    case WM_COMMAND:
+	if (wParam == IDOK || wParam == IDCANCEL) {
+	    EndDialog(dialog, TRUE);
+	    return TRUE;
+	}
+    default:
+	return FALSE;
+    }
+}
+
+void StatusReportDialog (HWND win, HINSTANCE instance) {
+    DialogBox(instance, MAKEINTRESOURCE(IDD_STATUS_REPORT), win, (DLGPROC)status_report_DlgProc);
 }
 
 
@@ -336,6 +370,7 @@ DLGPROC_DCL show_stops_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPA
 				SendDlgItemMessage
 				(dialog, i, BM_SETCHECK, (cmd == i), 0L);
 			ShowStopsLast = cmd;
+			return TRUE;
 		}
 		else
 			return FALSE;
