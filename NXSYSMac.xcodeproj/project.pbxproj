@@ -234,7 +234,7 @@
 		5BFB49E427AC725D006BE311 /* SwitchConsistency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */; };
 		5BFB49E627AC7606006BE311 /* NXSYS.html in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB49E527AC7606006BE311 /* NXSYS.html */; };
 		5BFB49E827AC7682006BE311 /* argparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB49E727AC7682006BE311 /* argparse.cpp */; };
-		5BFB4A0927AF00FA006BE311 /* HelpBMPs in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4A0827AF00FA006BE311 /* HelpBMPs */; };
+		5BFB4A0927AF00FA006BE311 /* HelpImages in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4A0827AF00FA006BE311 /* HelpImages */; };
 		5BFB4AFD27B172A9006BE311 /* stdmacs.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF327B172A9006BE311 /* stdmacs.trk */; };
 		5BFB4AFE27B172A9006BE311 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF427B172A9006BE311 /* README.md */; };
 		5BFB4AFF27B172A9006BE311 /* db6.trk in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4AF527B172A9006BE311 /* db6.trk */; };
@@ -607,7 +607,7 @@
 		5BFB4A0027ADD720006BE311 /* StartShut.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartShut.h; sourceTree = "<group>"; };
 		5BFB4A0127ADD738006BE311 /* xtgload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xtgload.h; sourceTree = "<group>"; };
 		5BFB4A0227ADEC56006BE311 /* blisp_test.lisp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blisp_test.lisp; sourceTree = "<group>"; };
-		5BFB4A0827AF00FA006BE311 /* HelpBMPs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HelpBMPs; sourceTree = "<group>"; };
+		5BFB4A0827AF00FA006BE311 /* HelpImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HelpImages; sourceTree = "<group>"; };
 		5BFB4AF327B172A9006BE311 /* stdmacs.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stdmacs.trk; sourceTree = "<group>"; };
 		5BFB4AF427B172A9006BE311 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5BFB4AF527B172A9006BE311 /* db6.trk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = db6.trk; sourceTree = "<group>"; };
@@ -900,7 +900,7 @@
 				5B8A110E25C07E91007857A8 /* 5_0TL.png */,
 				5B2CD8BD25E7E4EF0095C17F /* TrafficKnob.png */,
 				5BFB4B0727B1D697006BE311 /* RelayLanguage.md */,
-				5BFB4A0827AF00FA006BE311 /* HelpBMPs */,
+				5BFB4A0827AF00FA006BE311 /* HelpImages */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
@@ -1604,7 +1604,7 @@
 				5B65681825C3388700411B8F /* About.html in Resources */,
 				5BAFFBA919B894CC00AEE791 /* nxdoc.css in Resources */,
 				5B8A110F25C07E91007857A8 /* 5_0TL.png in Resources */,
-				5BFB4A0927AF00FA006BE311 /* HelpBMPs in Resources */,
+				5BFB4A0927AF00FA006BE311 /* HelpImages in Resources */,
 				5BFB4B0327B172A9006BE311 /* dburg.trk in Resources */,
 				5B8A10FF25C06DB4007857A8 /* TrafficLevers2_5.html in Resources */,
 				5B79D2B519B39D9C0029D74E /* MacNXSYS.html in Resources */,
