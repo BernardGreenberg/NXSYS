@@ -32,7 +32,7 @@ None of the OpenGL code of the popular erstwhile Cab View feature of Version 1 i
 
 The Mac Version is targeted in XCode to (minimum) [macOS Sierra (10.12)](https://en.wikipedia.org/wiki/MacOS_Sierra) (released Sept. 2019); that is the SDK level it uses.   While this can easily be set as current as you wish in XCode, and most Mac users keep their systems up-to-date, I see no reason to bring it closer to currency: back-compatibility is a virtue. See [Related Resources](#related-resources) below for the latest "released" Mac installable. I may move it here and use the GitHub "release" mechanism.
 
-I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about changes necessary to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013. If I successfully implement this or other new features, they will not break extant interlockings, and I won't "push" until I have solid code.
+I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about (significant) changes to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013. If I successfully implement this or other new features, they will not break extant interlockings, and I won't "push" until I have solid code.
 
 I may or may not fix reported bugs and post changes, but I want to know if you can't build it; contact me via GitHub. I expect to post fixes to bugs I encounter and gratuitous enhancements from hereon in.
 
@@ -50,9 +50,12 @@ There are five in this project:
 
 - **Relay Indexer**.  This recent innovation is another command-line C++11 program (no Objective C/C++) built from this tree that produces a text-format "relay index", a cross-reference of which relays are referenced as logic inputs by other relays, including "built-in" relays to the system. While this can be useful, it even more usefully produces an Emacs/Aquamacs `TAGS` table for all of the relays in the interlocking, allowing `meta-.` to be used with relays, and allowing relay source to be located from NXSYS' Relay Draftsperson.
 
-The distribution of the sources into XCode "groups" is somewhat chaotic, and I apologize.  The [folder `NXSYS`](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYS) is supposed to contain all sources (and headers) that are shared with the Windows build, although it includes some inexcusable others. But other folders contain Mac-only code and headers.
+The distribution of the sources into XCode "groups" is somewhat chaotic, and I apologize.  The [folder `NXSYS`](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYS) contains all code of the main application (and headers) that is shared with the Windows build.  `TLEdit/tled` contains the *additional* code in TLEdit shared with Windows version. And `NXSYSWindows` contains all Windows-only code and other artifacts.  All other folders contain Mac-only code and headers.
 
-The TLEdit `buttons` folder contains, in addition to png's for its tool-panel buttons, Pixelmator (pre-Pro) files from which they were created.
+***Nota bene***—there are file system and XCode artifacts seemingly referring to Windows in the Mac-only folders, e.g., `Winapi.mm`.  These are *not* misplaced Windows programs, but Mac code *emulating the Win32 API in Cocoa/Objective C++*, which is the compatibility strategy I chose in 2014 to maximize shared, retained code.
+
+The TLEdit `buttons` folder contains, in addition to png's for its (Mac) tool-panel buttons, Pixelmator (pre-Pro) files from which they were created.
+
 
 
 ## *Et in fine* ...

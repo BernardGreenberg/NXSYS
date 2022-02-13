@@ -7,9 +7,9 @@
 
 #define VER_PRIVATEBUILD 0
 #define VER_COMPANYNAME_STR "Bernard Greenberg"
-#define VER_FILEDESCRIPTION_STR "NXSYS V2 Signalling and Interlocking Simulator"
+#define VER_FILEDESCRIPTION_STR "NXSYS Signalling and Interlocking Simulator"
 #define VER_INTERNALNAME_STR "NXSYS V2 main app"
-#define VER_LEGALCOPYRIGHT_STR "Copyright (c) 1994-2016 Bernard Greenberg"
+#define VER_LEGALCOPYRIGHT_STR "Copyright (c) 1994-2022 Bernard Greenberg"
 #define VER_PRERELEASE 0
 #define VER_LEGALTRADEMARKS1_STR ""
 #define VER_LEGALTRADEMARKS2_STR ""
@@ -115,11 +115,6 @@ BEGIN
 #endif
       MENUITEM "&About..."  CmAbout
 
-#ifdef APPDEMO
-      MENUITEM "Version &2 Info", CmV2Info
-#else
-      MENUITEM "&Version 2 NXSYS Help", CmV2NXHelp
-#endif
 #ifdef RT_PRODUCT
       MENUITEM "&Info", CmV2Info
 #endif
@@ -155,8 +150,8 @@ BEGIN
 
 	DEFPUSHBUTTON "OK", IDOK, 76, 86, 24, 14
 	CONTROL "Built:", ABOUT_BUILD, "STATIC", WS_CHILD | WS_VISIBLE | WS_GROUP, 30, 51, 58, 8
-	CTEXT "Copyright (c) 1994-2016 B. Greenberg", -1, 8, 64, 160, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
-	CONTROL, "Version 2.1 (32-bit MS Windows)", ABOUT_NUM_VSN, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 30, 42, 126, 8
+	CTEXT "Copyright (c) 1994-2022 B. Greenberg", -1, 8, 64, 160, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
+	CONTROL, "Version 2.6 (32-bit MS Windows)", ABOUT_NUM_VSN, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 25, 42, 136, 8
 	CTEXT "All Rights Reserved", -1, 40, 74, 96, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
 	ICON "NXICON", -1, 12, 82, 16, 16
 	CONTROL "27 June 12:24:02 1994", ABOUT_VSN, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 88, 51, 83, 8
@@ -282,11 +277,11 @@ END
 
 // 1 Dec 2016 copied from MS Web posting
 
-#define VER_FILEVERSION             2,1,0,0
-#define VER_FILEVERSION_STR         "2.1.0.0\0"
+#define VER_FILEVERSION             2,6,0,0
+#define VER_FILEVERSION_STR         "2.6.0.0\0"
 
-#define VER_PRODUCTVERSION          2,1,0,0
-#define VER_PRODUCTVERSION_STR      "2.1\0"
+#define VER_PRODUCTVERSION          2,6,0,0
+#define VER_PRODUCTVERSION_STR      "2.6\0"
 
 #ifndef DEBUG
 #define VER_DEBUG                   0
@@ -300,7 +295,7 @@ PRODUCTVERSION 	VER_PRODUCTVERSION
 FILEFLAGSMASK  	VS_FFI_FILEFLAGSMASK
 FILEFLAGS      	(VER_PRIVATEBUILD|VER_PRERELEASE|VER_DEBUG)
 FILEOS         	VOS__WINDOWS32
-FILETYPE       	VFT_DLL
+FILETYPE       	VFT_APP
 FILESUBTYPE    	VFT2_UNKNOWN
 BEGIN
     BLOCK "StringFileInfo"
