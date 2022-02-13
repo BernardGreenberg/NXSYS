@@ -473,6 +473,9 @@
 		5BABBE7327B839D700AED491 /* nxvc.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = nxvc.rc; sourceTree = "<group>"; };
 		5BABBE7427B8A16400AED491 /* print.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = print.cpp; sourceTree = "<group>"; };
 		5BABBE7527B8A17F00AED491 /* nxldwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nxldwin.cpp; sourceTree = "<group>"; };
+		5BABBE7627B9655700AED491 /* Resources2022.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Resources2022.rc; sourceTree = "<group>"; };
+		5BABBE7727B9655700AED491 /* Resources2022.aps */ = {isa = PBXFileReference; lastKnownFileType = file; path = Resources2022.aps; sourceTree = "<group>"; };
+		5BABBE7827B9655800AED491 /* Resources2022.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Resources2022.h; sourceTree = "<group>"; };
 		5BAC92B419C78AE400673BDC /* BigYellowXView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BigYellowXView.h; sourceTree = "<group>"; };
 		5BAC92B519C84A9000673BDC /* WinMacCalls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinMacCalls.h; sourceTree = "<group>"; };
 		5BAC930B19C8FE7100673BDC /* TLEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TLEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1003,6 +1006,9 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5BABBE7727B9655700AED491 /* Resources2022.aps */,
+				5BABBE7827B9655800AED491 /* Resources2022.h */,
+				5BABBE7627B9655700AED491 /* Resources2022.rc */,
 				5BABBE7527B8A17F00AED491 /* nxldwin.cpp */,
 				5BABBE7427B8A16400AED491 /* print.cpp */,
 				5BABBE6227B7143200AED491 /* NXSYS */,

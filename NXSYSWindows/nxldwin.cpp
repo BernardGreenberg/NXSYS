@@ -61,7 +61,7 @@ static WNDPROC_DCL RelayGraphicsWindow_WndProc
 		case CmShowRelayCircuit:
 		    AskForAndDrawRelay(window);
 		    break;
-		default:;
+		default: break;
 	    }
 	    return 0;
 
@@ -129,7 +129,7 @@ void RelayShowString (const char *rnm) {
 
     if (!S_RelayGraphicsWindow && !CreateRelayGraphicsWindow())
 	return ;
-    if (!DrawRelayFromName ((const char *)rnm))
+    if (!DrawRelayFromName (rnm))
 	return ;
     PlaceDrawing(S_RelayGraphicsWindow);
     ShowWindow (S_RelayGraphicsWindow, SW_SHOWNORMAL);
@@ -229,11 +229,11 @@ static void ShowStateRelay (Relay * rly) {
 
 
 void AskForAndShowStateRelay (HWND win) {
-    char rnm [32];
-    if (RlyDialog (win, app_instance, rnm)) {
-	Sexpr s = RlysymFromStringNocreate (rnm);
+    auto p = RlyDialog(win, app_instance);
+    if (p.first) {
+	Sexpr s = RlysymFromStringNocreate (p.second.c_str());
 	if (s == NIL || s.u.r->rly==NULL) {
-	    usermsg ("No such relay: %s", rnm);
+	    usermsg ("No such relay: %s", p.second.c_str());
 	    return;
 	}
 	ShowStateRelay (s.u.r->rly);
@@ -241,9 +241,9 @@ void AskForAndShowStateRelay (HWND win) {
 }
 
 void AskForAndDrawRelay (HWND win) {
-    char rnm[32];
-    if (RlyDialog (win, app_instance, rnm))
-	RelayShowString (rnm);
+    auto p = RlyDialog(win, app_instance);
+    if (p.first)
+	RelayShowString (p.second.c_str());
 }
 
 void DraftsbeingCleanupForSystem() {
@@ -259,7 +259,7 @@ void DraftsbeingCleanupForOneLayout () {
 struct ListRelayStruct {
     std::vector<Relay *>Array;
     const Relay * Result;
-    char Title[64];
+    char Title[64]{};
 };
 
 typedef struct ListRelayStruct *pLRS;

@@ -3,7 +3,7 @@
 #include "traindlg.h"
 #include "ssdlg.h"
 //#include "appcomv.h"
-//#include "nxvc.rc"
+#include "nxvc.rc"
 
 #define VER_PRIVATEBUILD 0
 #define VER_COMPANYNAME_STR "Bernard Greenberg"
@@ -44,6 +44,7 @@ BEGIN
       MENUITEM "&Open...",      CmOpen
 #endif
       MENUITEM "&Reload\tCtrl+R",    CmReload
+      MENUITEM "File &Info...", CmFileInfo
       MENUITEM SEPARATOR
       MENUITEM "&Demo...",     CmDemo
 #ifdef NXOLE

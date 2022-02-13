@@ -8,15 +8,22 @@
 #include <time.h>
 #include "compat32.h"
 #include "commands.h"
+#include "resource.h"
 #include "ssdlg.h"
 #include "dialogs.h"
 #include "nxsysapp.h"
+#include <string>
 #include <vector>
 #include <winver.h>
+#include <regex>
 #include <cassert>
 #include "getmodtm.h"
 #include "StatusReport.h"
 #include "Resources2022.h"
+#include "nxgo.h"
+#include "WinApiSTL.h"
+#include "STLExtensions.h"
+#include "MessageBox.h"
 
 #define TIME_FORMAT_STR "%#d %b %Y %H:%M"
 //#include <getmodtm.h>
@@ -26,39 +33,37 @@ using std::string;
 extern struct tm far nxtime_time_;
 const int MaxFilesMenu = 20;
 
+static std::regex relay_regex("(\\d+\\w+)");
+
 static const char DemoFilter[] = "Interlocking Demos (*.xdo)\0*.xdo\0All Files (*.*)\0*.*\0\0";
 static const char ScriptFilter[] = "NXScript scripts (*.nxs)\0*.nxs\0All Files (*.*)\0*.*\0\0";
 static const char szFilter[] = "Track Layouts (*.tko)\0*.TKO\0Expr Code (*.TRK)\0*.TRK\0Both (.TRK/.TKO)\0*.TRK;*.TKO\0All Files (*.*)\0*.*\0\0";
 static const char *InterpFilter = "Interpreted Xlkgs (*.trk)\0*.TRK\0All Files (*.*)\0*.*\0\0";
 
-#define RELAY_CACHE_STRING_MAX 32
-#define RELAY_CACHE_LEN 40
+static std::vector<string> RelayCache;
 
-static int RCfirst = 0;
 
-typedef char tRelayCacheItem[RELAY_CACHE_STRING_MAX];
 
-static tRelayCacheItem RelayCache[RELAY_CACHE_LEN];
-
-static void SaveToRelayCache(HWND dlg, int item) {
-	HWND ctl = GetDlgItem(dlg, item);
-	for (int i = 0; i < RELAY_CACHE_LEN; i++) {
-		if (SendMessage(ctl, CB_GETLBTEXT, (WPARAM)i, (LPARAM)RelayCache[i])
+static void SaveToRelayCache(HWND dlg, int ctl_id) {
+	HWND ctl = GetDlgItem(dlg, ctl_id);
+	RelayCache.clear();
+	for (int i = 0; ; i++) {
+		int res = SendMessage(ctl, CB_GETLBTEXTLEN, (WPARAM)i, 0);
+		if (res == CB_ERR)
+			break;
+		std::vector<char>buf(res + 1);
+		if (SendMessage(ctl, CB_GETLBTEXT, (WPARAM)i, (LPARAM)buf.data())
 			== CB_ERR)
-			RelayCache[i][0] = '\0';
+			break;
+		else
+			RelayCache.push_back(buf.data());
 	}
 }
 
-
-static void RestoreFromRelayCache(HWND dlg, int item) {
-	if (!RCfirst++)
-		RelayCache[0][0] = '\0';
-	HWND ctl = GetDlgItem(dlg, item);
-	for (int i = 0; i < RELAY_CACHE_LEN; i++) {
-		if (RelayCache[i][0] == '\0')
-			break;
-		SendMessage(ctl, CB_INSERTSTRING, (WPARAM)-1, (LPARAM)RelayCache[i]);
-	}
+static void RestoreFromRelayCache(HWND dlg, int ctl_id) {
+	HWND ctl = GetDlgItem(dlg, ctl_id);
+	for (size_t i = 0; i < RelayCache.size(); i++)
+		SendMessage(ctl, CB_INSERTSTRING, (WPARAM)-1, (LPARAM)RelayCache[i].c_str());
 }
 
 
@@ -123,7 +128,6 @@ BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
 
 	return rsw ? GetOpenFileName(&ofn) : GetSaveFileName(&ofn);
 }
-#include <string>
 static std::string fixnl(std::string s) {
     std::string out;
     for (char c : s) {
@@ -147,6 +151,7 @@ DLGPROC_DCL status_report_DlgProc(HWND dialog, unsigned message, WPARAM wParam, 
 	    EndDialog(dialog, TRUE);
 	    return TRUE;
 	}
+	return FALSE;
     default:
 	return FALSE;
     }
@@ -190,7 +195,7 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 		SetDlgItemText(dialog, ABOUT_BUILD, sversion);
 		UINT cbLang{};
 		WORD* langInfo = nullptr;;
-		return TRUE;
+
 		VerQueryValue(vdp, "\\VarFileInfo\\Translation", (LPVOID*)&langInfo, &cbLang);
 		//Prepare the label -- default lang is bytes 0 & 1
 		//of langInfo
@@ -243,103 +248,111 @@ void NullDialog(HWND win, HINSTANCE instance, char* name) {
 
 DLGPROC_DCL CTDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message) {
-	case WM_INITDIALOG:
-		return TRUE;
-	case WM_COMMAND:
-		if (wParam == IDOK || wParam == IDCANCEL) {
-			SendMessage(G_mainwindow, WM_NXSYS_SELTRACK, (WPARAM)-1, 0L);
-			return TRUE;
-		}
-		else return FALSE;
-	case WM_CHAR:
-		wParam &= 0x7F;
-		if (wParam >= '1' && wParam <= '9')
-			SendMessage(G_mainwindow, WM_NXSYS_SELTRACK, wParam - '0', 0L);
-		return TRUE;
-	default:
-		return FALSE;
+    switch (message) {
+    case WM_INITDIALOG:
+	return TRUE;
+    case WM_COMMAND:
+	if (wParam == IDOK || wParam == IDCANCEL) {
+	    SendMessage(G_mainwindow, WM_NXSYS_SELTRACK, (WPARAM)-1, 0L);
+	    return TRUE;
 	}
+	else return FALSE;
+    case WM_CHAR:
+	wParam &= 0x7F;
+	if (wParam >= '1' && wParam <= '9')
+	    SendMessage(G_mainwindow, WM_NXSYS_SELTRACK, wParam - '0', 0L);
+	return TRUE;
+    default:
+	return FALSE;
+    }
+};
+
+static string LastRelayID;
+
+struct GetRelayStruct {
+    string init_val{};
+    string return_val{};
+};
+
+const string WHITESPACE = " \n\r\t\f\v";
+ 
+static string ltrim(const string &s)
+{
+    size_t start = s.find_first_not_of(WHITESPACE);
+    return (start == string::npos) ? "" : s.substr(start);
+}
+ 
+static string rtrim(const string &s)
+{
+    size_t end = s.find_last_not_of(WHITESPACE);
+    return (end == string::npos) ? "" : s.substr(0, end + 1);
+}
+static string trim(const string &s) {
+    return rtrim(ltrim(s));
 }
 
-static char * S_rvptr;
-static char LastRelayID[30] = "";
-
-static int FinishRelayFld(HWND dlg, unsigned cmd) {
-	int c = 0;
-	char * pp;
-	int textl = (WORD)SendDlgItemMessage
-	(dlg, cmd, WM_GETTEXT, 30, (LPARAM)S_rvptr);
-	S_rvptr[textl] = '\0';
-	char *p = S_rvptr;
-	while (isspace(*p)) p++;
-	while (isdigit(*p)) {
-		c = 1;
-		p++;
+static bool FinishRelayFld(HWND dlg, unsigned ctl_id, GetRelayStruct * grsp) {
+	string S = stoupper(trim(GetDlgItemText(dlg, ctl_id)));
+	if (!std::regex_match(S, relay_regex)) {
+	    MessageBoxS(0, "Not a relay string: " + S, "Dialog Field Value Error", MB_OK | MB_ICONEXCLAMATION);
+	    return false;
 	}
-	if (c == 0) goto bad;
-	c = 0;
-	while (isalnum(*p)) {
-		c = 1;
-		*p = toupper(*p);
-		p++;
-	}
-	if (c == 0) goto bad;
-	pp = p;
-	while (isspace(*p)) p++;
-	if (*p != '\0') {
-	bad:	char mbuf[100];
-		wsprintf(mbuf, "Not a relay string: %s", S_rvptr);
-		MessageBox(0, mbuf, "Dialog Field Value Error", MB_OK | MB_ICONEXCLAMATION);
-		return 0;
-	}
-	LPARAM lpString = (LPARAM)S_rvptr;
-	SendDlgItemMessage(dlg, cmd, WM_SETTEXT, 0, lpString);
-	int old_cbx = SendDlgItemMessage(dlg, cmd, CB_FINDSTRINGEXACT, -1, lpString);
+	const char* cs = S.c_str();
+	SendDlgItemMessage(dlg, ctl_id, WM_SETTEXT, 0, (LPARAM)cs);
+	int old_cbx = SendDlgItemMessage(dlg, ctl_id, CB_FINDSTRINGEXACT, -1, (LPARAM)cs);
 	if (old_cbx != CB_ERR)
-		SendDlgItemMessage(dlg, cmd, CB_DELETESTRING, (WPARAM)old_cbx, (LPARAM)0);
-	SendDlgItemMessage(dlg, cmd, CB_INSERTSTRING, 0, lpString);
-	*pp = '\0';
-	strcpy(LastRelayID, S_rvptr);
-	return 1;
+		SendDlgItemMessage(dlg, ctl_id, CB_DELETESTRING, (WPARAM)old_cbx, (LPARAM)0);
+	SendDlgItemMessage(dlg, ctl_id, CB_INSERTSTRING, 0, (LPARAM)cs);
+	grsp->return_val = S;
+	SaveToRelayCache(dlg, ctl_id);
+	return true;
 }
 
 
 DLGPROC_DCL relay_id_DlgProc(HWND hDlg, unsigned message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message) {
+    GetRelayStruct* grsp = nullptr;
+    switch (message) {
+
 	case WM_INITDIALOG:
-		SetDlgItemText(hDlg, IDC_RELAY_ID_EDIT, LastRelayID);
+		grsp = (GetRelayStruct*)lParam;
+		SetWindowLongPtr(hDlg, GWLP_USERDATA, lParam);
+		SetDlgItemText(hDlg, IDC_RELAY_ID_EDIT, grsp->init_val.c_str());
 		RestoreFromRelayCache(hDlg, IDC_RELAY_ID_EDIT);
 		return TRUE;
 	case WM_COMMAND:
+		grsp = (GetRelayStruct*)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 		if (wParam == IDCANCEL) {
 			EndDialog(hDlg, FALSE);
 			return TRUE;
 		}
-		else if (wParam == IDOK) {
-			if (!FinishRelayFld(hDlg, IDC_RELAY_ID_EDIT))
-				return TRUE;
-			SaveToRelayCache(hDlg, IDC_RELAY_ID_EDIT);
-			EndDialog(hDlg, TRUE);
+	else if (wParam == IDOK) {
+	    if (!FinishRelayFld(hDlg, IDC_RELAY_ID_EDIT, grsp))
 			return TRUE;
-		}
-		else if (NOTIFY_CODE(wParam, lParam) == CBN_SELENDOK) {
-			char buf[32]{};
-			int x = (int)SendDlgItemMessage(hDlg, IDC_RELAY_ID_EDIT, CB_GETCURSEL, 0, 0);
-			SendDlgItemMessage(hDlg, IDC_RELAY_ID_EDIT, CB_GETLBTEXT, x, (LPARAM)buf);
-			SetDlgItemText(hDlg, IDC_RELAY_ID_EDIT, buf);
-			return relay_id_DlgProc(hDlg, message, IDOK, 0);
-		}
-		else return FALSE;
+	    EndDialog(hDlg, TRUE);
+	    return TRUE;
+	}
+	else if (NOTIFY_CODE(wParam, lParam) == CBN_SELENDOK) {
+	    char buf[32]{};
+	    int x = (int)SendDlgItemMessage(hDlg, IDC_RELAY_ID_EDIT, CB_GETCURSEL, 0, 0);
+	    SendDlgItemMessage(hDlg, IDC_RELAY_ID_EDIT, CB_GETLBTEXT, x, (LPARAM)buf);
+	    SetDlgItemText(hDlg, IDC_RELAY_ID_EDIT, buf);
+	    grsp->return_val = buf;
+	    return relay_id_DlgProc(hDlg, message, IDOK, 0);
+	}
+	else return FALSE;
 	default:
 		return FALSE;
 	}
 }
 
-int RlyDialog(HWND win, HINSTANCE instance, char* buf) {
-	S_rvptr = buf;
-	return DialogBox(instance, "relay_id", win, (DLGPROC)relay_id_DlgProc);
+std::pair<bool, string> RlyDialog(HWND win, HINSTANCE instance) {
+    GetRelayStruct grs;
+    INT_PTR r = DialogBoxParam(instance, MAKEINTRESOURCE(IDD_RELAY_ID), win, (DLGPROC)relay_id_DlgProc, (LPARAM)&grs);
+    if (r > 0)
+	return std::pair <bool, string>(true, grs.return_val);
+    else
+	return std::pair<bool, string>(false, "");
 }
 
 static UINT ShowStopsLast;
@@ -393,10 +406,9 @@ HWND ChooseTrackDlg = NULL;
 
 
 void OfferChooseTrackDlg() {
-	ChooseTrackDlg = CreateDialog(app_instance, "ChooseTrack", G_mainwindow,
-		CTDlgProc);
+	ChooseTrackDlg = CreateDialog(app_instance, "ChooseTrack", G_mainwindow, CTDlgProc);
 	if (ChooseTrackDlg != NULL)
-		ShowWindow(ChooseTrackDlg, SW_SHOW);
+	     ShowWindow(ChooseTrackDlg, SW_SHOW);
 	SetFocus(G_mainwindow);
 }
 
@@ -409,7 +421,6 @@ void FlushChooseTrackDlg() {
 
 double VirtualScreenScale = 1.0;
 
-#include <nxgo.h>
 
 DLGPROC_DCL ScaleDlgProc(HWND hDlg, unsigned message, WPARAM wParam, LPARAM lParam)
 {

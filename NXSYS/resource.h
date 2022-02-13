@@ -10,6 +10,7 @@
 #define IDR_SWITCH_CONTEXT_MENU         506
 #define IDR_SWITCH_KEY_CONTEXT_MENU     507
 #define IDD_HELPDLG                     508
+#define IDD_RELAY_ID                    520
 #define IDC_RELAY_LIST                  1001
 #define IDC_DRAW_RELAY                  1002
 #define IDC_HELPDLG_TEXT                1003
