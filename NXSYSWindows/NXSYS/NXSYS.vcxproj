@@ -72,6 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <CustomBuildAfterTargets>Link</CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -99,6 +100,12 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <CustomBuildStep>
+      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Pages NXSYS.html
+robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Command>
+      <Outputs>$(OutputDir)Pages</Outputs>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -159,7 +166,6 @@
     <ClCompile Include="..\..\NXSYS\pswitch.cpp" />
     <ClCompile Include="..\..\NXSYS\rdtrkcmn.cpp" />
     <ClCompile Include="..\..\NXSYS\readsexp.cpp" />
-    <ClCompile Include="..\..\NXSYS\RelayGraphics.cpp" />
     <ClCompile Include="..\..\NXSYS\RelayLispSubstrate.cpp" />
     <ClCompile Include="..\..\NXSYS\relays.cpp" />
     <ClCompile Include="..\..\NXSYS\rlyindex.cpp" />
@@ -189,15 +195,24 @@
     <ClCompile Include="..\dialogs.cpp" />
     <ClCompile Include="..\getmodtm.c" />
     <ClCompile Include="..\helpdlg.cpp" />
+    <ClCompile Include="..\nxldwin.cpp" />
     <ClCompile Include="..\nxsldrly.cpp" />
     <ClCompile Include="..\PARSARGS.C" />
+    <ClCompile Include="..\print.cpp" />
     <ClCompile Include="..\rtracwin.cpp" />
     <ClCompile Include="..\timers.cpp" />
-    <ClCompile Include="..\WindowsMysteriousAbsences.cpp" />
     <ClCompile Include="..\WinReadResText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\nx.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\nx2.ico" />
+    <Image Include="..\relay.ico" />
+    <Image Include="..\tracetb.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
