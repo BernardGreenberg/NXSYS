@@ -222,7 +222,7 @@ void CompileTopLevelForm (Sexpr s, fs::path path, long filepos) {
         else if (fn == INCLUDE) {
             fs::path newpath (path);
             newpath.replace_filename(CADR(s).u.s);
-            FILE * ff = fopen (newpath.c_str(), "r");
+            FILE * ff = fopen (newpath.c_str(), "rb");
             if (ff == NULL)
                 RC_error (1, "Cannot open include file %s", newpath.c_str());
             CompileFile (ff, newpath);
@@ -314,7 +314,7 @@ int main (int argc, const char ** argv) {
     if (!inpath.has_extension())
         inpath.replace_extension(".trk");
 
-    FILE* f = fopen (inpath.c_str(), "r");
+    FILE* f = fopen (inpath.c_str(), "rb");
     if (f == NULL) {
         cerr << "Cannot open " << inpath << " for reading" <<endl;
         return 3;
