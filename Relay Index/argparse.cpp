@@ -12,18 +12,21 @@
 #include <algorithm>
 #include <filesystem>
 #include <memory>
+#include <cassert>
+#include <cstdarg> //va_arg
 
 #include "argparse.hpp"
+
+#if __cplusplus < 201700
+#error CPlusPlus level not up to C++17!
+#endif
 
 constexpr short MAX_ARGS = 32767;
 constexpr auto DIGITS = "0123456789";
 constexpr auto HELP_COLUMN_WIDTH = 27;
 
-using std::string;
-using std::vector;
-using std::map;
-using std::set;
-using std::unique_ptr;
+using std::string, std::vector, std::map, std::set, std::unique_ptr;
+namespace fs = std::filesystem;
 
 typedef std::initializer_list<std::string> strarray_ilist;
 
@@ -337,7 +340,9 @@ int argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, int i, int argc, 
 }
 
 ParsedArgs argset_i::Parse(int argc, const char ** argv) {
-    CommandName = std::__fs::filesystem::path(argv[0]).filename().string();
+    
+    assert (__cplusplus / 100 > 2014);
+    CommandName = std::filesystem::path(argv[0]).filename().string();
     ParsedArgs PA;
     int unnamed_count = 0;
     for (int i = 1; i < argc; i++) {
