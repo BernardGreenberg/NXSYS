@@ -16,8 +16,9 @@
     -->
 
 <head>
-<meta http-equiv=Content-Type content="text/html;charset=macintosh"></meta>
-<meta name=Title content="NXSYS Subway Signalling Simulator"></meta>
+<meta http-equiv=Content-Type content="text/html;charset=UTF-8">
+<meta name=Title content="NXSYS Subway Signalling Simulator">
+
 
 <style>
 .def {
@@ -112,11 +113,9 @@ function defleave() {
 }
 
 function loadtimer() {
-   var spans = document.getElementsByClassName("def");
-   for (var i = 0; i < spans.length; i++) { // can't use 'for in' for HTMLCollection!!@#
-        var x = spans[i]
-        x.setAttribute("onmouseenter", "defenter(this);");
-        x.setAttribute("onmouseleave", "defleave();");
+   for (span of spans = document.getElementsByClassName("def")) {
+        span.setAttribute("onmouseenter", "defenter(this);");
+        span.setAttribute("onmouseleave", "defleave();");
     }
 }
 
@@ -125,10 +124,6 @@ window.onmousemove = mmhandler
 
 </script>
 
-<style>
-
-</style>
-
 </head>
 
 <body lang=EN-US style='tab-interval:.5in;text-justify-trim:punctuation;max-width:800px'>
@@ -136,28 +131,38 @@ window.onmousemove = mmhandler
 <div class=WordSection1>
 
 <h1>NXSYS Subway Signalling Simulator</h1>
-<p><b>NXSYS</b> is a signalling and NX/UR Interlocking simulator application designed to the signalling and circuit styles and standards used in the New York City Transit System throughout the second half of the twentieth century.   It facilitates learning about classic relay-based signalling and switching by actually controlling moderately complex (simulated) arrangements of
-tracks and signals the way they are controlled in real life. <b>NXSYS</b>
-facilitates analysis and observation of, and experimentation with, signalling
+
+<p> <b><a name="cont_nx_xlkg"/>Status: 13 February 2022, all versions</b></p>
+
+<p><b>NXSYS</b> is a signalling and NX/UR Interlocking simulator application designed to the signalling and circuit styles and standards used in the New York City Transit System throughout the second half of the twentieth century.   It facilitates learning about classic relay-based signalling and switching by actually controlling moderately complex (simulated) arrangements of tracks and signals the way they are controlled
+    in real life. <b>NXSYS</b> facilitates analysis and observation of, and experimentation with, signalling
 behavior right down to the level of individual electrical relays. This document contains not just usage details of this application, but extensive information on all types of signals and related concepts as employed on the New York system (and, generally, many other rapid transit systems and other railroads).</p>
 
-<p><b>NXSYS</b> is now available in three versions:
+<p><b>NXSYS</b> is currently available in two versions:
   <ul>
-    <li><b>Version 1 for Microsoft&#x2122; Windows&#x2122;, from the 1990's</b>.  Version 1 features <a href="#scenarios">two didactic scenarios</a> which are not actual New York interlockings.  Version 1 can only represent straight, parallel tracks (not all of which need be the same length.) However, it includes the attractive game-like <a href="#threed">Cab View feature</a>, <a href="#scripts">Automation/OLE scripting</a>, and a logic compiler. It is no longer (2016) maintained or developed.</li>
-    <li><b>Version 2 for Microsoft&#x2122; Windows&#x2122;</b>, (2016).  Version 2 features arbitrary two-dimensional track geometry and <a href="#v2adv">two real New York interlockings</a> in addition to ports of the Version 1 didactic ones.  While Version 2 supports <a href="#scripts">Automation/OLE scripting</a>, it no longer includes the <a href="#threed">Cab View</a>. There is a <a href="#design">Track Layout editor (<b>TLEdit</b>)</a>, but no logic compiler.  Version 2 (either implementation) also includes several new interlocking features (e.g., <a href="#traffic">traffic levers</a>).</li>
-    <li><b>Version 2 for the Apple&#x2122; Macintosh&#x2122;/OS X</b>, &ldquo;<b>NXSYS/Mac</b>&rdquo;, (2014).  Compatible with Version 2 for Windows, it includes all the features of the latter except Automation/OLE scripting, which is Windows-specific. Correspondingly, it does not include Cab View, nor the logic compiler, but it does include <b>TLEdit</b>. <b>NXSYS/Mac</b> features a couple of additional frills, such as a new style of <a href="#fullsig">Full-Signal Displays</a>, and has its own help document (describing differences only) in its <b>Help</b> menu.</li>
+    <li><b>Version 2 for Microsoft&#x2122; Windows&#x2122;</b>, (2016, 2022–).  Version 2 features arbitrary two-dimensional track geometry and <a href="#v2adv">two real New York interlockings</a> in addition to ports of the Version 1 didactic ones. There is a <a href="#design">Track Layout editor (<b>TLEdit</b>)</a>, but no logic compiler.  Version 2 (either implementation) also includes several new interlocking features (e.g., <a href="#traffic">traffic levers</a>).</li>
+    <li><b>Version 2 for the Apple&#x2122; Macintosh&#x2122;/OS X</b>, &ldquo;<b>NXSYS/Mac</b>&rdquo;, (2014–).  Compatible with Version 2 for Windows, including <b>TLEdit</b>. <b>NXSYS/Mac</b> features a couple of additional frills, such as a new style of <a href="#fullsig">Full-Signal Displays</a>, and has its own help document (describing differences only) in its <b>Help</b> menu.</li>
     </ul>
-  Version 1 and Version 2 scenario files (<b>.trk</b>) are not compatible, although source files defining relay logic are compatible.  Scenario definition files are completely compatible, identical, between Version 2 for Windows and <b>NXSYS/Mac</b>.  Neither Version 2 implementation can load Version 1 compiled interlockings (<b>.tko</b>); modern processors are fast enough to obviate them.
+  Version 1 is no longer available and no longer supported.  Its interlocking sources are not supported.  Its attractive Cab View feature is not available in Version 2, because the problem of simulating an arbitrary 3-D world credibly and attractively is too large.  There is no more relay compiler; modern processors are fast enough to obviate it.
   </p>
+  <p>The OLE scripting (NXCTL/NXScript) system has been retired.  No one, including the author, ever expressed enthusiasm for it, and it is difficult to test and maintain.</p>
+<p>
+<p>There are three relevant World Wide Web pages:</p>
+<ul>
+    <li><a href="https://BernardGreenberg.com/Subway">https://BernardGreenberg.com/Subway</a> on my personal site.  This is the official page, and where important news and new versions will be announced. This is currently the official download site.  There are YouTube demo videos cited there.</li>
+    <li><a href="https://github.com/BernardGreenberg.com/NXSYS">https://github.com/BernardGreenberg.com/NXSYS</a>, the now-official source repository for both versions, promised to be buildable and runnable on both systems.  I don’t know right now if I will post executables there. This site is most likely to survive me.</li>
+    <li><a href="https://www.nycsubway.org/wiki/NXSYS,_Signalling_and_Interlocking_Simulator">https://www.nycsubway.org/wiki/NXSYS,_Signalling_and_Interlocking_Simulator</a> on nycsubway.org, which was the first download home of this software.</li>
+    </ul>
 
-Please check the <b>NXSYS</b> World Wide Web page (<b><a href="https://www.nycsubway.org/wiki/NXSYS,_Signalling_and_Interlocking_Simulator">https://www.nycsubway.org/wiki/NXSYS,_Signalling_and_Interlocking_Simulator</a></b>) regularly for updates and bug fixes.</span>  Please also visit the containing site, <a href="https://www.nycsubway.org/wiki/Subway_Signals:_A_Complete_Guide">Subway Signals: A Complete Guide</a>, by this author, for an alternative introduction to (classic) New York City Transit signalling, part of the vast, wonderful <a href="https://www.nycsubway.org">nycsubway.org</a> of David Pirmann (with many other contributors).</p>
+<p>Please also visit <a href="https://www.nycsubway.org/wiki/Subway_Signals:_A_Complete_Guide">Subway Signals: A Complete Guide</a>, by this author, for an alternative introduction to (classic) New York City Transit signalling, part of the vast, wonderful <a href="https://www.nycsubway.org">nycsubway.org</a> of David Pirmann (with many other contributors).</p>
 
-<p>Conditions of use, copyright/trademark notices, and credits, may be
-    found in <a href="#credits">Section 6.0</a></span></p>
+<p>Conditions of use, copyright/trademark notices, and credits, may be found in <a href="#credits">Section 6.0</a></span></p>
 
 <p><u><span style="color:#800">Note that <b>Command</b> is used on the Mac almost everywhere <b>control</b> is written below (the default assumption being MS-Windows), as is common on Windows applications ported to the Mac.</u></p>
+
+<p><span style="font-size:200%">Note that <span class="def">azure text</span> can be hovered over to pop up definitions of the terms so highlighted.</span></p>
  
-<p> <b><a name="cont_nx_xlkg"/>Status: 13 February 2022, all versions</b></p>
+
 <a href="#introduction">1. Introduction</a> 
 <div style="padding-left:.5in">
 <a href="#definitions">1.1 Definitions</a><br/>
@@ -174,8 +179,6 @@ at top level)<br/>
 <a href="#menu">2.0 Top Level (application) Menu</a><br/>
 <a href="#demos">2.1 Demo system</a><br/>
 <a href="#trains">2.2 Train system</a><br/>
-<a href="#threed">2.3 3-D Cab View Graphics (Windows V1 only)</a><br/>
-<a href="#scripts">2.4 Scripting and OLE Automation</a><br/>
 </div>
 <br/>
 <a href="#ifeat">3. Signalling and Interlocking Features</a><br/>
@@ -205,7 +208,9 @@ at top level)<br/>
 <a href="#islington">4.2 Islington (Toronto) Interlocking</a><br/>
 <a href="#v2adv">4.3 Atlantic and Myrtle &mdash; Advanced Version 2
   Real-Life NYC scenarios</a><br/>
-<a href="#design">4.4 Designing Scenarios &mdash; NOT</a><br/>
+<a href="#240th">4.4 240<sup>th</sup> St. Broadway IRT Interlocking</a><br/>
+<a href="Duckburg">4.5 Duckburg (tutorial) Interlocking</a><br/>
+<a href="#design">4.6 Designing Scenarios</a><br/>
 </div>
 <br/>
 <a href="#relays">5. Relays and Relay Logic</a> (&ldquo;Can safely ignore
@@ -231,7 +236,7 @@ because the controls of these items are so interlocked that only safe sequences
 of moves and states are possible. The controls appear on a &ldquo;panel&rdquo; or &ldquo;interlocking machine&rdquo; in a <b>tower,</b> operated by a human <b>tower operator</b> (formerly &ldquo;towerman&rdquo;). The panel looks like a model of the
 tracks being controlled with buttons, switch keys and lights on it. In earlier
 times, a mechanical frame with actual mechanical <span class="def" dref="#DEF_lever">levers,</span>
-physically interlocked, was employed. In modern interlockings, the physical buttons and switch keys are not interlocked, but their effects and operation are restricted to safe moves by electrical logic.</p>
+physically interlocked, was employed. In modern interlockings, the physical buttons and switch keys are not mechanically interlocked, but their effects and operation are restricted to safe moves by electrical logic.</p>
 
 <p>Interlocking is a kind of counterpoint for subway tracks; each track
 adds about as much complexity as a line of a fugue. The game is to sufficiently understand the
@@ -242,12 +247,12 @@ tower operator, to be able to operate the the interlocking at all.</p>
 the panel, but all the logic implemented in electromechanical <a href="#relays">relays,</a> relay by relay. Relays are still used in many interlockings worldwide as well as in New York. Before the twenty-first century, all interlocking logic in New York was relay logic, and most remains so.</p>
 
 <p>What you will see when you read in a file is the &ldquo;panel&rdquo; of a
-moderate-size interlocking under your control, representing of 3500 feet of an
-imaginary (or real, in some scenarios) 4-track subway line at a time.</p>
+moderate-size interlocking under your control, representing hundreds (or thousands) of feet of an
+imaginary (or real, in some scenarios) subway line.</p>
 
 <p>The track board is designed to be as similar as possible to a real
 &ldquo;NX/UR&rdquo; panel, the kind in use in New York City since the
-50's and still being installed, an object of <a href="#author">the
+1950s and still being installed, an object of <a href="#author">the
 author's</a> intense intellectual concentration during his youth. You can move imaginary trains around
 with the <a href="#mouse">mouse</a>, control the
 &ldquo;traffic lights&rdquo; (i.e., signals) and track routes, and see how they all
@@ -255,14 +260,12 @@ interact.</p>
 
 <p><b>NXSYS</b> does not simulate any particular interlocking, but rather,
 &ldquo;runs&rdquo; simulations of particular interlockings read in from files
-defining them. Currently, four such <a href="#scenarios">sample interlockings</a> are
-supplied (only two in Version 1). These files define the track
-and signal layout of the interlocking, and all its logic as traditional <a href="#relays">relay-logic circuitry.</a></p>
+defining them. Currently, five such <a href="#scenarios">sample interlockings</a> are
+supplied. These files define the track and signal layout of the interlocking, and all its logic as traditional <a href="#relays">relay-logic circuitry.</a></p>
 
 <p>A major reward of <b>NXSYS</b> is much like that of flight
-simulators: learning the rules of
-interlocking hands-on without worsening transportation chaos in New York City
-or entering upon tracks or other dangerous terrain. The interlockings implemented in <b>NXSYS</b>,
+simulators: learning the rules of interlocking hands-on without worsening transportation
+chaos in New York City or entering upon tracks or other dangerous terrain. The interlockings implemented in <b>NXSYS</b>,
 like any other NX interlockings, also provide the additional reward of watching
 them figure out how to work themselves in a safe order in response to your
 routing requests.</p>
@@ -274,11 +277,6 @@ what NXSYS implements. <b>UR</b> is
 &ldquo;Union Route,&rdquo; the trademark of the Union Switch and Signal company
 (which signaled the IRT) for their NX interlocking implementation, which is
 slightly different than the GRS (BMT) &ldquo;NX&rdquo; implementation.</p>
-
-<p><span style="color:#AAA">(Windows Version 1 only) <b>NXSYS</b> includes a <a href="#threed">three-dimensional view
-window</a> which views the track as the train operator would see it, as all
-signals and other apparatus respond to your operation of the interlocking
-panel.</span></p>
 
 <p>As the further use non-technical language such as &ldquo;traffic
 lights&rdquo; is undesirable, please proceed to <a href="#definitions">Definitions</a>
@@ -464,7 +462,7 @@ such as <b>NXSYS</b>, levers are imaginary and simulated by <a href="#relays">re
        <td>switch         A
 switch, when viewed from a certain track in a certain direction, which merges
 movement into that track in that same direction. If approached in the opposite direction
-on the same track, it would be a facing-point switch.<br/><img align='right' src='HelpImages/fpsw.bmp'/></span>
+on the same track, it would be a facing-point switch.<br/><img align='right' src='HelpImages/fpsw.bmp'/>
        </td>
     </tr>
 
@@ -679,8 +677,7 @@ See <a href="#auxkeys">the section on them.</a></span>
 and one meaningful command option. You must read in the definition of
 an <span onmouseenter="defenter(this);" onmouseleave="defleave();"
 class="def" dref="#DEF_xlkg">interlocking</span>, which includes track
-and signal layout and control logic, from files. We supply the definitions of four interlockings <span
-style="color:#0A0">(two in Version 1)</span>with <b>NXSYS.</b>
+and signal layout and control logic, from files. We supply the definitions of five interlockings with <b>NXSYS.</b>
 Please see <a href="#scenarios">Supplied Interlocking Scenarios</a>
 for a discussion of them. We recommend <a href="#progman">Progman St.</a> for those new
 to this program or new to the subject matter.</p>
@@ -692,13 +689,6 @@ argument on the Windows command line in a start up icon for
 whatever other files it needs from its folder.</p>
 
 <p>Now you will see the control panel for <a href="#progman">Progman St. Interlocking.</a> Proceed with caution to <a href="#whatsee">What you see before you.</a></p>
-
-<p><span style='color:#AAA'>(Windows Version 1 only) If you have the proper software components available and locatable
-(see <a href="#threed">the section on this feature</a> for
-more explanation and information), you will also see a three-dimensional view
-of the interlocking. As this is an
-optional feature &mdash; see <a href="#threed">3-D Cab View window</a>
-for more information about it.</span></p>
 
 <p>If you have not seen the demo system, try opening <b>demo1-Progman.xdo</b>
 from the </span><b>Demo</b> item of the <b>File</b><span> menu. See <a href="#demos">Demo System</a> for more
@@ -1023,9 +1013,8 @@ commands. Most are disabled if no interlocking is loaded.</span></p>
 <tr class="spacer" height="20px"></tr>
 
   <tr><td><b>File</b></td><td>Open</td><td>Reads
-    in the definition of an interlocking from an <span style='color:#AAA'>(Version 1 only )interlocking definition file,
-usual suffix <b>.tko</b>, consting of <a href="#relays">relay</a>
-code and layout directives compiled by the Relay Compiler, or</span> &ldquo;Interpreted&rdquo; interlocking source file, suffix <b>.trk</b>, each interlocking in is own folder (interlockings comprise many source files). See the <a href="#scenarios">Interlocking
+    in the definition of an interlocking from an interlocking definition file,
+usual suffix <b>.trk</b>. Each interlocking in is own folder (interlockings comprise many source files). See the <a href="#scenarios">Interlocking
 Scenarios</a> for the correct names of files for each version and the
 lowdown on creating your own scenarios.</td></tr>
 
@@ -1033,7 +1022,7 @@ lowdown on creating your own scenarios.</td></tr>
 <tr><td></td><td>Reload</td><td>Asks
 for confirmation, and re-initializes the currently-loaded interlocking from the
 current interlocking definition file. This resets its state to &ldquo;as it was in the beginning&rdquo;. This can also be used to debug changes
-to interlocking definitions or simply to reset the layout. See also </span><b><span>1 (Last interlocking pathname)</span></b><span> below on this menu to reattempt to load an interlocking that has aaafailed to load.</td></tr>
+to interlocking definitions or simply to reset the layout. See also </span><b><span>1 (Last interlocking pathname)</span></b><span> below on this menu to reattempt to load an interlocking that has failed to load.</td></tr>
 
 
 <tr><td></td><td>Demo</td><td>brings
@@ -1062,11 +1051,6 @@ end of the set. The state of the
 contacts will reflect the state of the relays at the time it is invoked. Works only if an interpreted (<b>.trk</b>)
 interlocking is loaded. See <b>Print Logic File.</b></td></tr>
 
-<tr><td></td><td><b>Print Logic File</td><td> <span style='color:#AAA'> (Version 1 only) Same as <b>Print Logic,</b> but tries to work
-when a compiled (<b>.tko</b>) interlocking is loaded by asking you to supply
-the corresponding source (<b>.trk</b>), and prints the <a href="#relays">relays</a> in the order they are defined in that file, but with
-their contact states as actually reflected in the state of the interlocking at
-the time it is invoked.</td></tr>
 
 
 <tr><td></td><td>Exit</td><td>     Closes
@@ -1180,37 +1164,6 @@ will not be affected. &nbsp;<span style='color:#900'>This feature is not availab
 
 
 <tr><td></td><td>Show all</td><td>restores all minimized train dialogs to visibility.&nbsp;<span style='color:#900'>This feature is not available on the Macintosh.<span></td></tr>
-
-<tr class="spacer" height="20px"></tr>
-
-<tr><td><b>Cab View</b></td><td><b></td><td>These
-commands pertain to the <a href="#threed">3-D Cab View Window.</a>
-Most of the commands for controlling that window appear on its own menu; these
-commands deal with calling it up, removing it, and coordinating it.</span>&nbsp;<span style='color:#900'>This feature is not available in Version 2, or on the Macintosh.</span></td></tr>
-
-
-<tr><td></td><td>Show Cab View</td><td>Calls
-up the cab view window, bringing it to the front and making it the input focus
-(typed commands will be directed to it.) If the Cab View and 3-D graphics DLL's (dynamically linked libraries,
-the software needed to use the Cab View Window) have not yet been loaded, they
-will be loaded, or an appropriate diagnostic issued. If the window has already been created,
-but is closed or hidden, it will be opened and displayed.</td></tr>
-
-
-<tr><td></td><td>Unload Cab View</td><td>Closes
-the cab view window and unloads the cab view DLL's, allowing deleting or
-replacing them. Although the cab
-view can be called back with <b>Show Cab View,</b> this is not the best way to
-merely hide or disable the cab view; to do that, double-click the system icon
-on the Cab View Window, or choose <b>File|Hide</b> on its own menu.</td></tr>
-
-
-<tr><td></td><td>Auto Engage Trains</td><td>This
-item (which can be checked on or off, it is on by default) controls whether <a href="#trains">trains</a> automatically &ldquo;engage&rdquo;
-the cab view window, when they are the first and only active train created. If enabled, the cab view window will
-automatically &ldquo;see&rdquo; out of the window of the first train created when
-there are no other trains present (i.e., it will &ldquo;remain aboard&rdquo; that
-train unless reengaged to another).</td></tr>
 
 <tr class="spacer" height="20px"></tr>
 
@@ -1417,7 +1370,7 @@ the interlocking.</p>
 obey the signals and move through the interlocking. While <b>NXSYS</b> cannot create real
 trains in a simulated world, it can, however, simulate them. But like many a real tower operator, the only
 evidence of the &ldquo;trains&rdquo; that you will see on the panel is a line of
-red (<a class='def' dref='#DEF_occ'>occupied</a>) lights. The fun is tripled when <a href="#threed">Cab View Graphics</a> are available, granting you not just the hands but the eyes of tower operator and train operator at once.</p>
+red (<a class='def' dref='#DEF_occ'>occupied</a>) lights.</p>
 
 <p>You create a train by choosing the <b>Trains|New</b> or <b>Trains|New (stopped)</b><span> menu item; choose
 between them as according to whether you want the train to start out moving
@@ -1505,310 +1458,9 @@ train move over them, bring in the next train, hold trains at signals, turn
 trains around at terminals, and so on, all in parallel, just like at a real
 tower.</p>
 
-<p>If you have the requisite software for the <a href="#threed">Cab View window</a> present, the checkbox <b>Engage Cab View</b>
-appearing at the bottom of the train dialog can be used to see the view out the
-front window of any train. Simply
-click that checkbox &ldquo;on&rdquo; for any train which is active, and the cab
-view window will view out that train's front window, moving with it over the
-interlocking. NXSYS Development
-apologizes for the lack of smoothness of the animation: this is being worked
-on. Checking that box off will
-disengage the cab view, as will engaging it on any other train. If the main menu item <b>Cab View|Auto Engage Trains</b> is on, the first train created when no trains are active will
-automatically engage the cab view. Please see <a href="#threed">Cab View Window</a>
-for more information.</p>
-
 <br clear=all style='page-break-before:always'>
 
-
-<a name='threed'/><h2>2.3 Three-Dimensional &ldquo;Cab View&rdquo; Graphics</h2>
-<h3 style='color:#D00'>Cab View is not available in Version 2 NXSYS, including NXSYS / Mac</h3>
-
-<p>If the proper software is present and locatable, NXSYS presents a <b>Cab
-View Window</b>, which displays a realistic, three-dimensional view of whatever
-interlocking you have loaded. The
-view can be positioned to either direction on any point on any track, and
-appears to be from the train operator's window (right of track center, about half way
-up the tunnel height). All the tracks, switches, signals and <a href="#stops">stops</a> are displayed in accurate color
-with accurate markings, and more importantly, display whatever aspect or
-position is required of them by the state of the interlocking, and change in
-real time. Here is an image of it.</p>
-
-<img align='center' src='HelpImages/nxgl2.bmp'/>
-
-<p>If the Cab View Window is present (see below), you can observe it at
-any time, and change its viewpoint at will, as you operate the interlocking you
-have loaded. It is extremely
-convenient to watch several signals in spatial proximity as you manipulate
-signals; the effect is quite realistic. Commands for operating the Cab View Window are available as menu items,
-toolbar buttons, and keystrokes, although, as with any other Windows(tm)
-application, that window must be &ldquo;foreground&rdquo; (blue title bar) to
-receive keyboard input. The Cab
-View Window has its own help text documenting its commands, which can be
-accessed by typing F1 to it, or clicking the help toolbar button or calling it
-up from that window's command menu.</p>
-
-<p>Being in the Cab Window creates the feeling of being on a train:
-with sufficient CPU resources, you can hold down the &ldquo;uparrow&rdquo; key
-and move forward smoothly over tracks, creating an animation. If you do this, you will actually turn
-over switches, rotating your view and switching tracks and rotating back. You can back up. You can turn around. The animation effect approaches &ldquo;flight simulator&rdquo; quality in this mode.</p>
-
-<p>When you navigate the interlocking with the Cab View Window, you are
-not a train, but a &ldquo;virtual presence&rdquo; &mdash; the interlocking (i.e., the
-track circuits) does not know &ldquo;you are there.&rdquo; This feature may be added in the
-future. Perhaps what you are expecting is this next feature:</p>
-
-<p><b>Cab View and <a href="#trains">&ldquo;Trains&rdquo;</a></b></p>
-
-<p>Cab View may be used in conjunction with the <a href="#trains">&ldquo;train system.&rdquo;</a> If the menu item <b>Cab View|Auto Engage
-Trains</b> is checked, whenever a train is created and there are no other
-trains &ldquo;alive&rdquo;, the &ldquo;virtual train operator&rdquo; whose eye is the Cab
-View window will board that train, and move with that train, seeing exactly
-what a train operator on that train would see <b>except that other trains themselves
-are not (yet) modelled/visible.</b> The train operator can be &ldquo;let off the train&rdquo; at any time by
-clicking the X out of the checkbox <b>Engage Cab View</b> on that train's
-control dialog, and put back on that train, or any other train, by checking
-that box on the control dialog of whatever train you want to engage or
-disengage (i.e., want the &ldquo;3-D graphics train operator&rdquo; to board or
-disembark from). You can engage any train that is alive at any time, the currently engaged train if any will disengage automatically.</p>
-
-<p>The quality and smoothness of the animation have a long way to go;
-the simultaneous computational resources required skew both train kinematics
-and the smooth interlocking navigation animation available from the Cab View
-window. Please expect improvement
-here; watch this space. If it is
-too disconcerting, simply click off <b>Auto Engage Trains.</b></p>
-
-<h3>When does the Cab View Window come up?</h3>
-
-<p>The Cab View window can be called up at any time by use of the main
-menu item <b>Cab View|Show Cab View.</b> If you do not have the requisite DLL's (&ldquo;.DLL&rdquo; dynamically
-linked library files) available, the situation will be diagnosed at that time
-and recommendations made. If you
-not have this software, this diagnosis and complaint will not be issued at any
-other time; <b>NXSYS</b> will continue to function without the Cab View Window
-without complaint.</p>
-
-<p>If the proper software is available, the Cab View Window will come
-up, if it is not already up, any time an interlocking is first loaded or
-reloaded. Also, if the <b>Auto
-Engage Trains</b> feature described above is enabled, it will come up whenever
-a &ldquo;first train&rdquo; is created (see above). If you click on the <b>Engage Cab View</b>
-checkbox on any train's control dialog, the Cab View will come up if not
-already up.</p>
-
-<p>Any of these actions which call up the cab view window also bring it
-to the foreground and make it the input focus.  Since <b>NXSYS</b> is almost
-entirely mouse-operated, this should not present a problem. Except for <b>Cab View|Show Cab View</b>,
-none of these actions will fail or even diagnose an error if the proper software
-is not locatable.</p>
-
-<h3>System Hardware and Software Issues</h3>
-
-<p>The Cab View Window is implemented using Microsoft's &ldquo;Open
-GL&rdquo; 3-D Graphics Library (for Windows NT/2000(tm) and Windows 95/98(tm))
-implementing the standard designed and promulgated by Silicon Graphics, Inc.</p>
-
-<p>Performance with an 8-bit video card is tolerable, but not as good
-as with a 16- or 24-bit card. The
-8-bit (256 color) cards require quite a bit of extra computation and
-manipulation.</p>
-
-<p>In any case, the calculations to compute the cab view scene are
-substantial, and although every attempt is being made to optimize them,
-currently, performance, as measured by how many views can be computed per unit
-time, may be unacceptable on slower machines. Cab View is barely usable, and not at
-all for animation, on machines lacking hardware floating point.</p>
-
-<p>The Cab View Software is distributed as a DLL because it is optional
-(<b>NXSYS</b> will work correctly without it), subject to its own development,
-and for the reason that the absence of the Open GL system it requires would
-prevent execution of <b>NXSYS</b> were it not a DLL. This DLL, <b>NXGLVIEW.DLL</b>, which is
-in the standard distribution zipfile for <b>NXSYS,</b> must be present and
-locatable (preferably in <b>NXSYS'</b> own directory) for the Cab View feature
-to function.</p>
-
-<p>The required Open GL software is a built-in part of Windows NT and
-Windows 2000. The Windows 95(tm)
-DLL's for Open GL, which differ from Windows NT/2000's, are not distributed
-with Windows 95 (tm) (but will be soon), are available for free from several
-sources, one of which is Microsoft (<b>http://www.microsoft.com</b>), and
-another of which is the <b><u>NXSYS</u></b><a href="#webaddr"> web site.</a>. You may already have them. These DLL's,
-as well as the Cab View DLL, must be in <b>NXSYS'</b> directory, the Windows
-System directory, or any place else in the search path where <b>NXSYS</b> can
-find them when it tries to call up the Cab View Window. Open GL is not available for Win32s
-(Windows 3.1/3.11 32-bit extensions).</p>
-
-<br clear=all style='page-break-before:always'>
-
-<a name='scripts'/><h2>2.4 Scripting and OLE Automation<br/></h2><h3 style='color:#D00'>OLE Automation and NXSCRIPT scripting are not available in NXSYS / Mac</h3>
-
-<p><b>OLE Automation</b> provides for the control of <b>NXSYS</b>
-interlockings by &ldquo;scripting&rdquo;, which means the creation and running of
-&ldquo;scripts&rdquo;, such as those facilitated by the <a href="#demos">Demo system</a>, but in <b>NXScript</b>, a more user-friendly
-language than the Demo system's Lisp. For example:</p>
-
-<blockquote><span style='font-family:monospace'>
-    switch 3 n<br/>
-    wait 1000<br/>
-    initiate 26<br/>
-    exit    16</span></blockquote>
-
-<p><b>NXSYS</b> now includes a command, <b><u>File|Command
-Dialog</u></b>, which pops up a dialog that allows you to enter such
-commands one at a time and observe their effect, i.e., run <b>NXSYS</b> from
-the keyboard. Also provided is a command-line application, <b>nxctl</b>, into which such commands can be typed one at a time, or read from a file, to operate <b>NXSYS</b> from the keyboard
-by typed (or stored) commands from another process.</p>
-
-<p>OLE Automation allows other programs, notably in &ldquo;scripting
-languages&rdquo; such as Microsoft Visual Basic(tm), Java/Javascript, and Perl,
-to control <b>NXSYS</b> interlockings by looking at the model board and
-pressing buttons, just as would a real tower operator, or, for that matter, a
-&ldquo;remote (CTC) tower&rdquo; doing the exact same thing electrically. These programs (&ldquo;Automation Controllers&rdquo;) can be written and run without changing <b>NXSYS</b> and
-without access to the <b>NXSYS</b> sources. Automation controllers can also create,
-destroy, and control <b>NXSYS</b>' simulated trains. What is more, the source for the
-aforementioned program, <b>nxctl</b>, is provided as an example of an <b>NXSYS</b>
-Automation Controller written in C++.</p>
-
-<p>Those who are designing or debugging interlockings, or attempting to
-learn the design logic of the supplied ones, can issue script commands such as</p>
-
-<p><span style="font-family:monospace"> <b>
-    verify !20AS !4336NS</b>   ;Makesure S/B locking dropped</span></p>
-
-<p>to verify that the state of the system is as designed at given points in scripts.</p>
-
-<p>In order to use <b>nxctl</b>, or control <b>NXSYS</b> from another
-automation controller, you must tell Windows(tm) how to find <b>NXSYS</b> by
-&ldquo;registering&rdquo; it as an OLE Automation Server.  In recent versions of Microsoft Windows,
-<b>you must be an Administrator to do this</b>.  To do it, first make
-sure that <b>nxsys32.exe</b> or <b>nxv2.exe</b> is in its &ldquo;permanent place&rdquo;, the place
-where it can later be found, and then issue the command<</p>
-
-<p><span style='color:#AAA'>  <b>nxsys32/register</b> (Windows Version 1)</span>
-</br><b>nxv2/register</b> (Windows Version 2)</p>
-
-<p>This command should issue a message confirming the OLE
-&ldquo;registration&rdquo; of <b>NXSYS</b> into the Registry on that
-machine. This only has to be done once. To unregister (there is no
-real reason why you should want to do this), merely <b>/unregister.</b> While you do not have to do this unless you intend to use <b>nxctl.exe</b> or control <b>NXSYS</b> from another
-program, it cannot hurt to do it in any case.</p>
-
-<p>The program <b>nxctl.exe</b> provides a simple command line
-interface to <b>NXSYS</b>. You can
-issue scripting commands from it, either one at a time on the <b>nxctl</b>
-command line, in an interactive &ldquo;shell-like&rdquo; loop, or run a whole
-script from a file. The script
-commands can open or close <b>NXSYS</b> (<b>nxctl</b> starts one up
-automatically if there is not one running), load up an interlocking, initiate
-or cancel a signal, punch in an exit, occupy or vacate a track section, move a
-switch via its auxiliary key, or even set up a route between a signal and an
-exit in one command. <b>nxctl</b>
-issues interlocking-relevant diagnostics usually generated by <b>NXSYS</b>.</p>
-
-<p>Here are some sample <b>NXScript</b> commands.</p>
-
-<blockquote><span style='font-family:monospace'>
-    load Progman\progman.trk ;load an interlocking<br/>
-    i 20                     ;initiate signal 20<br/>
-    c 20                     ;cancel signal 20<br/>
-    r 20 34                  ;line route from 20 to 34<br/>
-    a 20                     ;show aspect of signal 20<br/>
-    w 7 r                    ;key switch 7 reverse<br/>
-    w 7 n hold               ;switch 7 normal, hold called<br/>
-    c all                    ;cancel all signals<br/>
-    quit                     ;close NXSYS</blockquote>
-        
-etc.</span></p>
-
-<p>All commands have long names and some have short names, too (see the
-table below). A good way to experiment with <b>NXSYS</b> scripting is to make a
-small Command Prompt window near the bottom of the screen, run <b>nxctl shell</b>,
-and type <b>NXScript</b> commands at it one at a time and observe their
-effects.</p>
-
-<p>A small <b>NXScript</b> file for <a href="#progman">Progman
-St.</a>, <b>test1.nxs</b>, is included. Change the interlocking pathname inside of it to whatever is correct to locate Progman St. at your site.</p>
-
-<p>The current scripting language repertoire is as follows. This printout is available by invoking <b>nxctl</b>
-with no arguments. Here, <b>{arg}</b>
-means an optional argument. Most of
-these commands are the same as <b>NXSYS</b> menu items or the standard
-interactive interlocking controls documented in this helpfile.</p>
-
-<p>(Blank lines and text after ; is ignored (except as part of <b>say</b> text))</p>
-<blockquote>
-
-    <table>
-    <tr><td><tt>FILE path</tt></td><td>Run commands from <tt>path</tt></td></tr>
-    <tr><td><tt>QUIT</tt></td><td>Close the <b>NXSYS</b> window and app.</td></tr>
-    <tr><td><tt>RESETALL</tt></td><td> Reset all signals and vacate track (leave switches)</td></tr>
-    <tr><td><tt>LOAD path</tt></td><td>Load up an interlocking (or <tt>L</tt>)</td></tr>
-    <tr><td><tt>INITIATE nnn</tt></td><td>Initiate at signal <tt>nnn</tt> (or <tt>I</tt>)</td></tr
-    <tr><td><tt>CANCEL nnn</tt></td><td>Cancel signal <tt>nnn</tt> (or <tt>C</tt>)</td></tr>
-    <tr><td><tt>CANCEL ALL</tt></td><td>Cancel all signals</td></tr>
-    <tr><td><tt>FLEET nnn</tt></td><td>Fleet and try to initiate signal <tt>nnn</tt></td></tr>
-    <tr><td><tt>UNFLEET nnn</tt></td><td>Cancel fleeting on signal <tt>nnn</tt></td></tr>
-    <tr><td><tt>ASPECT nnn</tt></td><td>Show aspect of signal <tt>nnn</tt> (or <tt>A</tt>)</td></tr>
-    <tr><td><tt>RESETAPPROACH nnn</tt></td><td>(or <tt>RESETAS</tt>) Reset signal <tt>nnn</tt>'s approach locking</td></tr>
-    <tr><td><tt>RESETAPPROACH</tt></td><td>Reset all timing-out approach and route locking</td></tr>
-    <tr><td><tt>FSD nnn {hide}</tt></td><td>Show (hide) full signal disp nnn window</td></tr>
-    <tr><td><tt>EXIT xxx</tt></td><td>Press exit button <tt>xxx</tt> (or <tt>X</tt>)</td></tr>
-    <tr><td><tt>OCCUPY ttt</tt></td><td>Occupy track section <tt>ttt</tt> (or <tt>O</tt>)</td></tr>
-    <tr><td><tt>VACATE ttt</tt></td><td>Vacate track section <tt>ttt</tt> (or <tt>V</tt>)</td></tr>
-    <tr><td><tt>SWITCH nn P {hold}</tt></td><td><tt>P</tt> is <tt>R</tt> or <tt>N</tt>, hold locks key (<tt>SWITCH</tt> or <tt>W</tt>)</td></tr>
-    <tr><td><tt>SWITCH NALL</tt></td><td>Normal all switches &mdash; see <tt>RESETALL</tt></td></tr>
-    <tr><td><tt>ROUTE nnn xxx</tt></td><td>Line a route from signal <tt>nnn</tt> to <tt>xxx</tt> (or <tt>R</tt>)</td></tr>
-    <tr><td><tt>RELAY nnNNN</tt><td>Show the state of given relay or logic point.</td></tr>
-    <tr><td><tt>VERIFY rly rly !rly...</tt></td><td>Verify true/false logic terms</td></tr>
-    <tr><td><tt>WAIT ms</tt></td><td>Wait <tt>ms</tt> milliseconds (useful in files)</td></tr>
-    <tr><td><tt>WINDOW cmd</tt></td><td><tt>maximize, minimize, restore</tt> app window</td></tr>
-    <tr><td><tt>SHOWSTOPS cmd</tt></td><td>always, never, tripping</td></tr>
-    <tr><td><tt>SAY stuff stuff stuff</tt></td><td>Print text as <b>NXSYS</b> demo legend (not available on command line)</td></tr>
-    <tr><td><tt>TRAIN startpos<br/>
-        &nbsp;&nbsp;SPEED=n.n<br/>
-        &nbsp;&nbsp;PANEL=MIN/REST/HIDE<br/>
-        &nbsp;&nbsp;ID=n<br/>
-        &nbsp;&nbsp;CONTROLMODE=AUTO|MANUAL<br/>
-        &nbsp;&nbsp;(default: auto anon)</tt></td><td>Create train; See below about <tt>startpos</tt>.</td></tr>
-        <tr><td><tt>TRAIN</tt>-related commands:</td><td><tt>HALT
-n, KILL n, SPEED n ff.ff, PANEL MIN/REST/HIDE,<br/> AUTOPILOT n {off}, ACCEPTCO n, REVERSE
-n. (KILL ALL, too).</tt></td></tr>
- </table></blockquote>
- 
- <p><tt>startpos</tt> in the <tt>TRAIN</tt> command is a track number in Version 1 <b>NXSYS</b>, but in Version 2, the ID of the insulated joint at the end of the track where the train is to enter.</p>
-
-<p>Also included is a Visual Basic (4.00) form script that illustrates
-how simple it is to operate OLE Automation from a scripting language. If you have Microsoft Visual Basic, load
-up this script and run it, and better yet, modify it.</p>
-
-<p><b>NXSYS</b><span> also includes a command on the <b>File</b> menu, <b>NXScript</b>,
-that reads and executes an <b>NXScript</b> file directly by calling its own OLE
-Automation interface. You can also
-run an <b>NXScript</b> script from the Windows command line (or an icon) as
-follows:</span></p>
-
-<blockquote>
-    <span style='color:#AAA'><tt><b>nxsys32  -script</b> <i>script-pathname</i></tt> (Version 1)</span><br/>
-    <tt>nxv2 -script <i>script-pathname</i></tt> (Version 2)
-    </blockquote>
-
-<p>The current <b>NXScript</b>/automation system does not provide for
-drawing the &ldquo;big yellow X's&rdquo; that the <a href="#demos">Demo
-System</a> uses to illustrate mouse clicks, otherwise, it does everything
-and more than the latter. As with the <a href="#demos">Demo System,</a> <b>space</b> pauses and resumes scripts, and <b>ESC</b>
-aborts them.</p>
-
-<p>The components needed to write scripting extensions in other
-languages (than merely writing <b>NXScript</b> scripts) are not provided in the
-main <b>NXSYS</b> zipfile, but in the zipfile <b>nxole.zip</b> in the same
-directory. This includes the source
-for <b>nxctl</b>, the header file defining the C++ classes, the Microsoft
-Visual C++ object file <b>nxautcli.obj</b> that supports those classes, and the
-definitions of the <b>NXSYS</b> OLE Automation interfaces accessible to all
-automation controllers (<b>oleapi.txt</b>).</p>
-
-<br clear=all style='page-break-before:always'>
-
+<b>Cab View and OLE sections removed here.</b>
 
 <a name='ifeat'/><h2>3. Signalling and Interlocking Features</h2>
 
@@ -2651,8 +2303,7 @@ they trip the train by hitting the brake valve in the wrong direction (this is
 known as <b>off-side tripping.</b>)</p>
 
 <p>It is important to be able to see the
-state of train stops in a world where you are both train operator and tower operator. Even given Cab View, you might want to
-see all the train stops to help you learn about them. On a real NX panel, stops are not
+state of train stops in a world where you are both train operator and tower operator. On a real NX panel, stops are not
 shown. <img align='right' src='HelpImages/stop.png' height="70px"/> <b>NXSYS</b>
 displays train stops as little triangles on the right of the track (seen in the
 relevant direction of motion), as per IRT convention, but also creating a
@@ -3100,7 +2751,6 @@ relay</a>) and allows automatic A2-714 to clear at all.</p>
 
 <h2 id="traffic">3.16 Traffic Control and Traffic Levers</h2>
 
-<span style='color:#0A0'><b>Available in Version 2, including Macintosh, only.</b></span>
 
 <p><b>Traffic control</b> is a technique used to coordinate the direction of traffic on a single  run of track (henceforth, &ldquo;the extent&rdquo;), usually lengthy, connecting two interlockings (i.e., with none other between them). <b>Traffic levers</b> are operator controls at those interlockings (actual levers in classic frames, or equivalent knobs at newer ones, including NX/UR) employed to operate this.  When mutually consistent, they designate the containing interlocking as either the entrance to the extent or exit from it. In traditional lever-frame interlockings, levers are physically locked, i.e., cannot be moved, unless appropriate conditions obtain.  In &ldquo;all-relay&rdquo; interlockings, including NX/UR, these controls are not physically locked, but (as elsewhere) have no effect unless appropriate conditions obtain: the white arrow-marked directional lights surrounding the &ldquo;traffic lever&rdquo; knob show red when it is logically locked.</p>
 
@@ -3133,8 +2783,6 @@ The interlocking desiring to declare itself the entrance to the extent (the end 
 <p></p>
 
 <a name='autoop'/><h2>3.17 Train Operator Route Selectors and Automatic Operation</h2>
-
-<span style='color:#0A0'><b>Available in Version 2, including Macintosh, only.</b></span>
 
 <p>Since time immemorial in the twentieth century, New York Subways have included &ldquo;route selector&rdquo; push-button boxes for Train Operators (previously called &ldquo;motormen&rdquo;; many are now women) to &ldquo;punch&rdquo;, from their cab windows, to identify their trains and destinations to inform the  the Tower Operator, usually at the next station, of their intent, and in some places (e.g., DeKalb Avenue, Brooklyn), inform passengers on the platform.   In the twenty-first century, the latter function, at least, has been obsoleted by radio communications and &ldquo;arrival prediction&rdquo; digital displays in many cities, including many places in New York.</p>
 
@@ -3179,10 +2827,7 @@ and a little less, to introduce variety for didactic purposes. The equivalent of
 neither of the named interlockings, and is there only to add to the fun with
 the availability of multiple routes between signals 20 and 32 and 34.</p>
 
-<p>The interlocking files for Progman St. interlocking are:</p>
-
-<p><b>progman.trk</b>&nbsp;&nbsp;Relay-language source-code for the interlocking &mdash; uses other files in its folder<br/>
-<span style='color:#AAA'><b>prgman32.tko</b>&nbsp;Compiled interlocking definition. (Version 1 only; Not used on the Mac&#x2122; or Windows Version 2; use progman.trk.)</span></p>
+<p>The interlocking definition files for Progman St. interlocking is><b>progman.trk</b>.</p>
 
 <p>Please refer to the <b>NXSYS</b>
 display of Progman St. interlocking for the following discussion. It is conventional, when explaining a given interlocking, to present a track map with all <span class="def" dref="#DEF_clen">control lines</span>
@@ -3251,12 +2896,10 @@ even though it is smaller than <a href="#progman">Progman St.</a>,
 and involves fewer tracks, it involves a fair number of complexities not
 present there.</p>
 
-<p>The interlocking files for Islington interlocking are:</p>
+<p>The interlocking file for Islington interlocking is:</p>
 
 <p><b>islingtn.trk</b> &nbsp;&nbsp;           Relay-language
-source-code for the interlocking<br/>
-<span style='color:#AAA'><b>islingtn.tko</b>&nbsp;&nbsp;Compiled interlocking definition.</span> <span style='color:#0A0;font-weight:bold'>Not used on the Mac&#x2122; or Windows Version 2; use islingtn.trk.</p>
-</span></p>
+source-code for the interlocking</p>
 
 <p>We will present here the very minor differences between New York and Toronto conventions, and critical facts necessary for anyone operating this interlocking. Please refer to the <b>NXSYS</b> display of Islington interlocking for this discussion./p>
 
@@ -3412,9 +3055,14 @@ as Islington.</p>
 
 <a name='design'/>
 
-<h3>4.4 Designing your own scenarios &mdash; NOT</h3>
+<h3 id="240th">4.4 240th St Broadway Line — TBD</h3>
+<h3 id="Duckburg">4.5 Duckburg design tutorial — TBD</h3>
 
 
+
+<h3>4.6 Designing your own scenarios</h3>
+
+<p><b>LogicExp.pdf stuff TBD.</b></p>
 
 <p>Designing your own <b>NXSYS</b>
 scenarios, unfortunately, is not very easy now, nor may it ever be. As <b>NXSYS</b> is an interlocking
@@ -3467,10 +3115,9 @@ be <b>closed</b> when electricity can flow through it, and <b>open</b> when
 not. A typical railroad signalling
 relay might have a dozen contacts total, some front, some back. Railroad signalling relays are of extremely high quality, rugged, and quite expensive.</p>
 
-<p><b>NXSYS</b> interlockings are implemented as simulated relays; the actual names (<i>nomenclature</i>) of the relays and the way the contacts are interconnected are defined in the <b>.trk</b> file<span style="color:#aaa">; the <b>Relay Compiler (in Version 1 only)</b> writes machine-language computer programs that do the same thing as the relays, and puts them in the <b>.tko</b> file</span>. All of the logic of the interlocking described in <a href="#ifeat">Chapter 3</a> of this documentation are implemented not in C or C++, but in simulated relays, using traditional New York circuit nomenclature and designs.</p>
+<p><b>NXSYS</b> interlockings are implemented as simulated relays; the actual names (<i>nomenclature</i>) of the relays and the way the contacts are interconnected are defined in the <b>.trk</b> file. All of the logic of the interlocking described in <a href="#ifeat">Chapter 3</a> of this documentation are implemented not in C or C++, but in simulated relays, using traditional New York circuit nomenclature and designs.</p>
 
-<p><b>NXSYS</b><span style="color:#aaa">, when running the
-&ldquo;interpreted&rdquo; file (<b>.trk</b>),</span> allows you to actually see the
+<p><b>NXSYS</b> allows you to actually see the
 circuits for any and all relays it is managing and simulating. You can display the circuits on the
 screen, several at a time, or create a set of hardcopy circuit drawings
 suitable for study and analysis. The relays and their logic circuits are displayed in traditional New York Subway relay logic notation, which is extremely clear and intuitive: <img align='left' src='HelpImages/relay.bmp'/> the coil of a relay is a little box sitting on a wire, and a contact is a little triangle and a dot &mdash; triangles &ldquo;balancing&rdquo; above the
@@ -3630,11 +3277,7 @@ well. On Windows, when the page fills up, it will be cleared, or you can clear i
 
 <p>You may also click right on any object (track circuit, signal, switch, or other), and select <b>Draw Circuit</b> to be offered a menu of relays associated with that object; select one to draw its circuit.</p>
 
-<p><span style="color:#AAA">(Version 1 only) The circuit-drawing system only works when an
-&ldquo;interpreted&rdquo; interlocking is loaded, i.e., a <b>.trk</b> file, for
-that is the only time that code is present. Nevertheless, there are still are relays
-in a &ldquo;compiled&rdquo; (<b>.tko</b>) interlocking, and their state (compiled
-or intepreted) may be interrogated. </span> Relays may be interrogated with <b>Relays|Query.</b> This command will
+<p>Relays may be interrogated with <b>Relays|Query.</b> This command will
 prompt for a relay name and show its state, and, if you wish, its
 &ldquo;dependents,&rdquo; that is, the list of all relays who depend upon this
 relay in their own circuits (its &ldquo;outputs&rdquo;, if you will).</p>
@@ -3644,12 +3287,7 @@ the symbols smaller, too &mdash; there are a fixed number of contacts on each li
 &mdash; but doing so also allows more to fit in a given vertical space.</p>
 
 <p>One can (on Windows only) print, on a printer, all the circuits for all the relays in
-the interlocking from the <b>File|Print Logic</b><span>
-menu item, as a set of schematic diagrams. <span style="color:#AAA"> (Version 1 only) While this is easy to do in an interpreted interlocking, in a compiled
-interlocking the source (<b>.trk</b>) must be referred
-to to retrieve the definitions while the interlocking itself is queried for the
-contact states: <b>File|Print Logic
-File</b> does just that, and dialogs you for the source file name.</span> It is best to restore the interlocking
+the interlocking from the <b>File|Print Logic</b>.  It is best to restore the interlocking
 to &ldquo;canonical state&rdquo;, i.e., all track sections clear, all signals
 cancelled, all switches normal (use <b>Interlocking|All
 the above</b> if you wish) before printing, so that contact states will reflect
