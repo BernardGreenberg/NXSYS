@@ -177,91 +177,8 @@ void DraftsbeingCleanupForOneLayout () {
 	ShowWindow (S_RelayGraphicsWindow, SW_HIDE);
 }
 
-struct ListRelayStruct {
-    std::vector<Relay *>Array;
-    const Relay * Result;
-    char Title[64]{};
-};
-
-typedef struct ListRelayStruct *pLRS;
-
-static DLGPROC_DCL RelayListDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    pLRS S = (pLRS) GetWindowLong (hDlg, DWL_USER);
-    switch (message) {
-	case WM_INITDIALOG:
-	{
-	    SetWindowLong(hDlg, DWL_USER, (LONG) lParam);
-	    S = (pLRS)lParam;
-	    SetWindowText (hDlg, S->Title);
-	    HWND lb = GetDlgItem (hDlg, IDC_RELAY_LIST);
-	    for (auto r : S->Array) {
-		std::string rs = r->RelaySym.PRep();
-		const char* rp = rs.c_str();
-		while (isdigit((unsigned char)*rp)) rp++;
-		int ix = SendMessage (lb, LB_ADDSTRING, 0,(LPARAM)rp); //hope he copies it!
-		SendMessage (lb, LB_SETITEMDATA, ix, (LPARAM)r);
-	    }
-	    return TRUE;
-	}
-	case WM_COMMAND:
-	    if (wParam == IDOK) {
-		goto doit;
-	    }
-	    else if (wParam == IDCANCEL) {
-		S->Result = NULL;
-		EndDialog (hDlg, FALSE);
-		return TRUE;
-	    }
-	    else if (NOTIFY_CODE(wParam,lParam) == LBN_DBLCLK) {
-doit:
-		int selx = SendDlgItemMessage
-			   (hDlg, IDC_RELAY_LIST, LB_GETCURSEL,0,0);
-		if (selx == LB_ERR) {
-		    MessageBox (hDlg, "No item selected", PRODUCT_NAME,
-				MB_OK | MB_ICONEXCLAMATION);
-		    return TRUE;
-		}
-		S->Result = (Relay*)SendDlgItemMessage
-			    (hDlg, IDC_RELAY_LIST, LB_GETITEMDATA, selx,0);
-		EndDialog(hDlg,TRUE);
-		return TRUE;
-	    }	    
-	    else return FALSE;
-	default:
-	    return FALSE;
-    }
-    return FALSE;
-}
 
 
-Relay * ListRelaysForObjectDialog (const char * funcdesc,
-				   const char * classdesc,
-				   int object_number) {
-
-    ListRelayStruct S;
-    sprintf (S.Title, "%s relay for %s %d",
-	     funcdesc, classdesc, object_number);
-    
-    S.Array = get_relay_array_for_object_number (object_number);
-    if (S.Array.size() == 0) {
-	usermsg ("No relays found for %s %d.", classdesc, object_number);
-	return NULL;
-    }
-    
-    DialogBoxParam (app_instance,
-		    MAKEINTRESOURCE(IDD_OBJECT_RELAY_LIST),
-		    G_mainwindow, RelayListDlgProc, (LPARAM) &S);
-   
-    return const_cast<Relay*>(S.Result);
-}
-
-void ShowStateRelay(Relay*);
-void ShowStateRelaysForObject (int object_number, const char * classdesc) {
-    Relay * r = ListRelaysForObjectDialog ("Show State", classdesc, object_number);
-    if (r)
-    ShowStateRelay (r);
-}
 #if 0
 int ShowStateRelaysForObject(int object_number, const char* classdesc) {
     Relay* r = ListRelaysForObjectDialog("Show State", classdesc, object_number);
@@ -278,10 +195,3 @@ int DrawRelaysForObject (int object_number, const char * classdesc) {
     return 1;
 }
 #endif
-
-void DrawRelaysForObject(int object_number, const char* classdesc) {
-    Relay* r = ListRelaysForObjectDialog("Draw", classdesc, object_number);
-    if (!r)
-	return;
-    RelayShowString(r->RelaySym.PRep().c_str());
-}

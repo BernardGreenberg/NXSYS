@@ -326,6 +326,7 @@
 		5B50EE4F19BB8469004CAABE /* WinDialogProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinDialogProtocol.h; sourceTree = "<group>"; };
 		5B54273527BAAC0C006EEDEF /* RelayQueryDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayQueryDialog.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5B54273627BAAC0C006EEDEF /* RelayStateDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayStateDialog.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		5B54273727BACC0F006EEDEF /* RelayListDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayListDialog.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5B54429219B004ED00FB5537 /* ContextMenu.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ContextMenu.mm; sourceTree = "<group>"; };
 		5B54429419B0F00F00FB5537 /* RelaySelector.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelaySelector.xib; sourceTree = "<group>"; };
 		5B54429619B0F1F500FB5537 /* RelayListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelayListView.h; sourceTree = "<group>"; };
@@ -1008,6 +1009,7 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5B54273727BACC0F006EEDEF /* RelayListDialog.cpp */,
 				5B54273527BAAC0C006EEDEF /* RelayQueryDialog.cpp */,
 				5B54273627BAAC0C006EEDEF /* RelayStateDialog.cpp */,
 				5BABBE7727B9655700AED491 /* Resources2022.aps */,
