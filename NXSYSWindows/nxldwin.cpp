@@ -160,85 +160,6 @@ BOOL RegisterRelayLogicWindowClass (HINSTANCE hInstance) {
 }
 
 
-static Relay * GetSelRelayFromListDlg (HWND hDlg) {
-    int selx = SendDlgItemMessage (hDlg, IDC_RLYQUERY_LIST, LB_GETCURSEL,0,0);
-    if (selx < 0)
-	return NULL;
-    return (Relay*)SendDlgItemMessage
-	    (hDlg, IDC_RLYQUERY_LIST, LB_GETITEMDATA, selx,0);
-}
-
-
-
-static DLGPROC_DCL RlystateDlgProc (HWND hDlg, unsigned message, WPARAM wParam, LPARAM lParam)
-{
-    char buf [100];
-    const Relay * r;
-    switch (message) {
-	case WM_INITDIALOG:
-	{
-	    r = (Relay *) lParam;
-dorelay:
-	    SetWindowLong (hDlg, DWL_USER, (LONG)r);
-	    EnableWindow (GetDlgItem (hDlg, IDC_DRAW_RELAY),
-			  !(r->Flags & LF_CCExp));
-	    wsprintf (buf, "Relay %s", r->RelaySym.PRep().c_str());
-	    SetDlgItemText (hDlg, IDC_RLYQUERY_NAME, buf);
-	    wsprintf (buf, "State is %s", r->State ? "PICKED" : "DROPPED");
-	    SetDlgItemText (hDlg, IDC_RLYQUERY_STATE, buf);
-	    wsprintf (buf, "%d dependent%s:",
-		      r->Dependents.size(), (r->Dependents.size()) == 1 ? "" : "s");
-	    SetDlgItemText (hDlg, IDC_RLYQUERY_NDEPS, buf);
-	    SendDlgItemMessage (hDlg, IDC_RLYQUERY_LIST, LB_RESETCONTENT,0,0);
-	    for (const Relay* dep : r->Dependents) {
-		wsprintf (buf, "%s\t%d", dep->RelaySym.PRep().c_str(), dep->State);
-		int index
-			=  SendDlgItemMessage
-			   (hDlg, IDC_RLYQUERY_LIST, LB_ADDSTRING, 0, (LPARAM)(LPSTR)buf);
-		SendDlgItemMessage
-			(hDlg, IDC_RLYQUERY_LIST, LB_SETITEMDATA,
-			 index, (LPARAM)&dep);
-	    }
-	    return TRUE;
-	}
-	case WM_COMMAND:
-	    if (wParam == IDOK|| wParam == IDCANCEL) {
-		EndDialog (hDlg, TRUE);
-		return TRUE;
-	    }
-	    else if (wParam == IDC_DRAW_RELAY) {
-		Relay * r = (Relay*)GetWindowLong (hDlg, DWL_USER);
-		RelayShowString(r->RelaySym.PRep().c_str());
-	    }
-	    else if (NOTIFY_CODE(wParam,lParam) == LBN_DBLCLK) {
-		r = GetSelRelayFromListDlg (hDlg);
-		goto dorelay;
-	    }
-	    else return FALSE;
-	default:
-	    return FALSE;
-    }
-}
-
-
-static void ShowStateRelay (Relay * rly) {
-    DialogBoxParam (app_instance,
-		    MAKEINTRESOURCE(IDD_RELAYSTATE),
-		    G_mainwindow, DLGPROC(RlystateDlgProc), (LPARAM)rly);
-}
-
-
-void AskForAndShowStateRelay (HWND win) {
-    auto p = RlyDialog(win, app_instance);
-    if (p.first) {
-	Sexpr s = RlysymFromStringNocreate (p.second.c_str());
-	if (s == NIL || s.u.r->rly==NULL) {
-	    usermsg ("No such relay: %s", p.second.c_str());
-	    return;
-	}
-	ShowStateRelay (s.u.r->rly);
-    }
-}
 
 void AskForAndDrawRelay (HWND win) {
     auto p = RlyDialog(win, app_instance);
@@ -335,7 +256,7 @@ Relay * ListRelaysForObjectDialog (const char * funcdesc,
     return const_cast<Relay*>(S.Result);
 }
 
-
+void ShowStateRelay(Relay*);
 void ShowStateRelaysForObject (int object_number, const char * classdesc) {
     Relay * r = ListRelaysForObjectDialog ("Show State", classdesc, object_number);
     if (r)

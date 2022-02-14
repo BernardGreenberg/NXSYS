@@ -33,38 +33,12 @@ using std::string;
 extern struct tm far nxtime_time_;
 const int MaxFilesMenu = 20;
 
-static std::regex relay_regex("(\\d+\\w+)");
+static std::regex relay_regex(R"(\s*(\d+\w+)\s*)");
 
 static const char DemoFilter[] = "Interlocking Demos (*.xdo)\0*.xdo\0All Files (*.*)\0*.*\0\0";
 static const char ScriptFilter[] = "NXScript scripts (*.nxs)\0*.nxs\0All Files (*.*)\0*.*\0\0";
 static const char szFilter[] = "Track Layouts (*.tko)\0*.TKO\0Expr Code (*.TRK)\0*.TRK\0Both (.TRK/.TKO)\0*.TRK;*.TKO\0All Files (*.*)\0*.*\0\0";
 static const char *InterpFilter = "Interpreted Xlkgs (*.trk)\0*.TRK\0All Files (*.*)\0*.*\0\0";
-
-static std::vector<string> RelayCache;
-
-
-
-static void SaveToRelayCache(HWND dlg, int ctl_id) {
-	HWND ctl = GetDlgItem(dlg, ctl_id);
-	RelayCache.clear();
-	for (int i = 0; ; i++) {
-		int res = SendMessage(ctl, CB_GETLBTEXTLEN, (WPARAM)i, 0);
-		if (res == CB_ERR)
-			break;
-		std::vector<char>buf(res + 1);
-		if (SendMessage(ctl, CB_GETLBTEXT, (WPARAM)i, (LPARAM)buf.data())
-			== CB_ERR)
-			break;
-		else
-			RelayCache.push_back(buf.data());
-	}
-}
-
-static void RestoreFromRelayCache(HWND dlg, int ctl_id) {
-	HWND ctl = GetDlgItem(dlg, ctl_id);
-	for (size_t i = 0; i < RelayCache.size(); i++)
-		SendMessage(ctl, CB_INSERTSTRING, (WPARAM)-1, (LPARAM)RelayCache[i].c_str());
-}
 
 
 BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
@@ -131,10 +105,10 @@ BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
 static std::string fixnl(std::string s) {
     std::string out;
     for (char c : s) {
-	if (c == '\n')
-	    out += "\r\n";
-	else
-	    out += c;
+		if (c == '\n')
+			out += "\r\n";
+		else
+			out += c;
     }
     return out;
 }
@@ -197,8 +171,7 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 		WORD* langInfo = nullptr;;
 
 		VerQueryValue(vdp, "\\VarFileInfo\\Translation", (LPVOID*)&langInfo, &cbLang);
-		//Prepare the label -- default lang is bytes 0 & 1
-		//of langInfo
+		//Prepare the label -- default lang is bytes 0 & 1 of langInfo
 		sprintf_s<COUNTOF(sversion)>(sversion, "\\StringFileInfo\\%04x%04x\\%s",
 			langInfo[0], langInfo[1], "ProductName");
 		//Get the string from the resource data
@@ -267,94 +240,6 @@ DLGPROC_DCL CTDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lPara
     }
 };
 
-static string LastRelayID;
-
-struct GetRelayStruct {
-    string init_val{};
-    string return_val{};
-};
-
-const string WHITESPACE = " \n\r\t\f\v";
- 
-static string ltrim(const string &s)
-{
-    size_t start = s.find_first_not_of(WHITESPACE);
-    return (start == string::npos) ? "" : s.substr(start);
-}
- 
-static string rtrim(const string &s)
-{
-    size_t end = s.find_last_not_of(WHITESPACE);
-    return (end == string::npos) ? "" : s.substr(0, end + 1);
-}
-static string trim(const string &s) {
-    return rtrim(ltrim(s));
-}
-
-static bool FinishRelayFld(HWND dlg, unsigned ctl_id, GetRelayStruct * grsp) {
-	string S = stoupper(trim(GetDlgItemText(dlg, ctl_id)));
-	if (!std::regex_match(S, relay_regex)) {
-	    MessageBoxS(0, "Not a relay string: " + S, "Dialog Field Value Error", MB_OK | MB_ICONEXCLAMATION);
-	    return false;
-	}
-	const char* cs = S.c_str();
-	SendDlgItemMessage(dlg, ctl_id, WM_SETTEXT, 0, (LPARAM)cs);
-	int old_cbx = SendDlgItemMessage(dlg, ctl_id, CB_FINDSTRINGEXACT, -1, (LPARAM)cs);
-	if (old_cbx != CB_ERR)
-		SendDlgItemMessage(dlg, ctl_id, CB_DELETESTRING, (WPARAM)old_cbx, (LPARAM)0);
-	SendDlgItemMessage(dlg, ctl_id, CB_INSERTSTRING, 0, (LPARAM)cs);
-	grsp->return_val = S;
-	SaveToRelayCache(dlg, ctl_id);
-	return true;
-}
-
-
-DLGPROC_DCL relay_id_DlgProc(HWND hDlg, unsigned message, WPARAM wParam, LPARAM lParam)
-{
-    GetRelayStruct* grsp = nullptr;
-    switch (message) {
-
-	case WM_INITDIALOG:
-		grsp = (GetRelayStruct*)lParam;
-		SetWindowLongPtr(hDlg, GWLP_USERDATA, lParam);
-		SetDlgItemText(hDlg, IDC_RELAY_ID_EDIT, grsp->init_val.c_str());
-		RestoreFromRelayCache(hDlg, IDC_RELAY_ID_EDIT);
-		return TRUE;
-	case WM_COMMAND:
-		grsp = (GetRelayStruct*)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-		if (wParam == IDCANCEL) {
-			EndDialog(hDlg, FALSE);
-			return TRUE;
-		}
-	else if (wParam == IDOK) {
-	    if (!FinishRelayFld(hDlg, IDC_RELAY_ID_EDIT, grsp))
-			return TRUE;
-	    EndDialog(hDlg, TRUE);
-	    return TRUE;
-	}
-	else if (NOTIFY_CODE(wParam, lParam) == CBN_SELENDOK) {
-	    char buf[32]{};
-	    int x = (int)SendDlgItemMessage(hDlg, IDC_RELAY_ID_EDIT, CB_GETCURSEL, 0, 0);
-	    SendDlgItemMessage(hDlg, IDC_RELAY_ID_EDIT, CB_GETLBTEXT, x, (LPARAM)buf);
-	    SetDlgItemText(hDlg, IDC_RELAY_ID_EDIT, buf);
-	    grsp->return_val = buf;
-	    return relay_id_DlgProc(hDlg, message, IDOK, 0);
-	}
-	else return FALSE;
-	default:
-		return FALSE;
-	}
-}
-
-std::pair<bool, string> RlyDialog(HWND win, HINSTANCE instance) {
-    GetRelayStruct grs;
-    INT_PTR r = DialogBoxParam(instance, MAKEINTRESOURCE(IDD_RELAY_ID), win, (DLGPROC)relay_id_DlgProc, (LPARAM)&grs);
-    if (r > 0)
-	return std::pair <bool, string>(true, grs.return_val);
-    else
-	return std::pair<bool, string>(false, "");
-}
-
 static UINT ShowStopsLast;
 
 DLGPROC_DCL show_stops_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
@@ -391,8 +276,6 @@ DLGPROC_DCL show_stops_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPA
 		return FALSE;
 	}
 }
-
-
 
 int ShowStopDlg(HWND win, HINSTANCE instance, int policy) {
 	ShowStopsLast = (UINT)policy;

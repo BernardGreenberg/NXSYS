@@ -199,6 +199,8 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
     <ClCompile Include="..\nxsldrly.cpp" />
     <ClCompile Include="..\PARSARGS.C" />
     <ClCompile Include="..\print.cpp" />
+    <ClCompile Include="..\RelayQueryDialog.cpp" />
+    <ClCompile Include="..\RelayStateDialog.cpp" />
     <ClCompile Include="..\rtracwin.cpp" />
     <ClCompile Include="..\timers.cpp" />
     <ClCompile Include="..\WinReadResText.cpp" />
