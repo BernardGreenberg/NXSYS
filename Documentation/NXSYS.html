@@ -160,7 +160,7 @@ behavior right down to the level of individual electrical relays. This document 
 
 <p><u><span style="color:#800">Note that <b>Command</b> is used on the Mac almost everywhere <b>control</b> is written below (the default assumption being MS-Windows), as is common on Windows applications ported to the Mac.</u></p>
 
-<p><span style="font-size:200%">Note that <span class="def">azure text</span> can be hovered over to pop up definitions of the terms so highlighted.</span></p>
+<p><span style="font-size:200%">Note that <span class="def" dref="#DEF_demo">azure text</span> can be hovered over to pop up definitions of the terms so highlighted.</span></p>
  
 
 <a href="#introduction">1. Introduction</a> 
@@ -1024,24 +1024,12 @@ for confirmation, and re-initializes the currently-loaded interlocking from the
 current interlocking definition file. This resets its state to &ldquo;as it was in the beginning&rdquo;. This can also be used to debug changes
 to interlocking definitions or simply to reset the layout. See also </span><b><span>1 (Last interlocking pathname)</span></b><span> below on this menu to reattempt to load an interlocking that has failed to load.</td></tr>
 
+<tr><td></td><td>File Info</td><td>Displays a small dialog with statistical information about the content of the interlocking, viz., the pathname of the top-level definition file, the count of signals, switches, relays, etc. </td></tr>
+
 
 <tr><td></td><td>Demo</td><td>brings
 up a file dialog for interlocking demo (<b>.xdo</b>) files, and runs the demo
 you select. See the <a href="#demos">Demo System</a> section.</td></tr>
-
-
-<tr><td></td><td>NXScript</td><td>brings
-up a file dialog for an <b>NXSYS</b> script written in <b>NXScript</b>. Please see <a href="#scripts">Scripting and OLE Automation</a>.</span>&nbsp;<span style='color:#900'>This feature is not available on the Macintosh.</td></tr>
-
-
-<tr><td></td><td>Command Dialog</td><td>brings
-up an &ldquo;Interactor&rdquo; dialog, into which you can type individual <b>NXScript</b>
-commands and see their result, i.e., run <b>NXSYS</b> from the keyboard. The dialog is non-modal, that is, you
-can interact with <b>NXSYS</b> either via it or the usual controls while it is
-up; <b>Enter</b> activates each
-command, <b>Esc</b> dismisses the dialog. Please see <a href="#scripts">Scripting and OLE Automation</a>
-for the list of valid commands. <b>Alt+X</b> brings it up, too, and refocuses
-it if is already up. &nbsp;<span style='color:#900'>This feature is not available on the Macintosh.</span></td></tr>
 
 
 <tr><td></td><td>Print Logic</td><td> (<b>Windows only</b>) offers
@@ -1054,7 +1042,7 @@ interlocking is loaded. See <b>Print Logic File.</b></td></tr>
 
 
 <tr><td></td><td>Exit</td><td>     Closes
-down the simulator. Passengers are
+down the application. Passengers are
 left stranded in the tunnels without power or Windows resources.  Use <b>Quit</b> on the <b>NXSYSMac</b> menu on the Mac.</p></td></tr>
 
 
@@ -2827,7 +2815,7 @@ and a little less, to introduce variety for didactic purposes. The equivalent of
 neither of the named interlockings, and is there only to add to the fun with
 the availability of multiple routes between signals 20 and 32 and 34.</p>
 
-<p>The interlocking definition files for Progman St. interlocking is><b>progman.trk</b>.</p>
+<p>The interlocking definition files for Progman St. interlocking is <b>progman.trk</b>.</p>
 
 <p>Please refer to the <b>NXSYS</b>
 display of Progman St. interlocking for the following discussion. It is conventional, when explaining a given interlocking, to present a track map with all <span class="def" dref="#DEF_clen">control lines</span>
@@ -3395,10 +3383,15 @@ namely, finding others who share his passion for this subject matter.</p>
 <p>Two signal engineers formerly, but not at the time, in the employ of the New York TA, Dave Rosenthal and Norm Ishler, contacted (as it were) me not long after Version 1 was posted. Both were exceedingly generous in their critiques, corrections, and supplementation of my imperfect knowledge, finding and fixing all the parallel fifths and unresolved suspensions in my subway scores, and I wish to relay my enduring gratitude here</p>
 
 <p>Special mention and credit is due New York's Dave Barraza, who, with this application (prerelease Windows Version 2), not only found a continuing professional career in signal engineering, and has tested and used and critiqued both versions of this software extensively, but has designed, with his professional signal engineering skills now far superior to my amateur skills, a number of massive, master-tower multi-interlockings within it, including several of the &ldquo;masterpieces&rdquo; of the New York systems, some 10 or 20 times the extent of the none-too-simple sample interlockings supplied here, and has continued to be the prime tester of the Mac version.</p>
-
+ 
 
 <p>Enjoy!</p>
 <table>
+    
+ <div id="DEF_demo" class="DocPopup">
+     <p>See? Like that!  That's right!</o>
+     
+ </div>
  <div id="DEF_IJ" class="DocPopup">
 
 <p>A small wedge of fiber or fiberglass (previously, treated wood)
