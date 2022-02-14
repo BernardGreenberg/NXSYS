@@ -20,6 +20,7 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include <cassert>
 
 #include "STLExtensions.h"
 #include "argparse.hpp"
@@ -38,7 +39,7 @@ using std::endl;
 using std::cerr;
 using std::stringstream;
 
-namespace fs = std::__fs::filesystem;
+namespace fs = std::filesystem;
 
 std::unordered_map<RLID, std::vector<RLID>> BackRefMap;
 std::unordered_map<const char *, Sexpr>LabelMap; //atom strings guaranteed EQ

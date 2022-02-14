@@ -14,6 +14,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <regex>
+#include <cassert>
 
 using std::string;
 
