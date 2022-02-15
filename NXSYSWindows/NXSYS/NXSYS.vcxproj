@@ -195,7 +195,9 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
     <ClCompile Include="..\dialogs.cpp" />
     <ClCompile Include="..\getmodtm.c" />
     <ClCompile Include="..\helpdlg.cpp" />
+    <ClCompile Include="..\LDRightClick.cpp" />
     <ClCompile Include="..\nxldwin.cpp" />
+    <ClCompile Include="..\NXRegistry.cpp" />
     <ClCompile Include="..\nxsldrly.cpp" />
     <ClCompile Include="..\PARSARGS.C" />
     <ClCompile Include="..\print.cpp" />
@@ -216,7 +218,10 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
     <Image Include="..\tracetb.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\LDRightClick.h" />
+    <ClInclude Include="..\NXRegistry.h" />
     <ClInclude Include="..\resource.h" />
+    <ClInclude Include="..\resource1.h" />
     <ClInclude Include="resource1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

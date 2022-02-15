@@ -327,6 +327,11 @@
 		5B54273527BAAC0C006EEDEF /* RelayQueryDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayQueryDialog.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5B54273627BAAC0C006EEDEF /* RelayStateDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayStateDialog.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5B54273727BACC0F006EEDEF /* RelayListDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayListDialog.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		5B54273827BC498C006EEDEF /* LDRightClick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDRightClick.h; sourceTree = "<group>"; };
+		5B54273927BC498C006EEDEF /* NXRegistry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NXRegistry.h; sourceTree = "<group>"; };
+		5B54273A27BC498C006EEDEF /* LDRightClick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LDRightClick.cpp; sourceTree = "<group>"; };
+		5B54273B27BC498C006EEDEF /* NXRegistry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NXRegistry.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		5B54273C27BC498C006EEDEF /* resource1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = resource1.h; sourceTree = "<group>"; };
 		5B54429219B004ED00FB5537 /* ContextMenu.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ContextMenu.mm; sourceTree = "<group>"; };
 		5B54429419B0F00F00FB5537 /* RelaySelector.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelaySelector.xib; sourceTree = "<group>"; };
 		5B54429619B0F1F500FB5537 /* RelayListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelayListView.h; sourceTree = "<group>"; };
@@ -457,7 +462,7 @@
 		5BABBE1527B7143100AED491 /* parsargs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parsargs.h; sourceTree = "<group>"; };
 		5BABBE1627B7143100AED491 /* getmodtm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = getmodtm.h; sourceTree = "<group>"; };
 		5BABBE1727B7143100AED491 /* dialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialogs.cpp; sourceTree = "<group>"; };
-		5BABBE5C27B7143200AED491 /* PARSARGS.C */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PARSARGS.C; sourceTree = "<group>"; };
+		5BABBE5C27B7143200AED491 /* PARSARGS.C */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PARSARGS.C; sourceTree = "<group>"; tabWidth = 4; };
 		5BABBE5D27B7143200AED491 /* tled.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = tled.rc; sourceTree = "<group>"; };
 		5BABBE5E27B7143200AED491 /* timers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timers.cpp; sourceTree = "<group>"; };
 		5BABBE5F27B7143200AED491 /* rtracwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rtracwin.cpp; sourceTree = "<group>"; };
@@ -569,7 +574,7 @@
 		5BF062F9199FB21A008CDCA0 /* stop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stop.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF062FB199FB344008CDCA0 /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = text.cpp; sourceTree = "<group>"; };
 		5BF062FD199FB6AA008CDCA0 /* txlayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = txlayout.cpp; sourceTree = "<group>"; };
-		5BF062FF199FB8DD008CDCA0 /* nxsys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nxsys.cpp; sourceTree = "<group>"; tabWidth = 8; };
+		5BF062FF199FB8DD008CDCA0 /* nxsys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nxsys.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BF0630119A02803008CDCA0 /* xtrains.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xtrains.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF0630319A028A8008CDCA0 /* fullsig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fullsig.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F3C19A0395B008CDCA0 /* demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = demo.cpp; sourceTree = "<group>"; tabWidth = 8; };
@@ -1009,6 +1014,11 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5B54273A27BC498C006EEDEF /* LDRightClick.cpp */,
+				5B54273827BC498C006EEDEF /* LDRightClick.h */,
+				5B54273B27BC498C006EEDEF /* NXRegistry.cpp */,
+				5B54273927BC498C006EEDEF /* NXRegistry.h */,
+				5B54273C27BC498C006EEDEF /* resource1.h */,
 				5B54273727BACC0F006EEDEF /* RelayListDialog.cpp */,
 				5B54273527BAAC0C006EEDEF /* RelayQueryDialog.cpp */,
 				5B54273627BAAC0C006EEDEF /* RelayStateDialog.cpp */,

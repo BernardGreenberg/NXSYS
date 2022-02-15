@@ -9,7 +9,8 @@ void RecordIndexDrawnRelays(int pageno);
 int PlaceRelayDrawing ();
 void ClearRelayGraphics();
 int DrawRelayFromRelay(class  Relay* r);
-int RelayGraphicsLeftCLick(int x, int y);
+int RelayGraphicsLeftClick(int x, int y);
+const char* RelayGraphicsNameFromXY(int x, int y);
 
 
 

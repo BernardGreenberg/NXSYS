@@ -65,9 +65,10 @@ static void drAPIcommon () {
     ShowWindow(getRelayDrafterHWND(true), SW_SHOWNORMAL);
 }
 
-void RelayGraphicsLeftClick(int x, int y) {
+int RelayGraphicsLeftClick(int x, int y) {
     if (RelayGraphicsMouse(0, x, y))
         drAPIcommon();
+    return 0;
 }
 
 /* Called from miscellaneous UI functions that want to draw a relay-in-hand */

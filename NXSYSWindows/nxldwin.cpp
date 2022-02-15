@@ -14,8 +14,9 @@
 #include "nxldwin.h"
 #include "usermsg.h"
 #include "rlymenu.h"
+#include "LDRightClick.h"
 
-static HWND S_RelayGraphicsWindow;
+static HWND S_RelayGraphicsWindow = nullptr;
 static const char RelayGraphicsWindow_Class [] = PRODUCT_NAME ":Relayg";
 
 static void PlaceDrawing (HWND window) {
@@ -34,7 +35,8 @@ static void PlaceDrawing (HWND window) {
     InvalidateRect (window, NULL, 0);
 }
 
-static WNDPROC_DCL RelayGraphicsWindow_WndProc
+//Don't know why "static" doesn't work...
+ WNDPROC_DCL RelayGraphicsWindow_WndProc
    (HWND window, unsigned message, WPARAM wParam, LPARAM lParam){
 
     RECT rc;
@@ -44,7 +46,11 @@ static WNDPROC_DCL RelayGraphicsWindow_WndProc
 	    if (RelayGraphicsMouse (wParam, LOWORD (lParam), HIWORD (lParam)))
 		PlaceDrawing (window);
 	    break;
-	  
+
+	case WM_RBUTTONDOWN:
+		if (int newcmd = RelayGraphicsRightClick(window, wParam, LOWORD(lParam), HIWORD(lParam)))
+			RelayGraphicsWindow_WndProc(window, WM_COMMAND, MAKEWPARAM(newcmd, 0), 0);
+		break;
 	case WM_COMMAND:
 
 	    switch (LOWORD(wParam)) {
@@ -61,7 +67,8 @@ static WNDPROC_DCL RelayGraphicsWindow_WndProc
 		case CmShowRelayCircuit:
 		    AskForAndDrawRelay(window);
 		    break;
-		default: break;
+		default:
+			break;
 	    }
 	    return 0;
 
