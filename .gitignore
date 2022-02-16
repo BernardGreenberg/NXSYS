@@ -5,3 +5,4 @@ NXSYSMac.build_log.txt
 
 NXSYSWindows/NXSYS/.#NXSYS.vcxproj
 *.xcuserstate
+*.xref
