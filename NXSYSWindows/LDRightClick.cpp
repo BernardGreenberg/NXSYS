@@ -4,14 +4,13 @@
 #include "ldraw.h"
 #include "resource1.h"
 #include "NXRegistry.h"
+#include "commands.h"
 
 #include "LDRightClick.h"
 
 using std::string;
 
 static string ExecutorCommand;
-
-#define MAGIC_SOURCE_EDIT_CMD 90210
 
 struct menuctr {
     HMENU hMenu;
@@ -21,18 +20,17 @@ struct menuctr {
     ~menuctr() { if (hMenu) DeleteObject(hMenu); }
 };
 
-void EnhanceMenu(HMENU sub, const string relay_name){
+static void EnhanceMenu(HMENU sub, const string relay_name){
     string S{ "Source Edit " + relay_name };
     UINT flags = MF_STRING | MF_ENABLED;
-    AppendMenu(sub, flags, MAGIC_SOURCE_EDIT_CMD, S.c_str());
+    AppendMenu(sub, flags, CmEditSource, S.c_str());
 }
 
-void SubmitEditCommand(const char* relay_name) {
+static void SubmitEditCommand(const char* relay_name) {
     ShellExecute(NULL, "open", ExecutorCommand.c_str(), relay_name, NULL, SW_HIDE);
-
 }
 
-int Menu(HWND hWnd, int resource_id, int x, int y, const char* relay_name) {
+static int Menu(HWND hWnd, int resource_id, int x, int y, const char* relay_name) {
     menuctr M(IDM_LDRCLICK);
     if (!M.hMenu)
         return 0;
@@ -48,7 +46,7 @@ int Menu(HWND hWnd, int resource_id, int x, int y, const char* relay_name) {
 int RelayGraphicsRightClick(HWND ldWindow, WPARAM, int x, int y) {
 	const char* relay_name = RelayGraphicsNameFromXY(x, y);
     int cmd = Menu(ldWindow, IDM_LDRCLICK, x, y, relay_name);
-    if (cmd == MAGIC_SOURCE_EDIT_CMD) {
+    if (cmd == CmEditSource) {
         SubmitEditCommand(relay_name);
         return 0;
     }

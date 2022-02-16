@@ -48,6 +48,7 @@
 #define CmTrMorgo       4504
 #define CmTrMortoggle   4505
 #define CmTrMorstop     4506
+#define CmEditSource    4507
 
 #define CmPauseDemo     4600
 #define CmHaltDemo      4601
