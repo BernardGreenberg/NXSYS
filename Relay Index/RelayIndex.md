@@ -103,7 +103,7 @@ You may or may not have an Emacs startup.  If you are using regular Emacs (e.g.,
 
 ### Editing interlockings with Lisp Mode
 
-If you have done all this, and created a TAGS files for the interlocking you want to edit (yes, it is still useful after editing and changing line numbers), and have started the emacs server, editing interlocking is now trivial (assuming you know how to design and debug them).
+If you have done all this, and created a TAGS files for the interlocking you want to edit (yes, it is still useful after editing and changing line numbers), and have started the emacs server, editing interlockings is now trivial (assuming you know how to design and debug them).
 
 Read in as many interlocking `.trk` files as you want, and use all Emacs tools.  `m-X visit-tags-table` to the `TAGS` file you have created. Now, you can simply point to any term in the logic of any relay, and type `m-.`, that is, “meta dot”, and *presto*, the definition of that relay (whose contact you clicked on) will come up!  `C-u m-.` (control U, Meta .) and you can type in the name of a relay, and it will be found!  Alphabetic case ignored!
 
