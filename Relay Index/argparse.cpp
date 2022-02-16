@@ -359,14 +359,14 @@ ParsedArgs argset_i::Parse(int argc, const char ** argv) {
             else if (D.boolean)
                 PA.add(D.Name, "true");
             else
-                PA.add(D.Name, GetNextArg(++i, argc, argv, &D));
+                PA.add(D.Name, GetNextArg((int)++i, argc, argv, &D));
         } else if (arg.length() > 1 && arg[0] == '-') {
             char ch = arg[1];
             if (SingleCharMap.count(ch) == 0)
                 uerr("Single-character control arg -%c not known.\n", ch);
             ArgDesc& D = *SingleCharMap[ch];
             if (D.variadic) {
-                int j = i + 1;
+                int j = (int)i + 1;
                 i += collect_variadic_arg (PA, D, j, argc, argv);
             }
             else if (D.boolean) {
@@ -379,7 +379,7 @@ ParsedArgs argset_i::Parse(int argc, const char ** argv) {
             else {
                 string argval = arg.substr(2);
                 if (argval.length() == 0)
-                    PA.add(D.Name, GetNextArg(++i, argc, argv, &D));
+                    PA.add(D.Name, GetNextArg((int)++i, argc, argv, &D));
                 else
                     PA.add(D.Name, argval);
             }
