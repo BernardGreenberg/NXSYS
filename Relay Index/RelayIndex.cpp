@@ -170,7 +170,7 @@ void CompileRelayDef (Sexpr s, fs::path path, long filepos) {
     RLID relay_sym = rlysexpr.u.r;
     if (RelaysDefined.count(relay_sym))
         RC_error (1, "Relay already defined: %s", relay_sym->PRep().c_str());
-    SourceLoc::RecordRelay(path.c_str(), relay_sym->PRep().c_str(), filepos);
+    SourceLoc::RecordRelay(path.string().c_str(), relay_sym->PRep().c_str(), filepos);
     RelaysDefined.insert(relay_sym);
     CompileList (CDR(s), relay_sym);
 }
@@ -222,7 +222,7 @@ void CompileTopLevelForm (Sexpr s, fs::path path, long filepos) {
         else if (fn == INCLUDE) {
             fs::path newpath (path);
             newpath.replace_filename(CADR(s).u.s);
-            FILE * ff = fopen (newpath.c_str(), "rb");
+            FILE * ff = fopen (newpath.string().c_str(), "rb");
             if (ff == NULL)
                 RC_error (1, "Cannot open include file %s", newpath.c_str());
             CompileFile (ff, newpath);
@@ -245,7 +245,7 @@ void CompileTopLevelForm (Sexpr s, fs::path path, long filepos) {
 
 void CompileFile (FILE* f, fs::path path) {
     for (;;) {
-        SourceLoc::RecordFile(path.c_str());
+        SourceLoc::RecordFile(path.string().c_str());
         skip_lisp_file_whitespace(f);
         long sexp_pos = ftell(f);
         Sexpr s = read_sexp (f);
@@ -254,7 +254,7 @@ void CompileFile (FILE* f, fs::path path) {
         CompileTopLevelForm (s, path, sexp_pos);
         dealloc_ncyclic_sexp (s);
     }
-    SourceLoc::ComputeFileLines(path.c_str(), f);
+    SourceLoc::ComputeFileLines(path.string().c_str(), f);
     fclose (f);
 }
 
@@ -314,7 +314,7 @@ int main (int argc, const char ** argv) {
     if (!inpath.has_extension())
         inpath.replace_extension(".trk");
 
-    FILE* f = fopen (inpath.c_str(), "rb");
+    FILE* f = fopen (inpath.string().c_str(), "rb");
     if (f == NULL) {
         cerr << "Cannot open " << inpath << " for reading" <<endl;
         return 3;
@@ -330,11 +330,11 @@ int main (int argc, const char ** argv) {
 
     fs::path outpath = args["outpath"] ? args["outpath"] : fs::path(inpath).replace_extension(".xref");
     fs::path tagspath = fs::path(inpath).replace_filename("TAGS");
-    if (!SourceLoc::WriteTagsFile(tagspath.c_str())) {
+    if (!SourceLoc::WriteTagsFile(tagspath.string().c_str())) {
         cerr << "Can't write " << tagspath << "\n";
         return 3;
     }
-    cout << "Wrote " << tagspath.string() << ", " << SourceLoc::get_file_size(tagspath.c_str()) << " bytes." <<endl;
+    cout << "Wrote " << tagspath.string() << ", " << SourceLoc::get_file_size(tagspath.string().c_str()) << " bytes." <<endl;
 
     std::ofstream outs(outpath);
     if (!outs.is_open()) {

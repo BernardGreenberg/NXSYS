@@ -18,7 +18,7 @@
 #include "argparse.hpp"
 
 #if __cplusplus < 201700
-#error CPlusPlus level not up to C++17!
+#error __cplusplus level not up to C++17!
 #endif
 
 constexpr short MAX_ARGS = 32767;
@@ -93,7 +93,7 @@ public:
     string Help;
     void emplacer(strarray_ilist);
     ParsedArgs Parse(int argc, const char**argv);
-    int collect_variadic_arg(ParsedArgs&, ArgDesc&, int i, int argc, const char **argv);
+    size_t collect_variadic_arg(ParsedArgs&, ArgDesc&, size_t i, size_t argc, const char **argv);
 
 private:
     string GetNextArg(int i, int argc, const char**argv, ArgDesc* pAD);
@@ -145,8 +145,8 @@ void ArgDesc::def_err(const char* fmt, ...) {
     va_start(ap, fmt);
     vfprintf(stderr, fmt, ap);
     string line = "arg spec: {";
-    int i = 0;
-    for (auto s : Params) {
+    size_t i = 0;
+    for (auto& s : Params) {
         line += "\"" + s + "\"";
         if (++i < Params.size())
             line += ", ";
@@ -157,7 +157,7 @@ void ArgDesc::def_err(const char* fmt, ...) {
 }
 
 void ArgDesc::ComputeKeywordMap() {
-    for (auto arg : Params) {
+    for (auto& arg : Params) {
         auto eqp = arg.find('=');
         if (eqp != string::npos) {
             string kwd = arg.substr(0, eqp);
@@ -320,7 +320,7 @@ string argset_i::GetNextArg(int iinc, int argc, const char**argv, ArgDesc* pAD) 
     return "";
 }
 
-int argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, int i, int argc, const char **argv) {
+size_t argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, size_t i, size_t argc, const char **argv) {
     vector<string> values;
     while (values.size() < D.v_max) {
         if (i == argc)
@@ -340,12 +340,12 @@ int argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, int i, int argc, 
 }
 
 ParsedArgs argset_i::Parse(int argc, const char ** argv) {
-    
-    assert (__cplusplus / 100 > 2014);
+ //   printf("%ld", __cplusplus);
+   // assert (__cplusplus / 100 > 2014);
     CommandName = std::filesystem::path(argv[0]).filename().string();
     ParsedArgs PA;
     int unnamed_count = 0;
-    for (int i = 1; i < argc; i++) {
+    for (size_t i = 1; i < argc; i++) {
         string arg = argv[i];
         if (arg.length() > 2 && arg[0] == '-' && arg[1] == '-') {
             string rarg = arg.substr(2);
@@ -353,7 +353,7 @@ ParsedArgs argset_i::Parse(int argc, const char ** argv) {
                 uerr2("Argument --%s not known.\n", rarg);
             ArgDesc& D = *NameMap[rarg];
             if (D.variadic) {
-                int j = i + 1;
+                size_t j = i + 1;
                 i += collect_variadic_arg(PA, D, j, argc, argv);
             }
             else if (D.boolean)
