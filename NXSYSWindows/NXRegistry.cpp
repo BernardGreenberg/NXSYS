@@ -46,17 +46,17 @@ DWORD PutDWORDRegval(HKEY key, LPCSTR vname, DWORD value) {
 	return value;
 }
 
-StringRegValue getStringRegItem(const char* name, size_t size) {
-	HKEY hKey = 0;
+StringRegValue getStringRegval(HKEY key, const std::string& vname, size_t size) {
 	std::vector<char> buff(size);
 	DWORD bufsize = size;
 	DWORD type;
-	DWORD ec = RegOpenKeyEx(HKEY_CURRENT_USER, NXSYS_REG_KEY, 0, KEY_READ, &hKey);
-	if (ec == ERROR_SUCCESS) {
-		ec = RegQueryValueEx(hKey, name, NULL, &type, (PBYTE)buff.data(), &bufsize);
-		RegCloseKey(hKey);
-		if (ec == ERROR_SUCCESS)
-			return StringRegValue(string(buff.data(), bufsize));
-	}
+	DWORD ec = RegQueryValueEx(key, vname.c_str(), NULL, &type, (PBYTE)buff.data(), &bufsize);
+	if (ec == ERROR_SUCCESS)
+		return StringRegValue(string(buff.data(), bufsize));
 	return StringRegValue();
+}
+
+bool putStringRegval(HKEY key, const std::string& vname, const std::string& value) {
+	DWORD ec = RegSetValueEx(key, vname.c_str(), 0, REG_SZ, (PBYTE)value.c_str(), value.length()+1);
+	return (ec == ERROR_SUCCESS);
 }

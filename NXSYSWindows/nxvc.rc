@@ -126,6 +126,7 @@ BEGIN
         MENUITEM "&Clear",                      CmTrClear
         MENUITEM "&Hide",                       CmTrHide
         MENUITEM "&Draw relay...",              CmShowRelayCircuit
+	MENUITEM "Set Locator Path",            CmSetLctrPath
     END
 END
 

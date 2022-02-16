@@ -109,7 +109,8 @@ string GlobalFilePathname;
 char IniFileName [] = "NXSYS.INI";
 char app_name [] = "V2 NXSYS";
 static char InitialTitleBar[] = "Version 2 NXSYS -- New York Subway NX/UR Panel";
-static char FName[MAX_PATH]{};
+
+static string FName;
 
 
 #ifndef NXSYSMac
@@ -189,16 +190,18 @@ static void SetGlobalMenuState (BOOL enable) {
 
 static void
 SetHelpFilePath () {
-    auto result = getStringRegItem("HelpFilePathname");
-    if (result.valid) {
-		HelpPath = result.value;
-		return;
-    }
-    std::vector<char>buf(MAX_PATH);
-    GetModuleFileName (app_instance, buf.data(), buf.size() - 1);
-    fs::path modpath = string(buf.data());
-    modpath.replace_filename("");
-    HelpPath = (fs::path(modpath / HELP_FNAME)).string();
+	if (HKEY hk = GetAppKey("Settings")) {
+		auto result = getStringRegval(hk, "HelpFilePathname");
+		if (result.valid) {
+			HelpPath = result.value;
+			return;
+		}
+		std::vector<char>buf(MAX_PATH);
+		GetModuleFileName(app_instance, buf.data(), buf.size() - 1);
+		fs::path modpath = string(buf.data());
+		modpath.replace_filename("");
+		HelpPath = (fs::path(modpath / HELP_FNAME)).string();
+	}
 }
 
 long smeasure (HDC dc, const char * str) {
@@ -279,15 +282,14 @@ void DeInstallLayout () {
 #endif
 #ifndef NXSYSMac
 
-    if (FName[0]) {
-	char buf [MAX_PATH+10];
-	sprintf (buf, "&1 %s", FName);
-	HMENU menu = GetSubMenu (GetMenu (G_mainwindow),0);
-	if (!AddedLastPath)
-	    InsertMenu (menu, 2, MF_BYPOSITION, CmLoadLast, buf);
-	else
-	    ModifyMenu (menu, CmLoadLast, MF_BYCOMMAND, CmLoadLast, buf);
-	AddedLastPath = TRUE;
+    if (FName.length()) {
+		std::string entry = "&1 " + FName;	
+		HMENU menu = GetSubMenu (GetMenu (G_mainwindow),0);
+		if (!AddedLastPath)
+		  InsertMenu (menu, 2, MF_BYPOSITION, CmLoadLast, entry.c_str());
+		else
+		   ModifyMenu (menu, CmLoadLast, MF_BYCOMMAND, CmLoadLast, entry.c_str());
+		AddedLastPath = TRUE;
     }
 #endif
     /* loose trains are nasty. destroy them first. */
@@ -465,24 +467,29 @@ static void NXSYS_Command(unsigned int cmd) {
 		break;
 	case CmLoadLast:
 		if (!Got) {
-			GetLayout(FName, TRUE);
+			GetLayout(FName.c_str(), TRUE);
 			break;
 		}
 	case CmReload:
 		if (Got && usermsggen(MB_YESNO, "Really reload and reset state?")
 			== IDYES)
-			GetLayout(FName, FALSE);
+			GetLayout(FName.c_str(), FALSE);
 		break;
 	case CmOpen:
-		if (FileOpenDlg(G_mainwindow, FName, FTitle, sizeof(FName), 1,
+	{
+		auto result = FileOpenDlgSTL(G_mainwindow, FName, FTitle, true,
 #ifdef NXCMPOBJ
-			FDE_Layout
+			FDlgExt::Layout
 #else
-			FDE_Interpreted
+			FDlgExt::Interpreted
 #endif
-		))
-			GetLayout(FName, TRUE);
-		break;
+		);
+		if (result.valid) {
+			FName = result.Path;
+			GetLayout(FName.c_str(), TRUE);
+		}
+	}
+	break;
 #ifdef WINDOWS
 	case CmFileInfo:
 	    if (InterlockingLoaded)
@@ -500,10 +507,11 @@ static void NXSYS_Command(unsigned int cmd) {
 		DestroySigWins();
 		break;
 	case CmDemo:
-		if (FileOpenDlg(G_mainwindow, DFName, FTitle,
-			sizeof(DFName), 1, FDE_XDO)) {
+	{
+		auto result = FileOpenDlgSTL(G_mainwindow, "", "Demo script", true, FDlgExt::XDO);
+		if (result.valid) {}
 			AllAbove();
-			Demo(DFName);
+			Demo(result.Path.c_str());
 		}
 		break;
 #ifdef NXOLE
@@ -540,7 +548,7 @@ static void NXSYS_Command(unsigned int cmd) {
 	case CmPrintLogicFile:
 		if (InterlockingLoaded)
 			if (FileOpenDlg(G_mainwindow, DFName, FTitle, sizeof(DFName),
-				1, FDE_Interpreted))
+				1, FDlgExt::Interpreted))
 				DrawInterlockingFromFile(InterlockingName.c_str(), DFName);
 			else;
 		else
@@ -968,14 +976,14 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 
 #ifndef NXSYSMac
   if (initial_layout_name) {
-      strcpy (FName, initial_layout_name);
+	  FName = initial_layout_name;
       const char * s = ReadLayout (initial_layout_name);
       if (s != NULL) {
-	  SetGlobalMenuState(TRUE);
-	  InstallLayoutFile(window, s);
+		  SetGlobalMenuState(TRUE);
+		  InstallLayoutFile(window, s);
       }
       else  {
-	  DeInstallLayout();
+		 DeInstallLayout();
       }
   }
 #ifndef NODEMO
@@ -1011,7 +1019,7 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 	  val = 0;
 	  break;
       case IDYES:
-	  GetLayout (FName, FALSE);
+	  GetLayout (FName.c_str(), FALSE);
 	  val = 0;
 	  break;
       case IDNO:

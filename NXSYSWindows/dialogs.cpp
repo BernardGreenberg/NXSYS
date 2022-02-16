@@ -38,11 +38,21 @@ static std::regex relay_regex(R"(\s*(\d+\w+)\s*)");
 static const char DemoFilter[] = "Interlocking Demos (*.xdo)\0*.xdo\0All Files (*.*)\0*.*\0\0";
 static const char ScriptFilter[] = "NXScript scripts (*.nxs)\0*.nxs\0All Files (*.*)\0*.*\0\0";
 static const char szFilter[] = "Track Layouts (*.tko)\0*.TKO\0Expr Code (*.TRK)\0*.TRK\0Both (.TRK/.TKO)\0*.TRK;*.TKO\0All Files (*.*)\0*.*\0\0";
-static const char *InterpFilter = "Interpreted Xlkgs (*.trk)\0*.TRK\0All Files (*.*)\0*.*\0\0";
+static const char* InterpFilter = "Interpreted Xlkgs (*.trk)\0*.TRK\0All Files (*.*)\0*.*\0\0";
+static const char* BatFilter = "Batch files (*.BAT)\0*.BAT\0All Files (*.*)\0*.*\0\0";
 
+struct FDlgReturnVal FileOpenDlgSTL(HWND hWnd, const std::string file_name, const std::string title, bool rsw, FDlgExt ext) {
+	char tbuff[MAX_PATH]{};
+	char pbuff[MAX_PATH]{};
+	strncpy(tbuff, title.c_str(), sizeof(tbuff) - 1);
+	strncpy(pbuff, file_name.c_str(), sizeof(pbuff) - 1);
 
-BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
-	int bufl, int rsw, FDlgExt dsw) {
+	if (FileOpenDlg(hWnd, pbuff, tbuff, sizeof(pbuff), rsw ? 1 : 0, ext))
+		return FDlgReturnVal(pbuff, tbuff);
+	else return FDlgReturnVal();
+}
+
+BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName, int bufl, int rsw, FDlgExt dsw) {
 
 	OPENFILENAME ofn;
 	char ext[MAXEXT];
@@ -55,14 +65,17 @@ BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
 	ofn.hwndOwner = hwnd;
 	ofn.hInstance = NULL;
 	switch (dsw) {
-	case FDE_Interpreted:
+	case FDlgExt::Interpreted:
 		ofn.lpstrFilter = InterpFilter;
 		break;
-	case FDE_XDO:
+	case FDlgExt::XDO:
 		ofn.lpstrFilter = DemoFilter;
 		break;
-	case FDE_NXScript:
+	case FDlgExt::NXScript:
 		ofn.lpstrFilter = ScriptFilter;
+		break;
+	case FDlgExt::ShellScript:
+		ofn.lpstrFilter = BatFilter;
 		break;
 	default:
 		ofn.lpstrFilter = szFilter;
@@ -79,15 +92,18 @@ BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
 	ofn.nMaxFileTitle = 256;
 	ofn.lpstrInitialDir = NULL;
 	switch (dsw) {
-	case FDE_Layout:
+	case FDlgExt::Layout:
 	    ofn.lpstrTitle = "Open Interlocking definition file.";
 	    break;
-	case FDE_Interpreted:
+	case FDlgExt::Interpreted:
 	    ofn.lpstrTitle = "Open NXSYS-Lisp code for interlocking definition";
 	    break;
-	case FDE_XDO:
+	case FDlgExt::XDO:
 	    ofn.lpstrTitle = "Run Interlocking Demo file.";
 	    break;
+	case FDlgExt::ShellScript:
+		ofn.lpstrTitle = "Shell Script (.BAT file)";
+		break;
 	}
 	assert(rsw);
 	ofn.Flags = (rsw ? OFN_FILEMUSTEXIST : OFN_OVERWRITEPROMPT)
@@ -102,6 +118,7 @@ BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName,
 
 	return rsw ? GetOpenFileName(&ofn) : GetSaveFileName(&ofn);
 }
+
 static std::string fixnl(std::string s) {
     std::string out;
     for (char c : s) {
@@ -117,17 +134,18 @@ DLGPROC_DCL status_report_DlgProc(HWND dialog, unsigned message, WPARAM wParam, 
 {
     switch (message) {
     case WM_INITDIALOG:
-	SetDlgItemText(dialog, IDC_STATUS_REPORT, fixnl(InterlockingFileStatus().Report()).c_str());
+		SetDlgItemText(dialog, IDC_STATUS_REPORT, fixnl(InterlockingFileStatus().Report()).c_str());
 	return TRUE;
 
     case WM_COMMAND:
-	if (wParam == IDOK || wParam == IDCANCEL) {
-	    EndDialog(dialog, TRUE);
+		if (wParam == IDOK || wParam == IDCANCEL) {
+		    EndDialog(dialog, TRUE);
 	    return TRUE;
-	}
-	return FALSE;
+		}
+		return FALSE;
+
     default:
-	return FALSE;
+		return FALSE;
     }
 }
 

@@ -1,6 +1,6 @@
 # Relay Indexer and Source Locator
 
-### 15 February 2022
+### 16 February 2022
 
 These two features are new to the Windows build, but have been available in the Mac builds for a while.  They are intended to assist those designing NXSYS interlockings in pseudo-Lisp relay circuitry (which is the only way).
 
@@ -14,8 +14,8 @@ We will discuss them independently.
 
 The relay cross reference is a listing, in relay order (smaller object (lever, track circuit, etc.) numbers first, alphabetical within the same object) for each relay, of all the relays (including this one, if it has a “stick contact”) who include a contact of this relay in their circuits.  The ”referrers” are sorted in the same way.
 
-Here is an excerpt from the cross-reference of Myrtle Avenue (make your window wider if the lines wrap).
-
+Here is an excerpt from the cross-reference of Myrtle Avenue: 
+<span style="font-size:50%">
 ~~~
 
 155L 244 7104 myrtle.trk
@@ -29,10 +29,10 @@ Here is an excerpt from the cross-reference of Myrtle Avenue (make your window w
 155NL UNDEFINED
  155NLP    
 ~~~
-
+</span>
 Lines read across, not column-down. The header line for each relay lists the name of the relay, the line number, and the character position in the file where its definition appear.  Of course, those will change if you edit.
 
-Note that 159 NL is listed as “undefined".  That is not an error; 155NL is the tower operator's “normal lever control” for switch 155, and 155NL is thus a so-called *Quisling relay;* you don't supply it—the simulator does.
+Note that 155NL is listed as “undefined".  That is not an error; 155NL is the tower operator's “normal lever control” for switch 155, and 155NL is thus a so-called *Quisling relay;* you don't supply it—the simulator does.
 
 Note also that the file-name is repeated.  This is not an error or a weakness; even medium-sized interlockings are distributed over several files.
 
@@ -42,13 +42,15 @@ The output file will be called the same as the input file, but with `.trk` repla
 
 This feature allows you to locate the pseudo-Lisp source for any relay in the interlocking by clicking right on its coil or contact in the Relay Draftsperson drawings. If set up properly, an external editor or other program of your choice will navigate to the relay definition in the source file so you can edit it, and then type control- (Cmd-) R to NXSYS to reload the fixed version.
 
-The NXSYS feature relies on being told a key piece of information, viz., exactly what external program or BAT/bash script to execute to tell about the relay you want to edit.  Although the purpose and action are identical on both systems (Windows and Mac), the way and place you put the information differs.  This script, which you supply, is called the *SourceLocatorScript* (It needn't be a script, it could be an executable program, but we will assume script for now, BASH on Mac and BAT on Windows).
+The NXSYS feature relies on being told a key piece of information, viz., exactly what external program or BAT/bash script to execute to tell about the relay you want to edit.  Although the purpose and action are identical on both systems (Windows and Mac), the way and place you put the information differs.  This script, which you supply, is called the *SourceLocatorScript* (It needn't be a script, it could be an executable program, but we will assume script for now, Bash on the Mac and BAT on Windows).
 
-On both systems, you edit the source of a relay by clicking right on its coil or contact in the Relay Draftsperson.  Now, on either system, you will get a small context menu allowing you to close or hide the window, but, if the Source Locator Script has been set up properly, you will also see a new option, `Edit Source 158HY` (or whatever the relay name is). Select that and your editor will be fed the string `158HY` in a way that you prescribe.  I will tell you how to do it for Emacs (including Mac Aquamacs).
+On both systems, you edit the source of a relay by clicking right on its coil or contact in the Relay Draftsperson, whereupon you will get a small “context menu” allowing you to close or hide the window ... and if the Source Locator Script has been set up properly, you will also see a new option, `Edit Source 158HY` (or whatever the relay name is). Select that and your editor will be fed the string `158HY` in a way that you prescribe.  I will tell you how to do it for Emacs (including Mac Aquamacs).
 
 #### Writing the Source Locator Script
 
-The content of the Source Locator Script depends entirely on the editor or scheme you are using.  I am going to assume Emacs (including [Aquamacs](https://aquamacs.org/)) with its [comprehensive ”tags” facility](https://www.emacswiki.org/emacs/EmacsTags) for locating defined entities in multiple computer languages.
+The Source Locator Script, which you supply, specifies what is to happen on your system when NXSYS wants to locate the source for a relay.
+
+The content of the script depends entirely on the editor or scheme you are using.  I am going to assume you are using Emacs (including [Aquamacs](https://aquamacs.org/)) with its [comprehensive ”tags” facility](https://www.emacswiki.org/emacs/EmacsTags) for locating defined entities in multiple computer languages.
 
 For Emacs/Aquamacs, using the native TAGS facility, the content should look like this:
 ~~~
@@ -57,35 +59,19 @@ For Emacs/Aquamacs, using the native TAGS facility, the content should look like
 c:\"Program Files"\Emacs\x86_64\bin\emacsclient -e "(find-tag """%1""")"   (Windows)
 ~~~
 
-Note that these assume that Emacs and its "emacsclient" are installed in the default place; they should be changed appropriately if not.
+`emacsclient` is a command-line application supplied with Emacs that can send messages to a running instance of Emacs (or Aquamacs). The above formula assumes that is installed in the default place where Emacs installation puts it, and should be changed appropriately if you installed it somewhere else.
 
-You can call this script anything at all you want, `EmacsSourceLocator.sh` or `EmacsSourceLocator.bat` (Mac, Windows).  On the Mac, you must, as with all shell scripts, `chmod +x ...` to allow it to be executed.
+You can call this script anything at all you want, perhaps `EmacsSourceLocator.sh` or `EmacsSourceLocator.bat` (Mac, Windows).  On the Mac, you must, as with all shell scripts, `chmod +x ...` to allow it to be executed.
 
 If you're not using Emacs or Aquamacs, but some scheme of your own, you presumably know what you should put in your Source Locator Script.  It will be called as a command with one argument, the name of the relay whose source is sought, which cannot contain spaces, quotes, parentheses, or other problematic characters.
 
 #### Identifying the Source Locator Script to NXSYS
 
-This is the tricky part.  In the Olde Days, I'd tell you to add a line to the INIT file, but these days a graduate degree in computer science is needed.  On Windows, we use the Registry.  If you are not competent to edit the registry, get help.  You need Admin access, too, to set this up. On the Mac, you have to use an obscure program, `PListBuddy`, or, if you are an XCode adept, that is even simpler.
+This has now (NXSYS 2.6.0) become easy.
 
-##### Windows
+There is a File Open Dialog in both implementations that allows you to tell NXSYS about your Source Locator script.  On the Mac, it is called up by a new button, `Set Lctr Path`, on the right-hand top of the Relay Draftsperson window (you can expose the latter via the `View` menu). On Windows, it is the identically-named option on the `Control` menu at its top left.  NXSYS will update its info-plist or registry data accordingly.
 
-Basically, you have to set the pathname of your Source Locator Script as the value of the Registry variable called, oddly enough, `SourceLocatorScript` in your NXSYS `HKEY_CURRENT_USER` Registry key.  The Registry pathname of NXSYS' Registry key is (or should be), logically enough:
-
-`HKEY_CURRENT_USER\Software\B.Greenberg\NXSYS
-
-The key should exist. Directly under it (not in "Settings"), create a new “string value” called `SourceLocatorScript`, and give it a value of the full pathname, including drive, of your source locator script, e.g., `c:\Users\joe\EmacsSourceLocatorScript.bat`.  If this is not done, the Edit Source menu item will not appear on the Relay Draftsperson right-click menu.
-
-NXSYS inspects this value when it starts up. If you set it while NXSYS is running, you will have to restart it for the setting to be noticed.
-
-##### On the Mac
-
-You have to know how to use `PListBuddy` or XCode to edit “plists”.  `PListBuddy` should be in `/usr/libexec/PListBuddy` on a healthy Mac.  There are several good articles on how to use it. [Here's one](https://www.marcosantadev.com/manage-plist-files-plistbuddy/). Or use XCode, if you are skilled in its use and have it (it is very large and complex -- if you do not already use Xcode, don’t attempt to for this).
-
-You have to find NXSYS’s `plist`.  It should be at
-~~~
-~/Library/Preferences/BernardGreenberg.NXSYSMac.plist
-~~~
-(it will always be my name, as the author/vendor, not yours!).  Once you have skill in simple `plist` editing, do the same as on Window, i.e., add a string value called `SourceLocatorScript` with a value of the full pathname from `/` of your source locator script.  Again, skip this or do it wrongly, and NXSYS will not offer `Source Edit`.
+Both commands assume you will use a `.sh` (Mac) or `.BAT` (Windows) file, and only offer such files in the file dialog.  If you actually have written an executable program that you have written for this function, feel free to edit the `HKEY_CURRENT_USER` registry for `B.Greenberg\NXSYS\Settings` (Windows) or info-plist `~/Library/Preferences/BernardGreenberg.NXSYSMac.plist` (Mac) yourself with appropriate tools, in which you are surely proficient if you have actually written such a program.
 
 ### Use under Emacs/Aquamacs
 

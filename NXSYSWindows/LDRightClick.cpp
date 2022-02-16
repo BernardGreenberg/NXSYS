@@ -54,8 +54,10 @@ int RelayGraphicsRightClick(HWND ldWindow, WPARAM, int x, int y) {
 }
 
 void InitRelayGraphicsSourceClick() {
-    auto result = getStringRegItem("SourceLocatorScript");
-    if (result.valid)
-        ExecutorCommand = result.value;
-
+    AppKey hk("Settings");
+    if (hk) {
+        auto result = getStringRegval(hk, SOURCE_LOCATOR_SCRIPT_VALUE_NAME);
+        if (result.valid)
+            ExecutorCommand = result.value;
+    }
 }

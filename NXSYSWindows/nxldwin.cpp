@@ -15,6 +15,7 @@
 #include "usermsg.h"
 #include "rlymenu.h"
 #include "LDRightClick.h"
+#include "NXRegistry.h"
 
 static HWND S_RelayGraphicsWindow = nullptr;
 static const char RelayGraphicsWindow_Class [] = PRODUCT_NAME ":Relayg";
@@ -34,6 +35,17 @@ static void PlaceDrawing (HWND window) {
     }
     InvalidateRect (window, NULL, 0);
 }
+
+static void SetLocatorPath(HWND window) {
+	auto result = FileOpenDlgSTL(window, "", "BAT file Source Locator", true, FDlgExt::ShellScript);
+	if (result.valid) {
+		AppKey key("Settings");
+		if (key)
+			putStringRegval(key, SOURCE_LOCATOR_SCRIPT_VALUE_NAME, result.Path);
+		InitRelayGraphicsSourceClick();
+	}
+}
+
 
 //Don't know why "static" doesn't work...
  WNDPROC_DCL RelayGraphicsWindow_WndProc
@@ -67,6 +79,9 @@ static void PlaceDrawing (HWND window) {
 		case CmShowRelayCircuit:
 		    AskForAndDrawRelay(window);
 		    break;
+		case CmSetLctrPath:
+			SetLocatorPath(window);
+			break;
 		default:
 			break;
 	    }
