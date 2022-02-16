@@ -53,6 +53,7 @@ NSString* savedSourceString = nullptr;
     savedSourceString = source_string;
 }
 
+
 -(IBAction)sourceCmd:(id)sender
 {
     NSString* cmdline = [NSString stringWithFormat:@"%@ \"%@\"", sourceLocatorScript, savedSourceString];
@@ -75,6 +76,27 @@ NSString* savedSourceString = nullptr;
         [self.window.parentWindow removeChildWindow:self.window];
     [getNXWindow() orderFront:nil];
     
+}
+- (IBAction)setLocatorPath:(id)sender {
+    NSOpenPanel* openDlg = [NSOpenPanel openPanel];
+    
+    // Enable the selection of files, disable directories in the dialog.
+    [openDlg setCanChooseFiles:YES];
+    [openDlg setCanChooseDirectories:NO];
+    [openDlg setAllowedFileTypes: @[ @"sh" ]];
+    [openDlg setTitle:@"NXSYS - Set source locator script pathname"];
+
+    // Display the dialog.  "If OK", process the file.
+    if ( [openDlg runModal] == NSModalResponseOK )
+    {
+        [openDlg close];
+        NSURL* url = [openDlg URL];
+        openDlg = nil;
+        NSUserDefaults * dfts = [NSUserDefaults standardUserDefaults];
+        NSString * path = url.path;
+        [dfts setValue:path forKey:SourceLocatorScriptKey];
+        sourceLocatorScript = path;  // allow use now!
+    }
 }
 - (id)initWithWindow:(NSWindow *)window
 {
