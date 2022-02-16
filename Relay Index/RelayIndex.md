@@ -40,7 +40,7 @@ The output file will be called the same as the input file, but with `.trk` repla
 
 ## Source locator / Emacs interoperation
 
-This feature allows you to locate the pseudo-Lisp source for any relay in the interlocking by clicking right on its coil or contact in the Relay Draftsperson drawings. If set up properly, an external editor or other program of your choice will navigate to the relay definition in the source file so you can edit it (and then type control- (Cmd-) R to NXSYS to reload the fixed version.
+This feature allows you to locate the pseudo-Lisp source for any relay in the interlocking by clicking right on its coil or contact in the Relay Draftsperson drawings. If set up properly, an external editor or other program of your choice will navigate to the relay definition in the source file so you can edit it, and then type control- (Cmd-) R to NXSYS to reload the fixed version.
 
 The NXSYS feature relies on being told a key piece of information, viz., exactly what external program or BAT/bash script to execute to tell about the relay you want to edit.  Although the purpose and action are identical on both systems (Windows and Mac), the way and place you put the information differs.  This script, which you supply, is called the *SourceLocatorScript* (It needn't be a script, it could be an executable program, but we will assume script for now, BASH on Mac and BAT on Windows).
 
@@ -97,7 +97,7 @@ This has been tested under Emacs (Windows build) 27, and Aquamacs 3.5 (Mac only)
 
 In order for Emacs or Aquamacs to “hear” the messages sent to it by `emacsclient`, you have to “start the Emacs server“ in Emacs (or Aquamacs).  This is done with the command `M-x server-start`.  If you are an Emacs adept, you can do that in your startup (i.e., add `(server-start)`), if you want.  But fail and the commands sent from NXSYS will not be heard. Here is [additional info on the Emacs server](https://wikemacs.org/wiki/Emacs_server).
 
-There are two more changes to Emacs you should make if you want to edit `.trk` files in Emacs’ powerful [Lisp mode](https://www.emacswiki.org/emacs/EmacsLispMode).  You definitely want to tell it that all `.trk` files are to be edited in Lisp mode, and have to modify the syntax of exclamation point to not be a valid ”word” character. Unless you do this, if you click, in Emacs, on a back-contact term such as `!153RWK`, Emacs will fail to find the source for putative relay `!153RWK`, not knowing that the ! should not be included in the name.
+There are two customizations of Emacs you should make if you want to edit `.trk` files in Emacs’ powerful [Lisp mode](https://www.emacswiki.org/emacs/EmacsLispMode).  You definitely want to tell it that all `.trk` files are to be edited in Lisp mode, and to modify the syntax of exclamation point to not be a valid ”word” character. Unless you do this, if you click, in Emacs, on a back-contact term such as `!153RWK`, Emacs will fail to find the source for putative relay `!153RWK`, not knowing that the ! should not be included in the name.
 
 
 To effect these changes, add this Lisp code verbatim, copy-paste, to your Emacs / Aquamacs startup (or make one):
@@ -114,7 +114,7 @@ To effect these changes, add this Lisp code verbatim, copy-paste, to your Emacs 
       (when (and fname (string-suffix-p ".trk" fname))
 	      (my-trk-mode-setup)))))
 
-(add-hook 'after-change-major-mode-hook 'bsg-after-change-major-mode)
+(add-hook 'after-change-major-mode-hook 'my-after-change-major-mode)
 ~~~
 
 You may or may not have an Emacs startup.  If you are using regular Emacs (e.g., on Windows), you probably don’t, and if you're using Aquamacs, you probably do. On Windows, it is a file called `.emacs` in your home directory, `c:\Users\kathy` or whatever (Microsoft is working to make it hard to access).  If you are using Aquamacs, it is `~/Library/Preferences/Aquamacs Emacs/Preferences.el` (`el` stands for “Emacs Lisp”, although `.emacs` in your home directory is read, too, which covers the “regular Emacs” case).
