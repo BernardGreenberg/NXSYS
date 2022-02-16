@@ -1,6 +1,6 @@
 #  NXSYS sources, complete
 ###  By and ©Copyright 1994-2022, Bernard S. Greenberg
-#### First Posted 4 February 2022
+#### First Posted 4 February 2022 (last 15 Feb 2022)
 
 This is the buildable, runnable source code for **NXSYS** (*enn-ex-sys*) (Version 2), my New York City Subway relay-logic and interlocking panel simulator, and its six offered interlockings, as it stands.  It is mine, and mine alone, although Dave Barraza's contributions to its debugging and development deserve credit.  Feel free to continue it, improve it if you like, or just build it for yourself.  I want this repository to be its home.  I'm not soliciting or merging branches at this time.
 
@@ -48,7 +48,7 @@ There are five in this project:
 
 - **BLISP** (B for Bernie).  A command-line program, being a test-build of its native reader (`readsexp.cpp`) for the quasi-Lisp used for interlocking definitions.  `READ-PRINT` only, though, C(++)-no-`EVAL`. 10 cdr trains are handled :).
 
-- **Relay Indexer**.  This recent innovation is another command-line C++11 program (no Objective C/C++) built from this tree that produces a text-format "relay index", a cross-reference of which relays are referenced as logic inputs by other relays, including "built-in" relays to the system. While this can be useful, it even more usefully produces an Emacs/Aquamacs `TAGS` table for all of the relays in the interlocking, allowing `meta-.` to be used with relays, and allowing relay source to be located from NXSYS' Relay Draftsperson.
+- **Relay Indexer**. There is an [extensive separate help file on this](https://github.com/BernardGreenberg/NXSYS/blob/master/RelayIndex/RelayIndex.htm) now. It now works on Windows and Mac.
 
 The distribution of the sources into XCode "groups" is somewhat chaotic, and I apologize.  The [folder `NXSYS`](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYS) contains all code of the main application (and headers) that is shared with the Windows build.  `TLEdit/tled` contains the *additional* code in TLEdit shared with Windows version. And `NXSYSWindows` contains all Windows-only code and other artifacts.  All other folders contain Mac-only code and headers.
 

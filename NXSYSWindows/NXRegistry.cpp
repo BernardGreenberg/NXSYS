@@ -7,6 +7,8 @@ using std::string;
 
 #define NXSYS_LM_REG_KEY "SOFTWARE\\B.Greenberg\\NXSYS"
 
+static constexpr UINT SAM = KEY_WOW64_64KEY;
+
 HKEY GetAppKey(LPCSTR subk) {
 	HKEY hk;
 	string path{ NXSYS_LM_REG_KEY };
@@ -19,7 +21,7 @@ HKEY GetAppKey(LPCSTR subk) {
 			0,
 			NULL,
 			0,
-			KEY_ALL_ACCESS,
+			KEY_ALL_ACCESS | SAM,
 			NULL,
 			&hk,
 			NULL))
@@ -50,7 +52,7 @@ StringRegValue getStringRegItem(const char* name, size_t size) {
 	std::vector<char> buff(size);
 	DWORD bufsize = size;
 	DWORD type;
-	DWORD ec = RegOpenKeyEx(HKEY_LOCAL_MACHINE, NXSYS_LM_REG_KEY, 0, KEY_READ, &hKey);
+	DWORD ec = RegOpenKeyEx(HKEY_LOCAL_MACHINE, NXSYS_LM_REG_KEY, 0, KEY_READ | SAM, &hKey);
 	if (ec == ERROR_SUCCESS) {
 		ec = RegQueryValueEx(hKey, name, NULL, &type, (PBYTE)buff.data(), &bufsize);
 		RegCloseKey(hKey);
