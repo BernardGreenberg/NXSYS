@@ -367,6 +367,7 @@ void TrackCircuitSystemLoadTimeComplete();
 void TrackCircuitSystemReInit();
 void DecodeDigitated (long input, int &trackno, int &sno);
 TrackCircuit * FindTrackCircuit (long sno);
+void TrackCircuitSystemReInit();
 #endif
 
 #endif

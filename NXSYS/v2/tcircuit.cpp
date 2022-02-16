@@ -15,6 +15,8 @@
 #include "rlyapi.h"
 #endif
 
+#include <unordered_set>
+
 /* Track circuits are not GraphicObjects and need explicit tracking.
    Track seg(ment)s, on the other hand, are GO's and are tracked by the
    GO system.
@@ -38,7 +40,7 @@ static void VEDEL (std::vector<T> v, T item) {  //1767-1808 Ukr. vector deleter
             break;
         }
     }
-}
+} 
 
 TrackCircuit::~TrackCircuit () {
     VEDEL(AllTrackCircuits, this);
@@ -173,10 +175,12 @@ void TrackCircuitSystemLoadTimeComplete () {
 }
 
 void TrackCircuitSystemReInit() {
-    std::vector<TrackCircuit*> copy(AllTrackCircuits);
-    AllTrackCircuits.clear();  //avoid quadratic operation...
-    for (auto tc : copy) //provably works (i.e., ptrs were copied)
-        delete tc;
+    std::unordered_set<TrackCircuit*> Circuits;
+    for (auto tc : AllTrackCircuits)
+        Circuits.insert(tc);
+    for (auto ttc : Circuits)
+        delete ttc;
+    AllTrackCircuits.clear();
 }
 
 void TrackCircuit::TrackReportFcn(BOOL state, void* v) {
