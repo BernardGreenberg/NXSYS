@@ -43,8 +43,8 @@
 		5B50EE4919BA9455004CAABE /* ChooseTrack.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B50EE4819BA9455004CAABE /* ChooseTrack.xib */; };
 		5B50EE4D19BA95A7004CAABE /* ChooseTrackController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B50EE4B19BA95A7004CAABE /* ChooseTrackController.mm */; };
 		5B54273E27BC76F9006EEDEF /* RelayIndex.md in Resources */ = {isa = PBXBuildFile; fileRef = 5B54273D27BC76F9006EEDEF /* RelayIndex.md */; };
-		5B54274A27BD21D2006EEDEF /* Relay Index.vcxproj in Resources */ = {isa = PBXBuildFile; fileRef = 5B54274827BD21D2006EEDEF /* Relay Index.vcxproj */; };
-		5B54274B27BD21D2006EEDEF /* Relay Index.vcxproj.filters in Resources */ = {isa = PBXBuildFile; fileRef = 5B54274927BD21D2006EEDEF /* Relay Index.vcxproj.filters */; };
+		5B54275027BD27C3006EEDEF /* Relay Index.vcxproj in Resources */ = {isa = PBXBuildFile; fileRef = 5B54274E27BD27C3006EEDEF /* Relay Index.vcxproj */; };
+		5B54275127BD27C3006EEDEF /* Relay Index.vcxproj.filters in Resources */ = {isa = PBXBuildFile; fileRef = 5B54274F27BD27C3006EEDEF /* Relay Index.vcxproj.filters */; };
 		5B54429319B004ED00FB5537 /* ContextMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429219B004ED00FB5537 /* ContextMenu.mm */; };
 		5B54429519B0F00F00FB5537 /* RelaySelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B54429419B0F00F00FB5537 /* RelaySelector.xib */; };
 		5B54429819B0F1F500FB5537 /* RelayListView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429719B0F1F500FB5537 /* RelayListView.mm */; };
@@ -336,8 +336,8 @@
 		5B54273B27BC498C006EEDEF /* NXRegistry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NXRegistry.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5B54273C27BC498C006EEDEF /* resource1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = resource1.h; sourceTree = "<group>"; };
 		5B54273D27BC76F9006EEDEF /* RelayIndex.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = RelayIndex.md; sourceTree = "<group>"; };
-		5B54274827BD21D2006EEDEF /* Relay Index.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Relay Index.vcxproj"; sourceTree = "<group>"; };
-		5B54274927BD21D2006EEDEF /* Relay Index.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Relay Index.vcxproj.filters"; sourceTree = "<group>"; };
+		5B54274E27BD27C3006EEDEF /* Relay Index.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Relay Index.vcxproj"; sourceTree = "<group>"; };
+		5B54274F27BD27C3006EEDEF /* Relay Index.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Relay Index.vcxproj.filters"; sourceTree = "<group>"; };
 		5B54429219B004ED00FB5537 /* ContextMenu.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ContextMenu.mm; sourceTree = "<group>"; };
 		5B54429419B0F00F00FB5537 /* RelaySelector.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelaySelector.xib; sourceTree = "<group>"; };
 		5B54429619B0F1F500FB5537 /* RelayListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelayListView.h; sourceTree = "<group>"; };
@@ -788,13 +788,13 @@
 			name = Headers;
 			sourceTree = "<group>";
 		};
-		5B54274727BD21D2006EEDEF /* RelayIndex */ = {
+		5B54274D27BD27C3006EEDEF /* Relay Index */ = {
 			isa = PBXGroup;
 			children = (
-				5B54274827BD21D2006EEDEF /* Relay Index.vcxproj */,
-				5B54274927BD21D2006EEDEF /* Relay Index.vcxproj.filters */,
+				5B54274E27BD27C3006EEDEF /* Relay Index.vcxproj */,
+				5B54274F27BD27C3006EEDEF /* Relay Index.vcxproj.filters */,
 			);
-			path = RelayIndex;
+			path = "Relay Index";
 			sourceTree = "<group>";
 		};
 		5B54429019B004AD00FB5537 /* Relay Selector */ = {
@@ -1030,7 +1030,7 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
-				5B54274727BD21D2006EEDEF /* RelayIndex */,
+				5B54274D27BD27C3006EEDEF /* Relay Index */,
 				5BABBE1327B7143100AED491 /* NXSYSWindows.sln */,
 				5B54273A27BC498C006EEDEF /* LDRightClick.cpp */,
 				5B54273827BC498C006EEDEF /* LDRightClick.h */,
@@ -1653,10 +1653,10 @@
 				5BA92A7619DD72690098DBEC /* NXMessageBox.xib in Resources */,
 				5BA92A6919DC3BD90098DBEC /* Info.xib in Resources */,
 				5BE487DA199D0A5C007BD6BF /* InfoPlist.strings in Resources */,
-				5B54274B27BD21D2006EEDEF /* Relay Index.vcxproj.filters in Resources */,
+				5B54275127BD27C3006EEDEF /* Relay Index.vcxproj.filters in Resources */,
 				5B133A582649F5B800120B10 /* TrainWreck256.png in Resources */,
 				5BE487E8199D0A5C007BD6BF /* Images.xcassets in Resources */,
-				5B54274A27BD21D2006EEDEF /* Relay Index.vcxproj in Resources */,
+				5B54275027BD27C3006EEDEF /* Relay Index.vcxproj in Resources */,
 				5B47F34419AE70AB00CBB80A /* Help.xib in Resources */,
 				5BAFFBAE19BA4C4900AEE791 /* TrainDlg.xib in Resources */,
 				5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */,
