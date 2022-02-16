@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generated-by" content="Markdown PRO, http://markdownpro.com"/>
+<title></title>
+<style type="text/css">
+html,body{margin:0;padding:0;}
+body {padding: 20px;max-width:800px}
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,cite,code,del,dfn,em,img,q,s,samp,small,strike,strong,sub,sup,tt,var,dd,dl,dt,li,ol,ul,fieldset,form,label,legend,button,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;font-weight:normal;font-style:normal;font-size:100%;line-height:1;font-family:inherit;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul{list-style:none;}
+q:before,q:after,blockquote:before,blockquote:after{content:"";}
+html{overflow-y:scroll;font-size:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+a:focus{outline:thin dotted;}
+a:hover,a:active{outline:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block;}
+audio,canvas,video{display:inline-block;*display:inline;*zoom:1;}
+audio:not([controls]){display:none;}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline;}
+sup{top:-0.5em;}
+sub{bottom:-0.25em;}
+img{border:0;-ms-interpolation-mode:bicubic;}
+button,input,select,textarea{font-size:100%;margin:0;vertical-align:baseline;*vertical-align:middle;}
+button,input{line-height:normal;*overflow:visible;}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0;}
+button,input[type="button"],input[type="reset"],input[type="submit"]{cursor:pointer;-webkit-appearance:button;}
+input[type="search"]{-webkit-appearance:textfield;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;}
+input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;}
+textarea{overflow:auto;vertical-align:top;}
+html,body{background-color:#ffffff;}
+body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:normal;line-height:18px;color:#404040;}
+.container{width:940px;margin-left:auto;margin-right:auto;zoom:1;}.container:before,.container:after{display:table;content:"";zoom:1;*display:inline;}
+.container:after{clear:both;}
+.container-fluid{position:relative;min-width:940px;padding-left:20px;padding-right:20px;zoom:1;}.container-fluid:before,.container-fluid:after{display:table;content:"";zoom:1;*display:inline;}
+.container-fluid:after{clear:both;}
+.container-fluid>.sidebar{float:left;width:220px;}
+.container-fluid>.content{margin-left:240px;}
+a{color:#0069d6;text-decoration:none;line-height:inherit;font-weight:inherit;}a:hover{color:#00438a;text-decoration:underline;}
+.pull-right{float:right;}
+.pull-left{float:left;}
+.hide{display:none;}
+.show{display:block;}
+.row{zoom:1;margin-left:-20px;}.row:before,.row:after{display:table;content:"";zoom:1;*display:inline;}
+.row:after{clear:both;}
+p{font-size:13px;font-weight:normal;line-height:18px;margin-bottom:9px;}p small{font-size:11px;color:#bfbfbf;}
+h1,h2,h3,h4,h5,h6{font-weight:bold;color:#404040;}h1 small,h2 small,h3 small,h4 small,h5 small,h6 small{color:#bfbfbf;}
+h1{margin-bottom:18px;font-size:30px;line-height:36px;}h1 small{font-size:18px;}
+h2{font-size:24px;line-height:36px;}h2 small{font-size:14px;}
+h3,h4,h5,h6{line-height:36px;}
+h3{font-size:18px;}h3 small{font-size:14px;}
+h4{font-size:16px;}h4 small{font-size:12px;}
+h5{font-size:14px;}
+h6{font-size:13px;color:#bfbfbf;text-transform:uppercase;}
+ul,ol{margin:0 0 18px 25px;}
+ul ul,ul ol,ol ol,ol ul{margin-bottom:0;}
+ul{list-style:disc;}
+ol{list-style:decimal;}
+li{line-height:18px;color:#808080;}
+ul.unstyled{list-style:none;margin-left:0;}
+dl{margin-bottom:18px;}dl dt,dl dd{line-height:18px;}
+dl dt{font-weight:bold;}
+dl dd{margin-left:9px;}
+hr{margin:20px 0 19px;border:0;border-bottom:1px solid #eee;}
+strong{font-style:inherit;font-weight:bold;}
+em{font-style:italic;font-weight:inherit;line-height:inherit;}
+.muted{color:#bfbfbf;}
+blockquote{margin-bottom:18px;border-left:5px solid #eee;padding-left:15px;}blockquote p{font-size:14px;font-weight:300;line-height:18px;margin-bottom:0;}
+blockquote small{display:block;font-size:12px;font-weight:300;line-height:18px;color:#bfbfbf;}blockquote small:before{content:'\2014 \00A0';}
+address{display:block;line-height:18px;margin-bottom:18px;}
+code,pre{padding:0 3px 2px;font-family:Monaco, Andale Mono, Courier New, monospace;font-size:12px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+code{padding:1px 3px;}
+pre{background-color:#f5f5f5;display:block;padding:8.5px;margin:0 0 18px;line-height:18px;font-size:12px;border:1px solid #ccc;border:1px solid rgba(0, 0, 0, 0.15);-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;white-space:pre;white-space:pre-wrap;word-wrap:break-word;}
+form{margin-bottom:18px;}
+fieldset{margin-bottom:18px;padding-top:18px;}fieldset legend{display:block;padding-left:150px;font-size:19.5px;line-height:1;color:#404040;*padding:0 0 5px 145px;*line-height:1.5;}
+form .clearfix{margin-bottom:18px;zoom:1;}form .clearfix:before,form .clearfix:after{display:table;content:"";zoom:1;*display:inline;}
+form .clearfix:after{clear:both;}
+label,input,select,textarea{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:normal;line-height:normal;}
+label{padding-top:6px;font-size:13px;line-height:18px;float:left;width:130px;text-align:right;color:#404040;}
+form .input{margin-left:150px;}
+input[type=checkbox],input[type=radio]{cursor:pointer;}
+input,textarea,select,.uneditable-input{display:inline-block;width:210px;height:18px;padding:4px;font-size:13px;line-height:18px;color:#808080;border:1px solid #ccc;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+input[type=checkbox],input[type=radio]{width:auto;height:auto;padding:0;margin:3px 0;*margin-top:0;line-height:normal;border:none;}
+input[type=file]{background-color:#ffffff;padding:initial;border:initial;line-height:initial;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
+input[type=button],input[type=reset],input[type=submit]{width:auto;height:auto;}
+select,input[type=file]{height:27px;line-height:27px;*margin-top:4px;}
+select[multiple]{height:inherit;}
+textarea{height:auto;}
+.uneditable-input{background-color:#ffffff;display:block;border-color:#eee;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);cursor:not-allowed;}
+:-moz-placeholder{color:#bfbfbf;}
+::-webkit-input-placeholder{color:#bfbfbf;}
+input,textarea{-webkit-transition:border linear 0.2s,box-shadow linear 0.2s;-moz-transition:border linear 0.2s,box-shadow linear 0.2s;-ms-transition:border linear 0.2s,box-shadow linear 0.2s;-o-transition:border linear 0.2s,box-shadow linear 0.2s;transition:border linear 0.2s,box-shadow linear 0.2s;-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);-moz-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);}
+input:focus,textarea:focus{outline:0;border-color:rgba(82, 168, 236, 0.8);-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);-moz-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);}
+input[type=file]:focus,input[type=checkbox]:focus,select:focus{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;outline:1px dotted #666;}
+form div.clearfix.error{background:#fae5e3;padding:10px 0;margin:-10px 0 10px;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}form div.clearfix.error>label,form div.clearfix.error span.help-inline,form div.clearfix.error span.help-block{color:#9d261d;}
+form div.clearfix.error input,form div.clearfix.error textarea{border-color:#c87872;-webkit-box-shadow:0 0 3px rgba(171, 41, 32, 0.25);-moz-box-shadow:0 0 3px rgba(171, 41, 32, 0.25);box-shadow:0 0 3px rgba(171, 41, 32, 0.25);}form div.clearfix.error input:focus,form div.clearfix.error textarea:focus{border-color:#b9554d;-webkit-box-shadow:0 0 6px rgba(171, 41, 32, 0.5);-moz-box-shadow:0 0 6px rgba(171, 41, 32, 0.5);box-shadow:0 0 6px rgba(171, 41, 32, 0.5);}
+form div.clearfix.error .input-prepend span.add-on,form div.clearfix.error .input-append span.add-on{background:#f4c8c5;border-color:#c87872;color:#b9554d;}
+table{width:100%;margin-bottom:18px;padding:0;border-collapse:separate;*border-collapse:collapse;font-size:13px;border:1px solid #ddd;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}table th,table td{padding:10px 10px 9px;line-height:18px;text-align:left;}
+table th{padding-top:9px;font-weight:bold;vertical-align:middle;border-bottom:1px solid #ddd;}
+table td{vertical-align:top;}
+table th+th,table td+td{border-left:1px solid #ddd;}
+table tr+tr td{border-top:1px solid #ddd;}
+table tbody tr:first-child td:first-child{-webkit-border-radius:4px 0 0 0;-moz-border-radius:4px 0 0 0;border-radius:4px 0 0 0;}
+table tbody tr:first-child td:last-child{-webkit-border-radius:0 4px 0 0;-moz-border-radius:0 4px 0 0;border-radius:0 4px 0 0;}
+table tbody tr:last-child td:first-child{-webkit-border-radius:0 0 0 4px;-moz-border-radius:0 0 0 4px;border-radius:0 0 0 4px;}
+table tbody tr:last-child td:last-child{-webkit-border-radius:0 0 4px 0;-moz-border-radius:0 0 4px 0;border-radius:0 0 4px 0;}
+.zebra-striped tbody tr:nth-child(odd) td{background-color:#f9f9f9;}
+.zebra-striped tbody tr:hover td{background-color:#f5f5f5;}
+.zebra-striped .header{cursor:pointer;}.zebra-striped .header:after{content:"";float:right;margin-top:7px;border-width:0 4px 4px;border-style:solid;border-color:#000 transparent;visibility:hidden;}
+.zebra-striped .header:hover:after{visibility:visible;}
+footer{margin-top:17px;padding-top:17px;border-top:1px solid #eee;}
+.page-header{margin-bottom:17px;border-bottom:1px solid #ddd;-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5);-moz-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5);box-shadow:0 1px 0 rgba(255, 255, 255, 0.5);}.page-header h1{margin-bottom:8px;}
+.close{float:right;color:#000000;font-size:20px;font-weight:bold;line-height:13.5px;text-shadow:0 1px 0 #ffffff;filter:alpha(opacity=20);-khtml-opacity:0.2;-moz-opacity:0.2;opacity:0.2;}.close:hover{color:#000000;text-decoration:none;filter:alpha(opacity=40);-khtml-opacity:0.4;-moz-opacity:0.4;opacity:0.4;}
+
+pre {
+	padding: 0;
+	margin: 10px 0px 10px;
+	overflow: auto; /*--If the Code exceeds the width, a scrolling is available--*/
+	overflow-Y: hidden;  /*--Hides vertical scroll created by IE--*/
+}
+pre code {
+	margin: 5px;  /*--Left Margin--*/
+	padding: 0px;
+	display: block;
+    line-height: 18px;
+}
+.center { text-align:center}
+.left {text-align:left}
+.right {text-align:right}
+
+</style><style type="text/css">
+body {
+	font-family: "Geneva", Arial, sans-serif;
+	font-size: 13px;
+	margin: 10px;
+}
+
+a, a:visited {
+	color: #09c;
+}
+
+a:hover {
+	color: #336699;
+	text-decoration: none;
+}
+
+h1 {
+	margin: 0px 0px 10px;	
+	font-weight: bold;
+}
+
+h2 {
+	border-bottom: 2px dotted #ccc;
+	margin: 5px 0px 15px;	
+}
+
+h6 {
+	color: #09c;
+}
+
+blockquote {
+	font-family: "Georgia", Courier New, courier, sans-serif;
+	background: #efefef;
+	padding: 5px 10px;
+	border: solid 1px #ddd;
+	margin: 15px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+	border-radius:6px;
+	color:  #333;
+	
+}
+
+ul, ol {
+	margin-bottom: 15px;
+}
+
+li {
+	padding: 3px;
+}
+
+
+
+code {
+	background-color: #f1f1f1;
+    color: #336699;
+}
+
+pre {
+	background-color: #f1f1f1;
+}
+
+pre > code {
+	margin: 0px;
+	padding: 5px;
+	border: 0px;
+	background-color: #f1f1f1;
+}
+
+
+</style></head>
+<body>
+<h1 id="toc_0">Relay Indexer and Source Locator</h1>
+
+<h3 id="toc_1">16 February 2022</h3>
+
+<p>These two features are new to the Windows build, but have been available in the Mac builds for a while.  They are intended to assist those designing NXSYS interlockings in pseudo-Lisp relay circuitry (which is the only way).</p>
+
+<p>These two functions exploit a command-line program, the <em>Relay Indexer</em>, which, unsurprisingly enough, is called <code>RelayIndex(.exe)</code>, the <code>.exe</code> suffix on Windows, not Mac, and in either case supplied self-standing in both distribution zip files.</p>
+
+<p><code>RelayIndex</code> operates on an entire interlocking, from source.  You direct it to the top-level <code>.trk</code> file, the same one you open in the application (NXSYS).  It produces two files, a relay cross-reference, and a <code>TAGS</code> file, in the same folder as the source to which it was directed.  They are both text files.  You can place the output somewhere else with the <code>-o (--output)</code> control argument.</p>
+
+<p>We will discuss them independently.</p>
+
+<h2 id="toc_2">Relay cross-reference</h2>
+
+<p>The relay cross reference is a listing, in relay order (smaller object (lever, track circuit, etc.) numbers first, alphabetical within the same object) for each relay, of all the relays (including this one, if it has a “stick contact”) who include a contact of this relay in their circuits.  The ”referrers” are sorted in the same way.</p>
+
+<p>Here is an excerpt from the cross-reference of Myrtle Avenue: 
+<span style="font-size:50%"></p>
+
+<pre><code>
+155L 244 7104 myrtle.trk
+ 152CLK    154ZPJ3   155ANN    155ANS    155BNN    155BNS    155CLK    155LS     
+ 155RN     155RS     160PBS    162PBSS   184KXL    188KXL    194APBS   
+
+155LS 251 7315 myrtle.trk
+ 154CO     154H      155NWK    155NWZ    155RWK    155RWZ    158CO     158H      
+ 164CO     164H      170CO     170H      184CO     184STR    200CO     200STR    
+
+155NL UNDEFINED
+ 155NLP    
+</code></pre>
+
+<p></span>
+Lines read across, not column-down. The header line for each relay lists the name of the relay, the line number, and the character position in the file where its definition appear.  Of course, those will change if you edit.</p>
+
+<p>Note that 155NL is listed as “undefined&quot;.  That is not an error; 155NL is the tower operator&#39;s “normal lever control” for switch 155, and 155NL is thus a so-called <em>Quisling relay;</em> you don&#39;t supply it—the simulator does.</p>
+
+<p>Note also that the file-name is repeated.  This is not an error or a weakness; even medium-sized interlockings are distributed over several files.</p>
+
+<p>The output file will be called the same as the input file, but with <code>.trk</code> replaced by <code>.xref</code>.</p>
+
+<h2 id="toc_3">Source locator / Emacs interoperation</h2>
+
+<p>This feature allows you to locate the pseudo-Lisp source for any relay in the interlocking by clicking right on its coil or contact in the Relay Draftsperson drawings. If set up properly, an external editor or other program of your choice will navigate to the relay definition in the source file so you can edit it, and then type control- (Cmd-) R to NXSYS to reload the fixed version.</p>
+
+<p>The NXSYS feature relies on being told a key piece of information, viz., exactly what external program or BAT/bash script to execute to tell about the relay you want to edit. This script, which you supply, is called the <em>SourceLocatorScript</em>.</p>
+
+<p>On both systems, you edit the source of a relay by clicking right on its coil or contact in the Relay Draftsperson, whereupon you will get a small “context menu” allowing you to close or hide the window ... and if the Source Locator Script has been set up properly, you will also see a new option, <code>Edit Source 158HY</code> (or whatever the relay name is). Select that and your editor will be fed the string <code>158HY</code> in a way that you prescribe.  I will tell you how to do it for Emacs (including Mac Aquamacs).</p>
+
+<h4 id="toc_4">Writing the Source Locator Script</h4>
+
+<p>The Source Locator Script, which you supply, specifies what is to happen on your system when NXSYS wants to locate the source for a relay.</p>
+
+<p>The content of the script depends entirely on the editor or scheme you are using.  I am going to assume you are using Emacs (including <a href="https://aquamacs.org/">Aquamacs</a>) with its <a href="https://www.emacswiki.org/emacs/EmacsTags">comprehensive ”tags” facility</a> for locating defined entities in multiple computer languages.</p>
+
+<p>For Emacs/Aquamacs, using the native TAGS facility, the content should look like this:</p>
+
+<pre><code>/usr/local/bin/emacsclient -e &quot;(find-tag \&quot;$1\&quot;)&quot;         (Mac)
+
+c:\&quot;Program Files&quot;\Emacs\x86_64\bin\emacsclient -e &quot;(find-tag &quot;&quot;&quot;%1&quot;&quot;&quot;)&quot;   (Windows)
+</code></pre>
+
+<p><code>emacsclient</code> is a command-line application supplied with Emacs that can send messages to a running instance of Emacs (or Aquamacs). The above formula assumes that is installed in the default place where Emacs installation puts it, and should be changed appropriately if you installed it somewhere else.</p>
+
+<p>You can call this script anything at all you want, perhaps <code>EmacsSourceLocator.sh</code> or <code>EmacsSourceLocator.bat</code> (Mac, Windows).  On the Mac, you must, as with all shell scripts, <code>chmod +x ...</code> to allow it to be executed.</p>
+
+<p>If you&#39;re not using Emacs or Aquamacs, but some scheme of your own, you presumably know what you should put in your Source Locator Script.  It will be called as a command with one argument, the name of the relay whose source is sought, which will not contain spaces, quotes, parentheses, or other shell-problematic characters.</p>
+
+<h4 id="toc_5">Identifying the Source Locator Script to NXSYS</h4>
+
+<p>This has now (NXSYS 2.6.0) become easy.</p>
+
+<p>There is a File Open Dialog in both implementations that allows you to tell NXSYS about your Source Locator script.  On the Mac, it is called up by a new button, <code>Set Lctr Path</code>, on the right-hand top of the Relay Draftsperson window (you can expose the latter via the <code>View</code> menu). On Windows, it is the identically-named option on the <code>Control</code> menu at its top left.  NXSYS will update its per-user data (info-plist or registry key) accordingly.</p>
+
+<p>Both commands assume you will use a <code>.sh</code> (Mac) or <code>.BAT</code> (Windows) file, and only offer such files in the file dialog.  If you actually have an executable program that you have written for this function, feel free to edit the <code>HKEY_CURRENT_USER</code> registry for <code>B.Greenberg\NXSYS\Settings</code> (Windows) or info-plist <code>~/Library/Preferences/BernardGreenberg.NXSYSMac.plist</code> (Mac) yourself with appropriate tools, in which you are surely proficient if you have actually written such a program.</p>
+
+<h3 id="toc_6">Use under Emacs/Aquamacs</h3>
+
+<p>This has been tested under Emacs (Windows build) 27, and Aquamacs 3.5 (Mac only).</p>
+
+<p>In order for Emacs or Aquamacs to “hear” the messages sent to it by <code>emacsclient</code>, you have to “start the Emacs server“ in Emacs (or Aquamacs).  This is done with the command <code>M-x server-start</code>.  If you are an Emacs adept, you can do that in your startup (i.e., add <code>(server-start)</code>), if you want.  But fail and the commands sent from NXSYS will not be heard. Here is <a href="https://wikemacs.org/wiki/Emacs_server">additional info on the Emacs server</a>.</p>
+
+<p>There are two customizations of Emacs you should make if you want to edit <code>.trk</code> files in Emacs’ powerful <a href="https://www.emacswiki.org/emacs/EmacsLispMode">Lisp mode</a>.  You definitely want to tell it that all <code>.trk</code> files are to be edited in Lisp mode, and to modify the syntax of exclamation point to not be a valid ”word” character. Unless you do this, if you click, in Emacs, on a back-contact term such as <code>!153RWK</code>, Emacs will fail to find the source for putative relay <code>!153RWK</code>, not knowing that the ! should not be included in the name.</p>
+
+<p>To effect these changes, add this Lisp code verbatim, copy-paste, to your Emacs / Aquamacs startup (or make one):</p>
+
+<pre><code>(add-to-list &#39;auto-mode-alist &#39;(&quot;\\.trk\\&#39;&quot; . lisp-mode)) 
+
+(defun my-trk-mode-setup ()
+  (modify-syntax-entry ?! &quot;.&quot;))
+
+(defun my-after-change-major-mode ()
+  &quot;Custom `after-change-major-mode-hook&#39; behaviors.&quot;
+  (when (derived-mode-p &#39;lisp-mode)
+    (let ((fname (buffer-file-name)))
+      (when (and fname (string-suffix-p &quot;.trk&quot; fname))
+          (my-trk-mode-setup)))))
+
+(add-hook &#39;after-change-major-mode-hook &#39;my-after-change-major-mode)
+</code></pre>
+
+<p>You may or may not have an Emacs startup.  If you are using regular Emacs (e.g., on Windows), you probably don’t, and if you&#39;re using Aquamacs, you probably do. On Windows, it is a file called <code>.emacs</code> in your home directory, <code>c:\Users\kathy</code> or whatever (Microsoft is working to make it hard to access).  If you are using Aquamacs, it is <code>~/Library/Preferences/Aquamacs Emacs/Preferences.el</code> (<code>el</code> stands for “Emacs Lisp”, although <code>.emacs</code> in your home directory is read, too, which covers the “regular Emacs” case).</p>
+
+<h3 id="toc_7">Editing interlockings with Lisp Mode</h3>
+
+<p>If you have done all this, and created a TAGS files for the interlocking you want to edit (yes, it is still useful after editing and changing line numbers), and have started the emacs server, editing interlockings is now trivial (assuming you know how to design and debug them).</p>
+
+<p>Read in as many interlocking <code>.trk</code> files as you want, and use all Emacs tools.  <code>m-X visit-tags-table</code> to the <code>TAGS</code> file you have created. Now, you can simply point to any term in the logic of any relay, and type <code>m-.</code>, that is, “meta dot”, and <em>presto</em>, the definition of that relay (whose contact you clicked on) will come up!  <code>C-u m-.</code> (control U, Meta .) and you can type in the name of a relay, and it will be found!  Alphabetic case ignored!</p>
+
+<p>From NXSYS, simply click-right on a relay contact or coil, and if Source Editing is offered, select it, and Emacs / Aquamacs will find that relay and focus it (although it will not bring itself to the top of the screen; you have to switch it or keep it visible).</p>
+
+<h4 id="toc_8">By the way</h4>
+
+<p>The use of Lisp to extend Emacs on non-Lisp machines is <a href="https://multicians.org/mepap.html">my 1978 innovation</a>.  GNU Emacs’ choice of Lisp, years later, was informed by my work.</p>
+
+</body>
+</html>
