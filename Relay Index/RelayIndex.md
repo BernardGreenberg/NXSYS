@@ -69,21 +69,17 @@ This is the tricky part.  In the Olde Days, I'd tell you to add a line to the IN
 
 ##### Windows
 
-Basically, you have to set the pathname of your Source Locator Script as the value of the Registry variable called, oddly enough, `SourceLocatorScript` in NXSYS' `HKEY_LOCAL_MACHINE` Registry key.  The Registry pathname of NXSYS' Registry key is (or should be), logically enough:
+Basically, you have to set the pathname of your Source Locator Script as the value of the Registry variable called, oddly enough, `SourceLocatorScript` in your NXSYS `HKEY_CURRENT_USER` Registry key.  The Registry pathname of NXSYS' Registry key is (or should be), logically enough:
 
-`HKEY_LOCAL_MACHINE\Software\B.Greenberg\NXSYS
+`HKEY_CURRENT_USER\Software\B.Greenberg\NXSYS
 
-NXSYS does not create registry keys for you, because that is a privileged operation and would not work if you are not an administrator.  Normally, registry keys get created by the installer, which can only be run as an administrator.  But NXSYS doesn't have an installer.   I know quite a bit about writing Microsoft Installers, and I don't want to do that right now (it is a ton of work and detail).  So you have to log in as admin, and create "B.Greenberg" and "NXSYS" under me in your Software Registry "Hive".
-
-When you, or your administrator, has created that key, create a new “string value” called `SourceLocatorScript`, and give it a value of the full pathname, including drive, of your source locator script, e.g., `c:\Users\joe\EmacsSourceLocatorScript.bat`.  If this is not done, the Edit Source menu item will not appear on the Relay Draftsperson right-click menu.
+The key should exist. Directly under it (not in "Settings"), create a new “string value” called `SourceLocatorScript`, and give it a value of the full pathname, including drive, of your source locator script, e.g., `c:\Users\joe\EmacsSourceLocatorScript.bat`.  If this is not done, the Edit Source menu item will not appear on the Relay Draftsperson right-click menu.
 
 NXSYS inspects this value when it starts up. If you set it while NXSYS is running, you will have to restart it for the setting to be noticed.
 
-(NB for heavy-duty Windows adepts (changed from "hackers"): NXSYS, even though *currently* a 32-bit app, uses [KEY\_WOW64\_64KEY](https://docs.microsoft.com/en-us/windows/win32/winprog64/example-of-registry-reflection-and-redirection-on-wow64) to access the “64-bit registry”, which is to say, the one you get when you use `regedit` and don’t know how Windows 10 redirects the registry requests of 32-bit apps unless this is done).
-
 ##### On the Mac
 
-You don't need any special privilege here, but you do have to know how to use `PListBuddy` or XCode to edit “plists”.  `PListBuddy` should be in `/usr/libexec/PListBuddy` on a healthy Mac.  There are several good articles on how to use it. [Here's one](https://www.marcosantadev.com/manage-plist-files-plistbuddy/). Or use XCode, if you are skilled in its use and have it (it is very large and complex -- if you do not already use Xcode, don’t attempt to for this).
+You have to know how to use `PListBuddy` or XCode to edit “plists”.  `PListBuddy` should be in `/usr/libexec/PListBuddy` on a healthy Mac.  There are several good articles on how to use it. [Here's one](https://www.marcosantadev.com/manage-plist-files-plistbuddy/). Or use XCode, if you are skilled in its use and have it (it is very large and complex -- if you do not already use Xcode, don’t attempt to for this).
 
 You have to find NXSYS’s `plist`.  It should be at
 ~~~
