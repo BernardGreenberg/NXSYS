@@ -107,7 +107,7 @@ If you have done all this, and created a TAGS files for the interlocking you wan
 
 Read in as many interlocking `.trk` files as you want, and use all Emacs tools.  `m-X visit-tags-table` to the `TAGS` file you have created. Now, you can simply point to any term in the logic of any relay, and type `m-.`, that is, “meta dot”, and *presto*, the definition of that relay (whose contact you clicked on) will come up!  `C-u m-.` (control U, Meta .) and you can type in the name of a relay, and it will be found!  Alphabetic case ignored!
 
-From NXSYS, simply click-right on a relay contact or coil, and if Source Editing is offered, select it, and Emacs / Aquamacs will find that relay and focus it (although it will not bring itself to the top of the screen; you have to switch it or keep it visible).
+From NXSYS, simply click-right on a relay contact or coil, and if Source Editing is offered, select it, and Emacs / Aquamacs will find that relay and focus it (although it will not bring itself to the top of the screen; you have to switch to it or keep it visible).
 
 #### By the way
 
