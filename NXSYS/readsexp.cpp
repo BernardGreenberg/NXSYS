@@ -227,8 +227,8 @@ DEFRMACRO = intern ("DEFRMACRO"),
 ARG = intern ("ARG");
 
 Sexpr
-EOFOBJ = Sexpr(L_NULL, "EOF"),
-READ_ERROR_OBJ = Sexpr(L_NULL, "READ_ERROR");
+EOFOBJ = Sexpr(Lisp::tNULL, "EOF"),
+READ_ERROR_OBJ = Sexpr(Lisp::tNULL, "READ_ERROR");
 
 LispCB1 LispReadTimeEvalHook = NULL;
 LispCB1 LispLoadTimeEvalHook = NULL;
@@ -250,7 +250,7 @@ Sexpr Lisp_Cons (Sexpr s1, Sexpr s2) {
 	LispBarf("Lisp Cons alloc fails.");
 	LispCrash();
     }
-    nc.type = L_CONS;
+    nc.type = Lisp::tCONS;
     CAR(nc) = s1;
     CDR(nc) = s2;
     return nc;
@@ -296,7 +296,7 @@ top:
 }
 
 static Sexpr read_sexp_i (LispInputSource& f, int lf) {
-    static LispTChar SymBuf [256];
+    static LispTChar SymBuf[256]{};
     static char buf[256];
     Sexpr v1, Last_Cons, First_Cons;
     LispTChar ch2;
@@ -401,7 +401,7 @@ colnum:
 		LispBarf (buf);
 	    }
 	}
-	v1.type = L_NUM;
+	v1.type = Lisp::NUM;
 	v1.u.n = num*sign;
 #if TRACE_READ
 	printf ("Collected fixnum %d\n", num);
@@ -447,7 +447,7 @@ pdbareof:		LispBarf ("End of file in middle of #| ... |#");
 	else if (ch == ESC_CHAR) {
 	    v1.u.n = 0;
 	    v1.u.c = f.Getc();
-	    v1.type = L_CHAR;
+	    v1.type = Lisp::CHAR;
 zz:
 	    ch = ' ';
 	}
@@ -561,7 +561,7 @@ str_eof:		LispBarf("Premature EOF in middle of string.");
 	    _Lisp_Uncodize_Sym_Hook(&v1);
 	}
 #endif
-	v1.type = L_STRING;
+	v1.type = Lisp::STRING;
 	ch = ' ';
     }
     else if (ch == ')') {
@@ -581,9 +581,9 @@ reterr:	    v1 = READ_ERROR_OBJ;
     else if (ch == ']') {
 	if (vectoring) {
 	    int elts = Stack_count-stack_base;
-	    v1.type = L_VECTOR;
+	    v1.type = Lisp::VECTOR;
 	    v1.u.l = new Sexpr[elts+1];
-	    v1.u.l->type = L_NUM;
+	    v1.u.l->type = Lisp::NUM;
 	    v1.u.l->u.n = elts;
 	    for (int i = 0; i < elts; i++)
 		v1.u.l[i+1] = Stack[stack_base+i];
@@ -621,7 +621,7 @@ dce:		LispBarf ("Reader dot context error.");
 col_flonum_got_num:
 	ch = f.Getc();
 	if (!isdigit(ch)) {
-	    v1.type = L_NUM;
+	    v1.type = Lisp::NUM;
 	    v1.u.n = num;
 	}
 	else {
@@ -697,7 +697,7 @@ icd:
 
 Sexpr CreateRational (int numerator, int denominator) {
     Sexpr v1;
-    v1.type = L_RATIONAL;
+    v1.type = Lisp::RATIONAL;
     v1.u.rat = new LRational;
     v1.u.rat->Numerator = numerator;
     v1.u.rat->Denominator = denominator;
@@ -706,7 +706,7 @@ Sexpr CreateRational (int numerator, int denominator) {
 
 Sexpr CreateAtom (const char * s) {
     Sexpr v;
-    v.type = L_ATOM;
+    v.type = Lisp::ATOM;
     v.u.a = s;
     return v;
 }
@@ -762,21 +762,21 @@ Sexpr read_sexp_LIS (LispInputSource &Lis) {
 
 std::string Sexpr::PRep() const {
     switch (type) {
-	case L_NULL:
+	case Lisp::tNULL:
             if (u.v == nullptr)
-                return "%L_NULL<0>";
+                return "%Lisp::tNULL<0>";
             else
-                return FormatString("%%L_NULL<%s>", u.s);
-	case L_ATOM:
+                return FormatString("%%Lisp::tNULL<%s>", u.s);
+	case Lisp::ATOM:
             return u.a;
-	case L_NUM:
+	case Lisp::NUM:
             return std::to_string(u.n);
-	case L_RATIONAL:
+	case Lisp::RATIONAL:
             return std::to_string((long)u.rat->Numerator) + FRACTION_BARs +
                     std::to_string((long)u.rat->Denominator);
-	case L_FLOAT:
+	case Lisp::FLOAT:
             return std::to_string(*u.f);
-	case L_STRING:
+	case Lisp::STRING:
         {
             std::string b{'"'};
 	    for (const char * q = u.s; *q; q++) {
@@ -786,9 +786,9 @@ std::string Sexpr::PRep() const {
 	    }
             return b + '"';
         }
-	case L_CHAR:
+	case Lisp::CHAR:
 	    return "#" + ESC_CHARs + u.c;
-	case L_CONS:
+	case Lisp::tCONS:
         {
             Sexpr s = *this;
             std::string b{'('};
@@ -806,7 +806,7 @@ std::string Sexpr::PRep() const {
             }
 	    return b + ')';
         }
-	case L_VECTOR:
+	case Lisp::VECTOR:
 	{
             std::string b{'['};
 	    int lim = (int)u.l[0].u.n;
@@ -817,9 +817,9 @@ std::string Sexpr::PRep() const {
 	    }
             return b + ']';
 	}
-	case L_RLYSYM:
+	case Lisp::RLYSYM:
             return u.r->PRep();
-        case L_LAST_TYPE:
+	case Lisp::LAST_TYPE:
             return "<LAST-TYPE>";
 	default:
 	    return "<UNKNOWN-TYPE>";
@@ -836,25 +836,25 @@ void dealloc_ncyclic_sexp (Sexpr s) {
     Sexpr s2;
 loop:
     switch (s.type) {
-	case L_NULL:
+	case Lisp::tNULL:
 	    return;
-	case L_ATOM:
+	case Lisp::ATOM:
 	    return;			/* leave obarray gravid */
-	case L_NUM:
+	case Lisp::NUM:
 	    return;
-	case L_STRING:
+	case Lisp::STRING:
 	    break;
-	case L_RLYSYM:
+	case Lisp::RLYSYM:
 	    break;
-	case L_CHAR:
+	case Lisp::CHAR:
 	    break;
-	case L_CONS:
+	case Lisp::tCONS:
 	    dealloc_ncyclic_sexp(CAR(s));
 	    s2 = s;
 	    s = CDR(s);
 //	    delete s2.u.l;
 	    goto loop;
-	case L_LIST:
+	case Lisp::VECTOR:
 	{
 	    int lim = (int)s.u.l[0].u.n;
 	    for (i = 0; i < lim; i++)
@@ -862,13 +862,13 @@ loop:
 //	    delete s.u.l;
 	    return;
 	}
-	case L_RATIONAL:
+	case Lisp::RATIONAL:
 	    delete s.u.rat;
 	    break;
-	case L_FLOAT:
+	case Lisp::FLOAT:
 	    delete s.u.f;
 	    break;
-        case L_LAST_TYPE:
+	case Lisp::LAST_TYPE:
             LispBarf("Dealloc last type!?");
             break;
     }
@@ -876,9 +876,7 @@ loop:
 
 #if ! _BLISP
 void dealloc_lisp_sys() {
-#if !TLEDIT
     MacroCleanup();
-#endif
     AtomMap.clear();
 #if ! RELAYS
     ClearRelayMaps();
@@ -934,7 +932,7 @@ bool TestRunExprf(const char * fpathname) {
         Sexpr v = read_sexp (f);
         show_sexp (v);
         printf ("\n");
-        if (v.type == L_CONS && CAR(v) == DEFRMACRO) {
+        if (v.type == Lisp::tCONS && CAR(v) == DEFRMACRO) {
             printf ("Defining a macro...\n");
             int r = defrmacro (v);
             printf ("Retval is %d.\n", r);
@@ -945,7 +943,7 @@ bool TestRunExprf(const char * fpathname) {
             show_sexp (v2);
             printf ("\n");
         }
-        if (v.type == L_NULL)
+        if (v.type == Lisp::tNULL)
             break;
     }
     fclose (f);

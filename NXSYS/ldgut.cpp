@@ -214,20 +214,20 @@ GNode * CreateGNode (LNode * ln, GNode * parent, Drawing& d) {
     n->Thread(parent);
     
     Logop * lo = (Logop *) ln;
-    n->type = (lo->op == LG_AND) ? CT_AND : CT_OR;
+    n->type = (lo->op == LogOp::AND) ? CT_AND : CT_OR;
     for (int i = 0; i < lo->N; i++) {
 	GNode * sub = CreateGNode (lo->Opds[i], n, d);
 	switch (lo->op) {
-	    case LG_AND:
+	    case LogOp::AND:
 		n->width += sub->width;
 		n->height = mAx (sub->height, n->height);
 		break;
-	    case LG_OR:
+	    case LogOp::OR:
 		n->height += sub->height;
 		n->width = mAx (sub->width, n->width);
 		break;
-         case LG_ZT:
-         case LG_NOT:
+         case LogOp::ZT:
+         case LogOp::NOT:
              break; // +++s/b error
 	}
     }
@@ -444,7 +444,7 @@ void GNode::DrawCoil (HDC dc, Scord scx, Scord scy, int timer_p) {
     if (statereport) {
 	const char * s = *Statep ? "PICKED" : "DROPPED";
 	txr.left = txr.right =  txr.top = txr.bottom = 0;
-	DrawText (dc, "DROPPED", strlen("DROPPED"), &txr,
+	DrawText (dc, "DROPPED", (int)strlen("DROPPED"), &txr,
 		  DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP|DT_CALCRECT);
 
 	txr.left = scx;
@@ -452,11 +452,11 @@ void GNode::DrawCoil (HDC dc, Scord scx, Scord scy, int timer_p) {
 	txr.top = (int)(scy - CellH*.95);
 	txr.bottom += txr.top;
 	FillRect (dc, &txr, (HBRUSH)GetStockObject(WHITE_BRUSH));
-	DrawText (dc, s, strlen(s), &txr,
+	DrawText (dc, s, (int)strlen(s), &txr,
 		  DT_TOP | DT_CENTER |DT_SINGLELINE|DT_NOCLIP);
     }
     txr.left = txr.right =  txr.top = txr.bottom = 0;
-    DrawText (dc, text.c_str(), text.size(), &txr,
+    DrawText (dc, text.c_str(), (int)text.size(), &txr,
 	      DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP|DT_CALCRECT);
     txr.left = scx;
     txr.right = scx + CellW;
@@ -469,7 +469,7 @@ void GNode::DrawCoil (HDC dc, Scord scx, Scord scy, int timer_p) {
 	txr.top = (int)(scy - CellH*.95);
 	txr.bottom += txr.top;
     }
-    DrawText (dc, text.c_str(), text.size(), &txr,
+    DrawText (dc, text.c_str(), (int)text.size(), &txr,
 	      DT_TOP | DT_CENTER |DT_SINGLELINE| DT_NOCLIP);
 
 	RECT box{};
@@ -578,7 +578,7 @@ void GNode::DrawContactLabel (HDC dc, Scord scx, Scord scy) {
 	txr.right = (int)(scx + CellW*(.65+.2));
 	flgs |= DT_CENTER;
     }
-    DrawText (dc, text.c_str(), text.size(), &txr, flgs);
+    DrawText (dc, text.c_str(), (int)text.size(), &txr, flgs);
 }
 
 void GNode::Draw (HDC dc, Drawing& D) {

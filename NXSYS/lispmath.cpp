@@ -5,11 +5,11 @@
 
 int LpZerop (Sexpr x) {
     switch (x.type) {
-	case L_FLOAT:
+	case Lisp::FLOAT:
 	    return *x.u.f == 0.0;
-	case L_NUM:
+	case Lisp::NUM:
 	    return (x.u.n == 0);
-	case L_RATIONAL:
+	case Lisp::RATIONAL:
 	    return (x.u.rat->Numerator == 0);
 	default:
 	    return 0;
@@ -18,11 +18,11 @@ int LpZerop (Sexpr x) {
 
 Sexpr LCoerceToFloat (Sexpr x) {
     switch (x.type) {
-	case L_FLOAT:
+	case Lisp::FLOAT:
 	    return x;
-	case L_NUM:
+	case Lisp::NUM:
 	    return Sexpr ((double)x.u.n);
-	case L_RATIONAL:
+	case Lisp::RATIONAL:
 	    return Sexpr
 		    ((double)x.u.rat->Numerator/(double)x.u.rat->Denominator);
 	default:
@@ -32,11 +32,11 @@ Sexpr LCoerceToFloat (Sexpr x) {
 
 static double CoerceToFloatVal (Sexpr x) {
     switch (x.type) {
-	case L_FLOAT:
+	case Lisp::FLOAT:
 	    return *x.u.f;
-	case L_NUM:
+	case Lisp::NUM:
 	    return (double)(x.u.n);
-	case L_RATIONAL:
+	case Lisp::RATIONAL:
 	    return ((double)x.u.rat->Numerator/(double)x.u.rat->Denominator);
 	default:
 	    return 0.0;
@@ -45,11 +45,11 @@ static double CoerceToFloatVal (Sexpr x) {
 
 Sexpr LCoerceToFix   (Sexpr x) {
     switch (x.type) {
-	case L_FLOAT:
+	case Lisp::FLOAT:
 	    return Sexpr ((long)x.u.f);
-	case L_NUM:
+	case Lisp::NUM:
 	    return x;
-	case L_RATIONAL:
+	case Lisp::RATIONAL:
             return (Sexpr ((long)(x.u.rat->Numerator/x.u.rat->Denominator)));
 	default:
 	    return x;
@@ -94,7 +94,7 @@ struct LMathRatArgs {
 };
 
 LMathRatArgs::LMathRatArgs (Sexpr x, Sexpr y) {
-    if (x.type == L_NUM) {
+    if (x.type == Lisp::NUM) {
 	xn = x.u.n;
 	xd = 1;
     }
@@ -102,7 +102,7 @@ LMathRatArgs::LMathRatArgs (Sexpr x, Sexpr y) {
 	xn = x.u.rat->Numerator;
 	xd = x.u.rat->Denominator;
     }
-    if (y.type == L_NUM) {
+    if (y.type == Lisp::NUM) {
 	yn = y.u.n;
 	yd = 1;
     }
@@ -114,14 +114,14 @@ LMathRatArgs::LMathRatArgs (Sexpr x, Sexpr y) {
     
 
 Sexpr LMultiply (Sexpr x, Sexpr y) {
-    if (x.type == L_FLOAT || y.type == L_FLOAT)
+    if (x.type == Lisp::FLOAT || y.type == Lisp::FLOAT)
 	return Sexpr (CoerceToFloatVal(x)*CoerceToFloatVal(y));
     LMathRatArgs RA (x, y);
     return CreateReducedRational (RA.xn*RA.yn, RA.xd*RA.yd);
 }
 
 Sexpr LDivide   (Sexpr x, Sexpr y) {
-    if (x.type == L_FLOAT || y.type == L_FLOAT)
+    if (x.type == Lisp::FLOAT || y.type == Lisp::FLOAT)
 	return Sexpr (CoerceToFloatVal(x)/CoerceToFloatVal(y));
     LMathRatArgs RA (x, y);
     return CreateReducedRational (RA.xn*RA.yd, RA.xd*RA.yn);
@@ -129,14 +129,14 @@ Sexpr LDivide   (Sexpr x, Sexpr y) {
 
 
 Sexpr LAdd (Sexpr x, Sexpr y) {
-    if (x.type == L_FLOAT || y.type == L_FLOAT)
+    if (x.type == Lisp::FLOAT || y.type == Lisp::FLOAT)
 	return Sexpr (CoerceToFloatVal(x)+CoerceToFloatVal(y));
     LMathRatArgs RA (x, y);
     return CreateReducedRational (RA.xn*RA.yd + RA.xd*RA.yn, RA.xd*RA.yd);
 }
 
 Sexpr LSubtract (Sexpr x, Sexpr y) {
-    if (x.type == L_FLOAT || y.type == L_FLOAT)
+    if (x.type == Lisp::FLOAT || y.type == Lisp::FLOAT)
 	return Sexpr (CoerceToFloatVal(x)-CoerceToFloatVal(y));
     LMathRatArgs RA (x, y);
     return CreateReducedRational (RA.xn*RA.yd - RA.xd*RA.yn, RA.xd*RA.yd);
@@ -144,7 +144,7 @@ Sexpr LSubtract (Sexpr x, Sexpr y) {
 
 int LCompare (Sexpr x, Sexpr y) {
     double xv, yv;
-    if (x.type == L_FLOAT && y.type == L_FLOAT) {
+    if (x.type == Lisp::FLOAT && y.type == Lisp::FLOAT) {
 	xv = *x.u.f;
 	yv = *y.u.f;
 cpfloat:
@@ -154,7 +154,7 @@ cpfloat:
 	    return -1;
 	else return 0;
     }
-    if (x.type == L_FLOAT || y.type == L_FLOAT) {
+    if (x.type == Lisp::FLOAT || y.type == Lisp::FLOAT) {
 	xv = CoerceToFloatVal(x);
 	yv = CoerceToFloatVal(y);
 	goto cpfloat;

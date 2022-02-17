@@ -33,8 +33,10 @@
 #include <string>
 #include "incexppt.h"
 #include "STLExtensions.h"
+#include "WinApiSTL.h"
 #include "STLfnsplit.h"
 #include "AppAbortRestart.h"
+#include "MessageBox.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -107,12 +109,16 @@ HINSTANCE app_instance;
 HICON TrainMinimizedIcon;
 
 string GlobalFilePathname;
-char IniFileName [] = "NXSYS.INI";
-char app_name [] = "V2 NXSYS";
 
-static char InitialTitleBar[] = "Version 2 NXSYS -- New York Subway NX/UR Panel"
+
+char app_name[] = "V2 NXSYS";
+
+static const char* InitialTitleBar = "Version 2 NXSYS -- New York Subway NX/UR Panel"
 #ifdef _WIN64
   " (64-bit)"
+#endif
+#ifdef _DEBUG
+  " (DEBUG)"
 #endif
    ;
 
@@ -123,6 +129,7 @@ static string FName;
 static char MWPKey[] = "Main Window Placement";
 static char FTitle[MAXPATH], DFName[MAXPATH] = "";
 static char MainWindow_Class[] = PRODUCT_NAME ":Main";
+static const char* IniFileName = "NXSYS.INI";
 #endif
 string HelpPath("Pages/NXSYS.html");
 
@@ -196,7 +203,8 @@ static void SetGlobalMenuState (BOOL enable) {
 
 static void
 SetHelpFilePath () {
-	if (HKEY hk = GetAppKey("Settings")) {
+	AppKey hk("Settings");
+	if (hk) {
 		auto result = getStringRegval(hk, "HelpFilePathname");
 		if (result.valid) {
 			HelpPath = result.value;
@@ -263,17 +271,15 @@ static void GetWindowRectCl (HWND what, RECT &r, HWND parent) {
 #endif
 
 void SetViewportDimsFromWindow (HWND hWnd) {
-    RECT r;
+	RECT r{};
     GetClientRect (hWnd, &r);
     NXGO_SetViewportDims (r.right - r.left, r.bottom - r.top);
 }
 
 static void
-InstallLayoutFile (HWND window, const char* s) {
+InstallLayoutFile (HWND window, const char* layout_name) {
 #ifndef NXSYSMac // window not ready yet.  we mac do our own title, anyway
-    char title[200];
-    sprintf (title, "%s - %s", app_name, s);
-    SetWindowText (window, title);
+	SetWindowTextS(window, string(app_name) + " - " + layout_name);
 #endif
     ComputeVisibleObjectsLast();
     NXGO_ValidateWpVp(window);
@@ -395,12 +401,11 @@ static void NXSYS_Command(unsigned int cmd) {
 	case CmShowStops:
 		if (dlgr = ShowStopDlg(G_mainwindow, app_instance, ShowStopPolicy)) {
 			ImplementShowStopPolicy(dlgr);
-
-			if (HKEY hk = GetAppKey("Settings")) {
+			AppKey hk("Settings");
+			if (hk)
 				PutDWORDRegval(hk, "ShowStops", ShowStopPolicy);
-				RegCloseKey(hk);
-			}
-			break;
+		}
+		break;
 #ifndef NOTRAINS
 	case CmHaltTrains:
 	case CmKillTrains:
@@ -614,17 +619,16 @@ static void NXSYS_Command(unsigned int cmd) {
 		break;
 
 	case CmRightClickMenuMode:
-	{
 #ifndef NXSYSMac
 		RightButtonMenu = !RightButtonMenu;
-		if (HKEY hk = GetAppKey("Settings")) {
-			PutDWORDRegval(hk, "RightButtonMenuMode", RightButtonMenu);
-			RegCloseKey(hk);
+		{
+			AppKey hk("Settings");
+			if (hk)
+				PutDWORDRegval(hk, "RightButtonMenuMode", RightButtonMenu);
 		}
 
 #endif
 		break;
-	}
 
 #ifndef NXSYSMac
 	case CmV2NXHelp:
@@ -645,10 +649,6 @@ static void NXSYS_Command(unsigned int cmd) {
 #endif
 
 #ifndef NXSYSMac
-} //  some conditionalizing problem
-#endif
-
-#ifndef NXSYSMac
 WNDPROC_DCL MainWindow_WndProc
       (HWND window, unsigned message, WPARAM wParam, LPARAM lParam)
 {
@@ -656,22 +656,22 @@ WNDPROC_DCL MainWindow_WndProc
 
     case WM_COMMAND:
 
-      if (ChooseTrack)
-	  EndChooseTrack ();
+	  if (ChooseTrack)
+		  EndChooseTrack ();
 
       NXSYS_Command (LOWORD(wParam));
       break;
 
     case WM_PAINT:
     {
-	PAINTSTRUCT ps;
-	HDC dc = BeginPaint (window, &ps);
-	SelectObject (dc, Fnt);
-	SetBkColor (dc, RGB(0, 0, 0));
-	SetTextColor (dc, RGB(255,255,255));
-	DisplayVisibleObjectsRect (dc, ps.rcPaint);
-	EndPaint (window, &ps);
-	break;
+		PAINTSTRUCT ps;
+		HDC dc = BeginPaint(window, &ps);
+		SelectObject(dc, Fnt);
+		SetBkColor(dc, RGB(0, 0, 0));
+		SetTextColor(dc, RGB(255, 255, 255));
+		DisplayVisibleObjectsRect(dc, ps.rcPaint);
+		EndPaint(window, &ps);
+		break;
     }
 
 	case WM_LBUTTONDOWN:
@@ -910,12 +910,12 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
   int dth = 640;
 
 #ifdef WIN32
-   int winy = dth/16;
+  int winy = dth / 16;
 
-   int winh =(int)(MAIN_FRAME_SCREEN_Y_FRACTION*dth);
-   int winw = (int)(MAIN_FRAME_SCREEN_X_FRACTION*dtw);
+  int winh = (int)(MAIN_FRAME_SCREEN_Y_FRACTION * dth);
+  int winw = (int)(MAIN_FRAME_SCREEN_X_FRACTION * dtw);
 
-   int winx = 200;
+  int winx = 200;
   winx = GetPrivateProfileInt(MWPKey, "UpperLeftX", winx, IniFileName);
   winy = GetPrivateProfileInt(MWPKey, "UpperLeftY", winy, IniFileName),
   winw = GetPrivateProfileInt(MWPKey, "Width", winw, IniFileName);
@@ -962,10 +962,9 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 
 
 #ifndef NXSYSMac
-    if (HKEY hk = GetAppKey("Settings")) {
+  AppKey hk("Settings");
+  if (hk)
       RightButtonMenu = GetDWORDRegval (hk, "RightButtonMenuMode", RightButtonMenu);
-      RegCloseKey(hk);
-  }
 
   SetHelpFilePath();
 
@@ -975,13 +974,9 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
   CheckMainMenuItem(CmAutoOp, EnableAutoOperation);
   SetViewportDimsFromWindow (window);
 #ifndef NXSYSMac
-  if (HKEY shk = GetAppKey("Settings")) {
-      ImplementShowStopPolicy(GetDWORDRegval(shk, "ShowStops", ShowStopPolicy));
-      RegCloseKey(shk);
-  }
-#endif
+  if (hk) 
+      ImplementShowStopPolicy(GetDWORDRegval(hk, "ShowStops", ShowStopPolicy));
 
-#ifndef NXSYSMac
   if (initial_layout_name) {
 	  FName = initial_layout_name;
       const char * s = ReadLayout (initial_layout_name);
@@ -1004,7 +999,7 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 #endif
              
 #ifdef WIN32 // for now
-	  DemoBlurb (INITIAL_BLURB);
+	DemoBlurb (INITIAL_BLURB);
 
 #endif
   if (initial_demo_file)
@@ -1045,42 +1040,41 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 
 
 void CleanUpNXSYS() {
-    
-    DeleteObject (Fnt);
-    DeleteObject (LargeFnt);
+
+	DeleteObject(Fnt);
+	DeleteObject(LargeFnt);
 #ifndef NXSYSMac
-	
 	WinHelp(G_mainwindow, HelpPath.c_str(), HELP_QUIT, 0);
 #endif
-    /* Why isn't DeInstallLayout good enough here? --11 January 2001 */
-    ClearHelpMenu();
+	/* Why isn't DeInstallLayout good enough here? --11 January 2001 */
+	ClearHelpMenu();
 
 #ifdef NXOLE
-    CloseNXOLE();
+	CloseNXOLE();
 #endif
 
-    KillNXTimers();
+	KillNXTimers();
 
-    DraftsbeingCleanupForOneLayout();
-    DraftsbeingCleanupForSystem(); //mac will clean up its own Cocoa window resources.
+	DraftsbeingCleanupForOneLayout();
+	DraftsbeingCleanupForSystem(); //mac will clean up its own Cocoa window resources.
 
-    DestroySigWins();
-    DestroyDynMenus();
-   TrackGraphicsCleanup();
-  FreeGraphicObjects();
-  TextFontCleanup();
-  CleanUpRelaySys();
-  dealloc_lisp_sys();
+	DestroySigWins();
+	DestroyDynMenus();
+	TrackGraphicsCleanup();
+	FreeGraphicObjects();
+	TextFontCleanup();
+	CleanUpRelaySys();
+	dealloc_lisp_sys();
 #ifdef NXCMPOBJ
-  CleanupObjectMemory();
+	CleanupObjectMemory();
 #endif
 
 }
 
 
-static int umsgcmn (va_list ap, const char * ctlstr, UINT ctl) {
+static int umsgcmn (va_list ap, const char* ctlstr, UINT ctl) {
     std::string msg = FormatStringVA(ctlstr, ap);
-    return MessageBox (G_mainwindow, msg.c_str(), app_name, ctl);
+    return MessageBoxS (G_mainwindow, msg, app_name, ctl);
 }
 
 void usermsg (const char * ctlstr, ...) {

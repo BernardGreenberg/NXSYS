@@ -230,20 +230,22 @@ static BOOL REval (LNode * exp) {
     Logop * lgp = (Logop*) exp;
     LNode** operands = lgp->Opds;
     switch(lgp->op) {
-        case LG_ZT:
+    case LogOp::ZT:
             return 0;
-        case LG_NOT:
+    case LogOp::NOT:
             return !REval(((LNot *)exp)->opd);
-        case LG_AND:
+    case LogOp::AND:
             for (int i = 0; i < lgp->N; i++)
                 if (!REval(operands[i]))
                     return 0;
             return 1;
-        case LG_OR:
+    case LogOp::OR:
             for (int i = 0; i < lgp->N; i++)
                 if (REval (operands[i]))
                     return 1;
             return 0;
+        default:
+            return 0; // para placer el compilador
     }
 }
 
@@ -375,7 +377,7 @@ static LNode * CompileAsAnd (Sexpr s, Relay * r) {
     cons[0] = AND;
     cons[1] = s;
     ns.u.l = &cons[0];
-    ns.type = L_CONS;
+    ns.type = Lisp::tCONS;
     return CompileExpr (ns, r);
 }
 
@@ -401,15 +403,15 @@ static LNode * CompileBinOp (Logop_Types op, LNode * exp1, LNode * exp2) {
 
 static LNode * CompileExpr (Sexpr s, Relay* r) {
 
-    if (s.type == L_RLYSYM) {
+    if (s.type == Lisp::RLYSYM) {
 	if (s.u.r->rly == NULL)
 	    s.u.r->rly = CreateRelay(s);
 	s.u.r->rly->AddDependent (r);
 	return s.u.r->rly;
     }
-    else if (s.type == L_CONS) {
+    else if (s.type == Lisp::tCONS) {
 	int n = ListLen (CDR(s));
-	Logop_Types op;
+	LogOp op;
 	Sexpr fn = CAR(s);
 	if (fn == AND || fn == OR) {
             if (n == 0)
@@ -417,7 +419,7 @@ static LNode * CompileExpr (Sexpr s, Relay* r) {
 	    SPop(s);
 	    if (n == 1)
 		return CompileExpr (CAR(s), r);
-            op = (fn == AND) ? LG_AND : LG_OR;
+            op = (fn == AND) ? LogOp::AND : LogOp::OR;
 	    Logop* pLogop = new Logop (op, n);
             assert (pLogop);
 	    for (int x = 0;CONSP(s);SPop(s), x++)
@@ -429,9 +431,9 @@ static LNode * CompileExpr (Sexpr s, Relay* r) {
 	    return new LNot (CompileExpr (CAR(CDR(s)), r));
 	else if (fn == LABEL) {
 	    SPop(s);
-	    if (s.type != L_CONS)
+	    if (s.type != Lisp::tCONS)
 		CmplrErr (r, NOBJ, "Bad Format LABEL clause.");
-	    if (CDR(s).type != L_CONS)
+	    if (CDR(s).type != Lisp::tCONS)
                 CmplrErr (r, NOBJ, "Bad Format LABEL clause.");
 	    LCommShr * v = new LCommShr (CompileAsAnd (CDR(s), r));
 	    AddLabel (CAR(s), v);
@@ -448,7 +450,7 @@ static LNode * CompileExpr (Sexpr s, Relay* r) {
 	}
 						
     }			
-    else if (s.type == L_ATOM) {
+    else if (s.type == Lisp::ATOM) {
 	if (s == NIL)
 	    return &ZERO;
 	else if (s == T_ATOM)
@@ -462,7 +464,7 @@ static LNode * CompileExpr (Sexpr s, Relay* r) {
 	}
 	CmplrErr (r, s, "Logic label not found");
     }
-    else if (s.type == L_NUM) {
+    else if (s.type == Lisp::NUM) {
 	if ((int)s == 1)
 	    return &ONE;
 	else if ((int)s == 0)
@@ -552,17 +554,17 @@ Sexpr ZAppendRlysym (Sexpr base) {
 
 Relay* DefineTimerRelayFromLisp (Sexpr s) {
     try {
-        if (s.type != L_CONS)
+        if (s.type != Lisp::tCONS)
             CmplrErr (nullptr, NOBJ, "No timer relay name present in TIMER form.");
         Sexpr nam = CAR(s);
-        if (nam.type != L_RLYSYM)
+        if (nam.type != Lisp::RLYSYM)
              CmplrErr (nullptr, nam, "TIMER relay name not a relay symbol");
         Relay * outter = CreateRelay (nam);
-        if (s.type != L_CONS)
+        if (s.type != Lisp::tCONS)
             CmplrErr (outter, NOBJ, "TIMER time and expression absent");
         SPop(s);
         Sexpr TimeNum = CAR(s);
-        if (TimeNum.type != L_NUM)
+        if (TimeNum.type != Lisp::NUM)
             CmplrErr (outter, TimeNum, "TIMER time (in seconds) not an integer");
         ReportingRelay * ctrler = CreateReportingRelay (ZAppendRlysym (nam));
         TimerCtl * tc = new TimerCtl (outter, ctrler, (int)TimeNum * 1000);
@@ -593,7 +595,7 @@ Relay * DefineTimerRelayFromObject (Relay* outter, int t) {
 
 Relay * DefineRelayFromLisp2 (Sexpr S, Sexpr exp) {
     try {
-        if (S.type != L_RLYSYM)
+        if (S.type != Lisp::RLYSYM)
             CmplrErr (nullptr, S, "Relay name should be a relay symbol, but is not");
         Relay * us = CreateRelay (S);
         LNode * ln = CompileAsAndTopLevel (exp, us);
@@ -612,7 +614,7 @@ Relay * DefineRelayFromLisp (Sexpr s) {
     return DefineRelayFromLisp2 (CAR(s), CDR(s));
 }
 
-Logop::Logop (Logop_Types t, int n) : LNode() {
+Logop::Logop (LogOp t, int n) : LNode() {
     N = n;
     op = t;
     Opds = new LNode *[n];
@@ -799,7 +801,7 @@ bool validateExpr(const LNode* L, int breadth, int depth) {
         validateErr("Log operand count, %d,  negative or > 500", N);
         return false;
     }
-    if (Lopp->op != LG_AND && Lopp->op != LG_OR) {
+    if (Lopp->op != LogOp::AND && Lopp->op != LogOp::OR) {
         validateErr("Log operation not AND or OR: #x%2d", Lopp->op);
         return false;
     }
@@ -867,8 +869,8 @@ bool validateRlysym1(const Rlysym * rsp, const char * name) {
         if (rsp->rly == NULL)
             return true;
         const Relay* rly = rsp->rly;
-        if (rly->RelaySym.type != L_RLYSYM) {
-            validateErr("Relay Sym ptr is not of type L_RLYSYM but %d", rly->RelaySym.type);
+        if (rly->RelaySym.type != Lisp::RLYSYM) {
+            validateErr("Relay Sym ptr is not of type Lisp::RLYSYM but %d", rly->RelaySym.type);
         } else if (rly->RelaySym.u.r != rsp) {
             validateErr("RelaySym ptr %p != %p which latter brought us here.", rly->RelaySym.u.r, rsp);
         } else if (!(rly->Flags & LF_Terminal)) {

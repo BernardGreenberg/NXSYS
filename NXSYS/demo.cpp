@@ -216,12 +216,12 @@ bool DemoState::MakeBigX(GraphicObject* g, int mousecmd) {
 }
 
 static bool ProcessGOForm(int key, Sexpr s, int mousecmd) {
-    if (CDR(s).type != L_CONS)
+    if (CDR(s).type != Lisp::tCONS)
         throw DemoErr ("Mouse hit form too short in demo script.");
-    if (CADR(s).type != L_NUM)
+    if (CADR(s).type != Lisp::NUM)
         throw DemoErr ("No item number in mouse hit demo form.");
-    if (CDR(CDR(s)).type == L_CONS){ /* Allow "no comment" */
-        if (CADR(CDR(s)).type != L_STRING)
+    if (CDR(CDR(s)).type == Lisp::tCONS){ /* Allow "no comment" */
+        if (CADR(CDR(s)).type != Lisp::STRING)
             throw DemoErr ("No string in mouse hit demo form.");
         DemoSay (CADR(CDR(s)).u.s);
     }
@@ -240,26 +240,26 @@ static bool ProcessGOForm(int key, Sexpr s, int mousecmd) {
 static bool ProcessForm (Sexpr s, int mousecmd = WM_LBUTTONDOWN) {
     /* return true = break interpret loop for either end or wait */
 
-    if (s.type == L_NULL) {
+    if (s.type == Lisp::tNULL) {
         State.reset();
         return true;
     }
-    if (s.type != L_CONS || CDR(s).type != L_CONS)
+    if (s.type != Lisp::tCONS || CDR(s).type != Lisp::tCONS)
         throw DemoErr ("Non-list in demo script.");
-    if (CAR(s).type != L_ATOM)
+    if (CAR(s).type != Lisp::ATOM)
         throw DemoErr ("Non-atom at head of Demo command list.");
     
     std::string name = CAR(s).u.a;
     if (name == "OPTIONS")
         DecodeOptions(CDR(s));
     else if (name == "VERSION") {
-        if (s.type != L_CONS || CADR(s).type != L_NUM || CADR(s).u.n != 1)
+        if (s.type != Lisp::tCONS || CADR(s).type != Lisp::NUM || CADR(s).u.n != 1)
             throw DemoErr ("Demo script VERSION not 1.");
     }
     else if (name == "SAY") {
-        if (CADR(s).type != L_NUM)
+        if (CADR(s).type != Lisp::NUM)
             throw DemoErr ("Missing wait # in SAY in demo script.");
-        if (CDR(CDR(s)).type !=L_CONS || (CADR(CDR(s)).type !=L_STRING))
+        if (CDR(CDR(s)).type !=Lisp::tCONS || (CADR(CDR(s)).type !=Lisp::STRING))
             throw DemoErr ("Missing string in SAY in demo script.");
 
         DemoSay (CADR(CDR(s)).u.s);
@@ -271,7 +271,7 @@ static bool ProcessForm (Sexpr s, int mousecmd = WM_LBUTTONDOWN) {
     else if (name == "CLICKTIME")
         State->ClickTimeMs = CADR(s).u.n;
     else if (name == "WAIT") {
-        if (CADR(s).type != L_NUM)
+        if (CADR(s).type != Lisp::NUM)
             throw DemoErr ("Missing number in WAIT.");
         DemoTimer (CADR(s).u.n);
         return true;
@@ -305,7 +305,7 @@ static bool ProcessForm (Sexpr s, int mousecmd = WM_LBUTTONDOWN) {
     else if (name == "CIRCUIT")
         for (Sexpr q = CDR (s); q != NIL; q= CDR(q)) {
             Sexpr e = CAR(q);
-            if (e.type == L_RLYSYM) {
+            if (e.type == Lisp::RLYSYM) {
                 std::string rname = e.u.r->PRep();
                 if (e.u.r->rly == NULL)
                     throw DemoErr (std::string("No Relay in relay sym in CIRCUIT " + rname));
@@ -323,9 +323,9 @@ static bool ProcessForm (Sexpr s, int mousecmd = WM_LBUTTONDOWN) {
         };
         for (Sexpr q = CDR (s); q != NIL; q = CDR(q)) {
             Sexpr e = CAR(q);
-            if (e.type == L_RLYSYM)
+            if (e.type == Lisp::RLYSYM)
                 valrelay(e.u.r, 1);
-            else if (e.type == L_CONS && CADR(e).type == L_RLYSYM)
+            else if (e.type == Lisp::tCONS && CADR(e).type == Lisp::RLYSYM)
                 /* "I hope NOT!" */
                 valrelay(CADR(e).u.r, 0);
             else
@@ -400,9 +400,9 @@ static void DemoImpulse (void*) {
 }
 
 void DecodeOptions (Sexpr S) {
-    for (; S.type == L_CONS; SPop (S)) {
+    for (; S.type == Lisp::tCONS; SPop (S)) {
 	Sexpr O = (CAR(S));
-	if (O.type != L_ATOM)
+	if (O.type != Lisp::ATOM)
 	    throw DemoErr ("Non-atomic-symbol option in OPTIONS form.");
         std::string option = O.u.a;
 	if (option == "NOXES")
@@ -426,34 +426,34 @@ void DecodeOptions (Sexpr S) {
 #ifndef NOTRAINS
 void DemoTrain (Sexpr S) {
 
-    if (S.type != L_CONS || CAR(S).type != L_NUM)
+    if (S.type != Lisp::tCONS || CAR(S).type != Lisp::NUM)
 	throw DemoErr ("Missing numeric train number in TRAIN form.");
     int train_no = (int) (CAR(S).u.n);
     SPop(S);
 
-    if (S.type != L_CONS || CAR(S).type != L_ATOM)
+    if (S.type != Lisp::tCONS || CAR(S).type != Lisp::ATOM)
 	throw DemoErr ("Missing train command symbol in TRAIN %d form.", train_no);
 
     std::string cmd = CAR(S).u.a;
     SPop(S);
 
     if (cmd == "SPEED") {
-	if (S.type != L_CONS || !NUMBERP(CAR(S)))
+	if (S.type != Lisp::tCONS || !NUMBERP(CAR(S)))
 	    throw DemoErr ("Missing numeric train speed in TRAIN %d SPEED",
 			train_no);
 	if (!TrainAutoSetSpeed (train_no, *LCoerceToFloat(CAR(S)).u.f))
 	    throw DemoErr ("Could not set speed for train# %d", train_no);
     }
     else if (cmd == "CREATE") {
-	if (S.type != L_CONS || CAR(S).type != L_NUM)
+	if (S.type != Lisp::tCONS || CAR(S).type != Lisp::NUM)
 	    throw DemoErr ("Missing track # in TRAIN %d CREATE", train_no);
 
 	long start_place_id = CAR(S).u.n;
 	long options = 0;
 	SPop(S);
 
-	for (; S.type == L_CONS; SPop(S)) {
-	    if (CAR(S).type != L_ATOM)
+	for (; S.type == Lisp::tCONS; SPop(S)) {
+	    if (CAR(S).type != Lisp::ATOM)
 		throw DemoErr ("Non-atomic create option in train %d CREATE", train_no);
 
             std::string create_cmd = CAR(S).u.a; // Guaranteed to be upcased.

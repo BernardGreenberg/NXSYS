@@ -3,12 +3,12 @@
 
 /* hacked by BSG (and Dave Moon!) 9/96 for MusicSys - rationals, floats. */
 
-enum LISP_TYPES {L_NULL=0, L_VECTOR, L_STRING, L_ATOM, L_NUM, L_CHAR,
-		    L_RLYSYM, L_CONS, L_RATIONAL, L_FLOAT, L_LAST_TYPE};
+enum class Lisp {tNULL = 0, VECTOR, STRING, ATOM, NUM, CHAR,
+		    RLYSYM, tCONS, RATIONAL, FLOAT, LAST_TYPE};
 
 #define LISP_TYPE_DESCRIPTIONS_NOBRACKETS \
  "NULL", "VECTOR", "STRING", "ATOMIC-SYMBOL", "FIXNUM", "CHARACTER", \
- "RELAY-SYMBOL", "CONS", "RATIONAL", "FLOAT"
+ "RELAY-SYMBOL", "CONS", "RATIONAL", "FLOAT", "LAST-TYPE"
 
 #define LISP_TYPE_DESCRIPTIONS { LISP_TYPE_DESCRIPTIONS_NOBRACKETS}
 
@@ -45,32 +45,32 @@ struct Sexpr {
 	Rlysym * r;
 	const void * v;    // consted 11/23/2020
     } u;
-    enum LISP_TYPES type;
+    enum Lisp type;
     
-    Sexpr() : Sexpr(L_NULL, nullptr) {}
+    Sexpr() : Sexpr(Lisp::tNULL, nullptr) {}
     
-    Sexpr(enum LISP_TYPES a_type, const void* v) {
+    Sexpr(enum Lisp a_type, const void* v) {
         type = a_type;
         u.v = v;
     }
 
     explicit Sexpr(long longval) {
-        type = L_NUM;
+        type = Lisp::NUM;
         u.n = longval;
     }
     
     explicit Sexpr(int intval) {
-        type = L_NUM;
+        type = Lisp::NUM;
         u.n = intval;
     }
     
     explicit Sexpr(double dval) {
-        type = L_FLOAT;
+        type = Lisp::FLOAT;
         u.f = new double(dval);
     }
     
     explicit Sexpr(Rlysym* rsp) {
-        type = L_RLYSYM;
+        type = Lisp::RLYSYM;
         u.r = rsp;
     }
     
@@ -136,7 +136,7 @@ Sexpr MaybeExpandMacro (Sexpr s);
 struct Rlysym {
     Rlysym (long nomenc, short type_index, Relay* relay)
     : n(nomenc), type(type_index), rly(relay) {}
-    std::string PRep() const;                 /* printed rep */
+    std::string PRep();                 /* printed rep */
 
     long    n;				/* 4732 of 4732TP */
     short   type;			/* index to "TP" in relay-type tbl */
@@ -152,13 +152,13 @@ struct Rlysym {
 #define CADR(X) (CAR(CDR(X)))
 #define CDDR(X) (CDR(CDR(X)))
 #define CADDR(X) (CAR(CDR(CDR(X))))
-#define CONSP(X) (X.type == L_CONS)
+#define CONSP(X) (X.type == Lisp::tCONS)
 #define L_LIST L_VECTOR
 extern Sexpr NIL, DEFRMACRO, EOFOBJ, READ_ERROR_OBJ, FORMS, ARG, QUOTE,
        symBACKQUOTE, symCOMMA, symCOMMAATSIGN, symFUNCTION;
-#define NILP(x) (x.type == L_ATOM && x.u.l == NIL.u.l)
-#define ATOMP(x) (x.type == L_ATOM)
-#define NUMBERP(X) (X.type == L_NUM || X.type == L_RATIONAL || X.type == L_FLOAT)
+#define NILP(x) (x.type == Lisp::ATOM && x.u.l == NIL.u.l)
+#define ATOMP(x) (x.type == Lisp::ATOM)
+#define NUMBERP(X) (X.type == Lisp::NUM || X.type == Lisp::RATIONAL || X.type == Lisp::FLOAT)
 #define SPop(X) (X=CDR(X))
 #define CONS Lisp_Cons
 
@@ -200,7 +200,7 @@ Sexpr read_sexp_LIS (LispInputSource& Lis);
 
 inline Sexpr SPopCar(Sexpr& L) {
     Sexpr car = CAR(L);
-    assert (L.type == L_CONS);
+    assert (L.type == Lisp::tCONS);
     L = CDR(L);
     return car;
 }
@@ -214,7 +214,7 @@ class self_snapping_Sexpref {   // 22 Nov 2020
 public:
     self_snapping_Sexpref(const char * name) : m_name(name), m_value(Sexpr())  {}
     operator Sexpr& () {  //Sexpr == operator takes a ref.
-        if (m_value.type == L_NULL) {
+        if (m_value.type == Lisp::tNULL) {
             m_value = intern(m_name);
         }
         return m_value;

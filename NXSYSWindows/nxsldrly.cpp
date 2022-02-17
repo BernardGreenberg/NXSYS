@@ -137,9 +137,9 @@ int PrintInterlocking (const char * Iname) {
 
 
 int HackTopLevelForm (Sexpr s, const char * fname) {
-    if (s.type != L_CONS)
+    if (s.type != Lisp::tCONS)
 	LispBarf (1, "Top-level item not a list.", s);
-    if (CAR(s).type != L_ATOM)
+    if (CAR(s).type != Lisp::ATOM)
 	LispBarf (1, "Top-level item doesn't start with atom.", s);
     else {
 	Sexpr fn = CAR(s);
@@ -152,7 +152,7 @@ int HackTopLevelForm (Sexpr s, const char * fname) {
 	    defrmacro_maybe_dup (s, 1);	/* maybe FASDUMP macdef, too!? */
 	else if (fn == FORMS) {
 	    SPop (s);
-	    while (s.type == L_CONS) {
+	    while (s.type == Lisp::tCONS) {
 		if (!HackTopLevelForm (CAR(s), fname))
 		    return 0;
 		SPop (s);
@@ -196,7 +196,7 @@ int HackTopLevelForm (Sexpr s, const char * fname) {
 static void DrawFile (FILE * f, const char * fname) {
     for (;;) {
 	Sexpr s = read_sexp (f);
-	if (s.type == NULL)
+	if (s.type == Lisp::tNULL)
 	    break;
 	int r = HackTopLevelForm (s, fname);
 	dealloc_ncyclic_sexp (s);

@@ -115,7 +115,7 @@ void InitXTGReader () {  // called from rdtrkcmn, too.
 int XTGLoad (FILE * f) {
 
     Sexpr s = read_sexp (f);
-    if (s.type != L_CONS || CAR(s)!= aLAYOUT) {
+    if (s.type != Lisp::tCONS || CAR(s)!= aLAYOUT) {
         LispBarf ("LAYOUT Form missing in file.");
         return 0;
     }
@@ -124,12 +124,12 @@ int XTGLoad (FILE * f) {
 }
 
 int ProcessLayoutForm (Sexpr f) {
-    for ( ;f.type == L_CONS; f = CDR(f)) {
+    for ( ;f.type == Lisp::tCONS; f = CDR(f)) {
 	Sexpr s = CAR(f);
 #if 0
 	MessageBox (0, s.PRep(), "Layout subform about to be processed", MB_OK);
 #endif
-	if (s.type != L_CONS) {
+	if (s.type != Lisp::tCONS) {
 	    LispBarf ("Non-list element found in LAYOUT", s);
 	    return 0;
 	}
@@ -216,18 +216,18 @@ struct ppf_coords {
 
 BOOL ppf_coords::Collect (Sexpr s, Sexpr f) {
     flip = FALSE;
-    if (s.type != L_CONS) {
+    if (s.type != Lisp::tCONS) {
 	LispBarf ("Non-list where coordinate subform expected:", f);
 	return FALSE;
     }
-    if (CAR(s).type != L_NUM) {
+    if (CAR(s).type != Lisp::NUM) {
 	LispBarf ("Bogus X-coordinate in form", f);
 	return FALSE;
     }
     x = CAR(s);
     s = CDR(s);
-    if (s.type == L_CONS) {
-	if (CAR(s).type != L_NUM) {
+    if (s.type == Lisp::tCONS) {
+	if (CAR(s).type != Lisp::NUM) {
 	    LispBarf ("Bogus Y-coordinate in switch", f);
 	    return FALSE;
 	}
@@ -238,7 +238,7 @@ BOOL ppf_coords::Collect (Sexpr s, Sexpr f) {
 
     s = CDR(s);
 
-    if (s.type == L_CONS) {
+    if (s.type == Lisp::tCONS) {
 	if (CAR(s) == aNUMFLIP)
 	    flip = TRUE;
     }
@@ -279,13 +279,13 @@ static int ProcessPathForm (Sexpr f) {
     TrackSeg * last_ts = NULL;
     TrackJoint * tj;
     long last_tcid = 0;
-    for (; f.type == L_CONS; f = CDR(f)) {
+    for (; f.type == Lisp::tCONS; f = CDR(f)) {
 	Sexpr s = CAR(f);
 	Sexpr ss = s;
 	long Nomen = 0;
 	BOOL insulated = FALSE;
 	Sexpr key;
-	if (s.type == L_NUM) {
+	if (s.type == Lisp::NUM) {
 	    coords.x = (WP_cord) s;
 	    coords.y = coords.last_y;
 	    insulated = FALSE;
@@ -331,15 +331,15 @@ finish_create_any:
 	    continue;
 	}
 
-	if (s.type != L_CONS) {
+	if (s.type != Lisp::tCONS) {
 	    LispBarf ("Element other than number or list in PATH", s);
 	    return 0;
 	}
 	key = CAR(s);
-	if (key.type == L_NUM) {
+	if (key.type == Lisp::NUM) {
 	    coords.x = key;
-	    if (CDR(s).type == L_CONS) {
-		if (CADR(s).type != L_NUM) {
+	    if (CDR(s).type == Lisp::tCONS) {
+		if (CADR(s).type != Lisp::NUM) {
 		    LispBarf ("Coordinate-pair form in PATH not a pair of numbers.", s);
 		    return 0;
 		}
@@ -349,7 +349,7 @@ finish_create_any:
 	    goto create_simple;
 	}
 	    
-	if (key.type != L_ATOM) {
+	if (key.type != Lisp::ATOM) {
 	    LispBarf ("Form with non atomic head in PATH ", key);
 	    return 0;
 	}
@@ -379,25 +379,25 @@ finish_create_any:
 	}
 
 	/* (SWITCH) BRANCHTYPE swID x y */
-	if (s.type != L_CONS) {
+	if (s.type != Lisp::tCONS) {
 invsw:	    LispBarf ("Invalid SWITCH subform", s);
 	    return 0;
 	}
-	if (CAR(s).type != L_ATOM)
+	if (CAR(s).type != Lisp::ATOM)
 	    goto invsw;
 	int brtype;
 	if (!DecodeBranchType (CAR(s), &brtype)) {
 	    LispBarf ("Unknown switch branch type", CAR(s));
 	    return 0;
 	}
-	if (s.type != L_CONS) {
+	if (s.type != Lisp::tCONS) {
 	    LispBarf ("Missing nomenclature in switch", ss);
 	    return 0;
 	}
 
 	s = CDR(s);
 
-	if (CAR(s).type != L_NUM) {
+	if (CAR(s).type != Lisp::NUM) {
 	    LispBarf ("Bogus Nomenclature ID switch", ss);
 	    return 0;
 	}
@@ -407,7 +407,7 @@ invsw:	    LispBarf ("Invalid SWITCH subform", s);
 	int ab0;
 	Sexpr e = CAR(s);
 
-	if (e.type == L_NUM) {
+	if (e.type == Lisp::NUM) {
 	    if (e.u.n != 0) {
 unkab:		LispBarf ("Unknown Switch A/B/singleton tag:", ss);
 		return 0;
@@ -423,7 +423,7 @@ unkab:		LispBarf ("Unknown Switch A/B/singleton tag:", ss);
 
 	BOOL have_coords = FALSE;
 
-	if (s.type == L_CONS) {
+	if (s.type == Lisp::tCONS) {
 	    if (!coords.Collect (s, ss))
 		return 0;
 	    have_coords = TRUE;
@@ -537,11 +537,11 @@ static TrackJoint * FindTrackJoint (long nn) {
 
 
 static int ProcessExitlightForm (Sexpr s) {
-    if (s.type != L_CONS) {
+    if (s.type != Lisp::tCONS) {
 	LispBarf ("EXITLIGHT form missing data.");
 	return 0;
     }
-    if (CAR(s).type != L_NUM) {
+    if (CAR(s).type != Lisp::NUM) {
 	LispBarf ("EXITLIGHT form missing lever number.");
 	return 0;
     }
@@ -560,7 +560,7 @@ static int ProcessExitlightForm (Sexpr s) {
     /* (xno orient ij) */
     Sexpr e = CAR(s);
     char orient;
-    if (e.type == L_ATOM) {
+    if (e.type == Lisp::ATOM) {
 	if (e != aL && e != aR && e != aT && e != aB) {
 	    LispBarf ("Unrecognized orientation symbol in EXITLIGHT",
 		      Sexpr(xno), e);
@@ -595,18 +595,18 @@ static int ProcessSignalForm (Sexpr s) {
     char orient = ' ';
     BOOL HasStop = TRUE;
 
-    if (CAR(s).type != L_NUM) {
+    if (CAR(s).type != Lisp::NUM) {
 	LispBarf ("IJ id number missing in SIGNAL form", ss);
 	return 0;
     }
     ijid = CAR(s);
     SPop(s);
-    if (CAR(s).type == L_NUM) {
+    if (CAR(s).type == Lisp::NUM) {
         xlno = CAR(s);  // conv opr
 	SPop(s);
     }
     Sexpr e = CAR(s);
-    if (e.type == L_ATOM) {
+    if (e.type == Lisp::ATOM) {
 	if (e != aL && e != aR && e != aT && e != aB) {
 	    LispBarf ("Unrecognized orientation symbol in SIGNAL",
 		      e, ss);
@@ -615,7 +615,7 @@ static int ProcessSignalForm (Sexpr s) {
 	orient = e.u.s[0];
 	SPop(s);
     }
-    if (CAR(s).type != L_CONS) {
+    if (CAR(s).type != Lisp::tCONS) {
 	LispBarf("Missing heads list in SIGNAL", ss);
 	return 0;
     }
@@ -626,11 +626,11 @@ static int ProcessSignalForm (Sexpr s) {
 	LispBarf ("Cannot find Insulated Joint", ss);
 	return 0;
     }
-    while (s.type == L_CONS) {
+    while (s.type == Lisp::tCONS) {
 	SPop(s);
-	if (s.type == L_CONS && CAR(s) == aNOSTOP)
+	if (s.type == Lisp::tCONS && CAR(s) == aNOSTOP)
 	    HasStop = FALSE;
-	if (s.type == L_CONS &&
+	if (s.type == Lisp::tCONS &&
 	    (CAR(s) == aPLATENO || CAR(s) == aID)) { /* for the time being
 						    12 January 1998 */
 	    SPop(s);
@@ -702,7 +702,7 @@ static int ProcessTrafficleverForm (Sexpr s) {
     }
     Sexpr first = CAR(s);
     SPop(s);
-    if (first.type != L_NUM || (int)first != 1) {
+    if (first.type != Lisp::NUM || (int)first != 1) {
 	LispBarf ("TRAFFICLEVER version unknown:", s);
 	return 0;
     }
@@ -721,7 +721,7 @@ static int ProcessPanelLightForm (Sexpr s) {
     }
     Sexpr first = CAR(s);      SPop(s);  /* 1 */
 
-    if (first.type != L_NUM || (int)first != 1) {
+    if (first.type != Lisp::NUM || (int)first != 1) {
 	LispBarf ("PanelLight version unknown:", s);
 	return 0;
     }
@@ -753,7 +753,7 @@ static int ProcessPanelSwitchForm (Sexpr s) {
     }
     Sexpr first = CAR(s);      SPop(s);  /* 1 */
 
-    if (first.type != L_NUM || (int)first != 1) {
+    if (first.type != Lisp::NUM || (int)first != 1) {
 	LispBarf ("PanelSwitch version unknown:", s);
 	return 0;
     }

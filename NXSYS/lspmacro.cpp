@@ -22,7 +22,7 @@ static Sexpr MacName;
 static Sexpr lcopy (Sexpr x) {
     Sexpr copy;
     Sexpr last = NIL;
-    while (x.type == L_CONS) {
+    while (x.type == Lisp::tCONS) {
 	Sexpr lcons = CONS (lcopy (CAR(x)), NIL);
 	if (last == NIL)
 	    copy = lcons;
@@ -42,24 +42,24 @@ int defrmacro (Sexpr arg) {
 }
 
 int defrmacro_maybe_dup (Sexpr arg, int ignore_dup) {
-    if (!(arg.type == L_CONS && (CAR(arg) == DEFRMACRO)))
+    if (!(arg.type == Lisp::tCONS && (CAR(arg) == DEFRMACRO)))
 	return 0;
     Sexpr rest = CDR(arg);
-    if (rest.type != L_CONS)
+    if (rest.type != Lisp::tCONS)
 	goto bs;
-    if (CAR(rest).type != L_ATOM) {
+    if (CAR(rest).type != Lisp::ATOM) {
 bs:	LispBarf (0, "Bad Syntax in DEFRMACRO");
 	return 0;
     }
     Sexpr sym = CAR(rest);
     SPop(rest);
-    if (rest.type != L_CONS)
+    if (rest.type != Lisp::tCONS)
 	goto bs;
-    if (CAR(rest).type != L_NUM)
+    if (CAR(rest).type != Lisp::NUM)
 	goto bs;
     int argct = (int)CAR(rest).u.n;
     SPop(rest);
-    if (rest.type != L_CONS)
+    if (rest.type != Lisp::tCONS)
 	goto bs;
     if (argct < 1 || argct > 10)
 	goto bs;
@@ -81,7 +81,7 @@ bs:	LispBarf (0, "Bad Syntax in DEFRMACRO");
 static Sexpr get_macarg_n (int n) {
     if (n < 1 || n > NMacargs) {
 	Sexpr b;
-	b.type = L_NUM;
+	b.type = Lisp::NUM;
 	b.u.n = n;
 	LispBarf (2, "Macro arg designator out of range", MacName, b);
 	return EOFOBJ;
@@ -90,7 +90,7 @@ static Sexpr get_macarg_n (int n) {
 }
 
 static Sexpr get_macarg (Sexpr ns) {
-    if (ns.type != L_NUM) {
+    if (ns.type != Lisp::NUM) {
 	LispBarf (1, "Invalid macro arg designator.", ns);
 	return EOFOBJ;
     }
@@ -98,15 +98,15 @@ static Sexpr get_macarg (Sexpr ns) {
 }
     
 static Sexpr macsubst (Sexpr x)  {
-    if (x.type != L_RLYSYM)
+    if (x.type != Lisp::RLYSYM)
 	return x;
     int n = (int)x.u.r->n;
     if (n == 0)				/* Allow 0 as global */
 	return x;
     Sexpr actual = get_macarg_n (n);
-    if (actual.type == L_NUM)
+    if (actual.type == Lisp::NUM)
 	return intern_rlysym (actual.u.n, redeemRlsymId (x.u.r->type));
-    if (actual.type == L_RLYSYM)
+    if (actual.type == Lisp::RLYSYM)
 	return intern_rlysym (actual.u.r->n, redeemRlsymId (x.u.r->type));
     else {
 	LispBarf (2, "Invalid actual parameter for relay sym substitution", MacName, actual);
@@ -117,9 +117,9 @@ static Sexpr macsubst (Sexpr x)  {
 static Sexpr macexp (Sexpr x) {
     Sexpr copy;
     Sexpr last = NIL;
-    if (x.type == L_CONS && CAR(x) == ARG)
+    if (x.type == Lisp::tCONS && CAR(x) == ARG)
 	return (get_macarg (CAR(CDR(x))));  
-    while (x.type == L_CONS) {
+    while (x.type == Lisp::tCONS) {
 	Sexpr lcons = CONS (macexp (CAR(x)), NIL);
 	if (last == NIL)
 	    copy = lcons;
@@ -136,9 +136,9 @@ static Sexpr macexp (Sexpr x) {
 
 Sexpr MaybeExpandMacro (Sexpr s) {
     Sexpr ss = s;
-    if (s.type != L_CONS)
+    if (s.type != Lisp::tCONS)
 	return EOFOBJ;
-    if (CAR(s).type != L_ATOM)
+    if (CAR(s).type != Lisp::ATOM)
 	return EOFOBJ;
     Macro * mp = NULL;
     for (size_t i = 0; i < Macros.size(); i++)
@@ -153,7 +153,7 @@ Sexpr MaybeExpandMacro (Sexpr s) {
     MacName = CAR(s);
     SPop(s);
     for (NMacargs = 0; NMacargs < MaxNMacargs; NMacargs++) {
-	if (s.type != L_CONS)
+	if (s.type != Lisp::tCONS)
 	    break;
 	Macargs[NMacargs] = CAR(s);
 	SPop(s);

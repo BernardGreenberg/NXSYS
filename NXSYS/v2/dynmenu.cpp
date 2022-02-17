@@ -377,11 +377,11 @@ HWND DynMenu::CreateSystemDialog() {
 DynMenuEntry::DynMenuEntry(Sexpr button_def, DynMenu* pmenu, int control_id) :
    Menu(pmenu), ControlId(control_id), ReporterRelay(nullptr) {
     
-    if (CAR(button_def).type != L_STRING)
+    if (CAR(button_def).type != Lisp::STRING)
         throw DynMenuCreateException("Item destination label not a string");
     String = SPopCar(button_def).u.s;  // yay STL!
 
-    if (CAR(button_def).type != L_RLYSYM)
+    if (CAR(button_def).type != Lisp::RLYSYM)
         throw DynMenuCreateException("Pushbutton relay symbol not a relay symbol");
     PushButtonRelay = CreateRelay (SPopCar(button_def));   // not a reporter, not moveneedy
 
@@ -437,14 +437,14 @@ int DefineMenuFromLisp (Sexpr s) {
 
     Sexpr rlysym = SPopCar(s);   //Needed for catch clause, too.  Might be "bad", too...
     try {
-        if (rlysym.type != L_RLYSYM)
+        if (rlysym.type != Lisp::RLYSYM)
             throw DynMenuCreateException("Required relay symbol in MENU not a relay symbol");
 
         Sexpr expr = Lisp_Cons(SPopCar(s), NIL); // Make it look like a train cdr.
         if (!DefineRelayFromLisp2(rlysym, expr))   //compilation errors in expr can fail this way
             throw DynMenuCreateException("Creation of menu relay failed");
 
-        if (TEST_THROW || CAR(s).type != L_STRING)
+        if (TEST_THROW || CAR(s).type != Lisp::STRING)
             throw DynMenuCreateException("Title string in MENU not a Lisp string");
         const char * title = SPopCar(s).u.s;
 

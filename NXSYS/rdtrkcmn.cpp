@@ -122,7 +122,7 @@ static std::set<std::string> NormallyPickedRelays
    = {"AS", "D", "DV", "RGP"};
 
 int symcmp (Sexpr& s, const char * str) {
-    if (s.type != L_ATOM)
+    if (s.type != Lisp::ATOM)
 	    return 0;
     return (0==strcmp (s.u.a, str));
 }
@@ -174,7 +174,7 @@ static BOOL LoadExprcodeFile (const char * fname) {
 	Sexpr s = read_sexp (f);
         //show_sexp(s);
  //       ValidateRelayWorld();
-	if (s.type == L_NULL)
+	if (s.type == Lisp::tNULL)
 	    if (s == EOFOBJ)
 		got_it = TRUE;	/* otherwise read_err_obj */
 	    else
@@ -269,13 +269,13 @@ int InterpretTopLevelForm (const char* fname, Sexpr s) {
     if (c != 1)
         c = *pp;
 #endif
-    if (s.type != L_CONS)
+    if (s.type != Lisp::tCONS)
 	LERROR ("Item definition not a list", s);
     Sexpr fn = CAR(s);
     int subll = ListLen(s);
     if (subll < 1)
 	LERROR ("Top Level Item has fewer than one elements", s);
-    if (fn.type != L_ATOM)
+    if (fn.type != Lisp::ATOM)
 	LERROR ("Top-level item doesn't start with atom", s);
     Sexpr f2 = MaybeExpandMacro (s);
     if (f2 != EOFOBJ) {
@@ -290,7 +290,7 @@ int InterpretTopLevelForm (const char* fname, Sexpr s) {
     else if (fn == FORMS) {
 	SPop (s);
 forms:
-	while (s.type == L_CONS)
+	while (s.type == Lisp::tCONS)
 	    if (!InterpretTopLevelForm (fname, SPopCar(s)))
 		return 0;
 	return 1;
@@ -320,10 +320,10 @@ forms:
 	return 1;
     else if (symcmp (fn, "EVAL-WHEN")) {
 	SPop(s);
-	if (s.type == L_CONS && CAR(s).type == L_CONS) {
+	if (s.type == Lisp::tCONS && CAR(s).type == Lisp::tCONS) {
 	    Sexpr sc = SPopCar(s);
-	    for (; sc.type == L_CONS; SPop(sc))
-		if (CAR(sc).type == L_ATOM && symcmp (CAR(sc), "EVAL"))
+	    for (; sc.type == Lisp::tCONS; SPop(sc))
+		if (CAR(sc).type == Lisp::ATOM && symcmp (CAR(sc), "EVAL"))
 		    goto forms;
 	}
 	return 1;
@@ -542,16 +542,16 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
     if (ListLen(s) < 4)
 	LERROR ("Should be at least 5 items in ROUTE?", s);
 
-    if (CAR(s).type != L_STRING)
+    if (CAR(s).type != Lisp::STRING)
 	LERROR ("#2 item in route list not string", CAR(s));
     INameRetval = SPopCar(s).u.s;
-    if (CAR(s).type != L_CHAR)
+    if (CAR(s).type != Lisp::CHAR)
 	LERROR ("#3 item in route list not char", CAR(s));
     Glb.RouteIdentifier = SPopCar(s).u.c;
-    if (CAR(s).type != L_NUM)
+    if (CAR(s).type != Lisp::NUM)
 	LERROR ("#4 item in route list not number", CAR(s));
     SPop(s);
-    if (CAR(s).type != L_ATOM)
+    if (CAR(s).type != Lisp::ATOM)
 	LERROR ("#5 item in route list not ATOM", CAR(s));
 
     Sexpr NS = SPopCar(s);
@@ -584,7 +584,7 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
 		LERROR ("Value of :HELP-TEXT is not a list at least two long", value);
 	    Sexpr s1 = CAR(value);
 	    Sexpr s2 = CAR(CDR(value));
-	    if (s1.type != L_STRING || s2.type != L_STRING)
+	    if (s1.type != Lisp::STRING || s2.type != Lisp::STRING)
 		LERROR ("Members of :HELP-TEXT not strings.", value);
             std::string helpMenuTitle(s1.u.s), helpMenuText(s2.u.s);
             if (helpMenuText.length() && helpMenuText[0] == '@') {
@@ -602,16 +602,16 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
 		LERROR ("Value of :BASIC-HELP-FILE-ID is not a list at least two long", value);
 	    Sexpr s1 = CAR(value);
 	    Sexpr s2 = CAR(CDR(value));
-	    if (s1.type != L_STRING)
+	    if (s1.type != Lisp::STRING)
                 LERROR ("First element of :BASIC-HELP-FILE-ID not a string.", value);
-	    if (s2.type != L_NUM)
+	    if (s2.type != Lisp::NUM)
 		LERROR ("Second element of :BASIC-HELP-FILE-ID not a number.", value);
             const char * title = s1.u.s;
 #if NXSYSMac
             const char * URL = NULL;
             if (CONSP(CDDR (value))) { // Spricht man Lisp hier?
                 Sexpr s3 = CAR(CDDR(value));
-                if (s3.type != L_STRING)
+                if (s3.type != Lisp::STRING)
                     LERROR ("Present, third element (URL) of :BASIC-HELP-FILE-ID not a string.", value);
                 URL = s3.u.s;
             }

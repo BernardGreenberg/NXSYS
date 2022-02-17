@@ -101,7 +101,7 @@ Sexpr RlysymFromStringNocreate (const char * s) {
 }
 
 
-std::string Rlysym::PRep () const {
+std::string Rlysym::PRep ()  {
     return std::to_string(n) + RelayTypeTable[type];
 }
 

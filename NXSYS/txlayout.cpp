@@ -21,7 +21,7 @@ void usererr (const char *, ...);
 #endif
 
 #ifndef STRINGP
-#define STRINGP(x) ((x).type == L_STRING)
+#define STRINGP(x) ((x).type == Lisp::STRING)
 #endif
 
 

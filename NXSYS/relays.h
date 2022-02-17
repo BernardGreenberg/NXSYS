@@ -15,7 +15,7 @@ const int LF_Shref =     0x10;		/* shared ref - deall explicit */
 const int LF_CCExp =     0x20;		/* compiled code subr */
 const int LF_Timer =     0x80;		/* could extend this, you know... */
 
-enum Logop_Types {LG_ZT, LG_AND, LG_OR, LG_NOT};
+enum class LogOp {ZT, AND, OR, NOT};
 
 class LNode {
 public:
@@ -43,12 +43,12 @@ public:
 
 class Logop : public LNode{
 public:
-    Logop_Types op;
+    LogOp op;
     short   N;
     LNode **Opds;
-    Logop () {};
-    Logop (Logop_Types t) : LNode() {op = t;};
-    Logop (Logop_Types t, int n);
+    Logop() : Logop(LogOp::ZT, 0) {}
+    Logop (LogOp t) : LNode(), op(t), N(0), Opds(nullptr) {}
+    Logop (LogOp t, int n);
     void SetTerm (int n, LNode * lt) {Opds[n]=lt;};
 };
 
