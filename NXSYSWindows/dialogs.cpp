@@ -187,7 +187,14 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 			32);
 #endif
 		SetDlgItemText(dialog, ABOUT_NUM_VSN, sversion);
-		const char * build_type = (pFileInfo->dwFileFlags & VS_FF_DEBUG) ? "Debug" : "Release";
+		const char * build_type = 
+#ifdef _DEBUG
+			"Debug"
+#else
+			"Release"
+#endif
+			;
+
 		sprintf_s <COUNTOF(sversion)>(sversion, "Built (%s)", build_type);
 		SetDlgItemText(dialog, ABOUT_BUILD, sversion);
 		UINT cbLang{};
@@ -200,10 +207,11 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 		//Get the string from the resource data
 		LPTSTR lpProdName = nullptr;
 		UINT cbBufSize{};
-		if (VerQueryValue(vdp, sversion, (LPVOID*)&lpProdName,&cbBufSize))	
+		if (VerQueryValue(vdp, sversion, (LPVOID*)&lpProdName, &cbBufSize))	
 		    SetDlgItemText(dialog, ABOUT_PRODUCT_NAME, lpProdName);
 		return TRUE;
 	}
+
 	case WM_COMMAND:
 		if (wParam == IDOK || wParam == IDCANCEL) {
 			EndDialog(dialog, TRUE);

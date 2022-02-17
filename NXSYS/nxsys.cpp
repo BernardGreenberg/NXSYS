@@ -109,7 +109,12 @@ HICON TrainMinimizedIcon;
 string GlobalFilePathname;
 char IniFileName [] = "NXSYS.INI";
 char app_name [] = "V2 NXSYS";
-static char InitialTitleBar[] = "Version 2 NXSYS -- New York Subway NX/UR Panel";
+
+static char InitialTitleBar[] = "Version 2 NXSYS -- New York Subway NX/UR Panel"
+#ifdef _WIN64
+  " (64-bit)"
+#endif
+   ;
 
 static string FName;
 
@@ -198,7 +203,7 @@ SetHelpFilePath () {
 			return;
 		}
 		std::vector<char>buf(MAX_PATH);
-		GetModuleFileName(app_instance, buf.data(), buf.size() - 1);
+		GetModuleFileName(app_instance, buf.data(), (WORD)buf.size() - 1);
 		fs::path modpath = string(buf.data());
 		modpath.replace_filename("");
 		HelpPath = (fs::path(modpath / HELP_FNAME)).string();
@@ -207,7 +212,7 @@ SetHelpFilePath () {
 
 long smeasure (HDC dc, const char * str) {
     SIZE ss;
-    GetTextExtentPoint32 (dc, str, strlen (str), &ss);
+    GetTextExtentPoint32 (dc, str, (int)strlen (str), &ss);
     return ss.cx;
 }
 #else
@@ -779,7 +784,7 @@ WORD WindowsMessageLoop (HWND window, HACCEL hAccel, UINT closemsg) {
 	}
 /*	HEAPCHK */
     }
-    return message.wParam;
+    return (WORD)message.wParam;
 }
     
 #endif
