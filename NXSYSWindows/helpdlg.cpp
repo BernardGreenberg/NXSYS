@@ -49,7 +49,7 @@ static BOOL APIENTRY
 }
 
 
-static INT_PTR 
+static INT_PTR CALLBACK
    HelpDlgProc (HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 
     HWND edit;

@@ -24,7 +24,7 @@ class RelayListDialog {
 public:
 	RelayListDialog(HWND par, HINSTANCE inst) :
 		hInstance(inst), Parent(par) {};
-	static INT_PTR staticDlgProc(HWND, UINT, WPARAM, LPARAM);
+	static INT_PTR CALLBACK staticDlgProc(HWND, UINT, WPARAM, LPARAM);
 	Relay* run(string title, RArray& relays);
 
 private:

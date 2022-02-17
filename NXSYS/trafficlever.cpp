@@ -82,9 +82,9 @@ double TrafficLeverIndicator::doff;
 int TrafficLeverIndicator::arht;
 
 void TrafficLeverIndicator::DataInit() {
-    rad = ceil(IndicatorRadius * NXGO_Scale);
+    rad = (int)ceil(IndicatorRadius * NXGO_Scale);
     doff = ceil(rad*.60 + 1);
-    arht = ceil(rad/4.0);
+    arht = (int)ceil(rad/4.0);
 }
 
 void TrafficLever::SetNormalReverseStatus (int right_normal) {
@@ -109,10 +109,10 @@ static void CreateTrafficLever (int xno) {
 void InitTrafficLeverData () {
     int gu = GU2;			/* expected to be about 3 */
     KnobRadius = 6*gu;
-    BigRadius = ceil(KnobRadius * NXGO_Scale);
+    BigRadius = (int)ceil(KnobRadius * NXGO_Scale);
     IndicatorRadius = 3*gu;
     IndicatorOffset = 2*KnobRadius;
-    IndicOffsAdj = ceil(IndicatorOffset * NXGO_Scale);
+    IndicOffsAdj = (int)ceil(IndicatorOffset * NXGO_Scale);
 
     KnobAngle = M_PI/4;
 
@@ -184,8 +184,8 @@ void TrafficLeverIndicator::Draw(HDC hdc, int l_xcen, int y) {
     Ellipse (hdc, x - rad, y - rad, x + rad, y + rad);
     SelectObject (hdc, (HBRUSH)GetStockObject(BLACK_BRUSH));
     int rectht = arht;
-    int xvleft = x + PlusMinusOne*floor(doff*.6); // "virtual" left...
-    int xvright = x - PlusMinusOne*doff;
+    int xvleft = (int)(x + PlusMinusOne*floor(doff*.6)); // "virtual" left...
+    int xvright = (int)(x - PlusMinusOne*doff);
     Rectangle (hdc, xvleft, y - rectht+1, xvright, y + rectht-1);
     POINT points[3]{};
     points[0].x = (int)(xvleft + PlusMinusOne*(floor(doff/2)));
@@ -221,7 +221,7 @@ void TrafficLever::DrawKnob(HDC hdc) {
     int xxcen, yycen;
     LocateKnobPoint(irad, angle, xxcen, yycen);
     Ellipse (hdc, xxcen - trad, yycen - trad, xxcen + trad, yycen + trad);
-    float botang = angle + M_PI;
+    double botang = angle + M_PI;
     int xbot, ybot;
     LocateKnobPoint(BigRadius, botang, xbot, ybot);
     SelectObject(hdc, LinePen);

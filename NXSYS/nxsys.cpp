@@ -110,7 +110,6 @@ HICON TrainMinimizedIcon;
 
 string GlobalFilePathname;
 
-
 char app_name[] = "V2 NXSYS";
 
 static const char* InitialTitleBar = "Version 2 NXSYS -- New York Subway NX/UR Panel"

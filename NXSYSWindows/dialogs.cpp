@@ -250,7 +250,7 @@ void NullDialog(HWND win, HINSTANCE instance, char* name) {
 	DialogBox(instance, name, win, (DLGPROC)NullDlgProc);
 }
 
-INT_PTR CTDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK CTDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) {
     case WM_INITDIALOG:
@@ -273,7 +273,7 @@ INT_PTR CTDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
 
 static UINT ShowStopsLast;
 
-INT_PTR show_stops_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK show_stops_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
 {
 	UINT cmd;
 	UINT i;
