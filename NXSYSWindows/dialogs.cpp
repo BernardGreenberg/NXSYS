@@ -170,7 +170,7 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 		std::vector<char> infov(version_data_len);
 
 		LPVOID vdp = &infov[0];
-		GetFileVersionInfo(Path, NULL, version_data_len, vdp);
+		GetFileVersionInfo(Path, NULL, (DWORD)version_data_len, vdp);
 		VS_FIXEDFILEINFO    *pFileInfo = NULL;
 		UINT                puLenFileInfo = 0;
 		VerQueryValue(vdp, TEXT("\\"),(LPVOID*)&pFileInfo, &puLenFileInfo);
@@ -180,7 +180,12 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 		WORD fv4 = LOWORD(pFileInfo->dwFileVersionLS);
 		char sversion[128];
 		sprintf_s<COUNTOF(sversion)>
-			(sversion, "Version %d.%d.%d.%d (MS Windows 10, 32 bit)", fv1, fv2, fv3, fv4);
+			(sversion, "Version %d.%d.%d.%d (MS Windows 10, %d bit)", fv1, fv2, fv3, fv4,
+#ifdef _WIN64
+			64);
+#else
+			32);
+#endif
 		SetDlgItemText(dialog, ABOUT_NUM_VSN, sversion);
 		const char * build_type = (pFileInfo->dwFileFlags & VS_FF_DEBUG) ? "Debug" : "Release";
 		sprintf_s <COUNTOF(sversion)>(sversion, "Built (%s)", build_type);
@@ -237,7 +242,7 @@ void NullDialog(HWND win, HINSTANCE instance, char* name) {
 	DialogBox(instance, name, win, (DLGPROC)NullDlgProc);
 }
 
-DLGPROC_DCL CTDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
+INT_PTR CTDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) {
     case WM_INITDIALOG:
@@ -260,7 +265,7 @@ DLGPROC_DCL CTDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lPara
 
 static UINT ShowStopsLast;
 
-DLGPROC_DCL show_stops_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
+INT_PTR show_stops_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
 {
 	UINT cmd;
 	UINT i;

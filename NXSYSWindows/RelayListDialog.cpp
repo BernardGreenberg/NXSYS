@@ -24,7 +24,7 @@ class RelayListDialog {
 public:
 	RelayListDialog(HWND par, HINSTANCE inst) :
 		hInstance(inst), Parent(par) {};
-	static DLGPROC_DCL staticDlgProc(HWND, UINT, WPARAM, LPARAM);
+	static INT_PTR staticDlgProc(HWND, UINT, WPARAM, LPARAM);
 	Relay* run(string title, RArray& relays);
 
 private:
@@ -34,7 +34,7 @@ private:
 	string Title;
 	HWND hDlg;
 	Relay* result;
-	BOOL DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	INT_PTR DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	void ExtractResult();
 };
 
@@ -43,7 +43,7 @@ Relay* RelayListDialog::run(string title, RArray& relays) {
 	Relays = &relays;
 
 	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_OBJECT_RELAY_LIST), Parent, 
-		staticDlgProc, (LPARAM)this);
+		staticDlgProc, (INT_PTR)this);
 
 	return result;
 }
@@ -59,7 +59,7 @@ void RelayListDialog::ExtractResult() {
 	}
 }
 
-BOOL RelayListDialog::DlgProc(HWND p_hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+INT_PTR RelayListDialog::DlgProc(HWND p_hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
 	case WM_INITDIALOG:
@@ -95,7 +95,7 @@ BOOL RelayListDialog::DlgProc(HWND p_hDlg, UINT message, WPARAM wParam, LPARAM l
 	return FALSE;
 }
 
-DLGPROC_DCL RelayListDialog::staticDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+INT_PTR RelayListDialog::staticDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	if (msg == WM_INITDIALOG)
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, lParam);
 	return (((RelayListDialog*)GetWindowLongPtr(hWnd, GWLP_USERDATA))->DlgProc(hWnd, msg, wParam, lParam));

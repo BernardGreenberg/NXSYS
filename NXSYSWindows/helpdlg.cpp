@@ -49,7 +49,7 @@ static BOOL APIENTRY
 }
 
 
-static BOOL APIENTRY
+static INT_PTR 
    HelpDlgProc (HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 
     HWND edit;
@@ -63,8 +63,8 @@ static BOOL APIENTRY
 	    if (edit) {
 		SetWindowText (edit, pHT->Text);
 		wpOrigEditProc
-			= (WNDPROC) SetWindowLong
-			  (edit, GWL_WNDPROC, (LONG) EditBoxSubclassProc);
+			= (WNDPROC) SetWindowLongPtr
+			  (edit, GWLP_WNDPROC, (INT_PTR) EditBoxSubclassProc);
 	    }
 	    return TRUE;
 	}
@@ -84,7 +84,7 @@ static BOOL APIENTRY
 	case WM_DESTROY:
 	    edit = GetDlgItem(dialog, IDC_HELPDLG_TEXT);
 	    if (edit) {
-		SetWindowLong(edit, GWL_WNDPROC, (LONG) wpOrigEditProc);
+		SetWindowLongPtr(edit, GWLP_WNDPROC, (INT_PTR) wpOrigEditProc);
 		return TRUE;
 	    }
 	    return FALSE;

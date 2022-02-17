@@ -1,5 +1,5 @@
 # NXSYS MS Windows Status
-## 15 February 2022
+## 16 February 2022
 
 This repository contains (in addition to working Mac builds of NXSYS and TLEdit), enough content to build Debug Windows 10 executables (32-bit Win32) of both, in Visual Studio (VS) 2022, C++ Language Level C++17, platform toolset VS2022 level 143, Windows SDK “latest installed version“ 10.0, my Windows 10 at current updates 12 February 2022.
 
@@ -17,16 +17,16 @@ This re-adaptation work is pretty much done.  A usable up-to-date product can be
 
 - The basic help document has been purged of Version 1 obsolescence (e.g., Cab View) and references to OLE, but description of Duckburg and 240th St interlockings is not yet present.  A design document (designing interlocking circuitry, that is) is almost ready!
 
+- Upgraded to native 64 bit app (on Windows — it was always so on the Mac).  The 64 bit build is configuration ”Debug64” for x64; “Release64” to happen soon. (“Debug” and ”Release” for x86 are the 32-bit builds).
+
 ### Now, what doesn’t work
-(Of course I’ll update this as more is made to work).
 
 - The OLE Automation server and control aren’t there.  I haven’t used it in the 21st century, and I don’t suppose anyone has, so it likely won't be revived.  *¡Olé!, como se dice en España*).
-- Printing (never enabled on the Mac) claims to work, queues a file, but it doesn't print.
+- Printing (never enabled on the Mac) claims to work, queues a file, but it doesn't print.  It was never very useful.  Large temporary printouts waste expensive toner.
 
 ##### System-wise,
-- There is no release configuration or build yet.
-- I'd like to build this for 64-bit (The Mac version is 64-bit).  The advantage is that the services and DLL's of the Windows 32-bit compatibility subsystem in Windows 10 (which latter is 64-bit) would not be needed.  And it would solve a “Registry problem” that Microsoft has introduced.
-- I have not yet determined which DLL's need to be redistributed, but if you can build it, you can run it. The 2016 Windows build required redistributing `concrt140.dll`, `vccorlib140.dll`, `msvcp140.dll` and `vcruntime140.dll`. It now seems Microsoft [makes it easy to get “VC DLL’s”](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
+
+- I have not yet determined which DLL's need to be redistributed, but if you can build it, you can run it. The 2016 Windows build required redistributing `concrt140.dll`, `vccorlib140.dll`, `msvcp140.dll` and `vcruntime140.dll`. It now seems Microsoft [makes it easy to get “VC DLL’s”](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).  I know it doesn't build without `version.dll` (I have to tell it that).
 - I have not checked executables into the Repository. I may.
 
 
@@ -38,7 +38,7 @@ TLEdit needs some work with its documentation connections, but there is nothing 
 
 In this repository, the top-level directory `NXSYS` contains everything that is shared between the Mac and Windows builds of the app (and nothing else).  The second-level directory `TLEdit/tled`, quite unsymmetrically, contains everything shared by both builds of TLEdit (perhaps I will reorganize this) "and hopefully little else".  TLEdit depends upon the `NXSYS` directory, too, for sources and headers.
 
-The top-level directory `NXSYSWindows` contains everything specific to Windows, and *nothing* used on the Mac.  All Windows-specific code and resources (about 20 files) for both apps are in it, directly.  The solution file `NXSYSWindows.sln` is there, as well as subdirectories for the two (current) VS projects contained therein, which *do not contain code*, but only VS artifacts such as project, object, and precompiled header cache files.
+The top-level directory `NXSYSWindows` contains everything specific to Windows, and *nothing* used on the Mac.  All Windows-specific code and resources (about 25 files) for both apps are in it, directly.  The solution file `NXSYSWindows.sln` is there, as well as subdirectories for the two (current) VS projects contained therein, which *do not contain code*, but only VS artifacts such as project, object, and precompiled header cache files.
 
 ### Build it yourself
 

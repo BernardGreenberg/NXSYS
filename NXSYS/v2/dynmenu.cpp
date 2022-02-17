@@ -168,7 +168,7 @@ public:
 
 #if NXSYSMac
     void SendSelfToMac(HWND dlg) {
-        SetWindowTextS(GetDlgItem(dlg, ControlId), String);
+        SetWindowText(GetDlgItem(dlg, ControlId), String);
     }
 #endif
 };
@@ -215,7 +215,7 @@ public:
         MacKludgeParam2(Dlg, (int)Entries.size(), 0);  // Mac Dlg must know the # entries a priori
         for (auto& entry : Entries)
             entry.SendSelfToMac(Dlg);
-        SetWindowTextS(Dlg, Title);
+        SetWindowText(Dlg, Title);
     }
 #endif
 
@@ -525,22 +525,22 @@ static int nCopyAnsiToWideChar (LPWORD lpWCStr, const char * lpAnsiIn)
     return nChar;
 }
         
-static LPWORD lpwAlign ( LPWORD lpIn)
+static WORD* lpwAlign ( WORD* lpIn)
 {
-    ULONG ul;
+    INT_PTR ul;
             
-    ul = (ULONG) lpIn;
+    ul = (INT_PTR)lpIn;
     ul +=3;
     ul >>=2;
     ul <<=2;
-    return (LPWORD) ul;
+    return (WORD*)ul;
 }
 
 static INT_PTR staticDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     if (msg == WM_INITDIALOG) {
-        SetWindowLong(hWnd, DWL_USER, lParam);
+        SetWindowLongPtr(hWnd, GWLP_USERDATA, lParam);
     }
-    DynMenu* dmp = (DynMenu*)(void*)GetWindowLong(hWnd,DWL_USER);
+    DynMenu* dmp = (DynMenu*)(void*)GetWindowLongPtr(hWnd,GWLP_USERDATA);
     return dmp->DlgProc(hWnd, msg, wParam, lParam);
 }
                               /*   MS-Windows  ifdef continues ... */
