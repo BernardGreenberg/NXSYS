@@ -132,7 +132,7 @@ window.onmousemove = mmhandler
 
 <h1>NXSYS Subway Signalling Simulator</h1>
 
-<p> <b><a name="cont_nx_xlkg"/>Status: 13 February 2022, all versions</b></p>
+<p> <b><a name="cont_nx_xlkg"/>Status: 17 February 2022, all versions</b></p>
 
 <p><b>NXSYS</b> is a signalling and NX/UR Interlocking simulator application designed to the signalling and circuit styles and standards used in the New York City Transit System throughout the second half of the twentieth century.   It facilitates learning about classic relay-based signalling and switching by actually controlling moderately complex (simulated) arrangements of tracks and signals the way they are controlled
     in real life. <b>NXSYS</b> facilitates analysis and observation of, and experimentation with, signalling
@@ -3043,22 +3043,28 @@ as Islington.</p>
 
 <a name='design'/>
 
-<h3 id="240th">4.4 240th St Broadway Line — TBD</h3>
-<h3 id="Duckburg">4.5 Duckburg design tutorial — TBD</h3>
+<h3 id="240th">4.4 240th St Broadway Line</h3>
 
+<img src="HelpImages/240th.png" width="800px">
+
+<p>The NXSYS scenario for 240<sup>th</sup> St. Master Tower was begun by Henry Sundermayer and myself about 2000, and continued and upgraded by me continually since.  It represents all the trackage from 215<sup>th</sup> St. north (but not the 207<sup>th</sup> St. Yard connection.).  There is an operative middle-track (single-control) traffic control.  It is quite complex, and demonstrates many, many complex locking features.  See the incorporated help text for details.</p>
+
+<h3 id="Duckburg">4.5 Duckburg design tutorial</h3>
+<img src="HelpImages/Duckburg.png" width="800px">
+<p>This layout is an imaginary yard with &ldquo;railroad-like&rdquo; design.  What is interesting here is that the interlocking is supplied in seven files, explaining (in source comments) seven stages of implementing the interlocking logic from scratch to a fully-functional tower.  File <b>db1.trk</b> can only select routes, but no signals, locking, etc., and <b>db7.trk</b> is a fully-functional interlocking.  See the file <b>README.md</b> in the interlocking&rsquo;s eponymous folder.</p>
 
 
 <h3>4.6 Designing your own scenarios</h3>
 
-<p><b>LogicExp.pdf stuff TBD.</b></p>
 
-<p>Designing your own <b>NXSYS</b>
-scenarios, unfortunately, is not very easy now, nor may it ever be. As <b>NXSYS</b> is an interlocking
+<p>Designing your own scenarios is not easy! As <b>NXSYS</b> is an interlocking
 simulator, not an interlocking implementation, designing and creating the track
 layout consists not only of designing and expressing the track and signal plan, but all the <a href="#relays">relay circuitry</a>
 which implements the interlocking. The latter is the lion's share of the work (and the fun), but requires substantial understanding of the New York (or other) prototype circuits.  It is probably possible to learn a lot of this subject matter by watching the relays in action with <b>NXSYS.</b> Rather than an accident, a bug, poor design choice, or cop-out, this is the reason <b>NXSYS</b> came to be in the first place.</p>
 
-<p>This paradigm, does, however, offer the advantage that you have the &ldquo;source code&rdquo; for the two supplied interlockings; in the time-honored tradition of computer programmers, you can modify the supplied interlockings in layout, behavior, or implementation, without
+<p>As of this writing (17 February 2021), I have supplied a document teaching the basics of relay-based rapid transit interlocking circuit design.  It is downloaded with this application, and <a href="Interlocking Logic Design.pdf">should be at this link</a>.  This is no simple matter, but feel free to study that if it interests you.</p>
+
+<p>The NXSYS paradigm, does, however, offer the advantage that you have the &ldquo;source code&rdquo; for several supplied interlockings; in the time-honored tradition of computer programmers, you can modify the supplied interlockings in layout, behavior, or implementation, without
 restriction, if you wish to experiment or learn without crashing any real
 trains. You do not need the source code for <b>NXSYS</b> to do this, or to know any programming language, at
 all. The <i>real</i> pleasure in <b>NXSYS</b>
@@ -3069,7 +3075,7 @@ designing and debugging it in the manner of a computer program.</p>
 signal engineering, or are trying to acquire it, <b>NXSYS</b> is an ideal tool to create, experiment with,
 and debug relay circuit designs.</p>
 
-<p>In Version 2, including the Mac version, the application <b>TLEdit</b>  (&ldquo;track layout editor&rdquo;) is supplied.  <b>TLEdit</b>, which is self-documenting, allows you to create  actual layouts, i.e., the display of tracks, switches, signals, etc., but only you can create the logic which gives it life and makes it responsive.</p>
+<p><b>TLEdit</b>, the &ldquo;track layout editor&rdquo; is also supplied.  <b>TLEdit</b> allows you to create  actual layouts, i.e., the display of tracks, switches, signals, etc., but only you can create the logic which gives it life and makes it responsive.  It is self-documenting.</p>
 
 
 <br clear=all style='page-break-before:always'>
@@ -3252,6 +3258,7 @@ a good selection of relays to watch at once, and observing contacts as a train
 goes through or a route is set up and cancelled, one can actually watch the
 interlocking think.</p>
 
+<p><span style="font-size:150%;font-weight:bold">Important!</span>There are relays that are operated by NXSYS when you press buttons or click on track representations or other controls, and other relays which, when operated by the relays you code, cause “switches” to move, signals to clear, track sections to turn red or white or flash, etc.   These are the logical inputs and outputs of your relay system, and, corresponding, the outputs and inputs of the NXSYS application.  The identities and contracts (not <i>contacts</i>) of these relays are discussed in the Relay Language document <a href="RelayLanguage.html">at this link</a>.</p>
 
 <a name="rlygraphics"/>
 <h3>5.3 NXSYS relay graphics and other tools</h3>
@@ -3286,7 +3293,9 @@ distinction.</p>
 <p>Some relays will appear to have &ldquo;missing circuits&rdquo;, or coil
 wires that go nowhere, or are disconnected. Most of these relays are &ldquo;Quisling
 relays&rdquo;, operated directly by the user via the mouse (i.e., puppets operated by a foreign power), such as by clicking on a signal or track section, providing the &ldquo;inputs&rdquo; to the relay
-system. Bear in mind, too, that other relays are observed directly by the user interface (such as <b>H, T, V</b>) to control the states of the symbols it displays.</p>
+system. Bear in mind, too, that other relays are observed directly by the user interface (such as <b>H, T, V</b>) to control the states of the symbols it displays. Both are enumerated in the <a href="RelayLanguage.html">Relay Language document</a>.</p>
+
+<p>The Relay Draftsperson may also be used to access the pseudo-Lisp source for a relay via a click on a coil or contact representation, to facilitate editing of relays under development.  This feature is not trivial to set up, but is quite useful when running.  Do read <a href="RelayIndex.html">this document about it.</a></p>
 
 <a name="tracewindow"/><h3>Relay Trace Window</h3>
 

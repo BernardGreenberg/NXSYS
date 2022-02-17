@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generated-by" content="Markdown PRO, http://markdownpro.com"/>
+<title></title>
+<style type="text/css">
+html,body{margin:0;padding:0;}
+body {padding: 20px}
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,cite,code,del,dfn,em,img,q,s,samp,small,strike,strong,sub,sup,tt,var,dd,dl,dt,li,ol,ul,fieldset,form,label,legend,button,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;font-weight:normal;font-style:normal;font-size:100%;line-height:1;font-family:inherit;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul{list-style:none;}
+q:before,q:after,blockquote:before,blockquote:after{content:"";}
+html{overflow-y:scroll;font-size:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+a:focus{outline:thin dotted;}
+a:hover,a:active{outline:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block;}
+audio,canvas,video{display:inline-block;*display:inline;*zoom:1;}
+audio:not([controls]){display:none;}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline;}
+sup{top:-0.5em;}
+sub{bottom:-0.25em;}
+img{border:0;-ms-interpolation-mode:bicubic;}
+button,input,select,textarea{font-size:100%;margin:0;vertical-align:baseline;*vertical-align:middle;}
+button,input{line-height:normal;*overflow:visible;}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0;}
+button,input[type="button"],input[type="reset"],input[type="submit"]{cursor:pointer;-webkit-appearance:button;}
+input[type="search"]{-webkit-appearance:textfield;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;}
+input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;}
+textarea{overflow:auto;vertical-align:top;}
+html,body{background-color:#ffffff;}
+body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:normal;line-height:18px;color:#404040;}
+.container{width:940px;margin-left:auto;margin-right:auto;zoom:1;}.container:before,.container:after{display:table;content:"";zoom:1;*display:inline;}
+.container:after{clear:both;}
+.container-fluid{position:relative;min-width:940px;padding-left:20px;padding-right:20px;zoom:1;}.container-fluid:before,.container-fluid:after{display:table;content:"";zoom:1;*display:inline;}
+.container-fluid:after{clear:both;}
+.container-fluid>.sidebar{float:left;width:220px;}
+.container-fluid>.content{margin-left:240px;}
+a{color:#0069d6;text-decoration:none;line-height:inherit;font-weight:inherit;}a:hover{color:#00438a;text-decoration:underline;}
+.pull-right{float:right;}
+.pull-left{float:left;}
+.hide{display:none;}
+.show{display:block;}
+.row{zoom:1;margin-left:-20px;}.row:before,.row:after{display:table;content:"";zoom:1;*display:inline;}
+.row:after{clear:both;}
+p{font-size:13px;font-weight:normal;line-height:18px;margin-bottom:9px;}p small{font-size:11px;color:#bfbfbf;}
+h1,h2,h3,h4,h5,h6{font-weight:bold;color:#404040;}h1 small,h2 small,h3 small,h4 small,h5 small,h6 small{color:#bfbfbf;}
+h1{margin-bottom:18px;font-size:30px;line-height:36px;}h1 small{font-size:18px;}
+h2{font-size:24px;line-height:36px;}h2 small{font-size:14px;}
+h3,h4,h5,h6{line-height:36px;}
+h3{font-size:18px;}h3 small{font-size:14px;}
+h4{font-size:16px;}h4 small{font-size:12px;}
+h5{font-size:14px;}
+h6{font-size:13px;color:#bfbfbf;text-transform:uppercase;}
+ul,ol{margin:0 0 18px 25px;}
+ul ul,ul ol,ol ol,ol ul{margin-bottom:0;}
+ul{list-style:disc;}
+ol{list-style:decimal;}
+li{line-height:18px;color:#808080;}
+ul.unstyled{list-style:none;margin-left:0;}
+dl{margin-bottom:18px;}dl dt,dl dd{line-height:18px;}
+dl dt{font-weight:bold;}
+dl dd{margin-left:9px;}
+hr{margin:20px 0 19px;border:0;border-bottom:1px solid #eee;}
+strong{font-style:inherit;font-weight:bold;}
+em{font-style:italic;font-weight:inherit;line-height:inherit;}
+.muted{color:#bfbfbf;}
+blockquote{margin-bottom:18px;border-left:5px solid #eee;padding-left:15px;}blockquote p{font-size:14px;font-weight:300;line-height:18px;margin-bottom:0;}
+blockquote small{display:block;font-size:12px;font-weight:300;line-height:18px;color:#bfbfbf;}blockquote small:before{content:'\2014 \00A0';}
+address{display:block;line-height:18px;margin-bottom:18px;}
+code,pre{padding:0 3px 2px;font-family:Monaco, Andale Mono, Courier New, monospace;font-size:12px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+code{padding:1px 3px;}
+pre{background-color:#f5f5f5;display:block;padding:8.5px;margin:0 0 18px;line-height:18px;font-size:12px;border:1px solid #ccc;border:1px solid rgba(0, 0, 0, 0.15);-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;white-space:pre;white-space:pre-wrap;word-wrap:break-word;}
+form{margin-bottom:18px;}
+fieldset{margin-bottom:18px;padding-top:18px;}fieldset legend{display:block;padding-left:150px;font-size:19.5px;line-height:1;color:#404040;*padding:0 0 5px 145px;*line-height:1.5;}
+form .clearfix{margin-bottom:18px;zoom:1;}form .clearfix:before,form .clearfix:after{display:table;content:"";zoom:1;*display:inline;}
+form .clearfix:after{clear:both;}
+label,input,select,textarea{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:normal;line-height:normal;}
+label{padding-top:6px;font-size:13px;line-height:18px;float:left;width:130px;text-align:right;color:#404040;}
+form .input{margin-left:150px;}
+input[type=checkbox],input[type=radio]{cursor:pointer;}
+input,textarea,select,.uneditable-input{display:inline-block;width:210px;height:18px;padding:4px;font-size:13px;line-height:18px;color:#808080;border:1px solid #ccc;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+input[type=checkbox],input[type=radio]{width:auto;height:auto;padding:0;margin:3px 0;*margin-top:0;line-height:normal;border:none;}
+input[type=file]{background-color:#ffffff;padding:initial;border:initial;line-height:initial;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
+input[type=button],input[type=reset],input[type=submit]{width:auto;height:auto;}
+select,input[type=file]{height:27px;line-height:27px;*margin-top:4px;}
+select[multiple]{height:inherit;}
+textarea{height:auto;}
+.uneditable-input{background-color:#ffffff;display:block;border-color:#eee;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.025);cursor:not-allowed;}
+:-moz-placeholder{color:#bfbfbf;}
+::-webkit-input-placeholder{color:#bfbfbf;}
+input,textarea{-webkit-transition:border linear 0.2s,box-shadow linear 0.2s;-moz-transition:border linear 0.2s,box-shadow linear 0.2s;-ms-transition:border linear 0.2s,box-shadow linear 0.2s;-o-transition:border linear 0.2s,box-shadow linear 0.2s;transition:border linear 0.2s,box-shadow linear 0.2s;-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);-moz-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1);}
+input:focus,textarea:focus{outline:0;border-color:rgba(82, 168, 236, 0.8);-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);-moz-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.1),0 0 8px rgba(82, 168, 236, 0.6);}
+input[type=file]:focus,input[type=checkbox]:focus,select:focus{-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;outline:1px dotted #666;}
+form div.clearfix.error{background:#fae5e3;padding:10px 0;margin:-10px 0 10px;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}form div.clearfix.error>label,form div.clearfix.error span.help-inline,form div.clearfix.error span.help-block{color:#9d261d;}
+form div.clearfix.error input,form div.clearfix.error textarea{border-color:#c87872;-webkit-box-shadow:0 0 3px rgba(171, 41, 32, 0.25);-moz-box-shadow:0 0 3px rgba(171, 41, 32, 0.25);box-shadow:0 0 3px rgba(171, 41, 32, 0.25);}form div.clearfix.error input:focus,form div.clearfix.error textarea:focus{border-color:#b9554d;-webkit-box-shadow:0 0 6px rgba(171, 41, 32, 0.5);-moz-box-shadow:0 0 6px rgba(171, 41, 32, 0.5);box-shadow:0 0 6px rgba(171, 41, 32, 0.5);}
+form div.clearfix.error .input-prepend span.add-on,form div.clearfix.error .input-append span.add-on{background:#f4c8c5;border-color:#c87872;color:#b9554d;}
+table{width:100%;margin-bottom:18px;padding:0;border-collapse:separate;*border-collapse:collapse;font-size:13px;border:1px solid #ddd;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}table th,table td{padding:10px 10px 9px;line-height:18px;text-align:left;}
+table th{padding-top:9px;font-weight:bold;vertical-align:middle;border-bottom:1px solid #ddd;}
+table td{vertical-align:top;}
+table th+th,table td+td{border-left:1px solid #ddd;}
+table tr+tr td{border-top:1px solid #ddd;}
+table tbody tr:first-child td:first-child{-webkit-border-radius:4px 0 0 0;-moz-border-radius:4px 0 0 0;border-radius:4px 0 0 0;}
+table tbody tr:first-child td:last-child{-webkit-border-radius:0 4px 0 0;-moz-border-radius:0 4px 0 0;border-radius:0 4px 0 0;}
+table tbody tr:last-child td:first-child{-webkit-border-radius:0 0 0 4px;-moz-border-radius:0 0 0 4px;border-radius:0 0 0 4px;}
+table tbody tr:last-child td:last-child{-webkit-border-radius:0 0 4px 0;-moz-border-radius:0 0 4px 0;border-radius:0 0 4px 0;}
+.zebra-striped tbody tr:nth-child(odd) td{background-color:#f9f9f9;}
+.zebra-striped tbody tr:hover td{background-color:#f5f5f5;}
+.zebra-striped .header{cursor:pointer;}.zebra-striped .header:after{content:"";float:right;margin-top:7px;border-width:0 4px 4px;border-style:solid;border-color:#000 transparent;visibility:hidden;}
+.zebra-striped .header:hover:after{visibility:visible;}
+footer{margin-top:17px;padding-top:17px;border-top:1px solid #eee;}
+.page-header{margin-bottom:17px;border-bottom:1px solid #ddd;-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5);-moz-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5);box-shadow:0 1px 0 rgba(255, 255, 255, 0.5);}.page-header h1{margin-bottom:8px;}
+.close{float:right;color:#000000;font-size:20px;font-weight:bold;line-height:13.5px;text-shadow:0 1px 0 #ffffff;filter:alpha(opacity=20);-khtml-opacity:0.2;-moz-opacity:0.2;opacity:0.2;}.close:hover{color:#000000;text-decoration:none;filter:alpha(opacity=40);-khtml-opacity:0.4;-moz-opacity:0.4;opacity:0.4;}
+
+pre {
+	padding: 0;
+	margin: 10px 0px 10px;
+	overflow: auto; /*--If the Code exceeds the width, a scrolling is available--*/
+	overflow-Y: hidden;  /*--Hides vertical scroll created by IE--*/
+}
+pre code {
+	margin: 5px;  /*--Left Margin--*/
+	padding: 0px;
+	display: block;
+    line-height: 18px;
+}
+.center { text-align:center}
+.left {text-align:left}
+.right {text-align:right}
+
+</style><style type="text/css">
+body {
+	font-family: "Geneva", Arial, sans-serif;
+	font-size: 13px;
+	margin: 10px;
+}
+
+a, a:visited {
+	color: #09c;
+}
+
+a:hover {
+	color: #336699;
+	text-decoration: none;
+}
+
+h1 {
+	margin: 0px 0px 10px;	
+	font-weight: bold;
+}
+
+h2 {
+	border-bottom: 2px dotted #ccc;
+	margin: 5px 0px 15px;	
+}
+
+h6 {
+	color: #09c;
+}
+
+blockquote {
+	font-family: "Georgia", Courier New, courier, sans-serif;
+	background: #efefef;
+	padding: 5px 10px;
+	border: solid 1px #ddd;
+	margin: 15px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+	border-radius:6px;
+	color:  #333;
+	
+}
+
+ul, ol {
+	margin-bottom: 15px;
+}
+
+li {
+	padding: 3px;
+}
+
+
+
+code {
+	background-color: #f1f1f1;
+    color: #336699;
+}
+
+pre {
+	background-color: #f1f1f1;
+}
+
+pre > code {
+	margin: 0px;
+	padding: 5px;
+	border: 0px;
+	background-color: #f1f1f1;
+}
+
+
+</style></head>
+<body>
+<h1 id="toc_0">NXSYS scenario and relay language</h1>
+
+<p><strong>Copyright ©Bernard S. Greenberg</strong> 1994, 1995, 1996, 1997
+  18 June 1995 (upd: 10 November 1996, 2 February 1997. 19 Feb 97, 18 Nov1997, 2 Dec97., 6 Jan 98, 14 Jan 98, 23 April 98, 16 May 98, 16 January 01, 26 July 01, 7 February 2022</p>
+
+<p>This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts (no, it is not trivial).  Pay particular attention to the 1998 tutorial <a href="https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg">Duckburg Tower A</a>!</p>
+
+<p>The term <em>the simulator</em> is used below to denote the NXSYS application in such contexts where there is a need to draw a clear distinction between logic and actions effected by that application, and that effected by the relays whose definitions you supply to it.  The simulator operates some of your relays, and is operated by others of them, as described below.</p>
+
+<p><strong>NB: This document was first written around the turn of the century for Version 1 NXSYS.  While the relay language has not changed at all, the Version 2 track-definition language differs completely, and with the advent of TLEdit, the Track Layout Editor, there is no need ever to code in, or understand, the track definition language (it&#39;s not really very complicated, anyway).  So all that has been removed.</strong></p>
+
+<p>Making the signals and switches actually work is not so easy: one must design all the signal circuitry, which is not easily explained in a short (or even long) helpfile - that is a whole study.  The authoritative source document for that study is NYCTA/MTA drawing-set 733-33, their &quot;typical signal/interlocking prints&quot;, not readily available.  More stuff coming from me, hopefully, though (2022) --</p>
+
+<p>Of course, you are free and encouraged to study and mimic the circuitry provided in the examples; you can start with what we supply and modify until it becomes something else.  With NXSYS, you can actually <em>watch</em> the relays in operation and experiment with modifying their circuits, privileges I never had when learning this material from paper in the mid-1960&#39;s.  (However, I warn and declare unequivocally that my designs are for entertainment and educational purposes only and include certain simplifications and possible errors, and are not fit for use for controlling real railroads or other life-critical systems, and I assume no risk or responsibility should any of this information, or designs correctly or incorrectly derived from it, be faulty and lead to harm, damage, loss, or injury. Use it at your own risk.)</p>
+
+<p>The <a href="https://BernardGreenberg.com/Subway">NXSYS web page</a> on my <a href="https://BernardGreenberg.com">personal site</a> is presently the official location for executables. Critical updates will be posted there.  <a href="https://github.com/BernardGreenberg/NXSYS">This GitHub repository</a> is the authoritative source.</p>
+
+<h3 id="toc_1">NXSYS pseudo-Lisp</h3>
+
+<p>The relay language is a modified subset of <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>. In effect, this means little more than that parentheses define <em>forms</em> recursively and extant Lisp editing tools (e.g., Emacs) may be used to advantage.  All whitespace is equivalent, case is insignificant except in quoted strings, and semicolons start a rest-of-line comment.</p>
+
+<p>A <strong>form</strong> is either an <strong>atom</strong> or a <strong>list</strong>.  A <strong>list</strong> starts and ends with an open parenthesis a close parenthesis, and contains zero or more forms as its <strong>elements</strong>. Here are the known types of atoms in NXSYS Lisp, with examples</p>
+
+<table><thead>
+<tr>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>2345</td>
+<td>Integer, must be 32-bit (signed), decimal</td>
+</tr>
+<tr>
+<td>foobar</td>
+<td>Symbol (string of alphanumerics starting               with alphabetic). Used to cause references to the same thing.  CASE is INSigGNiFICANt! Colon (:) and hyphen (-) are legal &quot;alphabetics&quot;, e.g. <code>:ALL-GROUNDHOGS</code> is a legal symbol name.</td>
+</tr>
+<tr>
+<td>17NWK</td>
+<td>Relay Symbol.  Starts with digits, ends with alphabetics and/or digits. CASE IS INSIGNIFICANT! (NB: I hope to expand this syntax).</td>
+</tr>
+<tr>
+<td>&quot;Title&quot;</td>
+<td>Quoted string.  Used where text must appear.  Backslash escapes backslash or quote.</td>
+</tr>
+<tr>
+<td>#\A</td>
+<td>Single character object—used for subway line designations. (See below for handling BB &amp; MM.)</td>
+</tr>
+<tr>
+<td>!24HY</td>
+<td>Back contact Relay Symbol. Used for back (closed when dropped) contacts.</td>
+</tr>
+<tr>
+<td>782.3</td>
+<td>Floating-point number - not supported yet in compiler (10/96)</td>
+</tr>
+<tr>
+<td>355/113</td>
+<td>Rational number—not supported yet in compiler (10/96)</td>
+</tr>
+</tbody></table>
+
+<p>Top-level (not contained in other forms) forms define the track layout, its signals, and its relays.</p>
+
+<h3 id="toc_2">Interlocking definitions</h3>
+
+<p>A <code>ROUTE</code> form must appear first in the first file.  Unfortunately, it bears a couple of Version 1 compatibility artifacts presently devoid of meaning, but extant interlockings have them.</p>
+
+<pre><code>    (route &quot;Progman St. Interlocking  --  of 12/8/94&quot; #\A  00       north ...
+    (ROUTE  &quot;Title string for window              &quot; Line-ID Origin  direction
+</code></pre>
+
+<p><em>Line-ID</em> is the single letter used on signal plates for the whole layout, e.g., <code>#\F</code> in <strong>F4-334</strong> (i.e., Fourth Avenue BMT). Note that in 2.5 and later, <code>:EXTENDED-ROUTE-LETTER</code> can override this with a string of more than one character.  Yes, multiple subway lines joining don&#39;t work well (planned).</p>
+
+<p><em>Origin</em> is a Version 1 artifact that is ignored in Version 2 NXSYS. It must be a number, and 00 will do well. <em>Direction</em> is another Version 1 artifact meaningless in Version 2 NXSYS, but anything other than <code>NORTH</code> or <code>SOUTH</code> will err. Sorry.</p>
+
+<p>After <em>direction</em>, zero or more <strong>property pairs</strong> can appear, each being a <strong>Symbol</strong> and a value. Unknown or misspelled properties are <strong><em>guaranteed to be ignored</em></strong>.  This opens the door to downward-compatible, conditionally-used features. These are most definitely still relevant.</p>
+
+<p>The following are available to parameterize the &quot;train&quot; system:</p>
+
+<pre><code>    :CRUISING-FEET-PER-SECOND number
+    :TRAIN-LENGTH-FEET number
+    :YELLOW-FEET-PER-SECOND number
+</code></pre>
+
+<p><em>Cruising</em> refers to the target speed for distant (green) indications. <em>Yellow</em> refers to the home indication (prepare to stop at next signal).  Train kinematics are inferred from these parameters and distances inferred from signal/IJ stationing in hundreds of feet.</p>
+
+<p>The pair <code>:IRT T</code> causes IRT-style signal numbering to be displayed on the plates, and track section circuit ID numbers to be interpreted by the IRT convention, i.e., </p>
+
+<pre><code>        10*stationing_point + track_number
+</code></pre>
+
+<p>The pair <code>:TORONTO T</code> causes Toronto-style signal numbering to be displayed on the signal plates.</p>
+
+<p>Any number (up to 10) of specs</p>
+
+<pre><code>    :HELP-MENU (&quot;Menu string&quot; &quot;Help string... &quot;)
+</code></pre>
+
+<p>create interlocking-specific documentation offered on the &quot;Help&quot; menu with the string used as <em>Menu string</em> (which also is used as the help window title, so avoid ampersands (i.e., to designate menu accelerators).</p>
+
+<p>These next two property pairs are only recognized in NXSYS 2.5.0 and newer, and, by careful contract, are <em>ignored</em> by earlier versions:</p>
+
+<pre><code>    :TRISTATE-TRAFFIC-CONTROL T
+</code></pre>
+
+<p>Enables three-state, center-neutral traffic-control knobs. If elected, the interlocking logic must work with or without them. See the Release Notes.</p>
+
+<pre><code>    :EXTENDED-ROUTE-LETTER &quot;BB&quot;
+</code></pre>
+
+<p>(or &quot;MM&quot; or whatever), a <em>string</em>, which NXSYS 2.5 and later will use in signal plates instead of the <code>LINE-ID</code> letter.</p>
+
+<h3 id="toc_3">Defining track, signals, and switches</h3>
+
+<p><strong>Use TLEdit!</strong></p>
+
+<p>Documentation describing the track/panel layout forms, all from Version 1, was removed from here (they are all different now, anyway).  With Version 2, you create track and panel layout with TLEdit, including all the traffic levers, random keys/controls, etc.  The forms are fairly straightforward, but you should never need to look at them.  You must include the TLEdit-generated track layout with an <code>include</code> form, e.g.,</p>
+
+<pre><code>        (include &quot;GrandCentralLayout.trk&quot;)
+</code></pre>
+
+<p>and never edit it, other than by using TLEdit.</p>
+
+<h3 id="toc_4">Defining relays</h3>
+
+<p>Finally, one defines the relays.  I will give brief descriptions of the important known relay nomenclatures below, although the technique of interlocking design will not be explained here, although much may be inferred from my prototypes.</p>
+
+<p>Relays are defined by <code>RELAY</code> forms, which look like this:</p>
+
+<pre><code>(RELAY 4PBS expression1 expression2 expression3 .... )
+</code></pre>
+
+<p>i.e.,</p>
+
+<pre><code>    RELAY name  expressions.
+</code></pre>
+
+<p><em>name</em> must be a Relay Symbol for the relay being defined.  The <em>expressions</em> are zero or more terms to be <em>and</em>&#39;ed, i.e., wired in series.  Valid expressions are:</p>
+
+<table><thead>
+<tr>
+<th>Type</th>
+<th>Example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Front contact</td>
+<td><code>13RWC</code></td>
+</tr>
+<tr>
+<td>Back contact</td>
+<td><code>!22XS</code></td>
+</tr>
+<tr>
+<td>Terms in parallel</td>
+<td><code>(OR 22PBS 22XR .... )</code></td>
+</tr>
+<tr>
+<td>Terms in series</td>
+<td><code>(AND 15NWC 17NWC !10AS)</code></td>
+</tr>
+<tr>
+<td>Label definition</td>
+<td><code>(LABEL L4HY01</code> <em>terms to be wired in series</em> <code>)</code></td>
+</tr>
+<tr>
+<td>Reference to label</td>
+<td><code>L4HY01</code>     ;symbol/atom, not relay symbol!!!</td>
+</tr>
+<tr>
+<td>Macro call</td>
+<td><code>(SWIF2 7 10AS 12AS)</code></td>
+</tr>
+</tbody></table>
+
+<p>Labels are used to define common subexpressions that would implemented in real relays by shared wires. <code>(LABEL name expr1 expr2 ....)</code> defines the AND (series wiring) of all the <em>expr</em>&#39;s in it as <em>name</em>, and allows that name to be used as a synonym in subsequent relay definitions.</p>
+
+<p>(2022: <code>LABEL</code>s were a weak attempt to &quot;share wiring&quot; between relays, both to reduce error-prone code duplication and strive towards what I call &quot;topomorphic circuits&quot;, that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious technique used ubiquitously by the real circuitry, brought forward from ancient lever-frame interlockings, where it minimized contacts and wires. At its most potent, bidirectional current flow mirrors the bidirectional movement of trains.  Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)</p>
+
+<p><strong>Macros</strong> are used to define standardized identical relay definitions, identical in shape but not in relay numbers.  For example.</p>
+
+<pre><code>(defrmacro SWIFNC 3
+           (AND (OR 1NWC (arg 2)) 
+                (OR 1RWC (arg 3))))   ;8 Dec 1994
+</code></pre>
+
+<p>In general,</p>
+
+<pre><code>(DEFRMACRO  name  n template)
+</code></pre>
+
+<p><em>Name</em> must be a symbol, and <em>n</em> is the number of arguments expected. The actual arguments may be numbers or relay names:</p>
+
+<pre><code>(SWIFINC 23 10AS 12AS)
+         1   2    3
+</code></pre>
+
+<p>In the <em>template</em>, <code>(arg 2)</code> substitutes all of the second argument to the macro call, and references to relay symbols cause the switch or signal numbers of the corresponding argument to be substituted, i.e., <code>(OR 1NWC...</code> becomes <code>(OR 23NWC</code> in the above.</p>
+
+<p>Note that macros may be used both as &quot;top-level forms&quot; in a file, or as subforms of other relay definitions, even in other macros.</p>
+
+<p>TIMER forms are just like other relay forms, except that a time in seconds appears after the relay name:</p>
+
+<pre><code>(timer 4U 7 (OR 4AS......
+</code></pre>
+
+<p>This defines a timer relay that closes its named contacts after 7 continuous seconds of its defining terms being true.</p>
+
+<p>The following relays are known to the simulator.  Some are read by it to update the panel, and others are operated by it to reflect interaction. If you don&#39;t have them, the corresponding feature will not be implemented for the object in question.  If you have them, they be used as expected.</p>
+
+<h3 id="toc_5">Relays read by the simulator</h3>
+
+<p>These relays are read (i.e., logically observed) by the simulator to operate the panel, and which the (your) relay logic must drive to make the panel &quot;work&quot;.  They are called <em>reporting relays</em> in the code, and trigger nomenclature-specific code execution when they change state.</p>
+
+<p>Note that numeric part of a relay name is the lever number for those relays that have it, and track section (IJ) otherwise.</p>
+
+<table><thead>
+<tr>
+<th>Relay</th>
+<th>Function</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>For signal</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>H</td>
+<td>Home - when picked, signal is clear</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Distant. When signal is clear, picked if signal is green.     (If HV and/or DV are found, they will be used instead of          H and/or D, although H will be used for the GK light).</td>
+</tr>
+<tr>
+<td>FL</td>
+<td>Fleeting relay.  Created and read by simulator.</td>
+</tr>
+<tr>
+<td>DR</td>
+<td>For home signal, picked when cleared to diverging route.</td>
+</tr>
+<tr>
+<td>CO</td>
+<td>For home signal, call-on when picked.</td>
+</tr>
+<tr>
+<td>SK</td>
+<td>White &quot;S&quot; light (with yellow) in advance of GT signals.</td>
+</tr>
+<tr>
+<td>DK</td>
+<td>White &quot;D&quot; light (with yellow) in advance of GT signals. Signal must be clear (HV, if exists) or H to display.</td>
+</tr>
+<tr>
+<td>STR</td>
+<td>ST20 light, only displayed if signal is red.</td>
+</tr>
+<tr>
+<td>LH</td>
+<td>Lunar White light. Don&#39;t turn off until high signal clears            (e.g., during stop drive).</td>
+</tr>
+<tr>
+<td>V</td>
+<td>Stop (trip).  When picked, stop is held clear.</td>
+</tr>
+<tr>
+<td>K</td>
+<td>Exit light at signal.</td>
+</tr>
+<tr>
+<td>PBS</td>
+<td>Push button stick.  Fundamental initiation relay. Only read by the simulator to light GK light, and enable dropping by mouse click (see below).</td>
+</tr>
+<tr>
+<td>LS</td>
+<td>Switch lock (stick) - switch free when picked, locked (and red</td>
+</tr>
+<tr>
+<td><strong>For track</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>T</td>
+<td>Track.  When picked, track section is vacant.</td>
+</tr>
+<tr>
+<td>K</td>
+<td>Route.  When picked, white route line-of-light is shown.</td>
+</tr>
+<tr>
+<td><strong>For switch</strong></td>
+<td>(A and B operated together)</td>
+</tr>
+<tr>
+<td>NWZ</td>
+<td>Normal switch control - picked when switch wants to be normal (don&#39;t we all?)</td>
+</tr>
+<tr>
+<td>RWZ</td>
+<td>Reverse switch control - picked when switch wants to be reverse.</td>
+</tr>
+<tr>
+<td><strong>For traffic lever</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>NFK</td>
+<td>Normal direction white indicator</td>
+</tr>
+<tr>
+<td>NFKR</td>
+<td>Normal direction red indicator</td>
+</tr>
+<tr>
+<td>RFK</td>
+<td>Reverse direction white indicator</td>
+</tr>
+<tr>
+<td>RFKR</td>
+<td>Reverse direction red indicator</td>
+</tr>
+</tbody></table>
+
+<h3 id="toc_6">Relays operated by the simulator</h3>
+
+<p>The following are the relays operated by the simulator in response to the panel, providing input to rest of the relay system from the user interface. They are called <em>Quisling relays</em> in the code, in dishonor of Vidkun Quisling (1887-1945), the Norwegian traitor who operated his government on orders from the Nazi regime.</p>
+
+<p>The &quot;PB&quot;&#39;s are pulsed by the simulator.</p>
+
+<table><thead>
+<tr>
+<th>Relay</th>
+<th>Explanation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>0CPB</td>
+<td>is a huge simulated relay which is pulsed to drop every signal in the simulator, so a back contact appears in all PBS&#39;s. As of 19 Feb 97, this is no longer necessary; the simulator drops all PBS&#39;s known to its signals when required.  0CPB is still pulsed, though, and can be used elsewhere.</td>
+</tr>
+<tr>
+<td>0RAS</td>
+<td>is similar, and pulsed to release all approach locking on menu command (and must be used in all AS relays).</td>
+</tr>
+<tr>
+<td>0BRGP</td>
+<td>&quot;Bobble red signal repeaters&quot;.  This relay is pulsed by the <code>Interlocking &gt; Bobble red signal repeaters</code> menu command, and simulates temporary track power failures. <code>RGP</code> circuits must include its contact.</td>
+</tr>
+<tr>
+<td><strong>For signal</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>PB</td>
+<td>Push button (initiate or exit) at signal on control panel.</td>
+</tr>
+<tr>
+<td>COPB</td>
+<td>Trackside call-on push-button on home signals.</td>
+</tr>
+<tr>
+<td>FL</td>
+<td>Fleeting - turned on or off by menu command on signal,</td>
+</tr>
+<tr>
+<td>XPB</td>
+<td>Exit push button - pulsed by click on lit exit light.</td>
+</tr>
+<tr>
+<td>PBS</td>
+<td>Push button stick.  Picked when successful initiation at              signal. Only operated by the simulator to drop when GK clicked              on.</td>
+</tr>
+<tr>
+<td><strong>For switch</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>NL</td>
+<td>Normal lever - pulsed to request switch normal (right click or aux key)</td>
+</tr>
+<tr>
+<td>RL</td>
+<td>Reverse lever - pulsed to request switch reverse (ditto)</td>
+</tr>
+<tr>
+<td>NWP</td>
+<td>Normal Switch repeater - switch actually in that position.</td>
+</tr>
+<tr>
+<td>RWP</td>
+<td>Reverse Switch repeater</td>
+</tr>
+<tr>
+<td><strong>for track</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>T</td>
+<td>Track occupation. Picked when track section vacant. Can be generated by mouse, the &quot;train&quot; system, etc.</td>
+</tr>
+<tr>
+<td><strong>For stop</strong></td>
+<td>&quot;V&quot; for &quot;valve&quot; (electropneumatic)</td>
+</tr>
+<tr>
+<td>NVP</td>
+<td>The train stop has come fully to the normal (tripping) position.</td>
+</tr>
+<tr>
+<td>RVP</td>
+<td>The train stop has come fully to the clear position.</td>
+</tr>
+<tr>
+<td><strong>For traffic lever</strong></td>
+<td>This has differing semantics in 2.5 and later if the interlocking <strong>elects tristate traffic control in that case</strong>. See below. Call that case <strong>3ST</strong>, and the earlier (compatible case) <strong>2ST</strong></td>
+</tr>
+<tr>
+<td>NL (2ST)</td>
+<td>Traffic lever knob in normal position.(Picked at NXSYS load time).</td>
+</tr>
+<tr>
+<td>RL (2ST)</td>
+<td>Traffic lever knob in reverse position. Note that these merely reflect the KNOB state, not the logical traffic lever state (which is implemented by relays)-- the knob can be used to control anything.  No flashing is currently available.</td>
+</tr>
+<tr>
+<td>NL (3ST)</td>
+<td>The operator has turned (and will immediately release) the knob to the normal position.</td>
+</tr>
+<tr>
+<td>RL (3ST)</td>
+<td>The operator has turned (and will immediately release) the knob to the reverse position.</td>
+</tr>
+<tr>
+<td></td>
+<td>In 2ST, one or the other of NL or RL is picked at all times. In 3ST, neither is picked unless the operator is actually operating the control.</td>
+</tr>
+</tbody></table>
+
+<p>The tristate traffic control situation is complex because interlockings exploiting it, or, rather, <em>able to</em> exploit it, must be carefully coded to work compatibly in 2.5 and earlier, without the feature, and, of course, older interlockings must work flawlessly in 2.5 and later. Please read <a href="https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/TrafficLevers2_5.html">the helpfile on this feature</a>.</p>
+
+<p><strong>The simulator initializes all relays with nomenclatures RGP, AS, D, DV at interlocking load time by computing their state by evaluating their expressions</strong> - this is a very inelegant solution to a fairly massive initial-state problem not yet solved in general.</p>
+
+<h3 id="toc_7">Other relays of honorable mention</h3>
+
+<p>Here are some other relays, not known to the simulator proper. See the main NXSYS helpfile for explanation of the Vital/Non-vital distinction.</p>
+
+<table><thead>
+<tr>
+<th>Relay</th>
+<th>Semantics</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>For signal</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>XS</td>
+<td>Exit stick - picked when exit at this signal selected.</td>
+</tr>
+<tr>
+<td>R</td>
+<td>Route relay/ Picked when complete route at signal established.</td>
+</tr>
+<tr>
+<td>HY</td>
+<td>Slotting (control section) - home signal - picked when the control section is clear.</td>
+</tr>
+<tr>
+<td>COS</td>
+<td>Call on stick - picked when call on is selected by tower operator.&quot;</td>
+</tr>
+<tr>
+<td>AS</td>
+<td>Approach stick - picked when approach locking is clear.  Most general test for signal considered safely to be at stop.</td>
+</tr>
+<tr>
+<td>U</td>
+<td>Approach locking timer (also called U for track grade timer, though).</td>
+</tr>
+<tr>
+<td>VS</td>
+<td>Stop stick.  Forces train stop down in reverse direction.</td>
+</tr>
+<tr>
+<td>XL</td>
+<td>Exit lockout.  Sometimes used. When dropped, prohibits exit there.</td>
+</tr>
+<tr>
+<td>XR</td>
+<td>End-to-end routing: forward probe from one subnetwork to next.</td>
+</tr>
+<tr>
+<td>ZS</td>
+<td>End-to-end routing: successful exit selection returning in reverse direction.</td>
+</tr>
+<tr>
+<td><strong>For switch</strong></td>
+<td>(all &quot;when picked&quot;)</td>
+</tr>
+<tr>
+<td>RWZ, NWZ</td>
+<td>Switch control -- switch legitimately wants to be that position.</td>
+</tr>
+<tr>
+<td>RWC, NWC</td>
+<td>Switch in correspondence in that position.</td>
+</tr>
+<tr>
+<td>RLP, NLP</td>
+<td>Switch called for in that position, even if locked otherwise.</td>
+</tr>
+<tr>
+<td>RWK, NWK</td>
+<td>Switch in correspondence, <strong>and</strong> locked <strong>or</strong> called for in that position.</td>
+</tr>
+<tr>
+<td>ANN, BNN, ANS, BNS, RN, RS</td>
+<td>NX route selection magic relays.    Example: 17ANS = &quot;contemplating a move over 17A, Normal position, South direction.&quot;  When a corresponding pair (e.g., 17BNN/17BNS, 17RN/17RS) is picked, NLP or RLP is called to make the switch move.  This is the heart of NX/UR.</td>
+</tr>
+<tr>
+<td><strong>for track</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>NS, SS</td>
+<td>North/South stick.  Implements &quot;route locking&quot; (see main helpfile). Normally picked.  Dropped in linked chains over a route to lock switches, prevent opposing movement, and put white lines of light on board. Retained by either occupation, the previous section&#39;s identical relay, or signal AS.</td>
+</tr>
+<tr>
+<td>U</td>
+<td>GT/ST signal timing.</td>
+</tr>
+</tbody></table>
+
+<p><strong>Relays operated by &quot;random button&quot; controls, and operating &quot;random panel lights&quot; and the like are usually named by you in TLEdit.</strong>  If you care about the superterrific &quot;Train ID button system&quot; and its lights and buttons, study <a href="https://github.com/BernardGreenberg/NXSYS/blob/master/Interlockings/Myrtle/myrautop.trk">myrautop.trk at Myrtle Av.</a> and maybe the couldn&#39;t-be-cooler <a href="https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYS/v2/dynmenu.cpp">dynmenu.cpp</a> which implements its model.</p>
+
+<p>You can define any other relays you want, freely.</p>
+
+<p>There is a new class of &quot;optional&quot; relays, currently including</p>
+
+<table><thead>
+<tr>
+<th>Relay</th>
+<th>Semantics</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CLK (switch)</td>
+<td>If picked, which should only happen when the switch track section is neither occupied nor routed, the points of the switch will flash in white in whatever position they are in.</td>
+</tr>
+<tr>
+<td>CLK (signal)</td>
+<td>If picked, the GK light for the signal, if lit, will flash. If this relay exists for the signal, the builtin call-on processing that flashes the GK light will not be performed - the CLK relay assumes this responsibility and must be programmed for it.</td>
+</tr>
+<tr>
+<td>BPBS (signal)</td>
+<td>If the simulator can&#39;t find PBS for a signal, but can find BPBS, which is used with ST signals, it will use it instead for GK light indication, fleeting, and cancelling.</td>
+</tr>
+<tr>
+<td>LK (switch)</td>
+<td>The simulator will look for this, and if not found, use LS. It will use the back contact of the one found to drive the switch lock light, lock out the switch auxiliary key and switch control motion.  LK must be used (as in 1957, but not 1994, 733-33 standard) if there are conditional crosslocks in NWZ/RWZ that do not appear in LS.</td>
+</tr>
+</tbody></table>
+
+<p>These optional relays need not be coded, but if they are, they will be utilized as  indicated above.</p>
+
+<h3 id="toc_8">&quot;Special timing consideration&quot;</h3>
+
+<p>With one exception, relay definitions may appear in the source file in any order.  If the circuit is correctly designed and race-free, the order of relays will not matter.  There is, however, one case in the standard interlocking design where relative timing is critical, and thus the detail of the simulator&#39;s algorithm, and hence, source order, become considerations.</p>
+
+<p>The Relay evaluation algorithm is as follows: when a relay is picked or dropped, AND this is really a change from its previous state, i.e., a real transition, the identities of all relays that depend on that relay are put in a queue in the order they appear in the source file. Then all of these relays are visited, their states recomputed, and if their states change, their respective &quot;dependents&quot; are added to the end of the &quot;needs work&quot; queue.  This procedure is continued until the queue is empty.</p>
+
+<p>This algorithm works pretty well most of the time, far better than simply recursing over relays.  Computation of new state is fast.  The only time this algorithm is not transparent is when relay B repeats relay A, and a third relay, C, has a stick circuit broken over <code>(OR !B A)</code>, such as home signal PBS.  The real circuit drops A, which drops B: in the time interval between A&#39;s breaking and B&#39;s picking up, C drops.  This will not work in the simulator by the algorithm described above, and one must ensure that C is defined before B in the source file, to make sure that C sees the change of A before B does.  This is the case with HY (and COS) and PBS: The <strong>PBS for a home signal must be defined before its HY or COS</strong>. Dwarf signals, having no HY, require TP and TPP to repeat T to make the same circuit work, for the same reason.</p>
+
+<hr/>
+
+<h4 id="toc_9">Additional special forms (19 February 1997)</h4>
+
+<p>The Common Lisp special forms <code>COMMENT</code>, <code>EVAL-WHEN</code>, and <code>INCLUDE</code> are supported by NXSYS and the compiler.</p>
+
+<p><code>COMMENT</code>   all subforms are read, but ignored when it appears at top level. Example</p>
+
+<pre><code>         (COMMENT (RELAY 240R 240PBS 125RWK 127NWK 212XS)) ;;old 240R
+         (RELAY 24          ;;real definition.
+</code></pre>
+
+<p><code>(EVAL-WHEN  tags form1 form2 form3 ....)</code>
+ <em>tags</em> is a list, either (), <code>(EVAL), (LOAD), (LOAD )</code> etc.
+             if EVAL appears among the keys, the forms will be processed when the interpreted file is loaded.  If LOAD appears among the keys, the forms will be processed by the compiler as though  they had appeared at top level, but (unless EVAL appears) ignored when the file is loaded interpreted. <strong>[2022: Don&#39;t use it or try to understand it.]</strong></p>
+
+<p><code>INCLUDE</code>    e.g., <code>(INCLUDE &quot;stdmacs.trk&quot;)</code>.  The single argument is a pathname relative to the file which contains the INCLUDE.  The forms and definitions in the file will be treated by NXSYS and by the compiler as though they appeared in the file at the point of the INCLUDE form.</p>
+
+<p>A special relay called <code>0LogicHalt</code> has been defined.  If you provide a definition for this relay, and it ever picks, at that time a message box will pop up stating this: if you press &quot;Yes&quot;, the relay simulator engine will halt and allow you to examine its state in detail with the Draftsperson and other tools.  You must (currently) reload the interlocking after such a breakpoint.</p>
+
+<p><strong>2022: Description and usage of the Relay Compiler removed.  It can&#39;t compile for the Mac, and interlockings run rapidly enough on both platforms without compilation.</strong></p>
+
+<h1 id="toc_10"></h1>
+
+<p>(END)</p>
+
+</body>
+</html>
