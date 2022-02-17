@@ -55,7 +55,7 @@ BOOL GetDlgItemCheckState (HWND hDlg, UINT id) {
 
 #endif
 
-BOOL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 
     BOOL es;
 
@@ -124,7 +124,7 @@ BOOL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
 }
 
-BOOL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     BOOL es;
 
     if (TSCount== 3)
@@ -199,7 +199,7 @@ BOOL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
     }
 }
 
-BOOL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     BOOL es;
 
     switch (message) {
@@ -281,8 +281,8 @@ static DLGPROC_DCL GeneralDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARA
 {
 #ifndef NXSYSMac
     if (message == WM_INITDIALOG)
-	SetWindowLong (hDlg, DWL_USER, (long) lParam);
-    long l = GetWindowLong (hDlg, DWL_USER);
+	SetWindowLongPtr (hDlg, GWLP_USERDATA, lParam);
+    LONG_PTR l = GetWindowLongPtr (hDlg, GWLP_USERDATA);
     if (l)
 	return ((GraphicObject *) l)->DlgProc(hDlg, message, wParam, lParam);
     else
@@ -306,7 +306,7 @@ UINT GraphicObject::DlgId () {
     return  FindDialogIdFromObjClassRegistry (TypeID());
 }
 
-BOOL GraphicObject::DlgProc (HWND, UINT, WPARAM, LPARAM) {
+BOOL_DLG_PROC_QUAL GraphicObject::DlgProc (HWND, UINT, WPARAM, LPARAM) {
     return FALSE;
 }
 

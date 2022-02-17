@@ -54,7 +54,7 @@ static char * GetPSDlgString (HWND hDlg, UINT id) {
 
 
 
-BOOL PanelSwitch::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL PanelSwitch::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 
     BOOL es;
     switch (message) {

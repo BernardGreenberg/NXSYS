@@ -81,7 +81,7 @@ void PanelLight::Display (HDC hdc) {
     Paint(hdc, Selected ? GKGreenBrush : GKOffBrush);
 }
 
-BOOL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 
     BOOL es;
     switch (message) {

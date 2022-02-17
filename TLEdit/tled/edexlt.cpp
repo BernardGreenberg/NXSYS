@@ -69,7 +69,7 @@ int ExitLight::Dump (FILE * f) {
 }
 
 
-BOOL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     BOOL es;
     char o;
 

@@ -225,7 +225,7 @@ static void GetDlgElementsToLogfont (HWND hDlg) {
 
 
 
-BOOL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 #ifdef NXSYSMac
     BOOL es;
 #else

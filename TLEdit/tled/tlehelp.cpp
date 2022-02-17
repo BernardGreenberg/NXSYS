@@ -7,6 +7,7 @@
 #include "resource.h"
 #include <string>
 #include <WinReadResText.h>
+#include "TlDlgProc.h"
 
 COLORREF HelpColor = RGB(0, 228, 228);
 HBRUSH HelpBrush = NULL;
@@ -83,7 +84,7 @@ ExpandDocString(const char * s, std::string& B) {
 			if (p > s)
 				B.append(s, 0, p - s);
 			p++;
-			int len = strspn(p, ALPHAS);
+			int len = (int)strspn(p, ALPHAS);
 			InterpretDocCmd(p, len, B);
 			s = p + len;
 			if (*s == ';')
@@ -96,7 +97,7 @@ ExpandDocString(const char * s, std::string& B) {
 
 
 /* crockamarola to prevent text in edit box from selecting */
-static BOOL APIENTRY
+static BOOL_DLG_PROC_QUAL
 EditBoxSubclassProc
 (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
@@ -106,7 +107,7 @@ EditBoxSubclassProc
 	return lv;
 }
 
-static BOOL APIENTRY
+static BOOL_DLG_PROC_QUAL
 DlgWndProcSubclassProc
 (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
@@ -121,7 +122,7 @@ DlgWndProcSubclassProc
 }
 
 
-static DLGPROC_DCL
+static BOOL_DLG_PROC_QUAL
 HelpDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 
 	HWND edit;
@@ -132,12 +133,12 @@ HelpDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 		HelpBrush = CreateSolidBrush(HelpColor);
 		edit = GetDlgItem(dialog, IDC_TLEDIT_TEXT);
 		wpOrigDlgWndProc
-			= (WNDPROC)SetWindowLong
-			(dialog, GWL_WNDPROC, (LONG)DlgWndProcSubclassProc);
+			= (WNDPROC)SetWindowLongPtr
+			(dialog, GWLP_WNDPROC, (LONG_PTR)DlgWndProcSubclassProc);
 		if (edit) {
 			wpOrigEditProc
-				= (WNDPROC)SetWindowLong
-				(edit, GWL_WNDPROC, (LONG)EditBoxSubclassProc);
+				= (WNDPROC)SetWindowLongPtr
+				(edit, GWLP_WNDPROC, (LONG_PTR)EditBoxSubclassProc);
 			std::string BRaw, B;
 			if (WinReadResText("tlehlptx.txt", BRaw)) {
 				ExpandDocString(BRaw.c_str(), B);
@@ -166,9 +167,9 @@ HelpDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 
 	case WM_DESTROY:
 		edit = GetDlgItem(dialog, IDC_TLEDIT_TEXT);
-		SetWindowLong(dialog, GWL_WNDPROC, (LONG)wpOrigDlgWndProc);
+		SetWindowLongPtr(dialog, GWLP_WNDPROC, (LONG_PTR)wpOrigDlgWndProc);
 		if (edit) {
-			SetWindowLong(edit, GWL_WNDPROC, (LONG)wpOrigEditProc);
+			SetWindowLongPtr(edit, GWLP_WNDPROC, (LONG_PTR)wpOrigEditProc);
 			return TRUE;
 		}
 		DeleteObject(HelpBrush);
@@ -180,7 +181,7 @@ HelpDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 }
 
 
-static DLGPROC_DCL
+static BOOL_DLG_PROC_QUAL
 AboutDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 
 	switch (message) {
@@ -190,14 +191,8 @@ AboutDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 		time_t modtime = GetModuleTime(app_instance);
 		strftime(atime, sizeof(atime), DATE_FORMAT, localtime(&modtime));
 		SetDlgItemText(dialog, ABOUT_VSN, atime);
-#ifdef EVALUATION_EDITION
-		SetDlgItemText(dialog, IDC_RELEASE_NOTE, "Limited License Evaluation Edition");
-		strftime(atime, sizeof(atime), DATE_FORMAT, localtime(&RTExpireTime));
-		SetDlgItemText(dialog, IDC_EXECUTABLE_EXPIRES_AT, atime);
-#else
 		ShowWindow(GetDlgItem(dialog, IDC_EXECUTABLE_EXPIRES), SW_HIDE);
 		ShowWindow(GetDlgItem(dialog, IDC_EXECUTABLE_EXPIRES_AT), SW_HIDE);
-#endif
 		return TRUE;
 	}
 	case WM_COMMAND:

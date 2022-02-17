@@ -234,18 +234,18 @@ BOOL SaveItForReal(const char * path) {
 
 #ifndef NXSYSMac
 static BOOL OpenIt() {
-    char fnbuf[MAXPATH];
-    if (FileOpenDlg(AppWindow, fnbuf, NULL, MAXPATH - 1, 1)) {
-	FileName = fnbuf;
-	return ReadIt();
-    }
-    return FALSE;
+	char fnbuf[MAXPATH]{};
+	if (FileOpenDlg(AppWindow, fnbuf, NULL, MAXPATH - 1, 1)) {
+		FileName = fnbuf;
+		return ReadIt();
+	}
+	return FALSE;
 }
 
 static BOOL SaveIt(BOOL force_query) {
 	if (!strcmp(FileName.c_str(), ""))
 		force_query = TRUE;
-	char fnbuf[MAXPATH];
+	char fnbuf[MAXPATH]{};
 	if (force_query && !FileOpenDlg(AppWindow, fnbuf, NULL, MAXPATH - 1, 0))
 	    return FALSE;
 	FileName = fnbuf;

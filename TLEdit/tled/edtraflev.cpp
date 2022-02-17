@@ -9,6 +9,7 @@
 #include "resource.h"
 #include "tlpropdlg.h"
 #include "objreg.h"
+#include "nxgo.h"
 
 #include "dragger.h"
 
@@ -38,7 +39,7 @@ int TrafficLever::Dump (FILE * f) {
 }
 
 
-BOOL TrafficLever::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL TrafficLever::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     BOOL es;
 
     switch (message) {

@@ -193,7 +193,7 @@ BOOL PanelSignal::DlgOK(HWND hDlg) {
 }
 
 
-BOOL PanelSignal::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL PanelSignal::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 
     char buf[64];
     char o;

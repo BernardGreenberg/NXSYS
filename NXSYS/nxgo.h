@@ -18,10 +18,7 @@ struct WPRECT {
 };
 
 #ifdef TLEDIT				/* must be at top level */
-#ifndef _FILE_DEFINED
 #include <stdio.h>
-#define _FILE_DEFINED 1
-#endif
 #endif
 
 class GraphicObject {

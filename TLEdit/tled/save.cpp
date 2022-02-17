@@ -268,7 +268,7 @@ static void SaveTheLayout(FILE * f) {
 	the_time = GetModuleTime(NULL);
 	fprintf(f, ";;   by TLEdit of %s", ctime(&the_time));
 #endif
-	fprintf(f, ";;      TLEdit Copyright (c) Bernard Greenberg 2013\n");
+	fprintf(f, ";;      TLEdit Copyright (c) Bernard Greenberg 2013, 2022\n");
 
 	fprintf(f, ";;   Do not edit by hand.\n\n");
 

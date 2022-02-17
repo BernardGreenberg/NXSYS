@@ -33,7 +33,7 @@ int SwitchKey::Dump (FILE * f) {
     return 400;
 }
 
-BOOL SwitchKey::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+BOOL_DLG_PROC_QUAL SwitchKey::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     BOOL es;
 
     switch (message) {
