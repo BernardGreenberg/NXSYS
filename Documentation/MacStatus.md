@@ -26,7 +26,7 @@ There are five in this project:
 
 - **BLISP** (B for Bernie).  A command-line program, being a test-build of its native reader (`readsexp.cpp`) for the quasi-Lisp used for interlocking definitions.  `READ-PRINT` only, though, C(++)-no-`EVAL`. 10 cdr trains are handled :).
 
-- **Relay Indexer**. There is now an [extensive separate help file on this](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/RelayIndex.html) now. It now works on Windows and Mac.
+- **Relay Indexer**. There is now an [extensive separate help file on this](https://github.com/BernardGreenberg/NXSYS/blob/master/RelayIndex/RelayIndex.md) now. It now works on Windows and Mac.
 
 The distribution of the sources into XCode "groups" is somewhat chaotic, and I apologize.  The [folder `NXSYS`](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYS) contains all code of the main application (and headers) that is shared with the Windows build.  `TLEdit/tled` contains the *additional* code in TLEdit shared with Windows version. And `NXSYSWindows` contains all Windows-only code and other artifacts.  All other folders contain Mac-only code and headers.  There are still some glitches with TLEdit Windows-only code, so it does not appear in XCode, but does appear in the Repository.
 
