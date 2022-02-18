@@ -168,6 +168,7 @@
 		5BAFFBA919B894CC00AEE791 /* nxdoc.css in Resources */ = {isa = PBXBuildFile; fileRef = 5BAFFBA819B894CC00AEE791 /* nxdoc.css */; };
 		5BAFFBAE19BA4C4900AEE791 /* TrainDlg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */; };
 		5BB322512668062E00F4A611 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B47F34819AFAFE800CBB80A /* WebKit.framework */; };
+		5BB5801927C0030A00FB0ED5 /* MacStatus.md in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5801827C0030A00FB0ED5 /* MacStatus.md */; };
 		5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
 		5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AC19DDA738006C590E /* dialog_warning.png */; };
 		5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
@@ -529,6 +530,7 @@
 		5BAD56011A014B09006AEEAB /* DumbStubs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DumbStubs.cpp; sourceTree = "<group>"; };
 		5BAFFBA819B894CC00AEE791 /* nxdoc.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = nxdoc.css; sourceTree = "<group>"; };
 		5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrainDlg.xib; sourceTree = "<group>"; };
+		5BB5801827C0030A00FB0ED5 /* MacStatus.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = MacStatus.md; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -928,6 +930,7 @@
 		5B65677B25C1B17000411B8F /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				5BB5801827C0030A00FB0ED5 /* MacStatus.md */,
 				5B5427FD27BF2851006EEDEF /* TLEdit.html */,
 				5B54275927BEECB6006EEDEF /* RelayLanguage.html */,
 				5B54275627BDCFF0006EEDEF /* Interlocking Logic Design.odt */,
@@ -1645,6 +1648,7 @@
 			files = (
 				5B1948A8264B5FFA001EBEFE /* NXSYSMac.build_log.txt in Resources */,
 				5B65680F25C331D100411B8F /* icon_256x256.png in Resources */,
+				5BB5801927C0030A00FB0ED5 /* MacStatus.md in Resources */,
 				5BFB4AFF27B172A9006BE311 /* db6.trk in Resources */,
 				5B4E1810222AC4AF00DED5AE /* Credits.rtf in Resources */,
 				5B687ADF19B725840006FA4F /* ReleaseNotes.html in Resources */,

@@ -1,16 +1,13 @@
 #  NXSYS sources, complete
 ###  By and ©Copyright 1994-2022, Bernard S. Greenberg
-#### First Posted 4 February 2022 (last 15 Feb 2022)
+#### First Posted 4 February 2022 (last 18 Feb 2022)
 
 This is the buildable, runnable source code for **NXSYS** (*enn-ex-sys*) (Version 2), my New York City Subway relay-logic and interlocking panel simulator, and its six offered interlockings, as it stands.  It is mine, and mine alone, although Dave Barraza's contributions to its debugging and development deserve credit.  Feel free to continue it, improve it if you like, or just build it for yourself.  I want this repository to be its home.  I'm not soliciting or merging branches at this time.
 
 This application is posted and offered under the terms of the GNU General Public License Version 3. See the file `LICENSE` for details. These sources are offered "AS-IS", with no warranty or guarantee of operability or suitability for any purpose made or implied, and use is at your own risk — all the code is available here for inspection.  **Do not** attempt to use this code to control actual railroads with live crews and passengers (I would be *extremely* impressed and flattered, but not responsible for the outcome).
 
-This codebase is presently maintained and targeted for macOS, using XCode as a build platform.  While the MSWindows (10) version is available, it is not now fully buildable; work is in progress. See [Code languages and the Windows version](#code-languages-and-the-windows-version) below for more info on its status and future.
+This codebase can build working Mac and Windows (latter 64 and 32 bit) executables.  Although NXSYS was born on (16-bit) Windows, the reference implementation is presently that on macOS, hosted and built in XCode.  See [the macOS Readme](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/MacStatus.md) for particulars and status of the Mac version and [the Windows Readme](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/WindowsStatus.md) for particulars and status of the Windows version.
 
-This code builds completely and cleanly under XCode 13.2.1 (13C100) under macOS Monterey 12.1, for 64-bit Intel Mac; no configurations for M1 Mac are present. An [`xcodeproj` folder](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYSMac.xcodeproj) resides in the top folder; it contains no external references. **The Apple tool [`PlistBuddy`](https://www.marcosantadev.com/manage-plist-files-plistbuddy/) is expected** to be in `/usr/libexec` (where it should be if XCode is properly installed); it is used for packing build number and date signature into the Info plist.  Tools for packaging the whole for distribution (BASH scripting) are not provided (XCode `Product>Archive` already does most of the job).  Code Signing is, of course, now your responsibility, if desired.
-
-There remain (as expectable) some minor constraint irritations in the Interface  Builder layouts that do not impede building or raise warning flags at build time.
 
 The file [`NXSYS.html`](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/NXSYS.html) in the [Documentation folder](https://github.com/BernardGreenberg/NXSYS/tree/master/Documentation) is a comprehensive description of the application and its capabilities. It is the source for the distributed PDF (although building that PDF so that external and internal links work seems to be a challenging research problem that depends on one's own computer). Read everything in that folder.  See [Related Resources](#related-resources) below for a video demo.
 
@@ -18,56 +15,41 @@ Please ignore admonitions in the interlocking and other help texts about not red
 
 I am not, and have not been, associated with any transportation provider nor signal engineering contractor, nor has any endorsed this work, although during its history quite a few people such people have contributed knowledge, critique, and fanship.
 
-## Code languages and the Windows version
+## Code base
 
-This application is currently in C++11 (the 2011 standard of C++), exploiting STL.  The core of the functionality is in that language only, and, in principle, can run on MS Windows, for which it was originally written  (Win16 then Win32). It presently contains preprocessor conditionalizations to that end; it was ported to the Mac in late 2014, and back to Windows in 2016.  The User Interface artifacts in this tree are in Objective C++ (embedded in C++11), an Apple proprietary storage-management regime and Object-Oriented GUI system which preceded Swift as their   preferred application development language, but still supported. Its syntax extends that of C++ incompatibly; it is well-documented, but difficult to master.  Also in Objective C++ is my original simulation of the Win32 API, which was my solution to maximizing the code that ran compatibly on both platforms.  Foolishly, I rejected the advice of those wiser than myself suggesting the use of Qt or other cross-platform GUI substrates, which may or may not have been easier, but would surely have introduced other problems.
+This application is currently in C++17 (the 2017 standard of C++), exploiting STL.  It is almost all C++11, and, especially in the Windows version, contains code in dialects going all the way back to C. The shared core (whose maximization was my goal)  and the Windows-specific code is only in C/C++.  Some C++17 features have recently been exploited (e.g., `std::filesystem`).  Note that the Microsoft compiler will lie about the `__cplusplus` version unless told not to with `/Zc:__cplusplus`. The [Mac code](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/MacStatus.md) exploits Cocoa/Objective C++.
 
-The Windows build was last offered in 2016, and while fully operable, is not now fully buildable.  See [Related Resources](#related-resources) below for a download of the executable. Work is in progress on an up-to-date Windows build and source-tree.  See [this README](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/WindowsStatus.md) for more info on this.
+The core of the functionality contains preprocessor conditionalizations for the two platforms. it was ported to the Mac in late 2014, with very substantial Mac-specific code additions, and back to Windows in 2016, with The last six years of Mac improvements re-shared and retrofitted in 2022.
 
-I do take pains in distributed interlockings to avoid incompatible use of new features; the scenario language makes it possible to exploit newer features only in newer builds, downward compatibly.  All five of these interlockings are thus fully functional in the distributed (2016) Windows build.  The interlockings here in the [eponymous folder](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings) are newer and better (e.g., bugs fixed) than those in the distributions.
+There are three shared builds (“projects” on Windows, “targets” on the Mac), `NXSYS` the interlocking/relay simulator, `TLEdit` the track layout editor, and `Relay Index`, the cross-reference and tags file generator, a console program.  The Mac Xcode project (the largest entity, parallel to Windows “solution") contains two additional targets for debugging/amusement.
+
+I do take pains in distributed interlockings to avoid incompatible use of new features; the scenario language makes it possible to exploit newer features only in newer builds, downward compatibly.  All five of these interlockings are thus fully functional in the distributed 2016 32-bit Windows build as well as the new builds.  The interlockings here in the [eponymous folder](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings) are newer and better (e.g., bugs fixed) than those in the distributions.
 
 None of the OpenGL code of the popular erstwhile Cab View feature of Version 1 is present in this repository.  It cannot handle, nor can it be obviously extended to handle, the arbitrary track geometries of Version 2. And in a world where spectacular interactive animated graphics such as [this (threejs)](https://threejs.org/examples/#webgl_animation_keyframes) are available, Cab View's black, grey-walled tunnels with only rails and signals visible would be ... inadequate. But becoming the video-game designer required is not a credible use of my time, nor would the result be a reasonable extension of the purview of this application.
- 
-## Status of the Mac Version
 
-The Mac Version is targeted in XCode to (minimum) [macOS Sierra (10.12)](https://en.wikipedia.org/wiki/MacOS_Sierra) (released Sept. 2019); that is the SDK level it uses.   While this can easily be set as current as you wish in XCode, and most Mac users keep their systems up-to-date, I see no reason to bring it closer to currency: back-compatibility is a virtue. See [Related Resources](#related-resources) below for the latest "released" Mac installable. I may move it here and use the GitHub "release" mechanism.
+There are various degrees of beauty and professionalism evident in the code-base.  The oldest code dates from 25 years ago, when C++, and Windows were a lot more cumbersome.   The newest code, including the Mac-specific code, is considerably more pleasing.  I occasionally do mount cleanup campaigns upon it.
 
-I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about (significant) changes to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013. If I successfully implement this or other new features, they will not break extant interlockings, and I won't "push" until I have solid code.
+I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about (significant) changes to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013.
 
-I may or may not fix reported bugs and post changes, but I want to know if you can't build it; contact me via GitHub. I expect to post fixes to bugs I encounter and gratuitous enhancements from hereon in.
-
-## Build targets
-
-There are five in this project:
-
-- **NXSYSMac**. This is the Mac GUI application, complete with resources when built, invocable as a standard `.app` Mac GUI application.   It opens interlocking scenarios, displays control panels, accepts their operation, and runs them.
-
-- **TLEdit**, the track-layout editor.  A separate Mac GUI application (a Windows version exists, too, but not yet buildable here) that allows the creation and maintenance of `.trk` files containing layout information (and only layout information).  This is how you create the track-maps/panel layouts of scenarios, not any part of their logic. It is (poorly) self-documenting.
-
-- **Relay Compiler**. This is presently a joke, because even though this command-line application runs perfectly on the 64-bit Mac, *it only produces Windows object code*, 32- as well as 16-bit, actually — NXSYS Windows is now 64 bit.  It is simply no longer necessary with the speed of modern machines; interlockings run rapidly enough "interpreted" (Lisp taxonomy).  Prior to Mac NXSYS, though, it was quite neat, and it hurts me to delete it. It is a tribute to Apple that I have never had to learn the Mac machine-language environment.
-
-- **BLISP** (B for Bernie).  A command-line program, being a test-build of its native reader (`readsexp.cpp`) for the quasi-Lisp used for interlocking definitions.  `READ-PRINT` only, though, C(++)-no-`EVAL`. 10 cdr trains are handled :).
-
-- **Relay Indexer**. There is an [extensive separate help file on this](https://github.com/BernardGreenberg/NXSYS/blob/master/RelayIndex/RelayIndex.htm) now. It now works on Windows and Mac.
-
-The distribution of the sources into XCode "groups" is somewhat chaotic, and I apologize.  The [folder `NXSYS`](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYS) contains all code of the main application (and headers) that is shared with the Windows build.  `TLEdit/tled` contains the *additional* code in TLEdit shared with Windows version. And `NXSYSWindows` contains all Windows-only code and other artifacts.  All other folders contain Mac-only code and headers.
+I’m also thinking about support for topomorphic circuits (see the logic document cited right below).  If I successfully implement these or other new features, they will not break extant interlockings—I won't “push” until I have solid code.
 
 ***Nota bene***—there are file system and XCode artifacts seemingly referring to Windows in the Mac-only folders, e.g., `Winapi.mm`.  These are *not* misplaced Windows programs, but Mac code *emulating the Win32 API in Cocoa/Objective C++*, which is the compatibility strategy I chose in 2014 to maximize shared, retained code.
 
-The TLEdit `buttons` folder contains, in addition to png's for its (Mac) tool-panel buttons, Pixelmator (pre-Pro) files from which they were created.
+## New — Logic documentation
 
+This Repository now contains an [extensive tutorial on Interlocking Logic (pdf)](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/Interlocking%20Logic%20Design.pdf) and its [.odt source](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/Interlocking%20Logic%20Design.odt) (Libre Office), as well as a new [document on the Relay Language](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/RelayLanguage.md).  Both of these are intended for those interested in creating their own interlockings, and should be of great interest to any electrically-competent railfan.
 
 
 ## *Et in fine* ...
 
-Relay-based wayside color-light block signalling was in use in the New York Subways before *Titanic* sailed, before anyone knew that silicon could be used for building anything except deserts and glass, and when "computer" meant an accountant. In the present century, newer, computer- and communications-based technologies have finally begun to make inroads in New York, and this stuff is ... *como se dice*, "a bit long in the tooth", like its author, who grew up with it and learned to understand and admire it.  Nevertheless, the principles of safety design herein embodied survive even in the latest programmed-logic controller (PLC) plants, in New York and globally.  And NXSYS has already brought pleasure and learning to many, and even inspired imitators.
+Relay-based wayside color-light block signalling was in use in the New York Subways before *Titanic* sailed, before anyone knew that silicon could be used for building anything except deserts and glass, and when “computer” meant an accountant. In the present century, newer, computer- and communications-based technologies have finally begun to make inroads in New York, and this stuff is ... *como se dice*, “a bit long in the tooth”, like its author, who grew up with it and learned to understand and admire it.  Nevertheless, the principles of safety design herein embodied survive even in the latest programmed-logic controller (PLC) plants, in New York and globally.  And NXSYS has already brought pleasure and learning to many, and even inspired imitators.
 
-Go to town, or Coney Island Yard, with it, but keep my name and credit as you add your own.  It is my invention, my "baby", my work, my gift, and, with my music, my legacy.
+Go to town, or Coney Island Yard, with it, but keep my name and credit as you add your own.  It is my invention, my “baby”, my work, my gift, and, with my music, my legacy.
 
 Thank you for interest ... Enjoy,
 
 ### Bernard Greenberg
-### 4 February 2022
+### February 2022
 
 ===
 
