@@ -69,7 +69,7 @@ void DestroySigWins() {
 	LastX = 0;
 	for (int i = 0; i < SigWinCount; i++) {
 		HWND win = SigWins[i];
-		((Signal*)GetWindowLong(win, 0))->Window = NULL;
+		((Signal*)GetWindowLongPtr(win, 0))->Window = NULL;
 		DestroyWindow(win);
 	}
 	if (Font != NULL)
@@ -135,7 +135,7 @@ HWND MakeSigWin(Signal * s, int x, int y) {
                                G_mainwindow, NULL, app_instance, NULL);
 
     SendMessage(window, WM_SETFONT, (WPARAM)Font, 0);
-    SetWindowLong(window, 0, *(LONG *)&s);
+    SetWindowLongPtr(window, GWLP_USERDATA, (INT_PTR)s);
 #endif
     char plate[20];
     if (s->XlkgNo)
@@ -367,7 +367,7 @@ static void DrawPlate(Signal* S, HDC dc, int x, int y, int height, const char * 
 		DrawText(dc, plate, strlen(plate), &r, DT_TOP | DT_CENTER);
 	}
 #else
-	DrawText(dc, plate, strlen(plate), &r, DT_TOP | DT_CENTER);
+	DrawText(dc, plate, (int)strlen(plate), &r, DT_TOP | DT_CENTER);
 #endif
 	if (Glb.IRTStyle) {
             int xw = (int)(.75f*hw);
@@ -436,7 +436,7 @@ static WNDPROC_DCL SigWin_WndProc
             PAINTSTRUCT ps;
             HDC dc = BeginPaint(window, &ps);
             SelectObject(dc, Font);
-            ((Signal*)GetWindowLong(window, 0))->WinDisp(dc, 0);
+            ((Signal*)GetWindowLongPtr(window, GWLP_USERDATA))->WinDisp(dc, 0);
             EndPaint(window, &ps);
             break;
 	}
