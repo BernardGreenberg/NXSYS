@@ -46,7 +46,7 @@ static double CoerceToFloatVal (Sexpr x) {
 Sexpr LCoerceToFix   (Sexpr x) {
     switch (x.type) {
 	case Lisp::FLOAT:
-	    return Sexpr ((long)x.u.f);
+	    return Sexpr ((long)(*x.u.f));
 	case Lisp::NUM:
 	    return x;
 	case Lisp::RATIONAL:
