@@ -53,17 +53,19 @@ Updated 17 February 2022</p>
 
 <p>Click and drag mouse left (Windows, or Mac trackpad, single finger) to create a new track segment.  Click left on either an extant joint which is not already “full” (i.e., has less than  3 branches), some other point on an extant segment, or elsewhere, and drag the mouse, left button held.  You will be dragging the end of a &ldquo;rubber band&rdquo;, whose other end is where you started.  Drop the mouse on either an extant joint which is <b>not full</b>, some other point on an extant segment, or elsewhere &mdash; a new segment will be created.  To cancel, i.e., change your mind and create no new segment, drop the mouse end of the rubber band back on the stationary end.  Slopes of less than 4% from the vertical or horizontal are assumed to be vertical or horizontal, and “snapped” into place.</p>
 
-<p>To <b>move an extant joint</b>, click and drag it with mouse right (on Windows; control-mouse on the Mac). Clicking and dragging mouse right in the middle of an extant segment creates a joint and moves it &mdash; you can insert a “kink” this way. If you drag a joint to another joint, and there are no more than three branches among the two of them, the joints will merge into one.  The rubber-band lines will “click” onto a detente (and show as red) if TLEdit thinks it knows what you are trying to do.</p>
+<p>To <b>move an extant joint</b>, click and drag it with mouse right (on Windows; control-mouse on the Mac). Clicking and dragging mouse right in the middle of an extant segment creates a joint and moves it &mdash; you can insert a “kink” this way. If you drag a joint to another joint, and there are no more than three branches among the two of them, the joints will merge into one.  The rubber band lines will “click” onto a detente (and show as red) if TLEdit thinks it knows what you are trying to do.</p>
 
 <p>Placing a new joint in the middle of an extant segment via either tool splits the segment in two at that point.  For mouse left, the new joint will not come into existence until you actually drag the mouse.  For mouse right, a new joint will come into existence immediately.</p>
 
-<p>Any object (joint, segment, signal, exit light, or switch key) may be selected, which turns it green, by clicking left on it. A newly-created object, or a joint just moved, is automatically selected.  Pressing the <b>Edit Properties</b> tool (or typing <b>Ctrl+P</b>) when an object is selected brings up its <b>properties dialog</b>, which is different for each type of object, allowing detailed control of its properties.</p>
+<p>Any object (joint, segment, signal, exit light, or switch key) may be selected, which turns it green, by clicking left on it. A newly-created object, or a joint just moved, is automatically selected.  Pressing the <b>Edit Properties</b> tool (or typing <b>Ctrl+P</b>, both Windows and Mac) when an object is selected brings up its <b>properties dialog</b>, which is different for each type of object, allowing detailed control of its properties.  On the Mac, &ldquo;secondary gesture&rdquo; (right-click replacement) on any object calls up its properties dialog, too.</p>
 
-<p><b>Cut</b> (use the <b>Cut</b> tool or <b>Ctrl-X</b>) to delete a selected object.  Loose ends of a deleted segment will vanish with it.  <b>Cut</b> of a selected joint of two branches will remove the joint and collapse the two segments into one, joining the endpoints of the previous two.  <b>You must delete all signals and exit lights at an insulated joint before the joint can be deleted</b>.  There is presently no undo or paste.</p>
+<p><b>Cut</b> (use the <b>Cut</b> tool or <b>Ctrl-X</b>, <b>⌘X</b> in the Mac) to delete a selected object.  Loose ends of a deleted segment will vanish with it.  <b>Cut</b> of a selected joint of two branches will remove the joint and collapse the two segments into one, joining the endpoints of the previous two.  <b>You must delete all signals and exit lights at an insulated joint before the joint can be deleted</b>.  There is presently no undo or paste.</p>
 
 <p>A joint of two branches can be made insulated by selecting it and clicking the <b>Insulate</b> tool (insulated joints appear as yellow dots.)  Creating a signal at an uninsulated joint of two branches it insulates the joint automatically.</p>
 
-<p>Scroll down or to the right to extend layout those ways.  To extend up or to the left, use <b>View|Shift Layout</b> (<b>Alt+S</b>).  This takes much time to run.  To set the default view origin that comes up in NXSYS, scroll until you are looking at it, and use <b>View|Set Viewport here</b>.</p>
+<p>Scroll down or to the right to extend layout those ways.  To extend up or to the left, use <b>View|Shift Layout</b> (<b>Alt+S</b> on Windows, no accelerator on Mac).  This takes much time to run.  To set the default view origin that comes up in NXSYS, scroll until you are looking at it, and use <b>View|Set Viewport here</b>.</p>
+
+<p> The problem of how to establish an empty space of known dimensions, or &ldquo;large enough&rdquo; on the Mac is non-obvious, and discussed in the <a href="MacTleHelp.html">Mac-specific TLEdit help file.</a>.</p>
 
 <h2>Creating and Editing Other Objects</h2>
 
@@ -84,19 +86,19 @@ Updated 17 February 2022</p>
 
 <p>Track segments assemble into track <b>sections</b> (<b>track circuits</b>); NXSYS generates and manages T relays and "line-o-lite"s on a per-circuit basis.  Select and <b>property edit</b> a track segment to assign a numeric track circuit relay ID.  If <b>Wildfire spread by contact</b> is selected, all track segments reachable from the one being edited without passing an insulated joint will have their Circuit ID's changed as well.  NXSYS will not equip a track segment with the default ID (0).  Track segments with circuits assigned light with white "line-o-lites" in TLEdit. The algorithm for managing segments dependent on switch position, within one circuit, is a complex heuristic built into NXSYS (which occasionally fails).  Individual segments are not &ldquo;programmable&rdquo; as they are in real life.
 
-<h2>Switch Orientation (which route is "normal"?)</h2>
+<h2>Switch Orientation (which route is “normal”?)</h2>
 
 <p>TLEdit by default assigns the three branches emanating from a switch joint the designations <b>stem, normal,</b> and <b>reverse</b>, based upon the angles between them.  In some cases, notably for slip switches, this default is not correct.  The two buttons <b>highlight normal</b> and <b>swap normal</b> on the switch&rsquo;s <b>properties dialog</b> can be used to see which branch is “normal” (selecting it) and swap the definitions of normal and reverse (highlighting the new <b>normal</b>, as it were) to facilitate manual adjustment.
 </p>
 
 <p>========================================================================</p>
 
-<p>Use <b>Ctrl-W</b> (or <b>New</b>) to “wipe” the drawing clear.</p>
+<p>Use <b>Ctrl-W</b> (or <b>New</b>) to “wipe” the drawing clear, on Windows, but <b>⌘N</b> (<b>New</b>) on the Mac.</p>
 
 <p>Use the <b>Show joints</b> tool (an on/off button) to see what the panel will look like on NXSYS (i.e., no red dots).</p>
 
 <p>You can save and restore your creations.  The app will accept a file name as a command argument.</p>
 
-<p>You can <tt>(include "foo.trk")</tt> in an NXSYS <tt>.trk</tt> file.  The outer file should contain, or co-include, all the relay definitions and the TLEdit-generated file, which should not be hand-edited.  (The language is fairly obvious, and is left as an exercise for the user. You should not have to understand its details.)</p>
+<p>You can <tt>(include "foo.trk")</tt> in an NXSYS <tt>.trk</tt> file.  The outer file should contain, or co-include, all the relay definitions and the TLEdit-generated file, which latter should not be hand-edited.  (The language is fairly obvious, and is left as an exercise for the user. You should not have to understand its details.)</p>
 </body>
 </html>
