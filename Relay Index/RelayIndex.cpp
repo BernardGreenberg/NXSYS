@@ -94,7 +94,7 @@ DEFLSYM(LOAD);
 void CompileExpr (Sexpr s, RLID being_defined);
 
 void CompileReference (Sexpr s, RLID being_defined) {
-    if (s.type != L_RLYSYM)
+    if (s.type != Lisp::RLYSYM)
         RC_error (3, "Non-Rlysym handed to CompileReference.");
     RLID being_referenced = s.u.r;
     std::vector<RLID>& V = BackRefMap[being_referenced];
@@ -113,21 +113,21 @@ void CompileList (Sexpr args, RLID being_defined) {
 }
 
 void CompileExpr (Sexpr s, RLID being_defined) {
-    if (s.type == L_CONS) {
+    if (s.type == Lisp::tCONS) {
         Sexpr fn = CAR(s);
         if (fn == NOT) {
             Sexpr ss = CADR (s);
-            if (!(ss.type == L_RLYSYM))
+            if (!(ss.type == Lisp::RLYSYM))
                 RC_error (1, "No non-atomic-relay NOT's.");
             CompileReference(ss, being_defined);
         }
         else if (fn == AND || fn == OR)
             CompileList (CDR(s), being_defined);
         else if (fn == LABEL) {
-            if (CDR(s).type != L_CONS || CDDR(s).type != L_CONS)
+            if (CDR(s).type != Lisp::tCONS || CDDR(s).type != Lisp::tCONS)
                 RC_error (1, "Bad Format LABEL clause.");
             const Sexpr ltag = CADR(s);
-            if (ltag.type != L_ATOM)
+            if (ltag.type != Lisp::ATOM)
                 RC_error (1, "Label is not atom.");
             Sexpr exp = CDDR(s);
             CAR(s) = AND;
@@ -147,7 +147,7 @@ void CompileExpr (Sexpr s, RLID being_defined) {
         }
         return;
     }
-    else if (s.type == L_ATOM) {
+    else if (s.type == Lisp::ATOM) {
         if (s == T_ATOM || s == NIL) {
         }
         else if (LabelMap.count(s.u.s)) {
@@ -156,10 +156,10 @@ void CompileExpr (Sexpr s, RLID being_defined) {
         else
             LispBarf (1, "Unknown LABEL in Relay Xreffer", s);
     }
-    else if (s.type == L_RLYSYM) {
+    else if (s.type == Lisp::RLYSYM) {
         CompileReference(s, being_defined);
     }
-    else if (s.type == L_NUM) {
+    else if (s.type == Lisp::NUM) {
     }
     else
         LispBarf (1, "Unknown form (2) in Relay Xreffer", s);
@@ -196,9 +196,9 @@ void CleanUpRelaySys () {
 void CompileFile(FILE* f, fs::path path);  // for recursive call for INCLUDE
 
 void CompileTopLevelForm (Sexpr s, fs::path path, long filepos) {
-    if (s.type != L_CONS)
+    if (s.type != Lisp::tCONS)
         RC_error (1, "Item definition not a list?");
-    if (CAR(s).type != L_ATOM) {
+    if (CAR(s).type != Lisp::ATOM) {
         RC_error (1, "Top-level item doesn't start with atom.");}
     else {
         Sexpr fn = CAR(s);
@@ -212,7 +212,7 @@ void CompileTopLevelForm (Sexpr s, fs::path path, long filepos) {
         else if (fn == FORMS) {
             SPop (s);
         forms:
-            while (s.type == L_CONS)
+            while (s.type == Lisp::tCONS)
                 CompileTopLevelForm (SPopCar(s), path, filepos);
         }
         else if (fn == RELAY)
@@ -230,9 +230,9 @@ void CompileTopLevelForm (Sexpr s, fs::path path, long filepos) {
         else if (fn == COMMENT);
         else if (fn == EVAL_WHEN) {
             SPop(s);
-            if (s.type == L_CONS && CAR(s).type == L_CONS) {
+            if (s.type == Lisp::tCONS && CAR(s).type == Lisp::tCONS) {
                 Sexpr sc = SPopCar(s);
-                for (; sc.type == L_CONS; SPop(sc))
+                for (; sc.type == Lisp::tCONS; SPop(sc))
                     if (CAR(sc) == LOAD)
                         goto forms;
             }
@@ -265,7 +265,7 @@ void CompileLayout (FILE* f, fs::path path) {
 }
 
 string padit (string s, long n) {
-    long len = s.size();
+    size_t len = s.size();
     if (len < n)
         s += string(n-len, ' ');
     else
@@ -297,9 +297,12 @@ void IndexOneRelay(RLID rsym, std::ofstream& outs) {
 
 int main (int argc, const char ** argv) {
     
-    string compdesc = FormatString("BSG Relay Indexer of %s %s", __DATE__, __TIME__);
-#if DEBUG
+    string compdesc = FormatString("Relay Indexer of %s %s", __DATE__, __TIME__);
+#if DEBUG | _DEBUG
     compdesc += " (DEBUG)";
+#endif
+#ifdef _WIN64
+    compdesc += " (64-bit)";
 #endif
     cout << compdesc << endl;
     
