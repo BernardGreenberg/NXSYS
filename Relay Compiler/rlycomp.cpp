@@ -592,7 +592,7 @@ top:
 void outinst (MACH_OP op, Sexpr s, PCTR opd) {
     std::string str;
     check_fix8_overflows();
-    if (s.type == L_RLYSYM)
+    if (s.type == Lisp::RLYSYM)
         str = s.PRep();
     else if (s == T_ATOM)
 	str = "1";
@@ -737,7 +737,7 @@ void RecordDependent (RLID affector) {
 
 
 void CompileRlysym (Sexpr s, Ctxt * ctxt, int backf) {
-    if (s.type != L_RLYSYM)
+    if (s.type != Lisp::RLYSYM)
 	RC_error (3, "Non-Rlysym handed to CompileRlysym.");
     RecordDependent (RelayId(s));
     Jtag* tag = ctxt->tag;
@@ -823,11 +823,11 @@ void CompileExpr (Sexpr s, Ctxt* ctxt) {
 	list (";**CEXPR    %c %s %s\n",
               CTVAL[ctxt->op], ctxt->tag->lab, s.PRep().c_str());
 
-    if (s.type == L_CONS) {
+    if (s.type == Lisp::tCONS) {
 	Sexpr fn = CAR(s);
 	if (fn == NOT) {
 	    Sexpr ss = CADR (s);
-	    if (!(ss.type == L_RLYSYM))
+	    if (!(ss.type == Lisp::RLYSYM))
 		RC_error (1, "No non-atomic-relay NOT's.");
 	    CompileRlysym (ss, ctxt, 1);
 	}
@@ -836,10 +836,10 @@ void CompileExpr (Sexpr s, Ctxt* ctxt) {
 	else if (fn == OR)
 	    CompileAndOr (CDR(s), CT_OR, ctxt);
 	else if (fn == LABEL) {
-	    if (CDR(s).type != L_CONS || CDDR(s).type != L_CONS)
+	    if (CDR(s).type != Lisp::tCONS || CDDR(s).type != Lisp::tCONS)
 		RC_error (1, "Bad Format LABEL clause.");
 	    Sexpr ltag = CADR(s);
-	    if (ltag.type != L_ATOM)
+	    if (ltag.type != Lisp::ATOM)
 		RC_error (1, "Label is not atom.");
 	    Sexpr exp = CDDR(s);
 	    CDDR(s) = NIL;
@@ -864,7 +864,7 @@ void CompileExpr (Sexpr s, Ctxt* ctxt) {
 	}
 						
     }			
-    else if (s.type == L_ATOM) {
+    else if (s.type == Lisp::ATOM) {
         for (auto& lte : LabelTable)
 	    if (lte.s == s) {
 		if (CheckOpt && ctxt->op != CT_VAL)
@@ -879,9 +879,9 @@ void CompileExpr (Sexpr s, Ctxt* ctxt) {
 	else if (s == NIL) goto nat;
 	RC_error (1, "Label/Symbol not known as form: %s", s.u.a);
     }
-    else if (s.type == L_RLYSYM)
+    else if (s.type == Lisp::RLYSYM)
 	CompileRlysym (s, ctxt, 0);
-    else if (s.type == L_NUM) {
+    else if (s.type == Lisp::NUM) {
 	if (s.u.n == 1){
 tat:
 	    switch (ctxt->op) {
@@ -1095,9 +1095,9 @@ void PrintRelayTable () {
 void CompileFile(FILE* f, const char * fname);
 
 void CompileTopLevelForm (Sexpr s, const char * fname) {
-    if (s.type != L_CONS)
+    if (s.type != Lisp::tCONS)
 	RC_error (1, "Item definition not a list?");
-    if (CAR(s).type != L_ATOM) {
+    if (CAR(s).type != Lisp::ATOM) {
 	RC_error (1, "Top-level item doesn't start with atom.");}
     else {
 	Sexpr fn = CAR(s);
@@ -1111,7 +1111,7 @@ void CompileTopLevelForm (Sexpr s, const char * fname) {
 	else if (fn == FORMS) {
 	    SPop (s);
 forms:
-	    while (s.type == L_CONS) {
+	    while (s.type == Lisp::tCONS) {
 		CompileTopLevelForm (CAR(s), fname);
 		SPop (s);
 	    }
@@ -1130,10 +1130,10 @@ forms:
 	else if (fn == COMMENT);
 	else if (fn == EVAL_WHEN) {
 	    SPop(s);
-	    if (s.type == L_CONS && CAR(s).type == L_CONS) {
+	    if (s.type == Lisp::tCONS && CAR(s).type == Lisp::tCONS) {
 		Sexpr sc = CAR(s);
 		SPop(s);
-		for (; sc.type == L_CONS; SPop(sc))
+		for (; sc.type == Lisp::tCONS; SPop(sc))
 		    if (CAR(sc) == LOAD)
 			goto forms;
 	    }
@@ -1309,6 +1309,7 @@ usage:
 	Ltabs = "\t\t\t";
 	RetOp = MOP_RET;
 	RelayBlockSize = 32;
+        printf("Output for 32-bit Windows environment.\n");
     }
     else {
 	Bits = 16;
@@ -1316,6 +1317,7 @@ usage:
 	Ltabs = "\t\t";
 	RetOp = MOP_RETF;
 	RelayBlockSize = 28;
+        printf("Output for 16-bit Windows environment. Good luck.\n");
     }
     FullWidth = Bits/8;
     Ahex = Bits/4;

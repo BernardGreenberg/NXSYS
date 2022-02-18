@@ -7,3 +7,5 @@ NXSYSWindows/NXSYS/.#NXSYS.vcxproj
 *.xcuserstate
 *.xref
 Documentation/.~lock.Interlocking Logic Design.odt#
+*.lst
+*.tko

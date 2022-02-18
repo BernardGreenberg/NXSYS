@@ -76,7 +76,7 @@ static int FasdAtsymLookup (Sexpr s) {
 
 void fasd_form (Sexpr s) {
     switch (s.type) {
-	case L_NUM:
+        case Lisp::NUM:
 	    if (s.u.n >= 0 && s.u.n < 256) {
 		fasd_putb (FASD_1BNUM);
 		fasd_putb ((short) (s.u.n));
@@ -87,7 +87,7 @@ void fasd_form (Sexpr s) {
 	    }
 	    else RC_error (1, "Long nums not fasdumped yet.");
 	    break;
-	case L_STRING:
+        case Lisp::STRING:
 	    fasd_putb (FASD_STRING);
 	    {
 		int i = (int)strlen (s.u.s);
@@ -96,26 +96,26 @@ void fasd_form (Sexpr s) {
 		    fasd_putb (s.u.s[j]);
 	    }
 	    break;
-	case L_RLYSYM:
+        case Lisp::RLYSYM:
 	    fasd_putb (FASD_RLYSYM);
 	    fasd_putw (RelayId(s));
 	    break;
-	case L_ATOM:
+        case Lisp::ATOM:
 	    fasd_putb (FASD_ATSYM);
 	    fasd_putw (FasdAtsymLookup (s));
 	    break;
-	case L_CONS:
+        case Lisp::tCONS:
 	    fasd_putb (FASD_LIST);
 	    fasd_putw (ListLen (s));
 	    for (;;s = CDR(s)) {
 		fasd_form (CAR(s));
-		if (CDR(s).type != L_CONS)
+		if (CDR(s).type != Lisp::tCONS)
 		    break;
 	    }
 	    if (!(CDR(s) == NIL))
 		RC_error (1, "Can't fasdump dotted pairs yet.");
 	    break;
-	case L_CHAR:
+        case Lisp::CHAR:
 	    fasd_putb (FASD_CHAR);
 	    fasd_putb (s.u.c);
 	    break;
