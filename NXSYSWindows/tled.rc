@@ -1,13 +1,6 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
-
-
-#ifdef DEBUG
-#define TLEDIT_BUILD "Debug build"
-#else
-#define TLEDIT_BUILD "Release build"
-#endif
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -23,13 +16,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -38,28 +29,31 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_NXICON              ICON    DISCARDABLE     "tle.ico"
+IDI_NXICON              ICON                    "tle.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
 
-IDB_MAIN_TOOLS          BITMAP  DISCARDABLE     "tled.bmp"
+IDB_MAIN_TOOLS          BITMAP                  "tled.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Cursor
 //
 
-IDCR_CROSSHAIR          CURSOR  DISCARDABLE     "croshair.cur"
+IDCR_CROSSHAIR          CURSOR                  "croshair.cur"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
 //
 
-IDM_MAIN_MENU MENU DISCARDABLE 
+IDM_MAIN_MENU MENU
 BEGIN
     POPUP "&File"
     BEGIN
@@ -98,7 +92,7 @@ END
 // Accelerator
 //
 
-IDA_TLEDIT ACCELERATORS MOVEABLE PURE 
+IDA_TLEDIT ACCELERATORS
 BEGIN
     "S",            IDM_SHIFT,              VIRTKEY, ALT, NOINVERT
     VK_F1,          CmHelp,                 VIRTKEY, NOINVERT
@@ -117,223 +111,176 @@ END
 // Dialog
 //
 
-IDD_ABOUT DIALOG DISCARDABLE  21, 49, 179, 128
-STYLE DS_MODALFRAME | WS_POPUP
-FONT 8, "System"
+IDD_ABOUT DIALOGEX 21, 49, 179, 128
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP
+FONT 8, "System", 0, 0, 0x0
 BEGIN
-    CTEXT           TLEDIT_BUILD,IDC_STATIC,12,30,154,8
+    CTEXT           "Release build",IDC_BUILD_TYPE,12,30,154,8
     DEFPUSHBUTTON   "OK",IDOK,145,108,24,14
-    LTEXT           "Executable of:",IDC_STATIC,30,42,58,8
-	CTEXT	        "Version 1.2 (MS Windows)",IDC_STATIC,10,57,160,8
-    CTEXT           "Copyright © 1997-2001, 2014, 2016, 2022",IDC_STATIC,
-                    7,72,160,8
-    CTEXT           "All Rights Reserved",IDC_STATIC,41,111,96,8
+    LTEXT           "Executable of:",IDC_STATIC,30,56,58,8
+    CTEXT           "Copyright © 1997-2001, 2014, 2016, 2022",IDC_STATIC,7,72,160,8
+    CTEXT           "GPL 3 License",IDC_STATIC,41,111,96,8
     ICON            "NXICON",IDC_STATIC,7,104,20,20
-    LTEXT           "27 June 12:24:02 1994",ABOUT_VSN,82,42,83,8
+    LTEXT           "27 June 12:24:02 1994",ABOUT_VSN,82,56,83,8
     CTEXT           "Bernard Greenberg",IDC_STATIC,15,83,149,8
-    CTEXT           "TLEdit",IDC_STATIC,66,5,46,8
-    CTEXT           "NXSYS Version 2 Track Layout Editor",IDC_STATIC,4,16,
-                    170,8
-    LTEXT           "Executable expires:",IDC_EXECUTABLE_EXPIRES,11,54,67,8
-    LTEXT           "27 June 12:24:02 1994",IDC_EXECUTABLE_EXPIRES_AT,82,54,
-                    83,8
+    CTEXT           "TLEdit for MS Windows",IDC_STATIC,51,5,77,8
+    CTEXT           "NXSYS Version 2 Track Layout Editor",IDC_STATIC,4,16,170,8
+    LTEXT           "Version 2.6.0",IDC_STATIC,66,44,44,8
 END
 
-IDD_TLEDIT_HELP DIALOG DISCARDABLE  100, 100, 329, 258
-STYLE DS_ABSALIGN | DS_MODALFRAME | DS_SETFOREGROUND | DS_3DLOOK | DS_CENTER | 
-    WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+IDD_TLEDIT_HELP DIALOG 100, 100, 329, 258
+STYLE DS_ABSALIGN | DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_3DLOOK | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 CAPTION "Track Layout Graphics Editor (TLEdit) Help"
 FONT 10, "System"
 BEGIN
-    EDITTEXT        IDC_TLEDIT_TEXT,7,7,315,224,ES_MULTILINE | 
-                    ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL
+    EDITTEXT        IDC_TLEDIT_TEXT,7,7,315,224,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL
     DEFPUSHBUTTON   "&OK",IDOK,128,235,73,14
 END
 
-IDD_SWITCH_ATTR DIALOG DISCARDABLE  0, 0, 301, 164
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_SWITCH_ATTR DIALOG 0, 0, 301, 164
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Switch Attributes -- edit or assign them"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,244,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,244,24,50,14
     PUSHBUTTON      "Help",IDC_HELP1,244,44,50,14
-    LTEXT           "Error:  the selected switch has no number!",
-                    IDC_SWITCH_WARN,7,7,197,8,NOT WS_VISIBLE
-    LTEXT           "Edit or assign attributes for the selected switch.  The switch must have a unique number before this plan can be saved in a file.",
-                    IDC_STATIC,7,30,215,24
+    LTEXT           "Error:  the selected switch has no number!",IDC_SWITCH_WARN,7,7,197,8,NOT WS_VISIBLE
+    LTEXT           "Edit or assign attributes for the selected switch.  The switch must have a unique number before this plan can be saved in a file.",IDC_STATIC,7,30,215,24
     LTEXT           "Switch &Number",IDC_STATIC,19,60,58,8
     EDITTEXT        IDC_SWITCH_EDIT,82,58,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    PUSHBUTTON      "He&uristicate Orientation",IDC_SWITCH_HEURISTICATE,7,97,
-                    128,14
-    PUSHBUTTON      "S&wap && highlight ""normal""",IDC_SWITCH_SWAP_NORMAL,7,
-                    118,128,14
+    PUSHBUTTON      "He&uristicate Orientation",IDC_SWITCH_HEURISTICATE,7,97,128,14
+    PUSHBUTTON      "S&wap && highlight ""normal""",IDC_SWITCH_SWAP_NORMAL,7,118,128,14
     PUSHBUTTON      "&Highlight normal",IDC_SWITCH_HILITE_NORMAL,7,139,81,14
-    GROUPBOX        "Which part of the switch is this?",IDC_STATIC,149,64,
-                    124,71
-    CONTROL         "&A",IDC_SWITCH_IS_A,"Button",BS_AUTORADIOBUTTON | 
-                    WS_GROUP | WS_TABSTOP,167,80,21,10
-    CONTROL         "&B",IDC_SWITCH_IS_B,"Button",BS_AUTORADIOBUTTON | 
-                    WS_TABSTOP,167,95,21,10
-    CONTROL         "&Singleton Switch",IDC_SWITCH_IS_SINGLETON,"Button",
-                    BS_AUTORADIOBUTTON | WS_TABSTOP,167,110,69,10
-    PUSHBUTTON      "Edit &Joint (position) >>>",
-                    IDC_SWITCH_EDIT_JOINT_ATTRIBUTES,168,142,104,14
+    GROUPBOX        "Which part of the switch is this?",IDC_STATIC,149,64,124,71
+    CONTROL         "&A",IDC_SWITCH_IS_A,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,167,80,21,10
+    CONTROL         "&B",IDC_SWITCH_IS_B,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,167,95,21,10
+    CONTROL         "&Singleton Switch",IDC_SWITCH_IS_SINGLETON,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,167,110,69,10
+    PUSHBUTTON      "Edit &Joint (position) >>>",IDC_SWITCH_EDIT_JOINT_ATTRIBUTES,168,142,104,14
 END
 
-IDD_SEG_ATTRIBUTES DIALOG DISCARDABLE  0, 0, 289, 144
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_SEG_ATTRIBUTES DIALOG 0, 0, 289, 144
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Track Segment Attributes - edit or assign them"
 FONT 8, "MS Sans Serif"
 BEGIN
     GROUPBOX        "Track Circuit",IDC_STATIC,161,64,124,52
-    EDITTEXT        IDC_EDIT_SEG_TC,225,78,51,14,ES_UPPERCASE | 
-                    ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SEG_TC,225,78,51,14,ES_UPPERCASE | ES_AUTOHSCROLL
     LTEXT           "Relay &ID",IDC_STATIC,170,80,49,10
-    CONTROL         "&Wildfire spread by contact",IDC_EDIT_SEG_SPREAD,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,169,101,107,10
-    PUSHBUTTON      "&Show Track Circuit",IDC_EDIT_SEG_SHOW_TC,177,124,85,14,
-                    BS_NOTIFY
+    CONTROL         "&Wildfire spread by contact",IDC_EDIT_SEG_SPREAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,169,101,107,10
+    PUSHBUTTON      "&Show Track Circuit",IDC_EDIT_SEG_SHOW_TC,177,124,85,14,BS_NOTIFY
     DEFPUSHBUTTON   "OK",IDOK,232,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,232,24,50,14
     PUSHBUTTON      "&Help",IDC_HELP1,232,41,50,14
-    LTEXT           "Edit or assign attributes for the selected track segment",
-                    IDC_STATIC,7,15,200,12
-    GROUPBOX        "Not operative yet stuf",IDC_STATIC,7,38,147,88,NOT 
-                    WS_VISIBLE
+    LTEXT           "Edit or assign attributes for the selected track segment",IDC_STATIC,7,15,200,12
+    GROUPBOX        "Not operative yet stuf",IDC_STATIC,7,38,147,88,NOT WS_VISIBLE
     CONTROL         "Counts for track distance",IDC_EDIT_SEG_COUNTS_DISTANCE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,
-                    15,56,112,10
+                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,56,112,10
     CONTROL         "Shows route and occupancy  lights",IDC_EDIT_SEG_LIGHTS,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,
-                    15,74,131,10
+                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,74,131,10
     CONTROL         "Visible at all (not a ""zig"")",IDC_EDIT_SEG_VISIBLE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,
-                    15,91,92,10
+                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,91,92,10
     CONTROL         "Auto Subdivide between siblings",IDC_EDIT_SEG_SUBDIVIDE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,
-                    15,108,118,10
+                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,108,118,10
 END
 
-IDD_JOINT DIALOG DISCARDABLE  0, 0, 183, 222
-STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_JOINT DIALOG 0, 0, 183, 222
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Joint Attributes - set or edit"
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "&Station #ID (integer)",IDC_STATIC,15,65,73,8
-    EDITTEXT        IDC_JOINT_STATION_ID,100,63,67,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
-    CONTROL         "&Insulated",IDC_JOINT_INSULATED,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,16,28,100,10
+    EDITTEXT        IDC_JOINT_STATION_ID,100,63,67,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "&Insulated",IDC_JOINT_INSULATED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,28,100,10
     LTEXT           "Whole Panel &X coordinate",IDC_STATIC,18,94,84,8
     EDITTEXT        IDC_JOINT_WPX,111,91,40,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_JOINT_WPY,111,111,40,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "Whole Panel &Y coordinate",IDC_STATIC,18,112,84,8
     GROUPBOX        "Position on model board",IDC_STATIC,13,82,156,50
-    GROUPBOX        "Real-world position in 100's of feet",IDC_STATIC,14,141,
-                    156,68
+    GROUPBOX        "Real-world position in 100's of feet",IDC_STATIC,14,141,156,68
     LTEXT           "Exact Station Position (xxx.yy)",IDC_STATIC,20,155,90,8
-    EDITTEXT        IDC_JOINT_RWX,115,154,49,14,ES_AUTOHSCROLL | ES_NUMBER | 
-                    WS_DISABLED
-    EDITTEXT        IDC_JOINT_RWY,115,174,49,14,ES_AUTOHSCROLL | ES_NUMBER | 
-                    WS_DISABLED
+    EDITTEXT        IDC_JOINT_RWX,115,154,49,14,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
+    EDITTEXT        IDC_JOINT_RWY,115,174,49,14,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
     LTEXT           "Cross-track position",IDC_STATIC,20,176,87,8
     LTEXT           "Elevation (signed)",IDC_STATIC,20,197,88,8
-    EDITTEXT        IDC_JOINT_ELEVATION,115,193,49,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER | WS_DISABLED
+    EDITTEXT        IDC_JOINT_ELEVATION,115,193,49,14,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
     DEFPUSHBUTTON   "OK",IDOK,126,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,126,24,50,14
     PUSHBUTTON      "&Help",IDC_HELP1,126,41,50,14
 END
 
-IDD_SCALE DIALOG DISCARDABLE  0, 0, 207, 107
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_SCALE DIALOG 0, 0, 207, 107
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Scale Screen Display"
 FONT 8, "MS Sans Serif"
 BEGIN
-    LTEXT           "Please enter display scale, floating point (e.g. 1.234) is acceptable.",
-                    IDC_STATIC,34,18,101,27
+    LTEXT           "Please enter display scale, floating point (e.g. 1.234) is acceptable.",IDC_STATIC,34,18,101,27
     EDITTEXT        IDC_SCALE_EDIT,34,55,51,14,ES_AUTOHSCROLL
-    LTEXT           "Current screen display pixels per pixel of layout virtual screen",
-                    IDC_STATIC,92,51,100,27
+    LTEXT           "Current screen display pixels per pixel of layout virtual screen",IDC_STATIC,92,51,100,27
     PUSHBUTTON      ".5",IDC_SCALE_P5,6,7,19,14
     PUSHBUTTON      ".7",IDC_SCALE_P7,6,32,19,14
     PUSHBUTTON      ".8",IDC_SCALE_P8,6,57,19,14
     PUSHBUTTON      "1",IDC_SCALE_1,6,82,19,14
-    CTEXT           "Current virtual screen origin will be maintained",
-                    IDC_STATIC,34,92,163,8
+    CTEXT           "Current virtual screen origin will be maintained",IDC_STATIC,34,92,163,8
     DEFPUSHBUTTON   "OK",IDOK,146,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,146,24,50,14
 END
 
-IDD_EDIT_SIGNAL DIALOG DISCARDABLE  0, 0, 231, 185
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_EDIT_SIGNAL DIALOG 0, 0, 231, 185
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Edit Signal Properties"
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "Signal at IJ 10101",IDC_EDIT_SIG_IJID,7,7,143,8
-    LTEXT           "Orientation 0.0 degrees",IDC_EDIT_SIG_ORIENTATION,7,23,
-                    135,8
+    LTEXT           "Orientation 0.0 degrees",IDC_EDIT_SIG_ORIENTATION,7,23,135,8
     LTEXT           "&Lever number (or 0)",IDC_STATIC,18,49,62,8
-    EDITTEXT        IDC_EDIT_SIG_LEVER,89,46,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_EDIT_SIG_LEVER,89,46,40,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "&Track ID",IDC_STATIC,18,73,56,8
     EDITTEXT        IDC_EDIT_SIG_TRACK_ID,89,71,40,14,ES_AUTOHSCROLL
     LTEXT           "Station &Number",IDC_STATIC,18,98,60,8
-    EDITTEXT        IDC_EDIT_SIG_STATION_NO,89,94,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
-    LTEXT           "ST &Veloc. display",IDC_STATIC,18,121,65,8,NOT 
-                    WS_VISIBLE
-    EDITTEXT        IDC_EDIT_SIG_ST_NO,89,118,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER | NOT WS_VISIBLE
+    EDITTEXT        IDC_EDIT_SIG_STATION_NO,89,94,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "ST &Veloc. display",IDC_STATIC,18,121,65,8,NOT WS_VISIBLE
+    EDITTEXT        IDC_EDIT_SIG_ST_NO,89,118,40,14,ES_AUTOHSCROLL | ES_NUMBER | NOT WS_VISIBLE
     LTEXT           "&Heads/Lenses",IDC_STATIC,7,144,57,8
     EDITTEXT        IDC_EDIT_SIG_HEADS,74,142,140,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "Edit &Joint (position) >>>",IDC_EDIT_SIGNAL_JOINT,100,
-                    164,94,14
+    PUSHBUTTON      "Edit &Joint (position) >>>",IDC_EDIT_SIGNAL_JOINT,100,164,94,14
     DEFPUSHBUTTON   "OK",IDOK,174,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,174,24,50,14
     PUSHBUTTON      "&Help",9,174,44,50,14
-    CONTROL         "Has Sto&p",IDC_EDIT_SIG_STOP,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,170,79,54,10
-    CONTROL         "&ST",IDC_EDIT_SIG_ST,"Button",BS_AUTOCHECKBOX | NOT 
-                    WS_VISIBLE | WS_TABSTOP,170,95,54,10
-    CONTROL         "&GT",IDC_EDIT_SIG_GT,"Button",BS_AUTOCHECKBOX | NOT 
-                    WS_VISIBLE | WS_TABSTOP,170,111,54,10
+    CONTROL         "Has Sto&p",IDC_EDIT_SIG_STOP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,170,79,54,10
+    CONTROL         "&ST",IDC_EDIT_SIG_ST,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,170,95,54,10
+    CONTROL         "&GT",IDC_EDIT_SIG_GT,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,170,111,54,10
 END
 
-IDD_EDIT_EXLIGHT DIALOG DISCARDABLE  0, 0, 183, 92
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_EDIT_EXLIGHT DIALOG 0, 0, 183, 92
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Edit Entrance/Exit light"
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           """&Lever"" number",IDC_STATIC,21,52,51,8
-    EDITTEXT        IDC_EDIT_XLIGHT_XLNO,86,50,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_EDIT_XLIGHT_XLNO,86,50,40,14,ES_AUTOHSCROLL | ES_NUMBER
     DEFPUSHBUTTON   "OK",IDOK,126,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,126,24,50,14
     LTEXT           "Exit Light at IJ 30003",IDC_EDIT_XLIGHT_IJNO,7,9,87,8
     LTEXT           "Orientation: B",IDC_EDIT_XLIGHT_ORIENT,7,26,76,8
 END
 
-IDD_SHIFT DIALOG DISCARDABLE  0, 0, 183, 92
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_SHIFT DIALOG 0, 0, 183, 92
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Shift entire layout"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,126,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,126,24,50,14
     EDITTEXT        IDC_SHIFT_X,136,44,40,14,ES_AUTOHSCROLL
-    LTEXT           """Whole panel"" pixels &X (signed)",IDC_STATIC,7,47,114,
-                    8
-    LTEXT           """Whole panel"" pixels &Y (down) (signed)",IDC_STATIC,7,
-                    68,127,8
+    LTEXT           """Whole panel"" pixels &X (signed)",IDC_STATIC,7,47,114,8
+    LTEXT           """Whole panel"" pixels &Y (down) (signed)",IDC_STATIC,7,68,127,8
     EDITTEXT        IDC_SHIFT_Y,136,64,40,14,ES_AUTOHSCROLL
-    LTEXT           "Enter amount of ""whole panel"" virtual pixels to shift all extant joints, loose objects, and objects keyed off them.",
-                    IDC_STATIC,7,7,109,34
+    LTEXT           "Enter amount of ""whole panel"" virtual pixels to shift all extant joints, loose objects, and objects keyed off them.",IDC_STATIC,7,7,109,34
 END
 
-IDD_SWKEY DIALOG DISCARDABLE  0, 0, 183, 136
-STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_SWKEY DIALOG 0, 0, 183, 136
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Auxiliary Switch Key Attributes"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -349,121 +296,85 @@ BEGIN
     PUSHBUTTON      "&Help",IDC_HELP1,126,41,50,14
 END
 
-IDD_EDIT_TEXT DIALOG DISCARDABLE  0, 0, 288, 206
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_EDIT_TEXT DIALOG 0, 0, 288, 206
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Edit Text String Properties"
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "&Text",IDC_STATIC,14,10,25,12
     EDITTEXT        IDC_TEXT_TEXT,38,7,243,18,ES_AUTOHSCROLL
     GROUPBOX        "&Face",IDC_STATIC,7,28,138,57
-    CONTROL         "Default",IDC_ETEXT_FACE_DEFAULT,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,21,42,39,10
-    CONTROL         "Custom",IDC_ETEXT_FACE_CUSTOM,"Button",
-                    BS_AUTORADIOBUTTON,21,56,39,10
-    PUSHBUTTON      "Select Custom Face",IDC_ETEXT_FACE_SELECT,63,46,74,14,
-                    WS_GROUP
+    CONTROL         "Default",IDC_ETEXT_FACE_DEFAULT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,21,42,39,10
+    CONTROL         "Custom",IDC_ETEXT_FACE_CUSTOM,"Button",BS_AUTORADIOBUTTON,21,56,39,10
+    PUSHBUTTON      "Select Custom Face",IDC_ETEXT_FACE_SELECT,63,46,74,14,WS_GROUP
     LTEXT           "Frobacher Fraktur",IDC_ETEXT_FACE_SELECTION,24,72,113,8
     GROUPBOX        "&Height",IDC_STATIC,7,88,125,40
-    CONTROL         "Default",IDC_ETEXT_HEIGHT_DEFAULT,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,21,98,39,10
-    CONTROL         "Custom",IDC_ETEXT_HEIGHT_CUSTOM,"Button",
-                    BS_AUTORADIOBUTTON,21,112,39,10
-    EDITTEXT        IDC_ETEXT_HEIGHT_EDIT,70,102,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER | WS_GROUP
-    CONTROL         "Spin2",IDC_ETEXT_HEIGHT_SPIN,"msctls_updown32",
-                    UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,111,102,
-                    10,14
+    CONTROL         "Default",IDC_ETEXT_HEIGHT_DEFAULT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,21,98,39,10
+    CONTROL         "Custom",IDC_ETEXT_HEIGHT_CUSTOM,"Button",BS_AUTORADIOBUTTON,21,112,39,10
+    EDITTEXT        IDC_ETEXT_HEIGHT_EDIT,70,102,40,14,ES_AUTOHSCROLL | ES_NUMBER | WS_GROUP
+    CONTROL         "Spin2",IDC_ETEXT_HEIGHT_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,111,102,10,14
     GROUPBOX        "Character &width",IDC_STATIC,139,88,133,40
-    CONTROL         "Default",IDC_ETEXT_WIDTH_DEFAULT,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,148,99,39,10
-    CONTROL         "Custom",IDC_ETEXT_WIDTH_CUSTOM,"Button",
-                    BS_AUTORADIOBUTTON,148,112,39,10
-    EDITTEXT        IDC_ETEXT_WIDTH_EDIT,200,103,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER | WS_GROUP
-    CONTROL         "Spin1",IDC_ETEXT_WIDTH_SPIN,"msctls_updown32",
-                    UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,241,103,
-                    10,14
+    CONTROL         "Default",IDC_ETEXT_WIDTH_DEFAULT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,148,99,39,10
+    CONTROL         "Custom",IDC_ETEXT_WIDTH_CUSTOM,"Button",BS_AUTORADIOBUTTON,148,112,39,10
+    EDITTEXT        IDC_ETEXT_WIDTH_EDIT,200,103,40,14,ES_AUTOHSCROLL | ES_NUMBER | WS_GROUP
+    CONTROL         "Spin1",IDC_ETEXT_WIDTH_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,241,103,10,14
     GROUPBOX        "Font Wei&ght",IDC_STATIC,7,135,126,64
-    CONTROL         "Default",IDC_ETEXT_WEIGHT_DEFAULT,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,21,145,39,10
-    CONTROL         "&Normal",IDC_ETEXT_WEIGHT_NORMAL,"Button",
-                    BS_AUTORADIOBUTTON,21,158,38,10
-    CONTROL         "&Bold",IDC_ETEXT_WEIGHT_BOLD,"Button",
-                    BS_AUTORADIOBUTTON,21,170,30,10
-    CONTROL         "Custom",IDC_ETEXT_WEIGHT_CUSTOM,"Button",
-                    BS_AUTORADIOBUTTON,21,183,39,10
-    EDITTEXT        IDC_ETEXT_WEIGHT_EDIT,70,153,37,12,ES_AUTOHSCROLL | 
-                    ES_NUMBER | WS_GROUP
-    CONTROL         "Spin3",IDC_ETEXT_WEIGHT_SPIN,"msctls_updown32",
-                    UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,109,153,
-                    10,14
-    CONTROL         "&Italic",IDC_ITALIC,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,70,179,31,10
+    CONTROL         "Default",IDC_ETEXT_WEIGHT_DEFAULT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,21,145,39,10
+    CONTROL         "&Normal",IDC_ETEXT_WEIGHT_NORMAL,"Button",BS_AUTORADIOBUTTON,21,158,38,10
+    CONTROL         "&Bold",IDC_ETEXT_WEIGHT_BOLD,"Button",BS_AUTORADIOBUTTON,21,170,30,10
+    CONTROL         "Custom",IDC_ETEXT_WEIGHT_CUSTOM,"Button",BS_AUTORADIOBUTTON,21,183,39,10
+    EDITTEXT        IDC_ETEXT_WEIGHT_EDIT,70,153,37,12,ES_AUTOHSCROLL | ES_NUMBER | WS_GROUP
+    CONTROL         "Spin3",IDC_ETEXT_WEIGHT_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,109,153,10,14
+    CONTROL         "&Italic",IDC_ITALIC,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,70,179,31,10
     GROUPBOX        "&Color",IDC_STATIC,140,135,132,43
-    CONTROL         "Default",IDC_ETEXT_COLOR_DEFAULT,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,148,147,39,10
-    CONTROL         "Custom",IDC_ETEXT_COLOR_CUSTOM,"Button",
-                    BS_AUTORADIOBUTTON,148,161,39,10
-    PUSHBUTTON      "Select Color",IDC_ETEXT_COLOR_SELECT,205,145,50,26,
-                    WS_GROUP
+    CONTROL         "Default",IDC_ETEXT_COLOR_DEFAULT,"Button",BS_AUTORADIOBUTTON | WS_GROUP,148,147,39,10
+    CONTROL         "Custom",IDC_ETEXT_COLOR_CUSTOM,"Button",BS_AUTORADIOBUTTON,148,161,39,10
+    PUSHBUTTON      "Select Color",IDC_ETEXT_COLOR_SELECT,205,145,50,26,WS_GROUP
     DEFPUSHBUTTON   "OK",IDOK,157,185,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,231,185,50,14
-    CONTROL         "TEXT Sample",IDC_ETEXT_SAMPLE,"TLEdit:TextSample",0x0,
-                    153,42,120,41
-    LTEXT           "Sample text: click to redisplay",IDC_STATIC,153,31,119,
-                    8
+    CONTROL         "TEXT Sample",IDC_ETEXT_SAMPLE,"TLEdit:TextSample",0x0,153,42,120,41
+    LTEXT           "Sample text: click to redisplay",IDC_STATIC,153,31,119,8
 END
 
-IDD_TRAFFICLEVER DIALOG DISCARDABLE  0, 0, 183, 170
-STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_TRAFFICLEVER DIALOG 0, 0, 183, 170
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Traffic lever attributes"
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "&Lever number:",IDC_STATIC,13,20,73,8
-    EDITTEXT        IDC_TRAFFICLEVER_LEVER,13,36,67,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_TRAFFICLEVER_LEVER,13,36,67,14,ES_AUTOHSCROLL | ES_NUMBER
     GROUPBOX        "Normal traffic is to the",IDC_STATIC,13,63,106,27
-    CONTROL         "&Left",IDC_TRAFFICLEVER_LEFT,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,25,74,28,10
-    CONTROL         "&Right",IDC_TRAFFICLEVER_RIGHT,"Button",
-                    BS_AUTORADIOBUTTON,68,74,33,10
+    CONTROL         "&Left",IDC_TRAFFICLEVER_LEFT,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,25,74,28,10
+    CONTROL         "&Right",IDC_TRAFFICLEVER_RIGHT,"Button",BS_AUTORADIOBUTTON,68,74,33,10
     GROUPBOX        "Position on model board",IDC_STATIC,13,102,156,59
     LTEXT           "Whole Panel &X coordinate",IDC_STATIC,20,119,84,8
     EDITTEXT        IDC_TRAFFICLEVER_WPX,111,116,40,14,ES_AUTOHSCROLL
     LTEXT           "Whole Panel &Y coordinate",IDC_STATIC,20,140,84,8
-    EDITTEXT        IDC_TRAFFICLEVER_WPY,111,138,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_TRAFFICLEVER_WPY,111,138,40,14,ES_AUTOHSCROLL | ES_NUMBER
     DEFPUSHBUTTON   "OK",IDOK,126,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,126,24,50,14
     PUSHBUTTON      "&Help",IDC_HELP1,126,41,50,14
 END
 
-IDD_PANELLIGHT DIALOG DISCARDABLE  0, 0, 273, 170
-STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_PANELLIGHT DIALOG 0, 0, 273, 170
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Panel Light Attributes"
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "&Lever number:",IDC_STATIC,13,20,59,8
-    EDITTEXT        IDC_PANELLIGHT_LEVER,92,19,67,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_PANELLIGHT_LEVER,92,19,67,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "Ra&dius, design pixels",IDC_STATIC,13,51,67,8
-    EDITTEXT        IDC_PANELLIGHT_RADIUS,91,49,68,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_PANELLIGHT_RADIUS,91,49,68,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "Key &String",IDC_STATIC,13,80,33,8
     EDITTEXT        IDC_PANELLIGHT_STRING,63,78,96,14,ES_AUTOHSCROLL
-    GROUPBOX        "&Position on model board",IDC_STATIC,13,102,156,59,
-                    WS_TABSTOP
+    GROUPBOX        "&Position on model board",IDC_STATIC,13,102,156,59,WS_TABSTOP
     LTEXT           "Whole Panel &X coordinate",IDC_STATIC,20,119,84,8
-    EDITTEXT        IDC_PANELLIGHT_WPX,111,116,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER | WS_GROUP
+    EDITTEXT        IDC_PANELLIGHT_WPX,111,116,40,14,ES_AUTOHSCROLL | ES_NUMBER | WS_GROUP
     LTEXT           "Whole Panel &Y coordinate",IDC_STATIC,20,140,84,8
-    EDITTEXT        IDC_PANELLIGHT_WPY,111,138,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_PANELLIGHT_WPY,111,138,40,14,ES_AUTOHSCROLL | ES_NUMBER
     GROUPBOX        "Relay &Nomeclatures",IDC_STATIC,178,65,91,96
     LTEXT           "&Red",IDC_STATIC,184,81,14,8
-    EDITTEXT        IDC_PANELLIGHT_RED,208,79,54,14,ES_AUTOHSCROLL | 
-                    WS_GROUP
+    EDITTEXT        IDC_PANELLIGHT_RED,208,79,54,14,ES_AUTOHSCROLL | WS_GROUP
     LTEXT           "&Yellow",IDC_STATIC,184,102,22,8
     EDITTEXT        IDC_PANELLIGHT_YELLOW,208,99,54,14,ES_AUTOHSCROLL
     LTEXT           "&Green",IDC_STATIC,184,121,20,8
@@ -475,25 +386,22 @@ BEGIN
     PUSHBUTTON      "&Help",IDC_HELP1,218,41,50,14
 END
 
-IDD_PANELSWITCH DIALOG DISCARDABLE  0, 0, 183, 170
-STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_PANELSWITCH DIALOG 0, 0, 183, 170
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Panel Switch Attributes"
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "&Lever number:",IDC_STATIC,13,26,51,8
-    EDITTEXT        IDC_PANELSWITCH_LEVER,67,23,46,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_PANELSWITCH_LEVER,67,23,46,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "Key &String",IDC_STATIC,13,64,33,8
     EDITTEXT        IDC_PANELSWITCH_STRING,54,62,105,14,ES_AUTOHSCROLL
     LTEXT           "Relay &Nomenclature",IDC_STATIC,13,86,65,8
     EDITTEXT        IDC_PANELSWITCH_NOMENCLATURE,95,84,63,14,ES_AUTOHSCROLL
     GROUPBOX        "Position on model board",IDC_STATIC,13,102,156,59
     LTEXT           "Whole Panel &X coordinate",IDC_STATIC,20,119,84,8
-    EDITTEXT        IDC_PANELSWITCH_WPX,111,116,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_PANELSWITCH_WPX,111,116,40,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "Whole Panel &Y coordinate",IDC_STATIC,20,140,84,8
-    EDITTEXT        IDC_PANELSWITCH_WPY,111,138,40,14,ES_AUTOHSCROLL | 
-                    ES_NUMBER
+    EDITTEXT        IDC_PANELSWITCH_WPY,111,138,40,14,ES_AUTOHSCROLL | ES_NUMBER
     DEFPUSHBUTTON   "OK",IDOK,126,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,126,24,50,14
     PUSHBUTTON      "&Help",IDC_HELP1,126,41,50,14
@@ -506,12 +414,12 @@ END
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
     "#include ""windows.h""\r\n"
@@ -520,7 +428,7 @@ BEGIN
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
@@ -535,8 +443,12 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO
 BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+    END
+
     IDD_EDIT_EXLIGHT, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -569,13 +481,13 @@ END
 // String Table
 //
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE
 BEGIN
     IDS_BASIS_ADDRESS       " "
     IDS_EVAL_WARNING        "========================================\r\nThis copy of the track layout editor is licensed for evaluation only.\r\nIt will cease operating on %ExpireTime;\r\n========================================\r\n\r\n"
 END
 
-#endif    // English (U.S.) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

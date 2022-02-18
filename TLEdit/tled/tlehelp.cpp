@@ -6,11 +6,24 @@
 #include <nxproduct.h>
 #include "resource.h"
 #include <string>
-#include <WinReadResText.h>
+#include "WinReadResText.h"
 #include "TlDlgProc.h"
 
 COLORREF HelpColor = RGB(0, 228, 228);
 HBRUSH HelpBrush = NULL;
+
+static const char* BuildType =
+#ifdef _DEBUG
+"Debug"
+#else
+"Release"
+#endif
+#ifdef _WIN64
+" (64-bit)"
+#else
+" (32-bit)"
+#endif
+" build";
 
 static WNDPROC wpOrigEditProc;
 static WNDPROC wpOrigDlgWndProc;
@@ -38,14 +51,6 @@ InterpretDocCmd(const char * p, int len, std::string& B) {
 			B.append(p, 0, len);
 		return;
 	}
-	strncpy(cmd, p, len)[len] = '\0';
-	if (!stricmp(cmd, "BasisTechAddr"))
-		ResourceScat(IDS_BASIS_ADDRESS, B);
-	else if (!stricmp(cmd, "EvalWarning")) {
-#ifdef EVALUATION_EDITION
-		ResourceScat(IDS_EVAL_WARNING, B);
-#endif
-	}
 #if 0
 	else if (!stricmp(cmd, "Version"))
 		B.scat(RJ_Version);
@@ -53,15 +58,10 @@ InterpretDocCmd(const char * p, int len, std::string& B) {
 		B.scat(EncryptionErrorMessage);
 
 #endif
-	else if (!stricmp(cmd, "PNAME"))
+    if (!stricmp(cmd, "PNAME"))
 		B += PRODUCT_NAME;
 	else if (!stricmp(cmd, "ExpireTime")) {
 		b;
-#ifdef EVALUATION_EDITION
-		strftime(b, sizeof(b), "%#m/%#d/%y at %H:%M",
-			localtime(&RTExpireTime));
-		B += b;
-#endif
 	}
 	else
 		goto fail;
@@ -191,8 +191,7 @@ AboutDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 		time_t modtime = GetModuleTime(app_instance);
 		strftime(atime, sizeof(atime), DATE_FORMAT, localtime(&modtime));
 		SetDlgItemText(dialog, ABOUT_VSN, atime);
-		ShowWindow(GetDlgItem(dialog, IDC_EXECUTABLE_EXPIRES), SW_HIDE);
-		ShowWindow(GetDlgItem(dialog, IDC_EXECUTABLE_EXPIRES_AT), SW_HIDE);
+		SetDlgItemText(dialog, IDC_BUILD_TYPE, BuildType);
 		return TRUE;
 	}
 	case WM_COMMAND:

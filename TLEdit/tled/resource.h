@@ -118,6 +118,7 @@
 #define IDC_PANELSWITCH_LEVER           1067
 #define IDC_PANELSWITCH_WPX             1068
 #define IDC_PANELSWITCH_WPY             1069
+#define IDC_BUILD_TYPE                  1070
 #define IDD_SWKEY                       2007
 #define IDD_TRAFFICLEVER                2008
 #define IDD_PANELLIGHT                  2009
