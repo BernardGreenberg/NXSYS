@@ -2,19 +2,30 @@
 #include <string>
 #include <stdlib.h>
 #include <windows.h>
-#include <incexppt.h>
-#include <WinReadResText.h>
+#include "incexppt.h"
+#include "WinReadResText.h"
 
+using std::string, std::vector;
 
-bool WinReadResText(const char * path, std::string& result) {
-	std::vector<char> mpath(1024);
-	std::string expanded_path;
-	GetModuleFileName(NULL, &mpath[0], mpath.size());
-	include_expand_path(&mpath[0], path, expanded_path);
-	FILE* f = fopen(expanded_path.c_str(), "r");
+string GMFN() {
+	vector<char> mpath(1024);
+	string expanded_path;
+	GetModuleFileName(NULL, &mpath[0], (DWORD)mpath.size());
+	return string(mpath.data());
+}
+
+bool WinBrowseResource(const char* ename) {
+	string path = STLincexppath(GMFN(), ename);
+	ShellExecute(NULL, "open", path.c_str(), NULL, NULL, SW_SHOW);
+	return true;
+}
+
+bool WinReadResText(const char * ename, std::string& result) {
+
+	auto path = STLincexppath(GMFN(), ename);
+	FILE* f = fopen(path.c_str(), "r");
 	if (!f) {
-		std::string error("Can't open text resource: ");
-		error += expanded_path;
+		string error{ "Can't open text resource: " + path };
 		MessageBox(NULL, error.c_str(), "NXSYS", MB_ICONWARNING);
 		return false;
 	}

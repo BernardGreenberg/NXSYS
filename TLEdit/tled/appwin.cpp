@@ -1,21 +1,21 @@
 #include "windows.h"
-#ifndef NXSYSMac
-#include <commdlg.h>
-#include <commctrl.h>
-#endif
 #include <string.h>
 #include <stdio.h>
-#ifndef NXSYSMac
-//#include <syserr32.h>
+
+#ifdef WIN32
+#include <commdlg.h>
+#include <commctrl.h>
 #include <stdarg.h>
-#include <parsargs.h>
+#include "parsargs.h"
+#include "WinReadResText.h"
 #endif
+
 #include "compat32.h"
 #include "nxgo.h"
 #include "brushpen.h"
 #include "tletoolb.h"
 #include "tlecmds.h"
-#ifndef NXSYSMac
+#ifdef WIN32
 #include "rubberbd.h"
 #endif
 #include "xtgtrack.h"
@@ -327,7 +327,9 @@ void AppCommand(UINT command) {
 
 #ifndef NXSYSMac  // hic non est auxilium
 	case CmHelp:
-		DoHelpDialog();
+	//	DoHelpDialog(); //no HAY ayudo aquí -- Español mejor que la latina aquí...
+		WinBrowseResource("TLEdit.html");
+
 		break;
 
 	case CmAbout:
@@ -503,7 +505,7 @@ void GraphicsMouse(HWND window, unsigned message, WPARAM wParam, LPARAM lParam) 
 		(window, MouseLastX, MouseLastY, message, wParam);
 	else
 		GraphicsWindow_Rodentate		/* von WinRJ */
-		(window, MouseLastX, MouseLastY, message, wParam);
+		(window, MouseLastX, MouseLastY, message, (WORD)wParam);
 }
 
 #ifndef NXSYSMac
@@ -572,7 +574,7 @@ static long WindowsMessageLoop(HWND window, HACCEL hAccel) {
 		if (BufferModified != was_mod)
 			EnableCommand(CmSave, BufferModified);
 	}
-	return message.wParam;
+	return (long)message.wParam;
 }
 #endif
 
