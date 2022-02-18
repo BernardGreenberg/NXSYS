@@ -16,7 +16,7 @@
 #include "resource.h"
 #include "MessageBox.h"
 #include "ShiftLayoutDialog.h"
-
+#include "HelpController.h"
 
 void AppCommand(unsigned int);
 void InitTLEditApp(int w, int h);
@@ -263,7 +263,7 @@ TLEditAppDelegate* getTLEDelegate() {
 
 - (IBAction)Help:(id)sender {
     [self ensureHelp];
-    [_helpController TextHelp:@"tlehlptx"];
+    [_helpController HTMLHelp:@"TLEdit" tag:nil];
 }
 - (IBAction)MacHelp:(id)sender
 {

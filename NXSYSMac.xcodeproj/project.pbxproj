@@ -48,35 +48,6 @@
 		5B54275427BDA2B4006EEDEF /* RelayIndex.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B54275227BD9EAF006EEDEF /* RelayIndex.html */; };
 		5B54275727BDCFF0006EEDEF /* Interlocking Logic Design.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 5B54275527BDCFF0006EEDEF /* Interlocking Logic Design.pdf */; };
 		5B54275A27BEECB6006EEDEF /* RelayLanguage.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B54275927BEECB6006EEDEF /* RelayLanguage.html */; };
-		5B5427DF27BF0C76006EEDEF /* Plights.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C127BF0C76006EEDEF /* Plights.pxm */; };
-		5B5427E027BF0C76006EEDEF /* insulate.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C227BF0C76006EEDEF /* insulate.pxm */; };
-		5B5427E127BF0C76006EEDEF /* flipno.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C327BF0C76006EEDEF /* flipno.png */; };
-		5B5427E227BF0C76006EEDEF /* SignalSW.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C427BF0C76006EEDEF /* SignalSW.pxm */; };
-		5B5427E327BF0C76006EEDEF /* auxkey.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C527BF0C76006EEDEF /* auxkey.png */; };
-		5B5427E427BF0C76006EEDEF /* Pswitch.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C627BF0C76006EEDEF /* Pswitch.pxm */; };
-		5B5427E527BF0C76006EEDEF /* SignalNE.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C727BF0C76006EEDEF /* SignalNE.png */; };
-		5B5427E627BF0C76006EEDEF /* showex.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C827BF0C76006EEDEF /* showex.pxm */; };
-		5B5427E727BF0C76006EEDEF /* joints.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427C927BF0C76006EEDEF /* joints.png */; };
-		5B5427E827BF0C76006EEDEF /* crxl.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427CA27BF0C76006EEDEF /* crxl.png */; };
-		5B5427E927BF0C76006EEDEF /* traffic.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427CB27BF0C76006EEDEF /* traffic.pxm */; };
-		5B5427EA27BF0C76006EEDEF /* document_properties.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427CC27BF0C76006EEDEF /* document_properties.pxm */; };
-		5B5427EB27BF0C76006EEDEF /* SignalNE.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427CD27BF0C76006EEDEF /* SignalNE.pxm */; };
-		5B5427EC27BF0C76006EEDEF /* showex.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427CE27BF0C76006EEDEF /* showex.png */; };
-		5B5427ED27BF0C76006EEDEF /* joints.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427CF27BF0C76006EEDEF /* joints.pxm */; };
-		5B5427EE27BF0C76006EEDEF /* crxl.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D027BF0C76006EEDEF /* crxl.pxm */; };
-		5B5427EF27BF0C76006EEDEF /* traffic.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D127BF0C76006EEDEF /* traffic.png */; };
-		5B5427F027BF0C76006EEDEF /* document_properties.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D227BF0C76006EEDEF /* document_properties.png */; };
-		5B5427F127BF0C76006EEDEF /* Plights.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D327BF0C76006EEDEF /* Plights.png */; };
-		5B5427F227BF0C76006EEDEF /* insulate.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D427BF0C76006EEDEF /* insulate.png */; };
-		5B5427F327BF0C76006EEDEF /* Cut-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D527BF0C76006EEDEF /* Cut-icon.png */; };
-		5B5427F427BF0C76006EEDEF /* flipno.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D627BF0C76006EEDEF /* flipno.pxm */; };
-		5B5427F527BF0C76006EEDEF /* SignalSW.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D727BF0C76006EEDEF /* SignalSW.png */; };
-		5B5427F627BF0C76006EEDEF /* auxkey.pxm in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D827BF0C76006EEDEF /* auxkey.pxm */; };
-		5B5427F727BF0C76006EEDEF /* Pswitch.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427D927BF0C76006EEDEF /* Pswitch.png */; };
-		5B5427F827BF0C76006EEDEF /* dialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5427DA27BF0C76006EEDEF /* dialogs.cpp */; };
-		5B5427F927BF0C76006EEDEF /* rubberbd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5427DB27BF0C76006EEDEF /* rubberbd.cpp */; };
-		5B5427FA27BF0C76006EEDEF /* tletoolb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5427DD27BF0C76006EEDEF /* tletoolb.cpp */; };
-		5B5427FB27BF0C76006EEDEF /* tlehelp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5427DE27BF0C76006EEDEF /* tlehelp.cpp */; };
 		5B5427FC27BF2839006EEDEF /* HelpImages in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4A0827AF00FA006BE311 /* HelpImages */; };
 		5B5427FE27BF2851006EEDEF /* TLEdit.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427FD27BF2851006EEDEF /* TLEdit.html */; };
 		5B54429319B004ED00FB5537 /* ContextMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429219B004ED00FB5537 /* ContextMenu.mm */; };
@@ -376,36 +347,6 @@
 		5B54275527BDCFF0006EEDEF /* Interlocking Logic Design.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Interlocking Logic Design.pdf"; sourceTree = "<group>"; };
 		5B54275627BDCFF0006EEDEF /* Interlocking Logic Design.odt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Interlocking Logic Design.odt"; sourceTree = "<group>"; };
 		5B54275927BEECB6006EEDEF /* RelayLanguage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html.documentation; path = RelayLanguage.html; sourceTree = "<group>"; };
-		5B5427C127BF0C76006EEDEF /* Plights.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = Plights.pxm; sourceTree = "<group>"; };
-		5B5427C227BF0C76006EEDEF /* insulate.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = insulate.pxm; sourceTree = "<group>"; };
-		5B5427C327BF0C76006EEDEF /* flipno.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flipno.png; sourceTree = "<group>"; };
-		5B5427C427BF0C76006EEDEF /* SignalSW.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = SignalSW.pxm; sourceTree = "<group>"; };
-		5B5427C527BF0C76006EEDEF /* auxkey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auxkey.png; sourceTree = "<group>"; };
-		5B5427C627BF0C76006EEDEF /* Pswitch.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = Pswitch.pxm; sourceTree = "<group>"; };
-		5B5427C727BF0C76006EEDEF /* SignalNE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SignalNE.png; sourceTree = "<group>"; };
-		5B5427C827BF0C76006EEDEF /* showex.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = showex.pxm; sourceTree = "<group>"; };
-		5B5427C927BF0C76006EEDEF /* joints.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = joints.png; sourceTree = "<group>"; };
-		5B5427CA27BF0C76006EEDEF /* crxl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crxl.png; sourceTree = "<group>"; };
-		5B5427CB27BF0C76006EEDEF /* traffic.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = traffic.pxm; sourceTree = "<group>"; };
-		5B5427CC27BF0C76006EEDEF /* document_properties.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = document_properties.pxm; sourceTree = "<group>"; };
-		5B5427CD27BF0C76006EEDEF /* SignalNE.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = SignalNE.pxm; sourceTree = "<group>"; };
-		5B5427CE27BF0C76006EEDEF /* showex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = showex.png; sourceTree = "<group>"; };
-		5B5427CF27BF0C76006EEDEF /* joints.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = joints.pxm; sourceTree = "<group>"; };
-		5B5427D027BF0C76006EEDEF /* crxl.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = crxl.pxm; sourceTree = "<group>"; };
-		5B5427D127BF0C76006EEDEF /* traffic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = traffic.png; sourceTree = "<group>"; };
-		5B5427D227BF0C76006EEDEF /* document_properties.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = document_properties.png; sourceTree = "<group>"; };
-		5B5427D327BF0C76006EEDEF /* Plights.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plights.png; sourceTree = "<group>"; };
-		5B5427D427BF0C76006EEDEF /* insulate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = insulate.png; sourceTree = "<group>"; };
-		5B5427D527BF0C76006EEDEF /* Cut-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cut-icon.png"; sourceTree = "<group>"; };
-		5B5427D627BF0C76006EEDEF /* flipno.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = flipno.pxm; sourceTree = "<group>"; };
-		5B5427D727BF0C76006EEDEF /* SignalSW.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SignalSW.png; sourceTree = "<group>"; };
-		5B5427D827BF0C76006EEDEF /* auxkey.pxm */ = {isa = PBXFileReference; lastKnownFileType = file; path = auxkey.pxm; sourceTree = "<group>"; };
-		5B5427D927BF0C76006EEDEF /* Pswitch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pswitch.png; sourceTree = "<group>"; };
-		5B5427DA27BF0C76006EEDEF /* dialogs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialogs.cpp; sourceTree = "<group>"; };
-		5B5427DB27BF0C76006EEDEF /* rubberbd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rubberbd.cpp; sourceTree = "<group>"; };
-		5B5427DC27BF0C76006EEDEF /* TLDlgProc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLDlgProc.h; sourceTree = "<group>"; };
-		5B5427DD27BF0C76006EEDEF /* tletoolb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tletoolb.cpp; sourceTree = "<group>"; };
-		5B5427DE27BF0C76006EEDEF /* tlehelp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tlehelp.cpp; sourceTree = "<group>"; };
 		5B5427FD27BF2851006EEDEF /* TLEdit.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html.documentation; path = TLEdit.html; sourceTree = "<group>"; };
 		5B54429219B004ED00FB5537 /* ContextMenu.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ContextMenu.mm; sourceTree = "<group>"; };
 		5B54429419B0F00F00FB5537 /* RelaySelector.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelaySelector.xib; sourceTree = "<group>"; };
@@ -866,52 +807,6 @@
 			path = "Relay Index";
 			sourceTree = "<group>";
 		};
-		5B5427BF27BF0C19006EEDEF /* Windows tled */ = {
-			isa = PBXGroup;
-			children = (
-				5B5427C027BF0C76006EEDEF /* buttons */,
-				5B5427DA27BF0C76006EEDEF /* dialogs.cpp */,
-				5B5427DB27BF0C76006EEDEF /* rubberbd.cpp */,
-				5B5427DC27BF0C76006EEDEF /* TLDlgProc.h */,
-				5B5427DE27BF0C76006EEDEF /* tlehelp.cpp */,
-				5B5427DD27BF0C76006EEDEF /* tletoolb.cpp */,
-			);
-			name = "Windows tled";
-			path = tled;
-			sourceTree = "<group>";
-		};
-		5B5427C027BF0C76006EEDEF /* buttons */ = {
-			isa = PBXGroup;
-			children = (
-				5B5427C127BF0C76006EEDEF /* Plights.pxm */,
-				5B5427C227BF0C76006EEDEF /* insulate.pxm */,
-				5B5427C327BF0C76006EEDEF /* flipno.png */,
-				5B5427C427BF0C76006EEDEF /* SignalSW.pxm */,
-				5B5427C527BF0C76006EEDEF /* auxkey.png */,
-				5B5427C627BF0C76006EEDEF /* Pswitch.pxm */,
-				5B5427C727BF0C76006EEDEF /* SignalNE.png */,
-				5B5427C827BF0C76006EEDEF /* showex.pxm */,
-				5B5427C927BF0C76006EEDEF /* joints.png */,
-				5B5427CA27BF0C76006EEDEF /* crxl.png */,
-				5B5427CB27BF0C76006EEDEF /* traffic.pxm */,
-				5B5427CC27BF0C76006EEDEF /* document_properties.pxm */,
-				5B5427CD27BF0C76006EEDEF /* SignalNE.pxm */,
-				5B5427CE27BF0C76006EEDEF /* showex.png */,
-				5B5427CF27BF0C76006EEDEF /* joints.pxm */,
-				5B5427D027BF0C76006EEDEF /* crxl.pxm */,
-				5B5427D127BF0C76006EEDEF /* traffic.png */,
-				5B5427D227BF0C76006EEDEF /* document_properties.png */,
-				5B5427D327BF0C76006EEDEF /* Plights.png */,
-				5B5427D427BF0C76006EEDEF /* insulate.png */,
-				5B5427D527BF0C76006EEDEF /* Cut-icon.png */,
-				5B5427D627BF0C76006EEDEF /* flipno.pxm */,
-				5B5427D727BF0C76006EEDEF /* SignalSW.png */,
-				5B5427D827BF0C76006EEDEF /* auxkey.pxm */,
-				5B5427D927BF0C76006EEDEF /* Pswitch.png */,
-			);
-			path = buttons;
-			sourceTree = "<group>";
-		};
 		5B54429019B004AD00FB5537 /* Relay Selector */ = {
 			isa = PBXGroup;
 			children = (
@@ -1224,7 +1119,6 @@
 		5BAC930E19C8FE7200673BDC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				5B5427BF27BF0C19006EEDEF /* Windows tled */,
 				5B5AE6642311BEEA00348612 /* Headers */,
 				5BA6F72D19CCA335002551F7 /* Dialogs */,
 				5BAC936919C8FF5200673BDC /* TLEdit */,
@@ -1705,66 +1599,41 @@
 			files = (
 				5BA7E72C19D2D0C8006F9A04 /* nxdoc.css in Resources */,
 				5B6705BF19D0EACC002B6E28 /* SignalSW.png in Resources */,
-				5B5427E727BF0C76006EEDEF /* joints.png in Resources */,
 				5BA7E72919D2BEB4006F9A04 /* MacTleHelp.html in Resources */,
 				5BA7E73519D42589006F9A04 /* flipno.png in Resources */,
-				5B5427EF27BF0C76006EEDEF /* traffic.png in Resources */,
 				5B6705C519D0F2A3002B6E28 /* Cut-icon.png in Resources */,
 				5BED456319D1BC4E00A22DE8 /* PanelSwitchProperties.xib in Resources */,
-				5B5427E327BF0C76006EEDEF /* auxkey.png in Resources */,
 				5BD064D419CDCC3700564BD5 /* JointProperties.xib in Resources */,
-				5B5427F027BF0C76006EEDEF /* document_properties.png in Resources */,
 				5BD6200C19CD997C00DB8A8F /* TrackSegProperties.xib in Resources */,
 				5BED456919D1E14100A22DE8 /* traffic.png in Resources */,
 				5BF4F08019CB79A50089B3E4 /* TLEdit.xib in Resources */,
-				5B5427EB27BF0C76006EEDEF /* SignalNE.pxm in Resources */,
 				5BA6F73119CCA375002551F7 /* SignalProperties.xib in Resources */,
 				5BA6F72819CC61CC002551F7 /* Help.xib in Resources */,
-				5B5427F427BF0C76006EEDEF /* flipno.pxm in Resources */,
-				5B5427F327BF0C76006EEDEF /* Cut-icon.png in Resources */,
 				5BED455E19D1ADD300A22DE8 /* Plights.png in Resources */,
 				5B5427FE27BF2851006EEDEF /* TLEdit.html in Resources */,
-				5B5427E827BF0C76006EEDEF /* crxl.png in Resources */,
-				5B5427E127BF0C76006EEDEF /* flipno.png in Resources */,
 				5B6705C319D0F101002B6E28 /* auxkey.png in Resources */,
-				5B5427F627BF0C76006EEDEF /* auxkey.pxm in Resources */,
-				5B5427F727BF0C76006EEDEF /* Pswitch.png in Resources */,
 				5B6705C819D0F8C9002B6E28 /* showex.png in Resources */,
 				5BD064DB19CE44A600564BD5 /* SwitchProperties.xib in Resources */,
 				5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */,
-				5B5427F227BF0C76006EEDEF /* insulate.png in Resources */,
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
 				5BA7E74719D962A5006F9A04 /* CanvasExtentDialog.xib in Resources */,
-				5B5427E027BF0C76006EEDEF /* insulate.pxm in Resources */,
-				5B5427EE27BF0C76006EEDEF /* crxl.pxm in Resources */,
 				5BED456119D1B5EA00A22DE8 /* Pswitch.png in Resources */,
 				5BA6F72C19CC65A8002551F7 /* tlehlptx.txt in Resources */,
 				5BA7E74019D56426006F9A04 /* joints.png in Resources */,
 				5BED456C19D1E19300A22DE8 /* TrafficLeverProperties.xib in Resources */,
-				5B5427F527BF0C76006EEDEF /* SignalSW.png in Resources */,
-				5B5427E227BF0C76006EEDEF /* SignalSW.pxm in Resources */,
-				5B5427E927BF0C76006EEDEF /* traffic.pxm in Resources */,
 				5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */,
-				5B5427E527BF0C76006EEDEF /* SignalNE.png in Resources */,
 				5B5427FC27BF2839006EEDEF /* HelpImages in Resources */,
 				5BA7E73719D4B592006F9A04 /* TextStringProperties.xib in Resources */,
 				5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */,
 				5BC911B019DDB294006C590E /* dialog_warning.png in Resources */,
 				5B6705C119D0EC70002B6E28 /* document_properties.png in Resources */,
 				5B6705BA19D0B31A002B6E28 /* SignalNE.png in Resources */,
-				5B5427EA27BF0C76006EEDEF /* document_properties.pxm in Resources */,
 				5B6705DA19D1A148002B6E28 /* PanelLightProperties.xib in Resources */,
 				5BAC932019C8FE7200673BDC /* Images.xcassets in Resources */,
 				5B6705D319D19BA7002B6E28 /* ExitLightProperties.xib in Resources */,
-				5B5427EC27BF0C76006EEDEF /* showex.png in Resources */,
 				5BA7E73319D39DC0006F9A04 /* insulate.png in Resources */,
 				5B67045719D0A4B0002B6E28 /* Toolbar.xib in Resources */,
 				5BAC931819C8FE7200673BDC /* Credits.rtf in Resources */,
-				5B5427F127BF0C76006EEDEF /* Plights.png in Resources */,
-				5B5427E627BF0C76006EEDEF /* showex.pxm in Resources */,
-				5B5427E427BF0C76006EEDEF /* Pswitch.pxm in Resources */,
-				5B5427ED27BF0C76006EEDEF /* joints.pxm in Resources */,
-				5B5427DF27BF0C76006EEDEF /* Plights.pxm in Resources */,
 				5BA7E74F19DAA31C006F9A04 /* ShiftLayoutDialog.xib in Resources */,
 				5B6705CC19D1942A002B6E28 /* SwitchKeyProperties.xib in Resources */,
 			);
@@ -1932,14 +1801,12 @@
 				5BA6F73A19CCF58E002551F7 /* TLWindowsSide.cpp in Sources */,
 				5BAC935519C8FECC00673BDC /* tcircuit.cpp in Sources */,
 				5BAC935619C8FECC00673BDC /* trackseg.cpp in Sources */,
-				5B5427F927BF0C76006EEDEF /* rubberbd.cpp in Sources */,
 				5B5AE639230DDBEA00348612 /* main.mm in Sources */,
 				5BAC935719C8FECC00673BDC /* xexlight.cpp in Sources */,
 				5BAC935819C8FECC00673BDC /* xsignal.cpp in Sources */,
 				5BAC935919C8FECC00673BDC /* xstop.cpp in Sources */,
 				5BAC935B19C8FECC00673BDC /* xtgload.cpp in Sources */,
 				5BACF5F019CA1F56007F59A0 /* edpswitch.cpp in Sources */,
-				5B5427FB27BF0C76006EEDEF /* tlehelp.cpp in Sources */,
 				5BAD56031A014C00006AEEAB /* DumbStubs.cpp in Sources */,
 				5BAC937719C9C95100673BDC /* editsig.cpp in Sources */,
 				5BAC937B19C9D0A900673BDC /* edtext.cpp in Sources */,
@@ -1952,13 +1819,11 @@
 				5BA7E74A19D9652E006F9A04 /* CanvasExtentDialogController.mm in Sources */,
 				5B5AE615230C505000348612 /* RelayLispSubstrate.cpp in Sources */,
 				5B5CB8551A0B949500010B8B /* MiscApi.mm in Sources */,
-				5B5427F827BF0C76006EEDEF /* dialogs.cpp in Sources */,
 				5BAC936719C8FECC00673BDC /* NXSYSMac-Info.plist in Sources */,
 				5BF7CEB319CA299400DF6ECE /* edtraflev.cpp in Sources */,
 				5BF7CEB919CA55CC00DF6ECE /* MessageBox.mm in Sources */,
 				5BF7CEBA19CA566800DF6ECE /* MainView.mm in Sources */,
 				5BA6F73719CCBB1A002551F7 /* GenericWindlgController.mm in Sources */,
-				5B5427FA27BF0C76006EEDEF /* tletoolb.cpp in Sources */,
 				5B2B336B230220B4004007A9 /* STLExtensions.cpp in Sources */,
 				5BAC931B19C8FE7200673BDC /* TLEditAppDelegate.mm in Sources */,
 			);
