@@ -77,6 +77,8 @@
 		5B5427F927BF0C76006EEDEF /* rubberbd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5427DB27BF0C76006EEDEF /* rubberbd.cpp */; };
 		5B5427FA27BF0C76006EEDEF /* tletoolb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5427DD27BF0C76006EEDEF /* tletoolb.cpp */; };
 		5B5427FB27BF0C76006EEDEF /* tlehelp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5427DE27BF0C76006EEDEF /* tlehelp.cpp */; };
+		5B5427FC27BF2839006EEDEF /* HelpImages in Resources */ = {isa = PBXBuildFile; fileRef = 5BFB4A0827AF00FA006BE311 /* HelpImages */; };
+		5B5427FE27BF2851006EEDEF /* TLEdit.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B5427FD27BF2851006EEDEF /* TLEdit.html */; };
 		5B54429319B004ED00FB5537 /* ContextMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429219B004ED00FB5537 /* ContextMenu.mm */; };
 		5B54429519B0F00F00FB5537 /* RelaySelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B54429419B0F00F00FB5537 /* RelaySelector.xib */; };
 		5B54429819B0F1F500FB5537 /* RelayListView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429719B0F1F500FB5537 /* RelayListView.mm */; };
@@ -404,6 +406,7 @@
 		5B5427DC27BF0C76006EEDEF /* TLDlgProc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLDlgProc.h; sourceTree = "<group>"; };
 		5B5427DD27BF0C76006EEDEF /* tletoolb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tletoolb.cpp; sourceTree = "<group>"; };
 		5B5427DE27BF0C76006EEDEF /* tlehelp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tlehelp.cpp; sourceTree = "<group>"; };
+		5B5427FD27BF2851006EEDEF /* TLEdit.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html.documentation; path = TLEdit.html; sourceTree = "<group>"; };
 		5B54429219B004ED00FB5537 /* ContextMenu.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ContextMenu.mm; sourceTree = "<group>"; };
 		5B54429419B0F00F00FB5537 /* RelaySelector.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelaySelector.xib; sourceTree = "<group>"; };
 		5B54429619B0F1F500FB5537 /* RelayListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelayListView.h; sourceTree = "<group>"; };
@@ -1030,6 +1033,7 @@
 		5B65677B25C1B17000411B8F /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				5B5427FD27BF2851006EEDEF /* TLEdit.html */,
 				5B54275927BEECB6006EEDEF /* RelayLanguage.html */,
 				5B54275627BDCFF0006EEDEF /* Interlocking Logic Design.odt */,
 				5B54275527BDCFF0006EEDEF /* Interlocking Logic Design.pdf */,
@@ -1719,6 +1723,7 @@
 				5B5427F427BF0C76006EEDEF /* flipno.pxm in Resources */,
 				5B5427F327BF0C76006EEDEF /* Cut-icon.png in Resources */,
 				5BED455E19D1ADD300A22DE8 /* Plights.png in Resources */,
+				5B5427FE27BF2851006EEDEF /* TLEdit.html in Resources */,
 				5B5427E827BF0C76006EEDEF /* crxl.png in Resources */,
 				5B5427E127BF0C76006EEDEF /* flipno.png in Resources */,
 				5B6705C319D0F101002B6E28 /* auxkey.png in Resources */,
@@ -1741,6 +1746,7 @@
 				5B5427E927BF0C76006EEDEF /* traffic.pxm in Resources */,
 				5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */,
 				5B5427E527BF0C76006EEDEF /* SignalNE.png in Resources */,
+				5B5427FC27BF2839006EEDEF /* HelpImages in Resources */,
 				5BA7E73719D4B592006F9A04 /* TextStringProperties.xib in Resources */,
 				5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */,
 				5BC911B019DDB294006C590E /* dialog_warning.png in Resources */,
