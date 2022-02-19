@@ -30,7 +30,7 @@ ParsedCommandLine ParseCommandLineToVector(const char* command_line) {
 	if (W.length() == 0)
 		return ParsedCommandLine{};  /* avoid buggy documented behavior of returning exe path*/
 	int numArgs;
-	LPWSTR* args = (W.c_str(), &numArgs);
+	LPWSTR* args = CommandLineToArgvW(W.c_str(), &numArgs);
 	ParsedCommandLine pcl{};
 	for (size_t i = 0; i < numArgs; i++)
 		pcl.push_back(converter.to_bytes(args[i]));
