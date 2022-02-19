@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include "parsargs.h"
 #include "WinReadResText.h"
+#include "ParseCommandLine.h"
 #endif
 
 #include "compat32.h"
@@ -426,15 +427,6 @@ static WNDPROC_DCL MainWindow_WndProc
 		if (MouseupDragon)
 			MouseupDragon->Abort();
 
-#ifdef EVALUATION_EDITION
-		time_t exptime;
-		if (time(&exptime) >= RTExpireTime) {
-			ComplainExpired();
-			SendMessage(window, WM_CLOSE, 0, 0);
-			return 0;
-		}
-#endif
-
 		AppCommand(LOWORD(wParam));
 		break;
 
@@ -620,13 +612,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 
 	WNDCLASS klass;
 	app_instance = hInstance;
-
-	char ** argv;
-	if (command_line)
-		argv = ParseArgString(command_line);
-	else
-		argv = NULL;
-	int argc = ParseArgsArgCount(argv);
+	auto args = ParseCommandLineToVector(command_line);
 
 	if (!hPrevInstance) {
 
@@ -721,8 +707,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 
 	ShowWindow(AppWindow, nCmdShow);	/* don't gratuitously update */
 
-	if (argc >= 1) {
-		FileName = argv[0];
+	if (args.size() >= 1) {
+		FileName = args[0];
 		ReadIt();
 	}
 
@@ -730,7 +716,6 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 	(AppWindow,
 		LoadAccelerators(hInstance, MAKEINTRESOURCE(IDA_TLEDIT)));
 	CleanupTLEditApp();
-	ParseArgsFree(argv);  return val;
 	return val;
 
 }

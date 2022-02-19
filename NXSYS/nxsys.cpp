@@ -46,8 +46,9 @@ namespace fs = std::filesystem;
 #else
 #include "NXRegistry.h"
 #include "WinReadResText.h"
-#include <parsargs.h>
+#include "ParseCommandLine.h"
 #include "LDRightClick.h"
+#define NULL0(stl) ( (stl.length() == 0) ? nullptr : stl.c_str())
 #endif
 using std::string;
 using std::vector;
@@ -795,36 +796,30 @@ int PASCAL WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_
   HWND     window;
 
   app_instance = hInstance;
-  const char * initial_layout_name = NULL;
+  string initial_layout_name{};
 #ifndef NODEMO
-  const char * initial_demo_file = NULL;
+  string initial_demo_file{};
 #endif
-  char ** argv;
-  if (command_line)
-      argv =  ParseArgString(command_line);
-  else
-      argv = NULL;
-  int argc = ParseArgsArgCount (argv);
-  for (int ano = 0; ano < argc; ano++) {
-      const char * arg = argv[ano];
-      if (arg[0] == '/' || arg[0] == '-') {
-	  const char* argb = arg+1;
-      if (!_stricmp (argb, "contacts_per_line")) {
-	      if (ano >= argc - 1) {
+  auto args = ParseCommandLineToVector(command_line); //handles zero and null case
+  for (size_t ano = 0; ano < args.size(); ano++) {
+	  string arg = args[ano];
+      if (arg.length() && (arg[0] == '/' || arg[0] == '-')) {
+		  string argb = arg.substr(1);
+      if (argb == "contacts_per_line") {
+	      if (ano >= args.size() - 1) {
 badcpl:		 usermsg ("Missing or bad number after -contacts_per_line arg.");
 			 continue;
 	      }
-	      if (sscanf (argv[++ano], "%d", &ContactsPerLine) < 1)
+	      if (sscanf (args[++ano].c_str(), "%d", &ContactsPerLine) < 1)
 			 goto badcpl;
-
 	  }
-	  else if (!_stricmp (argb, "automation") || !_stricmp (argb, "embedding"))
+	  else if (argb == "automation" || argb == "embedding")
 #ifdef NXOLE
 	      automation = TRUE;
 #else
 	  {
 	      usermsg ("Bad control arg: /%s; this executable of %s is not OLE-enabled.",
-		       argb, PRODUCT_NAME);
+		       argb.c_str(), PRODUCT_NAME);
 	      return 0;
 	  }
 #endif
@@ -847,7 +842,7 @@ badcpl:		 usermsg ("Missing or bad number after -contacts_per_line arg.");
 #endif
 
 	  else
-	      usermsg ("Bad/unknown control arg: %s", argv[ano]);
+	      usermsg ("Bad/unknown control arg: %s",arg.c_str());
       }
       else initial_layout_name = arg;
   }
@@ -878,12 +873,10 @@ badcpl:		 usermsg ("Missing or bad number after -contacts_per_line arg.");
 	HACCEL hAccel = LoadAccelerators(hInstance, "NXACC");
 	window = NULL;   // KRAZY WTF NO WINDOW
     int rv = StartUpNXSYS (hInstance, window,
-                           initial_layout_name, initial_demo_file, nCmdShow);
+                           NULL0(initial_layout_name), NULL0(initial_demo_file), nCmdShow);
     if (rv == 0)
         rv = WindowsMessageLoop (G_mainwindow, hAccel, 0);
     
-
-    ParseArgsFree(argv);
     CleanUpNXSYS();
 
     return rv;

@@ -479,7 +479,6 @@
 		5BABBE1527B7143100AED491 /* parsargs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parsargs.h; sourceTree = "<group>"; };
 		5BABBE1627B7143100AED491 /* getmodtm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = getmodtm.h; sourceTree = "<group>"; };
 		5BABBE1727B7143100AED491 /* dialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialogs.cpp; sourceTree = "<group>"; };
-		5BABBE5C27B7143200AED491 /* PARSARGS.C */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PARSARGS.C; sourceTree = "<group>"; tabWidth = 4; };
 		5BABBE5D27B7143200AED491 /* tled.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = tled.rc; sourceTree = "<group>"; };
 		5BABBE5E27B7143200AED491 /* timers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timers.cpp; sourceTree = "<group>"; };
 		5BABBE5F27B7143200AED491 /* rtracwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rtracwin.cpp; sourceTree = "<group>"; };
@@ -531,6 +530,8 @@
 		5BAFFBA819B894CC00AEE791 /* nxdoc.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = nxdoc.css; sourceTree = "<group>"; };
 		5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrainDlg.xib; sourceTree = "<group>"; };
 		5BB5801827C0030A00FB0ED5 /* MacStatus.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = MacStatus.md; sourceTree = "<group>"; };
+		5BB5801A27C072B600FB0ED5 /* ParseCommandLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseCommandLine.h; sourceTree = "<group>"; };
+		5BB5801B27C072B600FB0ED5 /* ParseCommandLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseCommandLine.cpp; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -1048,6 +1049,8 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5BB5801B27C072B600FB0ED5 /* ParseCommandLine.cpp */,
+				5BB5801A27C072B600FB0ED5 /* ParseCommandLine.h */,
 				5B54274D27BD27C3006EEDEF /* Relay Index */,
 				5BABBE1327B7143100AED491 /* NXSYSWindows.sln */,
 				5B54273A27BC498C006EEDEF /* LDRightClick.cpp */,
@@ -1074,7 +1077,6 @@
 				5BABBE1527B7143100AED491 /* parsargs.h */,
 				5BABBE1627B7143100AED491 /* getmodtm.h */,
 				5BABBE1727B7143100AED491 /* dialogs.cpp */,
-				5BABBE5C27B7143200AED491 /* PARSARGS.C */,
 				5BABBE5D27B7143200AED491 /* tled.rc */,
 				5BABBE5E27B7143200AED491 /* timers.cpp */,
 				5BABBE5F27B7143200AED491 /* rtracwin.cpp */,

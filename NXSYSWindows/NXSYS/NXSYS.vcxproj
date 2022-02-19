@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-     <ProjectConfiguration Include="Debug|Win32">
+    <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
@@ -148,7 +148,7 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
-   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -215,7 +215,7 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
     <ClCompile Include="..\nxldwin.cpp" />
     <ClCompile Include="..\NXRegistry.cpp" />
     <ClCompile Include="..\nxsldrly.cpp" />
-    <ClCompile Include="..\PARSARGS.C" />
+    <ClCompile Include="..\ParseCommandLine.cpp" />
     <ClCompile Include="..\print.cpp" />
     <ClCompile Include="..\RelayListDialog.cpp" />
     <ClCompile Include="..\RelayQueryDialog.cpp" />
@@ -236,6 +236,7 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
   <ItemGroup>
     <ClInclude Include="..\LDRightClick.h" />
     <ClInclude Include="..\NXRegistry.h" />
+    <ClInclude Include="..\ParseCommandLine.h" />
     <ClInclude Include="..\resource.h" />
     <ClInclude Include="..\resource1.h" />
     <ClInclude Include="resource1.h" />

@@ -135,9 +135,6 @@
     <ClCompile Include="..\..\NXSYS\v2\xturnout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\PARSARGS.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\timers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -180,6 +177,9 @@
     <ClCompile Include="..\NXRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ParseCommandLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\nx.rc">
@@ -214,6 +214,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\NXRegistry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ParseCommandLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
