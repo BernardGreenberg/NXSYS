@@ -7,7 +7,8 @@
 		:CRUISING-FEET-PER-SECOND 75 ;54mph
 		:TRAIN-LENGTH-FEET 500
 		:YELLOW-FEET-PER-SECOND 40
-                :HELP-TEXT("Myrtle Avenue &Interlocking Info" "@myrthlptxt.txt")
+                :HELP-TEXT("Myrtle Avenue &Interlocking Info" "@myrthlptxt.txt"
+			   "@myrtle.html")
 		)
 
 (include "myrtlayt.trk")

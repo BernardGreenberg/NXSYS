@@ -148,9 +148,9 @@ bool to_window = false;
 {
     if (!to_window) {
         to_console = false;
-        [_consoleMenuItem setState: NSOffState];
+        [_consoleMenuItem setState: NSControlStateValueOff];
 
-        [_windowMenuItem setState: NSOnState];
+        [_windowMenuItem setState: NSControlStateValueOn];
         to_window = true;
         [self showWindow:self];
         NSWindow * mw = getNXWindow();
@@ -168,10 +168,10 @@ bool to_window = false;
         [self.window orderOut:self];
         
         to_console = true;
-        [_consoleMenuItem setState: NSOnState];
+        [_consoleMenuItem setState: NSControlStateValueOn];
         SetRelayTrace(ConsoleRelayTracer);
     } else {
-        [_consoleMenuItem setState: NSOffState];
+        [_consoleMenuItem setState: NSControlStateValueOff];
         SetRelayTrace(NULL);
         to_console = FALSE;
     }
@@ -186,7 +186,7 @@ bool to_window = false;
     }
     moron = false;
     [_moreingButton setState:FALSE];
-    [_windowMenuItem setState: NSOffState]; // main wnd menu
+    [_windowMenuItem setState: NSControlStateValueOff]; // main wnd menu
     SetRelayTrace(NULL);
     to_window = FALSE;
 }

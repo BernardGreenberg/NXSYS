@@ -1,7 +1,7 @@
 # NXSYS scenario and relay language
 
 **Copyright ©Bernard S. Greenberg** 1994, 1995, 1996, 1997
-  18 June 1995 (upd: 10 November 1996, 2 February 1997. 19 Feb 97, 18 Nov1997, 2 Dec97., 6 Jan 98, 14 Jan 98, 23 April 98, 16 May 98, 16 January 01, 26 July 01, 7 February 2022
+  18 June 1995 (upd: 10 November 1996, 2 February 1997. 19 Feb 97, 18 Nov1997, 2 Dec97., 6 Jan 98, 14 Jan 98, 23 April 98, 16 May 98, 16 January 01, 26 July 01, 19 February 2022
 
 This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts (no, it is not trivial).  Pay particular attention to the 1998 tutorial [Duckburg Tower A](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg)!
 
@@ -62,11 +62,14 @@ The pair `:IRT T` causes IRT-style signal numbering to be displayed on the plate
 
 The pair `:TORONTO T` causes Toronto-style signal numbering to be displayed on the signal plates.
 
-Any number (up to 10) of specs
+		:HELP-TEXT ("Menu string" "Help-string" ["@help.html"])
 
-		:HELP-MENU ("Menu string" "Help string... ")
+creates interlocking-specific documentation offered on the "Help" menu with the string used as *Menu string* (which also is used as the help window title, so avoid ampersands (i.e., to designate menu accelerators).
 
-create interlocking-specific documentation offered on the "Help" menu with the string used as *Menu string* (which also is used as the help window title, so avoid ampersands (i.e., to designate menu accelerators).
+
+`Help-string` will be taken as help text to be displayed as text, unless it starts with `@`, in which case will be taken as a pathname (relative to the `.trk`-containing directory) of a text file containing the documentation text.
+
+The third argument is optional, and only recognized by 2.6 and newer (it will be ignored by earlier versions).  If supplied, it must be a string starting with `@` and ending with `.html`.  The application will web-browse that file in the containing directory, in the HTML help viewer on the Mac and the system browser on Windows (If you want it to work on both versions, you must supply a real text file, too).
 
 These next two property pairs are only recognized in NXSYS 2.5.0 and newer, and, by careful contract, are *ignored* by earlier versions:
 

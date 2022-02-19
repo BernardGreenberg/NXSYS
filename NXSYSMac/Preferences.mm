@@ -62,15 +62,15 @@ extern bool SignalRIsMenu;
     bool rightClickIsMenu = [defaults boolForKey:SignalRightMenuKey] ? true: false;
     bool fullSigsAreViews = [defaults boolForKey:FullSigKey] ? true : false;
 
-    [((NSButton*)_stopsTripping) setState: (ssp == SHOW_STOPS_RED) ? NSOnState : NSOffState];
-    [((NSButton*)_stopsNever) setState: (ssp == SHOW_STOPS_NEVER) ? NSOnState : NSOffState];
-    [((NSButton*)_stopsAlways) setState: (ssp == SHOW_STOPS_ALWAYS) ? NSOnState : NSOffState];
+    [((NSButton*)_stopsTripping) setState: (ssp == SHOW_STOPS_RED) ? NSControlStateValueOn : NSControlStateValueOff];
+    [((NSButton*)_stopsNever) setState: (ssp == SHOW_STOPS_NEVER) ? NSControlStateValueOn : NSControlStateValueOff];
+    [((NSButton*)_stopsAlways) setState: (ssp == SHOW_STOPS_ALWAYS) ? NSControlStateValueOn : NSControlStateValueOff];
 
-    [(NSButton*)_fullSigsViews setState: fullSigsAreViews? NSOnState: NSOffState];
-    [(NSButton*)_fullSigsWindows setState: fullSigsAreViews? NSOffState: NSOnState];
+    [(NSButton*)_fullSigsViews setState: fullSigsAreViews? NSControlStateValueOn: NSControlStateValueOff];
+    [(NSButton*)_fullSigsWindows setState: fullSigsAreViews? NSControlStateValueOff: NSControlStateValueOn];
 
-    [(NSButton*)_rightClickMenus setState: rightClickIsMenu? NSOnState: NSOffState];
-    [(NSButton*)_rightClickFSDs setState: rightClickIsMenu ? NSOffState: NSOnState];
+    [(NSButton*)_rightClickMenus setState: rightClickIsMenu? NSControlStateValueOn: NSControlStateValueOff];
+    [(NSButton*)_rightClickFSDs setState: rightClickIsMenu ? NSControlStateValueOff: NSControlStateValueOn];
 
 }
 -(void)showModal
@@ -86,21 +86,21 @@ extern bool SignalRIsMenu;
 -(IBAction)OK:(id)sender
 {
     int nsp = 0;
-    if ([(NSButton*)_stopsTripping state] == NSOnState)
+    if ([(NSButton*)_stopsTripping state] == NSControlStateValueOn)
         nsp = SHOW_STOPS_RED;
-    if ([(NSButton*)_stopsAlways state] == NSOnState)
+    if ([(NSButton*)_stopsAlways state] == NSControlStateValueOn)
         nsp = SHOW_STOPS_ALWAYS;
-    if ([(NSButton*)_stopsNever state] == NSOnState)
+    if ([(NSButton*)_stopsNever state] == NSControlStateValueOn)
         nsp = SHOW_STOPS_NEVER;
     if (nsp != 0) {
         [defaults  setInteger:nsp forKey:ShowStopsKey];
         ImplementShowStopPolicy(nsp);
     }
     
-    FullSigsAreViews = ([(NSButton*)_fullSigsViews state] == NSOnState);
+    FullSigsAreViews = ([(NSButton*)_fullSigsViews state] == NSControlStateValueOn);
     [defaults setBool:(FullSigsAreViews ? YES : NO) forKey:FullSigKey];
 
-    SignalRIsMenu = ([(NSButton*)_rightClickMenus state] == NSOnState);
+    SignalRIsMenu = ([(NSButton*)_rightClickMenus state] == NSControlStateValueOn);
     [defaults setBool:(SignalRIsMenu ? YES : NO) forKey:SignalRightMenuKey];
     [[self window] close];
     [NSApp stopModal];

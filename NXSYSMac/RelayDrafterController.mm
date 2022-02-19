@@ -28,7 +28,7 @@ NSString* sourceLocatorScript = nullptr;
 NSString* savedSourceString = nullptr;
 -(void)windowWillClose:(NSNotification*)notification
 {
-    [_mainMenuItem setState:NSOffState];
+    [_mainMenuItem setState:NSControlStateValueOff];
 }
 
 - (id) init {
@@ -68,7 +68,7 @@ NSString* savedSourceString = nullptr;
 {
     AskForAndDrawRelay(NULL);
     if ([self.window isVisible])
-        [_mainMenuItem setState:NSOnState];
+        [_mainMenuItem setState:NSControlStateValueOn];
 }
 -(IBAction)recede:(id)sender
 {
@@ -124,13 +124,13 @@ NSString* savedSourceString = nullptr;
 {
     if (![self isWindowLoaded]) {// isVisible seems to lie in this case, but see FSWindow.
         [self showWindow:sender];
-        [_mainMenuItem setState:NSOnState];
+        [_mainMenuItem setState:NSControlStateValueOn];
     }
     else if ([self.window isVisible])
         [self close];
     else {
         [self showWindow:self];
-        [_mainMenuItem setState:NSOnState];
+        [_mainMenuItem setState:NSControlStateValueOn];
     }
 }
 @end

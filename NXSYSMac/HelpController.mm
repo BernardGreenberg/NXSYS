@@ -94,7 +94,12 @@ NSDictionary* helpFontDictionary;
 }
 -(void)HTMLHelp:(NSString*)rname  tag:(NSString*) tag
 {
-    NSURL * url = [[NSBundle mainBundle] URLForResource:rname withExtension:@".html"];
+    NSURL * url;
+    std::string S = [rname UTF8String];
+    if (S.length() > 5 && S.substr(0,5) == "file:")
+        url = [NSURL URLWithString: rname];
+    else
+        url = [[NSBundle mainBundle] URLForResource:rname withExtension:@".html"];
     if (tag) { // guten tag
         NSString * s = [NSString stringWithFormat:@"%@#%@", url.absoluteString, tag]; // watch that language!
         url = [NSURL URLWithString:s];

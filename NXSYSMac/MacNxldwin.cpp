@@ -125,6 +125,9 @@ void HelpText::Display () {
     } else if (FixedId) {
 //	WinHelp (G_mainwindow, HelpPath, HELP_CONTEXT, FixedId);
     }
+    else if (Text.length() > 5 && Text.substr(0, 5) == "file:") {
+        HelpSystemDisplayURL(Text.c_str());
+    }
     else {
         HelpSystemDisplay(Text.c_str());
     }

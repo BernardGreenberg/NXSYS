@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <filesystem>
 
 #include "lisp.h"
 
@@ -36,16 +37,11 @@
 #include "STLExtensions.h"
 
 
-#ifdef XTG
+
 #include "xtgtrack.h"
 #include "xtgload.h"
 #include "xturnout.h"
 void SetTrackGeometryDefaults();
-#else
-#include <stop.h>
-#include "rdtrkv1.h"
-int Station_base;
-#endif
 
 #include "lyglobal.h"
 #include "loaddcls.h"
@@ -53,6 +49,7 @@ int Station_base;
 
 #include "dynmenu.h"
 
+namespace fs = std::filesystem;
 
 void ValidateRelayWorld();
 
@@ -196,12 +193,10 @@ static BOOL LoadExprcodeFile (const char * fname) {
 const char * ReadLayout (const char* fname) {
     INameRetval = "NX Interlocking";
     InitRelaySys();
-#ifdef XTG
     InitXTGReader();
     EnableDynMenus(FALSE);
     TrackCircuitSystemReInit();
     InitSwitchKeyData();
-#endif
     InitTrafficLeverData();
 
     std::string drive,dir,ename,ext;
@@ -334,12 +329,7 @@ forms:
 }
 
 long Signal::CanonicalNumber () {
-    return XlkgNo ? XlkgNo :
-#if XTG
-	    StationNo;
-#else
-	    compute_track_relayno (ForwardTS->Track->TrackNo, StationNo);
-#endif
+    return XlkgNo ? XlkgNo : StationNo;
 }
 
 static void BobbleTimeFun (void *) {
@@ -499,9 +489,6 @@ void Turnout::ProcessLoadComplete () {
     RWZ = CreateAndSetReporter(XlkgNo, "RWZ", RWZReporter, this);
     RWZ->State = 0;
     SetReporterIfExists (XlkgNo, "CLK", CLKReporter, this);
-#if !XTG
-    CreatePointLabels();
-#endif
 }
 
 
@@ -530,9 +517,9 @@ static LassieRet LassieGetHelp(std::string path) {
         fseek(f, 0L, SEEK_END);
         std::vector<char>b(ftell(f));
         rewind(f);
-        fread(b.data(), 1, b.size(), f);
+        size_t we_read = fread(b.data(), 1, b.size(), f); //could be CRLF issues on Windows.
         fclose(f);
-        return LassieRet(true, std::string(b.data(), b.size()));
+        return LassieRet(true, std::string(b.data(), we_read));
     }
     else
         return LassieRet(false, "");
@@ -584,15 +571,33 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
 		LERROR ("Value of :HELP-TEXT is not a list at least two long", value);
 	    Sexpr s1 = CAR(value);
 	    Sexpr s2 = CAR(CDR(value));
-	    if (s1.type != Lisp::STRING || s2.type != Lisp::STRING)
-		LERROR ("Members of :HELP-TEXT not strings.", value);
-            std::string helpMenuTitle(s1.u.s), helpMenuText(s2.u.s);
-            if (helpMenuText.length() && helpMenuText[0] == '@') {
-                auto retvals = LassieGetHelp(STLincexppath(fname, helpMenuText.substr(1)));
-                if (retvals.first)
-                    helpMenuText = retvals.second;
-                else
-                    LERROR("Cannot open referenced text help file", s2); // macro returns 0.
+            if (s1.type != Lisp::STRING || s2.type != Lisp::STRING)
+                LERROR ("Members of :HELP-TEXT not strings.", value);
+            std::string helpMenuTitle(s1.u.s);
+            std::string helpMenuText;
+            if (CDDR(value) != NIL) {
+                Sexpr s3 = CAR(CDDR(value));
+                if (s3.type != Lisp::STRING)
+                    LERROR("Third element of :HELP-TEXT not a string.", value);
+                helpMenuText = s3.u.s;
+                if (!(helpMenuText.length() && helpMenuText[0] =='@'))
+                    LERROR("Third element of :HELP-TEXT doesn't start with @.", value);
+                if (helpMenuText.find(".html") != helpMenuText.length() - 5)
+                    LERROR("Third element of :HELP-TEXT doesn't end in .html.", value);
+                fs::path pfn(fname);
+                pfn.replace_filename("");
+                fs::path absp = (pfn / helpMenuText.substr(1));
+                helpMenuText = "file://" + absp.string();
+            }
+            else {
+                std::string helpMenuText(s2.u.s);
+                if (helpMenuText.length() && helpMenuText[0] == '@') {
+                    auto [valid, data] = LassieGetHelp(STLincexppath(fname, helpMenuText.substr(1)));
+                    if (valid)  // Astonishing C++17
+                        helpMenuText = data;
+                    else
+                        LERROR("Cannot open referenced text help file", s2); // macro returns 0.
+                }
             }
             RegisterHelpMenuTextCRLF1 (helpMenuText.c_str(), helpMenuTitle.c_str());
 	}
@@ -640,12 +645,8 @@ static inline void ProcessLoadCompleteMacro(){
 /*Version 2 process load complete */
 void ProcessLoadComplete () {
     TrackCircuitSystemLoadTimeComplete ();
-#if XTG
     ProcessLoadCompleteMacro<PanelSignal, ID_SIGNAL>();
     ProcessLoadCompleteMacro<Turnout, ID_TURNOUT>();
-#else
-    ProcessLoadCompleteMacro<Signal, ID_SIGNAL>();
-#endif
     ProcessLoadCompleteMacro<ExitLight, ID_EXITLIGHT>();
     ProcessLoadCompleteMacro<Stop, ID_STOP>();
     ProcessLoadCompleteMacro<TrafficLever, ID_TRAFFICLEVER>();

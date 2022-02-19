@@ -473,7 +473,7 @@ static NSString* buildSignature;
 }
 - (IBAction)AutomaticOperation:(id)sender {
     EnableAutoOperation = !EnableAutoOperation;
-    [_AutomaticOperation setState:(EnableAutoOperation ? NSOnState : NSOffState)];
+    [_AutomaticOperation setState:(EnableAutoOperation ? NSControlStateValueOn : NSControlStateValueOff)];
     EnableAutomaticOperation(EnableAutoOperation); // Windows BOOL -> bool under iNXSYS regime.
 }
 -(RelayDrafterController*)getDrafter:(bool)force

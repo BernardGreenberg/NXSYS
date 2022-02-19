@@ -1,6 +1,11 @@
-Broadway-Myrtle Interlocking (1998)
+Broadway-Myrtle Interlocking (1998, but maintained since)
 
-The supplied interlocking (the "track object" file myrtle.tko) is an accurate
+     ***(If you are using an older version of NXSYS (pre-2.6), please browse
+     ***myrtle.html in this same folder for a better experience (newer
+     ***versions do so automatically).
+
+
+The supplied interlocking (root is myrtle.trk) is an accurate
 reproduction of the BMT (Division B) interlocking on the Broadway-Jamaica
 line at Broadway (Brooklyn, NY), at the intersection with the remaining leg
 of the Myrtle Avenue El, demolished (geographic) South of this point

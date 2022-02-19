@@ -1,5 +1,5 @@
 # NXSYS Mac build status
-#### 18 February 2022
+#### 19 February 2022
 
 This code builds completely and cleanly under XCode 13.2.1 (13C100) under macOS Monterey 12.1, for 64-bit Intel Mac; no configurations or accommodations for the M1 Mac are present. An [`xcodeproj` folder](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYSMac.xcodeproj) resides in the top folder; it contains no external references. **The Apple tool [`PlistBuddy`](https://www.marcosantadev.com/manage-plist-files-plistbuddy/) is expected** to be in `/usr/libexec` (where it should be if XCode is properly installed); it is used for packing build number and date signature into the Info plist.  Tools for packaging the whole for distribution (Bash scripting) are not provided (XCode `Product>Archive` already does most of the job).  Code Signing is, of course, now your responsibility, if desired.
 
@@ -9,7 +9,7 @@ The Mac User Interface artifacts in this tree are in Objective C++ (embedded in 
 
 ## The XCode project
 
-The Mac Version is targeted in XCode to (minimum) [macOS Sierra (10.12)](https://en.wikipedia.org/wiki/MacOS_Sierra) (released Sept. 2019); that is the SDK level it uses.   While this can easily be set as current as you wish in XCode, and most Mac users keep their systems up-to-date, I see no reason to bring it closer to currency: back-compatibility is a virtue. 
+The Mac Version is targeted in XCode to (minimum) [macOS Mojave (10.14)](https://en.wikipedia.org/wiki/MacOS_Mojave) (released Sept. 2018); that is the SDK level it uses.   While this can easily be set as current as you wish in XCode, and most Mac users keep their systems up-to-date, I see no reason to bring it closer to currency: back-compatibility is a virtue. 
 It all builds and works without error or warnings, as far as I know (and my goal is to keep that true).
 
 I may or may not fix reported bugs and post changes, but I want to know if you can't build it; contact me via GitHub. I expect to post fixes to bugs I encounter and gratuitous enhancements from hereon in.
