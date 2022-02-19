@@ -17,7 +17,7 @@ I am not, and have not been, associated with any transportation provider nor sig
 
 ## Code base
 
-This application is currently in C++17 (the 2017 standard of C++), exploiting STL.  It is almost all C++11, and, especially in the Windows version, contains code in dialects going all the way back to C. The shared core (whose maximization was my goal)  and the Windows-specific code is only in C/C++.  Some C++17 features have recently been exploited (e.g., `std::filesystem`).  Note that the Microsoft compiler will lie about the `__cplusplus` version unless told not to with `/Zc:__cplusplus`. The [Mac code](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/MacStatus.md) exploits Cocoa/Objective C++.
+This application is currently in C++17 (the 2017 standard of C++), exploiting STL.  It is almost all C++11, and, especially in the Windows version, contains code in dialects going all the way back to C. The shared core (whose maximization was my goal)  and the Windows-specific code is only in C/C++.  Some C++17 features have recently been exploited (e.g., `std::filesystem`).  Note that the Microsoft compiler will lie about the `__cplusplus` version unless told not to with `/Zc:__cplusplus`. The [Mac code](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/MacStatus.md) exploits Cocoa/Objective C++.
 
 The core of the functionality contains preprocessor conditionalizations for the two platforms. it was ported to the Mac in late 2014, with very substantial Mac-specific code additions, and back to Windows in 2016, with The last six years of Mac improvements re-shared and retrofitted in 2022.
 
