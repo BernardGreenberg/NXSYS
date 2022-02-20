@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <cassert>
 
 #include "nxsysapp.h"
 #include "helpdlg.h"
@@ -31,7 +32,6 @@ struct HelpText {
 	HelpText(const char* text, const char* title, UINT hfid);
     string Title;
     string Text;
-    int FixedId;
     int CmdId;
     void Display();
     void Remove(HMENU hHelpMenu);
@@ -107,9 +107,7 @@ void HelpDialog (const char * text, const char * title) {
 }
 
 void HelpText::Display() {
-	if (FixedId)
-		WinHelp(G_mainwindow, HelpPath.c_str(), HELP_CONTEXT, FixedId);
-	else if (Text.length() >= 5 && Text.substr(0, 5) == "file:")
+	if (Text.length() >= 5 && Text.substr(0, 5) == "file:")
 		WinBrowseResource(Text.c_str());
 	else
 		Dialog();
@@ -132,7 +130,7 @@ static HMENU GetHelpSubMenu () {
 HelpText::HelpText (const char * text, const char * title, UINT hfid) {
 	if (text) Text = text;
 	if (title) Title = title;
-    FixedId = hfid;
+	(void)hfid; /* WinHelp no longer exists. */
 	CmdId = UINT(int(ID_EXTHELP0) + (int)HelpTexts.size());
     HMENU hHelpMenu = GetHelpSubMenu();
     if (CmdId == ID_EXTHELP0) //Good idea, Henry

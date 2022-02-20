@@ -64,8 +64,12 @@ StringRegValue getStringRegval(HKEY key, const std::string& vname, size_t size) 
 	DWORD bufsize = (DWORD)size;
 	DWORD type;
 	DWORD ec = RegQueryValueEx(key, vname.c_str(), NULL, &type, (PBYTE)buff.data(), &bufsize);
-	if (ec == ERROR_SUCCESS)
+	if (ec == ERROR_SUCCESS) {
+		/* Bombs lay in trailing zeros! */
+		while (bufsize > 0 && buff[bufsize - 1] == 0)
+			bufsize -= 1;
 		return StringRegValue(string(buff.data(), bufsize));
+	}
 	return StringRegValue();
 }
 

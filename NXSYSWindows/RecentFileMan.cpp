@@ -7,6 +7,7 @@
 #include "NXSYSMinMax.h"
 #include "STLExtensions.h"
 #include <filesystem>
+#include <unordered_set>
 
 using std::vector, std::string;
 namespace fs = std::filesystem;
@@ -30,11 +31,17 @@ static string Regkey(int index) {
 
 static void SetClearCommand() {
 	DeleteMenu(HMenu, ID_CLEAR_RECENT_FILE_LIST, MF_BYCOMMAND);
-	if (FilePaths.size() > 0)
+	DeleteMenu(HMenu, ID_SEPARATOR_RECENT_FILE_LIST, MF_BYCOMMAND);
+	if (FilePaths.size() > 0) {
+		AppendMenu(HMenu, MF_SEPARATOR, ID_SEPARATOR_RECENT_FILE_LIST, NULL);
 		InsertMenu(HMenu, -1, MF_BYPOSITION, ID_CLEAR_RECENT_FILE_LIST, "&0 Clear this list");
+	}
 };
 
-void InitMenuRecentFiles(HMENU submenu) {
+void InitMenuRecentFiles(HMENU submenu) { 
+   /* this goofy hash table accounts for multiple versions of seemingly the same path in the
+      registry, which happened because of getStringRegval not trimming trailing zeros (fixed) */
+	std::unordered_set<string>sfile_paths;
 	HMenu = submenu;
 	DeleteMenu(submenu, ID_1DUMY, MF_BYCOMMAND);
 	int count = 0;
@@ -42,13 +49,17 @@ void InitMenuRecentFiles(HMENU submenu) {
 	AppKey hk("Settings");
 	auto ctr = getDWORDRegVal(hk, "RecentFileCount");
 	if (ctr.valid)
-	count = NXMIN((int)ctr.value, MAX_COUNT);
+	    count = NXMIN((int)ctr.value, MAX_COUNT);
 	for (int i = FIRST_INDEX; i < count;i++) {
 		auto srslt = getStringRegval(hk, Regkey(i));
 		if (srslt.valid) {
 			int index = (int)FilePaths.size();
-			InsertMenu(submenu, -1, MF_BYPOSITION, ID_RECENT_BASE + index, LabelN(index, srslt.value).c_str());
-			FilePaths.push_back(stolower(srslt.value));
+			string lresult = stolower(srslt.value);
+			if (sfile_paths.count(lresult) == 0) {
+				sfile_paths.insert(lresult);
+				InsertMenu(submenu, -1, MF_BYPOSITION, ID_RECENT_BASE + index, LabelN(index, lresult).c_str());
+				FilePaths.push_back(lresult);
+			}
 		};
 	}
 	SetClearCommand();
@@ -56,7 +67,7 @@ void InitMenuRecentFiles(HMENU submenu) {
 
 static void RefreshMenu() {
 	AppKey ak("Settings");
-	for (int index = LAST_INDEX; index >= FIRST_INDEX; index--)
+	for (int index = LAST_INDEX+2; index >= FIRST_INDEX; index--)
 		DeleteMenu(HMenu, index, MF_BYPOSITION);
 	for (int index = FIRST_INDEX; index <= FilePaths.size(); index++) {
 		int cmd = ID_RECENT_BASE + index;	
@@ -72,10 +83,9 @@ static void RefreshMenu() {
 void AssertRecentFileUse(const std::string& pathname) {
 	string lpath = stolower(pathname);
 	for (auto it = FilePaths.begin(); it != FilePaths.end(); it++) {
-		if (*it == lpath) {
+		if (*it == lpath)
 			FilePaths.erase(it);
-			break;
-		}
+		break;  /* it becomes invalid */
 	}
 	FilePaths.insert(FilePaths.begin(), lpath);
 	RefreshMenu();

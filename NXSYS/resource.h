@@ -48,6 +48,7 @@
 #define ID_RECENT_BASE                  40100
 #define ID_RECENT_MAX                   40120
 #define ID_CLEAR_RECENT_FILE_LIST       40121
+#define ID_SEPARATOR_RECENT_FILE_LIST   40122
 
 // Next default values for new objects
 // 
