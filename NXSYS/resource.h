@@ -44,6 +44,11 @@
 #define ID_EXTHELP9                     40029
 #define ID_TRAIN                        40030
 
+#define ID_1DUMY                        40099
+#define ID_RECENT_BASE                  40100
+#define ID_RECENT_MAX                   40120
+#define ID_CLEAR_RECENT_FILE_LIST       40121
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

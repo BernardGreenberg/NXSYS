@@ -48,6 +48,8 @@ namespace fs = std::filesystem;
 #include "WinReadResText.h"
 #include "ParseCommandLine.h"
 #include "LDRightClick.h"
+#include "RecentFileMan.h"
+
 #define NULL0(stl) ( (stl.length() == 0) ? nullptr : stl.c_str())
 #endif
 using std::string;
@@ -96,10 +98,6 @@ void dealloc_lisp_sys();
 void LispCleanOutRelays();
 
 void CleanupObjectMemory();
-
-#if defined(APPDEMO) | defined(RT_PRODUCT)
-void DoV2Dialog();
-#endif
 
 #include "StartShut.h"
 
@@ -377,6 +375,8 @@ BOOL GetLayout (const char * name, BOOL review) {
         GlobalFilePathname = name;
 #if NXSYSMac  // why isn't this crapola in AppDelegate?
         MacOnSuccessfulLayoutLoad(name);
+#else
+		AssertRecentFileUse(name);
 #endif
     }
     if (!Got)
@@ -639,8 +639,15 @@ static void NXSYS_Command(unsigned int cmd) {
 		break;
 	}
 	default:
-		if (cmd >= ID_EXTHELP0 && cmd <= ID_EXTHELP9)
+		if (cmd >= ID_EXTHELP0 && cmd <= ID_EXTHELP9) {
 			DisplayHelpTextByCommand(cmd);
+			break;
+		}
+		auto rflresult = HandleRecentFileClick(cmd);
+		if (rflresult.valid) {
+			GetLayout(rflresult.pathname.c_str(), TRUE);
+			break;
+		}
 		break;
 #endif
 		} // this must end the "switch"
@@ -824,20 +831,20 @@ badcpl:		 usermsg ("Missing or bad number after -contacts_per_line arg.");
 	  }
 #endif
 #ifdef NXOLE
-	  else if (!_stricmp (argb, "register")) {
+	  else if (argb == "register") {
 	      RegisterNXOLE();
 	      return 0;
 	  }
-	  else if (!_stricmp (argb, "unregister")) {
+	  else if (argb == "unregister") {
 	      UnRegisterNXOLE();
 	      return 0;
 	  }
-	  else if (!_stricmp (argb, "script")) {
-	      if (ano >= argc - 1) {
+	  else if (argb =="script") {
+	      if (ano >= args.size() - 1) {
 		  usermsgstop ("Missing script file name after %s", arg);
 		  return 0;
 	      }
-	      initial_script_file = argv[++ano];
+	      initial_script_file = args[++ano];
 	  }
 #endif
 
@@ -847,7 +854,7 @@ badcpl:		 usermsg ("Missing or bad number after -contacts_per_line arg.");
       else initial_layout_name = arg;
   }
 
-
+ 
   #ifdef WIN32
     if (!hPrevInstance) {
       WNDCLASS klass;
@@ -869,12 +876,14 @@ badcpl:		 usermsg ("Missing or bad number after -contacts_per_line arg.");
 	    && RegisterRelayLogicWindowClass (hInstance)))
 	  return 0;
   }
+
 #endif
 	HACCEL hAccel = LoadAccelerators(hInstance, "NXACC");
 	window = NULL;   // KRAZY WTF NO WINDOW
     int rv = StartUpNXSYS (hInstance, window,
                            NULL0(initial_layout_name), NULL0(initial_demo_file), nCmdShow);
-    if (rv == 0)
+	
+	if (rv == 0)
         rv = WindowsMessageLoop (G_mainwindow, hAccel, 0);
     
     CleanUpNXSYS();
@@ -968,12 +977,17 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 #ifndef NXSYSMac
   if (hk) 
       ImplementShowStopPolicy(GetDWORDRegval(hk, "ShowStops", ShowStopPolicy));
+  HMENU top_level_menu = GetMenu(G_mainwindow);
+  HMENU file_menu = GetSubMenu(top_level_menu, 0);
+  HMENU recent_files_submenu = GetSubMenu(file_menu, 2);
+  InitMenuRecentFiles(recent_files_submenu);
 
   if (initial_layout_name) {
 	  FName = initial_layout_name;
       const char * s = ReadLayout (initial_layout_name);
       if (s != NULL) {
 		  SetGlobalMenuState(TRUE);
+		  AssertRecentFileUse(initial_layout_name);
 		  InstallLayoutFile(window, s);
       }
       else  {

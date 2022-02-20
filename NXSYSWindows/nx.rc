@@ -38,12 +38,12 @@ NXSYS MENU
 BEGIN
   POPUP "&File"
     BEGIN
-#ifdef APPDEMO
-      MENUITEM "&Open...",      CmOpen,GRAYED
-#else
       MENUITEM "&Open...",      CmOpen
-#endif
       MENUITEM "&Reload\tCtrl+R",    CmReload
+      POPUP "&Recent Files..."
+      BEGIN
+         MENUITEM "Dummy", ID_1DUMY
+      END
       MENUITEM "File &Info...", CmFileInfo
       MENUITEM SEPARATOR
       MENUITEM "&Demo...",     CmDemo

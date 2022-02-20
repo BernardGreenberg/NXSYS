@@ -39,6 +39,19 @@ DWORD GetDWORDRegval(HKEY key, LPCSTR vname, DWORD val) {
 	return val;
 }
 
+DWORDRegValue getDWORDRegVal(HKEY key, const string& name) {
+	if (key) {
+		DWORD val;
+		DWORD bufsize = sizeof(val);
+		DWORD type;
+		DWORD ec = RegQueryValueEx(key, name.c_str(), NULL,
+			&type, (PBYTE)&val, &bufsize);
+		if (ec == ERROR_SUCCESS)
+			return DWORDRegValue(val);
+	}
+	return DWORDRegValue();
+}
+
 DWORD PutDWORDRegval(HKEY key, LPCSTR vname, DWORD value) {
 	if (key)
 		RegSetValueEx(key, vname, 0,
@@ -48,7 +61,7 @@ DWORD PutDWORDRegval(HKEY key, LPCSTR vname, DWORD value) {
 
 StringRegValue getStringRegval(HKEY key, const std::string& vname, size_t size) {
 	std::vector<char> buff(size);
-	DWORD bufsize = size;
+	DWORD bufsize = (DWORD)size;
 	DWORD type;
 	DWORD ec = RegQueryValueEx(key, vname.c_str(), NULL, &type, (PBYTE)buff.data(), &bufsize);
 	if (ec == ERROR_SUCCESS)
@@ -57,6 +70,6 @@ StringRegValue getStringRegval(HKEY key, const std::string& vname, size_t size) 
 }
 
 bool putStringRegval(HKEY key, const std::string& vname, const std::string& value) {
-	DWORD ec = RegSetValueEx(key, vname.c_str(), 0, REG_SZ, (PBYTE)value.c_str(), value.length()+1);
+	DWORD ec = RegSetValueEx(key, vname.c_str(), 0, REG_SZ, (PBYTE)value.c_str(), (DWORD)value.length()+1);
 	return (ec == ERROR_SUCCESS);
 }
