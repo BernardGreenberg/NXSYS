@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+
+<body style="max-width:800px">
+
+<h1>Islington (Toronto) Interlocking</h1>
+
+<p>This layout arose as part of an unconsummated deal in the late 90s
+to license this system to the Toronto Transit Commission (TTC), who
+expressed interest in it.  They suggested this interlocking as a test case.</p>
+
+<p>We will present here the very minor differences between New York and Toronto conventions, and critical facts necessary for anyone operating this interlocking. Please refer to the <b>NXSYS</b> display of Islington interlocking for this discussion.</p>
+
+<p><b>Track and Signal Numbering and designation</b></p>
+
+<p>Tracks are called Eastbound and
+Westbound. At Islington, eastbound is to the right, westbound is to the
+left. Toronto numbers its signals
+with odd <span class="def" dref="#DEF_sno">station numbers</span> for the
+eastbound track, and even for the westbound. If a signal is in the reverse direction
+or on some track than the main tracks of a 2-track line, it is labelled with an
+&ldquo;A&rdquo;, e.g., &ldquo;BA-122&rdquo; instead of &ldquo;B-122&rdquo; (that
+would be B1-122 and B3-122 in New York). Switch <span class="def" dref="#DEF_lever">levers</span> are odd and signals even, as in New
+York.   <span class="def" dref="#DEF_tracksection">Track sections</span>
+and their associated <a>relays</a> at
+interlockings, like signals, are numbered by the interlocking number of the
+signal controlling them (e.g., 10T), or with an &ldquo;A&rdquo; (42AT) for
+&ldquo;approach&rdquo; if there is no interlocked signal controlling it; in New
+York, all track sections are numbered by <span class="def" dref="#DEF_sno">station number.</span></p>
+
+<p><b>General use and purpose of the interlocking; permissible routes</b></p>
+
+<p>Like <a>Progman
+St.,</a> Islington is a &ldquo;sometimes terminal.&rdquo; The region at the left, delimited by
+signals 6, 8, 10 and 12, is a station platform. Trains can either pass right through on
+the mainline tracks, or the station can be used fully or partially as a
+terminal, in which trains coming westbound, from the east, can turn around in
+the station and depart to the east. That is, trains entering at 48 can exit at
+10 or 12, then enter at 10 or 12 and exit at 50. The center track can be used for
+temporarily holding trains during such maneuvers, such as holding a second
+train to destined for 10 while that pocket is occupied, as a third train goes
+right by to the pocket at 12.  Note
+that the third track is passable in either direction.</p>
+
+<p>The interlocking does not permit
+trains to exit it eastbound on the westbound track (at 48). There is no exit at 48. There is no exit at 18; all eastbound
+traffic must leave the westbound track at 12 or 16. In the other direction, westbound trains
+certainly can enter the eastbound track, to terminate at the station, but may
+not go beyond signal 6, which is a <a>marker
+signal.</a>. (In real life,
+there is a signal 4, eastbound, to the west of 6 to further protect this move,
+but we do not implement it, or 52 to the east of 48, because of screen space
+limitations.) Note that reverse-direction (westbound) traffic from 50 over the
+eastbound track) is permitted. Note also that there are several routes, e.g.,
+from 48 to 10, for which there are three alternatives (in this case,
+48-20-18-16-10, 48-44-30-16-10, 48-44-30-14-10). The interlocking uses a
+&ldquo;preferencing&rdquo; algorithm when more than one is available.</p>
+
+<p>The lower heads home signals 12 and
+14 display the opposite aspect from what would be expected in New York; in
+either case, green clears a movement to the track in the &ldquo;normal&rdquo;
+direction, a move over switch 13 in either case, and yellow clears the other
+move, i.e., into the &ldquo;reverse direction&rdquo; track.</p>
+
+<p><b>Some <span class="def" dref="#DEF_clen">Control
+Lines</span></b></p>
+
+<p><span style='font-weight:bold;color:#0A0'>There is a signal control-line plan for Islington Interlocking, Islington.pdf, in the Islington Interlocking folder (courtesy Dave Barraza). Please refer to it in the following discussion</span>. It is <i>essential</i> to know the extents
+of these control lines to understand the various <span class="def" dref="#DEF_ovlp">overlaps,</span>
+crosslocks, and conflicts implicit in this interlocking.</p>
+
+<p>Eastbound, 2's control line extends
+to IJ's 127/128 on all three tracks. 10 and 12's control line extends to 44 on the center track and 42 on the
+eastbound track; as stated above, they permit no moves (ultimately) to the
+westbound track. 26 and 28's control lines extend out, whether via the center
+track or not, past 50 to encompass its approach track section, as does 44's.</p>
+
+<p>Westbound, 48's control line is quite complicated. When going over 45
+normal down the eastbound track, it is an <a>ST</a>
+signal whose &ldquo;solid&rdquo; control length extends to 16/28, and whose
+&ldquo;dotted&rdquo; control length extends over both station platforms (via
+switch 15) to the end, i.e., IJ 115/116. When going over 45 reverse down the center track, its control length,
+shared with 50, goes to 10/12 &mdash; note that 48's control length to the station
+behaves differently depending upon whether the middle track is employed. 50
+over 49 normal extends all the way to the end (115/116). 20 is also ST, solid
+portion to 26/28, dotted to the the end. The exact same description befits 18. 30's control length extends from itself
+to the end. 16 and 14's extend one
+track section <i>beyond</i> the left-hand (west) end. The <a>automatic
+signals</a> at 121 on both tracks (B-122 and BA-122) are <a>GT signals,</a> timed from 14/16, control lines
+also going one track section beyond the end.</p>
+
+<p><b>Home-style <u style='text-underline:double'>approach signals</u>, as it were</b></p>
+
+<p>Toronto makes heavy use of <a>approach signals</a> that look and act as <a=>home signals,</a> i.e., have two heads, no <a>automatic key-by,</a> require <a=>call-on</a> to pass, etc. They are not unheard of in New York (and
+on unresignalled IRT, all approach signals are really one-headed home signals),
+but are more heavily used in Toronto. Signals 2, 8, and 20 at Islington fit this description. They are to be considered home and
+approach signals simultaneously, sort of &ldquo;absolute approach signals.&rdquo;</p>
+
+<p><b>Auto-<a>call-on</a> <a>home signals</a></b></p>
+
+<p>Toronto provides a feature whereby
+some <a>home signals</a> act somewhat like <a>automatic</a> signals when red, if the
+only reason they are red is because of a train in their <span class="def" dref="#DEF_clen">control length,</span>
+i.e., not that they are not <span class="def" dref="#DEF_called">called.</span> These signals, when in that state, and
+approached sufficiently slowly, typically 5 mph, display a <a>call-on</a> automatically, as it were. The train operator need not manually key-by
+(see <a>call-on</a>), and no tower action
+is required; the tower operator will see
+the <span class="def" dref="#DEF_GK">GK light</span> flash as
+the call-on is offered and accepted. Signals 12, 10, and 18 at Islington have this feature.</p>
+
+<p><b>GT signals</b></p>
+
+<p>While the purpose and operation of <a>GT signals</a> in Toronto is the same as in New
+York, the aspects are slightly different. The two GT signals at Islington (the two <a>automatic
+signals</a> at the east end of the station) are &ldquo;one shot&rdquo;. In New York, they would
+have a <a">lunar white</a> to indicate
+this. But in Toronto, the signals <i>before</i>
+them (in this case, 14 and 16) have the lunar white aspect, which indicates
+that the <i>next</i> signal is in the grade-timing state, i.e., will clear if <i>it</i>
+is approached sufficiently slowly (similar to the two-shot &ldquo;S&rdquo; in New
+York, but it is one-shot).</p>
+
+<p><b>ST signals</b></p>
+
+<p>Again, the purpose and operation of <a>ST signals</a> is the same as in New
+York. Unlike as in New York, there
+are no special ST aspects (e.g., the &ldquo;20&rdquo;, see <a>ST Signals.</a>)</p>
+
+<p>Islington signals 48 (over 45 normal
+only), 20, and 18 form a chain of ST signals allowing closing-on signal
+16. Each of them has the
+&ldquo;solid portion&rdquo; of their <span class="def" dref="#DEF_clen">control length</span> extending from
+itself to signal 16, and a &ldquo;dotted portion&rdquo; from 16 on through the
+west end of the station. Thus, if
+signal 12 is cleared over 13 reverse for an eastbound move from the westbound
+pocket via 26 to 50, all of 48, 20, and 18 can be cleared in &ldquo;restricted
+form&rdquo; (see <a>Interlocked ST Signals</a>
+and trains coming in from the east can close in, clearing 48, 20, and 18 in
+sequence as they approach 16, which is red, protecting the reversed 13.</p>
+
+<p>Trains created via the <b>NXSYS</b> <a>train system</a> set loose on the westbound track will actually act in this way, slowing down before these ST signals and clearing them.</p>
+
+<p><b>Overlaps and Crosslocks</b></p>
+
+<p>The <span class="def" dref="#DEF_ovlp">overlaps</span> of the
+signals at Islington, especially 48, 50, and 30, westbound, impose very complex
+conditions on switches 27 and 29 in particular, and all of the issues described
+under <a>Advanced Locking Scenarios</a> must
+be studied to understand all the situations in which <a>locking conflicts</a> will be indicated by flashing lights
+as Islington.</p>
+
+
+
+</body> </html>
