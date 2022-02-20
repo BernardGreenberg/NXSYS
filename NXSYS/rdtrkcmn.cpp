@@ -590,7 +590,7 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
                 helpMenuText = "file://" + absp.string();
             }
             else {
-                std::string helpMenuText(s2.u.s);
+                helpMenuText = s2.u.s;
                 if (helpMenuText.length() && helpMenuText[0] == '@') {
                     auto [valid, data] = LassieGetHelp(STLincexppath(fname, helpMenuText.substr(1)));
                     if (valid)  // Astonishing C++17
