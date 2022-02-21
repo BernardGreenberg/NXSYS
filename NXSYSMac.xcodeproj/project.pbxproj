@@ -88,7 +88,6 @@
 		5BA6F73719CCBB1A002551F7 /* GenericWindlgController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA6F73619CCBB1A002551F7 /* GenericWindlgController.mm */; };
 		5BA6F73A19CCF58E002551F7 /* TLWindowsSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BA6F73819CCF58E002551F7 /* TLWindowsSide.cpp */; };
 		5BA7E72619D1F421006F9A04 /* crxl.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BA7E72519D1F421006F9A04 /* crxl.png */; };
-		5BA7E72919D2BEB4006F9A04 /* MacTleHelp.html in Resources */ = {isa = PBXBuildFile; fileRef = 5BA7E72719D2BEB4006F9A04 /* MacTleHelp.html */; };
 		5BA7E72F19D3681F006F9A04 /* MacObjDlgs.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E72E19D3681F006F9A04 /* MacObjDlgs.mm */; };
 		5BA7E73319D39DC0006F9A04 /* insulate.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BA7E73219D39DC0006F9A04 /* insulate.png */; };
 		5BA7E73519D42589006F9A04 /* flipno.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BA7E73419D42589006F9A04 /* flipno.png */; };
@@ -161,6 +160,7 @@
 		5BB5802D27C3D3CA00FB0ED5 /* InterlockingLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5802B27C3D3CA00FB0ED5 /* InterlockingLibrary.cpp */; };
 		5BB5802F27C40D9400FB0ED5 /* Documentation in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5802E27C40D9400FB0ED5 /* Documentation */; };
 		5BB5803127C40E2400FB0ED5 /* Interlockings in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803027C40E2400FB0ED5 /* Interlockings */; };
+		5BB5803B27C44EE100FB0ED5 /* TLEDocumentation in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803A27C44EE100FB0ED5 /* TLEDocumentation */; };
 		5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
 		5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AC19DDA738006C590E /* dialog_warning.png */; };
 		5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
@@ -411,7 +411,6 @@
 		5BA6F73819CCF58E002551F7 /* TLWindowsSide.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TLWindowsSide.cpp; sourceTree = "<group>"; };
 		5BA6F73B19CCF775002551F7 /* TLWindowsSide.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TLWindowsSide.h; sourceTree = "<group>"; };
 		5BA7E72519D1F421006F9A04 /* crxl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crxl.png; sourceTree = "<group>"; };
-		5BA7E72719D2BEB4006F9A04 /* MacTleHelp.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = MacTleHelp.html; sourceTree = "<group>"; };
 		5BA7E72E19D3681F006F9A04 /* MacObjDlgs.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacObjDlgs.mm; sourceTree = "<group>"; };
 		5BA7E73219D39DC0006F9A04 /* insulate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = insulate.png; sourceTree = "<group>"; };
 		5BA7E73419D42589006F9A04 /* flipno.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flipno.png; sourceTree = "<group>"; };
@@ -513,6 +512,7 @@
 		5BB5802E27C40D9400FB0ED5 /* Documentation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Documentation; sourceTree = "<group>"; };
 		5BB5803027C40E2400FB0ED5 /* Interlockings */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Interlockings; sourceTree = "<group>"; };
 		5BB5803227C4115C00FB0ED5 /* GetResourceDirectoryPathname.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetResourceDirectoryPathname.h; sourceTree = "<group>"; };
+		5BB5803A27C44EE100FB0ED5 /* TLEDocumentation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TLEDocumentation; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -1061,7 +1061,6 @@
 				5BF7CEBB19CB525100DF6ECE /* Mac Progs */,
 				5BAC931F19C8FE7200673BDC /* Images.xcassets */,
 				5BAC930E19C8FE7200673BDC /* Supporting Files */,
-				5BA7E72719D2BEB4006F9A04 /* MacTleHelp.html */,
 			);
 			path = TLEdit;
 			sourceTree = "<group>";
@@ -1169,6 +1168,7 @@
 		5BE487C3199D0A5C007BD6BF = {
 			isa = PBXGroup;
 			children = (
+				5BB5803A27C44EE100FB0ED5 /* TLEDocumentation */,
 				5BB5803027C40E2400FB0ED5 /* Interlockings */,
 				5BB5802E27C40D9400FB0ED5 /* Documentation */,
 				5BB5802327C3CFFD00FB0ED5 /* InterlockingLibrary.xml */,
@@ -1541,7 +1541,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B6705BF19D0EACC002B6E28 /* SignalSW.png in Resources */,
-				5BA7E72919D2BEB4006F9A04 /* MacTleHelp.html in Resources */,
 				5BA7E73519D42589006F9A04 /* flipno.png in Resources */,
 				5B6705C519D0F2A3002B6E28 /* Cut-icon.png in Resources */,
 				5BED456319D1BC4E00A22DE8 /* PanelSwitchProperties.xib in Resources */,
@@ -1564,6 +1563,7 @@
 				5BED456C19D1E19300A22DE8 /* TrafficLeverProperties.xib in Resources */,
 				5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */,
 				5BA7E73719D4B592006F9A04 /* TextStringProperties.xib in Resources */,
+				5BB5803B27C44EE100FB0ED5 /* TLEDocumentation in Resources */,
 				5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */,
 				5BC911B019DDB294006C590E /* dialog_warning.png in Resources */,
 				5B6705C119D0EC70002B6E28 /* document_properties.png in Resources */,

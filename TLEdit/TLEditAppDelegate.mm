@@ -263,12 +263,12 @@ TLEditAppDelegate* getTLEDelegate() {
 
 - (IBAction)Help:(id)sender {
     [self ensureHelp];
-    [_helpController HTMLHelp:@"TLEdit" tag:nil];
+    [_helpController HTMLHelp:@"TLEDocumentation/TLEdit" tag:nil];
 }
 - (IBAction)MacHelp:(id)sender
 {
     [self ensureHelp];
-    [_helpController HTMLHelp:@"MacTleHelp" tag:nil];
+    [_helpController HTMLHelp:@"TLEDocumentation/MacTleHelp" tag:nil];
 }
 - (IBAction)FixView:(id)sender
 {

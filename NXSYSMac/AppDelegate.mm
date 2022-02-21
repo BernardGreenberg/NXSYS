@@ -472,13 +472,13 @@ static InterlockingLibrary interlockingLibrary;
     ScenarioHelp(1);
 }
 - (IBAction)NXV1Help:(id)sender {
-    [self.helpController HTMLHelp:@"NXSYS" tag:nil];
+    [self.helpController HTMLHelp:@"Documentation/NXSYS" tag:nil];
 }
 - (IBAction)MacHelp:(id)sender {
-    [self.helpController HTMLHelp:@"MacNXSYS" tag:nil];
+    [self.helpController HTMLHelp:@"Documentation/MacNXSYS" tag:nil];
 }
 - (IBAction)ReleaseNotes:(id)sender {
-    [self.helpController HTMLHelp:@"ReleaseNotes" tag:nil];
+    [self.helpController HTMLHelp:@"Documentation/ReleaseNotes" tag:nil];
 }
 
 -(void)ScenarioHelpSetTitle:(NSString*)s
