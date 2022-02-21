@@ -9,7 +9,7 @@
 #ifndef GetResourceDirectoryPathname_h
 #define GetResourceDirectoryPathname_h
 
-#import <filesystem>
+#include <filesystem>
 
 /* different implementations on Mac and Windows */
 
