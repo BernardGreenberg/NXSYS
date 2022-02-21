@@ -1,6 +1,6 @@
 #  NXSYS sources, complete
 ###  By and ©Copyright 1994-2022, Bernard S. Greenberg
-#### First Posted 4 February 2022 (last 18 Feb 2022)
+#### First Posted 4 February 2022 (last 21 Feb 2022)
 
 This is the buildable, runnable source code for **NXSYS** (*enn-ex-sys*) (Version 2), my New York City Subway relay-logic and interlocking panel simulator, and its six offered interlockings, as it stands.  It is mine, and mine alone, although Dave Barraza's contributions to its debugging and development deserve credit.  Feel free to continue it, improve it if you like, or just build it for yourself.  I want this repository to be its home.  I'm not soliciting or merging branches at this time.
 
@@ -32,6 +32,8 @@ There are various degrees of beauty and professionalism evident in the code-base
 I'm satisfied with the operability and reliability of the sources posted here.  I am actively thinking about (significant) changes to support relay and track-section names more complicated than (the current) digits followed by alphanumerics, for example `A1-708, A1-708H` instead of `1708/1708H,` which would facilitate the representation of interlockings where two or more subway lines, with distinct stationing letters and origins, join, such as the incomparable E. 180th St. rebuild of 2013.
 
 I’m also thinking about support for topomorphic circuits (see the logic document cited right below).  If I successfully implement these or other new features, they will not break extant interlockings—I won't “push” until I have solid code.
+
+As of 21 February 2022, the application (both versions) includes, in source, the [**pugixml** portable XML library](http://pugixml.org) ©2006-2018 by Arseny Kapoulkine, which is MIT-license free to use.
 
 ***Nota bene***—there are file system and XCode artifacts seemingly referring to Windows in the Mac-only folders, e.g., `Winapi.mm`.  These are *not* misplaced Windows programs, but Mac code *emulating the Win32 API in Cocoa/Objective C++*, which is the compatibility strategy I chose in 2014 to maximize shared, retained code.
 

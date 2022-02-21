@@ -1015,8 +1015,7 @@ commands. Most are disabled if no interlocking is loaded.</span></p>
   <tr><td><b>File</b></td><td>Open</td><td>Reads
     in the definition of an interlocking from an interlocking definition file,
 usual suffix <b>.trk</b>. Each interlocking in is own folder (interlockings comprise many source files). See the <a href="#scenarios">Interlocking
-Scenarios</a> for the correct names of files for each version and the
-lowdown on creating your own scenarios.</td></tr>
+Scenarios</a> for the correct names of files for each version, but you don&rsquo;t have to know that if you use the <b>Interlocking Library</b> command below.</td></tr>
 
 
 <tr><td></td><td>Reload</td><td>Asks
@@ -1025,6 +1024,9 @@ current interlocking definition file. This resets its state to &ldquo;as it was 
 to interlocking definitions or simply to reset the layout. See also </span><b><span>1 (Last interlocking pathname)</span></b><span> below on this menu to reattempt to load an interlocking that has failed to load.</td></tr>
 
 <tr><td></td><td>File Info</td><td>Displays a small dialog with statistical information about the content of the interlocking, viz., the pathname of the top-level definition file, the count of signals, switches, relays, etc. </td></tr>
+
+tr><td></td><td>Interlocking Library...</td><td>Pops up a &ldquo;submenu&rdquo; of interlocking scenarios supplied with the application. Selecting any loads it.  It is driven by a simple XML file in the application&rsquo;s directory (or its Resources directory on the Mac).</td></tr>
+
 
 <tr><td></td><td>Recent Files...</td><td>Pops up a &ldquo;submenu&rdquo; of recently-visited interlockings in most-to-least-recently-used
 order, with single-digit accelerators on Windows.  Selecting any loads it.  On both systems you can clear the list (or menu, as the Mac calls it.)</td></tr>
@@ -2808,8 +2810,8 @@ operate Islington, it is necessary to comprehend even the <a href="#hairy">Advan
 Progman St., it is not.</span></p>
 
 <p>Designing your own scenarios is difficult.<br clear=all style='page-break-before:always'></p>
-<a name='progman'</a>
-<h3>4.1 Progman St. Interlocking</h3>
+
+<h3 id="progman">4.1 Progman St. Interlocking</h3>
 
 <p>The fictitious <b>Progman St.</b> is an interlocking very much like several 4-track terminals on the New York system where the station &ldquo;pockets&rdquo; on the center (express) tracks are used
 for holding and reversing trains coming from either the express or local
@@ -2877,8 +2879,7 @@ employ dwarf signals on revenue trackage for that reason.</p>
 
 <br clear=all style='page-break-before:always'>
 
-<a name='islington'/>
-<h3>4.2 Islington Interlocking (Toronto)</h3>
+<h3 id="islington">4.2 Islington Interlocking (Toronto)</h3>
 
 <p><b>NXSYS</b> now supplies a very complete and accurate implementation of Islington Interlocking on Toronto's Bloor-Danforth line. The signalling principles and panel operation are identical to those in New York City, although the signal aspects for <a href="#timesig">time
 signals</a> are a little different.</p>
@@ -2897,9 +2898,7 @@ source-code for the interlocking</p>
 
 <br clear=all style='page-break-before:always'>
 
-<a name='v2adv'/>
-
-<h3>4.3 Myrtle and Atlantic Avenues &mdash; Advanced &ldquo;Real Life&rdquo; NYCT scenarios</h3>
+<h3 id="v2adv">4.3 Myrtle and Atlantic Avenues &mdash; Advanced &ldquo;Real Life&rdquo; NYCT scenarios</h3>
 
 <p>Supplied with Version 2 are two operative scenarios for actual New York City interlockings, in their own folders, loadable from <b>atlantic.trk</b> and <b>myrtle.trk</b> in the similarly named folders (directories). While the track, signal, and switch identifications (and signal control lines) are from real life, the circuitry is <i>not the actual circuitry</i> at these sites, although it is designed to the same spec, but &ldquo;less well&rdquo;.</p>
 
@@ -2920,8 +2919,7 @@ source-code for the interlocking</p>
 <p>This layout is an imaginary yard with &ldquo;railroad-like&rdquo; design.  What is interesting here is that the interlocking is supplied in seven files, explaining (in source comments) seven stages of implementing the interlocking logic from scratch to a fully-functional tower.  File <b>db1.trk</b> can only select routes, but no signals, locking, etc., and <b>db7.trk</b> is a fully-functional interlocking.  See the file <b>README.md</b> in the interlocking&rsquo;s eponymous folder.</p>
 
 
-<h3>4.6 Designing your own scenarios</h3>
-
+<h3 id="design">4.6 Designing your own scenarios</h3>
 
 <p>Designing your own scenarios is not easy! As <b>NXSYS</b> is an interlocking
 simulator, not an interlocking implementation, designing and creating the track
@@ -2941,11 +2939,11 @@ designing and debugging it in the manner of a computer program.</p>
 signal engineering, or are trying to acquire it, <b>NXSYS</b> is an ideal tool to create, experiment with,
 and debug relay circuit designs.</p>
 
-<p><b>TLEdit</b>, the &ldquo;track layout editor&rdquo; is also supplied.  <b>TLEdit</b> allows you to create  actual layouts, i.e., the display of tracks, switches, signals, etc., but only you can create the logic which gives it life and makes it responsive.  It is self-documenting.</p>
+<p><b>TLEdit</b>, the &ldquo;track layout editor&rdquo;, is also supplied.  <b>TLEdit</b> allows you to create  actual layouts, i.e., the display of tracks, switches, signals, etc., but only you can create the logic which gives it life and makes it responsive.  It is self-documenting.</p>
 
 
 <br clear=all style='page-break-before:always'>
-<a name='relays'/><h2>5. Relays and Relay Logic</h2>
+<h2 id="relays">5. Relays and Relay Logic</h2>
 
 <p>You can safely ignore this section. But if you wish to
 understand the internal workings of <b>NXSYS</b> interlockings, or debug them, or
@@ -2992,8 +2990,7 @@ front contacts open, and back contacts closed.</p>
 
 <p>A typical relay name comprises a number identifying a switch, signal, or track section, and a <b>nomenclature</b> indicating function. For instance, <b>24R</b> is the &ldquo;Route Check&rdquo; (<span class="def" dref="#DEF_called">called</span>) relay for Signal 24, which is picked when it is called and dropped when not.</p>
 
-<a name="vital"/>
-<h3>5.1 Vital and nonvital relays</h3>
+<h3 id="vital">5.1 Vital and nonvital relays</h3>
 <p>Relays, by function (i.e., nomenclature), in real-world interlockings divide into two classes, &ldquo;vital&rdquo; and &ldquo;nonvital&rdquo;.  Vital relays, as the name suggests, are those ultimately responsible for the safety of life and limb: those that directly operate or report signals, stops, and switches, and others directly responsible for their safety.  While it may seem that <i>all</i> relays in an interlocking are thus, that is not strictly so:  many, typically those that record panel-board actions and implement (some) panel indications, and those which implement the ingenious entrance-exit route selection, are <i>not</i> critical to safety, and are therefore &ldquo;nonvital&rdquo;.  Categorically, by careful design, the failure, failure to pick, failure to drop, failure to operate properly or consistently, of a nonvital relay, while capable of creating a transportation tie-up, cannot create unsafe conditions.  Failure of vital relays can, although they cross-check each other (quite literally) up and down, coming and going, to minimize these possibilities.  Vital and nonvital relays are markedly different in construction and cost: while nonvital relays resemble those available at do-it-yourself parts stores, vital relays are huge, hyper-rugged, plastic-encased complex instruments each costing (at least) hundreds of dollars.</p>
 
 <p>For example, if the entire routing network of nonvital <b>PBS</b>, <b>XS</b> and <b>ANN, ANS</b> etc. relays were to call for bogus signal and switch movements, the circuits of the vital <b>H, AS, LS, etc.</b> relays would not permit these orders to be carried out.  Vital relays that assert, for safety checking, that something is <i>not so</i> (e.g., signal not clear, track not occupied, northbound route not active in this section, etc.) always are designed such that the relay's being picked is the positive assertion of the <i>absence</i> of the undesired (more unsafe) condition, even though this requires the relay being energized around the clock year round. </p>
@@ -3005,8 +3002,7 @@ front contacts open, and back contacts closed.</p>
 
 <p>In traditional lever interlockings, there are few, if any, nonvital relays.  The interlocked levers serve both control and checking functions simultaneously. For instance (say on the BMT where levers used to go &ldquo;in and out&rdquo; from the frame), a signal lever pushed all the way in is &ldquo;reset&rdquo; and does not inhibit other levers from motion, while countless other levers in concert potentially prevent it from being moved from this position. But once it can be and has been pulled out, it calls its signal, and locks other levers.  However, although it can be pushed in <i>a little</i> to cancel its signal at any time, it cannot be pushed <i>all the way in</i> unless its signal's <a href="#aplock">approach locking</a> has released (i.e., unlocked that far by its so-called &ldquo;indication magnet&rdquo;, &ldquo;<b>M</b>&rdquo;, forebear of the <b>AS</b> relay), and thus, does not unlock other levers until this happens and it is then pushed fully in.</p>
 
-<a name="nomenclatures"/>
-<h3>5.2 Important NY-style Relay Nomenclatures</h3>
+<h3 id="nomenclatures">5.2 Important NY-style Relay Nomenclatures</h3>
 
 <p>Here are the key nomenclatures used in <b>NXSYS</b> and New York and Toronto (and probably many other places) interlockings (the second column indicates vital or nonvital function). &ldquo;Stick&rdquo; designates a relay that &ldquo;sticks&rdquo; picked, i.e., becomes &ldquo;stuck&rdquo; via a &ldquo;feedback contact&rdquo; as long as some appropriate condition obtains. It is thus a memory element equivalent to the digital flip-flop.</p>
 
@@ -3108,8 +3104,6 @@ the initiation exploits this feature or not. For an <a href="#apsig">approach si
 </table>
 
 
-
-
 <p></p>
 
 <p>There are many others, and they are left as a tantalizing exercise
@@ -3126,8 +3120,8 @@ interlocking think.</p>
 
 <p><span style="font-size:150%;font-weight:bold">Important!</span>There are relays that are operated by NXSYS when you press buttons or click on track representations or other controls, and other relays which, when operated by the relays you code, cause “switches” to move, signals to clear, track sections to turn red or white or flash, etc.   These are the logical inputs and outputs of your relay system, and, corresponding, the outputs and inputs of the NXSYS application.  The identities and contracts (not <i>contacts</i>) of these relays are discussed in the Relay Language document <a href="RelayLanguage.html">at this link</a>.</p>
 
-<a name="rlygraphics"/>
-<h3>5.3 NXSYS relay graphics and other tools</h3>
+
+<h3 id="rlygraphics">5.3 NXSYS relay graphics and other tools</h3>
 
 <p>To see the definition (circuit) of any relay, select <b>Relays|Show Circuit</b>
 and type the nomenclature (e.g., <b>244PBS</b>) of the relay you want to see. The circuit will be displayed in a window called the &ldquo;Relay Draftsman&rdquo; on Windows and &ldquo;Relay Draftsperson&rdquo; on the Mac.  The present state of the relay (picked or dropped) will be displayed with the coil, and the state of each contact will be displayed as open or closed &mdash; a white triangle is open, black is closed. If relay and contact states
@@ -3163,7 +3157,7 @@ system. Bear in mind, too, that other relays are observed directly by the user i
 
 <p>The Relay Draftsperson may also be used to access the pseudo-Lisp source for a relay via a click on a coil or contact representation, to facilitate editing of relays under development.  This feature is not trivial to set up, but is quite useful when running.  Do read <a href="RelayIndex.html">this document about it.</a></p>
 
-<a name="tracewindow"/><h3>Relay Trace Window</h3>
+<h3 id="tracewindow">Relay Trace Window</h3>
 
 <p>One can trace relay activity, in a compiled or interpreted
 interlocking, with the <b>Relay Trace window</b>, which is activated from <b>Relays|Trace.</b> Each time a relay is picked or dropped its name and which (pick or drop)
@@ -3180,7 +3174,7 @@ or the first tool on its toolbar.</p>
 
 <br clear=all style='page-break-before:always'>
 
-<a name='credits'/><h2>6. Credits and Conditions of Use</h2>
+<h2  id="credits">6. Credits and Conditions of Use</h2>
 
 <p><b>NXSYS</b> was conceived, designed, and written by <a href="#author">Bernard S. Greenberg, of Boston, Mass.,
 USA,</a> on his own time, not using any non-redistributable copyrighted or owned components, or developed on anyone
@@ -3191,9 +3185,7 @@ purpose are made or implied. Please check the website listed below regularly for
 
 <p>This software is intended for educational, demonstrative, and entertainment purposes only, and is not suitable for use for control of actual railroads or other life-critical missions. The circuit designs, in particular, occasionally employ shortcuts and simplifications not appropriate for real railroad signalling, and are not suitable for use as prototypes for systems to control real life-critical systems. The author assumes no responsibility for any damage or harm resulting from use or misuse. The author assumes no responsibility for errors resulting from corruption of the distribution media or files. Compliance with any extant copyrights, patents, or other rights potentially infringed by the commercial use, in spite of this warning, of information provided in this software or documentation, is your responsibility alone.</p>
 
-<p>Individuals may use and share this program as they wish, but may not
-incorporate this program or its parts in any distribution, collection, or
-commercial product without the consent of the author (contact means below).  Users may not modify it, but are free to develop scenarios for it.</p>
+<p>This software is currently licensed in <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU Public License Version 3.</a></p>
 
 <p>This software is intended for personal use and personal education, and offered free of charge under those
 conditions. It is not intended, or certifed, to be used or adapted for real railroads or other life-critical applications.</p>
@@ -3203,17 +3195,17 @@ version in Apple <b>clang LLVM</b> C++, 64 bit, with the user interface in Objec
 href="MacNXSYS.html">Mac-specific help</a> for more detail). An original Lisp implementation
 (originally including an original compiler) forms a part of it. The Windows versions are intended for use in modern Windows environments, currently pretty much Windows 10 or 11.  The 32-bit versions, which are obsolete, will work on older Windows platforms.  NXSYS 1 is gone.  This help text was born in original Microsoft Help Compiler source, transmuted through Python scripting to HTML, and is now maintained in XCode on the Macintosh.</p>
 
+<p>This software employs the pugixml portable XML library (<a href="http://pugixml.org">http://pugixml.org</a>). pugixml is Copyright ©2006-2018 Arseny Kapoulkine.</p>
+
 <p><b>NXSYS</b> is based upon ideas and designs from the June 1, 1958 New York City
 Transit Authority drawings, <b><i>NX &amp; UR Interlockings, Typical Circuits
 (733-33),</i></b> which was one of the central formative documents of the
 author's career. A recent gift of a 1994 733-33 has been most helpful, too. The relay-logic interlockings implemented by <b>NXSYS</b> straightforwardly implement most, but not all, of these ideas. Neither this software nor this documentation has been authorized, approved, or verified by the New York City Transit Authority or its successors.</p>
 
-
 <p>The author conceived the ideas in the relay logic simulator/interpreter and compiler which form a large part of
 <b>NXSYS</b> when he was in the employ of Symbolics, Inc., in the early 1980's. Implementation of (16-bit Windows) NXSYS was begun on 29 May 1994.  Version 2, permitting arbitrary 2-dimensional track geometry and topology, was begun (on 32-bit Windows) early in 1997, but not released. The Macintosh Version was birthed in the Fall of 2014.  The releaseable Version 2.1 for Windows was effected, benefiting from many improvements in the Mac version, in the Winter of 2016.</p>
 
-<p><b>Windows, Windows XP, Windows 7</b>, <b>Windows 8</b>, <b>Windows 10</b>,
-<b>Win32</b>, and <b>Visual C++</b> are trademarks of the
+<p><b>Windows, <b>Windows 10</b>,<b>Win32</b>, and <b>Visual C++</b> are trademarks of the
 Microsoft Corporation. <b>Apple</b>, <b>Macintosh</b>, <b>Mac</b>, <b>XCode</b> and <b>Objective C(++)</b> are trademarks of
 Apple Inc.  <b>Intel</b> is a trademark of the <b>Intel Corporation.</b>
 <b>NX</b> refers to a scheme of railroad switch and signal control offered by
