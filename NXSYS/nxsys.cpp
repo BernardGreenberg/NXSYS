@@ -39,29 +39,28 @@
 #include "MessageBox.h"
 
 #include <filesystem>
+
 namespace fs = std::filesystem;
+using std::string;
+using std::vector;
 
 #ifdef NXSYSMac
 #include "AppDelegateGlobals.h"
-#else
+#endif
+
+#ifdef WIN32
 #include "NXRegistry.h"
-#include "WinReadResText.h"
-#include "ParseCommandLine.h"
 #include "LDRightClick.h"
+#include "NXSYSWinApp.h"
 #include "RecentFileMan.h"
 
-#define NULL0(stl) ( (stl.length() == 0) ? nullptr : stl.c_str())
 #endif
-using std::string;
-using std::vector;
 
 #ifdef NXOLE
 #include "nxole.h"
 #endif
 
-#ifndef NOTRAINS
 #include "trainapi.h"
-#endif
 #include "dynmenu.h"
 BOOL EnableAutoOperation = FALSE;
 
@@ -75,28 +74,19 @@ void ValidateRelayWorld();
 #define MAIN_FRAME_SCREEN_X_FRACTION (1.0)
 #define MAIN_FRAME_SCREEN_Y_FRACTION (10.5/16.0)
 
-#ifdef WIN32
-
-   #define HELP_FNAME "Pages\\NXSYS.html"
-#else
-   #define HELP_FNAME "nxxlkg"
-#endif
+#define HELP_FNAME "Documentation\\NXSYS.html"
 
 #define MAIN_WINDOW_STYLE \
   WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_HSCROLL |\
   WS_MINIMIZEBOX | WS_MAXIMIZEBOX
-
-BOOL No3DGraphics = TRUE;
 
 /* should be moved to appropriate include files at some point */
 
 void InitTrackGDI (int mww, int mwh);
 void TrackCleanup(), TrackGraphicsCleanup ();
 void TextFontCleanup();
-
 void dealloc_lisp_sys();
 void LispCleanOutRelays();
-
 void CleanupObjectMemory();
 
 #include "StartShut.h"
@@ -110,6 +100,7 @@ HICON TrainMinimizedIcon;
 string GlobalFilePathname;
 
 char app_name[] = "V2 NXSYS";
+string LayoutFileName;
 
 static const char* InitialTitleBar = "Version 2 NXSYS -- New York Subway NX/UR Panel"
 #ifdef _WIN64
@@ -120,28 +111,22 @@ static const char* InitialTitleBar = "Version 2 NXSYS -- New York Subway NX/UR P
 #endif
    ;
 
-static string FName;
-
-
 #ifndef NXSYSMac
 static char MWPKey[] = "Main Window Placement";
-static char FTitle[MAXPATH], DFName[MAXPATH] = "";
-static char MainWindow_Class[] = PRODUCT_NAME ":Main";
 static const char* IniFileName = "NXSYS.INI";
 #endif
-string HelpPath("Pages/NXSYS.html");
 
 #ifdef NXOLE
 static char ScriptName [MAXPATH];
 #endif
-static int  ChooseTrack = 0;
+int  ChooseTrackActive = 0;
 #ifndef NXSYSMac
 static int  TrainType = 0;
 
 BOOL RightButtonMenu = FALSE;
 static BOOL AddedLastPath = FALSE;
 #endif
-static BOOL Got = 0;
+BOOL GotLayout = 0;
 static jmp_buf S_JmpBuf;
 
 #ifdef NXSYSMac
@@ -159,17 +144,10 @@ static UINT OKNOICommands []
 static const char * initial_script_file = NULL;
 static BOOL automation = FALSE;
 #endif
-
-static void CheckMainMenuItem (int item, BOOL enabled) {
-    CheckMenuItem (GetMenu(G_mainwindow), item,
-		   enabled ?
-		   (MF_BYCOMMAND | MF_CHECKED) :
-		   (MF_BYCOMMAND | MF_UNCHECKED));
-}
     
 static void SetGlobalMenuState (BOOL enable) {
     UINT enb = enable ? MF_ENABLED : MF_GRAYED;
-    Got = enable;
+    GotLayout = enable;
     HMENU m = GetMenu (G_mainwindow);
     int lastmenu = 5;
 
@@ -197,25 +175,6 @@ static void SetGlobalMenuState (BOOL enable) {
 }
 
 #if WIN32
-
-
-static void
-SetHelpFilePath () {
-	AppKey hk("Settings");
-	if (hk) {
-		auto result = getStringRegval(hk, "HelpFilePathname");
-		if (result.valid) {
-			HelpPath = result.value;
-			return;
-		}
-		std::vector<char>buf(MAX_PATH);
-		GetModuleFileName(app_instance, buf.data(), (WORD)buf.size() - 1);
-		fs::path modpath = string(buf.data());
-		modpath.replace_filename("");
-		HelpPath = (fs::path(modpath / HELP_FNAME)).string();
-	}
-}
-
 long smeasure (HDC dc, const char * str) {
     SIZE ss;
     GetTextExtentPoint32 (dc, str, (int)strlen (str), &ss);
@@ -289,11 +248,10 @@ void DeInstallLayout () {
 #ifdef NXSYSMac
     CloseAllFSWs(true);  //should have something similar for MSWindows.
     LoseChooseTrack();
-#endif
-#ifndef NXSYSMac
+#else
 
-    if (FName.length()) {
-		std::string entry = "&1 " + FName;	
+    if (LayoutFileName.length()) {
+		std::string entry = "&1 " + LayoutFileName;	
 		HMENU menu = GetSubMenu (GetMenu (G_mainwindow),0);
 		if (!AddedLastPath)
 		  InsertMenu (menu, 2, MF_BYPOSITION, CmLoadLast, entry.c_str());
@@ -334,7 +292,7 @@ void DeInstallLayout () {
   //  MacReleaseGDIOBJs();   // why not reuse 'em?
 #endif
     InvalidateRect(G_mainwindow, NULL, TRUE);
-    Got = 0;
+    GotLayout = 0;
 }
 
 
@@ -364,10 +322,10 @@ BOOL GetLayout (const char * name, BOOL review) {
     MacBeforeLayoutLoad();
 #endif
     const char * s = ReadLayout (name);
-    Got = (s != NULL);
-    SetGlobalMenuState (Got);
+    GotLayout = (s != NULL);
+    SetGlobalMenuState (GotLayout);
 
-    if (Got) {
+    if (GotLayout) {
 	if (!review)
 	    NXGO_SetDisplayWPOrg(x, y);
 
@@ -379,518 +337,27 @@ BOOL GetLayout (const char * name, BOOL review) {
 		AssertRecentFileUse(name);
 #endif
     }
-    if (!Got)
+    if (!GotLayout)
 		DeInstallLayout();
 
     ValidateRelayWorld();
-    return Got;
+    return GotLayout;
 }
     
 
 void EndChooseTrack () {
-    ChooseTrack = 0;
+    ChooseTrackActive = 0;
     SetCursor (LoadCursor (NULL, IDC_ARROW));
     ReleaseCapture ();
     FlushChooseTrackDlg();
 }
-#ifndef NXSYSMac   // whole damned thing is worthless.
 
-static void NXSYS_Command(unsigned int cmd) {
-	int dlgr;
-	switch (cmd) {
-	case CmShowStops:
-		if (dlgr = ShowStopDlg(G_mainwindow, app_instance, ShowStopPolicy)) {
-			ImplementShowStopPolicy(dlgr);
-			AppKey hk("Settings");
-			if (hk)
-				PutDWORDRegval(hk, "ShowStops", ShowStopPolicy);
-		}
-		break;
-#ifndef NOTRAINS
-	case CmHaltTrains:
-	case CmKillTrains:
-	case CmHideTrainWindows:
-	case CmShowTrainWindows:
-		TrainMiscCtl(cmd);
-		break;
-
-	case CmNewTrain:
-		TrainType = TRAIN_HALTCTL_GO;
-	ctc:	    SetCapture(G_mainwindow);
-		ChooseTrack = 1;
-		SetCursor(LoadCursor(NULL, IDC_SIZEWE));
-		OfferChooseTrackDlg();
-		break;
-	case CmNewTrainStopped:
-		TrainType = TRAIN_HALTCTL_HALTED;
-		goto ctc;
-#endif
-
-	case CmResetAllAbove:
-		AllAbove();
-		break;
-
-	case CmClearTrack:
-		ClearAllTrackSecs();
-		break;
-	case CmCancelSignals:
-		DropAllSignals();
-		break;
-	case CmReleaseApproach:
-		DropAllApproach();
-		break;
-	case CmNormalSwitches:
-		NormalAllSwitches();
-		break;
-	case CmBobbleRGPs:
-		if (usermsggen(MB_YESNO,
-			"Really simulate temporary failure "
-			"of track repeater circuits?")
-			== IDYES)
-			BobbleRGPs();
-		break;
-
-	case CmClearAllAuxLevers:
-		ClearAllAuxLevers();
-		break;
-
-	case CmRelayQuery:
-		AskForAndShowStateRelay(G_mainwindow);
-		break;
-
-#ifndef NXSYSMac
-	case CmRelayTrace:
-		EnableRelayTrace(!RelayTraceExposedP());
-		break;
-
-	case CmNews:
-		//obsolete 2016, no UI
-		//WinHelp(G_mainwindow, HelpPath.c_str(), HELP_CONTEXT, IDH_NEWS);
-	case CmUsage:
-#ifdef WIN32
-		 
-#else
-		WinHelp(G_mainwindow, HelpPath, HELP_CONTENTS, 0);
-#endif
-		break;
-#endif
-	case CmAbout:
-		AboutDialog(G_mainwindow, app_instance);
-		break;
-	case CmLoadLast:
-		if (!Got) {
-			GetLayout(FName.c_str(), TRUE);
-			break;
-		}
-	case CmReload:
-		if (Got && usermsggen(MB_YESNO, "Really reload and reset state?")
-			== IDYES)
-			GetLayout(FName.c_str(), FALSE);
-		break;
-	case CmOpen:
-	{
-		auto result = FileOpenDlgSTL(G_mainwindow, FName, FTitle, true,
-#ifdef NXCMPOBJ
-			FDlgExt::Layout
-#else
-			FDlgExt::Interpreted
-#endif
-		);
-		if (result.valid) {
-			FName = result.Path;
-			GetLayout(FName.c_str(), TRUE);
-		}
-	}
-	break;
-#ifdef WINDOWS
-	case CmFileInfo:
-	    if (InterlockingLoaded)
-		StatusReportDialog(G_mainwindow, GetModuleHandle(NULL));
-	    break;
-#endif
-#ifndef	NODEMO
-	case CmHaltDemo:
-		DemoPause(1);
-		break;
-	case CmPauseDemo:
-		DemoPause(0);
-		break;
-	case CmFlushSigWins:
-		DestroySigWins();
-		break;
-	case CmDemo:
-	{
-		auto result = FileOpenDlgSTL(G_mainwindow, "", "Demo script", true, FDlgExt::XDO);
-		if (result.valid) {}
-			AllAbove();
-			Demo(result.Path.c_str());
-		}
-		break;
-#ifdef NXOLE
-	case CmDemoScript:
-		if (FileOpenDlg(G_mainwindow, ScriptName, FTitle,
-			sizeof(ScriptName), 1, FDE_NXScript)) {
-			AllAbove();
-			NXScript(ScriptName);
-		}
-		break;
-	case CmCommandDlg:
-		CommandLoopDlg();
-		break;
-#endif
-#endif
-	case CmShowRelayCircuit:
-		AskForAndDrawRelay(G_mainwindow);
-		SetFocus(G_mainwindow);
-		break;
-
-	case CmPrintLogic:
-		if (!InterlockingLoaded) {
-			usermsgstop("No interlocking loaded.  Load it first.");
-			break;
-		}
-		if (!InterpretedP) {
-			usermsgstop("Compiled interlocking.  Load expr-code "
-				"version or use Print Logic File.");
-			break;
-		}
-		PrintInterlocking(InterlockingName.c_str());
-		break;
-
-	case CmPrintLogicFile:
-		if (InterlockingLoaded)
-			if (FileOpenDlg(G_mainwindow, DFName, FTitle, sizeof(DFName),
-				1, FDlgExt::Interpreted))
-				DrawInterlockingFromFile(InterlockingName.c_str(), DFName);
-			else;
-		else
-			usermsgstop("No interlocking loaded.  Load it first.");
-		break;
-
-	case CmQuit:
-#ifndef NXSYSMac
-		PostQuitMessage(0);
-#endif
-		break;
-	case CmScaleDisplay:
-		if (ScaleDialog())
-			InvalidateRect(G_mainwindow, NULL, TRUE);
-		break;
-	      
-	case CmAutoOp:
-		EnableAutoOperation = !EnableAutoOperation;
-		CheckMainMenuItem(CmAutoOp, EnableAutoOperation);
-		EnableAutomaticOperation(EnableAutoOperation);
-		break;
-#if defined(APPDEMO) 
-	case CmV2Info:
-		DoV2Dialog();
-		break;
-#endif
-	case CmScrollRight:
-		NXGO_HScroll(G_mainwindow, SB_LINERIGHT, 0);
-		break;
-	case CmScrollLeft:
-		NXGO_HScroll(G_mainwindow, SB_LINELEFT, 0);
-		break;
-	case CmScrollUp:
-		NXGO_VScroll(G_mainwindow, SB_LINEUP, 0);
-		break;
-	case CmScrollDown:
-		NXGO_VScroll(G_mainwindow, SB_LINEDOWN, 0);
-		break;
-	case CmPageUp:
-		NXGO_VScroll(G_mainwindow, SB_PAGEUP, 0);
-		break;
-	case CmPageDown:
-		NXGO_VScroll(G_mainwindow, SB_PAGEDOWN, 0);
-		break;
-	case CmHome:
-		NXGO_HScroll(G_mainwindow, SB_TOP, 0);
-		break;
-	case CmEnd:
-		NXGO_HScroll(G_mainwindow, SB_BOTTOM, 0);
-		break;
-	case CmPageLeft:
-		NXGO_HScroll(G_mainwindow, SB_PAGELEFT, 0);
-		break;
-	case CmPageRight:
-		NXGO_HScroll(G_mainwindow, SB_PAGERIGHT, 0);
-		break;
-
-	case CmRightClickMenuMode:
-#ifndef NXSYSMac
-		RightButtonMenu = !RightButtonMenu;
-		{
-			AppKey hk("Settings");
-			if (hk)
-				PutDWORDRegval(hk, "RightButtonMenuMode", RightButtonMenu);
-		}
-
-#endif
-		break;
-
-#ifndef NXSYSMac
-	case CmV2NXHelp:
-	{
-		std::string V2HelpText;
-		if (WinReadResText("V2NXHelp.txt", V2HelpText))
-			HelpDialog(V2HelpText.c_str(), "Version 2 NXSYS Help");
-		break;
-	}
-	default:
-		if (cmd >= ID_EXTHELP0 && cmd <= ID_EXTHELP9) {
-			DisplayHelpTextByCommand(cmd);
-			break;
-		}
-		auto rflresult = HandleRecentFileClick(cmd);
-		if (rflresult.valid) {
-			GetLayout(rflresult.pathname.c_str(), TRUE);
-			break;
-		}
-		break;
-#endif
-		} // this must end the "switch"
-	} //you would think that this would end the function, but ...
-
-#endif
-
-#ifndef NXSYSMac
-WNDPROC_DCL MainWindow_WndProc
-      (HWND window, unsigned message, WPARAM wParam, LPARAM lParam)
-{
-  switch (message) {
-
-    case WM_COMMAND:
-
-	  if (ChooseTrack)
-		  EndChooseTrack ();
-
-      NXSYS_Command (LOWORD(wParam));
-      break;
-
-    case WM_PAINT:
-    {
-		PAINTSTRUCT ps;
-		HDC dc = BeginPaint(window, &ps);
-		SelectObject(dc, Fnt);
-		SetBkColor(dc, RGB(0, 0, 0));
-		SetTextColor(dc, RGB(255, 255, 255));
-		DisplayVisibleObjectsRect(dc, ps.rcPaint);
-		EndPaint(window, &ps);
-		break;
-    }
-
-	case WM_LBUTTONDOWN:
-		if (wParam & MK_SHIFT)
-			message = WM_NXGO_LBUTTONSHIFT;
-		else if (wParam & MK_CONTROL)
-			message = WM_NXGO_LBUTTONCONTROL;
-	case WM_RBUTTONDOWN:
-		if (message == WM_RBUTTONDOWN) {
-			if ((wParam & MK_CONTROL) || RightButtonMenu)
-				message = WM_NXGO_RBUTTONCONTROL;
-		}
-#ifndef NOTRAINS
-		if (ChooseTrack) {
-			EndChooseTrack();
-			GraphicObject* g = FindHitObjectOfType
-			(ID_TRACKSEG, LOWORD(lParam), HIWORD(lParam));
-			if (g != NULL) {
-				TrainDialog(g, TrainType);
-				break;
-			}
-		}
-#endif
-		NXGO_Rodentate (LOWORD (lParam), HIWORD (lParam), message);
-		break;
-
-    case WM_MOUSEMOVE:
-	NXGOMouseMove (LOWORD (lParam), HIWORD (lParam));
-	break;
-
-    case WM_LBUTTONUP:
-    case WM_RBUTTONUP:
-	NXGOMouseUp ();
-	break;
-
-    case WM_SIZE:
-	ResizeDemoWindowParent(window);
-
-	SetViewportDimsFromWindow(window);
-
-	if (InterlockingLoaded)
-	    NXGO_ValidateWpVp(window);
-	InvalidateRect (window, NULL, 1);
-	break;
-#ifndef NXSYSMac
-    case WM_CLOSE:
-	PostQuitMessage(0);
-	break;
-
-#endif
-    case WM_HSCROLL:
-	NXGO_HScroll (window, SCROLLARGS(wParam,lParam));
-	break;
-
-#ifdef NXV2
-    case WM_VSCROLL:
-	NXGO_VScroll (window, SCROLLARGS(wParam,lParam));
-	break;
-#endif
-
-#ifndef NXSYSMac
-      case WM_INITMENU:
-    {
-	HMENU m = GetMenu(window);
-	CheckMenuItem (m, CmRightClickMenuMode,
-		       MF_BYCOMMAND |
-		       (RightButtonMenu  ? MF_CHECKED : MF_UNCHECKED));
-       
-	CheckMenuItem (m, CmRelayTrace,
-		       MF_BYCOMMAND |
-		       (RelayTraceExposedP() ? MF_CHECKED : MF_UNCHECKED));
-	break;
-    }
-#endif
-  
-#ifndef NXSYSMac
-   default:
-       	return DefWindowProc (window, message, wParam, lParam);
-#endif
-  }
-  return 0;
-       
+void CheckMainMenuItem2(int item, BOOL enabled) { //yes, this works on the Mac....
+    CheckMenuItem(GetMenu(G_mainwindow), item,
+        enabled ?
+        (MF_BYCOMMAND | MF_CHECKED) :
+        (MF_BYCOMMAND | MF_UNCHECKED));
 }
-    
-
-
-WORD WindowsMessageLoop (HWND window, HACCEL hAccel, UINT closemsg) {
-    MSG      message;
-
-    while (GetMessage (&message, NULL, 0, 0)) {
-
-	if (closemsg && message.message == closemsg)
-	    break;
-
-	if (IsMenuDlgMessage (&message))
-	    continue;
-
-#ifdef NXOLE
-	if (IsCmdLoopDlgMessage (&message))
-	    continue;
-#endif
-	
-#ifndef NOTRAINS
-	if (FilterTrainDialogMessages (&message))
-	    continue;
-#endif
-	if (hAccel==NULL ||!TranslateAccelerator (window, hAccel, &message)){
-	    TranslateMessage (&message);
-	    DispatchMessage (&message);
-	}
-/*	HEAPCHK */
-    }
-    return (WORD)message.wParam;
-}
-    
-#endif
-
-#ifndef NXSYSMac
-
-int PASCAL WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_line, int nCmdShow)
-	{
-  HWND     window;
-
-  app_instance = hInstance;
-  string initial_layout_name{};
-#ifndef NODEMO
-  string initial_demo_file{};
-#endif
-  auto args = ParseCommandLineToVector(command_line); //handles zero and null case
-  for (size_t ano = 0; ano < args.size(); ano++) {
-	  string arg = args[ano];
-      if (arg.length() && (arg[0] == '/' || arg[0] == '-')) {
-		  string argb = arg.substr(1);
-      if (argb == "contacts_per_line") {
-	      if (ano >= args.size() - 1) {
-badcpl:		 usermsg ("Missing or bad number after -contacts_per_line arg.");
-			 continue;
-	      }
-	      if (sscanf (args[++ano].c_str(), "%d", &ContactsPerLine) < 1)
-			 goto badcpl;
-	  }
-	  else if (argb == "automation" || argb == "embedding")
-#ifdef NXOLE
-	      automation = TRUE;
-#else
-	  {
-	      usermsg ("Bad control arg: /%s; this executable of %s is not OLE-enabled.",
-		       argb.c_str(), PRODUCT_NAME);
-	      return 0;
-	  }
-#endif
-#ifdef NXOLE
-	  else if (argb == "register") {
-	      RegisterNXOLE();
-	      return 0;
-	  }
-	  else if (argb == "unregister") {
-	      UnRegisterNXOLE();
-	      return 0;
-	  }
-	  else if (argb =="script") {
-	      if (ano >= args.size() - 1) {
-		  usermsgstop ("Missing script file name after %s", arg);
-		  return 0;
-	      }
-	      initial_script_file = args[++ano];
-	  }
-#endif
-
-	  else
-	      usermsg ("Bad/unknown control arg: %s",arg.c_str());
-      }
-      else initial_layout_name = arg;
-  }
-
- 
-  #ifdef WIN32
-    if (!hPrevInstance) {
-      WNDCLASS klass;
-      memset (&klass, 0, sizeof(klass));
-      klass.style          = CS_BYTEALIGNCLIENT | CS_CLASSDC;
-      klass.lpfnWndProc    = (WNDPROC) MainWindow_WndProc;
-      klass.cbClsExtra     = 0;
-      klass.cbWndExtra     = 10;
-      klass.hInstance      = hInstance;
-      klass.hIcon          = LoadIcon (hInstance, "NXICON");
-      klass.hCursor        = LoadCursor (NULL, IDC_ARROW);
-      klass.hbrBackground  = (HBRUSH)GetStockObject (BLACK_BRUSH);
-      klass.lpszMenuName   = "NXSYS";
-      klass.lpszClassName  = MainWindow_Class;
-
-      if (!(RegisterClass (&klass)
-	    && RegisterFullSignalWindowClass(hInstance)
-	    && RegisterRelayTraceWindowClass (hInstance)
-	    && RegisterRelayLogicWindowClass (hInstance)))
-	  return 0;
-  }
-
-#endif
-	HACCEL hAccel = LoadAccelerators(hInstance, "NXACC");
-	window = NULL;   // KRAZY WTF NO WINDOW
-    int rv = StartUpNXSYS (hInstance, window,
-                           NULL0(initial_layout_name), NULL0(initial_demo_file), nCmdShow);
-	
-	if (rv == 0)
-        rv = WindowsMessageLoop (G_mainwindow, hAccel, 0);
-    
-    CleanUpNXSYS();
-
-    return rv;
-}
-#endif
 
 int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_name, const char* initial_demo_file,
                   int nCmdShow) {
@@ -967,23 +434,25 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
   if (hk)
       RightButtonMenu = GetDWORDRegval (hk, "RightButtonMenuMode", RightButtonMenu);
 
-  SetHelpFilePath();
-
 #endif
-    ShowWindow (window, nCmdShow);	/* don't gratuitously update */
 
-  CheckMainMenuItem(CmAutoOp, EnableAutoOperation);
+  
+  ShowWindow (window, nCmdShow);	/* don't gratuitously update */
+#ifdef WIN32
+  CheckMainMenuItem2(CmAutoOp, EnableAutoOperation);
+#endif
   SetViewportDimsFromWindow (window);
 #ifndef NXSYSMac
   if (hk) 
       ImplementShowStopPolicy(GetDWORDRegval(hk, "ShowStops", ShowStopPolicy));
-  HMENU top_level_menu = GetMenu(G_mainwindow);
-  HMENU file_menu = GetSubMenu(top_level_menu, 0);
-  HMENU recent_files_submenu = GetSubMenu(file_menu, 2);
+
+  HMENU top_level_menu = GetMenu(G_mainwindow),
+        file_menu = GetSubMenu(top_level_menu, 0),
+        recent_files_submenu = GetSubMenu(file_menu, 2);
   InitMenuRecentFiles(recent_files_submenu);
 
   if (initial_layout_name) {
-	  FName = initial_layout_name;
+	  LayoutFileName = initial_layout_name;
       const char * s = ReadLayout (initial_layout_name);
       if (s != NULL) {
 		  SetGlobalMenuState(TRUE);
@@ -1018,7 +487,7 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
       NXScript(initial_script_file);
 #endif
 #ifndef NXSYSMac
-  HACCEL hAccel = LoadAccelerators (hInstance, "NXACC");
+    HACCEL hAccel = LoadAccelerators (hInstance, "NXACC");
 #endif
     int val = 0;  /* makes Apple logic analyzer happy */
 	  
@@ -1027,7 +496,7 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 	  val = 0;
 	  break;
       case IDYES:
-	  GetLayout (FName.c_str(), FALSE);
+	  GetLayout (LayoutFileName.c_str(), FALSE);
 	  val = 0;
 	  break;
       case IDNO:
@@ -1049,9 +518,6 @@ void CleanUpNXSYS() {
 
 	DeleteObject(Fnt);
 	DeleteObject(LargeFnt);
-#ifndef NXSYSMac
-	WinHelp(G_mainwindow, HelpPath.c_str(), HELP_QUIT, 0);
-#endif
 	/* Why isn't DeInstallLayout good enough here? --11 January 2001 */
 	ClearHelpMenu();
 
@@ -1111,7 +577,7 @@ void ExternEditContextMenu(void * vobj, void* vmenu) {
 
 int GraphicObject::RunContextMenu (int resource_id) {
 
-#if NXSYSMac
+#ifdef NXSYSMac
     return MacWindowsContextMenu(G_mainwindow, resource_id, this);
 #else
     HMENU hMenu = LoadMenu(app_instance, MAKEINTRESOURCE(resource_id));
@@ -1129,25 +595,6 @@ int GraphicObject::RunContextMenu (int resource_id) {
     return cmd;
 #endif
 }
-
-
-#ifdef WIN32
-
-int ContextMenu (int resource_id) {
-    HMENU hMenu = LoadMenu(app_instance, MAKEINTRESOURCE(resource_id));
-    if (!hMenu)
-	return 0;
-	POINT p{};
-    p.x = NXGOHitX;
-    p.y = NXGOHitY;
-    ClientToScreen (G_mainwindow, &p);
-    HMENU m = GetSubMenu(hMenu, 0);
-    int flgs = TPM_LEFTALIGN|TPM_TOPALIGN|TPM_NONOTIFY|TPM_RETURNCMD;
-    int cmd = TrackPopupMenu (m, flgs, p.x, p.y, 0, G_mainwindow, NULL);
-    DeleteObject (hMenu);
-    return cmd;
-}
-#endif
 
 void GraphicObject::EditContextMenu(HMENU m) {
 }

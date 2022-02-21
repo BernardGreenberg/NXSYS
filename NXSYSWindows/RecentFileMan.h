@@ -1,3 +1,7 @@
+#ifndef  WIN32
+#error RecentFileMan.h appearing in non-Windows build!
+#endif
+
 #pragma once
 #include <string>
 #include <Windows.h>
