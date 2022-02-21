@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{de5fabdd-7eb6-4af0-b06e-6253260aaa18}</ProjectGuid>
+    <RootNamespace>NXSYS</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <CustomBuildAfterTargets>Link</CustomBuildAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <CustomBuildAfterTargets>Link</CustomBuildAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NXV2;REALLY_NXSYS;WINDOWS;XTG;WIN32;_WIN32;PRODUCT_NAME="NXSYS";_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>comctl32.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <CustomBuildStep>
+      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Pages NXSYS.html
+robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Command>
+      <Outputs>$(OutputDir)Pages</Outputs>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;WINDOWS;NXV2;XTG;REALLY_NXSYS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;WINDOWS;WIN32;REALLY_NXSYS;NXV2;XTG;_CRT_SECURE_NO_WARNINGS;PRODUCT_NAME="NXSYS64";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <CustomBuildStep>
+      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation NXSYS.html
+robocopy $(SolutionDir)..\Documentation\HelpImages $(OutDir)Documentation\HelpImages *.*
+robocopy $(SolutionDir).. $(OutDir) InterlockingLibrary.xml
+robocopy $(SolutionDir)..\Interlockings $(OutDir)\Interlockings</Command>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+      <Outputs>$(OutputDir)Documentation</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;NXV2;XTG;REALLY_NXSYS;WINDOWS;WIN32;PRODUCT_NAME="NXSYS64";_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <UndefinePreprocessorDefinitions>UNICODE;_UNICODE;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\NXSYS\demo.cpp" />
+    <ClCompile Include="..\..\NXSYS\fullsig.cpp" />
+    <ClCompile Include="..\..\NXSYS\incexppt.cpp" />
+    <ClCompile Include="..\..\NXSYS\InterlockingLibrary.cpp" />
+    <ClCompile Include="..\..\NXSYS\ldgut.cpp" />
+    <ClCompile Include="..\..\NXSYS\lispmath.cpp" />
+    <ClCompile Include="..\..\NXSYS\lspmacro.cpp" />
+    <ClCompile Include="..\..\NXSYS\nxgo.cpp" />
+    <ClCompile Include="..\..\NXSYS\NXGOLabel.cpp" />
+    <ClCompile Include="..\..\NXSYS\nxsys.cpp" />
+    <ClCompile Include="..\..\NXSYS\plight.cpp" />
+    <ClCompile Include="..\..\NXSYS\plight_apponly.cpp" />
+    <ClCompile Include="..\..\NXSYS\pswitch.cpp" />
+    <ClCompile Include="..\..\NXSYS\pugixml.cpp" />
+    <ClCompile Include="..\..\NXSYS\rdtrkcmn.cpp" />
+    <ClCompile Include="..\..\NXSYS\readsexp.cpp" />
+    <ClCompile Include="..\..\NXSYS\RelayLispSubstrate.cpp" />
+    <ClCompile Include="..\..\NXSYS\relays.cpp" />
+    <ClCompile Include="..\..\NXSYS\rlyindex.cpp" />
+    <ClCompile Include="..\..\NXSYS\signal.cpp" />
+    <ClCompile Include="..\..\NXSYS\STLExtensions.cpp" />
+    <ClCompile Include="..\..\NXSYS\STLfnsplit.cpp" />
+    <ClCompile Include="..\..\NXSYS\stop.cpp" />
+    <ClCompile Include="..\..\NXSYS\swkey.cpp" />
+    <ClCompile Include="..\..\NXSYS\text.cpp" />
+    <ClCompile Include="..\..\NXSYS\trafficlever.cpp" />
+    <ClCompile Include="..\..\NXSYS\traincmn.cpp" />
+    <ClCompile Include="..\..\NXSYS\trkgdi.cpp" />
+    <ClCompile Include="..\..\NXSYS\turncomn.cpp" />
+    <ClCompile Include="..\..\NXSYS\txlayout.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\dynmenu.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\joint.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\StatusReport.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\SwitchConsistency.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\tcircuit.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\trackseg.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\xexlight.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\xsignal.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\xstop.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\xtgload.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\xtrains.cpp" />
+    <ClCompile Include="..\..\NXSYS\v2\xturnout.cpp" />
+    <ClCompile Include="..\dialogs.cpp" />
+    <ClCompile Include="..\getmodtm.c" />
+    <ClCompile Include="..\helpdlg.cpp" />
+    <ClCompile Include="..\LDRightClick.cpp" />
+    <ClCompile Include="..\nxldwin.cpp" />
+    <ClCompile Include="..\NXRegistry.cpp" />
+    <ClCompile Include="..\nxsldrly.cpp" />
+    <ClCompile Include="..\ParseCommandLine.cpp" />
+    <ClCompile Include="..\print.cpp" />
+    <ClCompile Include="..\RecentFileMan.cpp" />
+    <ClCompile Include="..\RelayListDialog.cpp" />
+    <ClCompile Include="..\RelayQueryDialog.cpp" />
+    <ClCompile Include="..\RelayStateDialog.cpp" />
+    <ClCompile Include="..\rtracwin.cpp" />
+    <ClCompile Include="..\timers.cpp" />
+    <ClCompile Include="..\WinApp.cpp" />
+    <ClCompile Include="..\WinReadResText.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\nx.rc" />
+    <ResourceCompile Include="..\Resources2022.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\nx2.ico" />
+    <Image Include="..\relay.ico" />
+    <Image Include="..\tracetb.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\LDRightClick.h" />
+    <ClInclude Include="..\NXRegistry.h" />
+    <ClInclude Include="..\NXSYSWinApp.h" />
+    <ClInclude Include="..\ParseCommandLine.h" />
+    <ClInclude Include="..\RecentFileMan.h" />
+    <ClInclude Include="..\resource.h" />
+    <ClInclude Include="..\resource1.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
