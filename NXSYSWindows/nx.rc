@@ -40,6 +40,10 @@ BEGIN
     BEGIN
       MENUITEM "&Open...",      CmOpen
       MENUITEM "&Reload\tCtrl+R",    CmReload
+      POPUP "Interlocking &Library..."
+      BEGIN
+         MENUITEM "Dummy", ID_1DUMY
+      END
       POPUP "&Recent Files..."
       BEGIN
          MENUITEM "Dummy", ID_1DUMY

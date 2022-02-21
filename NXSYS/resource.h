@@ -50,6 +50,9 @@
 #define ID_CLEAR_RECENT_FILE_LIST       40121
 #define ID_SEPARATOR_RECENT_FILE_LIST   40122
 
+#define ID_LIBRARY_BASE                 42000
+#define ID_LIBRARY_MAX                  42200
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

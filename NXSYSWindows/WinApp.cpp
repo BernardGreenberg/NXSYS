@@ -41,6 +41,8 @@
 #include "WinReadResText.h"
 #include "RecentFileMan.h"
 #include "ParseCommandLine.h"
+#include "GetResourceDirectoryPathname.h"
+#include "InterlockingLibrary.hpp"
 
 #include <filesystem>
 
@@ -50,6 +52,7 @@ using std::vector;
 
 static int TrainType;
 static char FTitle[MAXPATH], DFName[MAXPATH] = "";
+static InterlockingLibrary Library;
 
 const char* MainWindow_Class = PRODUCT_NAME ":Main";
 #define HELP_FNAME "Documentation\\NXSYS.html"
@@ -309,6 +312,10 @@ void NXSYS_Command(unsigned int cmd) {
 			DisplayHelpTextByCommand(cmd);
 			break;
 		}
+		if (cmd >= ID_LIBRARY_BASE && cmd - ID_LIBRARY_BASE < Library.size()) {
+			GetLayout(Library[cmd - ID_LIBRARY_BASE].Pathname.string().c_str(), TRUE);
+			break;
+		}
 		auto rflresult = HandleRecentFileClick(cmd);
 		if (rflresult.valid) {
 			GetLayout(rflresult.pathname.c_str(), TRUE);
@@ -464,6 +471,18 @@ int ContextMenu(int resource_id) {
 	return cmd;
 }
 
+static void SetUpLibraryMenu() {
+	Library = GetInterlockingLibrary();
+	int i = 0;
+	HMENU main_menu = GetMenu(G_mainwindow),
+		file_menu = GetSubMenu(main_menu, 0),
+		lib_menu = GetSubMenu(file_menu, 2);
+	DeleteMenu(lib_menu, ID_1DUMY, MF_BYCOMMAND);
+	for (auto& libe : Library)
+		InsertMenu(lib_menu, -1, MF_BYPOSITION, ID_LIBRARY_BASE + i++, libe.Title.c_str());
+
+}
+
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_line, int nCmdShow)
 {
 	HWND     window;
@@ -540,11 +559,12 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 			&& RegisterRelayLogicWindowClass(hInstance)))
 			return 0;
 	}
-
 	HACCEL hAccel = LoadAccelerators(hInstance, "NXACC");
 	window = NULL;   // KRAZY WTF NO WINDOW
 	int rv = StartUpNXSYS(hInstance, window,
 		NULL0(initial_layout_name), NULL0(initial_demo_file), nCmdShow);
+
+	SetUpLibraryMenu();
 
 	if (rv == 0)
 		rv = WindowsMessageLoop(G_mainwindow, hAccel, 0);
@@ -554,3 +574,9 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 	return rv;
 }
 
+std::filesystem::path GetResourceDirectoryPathname() {
+	char buf[512];
+	GetModuleFileName(app_instance, buf, sizeof(buf) / sizeof(buf[0]));
+	std::filesystem::path p(buf);
+	return p.parent_path();
+}

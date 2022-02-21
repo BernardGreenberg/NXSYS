@@ -448,7 +448,7 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 
   HMENU top_level_menu = GetMenu(G_mainwindow),
         file_menu = GetSubMenu(top_level_menu, 0),
-        recent_files_submenu = GetSubMenu(file_menu, 2);
+        recent_files_submenu = GetSubMenu(file_menu, 3);
   InitMenuRecentFiles(recent_files_submenu);
 
   if (initial_layout_name) {
