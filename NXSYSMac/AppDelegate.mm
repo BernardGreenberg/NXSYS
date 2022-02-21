@@ -27,6 +27,13 @@ typedef void *HINSTANCE;
 #include "rlytrapi.h"
 #include "MessageBox.h"
 #include "commands.h"
+#include <filesystem>
+#include "InterlockingLibrary.hpp"
+#include "GetResourceDirectoryPathname.h"
+
+namespace fs = std::filesystem;
+
+#include <mach-o/dyld.h>
 
 static NSString * FullSigKey = @"FullSignalDisplaysAreViews";
 static NSString * LastPathnameKey = @"LastInterlockingPathname";
@@ -113,6 +120,7 @@ NSWindow * getNXWindow() {
 @implementation AppDelegate
 static NSString* buildDateString;
 static NSString* buildSignature;
+static InterlockingLibrary interlockingLibrary;
 -(id)init  // this actually gets run, proven.
 {
     self = [super init];
@@ -189,7 +197,37 @@ static NSString* buildSignature;
     NSString *formattedDateString = [formatter stringFromDate:date];
     return [NSString stringWithFormat: @" of %@", formattedDateString];
 }
-
+-(void)LibEntryClicked:(NSEvent*)event
+{
+    NSMenuItem* item = (NSMenuItem*)event;
+    int tag = (int)item.tag;
+    InterlockingLibraryEntry& E = interlockingLibrary[tag];
+    [self readLayout:[NSString stringWithUTF8String:E.Pathname.string().c_str()]];
+}
+-(void)PopulateLibraryMenu
+{
+    interlockingLibrary = GetInterlockingLibrary();
+    NSMenu * topLevelMenu = [[NSApplication sharedApplication] mainMenu];
+    
+    NSMenuItem* file_menu_item = [topLevelMenu itemWithTitle:@"File"];
+    if (file_menu_item.hasSubmenu) {
+        NSMenu* file_menu = file_menu_item.submenu;
+        NSArray* file_menu_array = file_menu.itemArray;
+        NSMenuItem* library_menu_item = file_menu_array[1];
+        if (library_menu_item.hasSubmenu) {
+            NSMenu* library_menu = library_menu_item.submenu;
+            int ix = 0;
+            for (auto& libe : interlockingLibrary) {
+                NSMenuItem *item = [[NSMenuItem alloc]
+                                    initWithTitle:[NSString stringWithUTF8String: libe.Title.c_str()]
+                                    action:@selector(LibEntryClicked:)
+                                    keyEquivalent:@""];
+                item.tag = ix++;
+                [library_menu addItem:item];
+            }
+        }
+    }
+}
 -(void)OnSuccessfulLayoutLoad:(NSString *)fileName
 {
     
@@ -272,6 +310,9 @@ static NSString* buildSignature;
     if (url != nil) {
         [self readLayout:[url path]];
     }
+
+    [self PopulateLibraryMenu];
+
     APDTRACE(("willFinishLaunching 5\n"));
     [self setUpEventMonitor];
     APDTRACE(("willFinishLaunching 6\n"));
@@ -589,4 +630,20 @@ HWND getRelayDrafterHWND(bool force) {
     if (force)
         [wc  window];
     return wc.hWnd;
+}
+
+fs::path GetResourceDirectoryPathname() {
+    // https://stackoverflow.com/questions/7004401/c-find-execution-path-on-mac
+    char buf [PATH_MAX];
+    uint32_t bufsize = PATH_MAX;
+    if(!_NSGetExecutablePath(buf, &bufsize)){
+        
+        fs::path exe(buf),
+                 macOS = exe.parent_path(),
+                 Contents = macOS.parent_path(),
+                 Resources = Contents / "Resources";
+        
+        return Resources;
+    }
+    return "";
 }

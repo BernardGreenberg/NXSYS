@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>240th St help</title>
+<meta charset="UTF-8">
+</head>
+
+<body style="max-width:800px">
+<h1>240<sup>th</sup> St. Broadway Interlocking</h1></p>
+
+<p>This NXSYS V2 implementation of 240th St Master Control panel was designed from official track/control-line prints, some from 1975 and some newer.  It simulates the full function of the portion of this panel on the IRT Broadway line controlling the same from 215th St. to the end.  The panel must be scrolled via the horizontal and vertical scroll bars to access it all; 240th St. Yard is above the starting view at the rightmost end.</p>
+
+<p><b>Please read this help text</b>, which addresses subtle issues you will doubtless encounter and which will otherwise derail your exploration of this complex interlocking.</p>
+
+<p>This layout and implementation differ from reality in the following ways:</p>
+
+<ol>
+
+<li>Recent (1995) ST control on X350 and some other approach and a large number of automatic signals has not been implemented.</li>
+
+<li>The GT and ST timings have not been accurately computed; all
+approach timings are 30 seconds (the usual NYCTA standard).</li>
+
+<li>The (1989) yard lead interlocking south of 215th St., connecting to the IND 207th St. yards and shops, has not been represented or implemented.</li>
+
+</ol>
+<p>Two limitations on use of the NXSYS \"train system\" (automatic running of simulated trains) arise from its sole reliance on insulated joint identifiers to infer geographical location:</p>
+<ol>
+<li> 1. Simulated trains have been reduced to 450' in order to fit in the apparent 500' between insulated joints at BB-400 and BB-450 at the 242nd St. pockets.</li>
+<li>Simulated trains may not currently be run into the yard because of
+the variance of insulated joint designation there from IRT
+standard.</li>
+</ol>
+
+<p>This is a systemic deficiency of NXSYS which may be addressed in a future version.  Explore yard behavior by occupying and vacating track with click-left.</p>
+
+<p>This layout contains a large number of “time-lock only” signals having no approach sections----this applies to all the dwarf and home signals in the yards and on the yard leads (except X384), and the reverse-direction home signals X372 and X386 at 238th St. As in real life, these signals will NOT release their approach locking when cancelled, even if no trains are near, for 30 seconds---white \"line-o-lite\"s will persist after signal cancellation even with no trains present.  Control-A, or the control-click-right menu on the signal, can be used to release (albeit \"unsafely\") these time-locking timers.</p>
+
+<p>Please note that back-to-back home signals (e.g., X416 and X370, but there are many pairs here) will call (route) but not clear unless there is a route or train leading up to them, as in real life.  See the section “Back-to-back signals” in the main NXSYS helpfile for an explanation.</p>
+
+<p>Note also the presence of many GT signals, such as the automatic signals in the terminal pockets at 242nd St, and many of the signals on the center track, including home signals X364, X368 (conditionally) and X416, which will not clear when called until GT time has expired with approach sections occupied.  Use click-right (full signal display) to observe the lunar white aspect.</p>
+
+<p>The dwarf signals in the yard (AKA “jack signals”) can be called irrespective of the occupation of their approach section (usually the yard track) or home section (that immediately beyond the signal).  If the home section was not occupied at the time of initiation, they will auto-cancel when it becomes occupied; if not, they must be manually cancelled.  Note that they have no control length, and display an aspect rule-wise equivalent to a call-on (prepare to find track occupied/stop within vision). Exercise special care when clicking on exit lights in the yard---it is too easy to wander into the mouse-detector zone of the signal on the next-lower numbered track---click on the signals in the yard (instead of the exit lights) if you experience this problem.</p>
+
+<p>Exit lights for moves from X358 to X416 (ditto X352 to X410), the
+case described in the paradigm as “Home signal with entrance and exit
+in the same direction”, display an exit light (and accept exit clicks)
+at and associated with the intervening approach signals (X414 and
+X408, respectively), as the exit light in the section between the
+approach and the exit home can be obscured by the “line-o-lite” resulting from calling the approach signal.  This case, approach signal preceding such a home signal, is not covered in the paradigm; the solution is original.</p>
+
+<p>Home signal X384 cannot clear a high signal (i.e., offers call-on only) to the bumper at 238th St., as per reality.</p>
+
+<p>Home signal X388 (3934/B) is an ST home signal whose “dotted portion” includes the trailing switch 359A, conditionally locks this switch, and will clear (to an ST aspect) even if this switch is locked reverse; see the standard NXSYS helpfile for more detail on conditional ST switch locking.</p>
+
+<p>Note that there is a three-way crosslock over switches 387, 389, and 391 by the control length overlaps of X352, X368, and X372 when they pass X386.  There are two two-way crosslocks over the same switches by X432 through X396.  Crosslocks are described in the standard NXSYS helpfile.</p>
+
+<p>There is a traffic lever (X349) in the middle of the layout,
+controlling the direction of traffic (and the behavior of automatic
+signals) on the center track between home signals X286 north of 215th
+St and X238 South of 238th St.  Click on the large circle to change
+direction &mdash; as in real life, the intervening track must be vacant and all signals governing opposing movement into it reset for this to succeed, at whch point the small arrows will change direction.</p>
+
+<p>To operate the Harlem River Lift Bridge (north of 215th St.), first
+operate (“flip”) the “unlock bridge” switch &mdash; lock light will turn green, and routes over the bridge will be locked out.  The \"Operate Bridge\" switch may then be operated to lift the bridge; its associated light turns orange when the bridge is safe for naval traffic.  Reverse this procedure to lower the bridge and reestablish rail traffic.</p>
+
+<p>Note that approach signals XA252/B252 at 215th St. will not clear unless holdout signal X250 is called&mdash;this is due to the train stop of marker 3137/B, which can only be driven by X250.  X252&rsquo;s reasons for existence (similar to X350) involve protection against the trailing switch on the other two tracks and overrun of opposing moves when the facing switch (i.e., 265) is reversed.</p>
+
+
+<hr/>
+
+<h3>Credits and disclaimer</h3>
+
+<p>The simulated relay logic implementing these interlockings was
+designed by,the author in 1998 and December/January 2000/2001, with
+the exception of some of the logic at 215th St. which was designed by
+him and his student, Henry J. Sundermeyer, July/August 1998. All of
+the layout with the exception of the yard was entered and laid out by
+Henry Sundermeyer, using the NXV2 graphic track layout editor.  The
+yard tracks were laid out with the aid of a Perl script. Everything
+has been subsequently improved.</p>
+
+<p>The lift-bridge logic is of an original design by the author; all the rest of the logic follows the architecture, accurately, and the guidelines, sometimes more accurately than others, of its paradigm, NYC Transit Authority standards 733-33, vintages 1957 and 1994.</p>
+
+<p>NXSYS Copyright (c) 1994-2022 Bernard S. Greenberg, under GNU
+Public License GPL3.</p>
+
+<p>The authors and this work are not affiliated with or supported or endorsed by any transit provider or signalling concern.  This system is intended for and llicensed exclusively for personal educational and recreational use.  The author(s) assume no liability for any use, specifically assuming no liability for harm, damage, or injury resulting from attempted use in controlling real vehicles or other real systems, or for inaccuracies in application or representation of signalling standards or representations of railroad properties and equipment.  The author(s) assume no liability for damage or harm to computer systems or files caused by bugs, program errors, or corruption.  No warranty, assurance of merchantability nor suitability for any purpose is given or implied. No license for sale, resale, redistribution, or derivative works is granted or implied.</p>
+
+<p>The author may be contacted via GitHub</p>
+
+</body> </html>

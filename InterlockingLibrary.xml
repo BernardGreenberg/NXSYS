@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interlocking-library>
+    <interlocking name="Progman St." path="$(here)/Interlockings/Progman/progman.trk"/>
+    <interlocking name="Atlantic Ave." path="$(here)/Interlockings/Atlantic/atlantic.trk"/>
+    <interlocking name="Myrtle Ave." path="$(here)/Interlockings/Myrtle/myrtle.trk"/>
+    <interlocking name="240th St. Broadway" path="$(here)/Interlockings/irt240/irt.240tl.trk"/>
+    <interlocking name="Islington (Toronto)" path="$(here)/Interlockings/Islington/islingtn.trk"/>
+    <interlocking name="Duckburg Yard" path="$(here)/Interlockings/Duckburg/db7.trk"/>
+</interlocking-library>
+
+
+

@@ -29,55 +29,13 @@
 		:TRAIN-LENGTH-FEET 448
 		:YELLOW-FEET-PER-SECOND 30
 		:TORONTO T                ;;signal plate format
-                :BASIC-HELP-FILE-ID ("Islington Interlocking Help" 780 "NXSYS#islington")
+		:HELP-TEXT("Islington Interlocking Help"
+			   "Please open \"Islington.html\" in this folder in your web browser.  NXSYS 2.6 and up does that for you."
+			   "@Islington.html")
 )
 
 (include "stdmacs.trk")
-(comment
-;; note that declaration order is display order, which can be critical.
-(track 1 
-   (114 116 121 125 128 132 137 140))
-
-(track 3 
-   (125 128 133 137))
-
-(track 2
-  (112 115 121 125 127 131 136 138))
-
-(platform island 116 121 40 160 "ISLINGTON")
-
-(switch 1 122 2 124 13)
-(switch 1 124 2 122 15)
-
-
-(switch 3 127 2 126 27)
-(switch 1 126 3 127 29 SINGLETON)
-
-
-(signal 2 (revdir 115 116) (ZZR ZZR) 6)
-(signal 2  115 (GYR GZR Y) 2)
-(signal 2  121 (GYR GYR Y) 10)
-(signal 2  125 (GYR GYR Y) 26)
-(signal 2 131 (GYR GYR Y) 42)
-(signal 2 (revdir 125 126) (ZYR GYR Y W) 14)
-(signal 2 (revdir 121 122) (GYR))
-(signal 2 (revdir 136 134) (ZYR GYR Y) 50)
-
-(signal 3 128 (GYR GYR Y) 30)
-(signal 3 (revdir 133 133) (GYR GZR Y) 44)
-
-(switch 1 135 3 134 45)
-(switch 2 135 3 134 49 SINGLETON)
-
-(signal 1 116 (ZYR GZR Y W) 8)
-(signal 1 (displace 137 136) (GYR GYR Y) 48)
-(signal 1 132 (GYR GZR Y) 20)
-(signal 1 128 (GYR GZR Y) 18)
-(signal 1 (displace 125 126) (ZYR GYR Y W) 16)
-(signal 1 (revdir 125 125) (ZYR ZYR Y) 28)
-(signal 1 (revdir 121 121) (GYR GYR Y) 12)
-(signal 1 (displace 121 122) (GYR))
-)
+;; Version 1 commented def removed 02/20/22
 
 (stdswitch 13)
 (stdswitch 15)
