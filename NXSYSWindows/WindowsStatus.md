@@ -1,11 +1,11 @@
 # NXSYS MS Windows Status
 ## 18 February 2022
 
-This repository now has enough content to build Windows 10 executables (64- and 32-bit) of the three executables of the system, in Visual Studio (VS) 2022, C++ Language Level C++17, platform toolset VS2022 level 143, Windows SDK “latest installed version“ 10.0, my Windows 10 at current updates 12 February 2022.
+This repository now has enough content to build Windows 10 executables (64-bit 32 not guarantee) of the three executables of the system, in Visual Studio (VS) 2022, C++ Language Level C++17, platform toolset VS2022 level 143, Windows SDK “latest installed version“ 10.0, my Windows 10 at current updates 12 February 2022.
 
 The re-adaptation work is fully done.  A usable up-to-date product can be built (if not yet downloaded as executables).  It builds and works as advertised, but I am still cleaning up loose ends, so it is not stable. I will release it when it is.
 
-**You can still download a fully operative 2016 Windows NXSYS from [the NXSYS page on my site](https://BernardGreenberg.com/NXSYS).**  I probably will not distribute new 32-bit versions. If you are stuck in an ancient, de-supported version of Windows not 64 bits, use the 2016 posting.
+**You can still download a fully operative 2016 Windows NXSYS from [the NXSYS page on my site](https://BernardGreenberg.com/NXSYS).** If you are stuck in an ancient, de-supported version of Windows not 64 bits, use the 2016 posting, which is for 32-bit Windows.
 
 ### What ***does*** work in the new build:
 
