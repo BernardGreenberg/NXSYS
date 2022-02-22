@@ -53,6 +53,9 @@
 #define ID_LIBRARY_BASE                 42000
 #define ID_LIBRARY_MAX                  42200
 
+#define ID_HELP_BASE                    42500
+#define ID_HELP_MAX                     42499
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

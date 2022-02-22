@@ -31,6 +31,7 @@ typedef void *HINSTANCE;
 #include "InterlockingLibrary.hpp"
 #include "HelpDirectory.hpp"
 #include "GetResourceDirectoryPathname.h"
+#include <regex>
 
 namespace fs = std::filesystem;
 
@@ -213,8 +214,12 @@ static HelpDirectory helpDirectory;
     int tag = (int)item.tag;
     HelpDirectoryEntry& E = helpDirectory[tag];
     NSString * nss;
-    if (E.isLocalPath)
-        nss = [NSString stringWithUTF8String: ("file://" + E.LocalPathname.string()).c_str() ];
+    if (E.isLocalPath) {
+        /* Windows can't tolerate %20's in pathnames.  Mac can't tolerate spaces. @$@#$!*/
+        std::string local_path = std::regex_replace
+            (E.LocalPathname.string(), std::regex(" "), "%20");
+        nss = [NSString stringWithUTF8String: ("file://" + local_path).c_str() ];
+    }
     else
         nss = [NSString stringWithUTF8String: E.URL.c_str() ];
     NSURL * url = [NSURL URLWithString: nss];

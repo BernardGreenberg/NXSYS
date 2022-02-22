@@ -47,6 +47,7 @@ HelpDirectory GetHelpDirectory () {
                     E.LocalPathname = path;
                 else
                     E.LocalPathname = resource_dir / path;
+                E.URL = "file://" + E.LocalPathname.string();
             }
             else
                 E.URL = url;

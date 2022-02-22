@@ -15,8 +15,18 @@ string GMFN() {
 }
 
 bool WinBrowseResource(const char* ename) {
-	string path = STLincexppath(GMFN(), ename);
-	ShellExecute(NULL, "open", path.c_str(), NULL, NULL, SW_SHOW);
+	string target(ename);
+	if (target.find("http:", 0) == 0 ||
+		target.find("https:", 0) == 0 )
+	{
+	}
+	else if (target.find("file://", 0) == 0) {
+		target = target.substr(7);
+	}
+	else {
+	  target = STLincexppath(GMFN(), ename);
+	}
+	ShellExecute(NULL, "open", target.c_str(), NULL, NULL, SW_SHOW);
 	return true;
 }
 

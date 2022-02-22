@@ -43,6 +43,7 @@
 #include "ParseCommandLine.h"
 #include "GetResourceDirectoryPathname.h"
 #include "InterlockingLibrary.hpp"
+#include "HelpDirectory.hpp"
 
 #include <filesystem>
 
@@ -53,6 +54,7 @@ using std::vector;
 static int TrainType;
 static char FTitle[MAXPATH], DFName[MAXPATH] = "";
 static InterlockingLibrary Library;
+static HelpDirectory Helps;
 
 const char* MainWindow_Class = PRODUCT_NAME ":Main";
 #define HELP_FNAME "Documentation\\NXSYS.html"
@@ -316,6 +318,10 @@ void NXSYS_Command(unsigned int cmd) {
 			GetLayout(Library[cmd - ID_LIBRARY_BASE].Pathname.string().c_str(), TRUE);
 			break;
 		}
+		if (cmd >= ID_HELP_BASE && cmd - ID_HELP_BASE <= Helps.size()) {
+			WinBrowseResource(Helps[cmd - ID_HELP_BASE].URL.c_str());
+			break;
+		}
 		auto rflresult = HandleRecentFileClick(cmd);
 		if (rflresult.valid) {
 			GetLayout(rflresult.pathname.c_str(), TRUE);
@@ -482,6 +488,15 @@ static void SetUpLibraryMenu() {
 		InsertMenu(lib_menu, -1, MF_BYPOSITION, ID_LIBRARY_BASE + i++, libe.Title.c_str());
 
 }
+static void SetUpHelpMenu() {
+	Helps = GetHelpDirectory();
+	int i = 0;
+	HMENU main_menu = GetMenu(G_mainwindow),
+		help_menu = GetSubMenu(main_menu, 5);
+	DeleteMenu(help_menu, ID_1DUMY, MF_BYCOMMAND);
+	for (auto& helpe : Helps)
+		InsertMenu(help_menu, -1, MF_BYPOSITION, ID_HELP_BASE + i++, helpe.Title.c_str());
+}
 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_line, int nCmdShow)
 {
@@ -565,6 +580,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 		NULL0(initial_layout_name), NULL0(initial_demo_file), nCmdShow);
 
 	SetUpLibraryMenu();
+	SetUpHelpMenu();
 
 	if (rv == 0)
 		rv = WindowsMessageLoop(G_mainwindow, hAccel, 0);
