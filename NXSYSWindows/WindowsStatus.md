@@ -1,29 +1,27 @@
 # NXSYS MS Windows Status
 ## 22 February 2022
 
-This repository now has enough content to build Windows 10 executables (64-bit 32 not guarantee) of the three executables of the system, in Visual Studio (VS) 2022, C++ Language Level C++17, platform toolset VS2022 level 143, Windows SDK “latest installed version“ 10.0, my Windows 10 at current updates 12 February 2022.
+This repository now has enough content to build Windows 10 executables (64-bit, 32 not guaranteed) of the three executables of the system, in Visual Studio (VS) 2022, C++ Language Level C++17, platform toolset VS2022 level 143, Windows SDK “latest installed version“ 10.0, my Windows 10 at current updates 12 February 2022.
 
-The re-adaptation work is fully done.  A usable up-to-date product can be built (if not yet downloaded as executables).  It builds and works as advertised, but I am still cleaning up loose ends, so it is not stable. I will release it when it is.
+A usable up-to-date product can be built (if not yet downloaded as executables).  It builds and works as advertised, but I am still cleaning up loose ends, so it is not stable. I will release it when it is.
 
 **You can still download a fully operative 2016 Windows NXSYS from [the NXSYS page on my site](https://BernardGreenberg.com/NXSYS).** If you are stuck in an ancient, de-supported version of Windows not 64 bits, use the 2016 posting, which is for 32-bit Windows.
 
-Everything I know about works, except what’s listed below that may not ever work. `Debug` and `Release` builds of 4 projects (`NXSYS`, `TLEdit`, `Relay Index`, and an MSI installer project), platforms `x86` and `x64`. Right now you have to move the help files and the image tree into the executable directory yourself.
+Everything I know about works, except what’s listed below that may not ever work. `Debug` and `Release` builds of 4 projects (`NXSYS`, `TLEdit`, `Relay Index`, and an MSI installer project), platform `x64`. Right now you have to move the Documentation and Interlockings trees yourself if you want to use application access to them.
 
 ### Now, what doesn’t work
 
-- The OLE Automation server and control aren’t there.  I haven’t used NXSYS OLE in the 21st century, and I don’t suppose anyone has, so it likely won't be revived.  *¡Olé!, como se dice en España*).
+- The OLE Automation server and control aren’t there.  I haven’t used NXSYS OLE in the 21st century, and I don’t suppose anyone has, so it likely won't be revived.  *¡Olé!, como se dice en España*.
 - Printing (never enabled on the Mac) claims to work, queues a file, but it doesn't print.  It was never very useful.  Large temporary printouts waste expensive toner. I may excise it.
 - Cab view has never been in Version 2, and won’t start now.  Video game design is “above my pay grade”.
 
-##### System-wise,
+##### System-wise
 
-- I have not yet determined which, if any, DLL's need to be redistributed, but if you can build it, you can run it. The issue is users not having Visual Studio.
-
-
- The 2016 Windows build required redistributing `concrt140.dll`, `vccorlib140.dll`, `msvcp140.dll` and `vcruntime140.dll`. It now seems Microsoft [makes it easy to get “VC DLL’s”](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).  
+I have not yet determined which, if any, DLL's need to be redistributed, but if you can build it, you can run it. The Microsoft MSI installer (a pleonasm) generator packs DLL's; I can't know if it's enough or too many until someone without Visual Studio tests the installation.
  
- I know it doesn’t build without `version.dll` and `comctl32.dll`. I have to tell it that, but I can’t imagine the absence of either on any system.
-- I have not checked executables into the Repository. I may.
+ I know it doesn’t build without `version.dll`, and `comctl32.dll`, but the Installer  generator told me to remove them from the Installation, where it itself had put it.
+  
+I have not checked executables into the Repository. I may.
 
 ### Layout of Source
 
