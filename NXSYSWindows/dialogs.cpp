@@ -388,7 +388,7 @@ DLGPROC_DCL ScaleDlgProc(HWND hDlg, unsigned message, WPARAM wParam, LPARAM lPar
 }
 
 BOOL ScaleDialog() {
-	return DialogBox(app_instance, MAKEINTRESOURCE(IDD_SCALE),
+	return (BOOL)DialogBox(app_instance, MAKEINTRESOURCE(IDD_SCALE),
 		G_mainwindow, DLGPROC(ScaleDlgProc));
 }
 

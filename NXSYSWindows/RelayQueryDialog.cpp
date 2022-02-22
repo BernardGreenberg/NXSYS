@@ -48,7 +48,7 @@ bool RelayQueryDialog::AcceptValue() {
 	return_value = match.str(1);
 	const char* cs = return_value.c_str();
 	SetWindowTextS(hLB, return_value);
-	int old_cbx = SendMessage(hLB, CB_FINDSTRINGEXACT, -1, (LPARAM)cs);
+	int old_cbx = (int)SendMessage(hLB, CB_FINDSTRINGEXACT, -1, (LPARAM)cs);
 	if (old_cbx != CB_ERR)
 		SendMessage(hLB, CB_DELETESTRING, (WPARAM)old_cbx, 0);
 	SendMessage(hLB, CB_INSERTSTRING, 0, (LPARAM)cs);
@@ -114,7 +114,7 @@ RelayQueryDialog::RelayQueryDialog(HINSTANCE instance, HWND win) {
 void RelayQueryDialog::SaveToCache() {
 	RelayCache.clear();
 	for (int i = 0; ; i++) {
-		int res = SendMessage(hLB, CB_GETLBTEXTLEN, (WPARAM)i, 0);
+		int res = (int)SendMessage(hLB, CB_GETLBTEXTLEN, (WPARAM)i, 0);
 		if (res == CB_ERR)
 			break;
 		std::vector<char>buf(res + 1);

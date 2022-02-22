@@ -34,7 +34,7 @@ private:
 };
 
 Relay* RelayStateDialog::GetSelRelayFromListDlg() {
-	int selx = SendMessage(hLB, LB_GETCURSEL, 0, 0);
+	int selx = (int)SendMessage(hLB, LB_GETCURSEL, 0, 0);
 	if (selx < 0)
 		return nullptr;
 	return (Relay*)SendMessage(hLB,LB_GETITEMDATA, selx, 0);
@@ -50,7 +50,7 @@ void RelayStateDialog::DoRelay() {
 	SendMessage(hLB, LB_RESETCONTENT, 0, 0);
 	for (const Relay* dep : relay->Dependents) {
 		std::string d2msg = FormatString("%s\t%d", dep->RelaySym.PRep().c_str(), dep->State);
-		int index = SendMessage (hLB, LB_ADDSTRING, 0,(LPARAM)d2msg.c_str());
+		int index = (int)SendMessage(hLB, LB_ADDSTRING, 0, (LPARAM)d2msg.c_str());
 		SendMessage (hLB, LB_SETITEMDATA, index, (LPARAM)dep);
 	}
 }

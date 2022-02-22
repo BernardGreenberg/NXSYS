@@ -49,7 +49,7 @@ int HandleTrwinToolbarNotification (WPARAM wParam, LPARAM lParam) {
 
     if (((LPNMHDR) lParam)->code == TTN_NEEDTEXT) {
 	LPTOOLTIPTEXT lpttt = (LPTOOLTIPTEXT) lParam; 
-	int idButton = lpttt->hdr.idFrom; 
+	int idButton = (int)lpttt->hdr.idFrom; 
 	if (idButton != 0)
 	    for (int i = 0; i < BUTTON_DATA_COUNT;i++)
 		if (ButtonData[i].Command == idButton) {
@@ -122,7 +122,7 @@ static void RelayTracer (const char * s, int state) {
 	string = "COMP";
     else string = "????";
     sprintf (buf, "%s %s", string, s);
-    int l = strlen (buf);
+    int l = (int)strlen (buf);
     if (l > 14) {
 	buf[14] = '\0';
 	l = 14;

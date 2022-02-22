@@ -49,7 +49,7 @@ Relay* RelayListDialog::run(string title, RArray& relays) {
 }
 
 void RelayListDialog::ExtractResult() {
-	int selx = SendDlgItemMessage(hDlg, IDC_RELAY_LIST, LB_GETCURSEL, 0, 0);
+	int selx = (int)SendDlgItemMessage(hDlg, IDC_RELAY_LIST, LB_GETCURSEL, 0, 0);
 	if (selx == LB_ERR)
 		MessageBox(hDlg, "No item selected", PRODUCT_NAME, MB_OK | MB_ICONEXCLAMATION);
 	else
@@ -69,7 +69,7 @@ INT_PTR RelayListDialog::DlgProc(HWND p_hDlg, UINT message, WPARAM wParam, LPARA
 		HWND lb = GetDlgItem(hDlg, IDC_RELAY_LIST);
 		for (auto r : *Relays) {
 			const char* rtype = redeemRlsymId(r->RelaySym.u.r->type);
-			int ix = SendMessage(lb, LB_ADDSTRING, -1, (LPARAM)rtype);
+			int ix = (int)SendMessage(lb, LB_ADDSTRING, -1, (LPARAM)rtype);
 			SendMessage(lb, LB_SETITEMDATA, ix, (LPARAM)r);
 		}
 		return TRUE;
