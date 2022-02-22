@@ -106,7 +106,7 @@ void TextString::ScaleSelf () {
     RECT r;
     memset (&r, 0, sizeof(r));
     SelectObject (hDC, HFont);
-    int height = DrawText (hDC, String.c_str(), String.size(), &r,
+    int height = (int)DrawText (hDC, String.c_str(), (int)String.size(), &r,
 			   DT_SINGLELINE | DT_NOCLIP |  DT_CALCRECT);
     ReleaseDC (G_mainwindow, hDC);
     wp_limits.left = - r.right/2 - 1;
@@ -135,7 +135,7 @@ void TextString::Display (HDC hdc) {
 	SetTextColor (hdc, ColorGiven ? Color : TrackDftCol);
     /* whoops have to scale the damned thing for screen scaling*/
     SelectObject (hdc, HFont);
-    DrawText (hdc, String.c_str(), String.size(), &r,
+    DrawText (hdc, String.c_str(), (int)String.size(), &r,
 	      DT_VCENTER | DT_CENTER |DT_SINGLELINE | DT_NOCLIP);
     SetTextColor (hdc, tc);
     SelectObject (hdc, Fnt);

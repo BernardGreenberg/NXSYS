@@ -152,7 +152,7 @@ static void PrintRelayType (HDC dc, int X, int Y, int xc,
     MoveTo (dc, txr.right, txr.bottom);
     LineTo (dc, txr.right, Y+NNums*cellh);
     const char * s = redeemRlsymId (idt);
-    DrawText (dc, s, strlen(s), &txr,
+    DrawText (dc, s, (int)strlen(s), &txr,
 	      DT_VCENTER | DT_CENTER |DT_SINGLELINE| DT_NOCLIP);
 }
 
@@ -167,7 +167,7 @@ static void PrintItemNumber (HDC dc, int X, int Y, int yc,
     MoveTo (dc, X-1*cellw, txr.bottom);
     LineTo (dc, X+nids*cellw, txr.bottom);
     sprintf (buf, "%ld", inum);
-    DrawText (dc, buf, strlen(buf), &txr,
+    DrawText (dc, buf, (int)strlen(buf), &txr,
 	      DT_VCENTER | DT_LEFT |DT_SINGLELINE| DT_NOCLIP);
 }
 
@@ -180,7 +180,7 @@ static void PrintPageNum (HDC dc, int X, int Y, int x, int y,
     txr.top = Y + y*cellh;
     txr.bottom = txr.top + cellh;
     sprintf (buf, "%d", page);
-    DrawText (dc, buf, strlen(buf), &txr,
+    DrawText (dc, buf, (int)strlen(buf), &txr,
 	      DT_VCENTER | DT_CENTER |DT_SINGLELINE| DT_NOCLIP);
 }
 
@@ -191,7 +191,7 @@ static void ProduceOneRelayIndex (HDC dc, Filter filter, const char * title,
     RECT txr;
     txr.left = txr.right =  txr.top = txr.bottom = 0;
     SelectObject (dc, F2);
-    DrawText (dc, title, strlen (title), &txr,
+    DrawText (dc, title, (int)strlen(title), &txr,
 	      DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP|DT_CALCRECT);
 
     int title_height = txr.bottom - txr.top;
@@ -238,7 +238,7 @@ static void ProduceOneRelayIndex (HDC dc, Filter filter, const char * title,
     SelectObject (dc, F1);
 
     txr.left = txr.right =  txr.top = txr.bottom = 0;
-    DrawText (dc, "245", strlen("245"), &txr,
+    DrawText (dc, "245", (int)strlen("245"), &txr,
 	      DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP|DT_CALCRECT);
     int cellw = (txr.right-txr.left)*2;
     int cellh = (int)((txr.bottom - txr.top)* 1.5);
@@ -269,7 +269,7 @@ static void ProduceOneRelayIndex (HDC dc, Filter filter, const char * title,
     txr.right = txr.left + title_width;
     txr.top = Y;
     txr.bottom = Y+2*cellh;
-    DrawText (dc, title, strlen (title), &txr,
+    DrawText (dc, title, (int)strlen (title), &txr,
 	      DT_LEFT | DT_BOTTOM | DT_SINGLELINE | DT_NOCLIP);
 
     SelectObject (dc, F1);

@@ -35,7 +35,7 @@ void NXGOLabel::SetText (const char * lab) {
 
     HDC dc = GetDC (G_mainwindow);
     SelectObject (dc, Fnt);
-    DrawText (dc, s, len, &r,
+    DrawText (dc, s, (int)len, &r,
               DT_TOP | DT_LEFT |DT_SINGLELINE | DT_NOCLIP | DT_CALCRECT);
     ReleaseDC (G_mainwindow, dc); /* args were reversed until 9 August 1999! */
     
@@ -52,7 +52,7 @@ void NXGOLabel::SetText (const char * lab) {
 void NXGOLabel::Display (HDC hDC) {
     /* at < .8 resolution, don't draw */
     if (NXGO_GetDisplayScale() >= 0.8)
-        DrawText (hDC, s, strlen(s), &sc_limits, DT_TOP | DT_LEFT |DT_SINGLELINE | DT_NOCLIP);
+        DrawText (hDC, s, (int)strlen(s), &sc_limits, DT_TOP | DT_LEFT |DT_SINGLELINE | DT_NOCLIP);
 }
 
 
