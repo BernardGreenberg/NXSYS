@@ -35,6 +35,10 @@ NSDictionary* helpFontDictionary;
     [_URLBar setTitle:urlstr];
     [_backButton setEnabled:[_theWebView canGoBack]];
     [_forwardButton setEnabled:[_theWebView canGoForward]];
+    [_backButton setHidden:NO];
+    [_forwardButton setHidden:NO];
+    [_textView setHidden:YES];
+    [_URLBarContainer setHidden:NO];
 }
 - (id)initWithWindow:(NSWindow *)window
 {
@@ -78,8 +82,10 @@ NSDictionary* helpFontDictionary;
     [_textView setString:@""];
     [[_textView textStorage] appendAttributedString:attrString];
     [_textView scrollRangeToVisible:NSMakeRange(0, 0)];
-  
-
+    [_textView setHidden:NO];
+    [_backButton setHidden:YES];
+    [_forwardButton setHidden:YES];
+    [_URLBarContainer setHidden:YES];
     // "I read it on the internet!  -- well it is good for computer code, but I've read lies, too.
     // NSString *urlText = @"http://google.com";
    // [[self.theWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
@@ -103,7 +109,7 @@ NSDictionary* helpFontDictionary;
     NSString *helpString = [NSString stringWithContentsOfFile:filePath
                                                      encoding:NSUTF8StringEncoding error:nil];
     [self log:helpString];
-    
+  
 }
 -(void)HTMLHelp:(NSString*)rname  tag:(NSString*) tag
 {

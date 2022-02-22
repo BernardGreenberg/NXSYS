@@ -18,6 +18,7 @@
 @property (weak) IBOutlet NSButton *backButton;
 @property (weak) IBOutlet NSButton *forwardButton;
 @property (weak) IBOutlet NSTextFieldCell *URLBar;
+@property (weak) IBOutlet NSTextField *URLBarContainer;
 -(void)log:(NSString*)nsstring;
 -(void)HTMLHelp:(NSString*)resource_name tag:(NSString*)tag;
 -(void)TextHelp:(NSString*)resource_name;

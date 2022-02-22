@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="HelpController">
             <connections>
                 <outlet property="URLBar" destination="b8m-0M-fSH" id="GgZ-Ev-OY0"/>
+                <outlet property="URLBarContainer" destination="4b7-ys-2cM" id="xxP-Tu-c9P"/>
                 <outlet property="backButton" destination="I7l-Mf-PsU" id="WMw-im-pXc"/>
                 <outlet property="forwardButton" destination="EdZ-Ou-z2N" id="1Mn-Ce-XUh"/>
                 <outlet property="scrollView" destination="Q5e-2t-NGt" id="UTW-kc-G2T"/>
