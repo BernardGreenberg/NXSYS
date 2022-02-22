@@ -1,6 +1,6 @@
 #  NXSYS sources, complete
 ###  By and ©Copyright 1994-2022, Bernard S. Greenberg
-#### First Posted 4 February 2022 (last 21 Feb 2022)
+#### First Posted 4 February 2022 (last 22 Feb 2022)
 
 This is the buildable, runnable source code for **NXSYS** (*enn-ex-sys*) (Version 2), my New York City Subway relay-logic and interlocking panel simulator, and its six offered interlockings, as it stands.  It is mine, and mine alone, although Dave Barraza's contributions to its debugging and development deserve credit.  Feel free to continue it, improve it if you like, or just build it for yourself.  I want this repository to be its home.  I'm not soliciting or merging branches at this time.
 
@@ -19,7 +19,7 @@ I am not, and have not been, associated with any transportation provider nor sig
 
 This application is currently in C++17 (the 2017 standard of C++), exploiting STL.  It is almost all C++11, and, especially in the Windows version, contains code in dialects going all the way back to C. The shared core (whose maximization was my goal)  and the Windows-specific code is only in C/C++.  Some C++17 features have recently been exploited (e.g., `std::filesystem`).  Note that the Microsoft compiler will lie about the `__cplusplus` version unless told not to with `/Zc:__cplusplus`. The [Mac code](https://github.com/BernardGreenberg/NXSYS/blob/master/DocSource/MacStatus.md) exploits Cocoa/Objective C++.
 
-The core of the functionality contains preprocessor conditionalizations for the two platforms. it was ported to the Mac in late 2014, with very substantial Mac-specific code additions, and back to Windows in 2016, with The last six years of Mac improvements re-shared and retrofitted in 2022.
+The core of the functionality contains preprocessor conditionalizations for the two platforms. It was ported to the Mac in late 2014, with very substantial Mac-specific code additions, and back to Windows in 2016, with The last six years of Mac improvements were re-shared and retrofitted in 2022.
 
 There are three shared builds (“projects” on Windows, “targets” on the Mac), `NXSYS` the interlocking/relay simulator, `TLEdit` the track layout editor, and `Relay Index`, the cross-reference and tags file generator, a console program.  The Mac Xcode project (the largest entity, parallel to Windows “solution") contains two additional targets for debugging/amusement.
 

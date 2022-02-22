@@ -27,11 +27,6 @@ static vector<FileEntry> Files;
 
 static HMENU HMenu = nullptr;
 
-static string LabelN(int index, const string& path) {
-	fs::path fspath(path);
-	return string{ "&" } + std::to_string(index + 1) + " " + fspath.filename().string();
-}
-
 static string Regkey(int index) {
 	return "RecentPath_" + std::to_string(index);
 }
@@ -46,14 +41,16 @@ static void SetClearCommand() {
 };
 static void PutUpDisambiguatedMenu() {
 	std::unordered_multiset<string>multie;
-	for (int index = 0; index < (int)Files.size(); index++)
-		multie.insert(Files[index].Display);
-	for (int index = 0; index < (int)Files.size(); index++) {
-		string tentative = Files[index].Display;
+	for (auto& file : Files)
+		multie.insert(file.Display);
+	int i = 0;
+	for (auto& file: Files) {
+		string tentative = file.Display;
 		if (multie.count(tentative) > 1)
-			tentative = tentative + " (" + Files[index].Path.string() + ")";
-		tentative = "& " + std::to_string(index + 1) + " " + tentative;
-		InsertMenu(HMenu, -1, MF_BYPOSITION, ID_RECENT_BASE + index, tentative.c_str());
+			tentative = tentative + " (" + file.Path.string() + ")";
+		tentative = "& " + std::to_string(i+1) + " " + tentative;
+		InsertMenu(HMenu, -1, MF_BYPOSITION, ID_RECENT_BASE + i, tentative.c_str());
+		i++;
 	}
 }
 
@@ -72,7 +69,6 @@ void InitMenuRecentFiles(HMENU submenu) {
 	for (int i = FIRST_INDEX; i < count;i++) {
 		auto srslt = getStringRegval(hk, Regkey(i));
 		if (srslt.valid) {
-			int index = (int)Files.size();
 			string lresult = stolower(srslt.value);
 			if (sfile_paths.count(lresult) == 0) {
 				sfile_paths.insert(lresult);
@@ -89,11 +85,8 @@ static void RefreshMenu() {
 	AppKey ak("Settings");
 	for (int index = LAST_INDEX+2; index >= FIRST_INDEX; index--)
 		DeleteMenu(HMenu, index, MF_BYPOSITION);
-	for (int index = FIRST_INDEX; index < Files.size(); index++) {
-		int cmd = ID_RECENT_BASE + index;	
-		if (index < (int)Files.size())
-			putStringRegval(ak, Regkey(index), Files[index].Path.string());
-	}
+	for (int index = FIRST_INDEX; index < Files.size(); index++)
+		putStringRegval(ak, Regkey(index), Files[index].Path.string());
 	PutUpDisambiguatedMenu();
 	SetClearCommand();
 	PutDWORDRegval(ak, "RecentFileCount", (DWORD)Files.size());
