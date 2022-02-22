@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <plugIn identifier="com.apple.WebKit2IBPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -9,6 +8,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HelpController">
             <connections>
+                <outlet property="URLBar" destination="b8m-0M-fSH" id="GgZ-Ev-OY0"/>
+                <outlet property="backButton" destination="I7l-Mf-PsU" id="WMw-im-pXc"/>
+                <outlet property="forwardButton" destination="EdZ-Ou-z2N" id="1Mn-Ce-XUh"/>
                 <outlet property="scrollView" destination="Q5e-2t-NGt" id="UTW-kc-G2T"/>
                 <outlet property="textView" destination="T05-cA-czB" id="uGS-qK-Phc"/>
                 <outlet property="theWebView" destination="bfo-4j-OvQ" id="VVG-8N-oZS"/>
@@ -20,50 +22,84 @@
         <window title="NXSYS / Mac Help" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="691" height="368"/>
+            <rect key="contentRect" x="196" y="240" width="695" height="399"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="691" height="368"/>
+                <rect key="frame" x="0.0" y="0.0" width="695" height="399"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q5e-2t-NGt">
-                        <rect key="frame" x="0.0" y="-7" width="691" height="384"/>
+                        <rect key="frame" x="0.0" y="-7" width="695" height="415"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" drawsBackground="NO" id="7ad-h6-EVg">
-                            <rect key="frame" x="1" y="1" width="674" height="367"/>
+                            <rect key="frame" x="1" y="1" width="678" height="398"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" horizontallyResizable="YES" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" textReplacement="YES" smartInsertDelete="YES" id="T05-cA-czB">
-                                    <rect key="frame" x="0.0" y="0.0" width="674" height="367"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="678" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="674" height="367"/>
+                                    <size key="minSize" width="678" height="398"/>
                                     <size key="maxSize" width="771" height="10000000"/>
                                     <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                 </textView>
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="0Zy-s0-p7p">
-                            <rect key="frame" x="1" y="368" width="674" height="15"/>
+                            <rect key="frame" x="1" y="399" width="678" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="tnM-88-abP">
-                            <rect key="frame" x="675" y="1" width="15" height="367"/>
+                            <rect key="frame" x="679" y="1" width="15" height="398"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                     <wkWebView wantsLayer="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bfo-4j-OvQ">
-                        <rect key="frame" x="0.0" y="0.0" width="691" height="368"/>
+                        <rect key="frame" x="0.0" y="-7" width="695" height="356"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <wkWebViewConfiguration key="configuration">
                             <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                             <wkPreferences key="preferences"/>
                         </wkWebViewConfiguration>
+                        <connections>
+                            <outlet property="navigationDelegate" destination="-2" id="gZm-E5-vC1"/>
+                        </connections>
                     </wkWebView>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I7l-Mf-PsU">
+                        <rect key="frame" x="7" y="352" width="46" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="←" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OHQ-kf-Nng">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <connections>
+                                <action selector="BackButton:" target="-2" id="ftA-uj-YN9"/>
+                            </connections>
+                        </buttonCell>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EdZ-Ou-z2N">
+                        <rect key="frame" x="52" y="352" width="46" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="→" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="k3o-Wc-Qys">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ForwardButton:" target="-2" id="aKa-e1-3Ym"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" textCompletion="NO" id="4b7-ys-2cM">
+                        <rect key="frame" x="115" y="359" width="560" height="21"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="truncatingHead" allowsUndo="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="b8m-0M-fSH">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="139.5" y="152"/>
+            <point key="canvasLocation" x="137.5" y="167.5"/>
         </window>
     </objects>
 </document>

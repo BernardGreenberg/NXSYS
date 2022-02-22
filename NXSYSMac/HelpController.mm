@@ -23,7 +23,19 @@ NSDictionary* helpFontDictionary;
     return self;
     
 } // end init
-
+- (IBAction)BackButton:(id)sender {
+    [_theWebView goBack];
+}
+- (IBAction)ForwardButton:(id)sender {
+    [_theWebView goForward];
+}
+- (void)updateBrowseStatus
+{
+    NSString * urlstr = [[_theWebView URL] path];
+    [_URLBar setTitle:urlstr];
+    [_backButton setEnabled:[_theWebView canGoBack]];
+    [_forwardButton setEnabled:[_theWebView canGoForward]];
+}
 - (id)initWithWindow:(NSWindow *)window
 {
     self = [super initWithWindow:window];
@@ -80,6 +92,7 @@ NSDictionary* helpFontDictionary;
     [self ensureExposed];
     [_theWebView setHidden:NO];
     [self.theWebView loadRequest:[NSURLRequest requestWithURL:url]];
+    [self updateBrowseStatus];
 
 
 }
@@ -128,6 +141,9 @@ NSDictionary* helpFontDictionary;
     [self log:[[NSString alloc] initWithUTF8String:stext.c_str()]];
 }
 
-
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    [self updateBrowseStatus];
+}
 @end
 
