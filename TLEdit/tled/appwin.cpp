@@ -329,7 +329,7 @@ void AppCommand(UINT command) {
 #ifndef NXSYSMac  // hic non est auxilium
 	case CmHelp:
 	//	DoHelpDialog(); //no HAY ayudo aquí -- Español mejor que la latina aquí...
-		WinBrowseResource("TLEdit.html");
+		WinBrowseResource("TLEDocumentation\\TLEdit.html");
 
 		break;
 
