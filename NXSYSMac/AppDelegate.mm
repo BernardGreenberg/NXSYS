@@ -29,6 +29,7 @@ typedef void *HINSTANCE;
 #include "commands.h"
 #include <filesystem>
 #include "InterlockingLibrary.hpp"
+#include "HelpDirectory.hpp"
 #include "GetResourceDirectoryPathname.h"
 
 namespace fs = std::filesystem;
@@ -121,6 +122,8 @@ NSWindow * getNXWindow() {
 static NSString* buildDateString;
 static NSString* buildSignature;
 static InterlockingLibrary interlockingLibrary;
+static HelpDirectory helpDirectory;
+
 -(id)init  // this actually gets run, proven.
 {
     self = [super init];
@@ -204,6 +207,39 @@ static InterlockingLibrary interlockingLibrary;
     InterlockingLibraryEntry& E = interlockingLibrary[tag];
     [self readLayout:[NSString stringWithUTF8String:E.Pathname.string().c_str()]];
 }
+-(void)HelpEntryClicked:(NSEvent*)event
+{
+    NSMenuItem* item = (NSMenuItem*)event;
+    int tag = (int)item.tag;
+    HelpDirectoryEntry& E = helpDirectory[tag];
+    NSString * nss;
+    if (E.isLocalPath)
+        nss = [NSString stringWithUTF8String: ("file://" + E.LocalPathname.string()).c_str() ];
+    else
+        nss = [NSString stringWithUTF8String: E.URL.c_str() ];
+    NSURL * url = [NSURL URLWithString: nss];
+    [self.helpController HTMLView:url];
+
+}
+
+-(void)PopulateHelpMenu
+{
+    helpDirectory = GetHelpDirectory();
+    NSMenu * topLevelMenu = [[NSApplication sharedApplication] mainMenu];
+    
+    NSMenuItem* help_item = [topLevelMenu itemWithTitle:@"Help"];
+    NSMenu* help_menu = help_item.submenu;
+    int ix = 0;
+    for (auto& helpe : helpDirectory) {
+        NSMenuItem *item = [[NSMenuItem alloc]
+                            initWithTitle:[NSString stringWithUTF8String: helpe.Title.c_str()]
+                            action:@selector(HelpEntryClicked:)
+                            keyEquivalent:@""];
+        item.tag = ix++;
+        [help_menu addItem:item];
+    }
+}
+
 -(void)PopulateLibraryMenu
 {
     interlockingLibrary = GetInterlockingLibrary();
@@ -310,7 +346,7 @@ static InterlockingLibrary interlockingLibrary;
     if (url != nil) {
         [self readLayout:[url path]];
     }
-
+    [self PopulateHelpMenu];
     [self PopulateLibraryMenu];
 
     APDTRACE(("willFinishLaunching 5\n"));

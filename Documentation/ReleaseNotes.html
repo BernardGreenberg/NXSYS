@@ -12,15 +12,21 @@
 since the initial release of <nxf>NXSYS / MAC 2.0M</nxf> on 2 Sept 2014.  All changes are integrated in <a href="MacNXSYS.html">the documentation</a> before release.<p>
 <p style='font-size:smaller'><span style='color:red;font-weight:bold'>In the unlikely event that any version of this program crashes,</span> please click “report” on the crash dialog, and instead of sending it to Apple, copy the contents of the report window, and send it to me, with a note about what you did to provoke it.  Thanks!</p>
 
-<h2>Relase 2.6.0 Mac — 21 February 2022</h2>
+<p><span style="color:red">Note well:</span> In the most recent and future updates, the terom <b>Resources directory</b> refers to
+<ul>
+    <li>On the Mac, the actual folder called <b>Resources</b> which is under <b>Contents</b> under the actual <b>.app</b> directory (it is secretly a directory) which is NXSYS on your system.</li>
+    <li>On Windows, the folder into which NXSYS <i>was</i> installed on your system.  That is usually, if installed from the supplied MS Installer (MSI) package,<br/>
+        <tt>C:\Program Files\Bernard Greenberg\NXSYS\</tt></li>
+</ul>
+
+<h2>Release 2.6.0 Mac — 21 February 2022</h2>
 
 <ul>
     <li>First Windows release in six years, 64 bit at that. Massively revised documentation.</li>
     <li>The documentation now includes <a href="Interlocking Logic Design.pdf">logic design documentation</a>.</li>
+    <li>There is a new help system, populating the <b>Help</b> menu from an XML file in the Resources directory, and pointing to many more resources, including a <a href="Interlocking Logic Design.pdf">new Logic Design tutorial</a>, as well as relevant online resources.</li>
     <li>The Mac help browser has forward and backward buttons and a URL bar.</li>
-    <li>Includes a new command on the <b>File</b> menu, <b>Interlocking Library</b>, which offers a menu of the supplied interlockings.  It assumes they
-        are in the folder named <b>Interlockings</b> the app&rsquo;s Resources directory, which, on the Mac is the directory named that
-        in the app&rsquo;s package, and on Windows is the directory into which the app itself is delivered.</li> 
+    <li>Includes a new command on the <b>File</b> menu, <b>Interlocking Library</b>, which offers a menu of the supplied interlockings in the Resources directory.  Windows now has a <b>Recent Files</b> menu item like the Mac&rsquo;s.</li>
     <li>The <b>Relay Draftsperson</b> sports a new button, <b>Set Lctr Path</b> (Set Source Locator Script pathname), which allows you to choose a shell script (<b>.sh</b> on the Mac, <b>.BAT</b> on Windows) file to be used as the Source Locator script for right-click source location in the drawings.  This eliminates commerce with <b>PListBuddy</b> on the Mac, and the Registry on Windows (on which latter it is in the <b>Control</b> menu on the left of the Draftsperson window).  There is a <a href="RelayIndex.html">new document</a> on this feature, too.</li>
     <li>Fixes a bug in the <b>Help</b> window .xib that made it impossible to resize the “Web view” of the actual help pages, in both the main application and <nxf>TLEdit</nxf>.</li>
     <li>Fixes a longstanding bug in layout destruction which only manifested on Windows during invocation of a Demo.</li>

@@ -322,23 +322,6 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                         <items>
-                            <menuItem title="NXSYS / Mac Help (start here)" keyEquivalent="?" id="FKE-Sm-Kum">
-                                <connections>
-                                    <action selector="MacHelp:" target="Voe-Tx-rLC" id="QTD-uB-Xnk"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Release Notes" id="hFM-ZT-NzP">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ReleaseNotes:" target="Voe-Tx-rLC" id="Ohq-ra-Zak"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="NXSYS Documentation and Help" id="aYW-EX-bfv" userLabel="NXSYS Documentation">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="NXV1Help:" target="Voe-Tx-rLC" id="yga-9J-rUq"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Scenario Help 1" id="f7O-Ji-tXJ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

@@ -161,6 +161,9 @@
 		5BB5802F27C40D9400FB0ED5 /* Documentation in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5802E27C40D9400FB0ED5 /* Documentation */; };
 		5BB5803127C40E2400FB0ED5 /* Interlockings in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803027C40E2400FB0ED5 /* Interlockings */; };
 		5BB5803B27C44EE100FB0ED5 /* TLEDocumentation in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803A27C44EE100FB0ED5 /* TLEDocumentation */; };
+		5BB5803D27C5586000FB0ED5 /* Help.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803C27C5586000FB0ED5 /* Help.xml */; };
+		5BB5803E27C5586000FB0ED5 /* Help.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803C27C5586000FB0ED5 /* Help.xml */; };
+		5BB5804127C55CF400FB0ED5 /* HelpDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */; };
 		5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
 		5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AC19DDA738006C590E /* dialog_warning.png */; };
 		5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
@@ -513,6 +516,9 @@
 		5BB5803027C40E2400FB0ED5 /* Interlockings */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Interlockings; sourceTree = "<group>"; };
 		5BB5803227C4115C00FB0ED5 /* GetResourceDirectoryPathname.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetResourceDirectoryPathname.h; sourceTree = "<group>"; };
 		5BB5803A27C44EE100FB0ED5 /* TLEDocumentation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TLEDocumentation; sourceTree = "<group>"; };
+		5BB5803C27C5586000FB0ED5 /* Help.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Help.xml; sourceTree = "<group>"; };
+		5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelpDirectory.cpp; sourceTree = "<group>"; };
+		5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HelpDirectory.hpp; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -1132,6 +1138,8 @@
 				5BB5802B27C3D3CA00FB0ED5 /* InterlockingLibrary.cpp */,
 				5BB5802C27C3D3CA00FB0ED5 /* InterlockingLibrary.hpp */,
 				5BB5803227C4115C00FB0ED5 /* GetResourceDirectoryPathname.h */,
+				5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */,
+				5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */,
 			);
 			name = NewShared;
 			sourceTree = "<group>";
@@ -1168,6 +1176,7 @@
 		5BE487C3199D0A5C007BD6BF = {
 			isa = PBXGroup;
 			children = (
+				5BB5803C27C5586000FB0ED5 /* Help.xml */,
 				5BB5803A27C44EE100FB0ED5 /* TLEDocumentation */,
 				5BB5803027C40E2400FB0ED5 /* Interlockings */,
 				5BB5802E27C40D9400FB0ED5 /* Documentation */,
@@ -1570,6 +1579,7 @@
 				5B6705BA19D0B31A002B6E28 /* SignalNE.png in Resources */,
 				5B6705DA19D1A148002B6E28 /* PanelLightProperties.xib in Resources */,
 				5BAC932019C8FE7200673BDC /* Images.xcassets in Resources */,
+				5BB5803E27C5586000FB0ED5 /* Help.xml in Resources */,
 				5B6705D319D19BA7002B6E28 /* ExitLightProperties.xib in Resources */,
 				5BA7E73319D39DC0006F9A04 /* insulate.png in Resources */,
 				5B67045719D0A4B0002B6E28 /* Toolbar.xib in Resources */,
@@ -1599,6 +1609,7 @@
 				5BA92A7619DD72690098DBEC /* NXMessageBox.xib in Resources */,
 				5BA92A6919DC3BD90098DBEC /* Info.xib in Resources */,
 				5BE487DA199D0A5C007BD6BF /* InfoPlist.strings in Resources */,
+				5BB5803D27C5586000FB0ED5 /* Help.xml in Resources */,
 				5B54275127BD27C3006EEDEF /* Relay Index.vcxproj.filters in Resources */,
 				5B133A582649F5B800120B10 /* TrainWreck256.png in Resources */,
 				5BE487E8199D0A5C007BD6BF /* Images.xcassets in Resources */,
@@ -1769,6 +1780,7 @@
 				5BA92A7119DC5E120098DBEC /* StatusReport.cpp in Sources */,
 				5B5AE62F230D74D000348612 /* WinApiSTL.cpp in Sources */,
 				5BF06300199FB8DD008CDCA0 /* nxsys.cpp in Sources */,
+				5BB5804127C55CF400FB0ED5 /* HelpDirectory.cpp in Sources */,
 				5BABB89719A829CE00ECA09A /* RelayTracerController.mm in Sources */,
 				5BF062F0199FAB49008CDCA0 /* xexlight.cpp in Sources */,
 				5BF062E8199F72C3008CDCA0 /* Winapi.mm in Sources */,
