@@ -1,5 +1,5 @@
 # NXSYS MS Windows Status
-## 18 February 2022
+## 22 February 2022
 
 This repository now has enough content to build Windows 10 executables (64-bit 32 not guarantee) of the three executables of the system, in Visual Studio (VS) 2022, C++ Language Level C++17, platform toolset VS2022 level 143, Windows SDK “latest installed version“ 10.0, my Windows 10 at current updates 12 February 2022.
 
@@ -7,9 +7,7 @@ The re-adaptation work is fully done.  A usable up-to-date product can be built 
 
 **You can still download a fully operative 2016 Windows NXSYS from [the NXSYS page on my site](https://BernardGreenberg.com/NXSYS).** If you are stuck in an ancient, de-supported version of Windows not 64 bits, use the 2016 posting, which is for 32-bit Windows.
 
-### What ***does*** work in the new build:
-
-Everything I know about works, except what's listed below that may not ever work. `Debug` and `Release` builds of 3 projects (`NXSYS`, `TLEdit`, `Relay Index`), platforms `x86` and `x64`. Right now you have to move the help files and the image tree into the executable directory yourself.
+Everything I know about works, except what’s listed below that may not ever work. `Debug` and `Release` builds of 4 projects (`NXSYS`, `TLEdit`, `Relay Index`, and an MSI installer project), platforms `x86` and `x64`. Right now you have to move the help files and the image tree into the executable directory yourself.
 
 ### Now, what doesn’t work
 
@@ -31,11 +29,14 @@ Everything I know about works, except what's listed below that may not ever work
 
 In this repository, the top-level directory `NXSYS` contains everything that is shared between the Mac and Windows builds of the app (and nothing else).  The second-level directory `TLEdit/tled`, quite unsymmetrically, contains everything shared by both builds of TLEdit (perhaps I will reorganize this) "and hopefully little else".  TLEdit depends upon the `NXSYS` directory, too, for sources and headers.
 
-The top-level directory `NXSYSWindows` contains everything specific to Windows, and *nothing* used on the Mac.  All Windows-specific code and resources (about 25 files) for both apps are in it, directly.  The solution file `NXSYSWindows.sln` is there, as well as subdirectories for the three (current) VS projects contained therein, which *do not contain code*, but only VS artifacts such as the `.vcxproj` project file and its artifacts.
+The top-level directory `NXSYSWindows` contains everything specific to Windows, and *nothing* used on the Mac.  All Windows-specific code and resources (about 25 files) for both apps are in it, directly.  The solution file `NXSYSWindows.sln` is there, as well as subdirectories for the four (current) VS projects contained therein, which *do not contain code*, but only VS artifacts such as the `.vcxproj` project file and its artifacts.
+
 
 ### Build it yourself
 
-All of the pathnames in the project files have been relativized.  There should be no references outside the repository tree, in fact, no references other than to the solution directory (`NXSYSWindows`) or its peers `NXSYS` and `TLEdit` (although there might (TBD) be build-time references to the `Documentation` directory when this is complete).
+You will need the [MS Visual Studio Installer Project Extension](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects), which is freely available, if you wish to build the MSI/ installer.
+
+All of the pathnames in the project files are solution-relative; there are no references outside the repository tree, in fact, no references other than to the solution directory (`NXSYSWindows`) or its peers `NXSYS` and `TLEdit` (although there are build-time references to the `Documentation` directory, as `$(SolutionDir)..\Documentation`).
 
 All you have to do is download this repository, assure you have a VS 2022 at least as up-to-date as mine (described above, free Community Edition used) open the solution `NXSYSWindows.sln` its eponymous directory, select and build both projects (`NXSYS` and `TLEdit`) and go to town. 
 
