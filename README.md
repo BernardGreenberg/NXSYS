@@ -39,7 +39,7 @@ As of 21 February 2022, the application (both versions) includes, in source, the
 
 ## New — Logic documentation
 
-This Repository now contains an [extensive tutorial on Interlocking Logic (pdf)](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/Interlocking%20Logic%20Design.pdf) and its [.odt source](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/Interlocking%20Logic%20Design.odt) (Libre Office), as well as a new [document on the Relay Language](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/RelayLanguage.md).  Both of these are intended for those interested in creating their own interlockings, and should be of great interest to any electrically-competent railfan.
+This Repository now contains an [extensive tutorial on Interlocking Logic (pdf)](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/Interlocking%20Logic%20Design.pdf) and its [.odt source](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/Interlocking%20Logic%20Design.odt) (Libre Office), as well as a new [document on the Relay Language](https://github.com/BernardGreenberg/NXSYS/blob/master/DocSource/RelayLanguage.md).  Both of these are intended for those interested in creating their own interlockings, and should be of great interest to any electrically-competent railfan.
 
 
 ## *Et in fine* ...
