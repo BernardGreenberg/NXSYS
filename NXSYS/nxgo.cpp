@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <map>
+#include <cassert>
+#include "NXSYSMinMax.h"
 
 #include "nxgo.h"
 
@@ -111,10 +113,10 @@ void GraphicObject::ContributeToLayoutRect() {
     WP_cord x1 = wp_x + wp_limits.right;
     WP_cord y0 = wp_y + wp_limits.top;
     WP_cord y1 = wp_y + wp_limits.bottom;
-    LRect.left = std::min(LRect.left, x0);
-    LRect.right = std::max(LRect.right, x1);
-    LRect.top = std::min(LRect.top, y0);
-    LRect.bottom = std::max(LRect.bottom, y1);
+    LRect.left = NXMIN(LRect.left, x0);
+    LRect.right = NXMAX(LRect.right, x1);
+    LRect.top = NXMIN(LRect.top, y0);
+    LRect.bottom = NXMAX(LRect.bottom, y1);
     // New lookup system 9/2/2019, RealNXSYS only - TLEdit moves, creates, and deletes objects.
 #if ! TLEDIT
     if (MouseSensitive())
