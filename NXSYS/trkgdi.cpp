@@ -103,6 +103,9 @@ std::vector<GDIEnt>GDIEnt::Objects;
 
 
 HPEN CreateSPen (int width, COLORREF color) {
+#if WINDOWS
+    return CreatePen(PS_SOLID, width, color);
+#endif
     GDIEnt * pE = GDIEnt::FindEntry(true, color, PS_SOLID, width);
     if (!pE) {
 	HPEN p = CreatePen (PS_SOLID, width, color);
@@ -112,6 +115,9 @@ HPEN CreateSPen (int width, COLORREF color) {
 }
 
 HBRUSH CreateSBrush (COLORREF color) {
+#if WINDOWS
+    return CreateSolidBrush(color);
+#endif
   GDIEnt * pE = GDIEnt::FindEntry (false, color, 0, 0);
     if (!pE) {
 	HBRUSH b = CreateSolidBrush(color);
