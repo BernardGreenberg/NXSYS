@@ -117,7 +117,7 @@ void Timer::Set (void* object, NXTimerFn fn, long ms) {
 #ifdef NXSYSMac
     Handle = SetTimer (NULL,  0, (DWORD)ms, (TIMERPROC*) TimeProc);
 #else
-	Handle = SetTimer(NULL, 0, (DWORD)ms, (TIMERPROC)TimeProc);
+	Handle = (UINT)SetTimer(NULL, 0, (DWORD)ms, (TIMERPROC)TimeProc);
 #endif
     if (Handle == 0)
 	FatalAppExit (0, "Can't get timer.  \"A scarce resource,\" they say. "

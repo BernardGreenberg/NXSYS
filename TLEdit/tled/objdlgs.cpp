@@ -284,7 +284,7 @@ static DLGPROC_DCL GeneralDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARA
 	SetWindowLongPtr (hDlg, GWLP_USERDATA, lParam);
     LONG_PTR l = GetWindowLongPtr (hDlg, GWLP_USERDATA);
     if (l)
-	return ((GraphicObject *) l)->DlgProc(hDlg, message, wParam, lParam);
+	return (BOOL)((GraphicObject *) l)->DlgProc(hDlg, message, wParam, lParam);
     else
 #endif
 	return FALSE;

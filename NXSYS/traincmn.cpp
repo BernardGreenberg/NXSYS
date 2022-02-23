@@ -912,7 +912,7 @@ double TrainAutoGetSpeed (int train_no) {
 BOOL TrainAutoLookupCommand (const char * scmd, int&icmd) {
     for (auto& command : TrainAutoCmds) {
         if (command.name == scmd) { //must already be upcased.
-	    icmd = command.cmd;
+	    icmd = (int)command.cmd;
 	    return TRUE;
 	}
     }

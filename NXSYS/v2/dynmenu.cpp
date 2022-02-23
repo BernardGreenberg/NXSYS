@@ -333,7 +333,7 @@ LRESULT DynMenu::DlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         case WM_SHOWWINDOW:
             if (wParam)
                 SetLights();
-            Up = wParam;
+            Up = (BOOL)wParam;
             return TRUE;
             
         case WM_COMMAND:

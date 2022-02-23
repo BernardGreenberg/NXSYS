@@ -158,7 +158,7 @@ Virtual void TrafficLever::Display (HDC hdc) {
     tr.bottom = tr.top + NumHeight;
     tr.left = sc_x - rad;
     tr.right = sc_x + rad;
-    DrawText (hdc, NumString.c_str(), NumString.size(), &tr, NUM_DT_OPTS);
+    DrawText (hdc, NumString.c_str(), (int)NumString.size(), &tr, NUM_DT_OPTS);
 
     SelectObject (hdc, brush);
     SelectObject (hdc, (HBRUSH)GetStockObject(NULL_PEN)); /* moved up 12 May 2001 */

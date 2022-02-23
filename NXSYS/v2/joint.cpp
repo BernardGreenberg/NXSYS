@@ -266,7 +266,7 @@ void DecodeDigitated (long input, int &track_no, int &station_no) {
     }
     else {
         int n_digits_minus_1 = (int)log10(input);
-        int power = pow(10, n_digits_minus_1);
+        int power = (int)pow(10, n_digits_minus_1);
         track_no   = (int)(input / power);
         station_no = input % power;
     }

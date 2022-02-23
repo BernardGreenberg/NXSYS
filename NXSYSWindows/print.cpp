@@ -233,13 +233,13 @@ void FramePage() {
     sprintf (buf, "%s    %s    Page %2d  ", Title, datime, PageNo);
     RECT tr;
     tr.top = tr.bottom = tr.left = tr.right= 0;
-    DrawText (Hpdc, buf, strlen(buf), &tr,
+    DrawText (Hpdc, buf, (int)strlen(buf), &tr,
 	      DT_TOP | DT_LEFT |DT_SINGLELINE|DT_CALCRECT);
     tr.top = BotLoc - tr.bottom - 3;
     tr.bottom = BotLoc - 3;
     tr.left = 0;
     tr.right = xPage - 3;
-    DrawText (Hpdc, buf, strlen(buf), &tr, DT_TOP|DT_RIGHT|DT_SINGLELINE);
+    DrawText (Hpdc, buf, (int)strlen(buf), &tr, DT_TOP|DT_RIGHT|DT_SINGLELINE);
     SelectObject (Hpdc, Pfnt);
 }
 

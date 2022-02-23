@@ -38,7 +38,7 @@ time_t GetModuleTime (HMODULE h) {
     if (h == NULL)
 	h = GetModuleHandle (NULL);
 
-    if ((((int) h) & 0xFFFF0000) == 0)
+    if ((((INT_PTR) h) & 0xFFFF0000) == 0)
 	return KludgeW32GMT(h);
     else {
        unsigned char * p = (unsigned char *) h;

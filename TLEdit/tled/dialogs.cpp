@@ -162,7 +162,7 @@ fx:			NXGO_SetDisplayScale (VirtualScreenScale);
 }
 
 BOOL ScaleDialog () {
-    return DialogBox (app_instance,
+    return (BOOL) DialogBox (app_instance,
 		      MAKEINTRESOURCE(IDD_SCALE),
 		      G_mainwindow,
 		      DLGPROC(ScaleDlgProc));

@@ -55,7 +55,7 @@ int HandleToolbarNotification (WPARAM wParam, LPARAM lParam) {
 
     if (((LPNMHDR) lParam)->code == TTN_NEEDTEXT) {
 	    LPTOOLTIPTEXT lpttt = (LPTOOLTIPTEXT) lParam; 
-	    int idButton = lpttt->hdr.idFrom; 
+	    int idButton = (int)lpttt->hdr.idFrom; 
 	    if (idButton != 0)
 		for (int i = 0; i < BUTTON_DATA_COUNT;i++)
 		    if (ButtonData[i].Command == idButton) {
