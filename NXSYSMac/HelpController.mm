@@ -31,7 +31,7 @@ NSDictionary* helpFontDictionary;
 }
 - (void)updateBrowseStatus
 {
-    NSString * urlstr = [[_theWebView URL] path];
+    NSString * urlstr = [[_theWebView URL] absoluteString];
     [_URLBar setTitle:urlstr];
     [_backButton setEnabled:[_theWebView canGoBack]];
     [_forwardButton setEnabled:[_theWebView canGoForward]];
