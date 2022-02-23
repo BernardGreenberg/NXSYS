@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+    <link rel="stylesheet" type="text/css" href="nxdoc.css">
+<title>NXSYS / Mac Release notes</title>
+<meta charset="UTF-8"/>
+</head>
+
+<body style="max-width:800px">
+<h1><span class=nxsys>NXSYS Release notes — Mac &amp; Windows</h1>
+
+<h2>2/22/22  &mdash; 2.6.0</h2>
+
+<p>Windows <nxf>NXSYS</nxf> has not been posted in over five years (November, 2016).  This release introduces significant systemic upgrades (how it is built, used, and distributed), and some technical (subway-related) upgrades, but nowhere near enough to declare a new major version.  Let&rsquo;s look at the largest changes <i>since then</i>.  All this is reflected in the <a href="NXSYS.html">main help file</a>. Other than an improved helpfile and rebuild (and one feature below), <nxf>TLEdit</nxf> has not changed.</p>
+
+<p>The term <b>Resource Directory</b> figures prominently in the new setup; both interlockings and documentation are contained within it.  It has two different meanings on Windows and macOS:
+<ul>
+    <li>On Windows, it means the directory into which the <nxf>NXSYS</nxf> and <nxf>TLEdit</nxf> executables are delivered.  Normally, this will be<br/>
+        <tt>C:\Program Files\Bernard Greenberg\NXSYS</tt></li>
+    <li>On macOS, it means the folder named <b>Resources</b> which is a child of the folder named <b>Contents</b>, which is a child of the folder which latter is <b>NXSYS.app</b> itself, i.e., the application itself (which is actually a folder with special markings). You need to click <b>Show Package Contents</b> in the finder to descend within it, but you should never have to.</li>
+</ul>
+<h3>New sharing status</h3>
+
+<ul>
+    <li><nxf>NXSYS</nxf> and its parts are now <b>open source, <a href="LICENSE">GPL 3 LICENSE</a></b></li>
+    <li>The source is <a href="https://Github.com/BernardGreenberg/NXSYS">here on Github.</a> It builds cleanly on Mac and Windows.  There are README&rsquo;s <b>.md</b> about its status and organization.</li>
+    <li>All interlockings and documents are contained in the installables.</li>
+    <li>Have a ball doing what you want with it, don&rsquo;t claim it as your own or redistribute without my authorship and GPL copyright notice.  Don&rsquo;t try to control real railroads, either.</li>
+</ul>
+
+<h3>Interlocking design no longer secret</h3>
+
+<p>After appropriate consultation with appropriate professionals, I have finally posted a 30 page tutorial on Interlocking Circuit design in this idiom and style, intended for those interested in either truly understanding the logic of the supplied interlockings, or constructing their own in this style.  This is possible partially because fixed-block wayside color-light relay-based signalling is ... obsolete and disrespected these hundred years later. The <a href="Interlocking Logic Design.pdf">document is here.</a></p>
+
+<h3>New Windows build and distribution</h3>
+
+<ul>
+    <li>Windows <nxf>NXSYS</nxf> and <nxf>TLEdit</nxf> are now 64 bit:  Windows 10 (or 11) is required.</li>
+    <li>The &ldquo;product&rdquo; is now distributed (for Windows) as a standard Microsoft Installer (MSI).  If you use Windows, you know them.  Admin access is needed to install, with the usual two-click uninstall and all the rest.</li>
+    <li>All the Mac-only features of the past 5+ years have been integrated.</li>
+</ul>
+
+<h3>New help system</h3>
+
+<p>Both Windows and Mac enjoy a new help system, which is driven by an XML file in the <b>Resources directory</b>, where all the documents now live.  The help menu now includes HTML and PDF filesas well as web-sites, including the relevant Github and nycsubway.org resources, and the aforementioned logic document.  The Mac help viewer finally has &ldquo;Back&rdquo; and &ldquo;Forward&rdquo; buttons and URL bar.  The Windows application does not have a help viewer (or much of one), and relies on sending local files, as well as remote accesses, to your system&rsquo;s default browser, where they are considerably more readable and manageable.</p>
+
+<p>Interlockings can now have HTML scenario-specific help.  See <a href="RelayLanguage.html">RelayLanguage.html</a> for how to specify it.  Some now do.</p>
+
+<p>The <a href="NXSYS.html">main helpfile</a> has been upgraded to remove obsolete material, including references to Version 1 (officially &ldquo;gone&rdquo;) and the retired OLE/NXSCRIPT feature.  Product status has been revised, and references to new interlockings and the logic document added.</p>
+
+<p>There is now a <a href="RelayLanguage.html">usable, up-to-date document on the &ldquo;Relay language&rdquo;</a>, i.e., the specific things you must say to communicate a secenario you construct to the application, such as the top-level <tt>(ROUTE...)</tt> form.</p>
+
+<h3>Relay Index and Cross-reference TAGS generator</h3>
+
+<p>The nonsexistly-named <b>Relay Draftsperson</b> has acquired a new feature whereby you can direct Emacs or an Emacs-repackaging such as Aquamacs to the text (pseudo-Lisp) source for a given relay from the latter&rsquo;s context menu in the Draftsperson.  You can direct some other editor or program if you tell NXSYS how to tell it.  In order to use this with Emacs, at least, you have to generate a TAGS file for the interlocking concerned.</p>
+
+<p>We just happen to have a handy-dandy command line utility, the <b>Relay Indexer</b>, that does just that, and generates a cross-reference for an interlocking. See <a href="RelayIndex.html">this document</a> for more detail.</p>
+    
+<h3>New Interlockings</h3>
+
+<p>Two interlockings not available in 2016 are now available, including one never before available.</p>
+
+<ul>
+    <li><b>240<sup>th</sup> St. Broadway</b>, on the IRT Broadway-Seventh Avenue line, first written by myself and Henry Sundermayer in 2000 (but maintained since).  See the scenario help for more information. As usual, these are <b>not</b> the real-life circuits.</li>
+    <li><b>Duckburg Yard</b>, an imaginary interlockings whose implementation is presented in seven stages to help explain the circuit design and a model for incremental implementation and debugging not available to real-life engineers.</li>
+</ul>
+
+<h3>New way of distributing and accessing provided interlockings</h3>
+
+<p>The six provided interlockings, and any future ones, are now distributed in a directory (folder) called <b>Interlockings</b>, in the <b>Resources Folder</b> in both distributions.  But you don&rsquo;t have to know where that is, because there is a new menu item on the <b>File</b> menu, <b>Interlocking Library</b>, which gives you a menu of them by name, without need for knowing either their real pathnames or the name of the correct (top-level) file in their directories (you can always learn that from <b>File Info</b> on the <b>File</b> menu (which is now on Windows, too), if you want to). Of course, if you create your own interlockings, or versions, you will know their pathnames and top-level files.</p>
+
+<p>Countless bugs and missing features (that&rsquo;s why you should use this to control real railroads) in all interlockings (mainly 240<sup>th</sup>, Myrtle, and Atlantic) have been found and fixed over the years.</p>
+
+<h3>New simulator features</h3>
+
+<ul>
+    <li>Route identifiers of more than one letter (e.g., <span class="nxsys" style="size:smaller">MM</span> for downtown Lexington, <span class="nxsys" style="size:smaller">BB</span> for upper Broadway) are now supported. <tt>:EXTENDED-ROUTE-LETTER "BB"</tt> in the layout <tt>route</tt> form does it. The single-letter <tt>#/B</tt> is still needed to keep the interlocking files backward-compatible.</li>
+    <li>Traffic levers have been reworked in appearance and function to be more like their real-life models. Traffic control circuitry at 240th St and Atlantic Avenue has been revised to take advantage of the changes (and yet work without them).  See <a href="TrafficLevers2_5.html">this help text</a> for details.</li>
+    <li>The <span class="menu">About</span> dialog on both systems was improved to show Release/Debug status and the date-time (in my zone) the executable was created. The same info is now displayed in the application’s title bar as well (on the Mac).</li>
+    <li> On the Mac, the keystroke <b>&#8997;&#8984; B</b> (<b>Opt Cmd B</b>) is now <b>Bobble All Signal Repeaters</b> (simulate track line power failure).</li>
+    <li>There is now (has been for some time on the Mac) a diagnostic “switch coherency” feature, preventing (in <nxf>TLEdit</nxf>) the creation of scenarios in which there are unmatched crossover-ends (e.g., 217A but no 217B), as well as inconsistency between paired switches and singletons.  <nxf>NXSYS</nxf>, which would previously crash when loading such (no matter how they arose), now diagnoses such explicitly and refuses to load them. <nxf>TLEdit</nxf> lets you load them so you can fix them.</li>
+  </ul>
+
+<h3>Removed features (Windows)</h3>
+
+<ul>
+    <li>The OLE Scripting system (NXSCRIPT) and server have been removed.  No one, including myself, has ever used them to advantage.</li>
+    <li>Printing may or may not work. I have not officially removed it, but it is no longer supported.</li>
+    <li>The attractive Cab View primitive &ldquo;video game&rdquo; feature of Version 1 has never been in version 2, and never will be.</li>
+</ul>
+
+<p>There is further, older change history, predating the 2016 32-bit Windows release, which is still available, in the <a href="ReleaseNotes.html">Mac release notes</a> file.</p>
+ 
+ </body>
+</html>
