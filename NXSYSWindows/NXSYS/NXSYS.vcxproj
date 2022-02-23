@@ -179,6 +179,7 @@ robocopy $(SolutionDir)..\Interlockings $(OutDir)\Interlockings</Command>
   <ItemGroup>
     <ClCompile Include="..\..\NXSYS\demo.cpp" />
     <ClCompile Include="..\..\NXSYS\fullsig.cpp" />
+    <ClCompile Include="..\..\NXSYS\HelpDirectory.cpp" />
     <ClCompile Include="..\..\NXSYS\incexppt.cpp" />
     <ClCompile Include="..\..\NXSYS\InterlockingLibrary.cpp" />
     <ClCompile Include="..\..\NXSYS\ldgut.cpp" />
