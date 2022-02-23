@@ -196,8 +196,6 @@ BEGIN
 #endif
 END
 
-
-#ifdef NXV2
 ChooseTrack DIALOG 60, 0, 133, 47
 STYLE WS_POPUP | WS_DLGFRAME |DS_MODALFRAME
 BEGIN
@@ -205,16 +203,6 @@ BEGIN
 	CTEXT "Train will enter there.", -1, 11, 24, 110, 8
 	CTEXT "Click elsewhere or ESC to cancel.", -1, 6, 34, 120, 8
 END
-#else
-ChooseTrack DIALOG 60, 0, 133, 47
-STYLE WS_POPUP | WS_DLGFRAME |DS_MODALFRAME
-BEGIN
-	CTEXT "Click on track for new train", -1, 13, 2, 108, 8
-	CTEXT "Train will enter in usual direction.", -1, 11, 24, 110, 8
-	CTEXT "Click elsewhere or ESC to cancel.", -1, 6, 34, 120, 8
-	CTEXT "or type track number.", -1, 21, 14, 90, 8
-END
-#endif
 
 ShowStops DIALOG 91, 24, 86, 71
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
