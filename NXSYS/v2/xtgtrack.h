@@ -20,8 +20,9 @@ class Stop;
 #ifdef REALLY_NXSYS
 class Turnout;
 #endif
-
-
+#ifdef TLEDIT
+#include "TLDlgProc.h"
+#endif
 
 struct JointOrganizationData {
     double Radang;
@@ -72,7 +73,7 @@ class TrackJoint
 	virtual void Select();
 	virtual void ShiftLayout2();
 	virtual void Cut();
-	virtual BOOL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
+	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual UINT DlgId();
 	virtual BOOL ClickToSelectP();
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
@@ -82,7 +83,7 @@ class TrackJoint
 	void	Insulate();
 	void	FlipNum();
 	int	SignalCount();
-	BOOL	SwitchDlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
+	BOOL_DLG_PROC_QUAL SwitchDlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 #endif
 
 #ifdef REALLY_NXSYS
@@ -181,7 +182,7 @@ class TrackSeg : public GraphicObject {
 	virtual void Select();
 	virtual void Cut();
 	void         SelectMsg();
-	virtual BOOL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
+	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual UINT DlgId();
 	virtual BOOL ClickToSelectP();
 #else
@@ -236,7 +237,7 @@ class PanelSignal  : public GraphicObject {
 	char Orientation();
 
 	virtual void Cut();
-	virtual BOOL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
+	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
     BOOL DlgOK(HWND hDlg);
 	virtual UINT DlgId();
 #else
@@ -345,7 +346,7 @@ public:
     virtual int Dump (FILE * f);
     virtual void Select();
     virtual void Cut();
-    virtual BOOL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
+    virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
     virtual UINT DlgId();
 #else 
     virtual void Hit (int mb);
