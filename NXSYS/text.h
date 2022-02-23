@@ -35,7 +35,7 @@ class TextString : public GraphicObject {
         virtual bool    MouseSensitive();
 #ifdef TLEDIT
 	virtual void EditClick(int x, int y);
-	virtual BOOL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
+	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual ~TextString();
 	virtual int Dump (FILE * f);
 
