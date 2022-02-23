@@ -1,6 +1,7 @@
 #include "TLDlgProc.h"
 
 
+
 /* Included in nxgo.h to define virtual functions for objects */
 
 virtual int     Dump(FILE * f); /* val is dump order if f is NULL */    

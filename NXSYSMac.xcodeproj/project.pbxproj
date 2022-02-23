@@ -519,6 +519,7 @@
 		5BB5803C27C5586000FB0ED5 /* Help.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Help.xml; sourceTree = "<group>"; };
 		5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelpDirectory.cpp; sourceTree = "<group>"; };
 		5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HelpDirectory.hpp; sourceTree = "<group>"; };
+		5BB5804327C6B2E300FB0ED5 /* TLDlgProc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLDlgProc.h; path = TLEdit/TLDlgProc.h; sourceTree = SOURCE_ROOT; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -882,6 +883,7 @@
 		5B5AE6652311BF4E00348612 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				5BB5804327C6B2E300FB0ED5 /* TLDlgProc.h */,
 				5B5AE6702311C05800348612 /* assignid.h */,
 				5B5AE6662311BF5F00348612 /* dialogs.h */,
 				5B5AE6672311BF6900348612 /* dragger.h */,
@@ -2073,7 +2075,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "BernardGreenberg.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../NXSYS/NXSYS/**";
+				USER_HEADER_SEARCH_PATHS = (
+					../TLEdit,
+					../NXSYS,
+					../NXSYS/v2,
+				);
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2104,7 +2110,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "BernardGreenberg.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "../NXSYS/NXSYS/**";
+				USER_HEADER_SEARCH_PATHS = (
+					../TLEdit,
+					../NXSYS,
+					../NXSYS/v2,
+				);
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
