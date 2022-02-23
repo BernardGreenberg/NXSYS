@@ -84,6 +84,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;$(IncludePath)</IncludePath>
+    <CustomBuildAfterTargets>Link</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,9 +151,10 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
     </ResourceCompile>
     <CustomBuildStep>
       <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation NXSYS.html
-robocopy $(SolutionDir)..\Documentation\HelpImages $(OutDir)Documentation\HelpImages *.*
-robocopy $(SolutionDir).. $(OutDir) InterlockingLibrary.xml
-robocopy $(SolutionDir)..\Interlockings $(OutDir)\Interlockings</Command>
+robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation /E
+robocopy $(SolutionDir).. $(OutDir) InterlockingLibrary.xml 
+robocopy $(SolutionDir)..\Interlockings $(OutDir)\Interlockings /E
+copy $(SolutionDir)..\Help.xml $(OutDir)\</Command>
       <TreatOutputAsContent>true</TreatOutputAsContent>
       <Outputs>$(OutputDir)Documentation</Outputs>
     </CustomBuildStep>
@@ -175,6 +177,11 @@ robocopy $(SolutionDir)..\Interlockings $(OutDir)\Interlockings</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>version.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>copy $(SolutionDir)..\Help.xml $(OutDir)\</Command>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+      <Outputs>$(OutputDir)Documentation;$(OutputDir)Interlockings;$(OutputDir)InterlockingLibrary.xml</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\NXSYS\demo.cpp" />
