@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <help>
-    <item title="NXSYS Mac (start here)" url="file://Documentation/MacNXSYS.html" include="Mac"/>
     <item title="NXSYS Usage, Help, and concepts" url="file://Documentation/NXSYS.html"/>
     <item title="Mac release notes" url="file://Documentation/ReleaseNotes.html" include="Mac"/>
     <item title="Release notes" url="file://Documentation/CommonReleaseNotes.html"/>
