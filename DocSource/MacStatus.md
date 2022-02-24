@@ -1,9 +1,9 @@
 # NXSYS Mac build status
-#### 19 February 2022
+#### 24 February 2022
 
-This code builds completely and cleanly under XCode 13.2.1 (13C100) under macOS Monterey 12.1, for 64-bit Intel Mac; no configurations or accommodations for the M1 Mac are present. An [`xcodeproj` folder](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYSMac.xcodeproj) resides in the top folder; it contains no external references. **The Apple tool [`PlistBuddy`](https://www.marcosantadev.com/manage-plist-files-plistbuddy/) is expected** to be in `/usr/libexec` (where it should be if XCode is properly installed); it is used for packing build number and date signature into the Info plist.  Tools for packaging the whole for distribution (Bash scripting) are not provided (XCode `Product>Archive` already does most of the job).  Code Signing is, of course, now your responsibility, if desired.
+This code builds completely and cleanly under XCode 13.2.1 (13C100) under macOS Monterey 12.1, for 64-bit Intel Mac; no configurations or accommodations for the M1 Mac are present. An [`xcodeproj` folder](https://github.com/BernardGreenberg/NXSYS/tree/master/NXSYSMac.xcodeproj) resides in the top folder; it contains no external references. **The Apple tool [`PlistBuddy`](https://www.marcosantadev.com/manage-plist-files-plistbuddy/) is expected** to be in `/usr/libexec` (where it should be if XCode is properly installed); it is used for packing build number and date signature into the Info plist.  Tools for packaging the whole for distribution (Bash and Python scripting) are provided in the `MacPackagingTool` directory; you might likely want to change them.  Code Signing is, of course, now your responsibility, if desired.
 
-There remain (as expectable) some minor constraint irritations in the Interface  Builder layouts that do not impede building or raise warning flags at build time; there are none (The Windows builds get many warnings).
+There remain (as expectable) some minor constraint irritations in the Interface Builder layouts that do not impede building or raise warning flags at build time; there are none.
 
 The Mac User Interface artifacts in this tree are in Objective C++ (embedded in C++17), an Apple proprietary storage-management regime and Object-Oriented GUI system which preceded Swift as their   preferred application development language, but still supported. Its syntax extends that of C++ incompatibly; it is well-documented, but difficult to master.  Also in Objective C++ is my original simulation of the Win32 API, which was my solution to maximizing the code that ran compatibly on both platforms.  Perhaps foolishly, I rejected the advice of those wiser than myself suggesting the use of Qt or other cross-platform GUI substrates, **which may or may not have been easier**, but would surely have introduced other problems.
 
@@ -13,6 +13,8 @@ The Mac Version is targeted in XCode to (minimum) [macOS Mojave (10.14)](https:/
 It all builds and works without error or warnings, as far as I know (and my goal is to keep that true).
 
 I may or may not fix reported bugs and post changes, but I want to know if you can't build it; contact me via GitHub. I expect to post fixes to bugs I encounter and gratuitous enhancements from hereon in.
+
+The entire `Documentation` and `Interlockings` directories get dumped into `Resources` and “shipped”. Be careful what you put there.  As on Windows, the files `InterlockingLibrary.xml` and `Help.xml` present the intended contents in the application menu.
 
 ## Build targets
 
