@@ -1,20 +1,37 @@
 #!/bin/sh
+
+# BASH Script to create NXSYS DMG including NXSYS, TLEdit, RelayIndex.
+# Just Run. Places temp file and output bz.dmg in the working dir and finds the
+# applications in the user Applications dir unless you change these:
+
+temp_dmg_dir=.
+output_dir=.
+user_applications=$HOME/Applications
+
 #See http://www.macdisk.com/dmgen.php
 
-VERPAT="#_#_##"
-VERRE="^[0-9]_[0-9]_[0-9]+$"
+nxsys_path=$user_applications/NXSYSMac.app
+
+VERPAT="#_#_##_##"
+VERRE="^[0-9]_[0-9]_[0-9]+_[0-9]+$"
+
+if [ -f $nxsys_path ]; then
+    echo Application path $nxsys_path "doesn't exist."
+    exit 6
+fi
+
 
 volname="NXSYSDelivery"
 vplace=/Volumes/$volname
 bz="BZ"
 
 if [ -d $vplace ]; then
-    echo "$vplace exists already. Resolve this first."
+    echo "$vplace exists already. Resolve this first. Dismount it."
     exit 1
 fi
 
 if [[ "$1" = "" ]]; then
-    version=$(python getversion.py | sed "s/\./_/g")
+    version=$(python getversion.py "$nxsys_path"| sed "s/\./_/g")
 else
     version="$1"
 fi
@@ -24,8 +41,8 @@ if [[ ! "$version" =~ $VERRE ]]; then
     exit 1
 fi
 
-outfile=../NXSYSMac$version$bz.dmg
-dpath=../Documents/NXSYSMac$version.dmg
+outfile=$output_dir/NXSYSMac$version$bz.dmg
+dpath=$temp_dmg_dir/NXSYSMac$version.dmg
 if [ -f $dpath ]; then
     echo $dpath exists already.
     echo Get rid of it if you want this to work.
@@ -37,7 +54,7 @@ if [ -f $outfile ]; then
     exit 5
 fi
 
-echo Creating $dpath
+echo Creating "(dpath)" $dpath
 hdiutil create -size 40m -fs HFS+ -attach $dpath -volname $volname
 rc=$?
 if [[ $rc != 0 ]] ; then
@@ -70,5 +87,6 @@ if [[ $rc != 0 ]]; then
     echo ":(:(:( HDIUTIL convert fouled up"
     exit $rc
 fi
+rm $dpath
 ls -lt $outfile
 echo Le voila.

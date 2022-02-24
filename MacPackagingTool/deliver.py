@@ -26,7 +26,8 @@ def copy_app(appname,dest):
     if (not ((os.path.exists(path) and os.path.isdir(path)))):
         print ("Putative app", path, "is not an extant directory.", file=sys.stderr)
         sys.exit(5)
-    print ("Copying", appname, getversion.getMacAppVersion(APPS_PATH,appname), "to", destpath)
+    app_path = os.path.join(APPS_PATH, appname)
+    print ("Copying", appname, getversion.getMacAppVersion(app_path), "to", destpath)
     shutil.copytree(path, destpath)
 
 def main():
