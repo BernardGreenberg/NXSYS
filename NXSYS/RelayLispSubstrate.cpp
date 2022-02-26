@@ -50,7 +50,7 @@ static long relay_hash(int typex, long xlkgno) {
     auto const it = RelayTypeHashMap.find(s_upcased);
     if (it != RelayTypeHashMap.cend())
         return it->second;
-    short newi = (int)RelayTypeTable.size();
+    short newi = (short)RelayTypeTable.size();
     RelayTypeTable.push_back(s_upcased);
     RelayTypeHashMap[s_upcased] = newi;
     return newi;
@@ -66,7 +66,7 @@ const char * redeemRlsymId (int rltype_index) {
 
 
 Sexpr intern_rlysym_nocreate (long n, const char* str) {
-    short type_index = get_relay_type_index (str);
+    short type_index = (short)get_relay_type_index (str);
     long longhash = relay_hash(type_index, n);
     auto const it = RelayHashTable.find(longhash);
     if (it != RelayHashTable.cend())

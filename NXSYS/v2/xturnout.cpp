@@ -108,10 +108,10 @@ int Turnout::AssignJoint (TrackJoint * tj) {
 
 int CreateTurnouts (TrackJoint ** joints, int njoints) {
     if (AllTurnouts)
-	delete AllTurnouts;
+	delete []AllTurnouts;
     NTurnouts = njoints;
     AllTurnouts = new Turnout*[NTurnouts];
-    for (size_t i = 0; i < njoints; i++) {
+    for (int i = 0; i < njoints; i++) {
 	TrackJoint * tj = joints[i];
 	if (tj->TurnOut == NULL) {
 	    Turnout * tn = new Turnout ((int)tj->Nomenclature);
@@ -125,7 +125,7 @@ int CreateTurnouts (TrackJoint ** joints, int njoints) {
 	    }
 	}
     }
-    for (size_t i = 0; i < njoints; i++) {
+    for (int i = 0; i < njoints; i++) {
 	TrackJoint * tj = joints[i];
 	if (tj->TurnOut) {
 	    AllTurnouts[i] = tj->TurnOut;

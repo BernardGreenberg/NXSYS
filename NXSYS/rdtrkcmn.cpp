@@ -381,7 +381,7 @@ void RelaySetReporter (Relay * r, RelRptFcn f, void * obj) {
 }
 
 BOOL Signal::HomeP() {
-    for (int hn = 1; hn < Heads.size(); hn++)
+    for (size_t hn = 1; hn < Heads.size(); hn++)
 	if (Heads[hn].height > 2)
 	    return TRUE;
     return FALSE;
@@ -398,7 +398,7 @@ void Signal::ProcessLoadComplete () {
 
     BOOL interlocked = XlkgNo != 0;
 
-    for (int hn = 1; hn < Heads.size() - 1; hn++) {
+    for (size_t hn = 1; hn < Heads.size() - 1; hn++) {
 	if (Heads[hn].height > 2) {
 	    CreateAndSetReporter (gno, "DR", Signal::DivReporter, this);
 	    COPB = CreateQuislingRelay (gno, "COPB");
