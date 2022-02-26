@@ -48,7 +48,7 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.31.311
 ~~~
 which is where they will be (for 64 bits) and
 ~~~
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\\Redist\MSVC\\14.31.31103\x86\Microsoft.VC143.CRT\*.dll
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.31.31103\x86\Microsoft.VC143.CRT\*.dll
 ~~~
 for 32, if you install the [Microsoft Visual C++ Redistributables download](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) from that link. Isn't that what *redistributable* means?
 
