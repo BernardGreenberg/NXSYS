@@ -86,6 +86,7 @@ static const std::string FRACTION_BARs(1, FRACTION_BAR);
 #endif
 
 #if LISP_ERRORS_TO_CIO
+#undef MessageBoxA
 #define MessageBoxA(a,b,c,d) fprintf(stderr, "%s:  %s\n", c, b)
 #endif
 
@@ -764,9 +765,9 @@ std::string Sexpr::PRep() const {
     switch (type) {
 	case Lisp::tNULL:
             if (u.v == nullptr)
-                return "%Lisp::tNULL<0>";
+                return "%NULL<0>";
             else
-                return FormatString("%%Lisp::tNULL<%s>", u.s);
+                return FormatString("%%NULL<%s>", u.s);
 	case Lisp::ATOM:
             return u.a;
 	case Lisp::NUM:
@@ -880,9 +881,7 @@ void dealloc_lisp_sys() {
     MacroCleanup();
 #endif
     AtomMap.clear();
-#if ! RELAYS
     ClearRelayMaps();
-#endif
 }
 #endif
 
@@ -952,7 +951,7 @@ bool TestRunExprf(const char * fpathname) {
     return true;
 }
 
-#if TEST
+#if _BLISP
 int main (int argc, char ** argv) {
     if (argc < 2) {
 	fprintf (stderr, "Arg missing.\n");
