@@ -32,7 +32,7 @@ All you have to do is download this repository, assure you have a VS 2022 at lea
 
 ## Oh yes, those DLLs
 
-All Windows programs built with Visual Studio require a passel of DLLs (Dynamic Link Libraries).  If you are the developer who has Visual Studio, you have those DLL's “and there is no problem” — *for you*. But if you build an installer and a user who does not have Visual Studio (as most don’t), your app will fail to run, noting missing DLLs.  You have two choices: you can pack all the “redistributable” DLLs in your installer, or somehow convey an out-of-band message to your users to download DLLs from Microsoft themselves, which is not a popular activity. You need a second machine or willing friend to quality-assure this.
+All Windows programs built with Visual Studio require a passel of DLLs (Dynamic Link Libraries).  If you are the developer who has Visual Studio, you have those DLL's “and there is no problem” — *for you*. But if you build an installer and a user who does not have Visual Studio (as most don’t) tries it, your app will fail to run, noting missing DLLs.  You have two choices: you can pack all the “redistributable” DLLs in your installer, or somehow convey an out-of-band message to your users to download DLLs from Microsoft themselves, which is not a popular activity. You need a second machine or willing friend to quality-assure this.
 
 Microsoft currently prefers the second method, because it allows them to fix bugs in the DLLs; cached DLLs do not get fixed.  The NXSYS Installer thumbs its nose at Microsoft and packs a dozen DLLs (less than 1 megabyte) on-board, that go into the NXSYS Installation directory. The Installer *builder* expects them to be in
 ~~~
