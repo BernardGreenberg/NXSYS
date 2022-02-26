@@ -90,9 +90,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NXV2;REALLY_NXSYS;WINDOWS;XTG;WIN32;_WIN32;PRODUCT_NAME="NXSYS";_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NXV2;REALLY_NXSYS;WINDOWS;XTG;WIN32;_WIN32;PRODUCT_NAME="NXSYS";_DEBUG;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -104,8 +104,11 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <CustomBuildStep>
-      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Pages NXSYS.html
-robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Command>
+      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation /E
+robocopy $(SolutionDir)..\Documentation\HelpImages $(OutDir)Pages\HelpImages /E
+robocopy $(SolutionDir)..\Interlockings $(OutDir)Interlockings /E
+copy $(SolutionDir)..\Help.xml $(OutDir)Help.xml
+copy $(SolutionDir)..\InterlockingLibrary.xml $(OutDir)InterlockingLibrary.xml</Command>
       <Outputs>$(OutputDir)Pages</Outputs>
       <TreatOutputAsContent>true</TreatOutputAsContent>
     </CustomBuildStep>
@@ -150,11 +153,10 @@ robocopy $(SolutionDir)..\Documentation\HelpBMPs $(OutDir)Pages\HelpBMPs</Comman
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <CustomBuildStep>
-      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation NXSYS.html
-robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation /E
-robocopy $(SolutionDir).. $(OutDir) InterlockingLibrary.xml 
+      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation /E
+copy $(SolutionDir)..\InterlockingLibrary.xml $(OutDir)\InterlockingLibrary /Y
 robocopy $(SolutionDir)..\Interlockings $(OutDir)\Interlockings /E
-copy $(SolutionDir)..\Help.xml $(OutDir)\</Command>
+copy $(SolutionDir)..\Help.xml $(OutDir)\ /Y</Command>
       <TreatOutputAsContent>true</TreatOutputAsContent>
       <Outputs>$(OutputDir)Documentation</Outputs>
     </CustomBuildStep>
@@ -169,6 +171,7 @@ copy $(SolutionDir)..\Help.xml $(OutDir)\</Command>
       <ConformanceMode>true</ConformanceMode>
       <UndefinePreprocessorDefinitions>UNICODE;_UNICODE;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
