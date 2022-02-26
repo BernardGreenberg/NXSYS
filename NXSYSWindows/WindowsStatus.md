@@ -20,15 +20,22 @@ In this repository, the top-level directory `NXSYS` contains everything that is 
 The top-level directory `NXSYSWindows` contains everything specific to Windows, and *nothing* used on the Mac.  All Windows-specific code and resources (about 25 files) for both apps are in it, directly.  The solution file `NXSYSWindows.sln` is there, as well as subdirectories for the four (current) VS projects contained therein, which *do not contain code*, but only VS artifacts such as the `.vcxproj` project file and its artifacts.
 
 
-### Build it yourself
+### Build the apps yourself
 
-You will need the [MS Visual Studio Installer Project Extension](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects), which is freely available, if you wish to build the MSI (installer). I also, sadly, guarantee that you will likely have to fiddle with it to make it work on your system, requiring (more sadly) knowledge of the MSI world.
 
-All of the pathnames in the project files are solution-relative; there are no references outside the repository tree ([but see below](#dlls)), in fact, no references other than to the solution directory (`NXSYSWindows`) or its peers `NXSYS` and `TLEdit` (although there are build-time references to the `Documentation` directory, as `$(SolutionDir)..\Documentation`).
+All of the pathnames in the project files are solution-relative; there are no references outside the repository tree. In fact, no references other than to the solution directory (`NXSYSWindows`) or its peers `NXSYS` and `TLEdit`.
 
-All you have to do is download and unzip, or clone, this repository, assure you have a VS 2022 at least as up-to-date as mine (described above, free Community Edition used) open the solution `NXSYSWindows.sln` its eponymous directory, select and build both projects (`NXSYS` and `TLEdit`) and go to town. 
+All you have to do is download and unzip, or clone, this repository, assure you have a VS 2022 at least as up-to-date as mine (described above, free Community Edition used) open the solution `NXSYSWindows.sln` its eponymous directory, select and build both projects (`NXSYS` and `TLEdit`) and go to town.
 
 Do read [this document here](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/CompilerFlags.md) about compiler (preprocessor) flags.
+
+### Build the installer MSI(s)
+
+Building the installer MSIs is not quite as easy.  There are two projects, `Installer`, the 64-bit version, and `Setup32`, the 32-bit version (both installers are 32-bit programs, but they install different versions of the application.  While one installer might have been "cleaner", it would either preclude installing the 32-bit version on a 64-bit system, or require custom UI in the Installer).
+
+You will need the [MS Visual Studio Installer Project Extension](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022I nstallerProjects), which is freely available. Don’t be surprised if you have to fiddle with the installer projects to make them work on your system, requiring (more sadly) knowledge of the MSI world.  The 64-bit output goes to `NXSYSWindows\x64\Release\NXSYS.msi`, and the 32-bit output to `NXSYSWindows\Release\NXSYS32.msi`.
+
+I have experienced difficulty making it accept shortcuts referencing “Primary Project Output”s as it seems to want, and less trouble simply freighting the output executables as ordinary .exe's, and pointing the shortcuts at them.
 
 #### Oh yes, those DLLs
 <a id="dlls"></a>
@@ -39,7 +46,11 @@ Microsoft currently advocates the second method, because it allows them to fix b
 ~~~
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.31.31103\x64\Microsoft.VC143.CRT\*.dll
 ~~~
-which is where they will be (for 64 bits) if you install the [Microsoft Visual C++ Redistributables download](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) from that link. Isn't that what *redistributable* means?
+which is where they will be (for 64 bits) and
+~~~
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\\Redist\MSVC\\14.31.31103\x86\Microsoft.VC143.CRT\*.dll
+~~~
+for 32, if you install the [Microsoft Visual C++ Redistributables download](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) from that link. Isn't that what *redistributable* means?
 
 If you do modify and redistribute this product, please substitute your own name as the company name in the installer and elsewhere.  GPL3 license, though—my original authorship cannot be effaced.
 
