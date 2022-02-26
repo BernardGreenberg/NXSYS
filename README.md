@@ -8,7 +8,7 @@ This application is posted and offered under the terms of the GNU General Public
 
 This codebase can build working Mac and Windows (the latter 64 and 32-bit) executables.  Although NXSYS was born on (16-bit!) Windows, the reference implementation is presently that on macOS, hosted and built in XCode.  See [the macOS Readme](https://github.com/BernardGreenberg/NXSYS/blob/master/DocSource/MacStatus.md) for particulars and status of the Mac version and [the Windows Readme](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/WindowsStatus.md) for particulars and status of the Windows version.
 
-The file [NXSYS.html.pdf](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/NXSYS.html.pdf) in the [Documentation folder](https://github.com/BernardGreenberg/NXSYS/tree/master/Documentation) is a comprehensive description of the application and its capabilities. Read everything in that folder.  See [Related Resources](#related-resources) below for a video demo.
+The file [NXSYS.html.pdf](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/NXSYS.html.pdf) in the [Documentation folder](https://github.com/BernardGreenberg/NXSYS/tree/master/Documentation) is a comprehensive description of the application and its capabilities. **Download it if you want the links to work**. Read everything in that folder.  See [Related Resources](#related-resources) below for a video demo.
 
 Please ignore admonitions in the interlocking and other help texts about not redistributing without permission (it's public now), and old email addresses there as well; contact me via GitHub if need be.  Unless you do real development, there shouldn't be any need to redistribute as long as this repository exists.
 
