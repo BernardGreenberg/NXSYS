@@ -5,7 +5,7 @@ This repository can build the three fully functional executables of the system, 
 
 The 64-bit build is the “official” one (and the Mac build more “official” than that); if you are on any version of Windows 10 (or later), use it.  The 32-bit applications can be built and run without error, but there is (presently) no installer for them (TBD). You can still download a fully operative 2016 Windows NXSYS (32-bit) from [the NXSYS page on my site](https://BernardGreenberg.com/Subway) (but it’s  a zip file, not an installer).
 
-To run NXSYS or TLEdit, nothing is needed but the two executables (although see [this note below](#dlls)). But the delivered products incorporate Interlocking Library and Documentation trees in their product directory, along their xml manifests, which the new `Interlocking Library` command and new help menu require to function.  The Debug builds do this with `robocopy`; the Release builds do not.  The Installer project, which expects the Release builds, freights all this on board, and installs them alongside the executables.
+To run NXSYS or TLEdit, nothing is needed but the two executables (although see [this note below](#dlls)). But the delivered products incorporate Interlocking Library and Documentation trees in their product directory, along their xml manifests, which the new `Interlocking Library` command and new help menu require to function.  The Debug builds do this with `robocopy`; the Release builds do not.  The Installer projects, which expect the Release builds, freight all this on board, and install them alongside the executables.
 
 ### Features removed
 
