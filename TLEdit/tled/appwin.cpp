@@ -5,8 +5,7 @@
 #ifdef WIN32
 #include <commdlg.h>
 #include <commctrl.h>
-#include <stdarg.h>
-#include "parsargs.h"
+#include <stdarg.
 #include "WinReadResText.h"
 #include "ParseCommandLine.h"
 #endif

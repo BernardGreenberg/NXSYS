@@ -447,7 +447,6 @@
 		5BABBE1227B7143100AED491 /* WinReadResText.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WinReadResText.cpp; sourceTree = "<group>"; };
 		5BABBE1327B7143100AED491 /* NXSYSWindows.sln */ = {isa = PBXFileReference; lastKnownFileType = text; path = NXSYSWindows.sln; sourceTree = "<group>"; };
 		5BABBE1427B7143100AED491 /* helpdlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helpdlg.cpp; sourceTree = "<group>"; };
-		5BABBE1527B7143100AED491 /* parsargs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parsargs.h; sourceTree = "<group>"; };
 		5BABBE1627B7143100AED491 /* getmodtm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = getmodtm.h; sourceTree = "<group>"; };
 		5BABBE1727B7143100AED491 /* dialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialogs.cpp; sourceTree = "<group>"; };
 		5BABBE5D27B7143200AED491 /* tled.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = tled.rc; sourceTree = "<group>"; };
@@ -1027,7 +1026,6 @@
 				5BABBE1127B7143100AED491 /* nxsldrly.cpp */,
 				5BABBE1227B7143100AED491 /* WinReadResText.cpp */,
 				5BABBE1427B7143100AED491 /* helpdlg.cpp */,
-				5BABBE1527B7143100AED491 /* parsargs.h */,
 				5BABBE1627B7143100AED491 /* getmodtm.h */,
 				5BABBE1727B7143100AED491 /* dialogs.cpp */,
 				5BABBE5D27B7143200AED491 /* tled.rc */,
