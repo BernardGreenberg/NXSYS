@@ -117,7 +117,7 @@ int CreateTurnouts (TrackJoint ** joints, int njoints) {
 	    Turnout * tn = new Turnout ((int)tj->Nomenclature);
 	    if (!tn->AssignJoint(tj))
 		return 0;
-	    for (size_t j = 0; j < njoints; j++) {
+	    for (int j = 0; j < njoints; j++) {
 		TrackJoint * tj2 = joints[j];
 		if (tj2 != tj && tj2->Nomenclature == tj->Nomenclature)
 		    if (!tn->AssignJoint (tj2))

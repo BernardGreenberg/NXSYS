@@ -183,7 +183,7 @@ void CompileTimerRelayDef (Sexpr s, fs::path path, long filepos) {
 }
 
 void close_report(fs::path path, std::ofstream& ofs) {
-    size_t len = ofs.tellp();
+    auto len = ofs.tellp();
     ofs.close();
     cout << "Wrote " << path.string() << ", " << len << " bytes." << endl;
 }
@@ -265,7 +265,7 @@ void CompileLayout (FILE* f, fs::path path) {
 }
 
 string padit (string s, long n) {
-    size_t len = s.size();
+    long len = (long)s.size();
     if (len < n)
         s += string(n-len, ' ');
     else

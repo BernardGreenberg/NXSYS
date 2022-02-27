@@ -85,7 +85,7 @@ static void RefreshMenu() {
 	AppKey ak("Settings");
 	for (int index = LAST_INDEX+2; index >= FIRST_INDEX; index--)
 		DeleteMenu(HMenu, index, MF_BYPOSITION);
-	for (int index = FIRST_INDEX; index < Files.size(); index++)
+	for (int index = FIRST_INDEX; index < (int)Files.size(); index++)
 		putStringRegval(ak, Regkey(index), Files[index].Path.string());
 	PutUpDisambiguatedMenu();
 	SetClearCommand();

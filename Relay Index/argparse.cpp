@@ -322,7 +322,7 @@ string argset_i::GetNextArg(int iinc, int argc, const char**argv, ArgDesc* pAD) 
 
 size_t argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, size_t i, size_t argc, const char **argv) {
     vector<string> values;
-    while (values.size() < D.v_max) {
+    while ((typeof(D.v_max))values.size() < D.v_max) {
         if (i == argc)
             break;
         if (strlen(argv[i]) && argv[i][0] == '-')
@@ -331,7 +331,7 @@ size_t argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, size_t i, size
         i++;
     }
 
-    if (values.size() < D.v_min)
+    if ((typeof(D.v_min))values.size() < D.v_min)
         uerr("Not enough values for \"%s\": %d required.\n", D.Name.c_str(), D.v_min);
     
     PA.add(D.Name, "*VECTOR*");
@@ -345,7 +345,7 @@ ParsedArgs argset_i::Parse(int argc, const char ** argv) {
     CommandName = std::filesystem::path(argv[0]).filename().string();
     ParsedArgs PA;
     int unnamed_count = 0;
-    for (size_t i = 1; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
         string arg = argv[i];
         if (arg.length() > 2 && arg[0] == '-' && arg[1] == '-') {
             string rarg = arg.substr(2);
@@ -385,7 +385,7 @@ ParsedArgs argset_i::Parse(int argc, const char ** argv) {
             }
         } else {
             /* non-control arg*/
-            if (unnamed_count + 1> PositionalArgs.size())
+            if (unnamed_count + 1> (int)PositionalArgs.size())
                 uerr2("Extra unwanted command arg: %s\n", arg);
             ArgDesc& D = *PositionalArgs[unnamed_count++];
             if (D.variadic)
@@ -409,7 +409,7 @@ ParsedArgs argset_i::Parse(int argc, const char ** argv) {
 
 static string gen_pad(size_t n) {
     string pad;
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
         pad += ' ';
     return pad;
 }
@@ -484,7 +484,7 @@ string ArgDesc::HelpLine() const {
             line += (string() + c);
             if (!boolean)
                 line += " " + Metavar;
-            if (++i < chars.size())
+            if (++i < (int)chars.size())
                 line += ", ";
         }
     }

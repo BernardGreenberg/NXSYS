@@ -31,7 +31,7 @@ struct RelayRecord {
     }
     string pRep;
     string signature;
-    long file_pos;
+    size_t file_pos;
     int  line_number;
     void Sign(const char * line_data, int line_no);
     string CTags() const;
@@ -135,7 +135,7 @@ void ComputeFileLines(const char * pathname, FILE* f) {
 
     int line_no = 1;
     size_t line_cpos = 0;
-    int rrx = 0;
+    size_t rrx = 0;
     // We assume the array is in file order, with possible multiples on a line.
     while (rrx < Relays.size()) {
         assert(line_cpos < Buf.size());  // this will happen if not in order or out of range.
