@@ -105,7 +105,7 @@ private:
     void UsageMessage();
 };
 
-set<string> ArgKwds({"boolean", "help", "required", "optional", "metavar", "nargs"});
+static set<string> ArgKwds({"boolean", "help", "required", "optional", "metavar", "nargs"});
 
 void argset_i::uerr(const char* fmt, ...) {
     va_list ap;
@@ -322,7 +322,7 @@ string argset_i::GetNextArg(int iinc, int argc, const char**argv, ArgDesc* pAD) 
 
 int argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, size_t i, size_t argc, const char **argv) {
     vector<string> values;
-    while ((typeof(D.v_max))values.size() < D.v_max) {
+    while ((decltype(D.v_max))values.size() < D.v_max) {
         if (i == argc)
             break;
         if (strlen(argv[i]) && argv[i][0] == '-')
@@ -331,7 +331,7 @@ int argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, size_t i, size_t 
         i++;
     }
 
-    if ((typeof(D.v_min))values.size() < D.v_min)
+    if ((decltype(D.v_min))values.size() < D.v_min)
         uerr("Not enough values for \"%s\": %d required.\n", D.Name.c_str(), D.v_min);
     
     PA.add(D.Name, "*VECTOR*");
