@@ -309,12 +309,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_63B7D0C68CC34B77A93A77E97B93C6FE"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_64172854BC5A460BB7582927A4BB2D52"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -670,6 +664,12 @@
         "Entry"
         {
         "MsmKey" = "8:_FB0E73C7D3E3462680BAAA156DFBC78D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FB0EFEC7899C45F8A7AF63A45CAA38E3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1726,26 +1726,6 @@
             "TargetName" = "8:fpsw.bmp"
             "Tag" = "8:"
             "Folder" = "8:_198B957CAE3D48009F0AD61C42ADFD2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_63B7D0C68CC34B77A93A77E97B93C6FE"
-            {
-            "SourcePath" = "8:..\\..\\NXSYS\\nx2.ico"
-            "TargetName" = "8:nx2.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_31133C30B0C548009B5A7472B912A9D4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2960,6 +2940,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB0EFEC7899C45F8A7AF63A45CAA38E3"
+            {
+            "SourcePath" = "8:..\\nx2.ico"
+            "TargetName" = "8:nx2.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_31133C30B0C548009B5A7472B912A9D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -3258,6 +3258,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5E3773D60DC245AE8D30B87E85EDE279"
+            {
+            "Name" = "8:NXSYS 64 bit"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_372737D839814A8EBC17ECBC482DABE3"
+            "Folder" = "8:_55638A2026984DBBA2C31EE5FE9D057F"
+            "WorkingFolder" = "8:_31133C30B0C548009B5A7472B912A9D4"
+            "Icon" = "8:_FB0EFEC7899C45F8A7AF63A45CAA38E3"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_61EF3D80D8B045D191D20E7A7F88CEC6"
             {
             "Name" = "8:NXSYS 64-bit"
@@ -3284,20 +3298,6 @@
             "Folder" = "8:_9FE7942B03C64BB084C72D64B3412210"
             "WorkingFolder" = "8:_31133C30B0C548009B5A7472B912A9D4"
             "Icon" = "8:_98B9B4D86A6C4AEE9432894196EAACAE"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C138C88BFB304F1C87FF77895E700084"
-            {
-            "Name" = "8:NXSYS 64-bit"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_372737D839814A8EBC17ECBC482DABE3"
-            "Folder" = "8:_55638A2026984DBBA2C31EE5FE9D057F"
-            "WorkingFolder" = "8:_31133C30B0C548009B5A7472B912A9D4"
-            "Icon" = "8:_63B7D0C68CC34B77A93A77E97B93C6FE"
             "Feature" = "8:"
             }
         }
