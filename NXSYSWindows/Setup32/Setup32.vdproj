@@ -87,12 +87,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2036CE97A07A406D84450314A82479D8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_235F37B5C21543B7B13FA7673EE5C215"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -303,6 +297,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7BDC9453C7E84AE9BEE7A21057C00746"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7D4831037DF14215A6AD6585ACDB4ACE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -483,12 +483,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CACBF7793F374030B73D784F6C8D980F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_CD9215516F9E4658903E1FBF39FE6CCF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -609,12 +603,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E266E60D64DB4500A68276859080EFB1"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_E28623EA062C40A0B114EBF7654A7ED6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -634,12 +622,6 @@
         "Entry"
         {
         "MsmKey" = "8:_E7DEA262B7E44B9CBEE9E97AFA647C56"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E955720700AB4A3D8F03AD804A444549"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1004,26 +986,6 @@
             "TargetName" = "8:exit.bmp"
             "Tag" = "8:"
             "Folder" = "8:_B33FB2D70AFD4CC88521B3BA3B582D31"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2036CE97A07A406D84450314A82479D8"
-            {
-            "SourcePath" = "8:..\\..\\Interlockings\\Myrtle\\myrtle.xref"
-            "TargetName" = "8:myrtle.xref"
-            "Tag" = "8:"
-            "Folder" = "8:_FCE741E9B4D1486A8710B8F8C94F4AE7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1738,6 +1700,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7BDC9453C7E84AE9BEE7A21057C00746"
+            {
+            "SourcePath" = "8:..\\nx2.ico"
+            "TargetName" = "8:nx2.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7D4831037DF14215A6AD6585ACDB4ACE"
             {
             "SourcePath" = "8:..\\..\\Documentation\\HelpImages\\Duckburg.png"
@@ -2338,26 +2320,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CACBF7793F374030B73D784F6C8D980F"
-            {
-            "SourcePath" = "8:..\\..\\Interlockings\\Progman\\Progman.tko"
-            "TargetName" = "8:Progman.tko"
-            "Tag" = "8:"
-            "Folder" = "8:_1F5A3E60E3C24C7082343E9A63285770"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CD9215516F9E4658903E1FBF39FE6CCF"
             {
             "SourcePath" = "8:..\\..\\Help.xml"
@@ -2758,26 +2720,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E266E60D64DB4500A68276859080EFB1"
-            {
-            "SourcePath" = "8:..\\..\\Interlockings\\Progman\\Progman.lst"
-            "TargetName" = "8:Progman.lst"
-            "Tag" = "8:"
-            "Folder" = "8:_1F5A3E60E3C24C7082343E9A63285770"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E28623EA062C40A0B114EBF7654A7ED6"
             {
             "SourcePath" = "8:..\\..\\Interlockings\\Duckburg\\README.md"
@@ -2844,26 +2786,6 @@
             "TargetName" = "8:db1.trk"
             "Tag" = "8:"
             "Folder" = "8:_02F694AA4C6D4D17928E0D20AB910E60"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E955720700AB4A3D8F03AD804A444549"
-            {
-            "SourcePath" = "8:..\\..\\NXSYS\\nx2.ico"
-            "TargetName" = "8:nx2.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3336,18 +3258,18 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_06EB999F05914C8D81400491E15750C9"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_307E5A1105694584A485E94A453AB5AF"
             {
-            "Name" = "8:NXSYS 32 bit"
+            "Name" = "8:NXSYS 32-bit"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_DC39D97FCD8A42E09E236A05B1C79C0B"
-            "Folder" = "8:_AB40C137BC454A6781FDBFA82CD0FB50"
+            "Folder" = "8:_A85794737C3B4F51B1B980CF55C8D50F"
             "WorkingFolder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
-            "Icon" = "8:_E955720700AB4A3D8F03AD804A444549"
+            "Icon" = "8:_7BDC9453C7E84AE9BEE7A21057C00746"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5596346D401149B090D6FE83044AA967"
@@ -3364,18 +3286,18 @@
             "Icon" = "8:_E06E7885CB354205AF5D2A1A20B8AE4A"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_6F4C38997C714F14974DE42B9328E0BE"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_92E0505C662D41BFAEC089E610AC4A90"
             {
-            "Name" = "8:NXSYS, 32 bit"
+            "Name" = "8:NXSYS 32 bit"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_DC39D97FCD8A42E09E236A05B1C79C0B"
-            "Folder" = "8:_A85794737C3B4F51B1B980CF55C8D50F"
+            "Folder" = "8:_AB40C137BC454A6781FDBFA82CD0FB50"
             "WorkingFolder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
-            "Icon" = "8:_E955720700AB4A3D8F03AD804A444549"
+            "Icon" = "8:_7BDC9453C7E84AE9BEE7A21057C00746"
             "Feature" = "8:"
             }
         }
