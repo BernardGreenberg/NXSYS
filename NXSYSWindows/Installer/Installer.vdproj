@@ -3138,7 +3138,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NXSYS"
         "ProductCode" = "8:{4B9640D7-E5AF-4B69-A7C8-BA4DDD4651EE}"
-        "PackageCode" = "8:{F0EB4B19-CA03-480F-A6AE-5D06F230C48D}"
+        "PackageCode" = "8:{BCD624FB-92F6-461B-882C-FD2F79764C17}"
         "UpgradeCode" = "8:{59B1A06F-08D5-49FD-90F6-2245A4356957}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -3260,7 +3260,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5E3773D60DC245AE8D30B87E85EDE279"
             {
-            "Name" = "8:NXSYS 64 bit"
+            "Name" = "8:NXSYS Interlocking Simulator"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -3274,7 +3274,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_61EF3D80D8B045D191D20E7A7F88CEC6"
             {
-            "Name" = "8:NXSYS 64-bit"
+            "Name" = "8:NXSYS Interlocking Simulator"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -3283,12 +3283,12 @@
             "Target" = "8:_372737D839814A8EBC17ECBC482DABE3"
             "Folder" = "8:_9FE7942B03C64BB084C72D64B3412210"
             "WorkingFolder" = "8:_31133C30B0C548009B5A7472B912A9D4"
-            "Icon" = "8:"
+            "Icon" = "8:_FB0EFEC7899C45F8A7AF63A45CAA38E3"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_62B8D16E02AA4B2E9A4DE2525F9D94D2"
             {
-            "Name" = "8:TLEdit"
+            "Name" = "8:TLEdit Track Layout Editor"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
