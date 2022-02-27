@@ -233,9 +233,15 @@ static std::unique_ptr<DynMenu>& ValidateMenuCallback(void * ptr) {
         if ((void*)rmenup.get() == ptr)
             return rmenup;
     }
-    assert(!"Alleged DynMenu relay callback ptr not found"); 
+    assert(!"Alleged DynMenu relay callback ptr not found");
+    /* These two lines will never, ever be executed, but the compiler (MSVC) doesn't know that,
+       and without them complains that "not all control paths return a value;  Returning a
+       value from a function that returns references to a unique_ptr is no trivial matter. */
+    /* This is very crazy; There ought be a compiler annotation. */
+    static std::unique_ptr<DynMenu> dumy;
+    return dumy;
 }
-;
+
 /* DynMenu general constructor; destructor is inline */
 DynMenu::DynMenu(Sexpr rlysym, const char* title, Sexpr items) {
     /* Initialize POD values appropriately */
