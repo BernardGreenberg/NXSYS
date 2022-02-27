@@ -147,6 +147,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_445DE12A1B9E41D595F1A958A3280772"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_44A19EE4D7D441C796112B94FBF4FFC8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1186,6 +1192,26 @@
             "TargetName" = "8:Islington.pdf"
             "Tag" = "8:"
             "Folder" = "8:_66C5D1E6CCCD463BA22006C910734DFF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_445DE12A1B9E41D595F1A958A3280772"
+            {
+            "SourcePath" = "8:..\\Release\\Relay Index.exe"
+            "TargetName" = "8:Relay Index.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3138,7 +3164,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NXSYS32"
         "ProductCode" = "8:{AF06DF4A-BDD6-41AC-BF05-60CBB43B0CB9}"
-        "PackageCode" = "8:{6D9EA34F-8146-4835-B5CA-30D4EEBC2134}"
+        "PackageCode" = "8:{2D200A3B-E372-48DA-BA8C-F19F6F0676D9}"
         "UpgradeCode" = "8:{C6264AAB-9A86-4387-AD3D-A2999B412ADB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
