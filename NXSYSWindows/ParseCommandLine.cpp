@@ -32,7 +32,7 @@ ParsedCommandLine ParseCommandLineToVector(const char* command_line) {
 	int numArgs;
 	LPWSTR* args = CommandLineToArgvW(W.c_str(), &numArgs);
 	ParsedCommandLine pcl{};
-	for (size_t i = 0; i < numArgs; i++)
+	for (int i = 0; i < numArgs; i++)
 		pcl.push_back(converter.to_bytes(args[i]));
 	LocalFree(args);
 	return pcl;
