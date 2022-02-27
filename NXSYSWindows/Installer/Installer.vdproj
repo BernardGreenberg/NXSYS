@@ -177,7 +177,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_39C15438CA884357AF8C2962F3418552"
+        "MsmKey" = "8:_372737D839814A8EBC17ECBC482DABE3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -274,6 +274,12 @@
         "Entry"
         {
         "MsmKey" = "8:_5E6832C54B8045DD88507E6A717D64CD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_61ED211BC878498EBC6BDCB24FAD305E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -531,12 +537,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BCD3E085CF224C1B864AAF996A362D92"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_BD8C56C92BFF44A98C136E92E07CC98D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -556,6 +556,12 @@
         "Entry"
         {
         "MsmKey" = "8:_CD5D6AC31A1244189155BD6C04877827"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CEEAE2A576E1432895F6375195BDD923"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1294,6 +1300,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_372737D839814A8EBC17ECBC482DABE3"
+            {
+            "SourcePath" = "8:..\\x64\\Release\\NXSYS.exe"
+            "TargetName" = "8:NXSYS.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_31133C30B0C548009B5A7472B912A9D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3AC418EAAFA04E66A8325B4699E91F2C"
             {
             "SourcePath" = "8:..\\..\\Interlockings\\irt240\\irt.traffic.trk"
@@ -1600,6 +1626,26 @@
             "TargetName" = "8:ReleaseNotes.html"
             "Tag" = "8:"
             "Folder" = "8:_EEE3E068D24B440698C1C3A4D60AC5C3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_61ED211BC878498EBC6BDCB24FAD305E"
+            {
+            "SourcePath" = "8:..\\x64\\Release\\TLEdit.exe"
+            "TargetName" = "8:TLEdit.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_31133C30B0C548009B5A7472B912A9D4"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2534,6 +2580,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CEEAE2A576E1432895F6375195BDD923"
+            {
+            "SourcePath" = "8:..\\x64\\Release\\RelayIndex.exe"
+            "TargetName" = "8:RelayIndex.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_31133C30B0C548009B5A7472B912A9D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CEECBDAAF6F041C0AD75B0499144EF8E"
             {
             "SourcePath" = "8:..\\..\\Interlockings\\Atlantic\\atlantic.trk"
@@ -3192,43 +3258,43 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1987D272B3A84486BF73014F8DA79E32"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_61EF3D80D8B045D191D20E7A7F88CEC6"
             {
-            "Name" = "8:TLEdit Layout Editor"
+            "Name" = "8:NXSYS 64-bit"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_BB493CA3B6704A448DA61E5436CE36C4"
+            "Target" = "8:_372737D839814A8EBC17ECBC482DABE3"
+            "Folder" = "8:_9FE7942B03C64BB084C72D64B3412210"
+            "WorkingFolder" = "8:_31133C30B0C548009B5A7472B912A9D4"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_62B8D16E02AA4B2E9A4DE2525F9D94D2"
+            {
+            "Name" = "8:TLEdit"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_61ED211BC878498EBC6BDCB24FAD305E"
             "Folder" = "8:_9FE7942B03C64BB084C72D64B3412210"
             "WorkingFolder" = "8:_31133C30B0C548009B5A7472B912A9D4"
             "Icon" = "8:_98B9B4D86A6C4AEE9432894196EAACAE"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_768D43B138884932834C2352155F50F9"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C138C88BFB304F1C87FF77895E700084"
             {
-            "Name" = "8:NXSYS interlocking simulator"
+            "Name" = "8:NXSYS 64-bit"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_BCD3E085CF224C1B864AAF996A362D92"
-            "Folder" = "8:_9FE7942B03C64BB084C72D64B3412210"
-            "WorkingFolder" = "8:_31133C30B0C548009B5A7472B912A9D4"
-            "Icon" = "8:_63B7D0C68CC34B77A93A77E97B93C6FE"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E2EB0B79D83844E7BD6F5EAA6F117B21"
-            {
-            "Name" = "8:NXSYS Interlocking simulator"
-            "Arguments" = "8:"
-            "Description" = "8:NXSYS Interlocking sim"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_BCD3E085CF224C1B864AAF996A362D92"
+            "Target" = "8:_372737D839814A8EBC17ECBC482DABE3"
             "Folder" = "8:_55638A2026984DBBA2C31EE5FE9D057F"
             "WorkingFolder" = "8:_31133C30B0C548009B5A7472B912A9D4"
             "Icon" = "8:_63B7D0C68CC34B77A93A77E97B93C6FE"
@@ -3633,90 +3699,6 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_39C15438CA884357AF8C2962F3418552"
-            {
-            "SourcePath" = "8:..\\x64\\Release\\RelayIndex.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_31133C30B0C548009B5A7472B912A9D4"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{54A752EA-A346-4B5B-8BD3-6D0381A09ADD}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BB493CA3B6704A448DA61E5436CE36C4"
-            {
-            "SourcePath" = "8:..\\x64\\Release\\TLEdit.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_31133C30B0C548009B5A7472B912A9D4"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:Release|x64"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{8E291D18-8597-4636-BC7C-94B28C3A7888}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BCD3E085CF224C1B864AAF996A362D92"
-            {
-            "SourcePath" = "8:..\\x64\\Release\\NXSYS.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_31133C30B0C548009B5A7472B912A9D4"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:Release|x64"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{DE5FABDD-7EB6-4AF0-B06E-6253260AAA18}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
         }
     }
 }
