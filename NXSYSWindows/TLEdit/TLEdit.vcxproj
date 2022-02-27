@@ -143,7 +143,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled</AdditionalIncludeDirectories>
     </ResourceCompile>
     <CustomBuildStep>
-      <Command>robocopy $(SolutionDir)..\TLEDocumentation $(OutDir)\TLEDocumentation</Command>
+      <Command>robocopy $(SolutionDir)..\TLEDocumentation $(OutDir)TLEDocumentation</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>$(OutputDir)..\TLEDocumentation</Outputs>
