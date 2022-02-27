@@ -93,7 +93,7 @@ public:
     string Help;
     void emplacer(strarray_ilist);
     ParsedArgs Parse(int argc, const char**argv);
-    size_t collect_variadic_arg(ParsedArgs&, ArgDesc&, size_t i, size_t argc, const char **argv);
+    int collect_variadic_arg(ParsedArgs&, ArgDesc&, size_t i, size_t argc, const char **argv);
 
 private:
     string GetNextArg(int i, int argc, const char**argv, ArgDesc* pAD);
@@ -320,7 +320,7 @@ string argset_i::GetNextArg(int iinc, int argc, const char**argv, ArgDesc* pAD) 
     return "";
 }
 
-size_t argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, size_t i, size_t argc, const char **argv) {
+int argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, size_t i, size_t argc, const char **argv) {
     vector<string> values;
     while ((typeof(D.v_max))values.size() < D.v_max) {
         if (i == argc)

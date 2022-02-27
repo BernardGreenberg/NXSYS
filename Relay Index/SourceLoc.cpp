@@ -31,7 +31,7 @@ struct RelayRecord {
     }
     string pRep;
     string signature;
-    size_t file_pos;
+    long file_pos;
     int  line_number;
     void Sign(const char * line_data, int line_no);
     string CTags() const;
