@@ -1,5 +1,5 @@
 # NXSYS MS Windows Build(s)
-## 26 February 2022
+## 27 February 2022
 
 This repository can build the three fully functional executables of the system, 64 and 32-bit, in Visual Studio (VS) 2022, C++ Language Level C++20, platform toolset VS2022 level 143, Windows SDK “latest installed version“ 10.0, my Windows 10 at current updates 12 February 2022.  There are no built executables in this repository; use [my web site page](https://BernardGreenberg.com/Subway) for that.
 
@@ -23,7 +23,7 @@ The top-level directory `NXSYSWindows` contains everything specific to Windows, 
 ### Build the apps yourself
 
 
-All of the pathnames in the project files are solution-relative; there are no references outside the repository tree. In fact, no references other than to the solution directory (`NXSYSWindows`) or its peers `NXSYS` and `TLEdit`.
+All of the pathnames in the project files are solution-relative; there are no references outside the repository tree. In fact, no references other than to the solution directory (`NXSYSWindows`) or its peers `NXSYS`, `TLEdit` and `Relay Index`.
 
 All you have to do is download and unzip, or clone, this repository, assure you have a VS 2022 at least as up-to-date as mine (described above, free Community Edition used) open the solution `NXSYSWindows.sln` its eponymous directory, select and build the three projects (`NXSYS`, `TLEdit` and `Relay Index`) and go to town.
 
