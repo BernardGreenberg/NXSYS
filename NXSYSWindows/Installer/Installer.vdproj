@@ -357,6 +357,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_83D50EDE7C474DB1ABE90935F73E3EA1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_83EEBDFFE3D647088114CE2C6A7D53D2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1900,6 +1906,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_83D50EDE7C474DB1ABE90935F73E3EA1"
+            {
+            "SourcePath" = "8:..\\..\\Documentation\\5_0TL.png"
+            "TargetName" = "8:5_0TL.png"
+            "Tag" = "8:"
+            "Folder" = "8:_EEE3E068D24B440698C1C3A4D60AC5C3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_83EEBDFFE3D647088114CE2C6A7D53D2"
             {
             "SourcePath" = "8:..\\..\\Documentation\\HelpImages\\RBoard.png"
@@ -3138,7 +3164,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NXSYS"
         "ProductCode" = "8:{4B9640D7-E5AF-4B69-A7C8-BA4DDD4651EE}"
-        "PackageCode" = "8:{BCD624FB-92F6-461B-882C-FD2F79764C17}"
+        "PackageCode" = "8:{B6A8A719-2164-40AE-801A-CAF842F18BCB}"
         "UpgradeCode" = "8:{59B1A06F-08D5-49FD-90F6-2245A4356957}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
