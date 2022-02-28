@@ -1,15 +1,12 @@
 # NXSYS scenario and relay language
+##### Status 27 February 2022
 
-**Copyright ©Bernard S. Greenberg** 1994, 1995, 1996, 1997
-  18 June 1995 (upd: 10 November 1996, 2 February 1997. 19 Feb 97, 18 Nov1997, 2 Dec97., 6 Jan 98, 14 Jan 98, 23 April 98, 16 May 98, 16 January 01, 26 July 01, 19 February 2022
 
-This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts (no, it is not trivial).  Pay particular attention to the 1998 tutorial [Duckburg Tower A](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg)!
+This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts.  Pay particular attention to the 1998 tutorial [Duckburg Tower A](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg)!
 
 The term *the simulator* is used below to denote the NXSYS application in such contexts where there is a need to draw a clear distinction between logic and actions effected by that application, and that effected by the relays whose definitions you supply to it.  The simulator operates some of your relays, and is operated by others of them, as described below.
 
-**NB: This document was first written around the turn of the century for Version 1 NXSYS.  While the relay language has not changed at all, the Version 2 track-definition language differs completely, and with the advent of TLEdit, the Track Layout Editor, there is no need ever to code in, or understand, the track definition language (it's not really very complicated, anyway).  So all that has been removed.**
-
-Making the signals and switches actually work is not so easy: one must design all the signal circuitry, which is not easily explained in a short (or even long) helpfile - that is a whole study.  The authoritative source document for that study is NYCTA/MTA drawing-set 733-33, their "typical signal/interlocking prints", not readily available.  More stuff coming from me, hopefully, though (2022) --
+Making the signals and switches actually work is not so easy: You must learn signalling logic design.   Consume everything in the main helpfile, then go on to the “(Advanced) Signalling Logic Tutorial" in the application help menu (or the `Documentation` folder in [this GitHub repository](https://github.com/BernardGreenberg/NXSYS)).
 
 Of course, you are free and encouraged to study and mimic the circuitry provided in the examples; you can start with what we supply and modify until it becomes something else.  With NXSYS, you can actually *watch* the relays in operation and experiment with modifying their circuits, privileges I never had when learning this material from paper in the mid-1960's.  (However, I warn and declare unequivocally that my designs are for entertainment and educational purposes only and include certain simplifications and possible errors, and are not fit for use for controlling real railroads or other life-critical systems, and I assume no risk or responsibility should any of this information, or designs correctly or incorrectly derived from it, be faulty and lead to harm, damage, loss, or injury. Use it at your own risk.)
 
@@ -24,14 +21,14 @@ A **form** is either an **atom** or a **list**.  A **list** starts and ends with
 
 |Example | Description|
 ---------|-----------
-|2345       | Integer, must be 32-bit (signed), decimal|
+|2345       | Integer, (possibly) signed, decimal|
 |foobar     | Symbol (string of alphanumerics starting               with alphabetic). Used to cause references to the same thing.  CASE is INSigGNiFICANt! Colon (:) and hyphen (-) are legal "alphabetics", e.g. `:ALL-GROUNDHOGS` is a legal symbol name.
 |17NWK      |Relay Symbol.  Starts with digits, ends with alphabetics and/or digits. CASE IS INSIGNIFICANT! (NB: I hope to expand this syntax).
 |"Title"    |Quoted string.  Used where text must appear.  Backslash escapes backslash or quote.|
 |#\A        |Single character object—used for subway line designations. (See below for handling BB & MM.)|
 |!24HY      |Back contact Relay Symbol. Used for back (closed when dropped) contacts.|
-|782.3      |Floating-point number - not supported yet in compiler (10/96)|
-|355/113    |Rational number—not supported yet in compiler (10/96)|
+|782.3      |Floating-point number|
+|355/113    |Rational number|
 
 Top-level (not contained in other forms) forms define the track layout, its signals, and its relays.
 
@@ -69,7 +66,7 @@ creates interlocking-specific documentation offered on the "Help" menu with the 
 
 `Help-string` will be taken as help text to be displayed as text, unless it starts with `@`, in which case will be taken as a pathname (relative to the `.trk`-containing directory) of a text file containing the documentation text.
 
-The third argument is optional, and only recognized by 2.6 and newer (it will be ignored by earlier versions).  If supplied, it must be a string starting with `@` and ending with `.html`.  The application will web-browse that file in the containing directory, in the HTML help viewer on the Mac and the system browser on Windows (If you want it to work on both versions, you must supply a real text file, too).
+The third argument is optional, and only recognized by 2.6 and newer (it will be ignored by earlier versions).  If supplied, it must be a string starting with `@` and ending with `.html`.  The application will web-browse that file in the containing directory, in the HTML help viewer on the Mac and the system browser on Windows (If you want it to work on older versions, you must supply a real text file, too).
 
 These next two property pairs are only recognized in NXSYS 2.5.0 and newer, and, by careful contract, are *ignored* by earlier versions:
 
@@ -117,7 +114,7 @@ i.e.,
 
 Labels are used to define common subexpressions that would implemented in real relays by shared wires. `(LABEL name expr1 expr2 ....)` defines the AND (series wiring) of all the *expr*'s in it as *name*, and allows that name to be used as a synonym in subsequent relay definitions.
 
-(2022: `LABEL`s were a weak attempt to "share wiring" between relays, both to reduce error-prone code duplication and strive towards what I call "topomorphic circuits", that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious technique used ubiquitously by the real circuitry, brought forward from ancient lever-frame interlockings, where it minimized contacts and wires. At its most potent, bidirectional current flow mirrors the bidirectional movement of trains.  Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)
+(2022: `LABEL`s were a weak attempt to “share wiring” between relays, both to reduce error-prone code duplication and strive towards what I call “topomorphic circuits”, that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious and venerable technique used ubiquitously by the real circuitry. See the logic document for a good example. Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)
 
 **Macros** are used to define standardized identical relay definitions, identical in shape but not in relay numbers.  For example.
 
@@ -160,8 +157,8 @@ Note that numeric part of a relay name is the lever number for those relays that
 |FL|Fleeting relay.  Created and read by simulator.|
 |DR|For home signal, picked when cleared to diverging route.|
 |CO|For home signal, call-on when picked.|
-|SK|White "S" light (with yellow) in advance of GT signals.|
-|DK|White "D" light (with yellow) in advance of GT signals. Signal must be clear (HV, if exists) or H to display.|
+|SK|White `S` light (with yellow) in advance of GT signals.|
+|DK|White `D` light (with yellow) in advance of GT signals. Signal must be clear (HV, if exists) or H to display.|
 |STR|ST20 light, only displayed if signal is red.|
 |LH|Lunar White light. Don't turn off until high signal clears            (e.g., during stop drive).|
 |V|Stop (trip).  When picked, stop is held clear.|
@@ -220,7 +217,7 @@ The tristate traffic control situation is complex because interlockings exploiti
 
 ### Other relays of honorable mention
 
-Here are some other relays, not known to the simulator proper. See the main NXSYS helpfile for explanation of the Vital/Non-vital distinction.
+Here are some other relays, not known to the simulator proper. See the main NXSYS helpfile for explanation of the Vital/Non-vital distinction, and the logic document for even more.
 
 |Relay|Semantics|
 |-----|----------|
@@ -245,9 +242,9 @@ Here are some other relays, not known to the simulator proper. See the main NXSY
 |NS, SS|North/South stick.  Implements "route locking" (see main helpfile). Normally picked.  Dropped in linked chains over a route to lock switches, prevent opposing movement, and put white lines of light on board. Retained by either occupation, the previous section's identical relay, or signal AS.|
 |U|GT/ST signal timing.|
 
-**Relays operated by "random button" controls, and operating "random panel lights" and the like are usually named by you in TLEdit.**  If you care about the superterrific "Train ID button system" and its lights and buttons, study [myrautop.trk at Myrtle Av.](https://github.com/BernardGreenberg/NXSYS/blob/master/Interlockings/Myrtle/myrautop.trk) and maybe the couldn't-be-cooler [dynmenu.cpp](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYS/v2/dynmenu.cpp) which implements its model.
+**Relays operated by “random button” controls, and operating "random panel lights" and the like are usually named by you in TLEdit.**  If you care about the superterrific “Train ID button system” and its lights and buttons, study [myrautop.trk at Myrtle Av.](https://github.com/BernardGreenberg/NXSYS/blob/master/Interlockings/Myrtle/myrautop.trk) and maybe the couldn't-be-cooler [dynmenu.cpp](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYS/v2/dynmenu.cpp) which implements its model.
 
-You can define any other relays you want, freely.
+You can define any other relays you want, freely. Right now their names must be valid “relay symbols”, i.e., digits followed by alphabetics.  The number will associate it with a track section or lever, and it will show up on relay list dialogs for that object.
 
 There is a new class of "optional" relays, currently including
 
@@ -261,7 +258,7 @@ There is a new class of "optional" relays, currently including
 
 These optional relays need not be coded, but if they are, they will be utilized as  indicated above.
 
-### "Special timing consideration"
+### “Special timing consideration”
 
 With one exception, relay definitions may appear in the source file in any order.  If the circuit is correctly designed and race-free, the order of relays will not matter.  There is, however, one case in the standard interlocking design where relative timing is critical, and thus the detail of the simulator's algorithm, and hence, source order, become considerations.
 
@@ -278,8 +275,8 @@ The Common Lisp special forms `COMMENT`, `EVAL-WHEN`, and `INCLUDE` are supporte
 
 `COMMENT`   all subforms are read, but ignored when it appears at top level. Example
 
-             (COMMENT (RELAY 240R 240PBS 125RWK 127NWK 212XS)) ;;old 240R
-             (RELAY 24          ;;real definition.
+    (COMMENT (RELAY 240R 240PBS 125RWK 127NWK 212XS)) ;;old 240R
+    (RELAY 240R          ;;real definition.
 
 `(EVAL-WHEN  tags form1 form2 form3 ....)`
  *tags* is a list, either (), `(EVAL), (LOAD), (LOAD )` etc.
@@ -288,8 +285,6 @@ The Common Lisp special forms `COMMENT`, `EVAL-WHEN`, and `INCLUDE` are supporte
 `INCLUDE`    e.g., `(INCLUDE "stdmacs.trk")`.  The single argument is a pathname relative to the file which contains the INCLUDE.  The forms and definitions in the file will be treated by NXSYS and by the compiler as though they appeared in the file at the point of the INCLUDE form.
 
 A special relay called `0LogicHalt` has been defined.  If you provide a definition for this relay, and it ever picks, at that time a message box will pop up stating this: if you press "Yes", the relay simulator engine will halt and allow you to examine its state in detail with the Draftsperson and other tools.  You must (currently) reload the interlocking after such a breakpoint.
-
-**2022: Description and usage of the Relay Compiler removed.  It can't compile for the Mac, and interlockings run rapidly enough on both platforms without compilation.**
 
 =======================================
 

@@ -1,14 +1,12 @@
 # Relay Indexer and Source Locator
 
-### 16 February 2022
+### 27 February 2022
 
-These two features are new to the Windows build, but have been available in the Mac builds for a while.  They are intended to assist those designing NXSYS interlockings in pseudo-Lisp relay circuitry (which is the only way).
+These two features are new to the Windows build; they have been available in the Mac builds for a while.  They are intended to assist those designing NXSYS interlockings in pseudo-Lisp relay circuitry (which is the only way).
 
-These two functions exploit a command-line program, the *Relay Indexer*, which, unsurprisingly enough, is called `RelayIndex(.exe)`, the `.exe` suffix on Windows, not Mac, and in either case supplied self-standing in both distribution zip files.
+These two functions exploit a command-line program, the *Relay Indexer*, which is called `RelayIndex(.exe)`, the `.exe` suffix on Windows, not Mac. It is in the product directory under `Program Files` on Windows (but has no icon), and is in the distribution `.dmg` on the Mac.
 
-`RelayIndex` operates on an entire interlocking, from source.  You direct it to the top-level `.trk` file, the same one you open in the application (NXSYS).  It produces two files, a relay cross-reference, and a `TAGS` file, in the same folder as the source to which it was directed.  They are both text files.  You can place the output somewhere else with the `-o (--output)` control argument.
-
-We will discuss them independently.
+`RelayIndex` operates on an entire interlocking, from source.  You direct it to the top-level `.trk` file, the same one you would open in the application (NXSYS).  It produces two files, a relay cross-reference, and a `TAGS` file, in the same folder as the source to which it was directed.  They are both text files.  You can place the output somewhere else with the <nobr>`-o (--output)`</nobr> control argument.
 
 ## Relay cross-reference
 
@@ -42,7 +40,7 @@ The output file will be called the same as the input file, but with `.trk` repla
 
 This feature allows you to locate the pseudo-Lisp source for any relay in the interlocking by clicking right on its coil or contact in the Relay Draftsperson drawings. If set up properly, an external editor or other program of your choice will navigate to the relay definition in the source file so you can edit it, and then type control- (Cmd-) R to NXSYS to reload the fixed version.
 
-The NXSYS feature relies on being told a key piece of information, viz., exactly what external program or BAT/bash script to execute to tell about the relay you want to edit. This script, which you supply, is called the *SourceLocatorScript*.
+The NXSYS feature relies on being told a key piece of information, viz., exactly what external program or BAT/bash script to execute to tell about the relay you want to edit. This script, which you supply, is called the *Source Locator Script*.
 
 On both systems, you edit the source of a relay by clicking right on its coil or contact in the Relay Draftsperson, whereupon you will get a small “context menu” allowing you to close or hide the window ... and if the Source Locator Script has been set up properly, you will also see a new option, `Edit Source 158HY` (or whatever the relay name is). Select that and your editor will be fed the string `158HY` in a way that you prescribe.  I will tell you how to do it for Emacs (including Mac Aquamacs).
 

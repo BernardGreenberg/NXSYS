@@ -6,7 +6,7 @@
 <title></title>
 <style type="text/css">
 html,body{margin:0;padding:0;}
-body {padding: 20px;max-width:800px}
+body {padding: 20px}
 h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,cite,code,del,dfn,em,img,q,s,samp,small,strike,strong,sub,sup,tt,var,dd,dl,dt,li,ol,ul,fieldset,form,label,legend,button,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;font-weight:normal;font-style:normal;font-size:100%;line-height:1;font-family:inherit;}
 table{border-collapse:collapse;border-spacing:0;}
 ol,ul{list-style:none;}
@@ -202,15 +202,13 @@ pre > code {
 <body>
 <h1 id="toc_0">Relay Indexer and Source Locator</h1>
 
-<h3 id="toc_1">16 February 2022</h3>
+<h3 id="toc_1">27 February 2022</h3>
 
-<p>These two features are new to the Windows build, but have been available in the Mac builds for a while.  They are intended to assist those designing NXSYS interlockings in pseudo-Lisp relay circuitry (which is the only way).</p>
+<p>These two features are new to the Windows build; they have been available in the Mac builds for a while.  They are intended to assist those designing NXSYS interlockings in pseudo-Lisp relay circuitry (which is the only way).</p>
 
-<p>These two functions exploit a command-line program, the <em>Relay Indexer</em>, which, unsurprisingly enough, is called <code>RelayIndex(.exe)</code>, the <code>.exe</code> suffix on Windows, not Mac, and in either case supplied self-standing in both distribution zip files.</p>
+<p>These two functions exploit a command-line program, the <em>Relay Indexer</em>, which is called <code>RelayIndex(.exe)</code>, the <code>.exe</code> suffix on Windows, not Mac. It is in the product directory under <code>Program Files</code> on Windows (but has no icon), and is in the distribution <code>.dmg</code> on the Mac.</p>
 
-<p><code>RelayIndex</code> operates on an entire interlocking, from source.  You direct it to the top-level <code>.trk</code> file, the same one you open in the application (NXSYS).  It produces two files, a relay cross-reference, and a <code>TAGS</code> file, in the same folder as the source to which it was directed.  They are both text files.  You can place the output somewhere else with the <code>-o (--output)</code> control argument.</p>
-
-<p>We will discuss them independently.</p>
+<p><code>RelayIndex</code> operates on an entire interlocking, from source.  You direct it to the top-level <code>.trk</code> file, the same one you would open in the application (NXSYS).  It produces two files, a relay cross-reference, and a <code>TAGS</code> file, in the same folder as the source to which it was directed.  They are both text files.  You can place the output somewhere else with the <nobr><code>-o (--output)</code></nobr> control argument.</p>
 
 <h2 id="toc_2">Relay cross-reference</h2>
 
@@ -245,7 +243,7 @@ Lines read across, not column-down. The header line for each relay lists the nam
 
 <p>This feature allows you to locate the pseudo-Lisp source for any relay in the interlocking by clicking right on its coil or contact in the Relay Draftsperson drawings. If set up properly, an external editor or other program of your choice will navigate to the relay definition in the source file so you can edit it, and then type control- (Cmd-) R to NXSYS to reload the fixed version.</p>
 
-<p>The NXSYS feature relies on being told a key piece of information, viz., exactly what external program or BAT/bash script to execute to tell about the relay you want to edit. This script, which you supply, is called the <em>SourceLocatorScript</em>.</p>
+<p>The NXSYS feature relies on being told a key piece of information, viz., exactly what external program or BAT/bash script to execute to tell about the relay you want to edit. This script, which you supply, is called the <em>Source Locator Script</em>.</p>
 
 <p>On both systems, you edit the source of a relay by clicking right on its coil or contact in the Relay Draftsperson, whereupon you will get a small “context menu” allowing you to close or hide the window ... and if the Source Locator Script has been set up properly, you will also see a new option, <code>Edit Source 158HY</code> (or whatever the relay name is). Select that and your editor will be fed the string <code>158HY</code> in a way that you prescribe.  I will tell you how to do it for Emacs (including Mac Aquamacs).</p>
 
@@ -309,7 +307,7 @@ c:\&quot;Program Files&quot;\Emacs\x86_64\bin\emacsclient -e &quot;(find-tag &qu
 
 <p>Read in as many interlocking <code>.trk</code> files as you want, and use all Emacs tools.  <code>m-X visit-tags-table</code> to the <code>TAGS</code> file you have created. Now, you can simply point to any term in the logic of any relay, and type <code>m-.</code>, that is, “meta dot”, and <em>presto</em>, the definition of that relay (whose contact you clicked on) will come up!  <code>C-u m-.</code> (control U, Meta .) and you can type in the name of a relay, and it will be found!  Alphabetic case ignored!</p>
 
-<p>From NXSYS, simply click-right on a relay contact or coil, and if Source Editing is offered, select it, and Emacs / Aquamacs will find that relay and focus it (although it will not bring itself to the top of the screen; you have to switch it or keep it visible).</p>
+<p>From NXSYS, simply click-right on a relay contact or coil, and if Source Editing is offered, select it, and Emacs / Aquamacs will find that relay and focus it (although it will not bring itself to the top of the screen; you have to switch to it or keep it visible).</p>
 
 <h4 id="toc_8">By the way</h4>
 
