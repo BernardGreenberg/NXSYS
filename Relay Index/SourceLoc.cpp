@@ -36,7 +36,7 @@ struct RelayRecord {
     void Sign(const char * line_data, int line_no);
     string CTags() const;
     bool on_line (size_t start, size_t end) {
-        return (file_pos >= start && file_pos < end);
+        return (file_pos >= (long)start && file_pos < (long)end);
     }
 };
 
