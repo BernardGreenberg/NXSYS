@@ -33,7 +33,7 @@ Do read [this document here](https://github.com/BernardGreenberg/NXSYS/blob/mast
 
 There are two installer projects, `Installer`, the 64-bit version, and `Setup32`, the 32-bit version (both installers are 32-bit programs, but they install different versions of the application.  While one installer might have been "cleaner", it would either preclude installing the 32-bit version on a 64-bit system, or require custom UI in the Installer).
 
-You will need the [MS Visual Studio Installer Project Extension](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022I nstallerProjects), which is freely available. Don’t be surprised if you have to fiddle with the installer projects to make them work on your system (especially if you try to modify them), requiring (sadly) knowledge of the MSI world.  The 64-bit output goes to `NXSYSWindows\x64\Release\NXSYS.msi`, and the 32-bit output to `NXSYSWindows\Release\NXSYS32.msi`.
+You will need the [MS Visual Studio Installer Project Extension](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects), which is freely available. Don’t be surprised if you have to fiddle with the installer projects to make them work on your system (especially if you try to modify them), requiring (sadly) knowledge of the MSI world.  The 64-bit output goes to `NXSYSWindows\x64\Release\NXSYS.msi`, and the 32-bit output to `NXSYSWindows\Release\NXSYS32.msi`.
 
 I have experienced difficulty making it accept shortcuts referencing “Primary Project Output”s as it seems to want. As a result, I package the output executables as ordinary .exe's, and point the desktop and Start menu shortcuts to them.
 
