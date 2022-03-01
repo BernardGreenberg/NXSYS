@@ -340,8 +340,6 @@ int argset_i::collect_variadic_arg(ParsedArgs& PA, ArgDesc& D, size_t i, size_t 
 }
 
 ParsedArgs argset_i::Parse(int argc, const char ** argv) {
- //   printf("%ld", __cplusplus);
-   // assert (__cplusplus / 100 > 2014);
     CommandName = std::filesystem::path(argv[0]).filename().string();
     ParsedArgs PA;
     int unnamed_count = 0;
