@@ -33,7 +33,13 @@ I'm satisfied with the operability and reliability of the sources posted here.  
 
 As of 21 February 2022, the application (both versions) includes, in source, the [**pugixml** portable XML library](http://pugixml.org) ©2006-2018 by Arseny Kapoulkine, which is MIT-license free to use.
 
-***Nota bene***—there are file system and XCode artifacts seemingly referring to Windows in the Mac-only folders, e.g., `Winapi.mm`.  These are *not* misplaced Windows programs, but Mac code *emulating the Win32 API in Cocoa/Objective C++*, which is the compatibility strategy I chose in 2014 to maximize shared, retained code.
+<a id="linux"></a>
+## When/why not Linux?
+
+I do get regular requests for Linux support.  Right now, this is too difficult to be a short-term goal.  To support the Mac in 2014, rather than rewrite every bit of graphics or UI code in the system, I implemented the Windows GUI in Mac code, allowing me to *keep all the C++ code with little modification*, which I held a worthy goal. (That is why there are modules and functions with “windows” names in Mac-specific portion of the code). This path was also chosen in favor of using a multiplatform-portable graphics system (such as [Qt](https://www.qt.io)) and redoing every graphics call or model-assuming code-fragment in the system to call it.
+
+Support on Linux, or some fourth system, without taking the onerous “write it all to use a portable GUI substrate” would mean total duplication of the work done for the Mac, which was huge.  Adaptation to a portable GUI system would be *even more huge*.  So, as with some other packages (e.g., [Hauptwerk](https://hauptwerk.com)), Windows and Mac for the foreseeable future.
+
 
 <a id="logic"></a>
 ## New — Logic documentation
