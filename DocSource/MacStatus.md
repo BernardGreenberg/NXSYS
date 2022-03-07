@@ -24,7 +24,7 @@ There are five in this project:
 
 - **TLEdit**, the track-layout editor.  A separate Mac GUI application that allows the creation and maintenance of `.trk` files containing layout information (and only layout information).
 
-- **Relay Compiler**. This is presently a joke, because even though this command-line application runs perfectly on the 64-bit Mac, *it only produces Windows object code*, 32- as well as 16-bit, actually — NXSYS Windows is now **64 bit**.  It is simply no longer necessary with the speed of modern machines; interlockings run rapidly enough “interpreted” (Lisp taxonomy).  Prior to Mac NXSYS, though, it was quite neat, and it hurts me to delete it. It is a tribute to Apple that I have never had to learn the Mac machine-language environment.
+- **Relay Compiler**. This is presently a joke, because even though this command-line application runs perfectly on the 64-bit Mac, *it only produces Windows object code*, 32- as well as 16-bit, actually — NXSYS Windows is now **64 bit** (as is the Mac system) (but Intel 64 and 32 architectures are very similar).  It is simply no longer necessary with the speed of modern machines; interlockings run rapidly enough “interpreted” (Lisp taxonomy).  Prior to Mac NXSYS, though, it was quite neat, and it hurts me to delete it. It is a tribute to Apple that I have never had to learn the Mac machine-language environment.  (Also, modern operating systems are averse to apps creating executable code).
 
 - **BLISP** (B for Bernie).  A command-line program, being a test-build of its native reader (`readsexp.cpp`) for the quasi-Lisp used for interlocking definitions.  `READ-PRINT` only, though, C(++)-no-`EVAL`. 10 cdr trains are handled :).
 
