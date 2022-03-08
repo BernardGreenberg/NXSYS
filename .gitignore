@@ -16,3 +16,4 @@ MacPackagingTool/.#make_dmg.sh
 MacPackagingTool/__pycache__/getversion.cpython-39.pyc
 NXSYSMac.xcodeproj/project.xcworkspace/xcuserdata/bsg.xcuserdatad/UserInterfaceState.xcuserstate
 NXSYSMac.xcodeproj/project.xcworkspace/xcuserdata/bsg.xcuserdatad/UserInterfaceState.xcuserstate
+*.odt#
