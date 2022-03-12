@@ -18,6 +18,7 @@
 #include "STLfnsplit.h"
 #include "SwitchConsistency.h"
 #include "STLExtensions.h"
+#include <cassert>
 #ifndef NXSYSMac
 #include <getmodtm.h>
 #include <io.h>
