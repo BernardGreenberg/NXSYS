@@ -32,7 +32,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.6.0/Mac</string>
+	<string>2.6.1/Mac</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -42,7 +42,7 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014 Bernard Greenberg. All rights reserved.</string>
+	<string>Copyright © 2014, 2022 Bernard Greenberg. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>TLEdit</string>
 	<key>NSPrincipalClass</key>
