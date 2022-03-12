@@ -17,6 +17,7 @@
 #include <string>
 #include "STLfnsplit.h"
 #include "SwitchConsistency.h"
+#include "STLExtensions.h"
 #ifndef NXSYSMac
 #include <getmodtm.h>
 #include <io.h>
@@ -35,7 +36,7 @@ static FILE * S_f;
 static TrackSeg * S_ts;
 static TrackJoint * S_tj;
 static int S_i;
-static BOOL S_YKnown, S_ZKnown;
+static BOOL S_YKnown;
 static double S_LastY;
 //static double S_LastZ;  // I wish .
 
@@ -82,6 +83,23 @@ static BOOL MakeBackupCopy(const char * path) {
 }
 
 
+static int ReportCorruptedJoints(GraphicObject *g) {
+    
+    TrackJoint& J = *(TrackJoint*)g;
+    if (J.TSCount == 0) {
+        usererr(FormatString("Dumper finds TJ#%d with TSCount 0.", J.Nomenclature).c_str());
+        return 1;
+    }
+    for (int x = 0; x < J.TSCount; x++) {
+        if (J.TSA[x] == NULL) {
+            usererr(FormatString("Dumper finds TJ#%d with TSCount %d, TSA[%d] null.",
+                                 J.Nomenclature, J.TSCount, x).c_str());
+            return 1;
+        }
+    }
+    return 0;
+}
+
 BOOL SaveLayout(const char * path) {
     std::string complaint;
     if (!SwitchConsistencyTotalCheck(complaint)) {
@@ -89,6 +107,11 @@ BOOL SaveLayout(const char * path) {
         MessageBox(G_mainwindow, complaint.c_str(), app_name, MB_ICONEXCLAMATION);
         return FALSE;
     }
+    if (MapGraphicObjectsOfType(ID_JOINT, ReportCorruptedJoints)) {
+        usererr("Corrupted joints found; won't save. Go fix them.");
+        return FALSE;
+    }
+
 	if (!MakeBackupCopy(path)) {
 		if (IDYES != MessageBox
 		(G_mainwindow,
@@ -167,8 +190,11 @@ static int FindUnmarkedLooseEnd(GraphicObject *g) {
 
 static int FindUnmarkedSwitchBranch(GraphicObject *g) {
 	TrackJoint * tj = (TrackJoint*)g;
+    if (tj->TSCount != 3)   // "SWITCH" means "** S W I T C H **", you Doofus!!!
+        return 0;           // 3/12/2022
 	for (int i = 0; i < tj->TSCount; i++) {
 		if (!tj->TSA[i]->Marked) {
+            
 			S_i = i;
 			S_ts = tj->TSA[i];
 			S_tj = tj;
@@ -177,6 +203,7 @@ static int FindUnmarkedSwitchBranch(GraphicObject *g) {
 	}
 	return 0;
 }
+
 
 static void DumpArc(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
@@ -205,11 +232,11 @@ static void DumpArc(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 		if (tj->Marked) {
 			if (tj->TSCount != 3) {
 				usererr("Dumper finds marked node, not switch.");
-			sfail:		tj->TDump(f, "BUG-ERROR BAD BAD");
+                tj->TDump(f, "BUG-ERROR BAD BAD");
 			}
 			else if (ts == tj->TSA[TSA_STEM]) {
 				usererr("Dumper found way into marked switch via stem.");
-				goto sfail;
+                tj->TDump(f, "BUG-ERROR BAD BAD2");
 			}
 			else if (ts == tj->TSA[TSA_NORMAL])
 				tj->TDump(f, "SWITCH NORMAL");
@@ -224,12 +251,14 @@ static void DumpArc(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
 		if (tj->TSCount == 3) {
 			dir = NULL;
-			for (int k = 0; k < 3; k++)
+            for (int k = 0; k < 3; k++){
+                assert (tj->TSA[k] != NULL);
 				if (ts == tj->TSA[k]) {
 					dir = SWKeys[k];
 					ts = tj->TSA[Alternate[k]];
 					break;
 				}
+            }
 			if (dir == NULL) {
 				usererr("Dumper found switch, but can't find seg in it.");
 				return;
@@ -280,12 +309,12 @@ static void SaveTheLayout(FILE * f) {
 	S_f = f;
 	S_ts = NULL;
 	S_tj = NULL;
-	MapGraphicObjectsOfType(ID_JOINT, AssignUnassignedSwitchNumbers);
+    MapGraphicObjectsOfType(ID_JOINT, AssignUnassignedSwitchNumbers);
 	MapGraphicObjectsOfType(ID_TRACKSEG, TSegClearMapper);
 	MapGraphicObjectsOfType(ID_JOINT, JointClearMapper);
 	while (MapGraphicObjectsOfType(ID_JOINT, FindUnmarkedLooseEnd)) {
 		fprintf(f, "  (PATH\n");
-		S_YKnown = S_ZKnown = FALSE;
+		S_YKnown = FALSE;
 		TrackJoint * tj = S_tj;
 		tj->TDump(f, "IJ");
 		/* if track circuit changes or not ij's nomen, dump that*/
@@ -296,7 +325,8 @@ static void SaveTheLayout(FILE * f) {
 
 	while (MapGraphicObjectsOfType(ID_JOINT, FindUnmarkedSwitchBranch)) {
 		fprintf(f, "  (PATH\n");
-		S_YKnown = S_ZKnown = FALSE;
+		S_YKnown = FALSE;
+        assert (S_i >=0 && S_i < 3);
 		sprintf(buf, "SWITCH %s", SWKeys[S_i]);
 		S_tj->TDump(f, buf);
 		DumpArc(f, S_ts, S_tj);
@@ -311,6 +341,19 @@ static void sDBB() {
 	DebugBreak();
 }
 
+static char CharizeAB0(long nomen, short AB0) {
+    if (nomen == 0)
+        usererr("Dumper found switch with no nomenclature number.");
+    switch (AB0) {
+        case 0: return '0';
+        case 1: return 'A';
+        case 2: return 'B';
+        default:
+            usererr("Dumper found switch %ld with bogus A/B/0: %d", nomen, AB0);
+            sDBB();
+            return '?';
+    }
+}
 
 void TrackJoint::TDump(FILE * f, const char * key) {
 	BOOL simple = (key == NULL) && !NumFlip;
@@ -324,29 +367,25 @@ void TrackJoint::TDump(FILE * f, const char * key) {
 	}
 
 	if (Insulated) {
+        assert (TSCount < 3);
 		sprintf(buf, " %ld", Nomenclature);
 		ii = buf;
 	}
-	const char * gl = "?";
 	if (TSCount == 3) {
-		if (Nomenclature == 0)
-			usererr("Dumper found switch with no number.");
 		simple = FALSE;
-		switch (SwitchAB0) {
-		case 0:
-			gl = " 0";
-			break;
-		case 1:
-			gl = " A";
-			break;
-		case 2:
-			gl = " B";
-		}
-		ii = buf;
-		sprintf(buf, " %ld%s", Nomenclature, gl);
+		sprintf(buf, " %ld %c", Nomenclature, CharizeAB0(Nomenclature, SwitchAB0));
+        ii = buf;
 		if (key == NULL)
 			key = "SWITCH";
+
+        assert (!strncmp(key, "SWITCH", 6)); // en todo caso
 	}
+    else {
+        if (key != NULL &&!strncmp(key, "SWITCH", 6)) {
+            usererr("Graph logic bug: %s %ld has TSCount %d", key, Nomenclature, TSCount);
+            assert(!"Alleged switch not count 3");
+        }
+    }
 
 	if ((key == NULL || !strcmp(key, "")) && ii && strcmp(ii, "")) {
 		sDBB();
