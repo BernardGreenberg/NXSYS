@@ -22,6 +22,7 @@
 #include "xtgload.h"
 #include "pival.h"
 #include "SwitchConsistency.h"
+#include "STLExtensions.h"
 
 
 
@@ -281,7 +282,7 @@ static int ProcessPathForm (Sexpr f) {
     long last_tcid = 0;
     for (; f.type == Lisp::tCONS; f = CDR(f)) {
 	Sexpr s = CAR(f);
-	Sexpr ss = s;
+	Sexpr whole_path_element = s;
 	long Nomen = 0;
 	BOOL insulated = FALSE;
 	Sexpr key;
@@ -361,20 +362,20 @@ finish_create_any:
 	    }
 	    insulated = TRUE;
 	    Nomen = CAR(s);
-	    if (!coords.Collect (CDR(s), ss))
+	    if (!coords.Collect (CDR(s), whole_path_element))
 		return 0;
 	    goto create_simple;
 	}
 	else if (key == aTC) {
 	    if (ListLen(s) < 1) {
-		LispBarf ("Not enough data in TC description ", ss);
+		LispBarf ("Not enough data in TC description ", whole_path_element);
 		return 0;
 	    }
 	    last_tcid = CAR(s);
 	    continue;
 	}
 	else if (key != aSWITCH) {
-	    LispBarf ("Unrecognized subform in PATH ", key);
+	    LispBarf ("Unrecognized subform in PATH ", whole_path_element);
 	    return 0;
 	}
 
@@ -391,14 +392,14 @@ invsw:	    LispBarf ("Invalid SWITCH subform", s);
 	    return 0;
 	}
 	if (s.type != Lisp::tCONS) {
-	    LispBarf ("Missing nomenclature in switch", ss);
+	    LispBarf ("Missing nomenclature in switch", whole_path_element);
 	    return 0;
 	}
 
 	s = CDR(s);
 
 	if (CAR(s).type != Lisp::NUM) {
-	    LispBarf ("Bogus Nomenclature ID switch", ss);
+	    LispBarf ("Bogus Nomenclature ID switch", whole_path_element);
 	    return 0;
 	}
 	Nomen = CAR(s);
@@ -409,8 +410,9 @@ invsw:	    LispBarf ("Invalid SWITCH subform", s);
 
 	if (e.type == Lisp::NUM) {
 	    if (e.u.n != 0) {
-unkab:		LispBarf ("Unknown Switch A/B/singleton tag:", ss);
-		return 0;
+                std::string swdesc = FormatString("Switch %ld: bad numeric Switch A/B/0 tag:", Nomen);
+                LispBarf (swdesc.c_str(), e);
+                return 0;
 	    }
 	    ab0 = 0;
 	}
@@ -418,13 +420,17 @@ unkab:		LispBarf ("Unknown Switch A/B/singleton tag:", ss);
 	    ab0 = 1;
 	else if (e == aB)
 	    ab0 = 2;
-	else goto unkab;
+	else {
+            std::string swdesc = FormatString("Switch %ld: unknown numeric Switch A/B/0 tag:", Nomen);
+            LispBarf (swdesc.c_str(), e);
+            return 0;
+        }
 	s = CDR(s);
 
 	BOOL have_coords = FALSE;
 
 	if (s.type == Lisp::tCONS) {
-	    if (!coords.Collect (s, ss))
+	    if (!coords.Collect (s, whole_path_element))
 		return 0;
 	    have_coords = TRUE;
 	}
@@ -432,14 +438,14 @@ unkab:		LispBarf ("Unknown Switch A/B/singleton tag:", ss);
 	TrackJoint * swj = FindSwitchJoint (Nomen,ab0);
 	if (swj != NULL) {
 	    if (!(first || CDR(f) == NIL)) {
-		LispBarf ("Previously-defined switch neither first nor last", ss);
+		LispBarf ("Previously-defined switch neither first nor last in path", whole_path_element);
 		return 0;
 	    }
 
 	}
 	if (swj == NULL) {
 	    if (!have_coords) {
-		LispBarf ("Switch Undefined: point coordinates missing", ss);
+		LispBarf ("Switch Undefined: point coordinates missing", whole_path_element);
 		return 0;
 	    }
 	    swj = new TrackJoint (coords.x, coords.y);

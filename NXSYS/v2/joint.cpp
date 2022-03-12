@@ -216,6 +216,8 @@ void TrackJoint::GetOrganization (JointOrganizationData *jod) {
 	TrackSeg * ts = TSA[i];
 	jod[i].original_index = i;	/* for degubbing.` */
 	jod[i].TSeg = ts;
+        if (ts == nullptr)
+            return;
 	int fx = FindEndIndex (ts);
 #if TLEDIT
 	if (fx == TSA_NOTFOUND) {
