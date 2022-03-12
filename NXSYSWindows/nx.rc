@@ -149,7 +149,7 @@ BEGIN
 	DEFPUSHBUTTON "OK", IDOK, 76, 86, 24, 14
 	CONTROL "Built:", ABOUT_BUILD, "STATIC", WS_CHILD | WS_VISIBLE | WS_GROUP, 30, 51, 58, 8
 	CTEXT "Copyright (c) 1994-2022 B. Greenberg", -1, 8, 64, 160, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
-	CONTROL, "Version 2.6 (64-bit MS Windows)", ABOUT_NUM_VSN, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 25, 42, 136, 8
+	CONTROL, "Version 2.6.1 (MS Windows)", ABOUT_NUM_VSN, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 25, 42, 136, 8
 	CTEXT "All Rights Reserved", -1, 40, 74, 96, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
 	ICON "NXICON", -1, 12, 82, 16, 16
 	CONTROL "27 June 12:24:02 1994", ABOUT_VSN, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 88, 51, 83, 8
@@ -263,11 +263,11 @@ END
 
 // 1 Dec 2016 copied from MS Web posting
 
-#define VER_FILEVERSION             2,6,0,0
-#define VER_FILEVERSION_STR         "2.6.0.0\0"
+#define VER_FILEVERSION             2,6,1,0
+#define VER_FILEVERSION_STR         "2.6.1.0\0"
 
-#define VER_PRODUCTVERSION          2,6,0,0
-#define VER_PRODUCTVERSION_STR      "2.6\0"
+#define VER_PRODUCTVERSION          2,6,1,0
+#define VER_PRODUCTVERSION_STR      "2.6.1"
 
 #ifndef DEBUG
 #define VER_DEBUG                   0

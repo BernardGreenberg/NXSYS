@@ -118,16 +118,16 @@ BEGIN
     CTEXT           "Release build",IDC_BUILD_TYPE,12,30,154,8
     DEFPUSHBUTTON   "OK",IDOK,145,108,24,14
     LTEXT           "Executable of:",IDC_STATIC,30,56,58,8
-    CTEXT           "Copyright © 1997-2001, 2014, 2016, 2022",IDC_STATIC,7,72,160,8
+    CTEXT           "Copyright ï¿½ 1997-2001, 2014, 2016, 2022",IDC_STATIC,7,72,160,8
     CTEXT           "GPL 3 License",IDC_STATIC,41,111,96,8
     ICON            "NXICON",IDC_STATIC,7,104,20,20
     LTEXT           "27 June 12:24:02 1994",ABOUT_VSN,82,56,83,8
     CTEXT           "Bernard Greenberg",IDC_STATIC,15,83,149,8
     CTEXT           "TLEdit for MS Windows",IDC_STATIC,51,5,77,8
     CTEXT           "NXSYS Version 2 Track Layout Editor",IDC_STATIC,4,16,170,8
-    LTEXT           "Version 2.6.0",IDC_STATIC,66,44,44,8
+    LTEXT           "Version 2.6.1",IDC_STATIC,66,44,44,8
 END
-
+
 IDD_TLEDIT_HELP DIALOG 100, 100, 329, 258
 STYLE DS_ABSALIGN | DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_3DLOOK | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 CAPTION "Track Layout Graphics Editor (TLEdit) Help"
