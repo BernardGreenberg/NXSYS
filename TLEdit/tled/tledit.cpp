@@ -627,8 +627,10 @@ void TrackJoint::SwallowOtherJoint (TrackJoint * tj) {
     for (int j = 0; j < tj->TSCount; j++) {
 	TrackSeg * ts = tj->TSA[j];
 	AddBranch(ts);
-	if (tj->TSCount > 2)
-	    tj->EnsureID();
+        if (TSCount > 2) {
+	    EnsureID();
+            Insulated = FALSE; // 3-12-2022
+        }
 	int fx = tj->FindEndIndex(ts);
 	if (fx != TSA_NOTFOUND) 
 	    ts->Ends[fx].Joint = this;
