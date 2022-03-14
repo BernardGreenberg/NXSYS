@@ -40,12 +40,15 @@ TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
     Insulated = FALSE;
     Lab = NULL;
     TSCount = 0;
+    TSA[0] = TSA[1] = TSA[2] = NULL;
     NumFlip = FALSE;
     wp_x = wpx1;
     wp_y = wpy1;
+
 #if TLEDIT
     Organized = FALSE;
     Selected = FALSE;
+    Marked = FALSE;
     rw_x = rw_y = 0;
     int r = 2*JointGlyphRadius;
     wp_limits.left  = -r;

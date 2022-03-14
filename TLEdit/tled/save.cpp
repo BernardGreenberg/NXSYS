@@ -19,7 +19,10 @@
 #include "SwitchConsistency.h"
 #include "STLExtensions.h"
 #include <cassert>
-#ifndef NXSYSMac
+#include <exception>
+#include <unordered_set>
+
+#ifdef WIN32
 #include <getmodtm.h>
 #include <io.h>
 #endif
@@ -33,19 +36,81 @@
 #define UNASSIGNED_BASE_SWITCH_NO 10001
 #define UNASSIGNED_BASE_IJ_NO     30001
 
-static FILE * S_f;
-static TrackSeg * S_ts;
-static TrackJoint * S_tj;
-static int S_i;
 static BOOL S_YKnown;
 static double S_LastY;
 //static double S_LastZ;  // I wish .
 
+#ifdef NXSYSMac
+#define STRERROR strerror
+#else
+#define STRERROR _strerror
+#endif
+
+/* Rewritten 13 Mar 2022 to remove C-style coding, use modern C++ with lambdas, thrown exceptions,
+ sets, and little value-containers with conversion operators. Also changed to write to temp file first,
+ to protect against blowouts overwriting good files with partially-written ones */
+
+/* These exceptions are thrown by the dumper (saver) when it finds problems or logic errors
+ OTHER THAN USER ERRORS (e.g., A switch with no B). These indicate bugs, but they must be
+ aggressively checked for lest the dumper write out bad files, clobbering good ones and losing work. */
+
+struct TLEditSaveException : public std::exception {
+    std::string message;
+    TLEditSaveException(const char * ctlstring, ...) {
+        va_list args;
+        va_start(args, ctlstring);
+        message = FormatStringVA(ctlstring, args);
+        MessageBox(nullptr, message.c_str(), "TLEdit Save logic error detected:", 0);
+#ifdef DEBUG  /* In debug mode (XCode/VS) break into the debugger.  Release build will not. */
+        assert(!"Save debug break");
+#endif
+    }
+};
+
+class IDAssign {
+    int CurPointer;
+    int Increment;
+    std::unordered_set<int> Values;
+public:
+    IDAssign(int base, int increment) : CurPointer(base), Increment(increment) {}
+    int MakeNew();
+    void Register(int value) {
+        Values.insert(value);
+    }
+    void Clear() {Values.clear();}
+};
+
+int IDAssign::MakeNew() {
+    while (Values.count(CurPointer != 0)) {
+        CurPointer += Increment;
+    }
+    int val = CurPointer;
+    Register(val);
+    return val;
+}
+
+static IDAssign SwitchNumbers(UNASSIGNED_BASE_SWITCH_NO, 2);
+static IDAssign IJNumbers(UNASSIGNED_BASE_IJ_NO, 1);
 
 static const char *SWKeys[3] = { "STEM", "NORMAL", "REVERSE" };
-static int Alternate[3] = { 1, 0, 0 };
+static const int Alternate[3] = { 1, 0, 0 };
 
+/* Declare-aheads; flaw in C language. PL/I didn't need 'em. */
 static void SaveTheLayout(FILE * f), DumpRemainingObjects(FILE * f);
+static void DumpTheActualGraph(FILE * f);
+static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj);
+
+template <int LEN>
+struct SCAT {   /* gato corto */
+    char B[LEN];
+    SCAT(const char *a, const char*b) {
+        strcpy(B, a);
+        strcat(B, b);
+    }
+    operator const char *() {return B;}
+};
+
+
 
 typedef
 struct SaveEntry {
@@ -95,6 +160,12 @@ static int ReportCorruptedJoints(GraphicObject *g) {
         if (J.TSA[x] == NULL) {
             usererr(FormatString("Dumper finds TJ#%d with TSCount %d, TSA[%d] null.",
                                  J.Nomenclature, J.TSCount, x).c_str());
+            if (x == 2) {
+                usererr("Downgrading TJ#%ld to order 1. Try again.", J.Nomenclature);
+                J.TSCount = 1;
+                J.TSA[1] = NULL;
+            }
+
             return 1;
         }
     }
@@ -121,104 +192,117 @@ BOOL SaveLayout(const char * path) {
 			MB_YESNOCANCEL | MB_ICONEXCLAMATION))
 			return FALSE;
 	}
-	FILE * f = fopen(path, "w");
-	if (f == NULL) {
-		usererr("Cannot open %s for writing: %s", path,
-
-#ifdef NXSYSMac
-			strerror(NULL)
-
-#else
-			_strerror(NULL)
-#endif
-		);
-		return FALSE;
+    FILE * temp_file = tmpfile();
+	if (temp_file == NULL) {
+        usererr("Cannot open temp file for writing: %s", STRERROR(NULL));
+        return FALSE;
 	}
-	SaveTheLayout(f);
-	fclose(f);
+    try {
+        SaveTheLayout(temp_file);
+    } catch (TLEditSaveException e) {
+        //Message already printed by exception ctor
+        return FALSE;
+    }
+
+    auto length = ftell(temp_file);
+    std::vector<char>total_file_content((size_t)length);
+    rewind(temp_file);
+    size_t did_read = (size_t)fread(total_file_content.data(), 1, total_file_content.size(), temp_file);
+    fclose(temp_file);
+
+    FILE * real_file = fopen(path, "w");
+    if (real_file == NULL) {
+        usererr("Cannot open file %s for writing: %s", path, STRERROR(NULL));
+        return FALSE;
+    }
+    fwrite(total_file_content.data(), 1, did_read, real_file);
+	fclose(real_file);
 	return TRUE;
 }
 
-static int CheckForJointNumber(GraphicObject *g) {
-	TrackJoint * tj = (TrackJoint*)g;
-	return (tj->Nomenclature == S_i);
+static void SaveTheLayout(FILE * f) {
+    time_t the_time;
+    time(&the_time);
+    fprintf(f, ";; TLEdit output of %s", ctime(&the_time));
+#ifdef WIN32
+    the_time = GetModuleTime(NULL);
+    fprintf(f, ";;   by TLEdit of %s", ctime(&the_time));
+#endif
+    fprintf(f, ";;      TLEdit Copyright (c) Bernard Greenberg 2013, 2022\n");
+
+    fprintf(f, ";;   Do not edit by hand.\n\n");
+
+    fprintf(f, "(LAYOUT\n");
+    fprintf(f, "  (VIEW-ORIGIN %d %d)\n", FixOriginWPX, FixOriginWPY);
+    /* dump mwh/mww assumptions */
+    /* date, time, layout name, stuff now in ROUTE */
+    /* much of this as comments*/
+    
+    DumpTheActualGraph(f);
+    
+    DumpRemainingObjects(f);
+    fprintf(f, ")\n\n");  // Close the "(LAYOUT" form.
 }
 
-static int AssignUnassignedSwitchNumbers(GraphicObject *g) {
-	TrackJoint * tj = (TrackJoint*)g;
-	if (tj->TSCount == 3 && tj->Nomenclature == 0L)
-		for (S_i = UNASSIGNED_BASE_SWITCH_NO; ; S_i += 2)
-			if (!MapGraphicObjectsOfType(ID_JOINT, CheckForJointNumber)) {
-				tj->Nomenclature = S_i;
-				tj->SwitchAB0 = 0;
-				break;
-			}
-	return 0;
-}
+static int FinalCleanUp(GraphicObject *g) {
+	TrackJoint& J = *(TrackJoint*)g;
 
-static int TSegClearMapper(GraphicObject *g) {
-	((TrackSeg*)g)->Marked = FALSE;
-	return 0;
-}
+    /* Unmark all nodes, regardless of degree */
+	J.Marked = FALSE;
 
-static int JointClearMapper(GraphicObject *g) {
-	TrackJoint * tj = (TrackJoint*)g;
-	tj->Marked = FALSE;
-	if (tj->TSCount == 1) {
-		tj->Invalidate();
-		tj->Insulated = TRUE;
+    /* Insulate all end-nodes; they must then be redisplayed, so invalidate */
+	if (J.TSCount == 1) {
+		J.Invalidate();
+		J.Insulated = TRUE;
 	}
-	if (tj->TSCount == 3)
-		tj->Organize();
-	if (tj->Insulated && tj->Nomenclature == 0L) {
-		for (S_i = UNASSIGNED_BASE_IJ_NO; ; S_i += 1)
-			if (!MapGraphicObjectsOfType(ID_JOINT, CheckForJointNumber)) {
-				tj->Nomenclature = S_i;
-				break;
-			}
-	}
+
+    /* And "Organize" all unorganized switches (measure their angles to determine normal/reverse */
+    else if (J.TSCount == 3) {
+        J.Organize();
+    }
 	return 0;
 }
 
-static int FindUnmarkedLooseEnd(GraphicObject *g) {
-	TrackJoint * tj = (TrackJoint*)g;
-	if (tj->TSCount == 1 && !tj->Marked) {
-		S_tj = tj;
-		return 1;
-	}
-	return 0;
+static void ChasePathWithStartKey(TrackJoint&J, int k, const char * key, FILE* f) {
+    fprintf(f, "  (PATH\n");
+    S_YKnown = FALSE;
+    J.TDump(f, key);
+    DumpPath(f, J.TSA[k], &J);
+    fprintf(f, "  )\n");
 }
 
-static int FindUnmarkedSwitchBranch(GraphicObject *g) {
-	TrackJoint * tj = (TrackJoint*)g;
-    if (tj->TSCount != 3)   // "SWITCH" means "** S W I T C H **", you Doofus!!!
-        return 0;           // 3/12/2022
-	for (int i = 0; i < tj->TSCount; i++) {
-		if (!tj->TSA[i]->Marked) {
-            
-			S_i = i;
-			S_ts = tj->TSA[i];
-			S_tj = tj;
-			return 1;
-		}
-	}
-	return 0;
+static int ChaseLooseTrackEnds(GraphicObject *g, void * vfp) {
+    FILE* f = (FILE*)vfp;
+    TrackJoint& J = *(TrackJoint*)g;
+    /* marking track-ends is necessary even with this improved loop, because an end can
+       be found (and marked) by forward motion and must not be found again by this loop. */
+    if (J.TSCount == 1 && !J.Marked)
+        ChasePathWithStartKey(J, 0, "IJ", f);
+    return 0; /* never stop */
 }
 
+static int ChaseUnmarkedSwitchBranches(GraphicObject * g, void * vfp) {
+    TrackJoint& J = *(TrackJoint*)g;
+    FILE * f = (FILE*)vfp;
+    if (J.TSCount == 3)   // "SWITCH" means "** S W I T C H **", you Doofus!!! 3/12/2022
+        for (int k = 0; k < 3; k++)
+            if (!J.TSA[k]->Marked)  // Branch is NOT MARKED ....
+                ChasePathWithStartKey(J, k, SCAT<20>("SWITCH ", SWKeys[k]), f);
+    return 0;
+}
 
-static void DumpArc(FILE * f, TrackSeg * ts, TrackJoint * tj) {
+/* This chases and outputs one path from one track-end or switch branch to another,
+   marking as it goes, so we can search for unmarked ones. */
+static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
 	const char * dir;
 
 	long LastTCID = 0;
 
-	while (1) {
+	while (true) {
 		int fx = tj->FindEndIndex(ts);
-		if (fx == TSA_NOTFOUND) {
-			usererr("Dumper finds estranged segment/joint.");
-			fprintf(f, "BUG-ERROR ... .... .... BAD BAD BAD\n");
-			return;
-		}
+		if (fx == TSA_NOTFOUND)
+            throw TLEditSaveException("Estranged track segment found.");
 
 		long id = ts->Circuit ? ts->Circuit->StationNo : 0;
 
@@ -226,52 +310,43 @@ static void DumpArc(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 		if (LastTCID != id)
 			fprintf(f, "     (TC %ld)\n", LastTCID = id);
 
-
 		ts->Marked = TRUE;
 		fx = 1 - fx;
 		tj = ts->Ends[fx].Joint;
+        long jnom = tj->Nomenclature;
 		if (tj->Marked) {
-			if (tj->TSCount != 3) {
-				usererr("Dumper finds marked node, not switch.");
-                tj->TDump(f, "BUG-ERROR BAD BAD");
-			}
-			else if (ts == tj->TSA[TSA_STEM]) {
-				usererr("Dumper found way into marked switch via stem.");
-                tj->TDump(f, "BUG-ERROR BAD BAD2");
-			}
+			if (tj->TSCount != 3)
+				throw TLEditSaveException("Dumper finds marked node #%ld not switch.", jnom);
+			else if (ts == tj->TSA[TSA_STEM])
+                throw TLEditSaveException ("Dumper found way into marked switch %ld via stem.", jnom);
 			else if (ts == tj->TSA[TSA_NORMAL])
 				tj->TDump(f, "SWITCH NORMAL");
 			else tj->TDump(f, "SWITCH REVERSE");
 
 			return;
 		}
-		else if (tj->TSCount == 1) {
+		else if (tj->TSCount == 1) {   // A loose end; the path is complete!
 			tj->TDump(f, "IJ");
 			return;
 		}
 
-		if (tj->TSCount == 3) {
+		if (tj->TSCount == 3) {   // A SWITCH
 			dir = NULL;
             for (int k = 0; k < 3; k++){
-                assert (tj->TSA[k] != NULL);
+                if (tj->TSA[k] == nullptr)
+                    throw TLEditSaveException ("Null segment pointer @k=%d found in joint %ld", k, jnom);
 				if (ts == tj->TSA[k]) {
 					dir = SWKeys[k];
 					ts = tj->TSA[Alternate[k]];
 					break;
 				}
             }
-			if (dir == NULL) {
-				usererr("Dumper found switch, but can't find seg in it.");
-				return;
-			}
-			char buf[20];
-			if (ts->Marked) {
-				usererr("Dumper found already marked segment in unmarked switch.");
-				tj->TDump(f, "BUG-ERROR BAD BAD");
-				return;
-			}
-			sprintf(buf, "SWITCH %s", dir);
-			tj->TDump(f, buf);
+			if (dir == NULL)
+                throw TLEditSaveException("Dumper found switch %ld, but can't find seg in it.", jnom);
+			if (ts->Marked)
+				throw TLEditSaveException("Dumper found already marked segment in unmarked switch %ld.", jnom);
+
+			tj->TDump(f, SCAT<20>("SWITCH ", dir));
 			continue;
 		}
 		else
@@ -279,139 +354,117 @@ static void DumpArc(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
 		tj->TDump(f, NULL);
 
-		if (ts->Marked) {
-			usererr("Dumper found already marked segment.");
-			tj->TDump(f, "BUG-ERROR BAD BAD");
-			fprintf(f, "\n");
-			return;
-		}
+		if (ts->Marked)
+			throw TLEditSaveException("Dumper found already marked segment.");
 	}
 }
 
 
-static void SaveTheLayout(FILE * f) {
-	char buf[40];
-	time_t the_time;
-	time(&the_time);
-	fprintf(f, ";; TLEdit output of %s", ctime(&the_time));
-#ifndef NXSYSMac
-	the_time = GetModuleTime(NULL);
-	fprintf(f, ";;   by TLEdit of %s", ctime(&the_time));
-#endif
-	fprintf(f, ";;      TLEdit Copyright (c) Bernard Greenberg 2013, 2022\n");
+static void DumpTheActualGraph(FILE* f) {
+    /* Register all known IJ and Switch numbers with the generator maps */
+    SwitchNumbers.Clear();
+    IJNumbers.Clear();
+    MapGraphicObjectsOfType(ID_JOINT, [](GraphicObject *g) {
+        TrackJoint & J = *(TrackJoint*)g;
+        if (J.Nomenclature) {
+            if (J.TSCount == 3)
+                SwitchNumbers.Register((int)J.Nomenclature);
+            else
+                IJNumbers.Register((int)J.Nomenclature);
+        }
+        return 0;
+    });
 
-	fprintf(f, ";;   Do not edit by hand.\n\n");
+    /* Assign currently unused numbers to unassigned joints and switches */
+    MapGraphicObjectsOfType(ID_JOINT, [](GraphicObject *g) {
+        TrackJoint& J = *(TrackJoint*)g;
+        if (J.Nomenclature == 0) {
+            if (J.TSCount == 3)
+                J.Nomenclature = SwitchNumbers.MakeNew();
+            else
+                J.Nomenclature = IJNumbers.MakeNew();
+        }
+        return 0;
+    });
 
-	fprintf(f, "(LAYOUT\n");
-	fprintf(f, "  (VIEW-ORIGIN %d %d)\n", FixOriginWPX, FixOriginWPY);
-	/* dump mwh/mww assumptions */
-	/* date, time, layout name, stuff now in ROUTE */
-	/* much of this as comments*/
-	S_f = f;
-	S_ts = NULL;
-	S_tj = NULL;
-    MapGraphicObjectsOfType(ID_JOINT, AssignUnassignedSwitchNumbers);
-	MapGraphicObjectsOfType(ID_TRACKSEG, TSegClearMapper);
-	MapGraphicObjectsOfType(ID_JOINT, JointClearMapper);
-	while (MapGraphicObjectsOfType(ID_JOINT, FindUnmarkedLooseEnd)) {
-		fprintf(f, "  (PATH\n");
-		S_YKnown = FALSE;
-		TrackJoint * tj = S_tj;
-		tj->TDump(f, "IJ");
-		/* if track circuit changes or not ij's nomen, dump that*/
-		TrackSeg * ts = tj->TSA[0];
-		DumpArc(f, ts, tj);
-		fprintf(f, "  )\n");
-	}
+    /* Clear Marked bits of track sections */
+    MapGraphicObjectsOfType(ID_TRACKSEG, [](GraphicObject *g) {
+        ((TrackSeg*)g)->Marked = FALSE;
+        return 0;
+    });
+    
+    /* Unmark joints/switches, insulate loose ends, "organize" switches */
+	MapGraphicObjectsOfType(ID_JOINT, FinalCleanUp);
 
-	while (MapGraphicObjectsOfType(ID_JOINT, FindUnmarkedSwitchBranch)) {
-		fprintf(f, "  (PATH\n");
-		S_YKnown = FALSE;
-        assert (S_i >=0 && S_i < 3);
-		sprintf(buf, "SWITCH %s", SWKeys[S_i]);
-		S_tj->TDump(f, buf);
-		DumpArc(f, S_ts, S_tj);
-		fprintf(f, "  )\n");
-	}
+    /* These produce the actual output, must use 3 arg form and pass file */
+    MapFindGraphicObjectsOfType (ID_JOINT, ChaseLooseTrackEnds, f);
+    MapFindGraphicObjectsOfType (ID_JOINT, ChaseUnmarkedSwitchBranches, f);
 	fprintf(f, "\n");
-	DumpRemainingObjects(f);
-	fprintf(f, ")\n\n");
-}
-
-static void sDBB() {
-	DebugBreak();
 }
 
 static char CharizeAB0(long nomen, short AB0) {
     if (nomen == 0)
-        usererr("Dumper found switch with no nomenclature number.");
+        throw TLEditSaveException("Dumper found switch with no nomenclature number.");
     switch (AB0) {
         case 0: return '0';
         case 1: return 'A';
         case 2: return 'B';
         default:
-            usererr("Dumper found switch %ld with bogus A/B/0: %d", nomen, AB0);
-            sDBB();
-            return '?';
+            throw TLEditSaveException("Dumper found switch %ld with bogus A/B/0: %d", nomen, AB0);
     }
 }
 
 void TrackJoint::TDump(FILE * f, const char * key) {
-	BOOL simple = (key == NULL) && !NumFlip;
-	if (!S_YKnown || wp_y != S_LastY || Insulated)
-		simple = FALSE;
-	char buf[30];
-	const char * ii = "";
-	if (Insulated && key == NULL) {
-		key = "IJ";
-		simple = FALSE;
-	}
 
-	if (Insulated) {
-        assert (TSCount < 3);
-		sprintf(buf, " %ld", Nomenclature);
-		ii = buf;
-	}
-	if (TSCount == 3) {
-		simple = FALSE;
-		sprintf(buf, " %ld %c", Nomenclature, CharizeAB0(Nomenclature, SwitchAB0));
-        ii = buf;
-		if (key == NULL)
-			key = "SWITCH";
+    if (TSCount == 2 && !Insulated //not terminal, not switch, not IJ, just random joint
+        && S_YKnown && wp_y == S_LastY
+        && key == NULL) {
 
-        assert (!strncmp(key, "SWITCH", 6)); // en todo caso
-	}
-    else {
-        if (key != NULL &&!strncmp(key, "SWITCH", 6)) {
-            usererr("Graph logic bug: %s %ld has TSCount %d", key, Nomenclature, TSCount);
-            assert(!"Alleged switch not count 3");
-        }
+        fprintf(f, "%37s%4ld\n", "", wp_x);  // simple single-number form
+        Marked = TRUE;
+        // S_YKnown and S_LastY remain same by definition
+        return;
     }
 
-	if ((key == NULL || !strcmp(key, "")) && ii && strcmp(ii, "")) {
-		sDBB();
-	}
+    char identifier [30] = "";   // Assumption = "vanilla kink",i.e., non-insulated joint
 
-	if (simple)
-		fprintf(f, "%37s%4ld\n", "", wp_x);
-	else {
-		char keybuf[50];
-		char numbuf[30];
-		char extra[50];
-		strcpy(extra, NumFlip ? " NUMFLIP" : "");
+    if (Insulated) {
+        if (TSCount == 3)
+            throw TLEditSaveException("Insulated switch found: %ld", Nomenclature);
+        if (key == NULL)
+            key = "IJ";
+        sprintf(identifier, " %ld", Nomenclature);
+    }
+
+    if (TSCount == 3) {
+        sprintf(identifier, " %ld %c", Nomenclature, CharizeAB0(Nomenclature, SwitchAB0));
 		if (key == NULL)
-			key = "";
-		sprintf(keybuf, "%-20s  %s", key, ii);
-		if (Marked && !strncmp(key, "SWITCH", 6))
-			fprintf(f, "    (%s)\n", keybuf);
-		else {
-			if (S_YKnown && wp_y == S_LastY && !strcmp(extra, ""))
-				sprintf(numbuf, "%4ld", wp_x);
-			else
-				sprintf(numbuf, "%4ld  %4ld", wp_x, wp_y);
-			fprintf(f, "    (%-30s  %s%s)\n", keybuf, numbuf, extra);
-		}
-	}
+			key = "SWITCH";
+        else if (!!strncmp(key, "SWITCH", 6))
+            throw TLEditSaveException("Count=3, but key is not SWITCH #%ld", Nomenclature);
+    }
+    else  if (key != NULL && !strncmp(key, "SWITCH", 6))
+        throw TLEditSaveException("Overrode type %s %ld has non-3 TSCount %d", key, Nomenclature, TSCount);
+
+	if ((key == NULL || !strcmp(key, "")) && !!strcmp(identifier, "")) //NOT a vanilla kink
+        throw TLEditSaveException ("Not-easy-to-categorize object #%ld id \"%s\"", Nomenclature, identifier);
+
+    if (key == NULL)
+        key = "";
+    char key_plus_id[64];
+    sprintf(key_plus_id, "%-20s  %s", key, identifier);
+    if (Marked && TSCount == 3)   // Marked switch, location already published.
+        fprintf(f, "    (%s)\n", key_plus_id); //(SWITCH NORMAL 10089 0)
+    else {
+        const char *addendum = NumFlip ? " NUMFLIP" : "";
+        char coordinates[30];
+        if (S_YKnown && wp_y == S_LastY && !strcmp(addendum, ""))
+            sprintf(coordinates, "%4ld", wp_x);
+        else
+            sprintf(coordinates, "%4ld  %4ld", wp_x, wp_y);
+        fprintf(f, "    (%-30s  %s%s)\n", key_plus_id, coordinates, addendum);
+    }
+
 	S_YKnown = TRUE;
 	S_LastY = wp_y;
 	Marked = TRUE;
