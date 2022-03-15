@@ -99,6 +99,37 @@ void TrackSeg::Align (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2){
     Ends[1].Reposition();
 }
 #include "signal.h"
+
+
+TrackSegEnd& TrackSeg::GetEnd(TSEX endx) {
+    if (endx == TSEX::E0)
+        return Ends[0];
+    else if (endx == TSEX::E1)
+        return Ends[1];
+    else
+        assert("Invalid segment end index.");
+    return Ends[0];
+}
+
+TrackSegEnd& TrackSeg::GetOtherEnd(TSEX endx) {
+    if (endx == TSEX::E0)
+        return Ends[1];
+    else if (endx == TSEX::E1)
+        return Ends[0];
+    else
+        assert("Invalid segment end index.");
+    return Ends[0];
+}
+
+TSEX TrackSeg::FindEndIndex(TrackJoint * tj) {
+    if (tj == Ends[0].Joint)
+        return TSEX::E0;
+    else if (tj == Ends[1].Joint)
+        return TSEX::E1;
+    else
+        return TSEX::NOTFOUND;
+}
+
 void TrackSegEnd::Reposition () {
     if (SignalProtectingEntrance)
 	SignalProtectingEntrance->PSignal->Reposition();
@@ -129,7 +160,7 @@ BOOL TrackSegEnd::InsulatedP () {
     if (Next == NULL)
 	return TRUE;
     return (Next->Circuit !=
-	    Next->Ends[EndIndexNormal].Next->Circuit);
+	    Next->GetEnd(EndIndexNormal).Next->Circuit);
 }
 
 void TrackSegEnd::OffExitLight () {
@@ -373,10 +404,39 @@ TrackSeg * SnapToTrackSeg (WP_cord& wpx, WP_cord& wpy) {
     return NULL;
 }
 
+static inline bool coord_vaguely_valid(int x) {
+    return x >= 0 && x <= 20000;
+}
+
+static bool tj_vaguely_valid(TrackJoint* tj) {
+    /* avoid crashes when deleting ... this is still a dicey proposition */
+    /* this SHOULD never fail, but ... part of anti-bug quest */
+    if (!(
+             coord_vaguely_valid ((int) tj->wp_x)
+          && coord_vaguely_valid ((int) tj->wp_y)
+#ifdef TLEDIT
+          && coord_vaguely_valid ((int) tj->rw_x)
+          && coord_vaguely_valid ((int) tj->rw_y)
+#endif
+    ))
+        return false;
+
+    if (tj->TSCount < 0 || tj->TSCount > 3) return false;
+    if (tj->SwitchAB0 < 0 || tj->SwitchAB0 > 2) return false;
+    if (tj->Nomenclature < 0 || tj->Nomenclature > 99999) return false;
+    return true;
+}
+
 TrackSeg::~TrackSeg () {
     for (int i = 0; i < 2; i++) {
 	TrackJoint * tj = Ends[i].Joint;
-	if (tj) {
+        if (tj) {
+            if (!tj_vaguely_valid(tj)) {
+#ifdef DEBUG
+                assert(!"Invalid joint pointer in track seg destructor.");
+#endif
+                return; // otherwise, just don't do it.
+            }
 	    tj->DelBranch(this);
 	    if (tj->TSCount == 0)
 		if (!NXGODeleteAll)
@@ -396,10 +456,11 @@ int TrackSeg::ObjIDp(long x) {
 
 
 #ifdef REALLY_NXSYS 
-int TrackSeg::StationPointsEnd (WP_cord &wpcordlen, int end_index) {
+int TrackSeg::StationPointsEnd (WP_cord &wpcordlen, TSEX end_index) {
 
     //TrackSegEnd * local = &Ends[end_index];
-    TrackSegEnd * distant = &Ends[1-end_index];
+    TSEX tse = (end_index == TSEX::E0) ? TSEX::E1 : TSEX::E0;
+    TrackSegEnd * distant = &GetEnd(tse);
     int sno;
     wpcordlen = (int) Length;
     if (distant->Joint) {

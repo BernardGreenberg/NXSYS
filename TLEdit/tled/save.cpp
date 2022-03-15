@@ -101,6 +101,8 @@ static const int Alternate[3] = { 1, 0, 0 };
 static void SaveTheLayout(FILE * f), DumpRemainingObjects(FILE * f);
 static void DumpTheActualGraph(FILE * f);
 static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj);
+static char CharizeAB0(long nomen, short AB0);
+void ValidateTrackGraph();
 
 template <int LEN>
 struct SCAT {   /* gato corto */
@@ -155,7 +157,8 @@ static int ReportCorruptedJoints(GraphicObject *g) {
     
     TrackJoint& J = *(TrackJoint*)g;
     if (J.TSCount == 0) {
-        usererr("Dumper finds TJ#%d with TSCount 0.", J.Nomenclature);
+        usererr("Dumper finds TJ#%d with TSCount 0. Selecting it. ", J.Nomenclature);
+        J.Select();
         return 1;
     }
     for (int x = 0; x < J.TSCount; x++) {
@@ -163,9 +166,10 @@ static int ReportCorruptedJoints(GraphicObject *g) {
             usererr(FormatString("Dumper finds TJ#%d with TSCount %d, TSA[%d] null.",
                                  J.Nomenclature, J.TSCount, x).c_str());
             if (x == 2) {
-                usererr("Downgrading TJ#%ld to order 1. Try again.", J.Nomenclature);
+                usererr("Downgrading TJ#%ld to order 1. Selecting it. Try again.", J.Nomenclature);
                 J.TSCount = 1;
                 J.TSA[1] = NULL;
+                J.Select();
             }
 
             return 1;
@@ -239,10 +243,16 @@ static void SaveTheLayout(FILE * f) {
     /* date, time, layout name, stuff now in ROUTE */
     /* much of this as comments*/
     
+    ValidateTrackGraph();
+
     DumpTheActualGraph(f);
-    
+
     DumpRemainingObjects(f);
     fprintf(f, ")\n\n");  // Close the "(LAYOUT" form.
+}
+
+void ValidateTrackGraph() {
+    DumpTheActualGraph(nullptr);
 }
 
 static int FinalCleanUp(GraphicObject *g) {
@@ -265,11 +275,13 @@ static int FinalCleanUp(GraphicObject *g) {
 }
 
 static void ChasePathWithStartKey(TrackJoint&J, int k, const char * key, FILE* f) {
-    fprintf(f, "  (PATH\n");
+    if (f)
+        fprintf(f, "  (PATH\n");
     S_YKnown = false;
     J.TDump(f, key);
     DumpPath(f, J.TSA[k], &J);
-    fprintf(f, "  )\n");
+    if (f)
+        fprintf(f, "  )\n");
 }
 
 static int ChaseLooseTrackEnds(GraphicObject *g, void * vfp) {
@@ -296,42 +308,46 @@ static int ChaseUnmarkedSwitchBranches(GraphicObject * g, void * vfp) {
    marking as it goes, so we can search for unmarked ones. */
 static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
-	const char * dir;
-
 	long LastTCID = 0;
 
 	while (true) {
-		int fx = tj->FindEndIndex(ts);
-		if (fx == TSA_NOTFOUND)
+		TSEX fx = ts->FindEndIndex(tj);
+		if (fx == TSEX::NOTFOUND)
             throw TLEditSaveException("Estranged track segment found.");
 
 		long id = ts->Circuit ? ts->Circuit->StationNo : 0;
 
 		/* dump seg attributes if appropriate*/
-		if (LastTCID != id)
-			fprintf(f, "     (TC %ld)\n", LastTCID = id);
+        if (f)
+            if (LastTCID != id)
+                fprintf(f, "     (TC %ld)\n", LastTCID = id);
 
 		ts->Marked = TRUE;
-		fx = 1 - fx;
-		tj = ts->Ends[fx].Joint;
+		tj = ts->GetOtherEnd(fx).Joint;
         long jnom = tj->Nomenclature;
 		if (tj->Marked) {
 			if (tj->TSCount != 3)
 				throw TLEditSaveException("Dumper finds marked node #%ld not switch.", jnom);
-			else if (ts == tj->TSA[TSA_STEM])
+			else if (ts == tj->GetBranch(TSAX::STEM))
                 throw TLEditSaveException ("Dumper found way into marked switch %ld via stem.", jnom);
-			else if (ts == tj->TSA[TSA_NORMAL])
-				tj->TDump(f, "SWITCH NORMAL");
-			else tj->TDump(f, "SWITCH REVERSE");
-
-			return;
+            else if (ts == tj->GetBranch(TSAX::NORMAL))
+                tj->TDump(f, "SWITCH NORMAL");
+            else if (ts == tj->GetBranch(TSAX::REVERSE))
+                tj->TDump(f, "SWITCH REVERSE");
+            else
+                throw TLEditSaveException("Dumper entered switch %ld %c from segment %p, "
+                                          "but the latter is none of its branches",
+                                          tj->Nomenclature, ts,
+                                          CharizeAB0(tj->Nomenclature, tj->SwitchAB0));
+			return;  // Marked switch hit,
 		}
 		else if (tj->TSCount == 1) {   // A loose end; the path is complete!
 			tj->TDump(f, "IJ");
 			return;
 		}
 
-		if (tj->TSCount == 3) {   // A SWITCH
+        const char* dir = nullptr;
+		if (tj->TSCount == 3) {   // An unmarked (new) SWITCH
 			dir = NULL;
             for (int k = 0; k < 3; k++){
                 if (tj->TSA[k] == nullptr)
@@ -350,8 +366,10 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 			tj->TDump(f, SCAT<20>("SWITCH ", dir));
 			continue;
 		}
-		else
+        else {
+            assert (tj->TSCount == 2);
 			ts = (ts == tj->TSA[0]) ? tj->TSA[1] : tj->TSA[0];
+        }
 
 		tj->TDump(f, NULL);
 
@@ -362,6 +380,8 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
 
 static void DumpTheActualGraph(FILE* f) {
+    /* f can be null for check only */
+    
     /* Register all known IJ and Switch numbers with the generator maps */
     SwitchNumbers.Clear();
     IJNumbers.Clear();
@@ -400,7 +420,8 @@ static void DumpTheActualGraph(FILE* f) {
     /* These produce the actual output, must use 3 arg form and pass file */
     MapFindGraphicObjectsOfType (ID_JOINT, ChaseLooseTrackEnds, f);
     MapFindGraphicObjectsOfType (ID_JOINT, ChaseUnmarkedSwitchBranches, f);
-	fprintf(f, "\n");
+    if (f)
+        fprintf(f, "\n");
 }
 
 static char CharizeAB0(long nomen, short AB0) {
@@ -416,12 +437,14 @@ static char CharizeAB0(long nomen, short AB0) {
 }
 
 void TrackJoint::TDump(FILE * f, const char * key) {
+    // f = NULL means "check only"
 
     if (TSCount == 2 && !Insulated //not terminal, not switch, not IJ, just random joint
         && S_YKnown && wp_y == S_LastY
         && key == NULL) {
 
-        fprintf(f, "%37s%4ld\n", "", wp_x);  // simple single-number form
+        if (f)
+            fprintf(f, "%37s%4ld\n", "", wp_x);  // simple single-number form
         Marked = TRUE;
         // S_YKnown and S_LastY remain same by definition
         return;
@@ -450,20 +473,22 @@ void TrackJoint::TDump(FILE * f, const char * key) {
 	if ((key == NULL || !strcmp(key, "")) && !!strcmp(identifier, "")) //NOT a vanilla kink
         throw TLEditSaveException ("Not-easy-to-categorize object #%ld id \"%s\"", Nomenclature, identifier);
 
-    if (key == NULL)
-        key = "";
-    char key_plus_id[64];
-    sprintf(key_plus_id, "%-20s  %s", key, identifier);
-    if (Marked && TSCount == 3)   // Marked switch, location already published.
-        fprintf(f, "    (%s)\n", key_plus_id); //(SWITCH NORMAL 10089 0)
-    else {
-        const char *addendum = NumFlip ? " NUMFLIP" : "";
-        char coordinates[30];
-        if (S_YKnown && wp_y == S_LastY && !strcmp(addendum, ""))
-            sprintf(coordinates, "%4ld", wp_x);
-        else
-            sprintf(coordinates, "%4ld  %4ld", wp_x, wp_y);
-        fprintf(f, "    (%-30s  %s%s)\n", key_plus_id, coordinates, addendum);
+    if (f) {
+        if (key == NULL)
+            key = "";
+        char key_plus_id[64];
+        sprintf(key_plus_id, "%-20s  %s", key, identifier);
+        if (Marked && TSCount == 3)   // Marked switch, location already published.
+            fprintf(f, "    (%s)\n", key_plus_id); //(SWITCH NORMAL 10089 0)
+        else {
+            const char *addendum = NumFlip ? " NUMFLIP" : "";
+            char coordinates[30];
+            if (S_YKnown && wp_y == S_LastY && !strcmp(addendum, ""))
+                sprintf(coordinates, "%4ld", wp_x);
+            else
+                sprintf(coordinates, "%4ld  %4ld", wp_x, wp_y);
+            fprintf(f, "    (%-30s  %s%s)\n", key_plus_id, coordinates, addendum);
+        }
     }
 
 	S_YKnown = true;
@@ -471,10 +496,10 @@ void TrackJoint::TDump(FILE * f, const char * key) {
 	Marked = TRUE;
 }
 
-char TrackSeg::EndOrientationKey(int end_index) {
+char TrackSeg::EndOrientationKey(TSEX end_index) {
 
 	double angle = atan2(SinTheta, CosTheta);
-	if (end_index == 1)
+	if (end_index == TSEX::E1)
 		angle += CONST_PI;
 	if (angle > CONST_2PI)
 		angle -= CONST_2PI;

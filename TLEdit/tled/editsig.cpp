@@ -31,10 +31,10 @@ void TLEditCreateSignal (TrackJoint * tj, bool upright) {
     tj->Insulate();			/* ensure insulated */
     for (int i = 0; i < tj->TSCount; i++) {
 	TrackSeg * ts = tj->TSA[i];
-	int ex = tj->FindEndIndex(ts);
-	TrackSegEnd * ep = &ts->Ends[ex];
+	TSEX endx = ts->FindEndIndex(tj);
+        TrackSegEnd * ep = &ts->GetEnd(endx);
 	double angle = atan2(ts->SinTheta, ts->CosTheta);
-	if (ex == 1)
+	if (endx == TSEX::E1)
 	    angle += CONST_PI;
 	if (angle > CONST_2PI)
 	    angle -= CONST_2PI;
@@ -46,7 +46,7 @@ void TLEditCreateSignal (TrackJoint * tj, bool upright) {
 	    if (ep->SignalProtectingEntrance == NULL) {
                 Signal * s = new Signal(0, 0, "GYR");
 		ep->SignalProtectingEntrance = s;
-		PanelSignal * Ps = new PanelSignal (ts, ex, s, NULL);
+		PanelSignal * Ps = new PanelSignal (ts, endx, s, NULL);
 		s->TStop = new Stop(s);
 		Ps->Select();
 		tj->PositionLabel();
@@ -62,8 +62,7 @@ void TLEditCreateSignal (TrackJoint * tj, bool upright) {
 
 void TLEditCreateSignalFromSignal (PanelSignal * ps, bool upright) {
     TrackSeg * ts = ps->Seg;
-    int ex = ps->EndIndex;
-    TLEditCreateSignal (ts->Ends[ex].Joint, upright);
+    TLEditCreateSignal (ts->GetEnd(ps->EndIndex).Joint, upright);
 }
 
 
@@ -77,22 +76,22 @@ HBRUSH Signal::GetGKBrush () {
 void FlipSignal (PanelSignal * ps) {
     Signal * s = ps->Sig;
     TrackSeg * ts = ps->Seg;
-    int end_index = ps->EndIndex;
-    TrackSegEnd * ep = &ts->Ends[end_index];
-    TrackJoint * tj = ep->Joint;
+    TSEX end_index = ps->EndIndex;
+    TrackSegEnd& E = ts->GetEnd(end_index);
+    TrackJoint * tj = E.Joint;
     if (tj->TSCount != 2) {
 	usererr ("No place to flip this signal to.");
 	return;
     }
     TrackSeg* tsother = (ts == tj->TSA[0]) ? tj->TSA[1] : tj->TSA[0];
-    int exother = tj->FindEndIndex(tsother);
-    TrackSegEnd *epother = &tsother->Ends[exother];
-    if (epother->SignalProtectingEntrance) {
+    TSEX exother = tsother->FindEndIndex(tj);
+    TrackSegEnd& epother = tsother->GetEnd(exother);
+    if (epother.SignalProtectingEntrance) {
 	usererr ("Both signal positions at this joint are occupied.  Can't flip this signal.");
 	return;
     }
-    ep->SignalProtectingEntrance = NULL;
-    epother->SignalProtectingEntrance = s;
+    E.SignalProtectingEntrance = NULL;
+    epother.SignalProtectingEntrance = s;
     ps->Seg = tsother;
     ps->EndIndex = exother;
     ps->Reposition();
@@ -100,7 +99,7 @@ void FlipSignal (PanelSignal * ps) {
 }
 
 void PanelSignal::Cut () {
-    Seg->Ends[EndIndex].Joint->Select();
+    Seg->GetEnd(EndIndex).Joint->Select();
     /* query ++++++++++++++++++++++ */
     BufferModified = TRUE;
     delete this;		/* should del Sig, and fix seg */
@@ -111,7 +110,7 @@ Signal::~Signal () {
 	if (XlkgNo)
 	    DeAssignID (XlkgNo);
 	if (PSignal)
-	    PSignal->Seg->Ends[PSignal->EndIndex].SignalProtectingEntrance = NULL;
+	    PSignal->Seg->GetEnd(PSignal->EndIndex).SignalProtectingEntrance = NULL;
 	if (TStop)
 	    delete TStop;
     }
@@ -201,7 +200,7 @@ BOOL_DLG_PROC_QUAL PanelSignal::DlgProc  (HWND hDlg, UINT message, WPARAM wParam
     switch (message) {
 	case WM_INITDIALOG:
 	    sprintf (buf, "Signal at IJ %ld",
-		      Seg->Ends[EndIndex].Joint->Nomenclature);
+		      Seg->GetEnd(EndIndex).Joint->Nomenclature);
 	    SetDlgItemText (hDlg, IDC_EDIT_SIG_IJID, buf);
 	    o = Orientation();
 	    if (o == ' ')
@@ -224,9 +223,9 @@ BOOL_DLG_PROC_QUAL PanelSignal::DlgProc  (HWND hDlg, UINT message, WPARAM wParam
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;		    
 		case IDC_EDIT_SIGNAL_JOINT:
-		    Seg->Ends[EndIndex].Joint->EditProperties();
+		    Seg->GetEnd(EndIndex).Joint->EditProperties();
 		    sprintf (buf, "Signal at IJ %ld",
-			      Seg->Ends[EndIndex].Joint->Nomenclature);
+			      Seg->GetEnd(EndIndex).Joint->Nomenclature);
 		    SetDlgItemText (hDlg, IDC_EDIT_SIG_IJID, buf);
 		default:
 		    return FALSE;
@@ -239,7 +238,7 @@ BOOL_DLG_PROC_QUAL PanelSignal::DlgProc  (HWND hDlg, UINT message, WPARAM wParam
 
 char PanelSignal::Orientation () {
 
-    TrackJoint * tj = Seg->Ends[EndIndex].Joint;
+    TrackJoint * tj = Seg->GetEnd(EndIndex).Joint;
     if (tj->TSCount == 1)
 	return ' ';
 
@@ -259,7 +258,7 @@ int PanelSignal::Dump (FILE * f) {
     char extra [100];
     char idbuf[15];
    // char orient = ' ';
-    TrackJoint * tj = Seg->Ends[EndIndex].Joint;
+    TrackJoint * tj = Seg->GetEnd(EndIndex).Joint;
 
     if (Sig->XlkgNo == 0)
 	strcpy (xlbuf, "");

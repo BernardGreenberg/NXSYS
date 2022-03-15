@@ -25,7 +25,7 @@ struct _Pointpos {
     /* what x value corresponds to the "entrance" end of this track_seg. */
     double x_at_seg_start;
     /* which end of that seg is ahead of us in present train motion direct. */
-    int facing_ex;
+    TSEX facing_ex;
 
     /* Last IJ passed, formatted */
     char LastIJID [24];

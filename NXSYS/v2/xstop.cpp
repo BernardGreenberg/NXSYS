@@ -96,7 +96,7 @@ void Stop::Reposition () {
 	return;
     float costheta, sintheta;
     ps->GetAngles (costheta, sintheta);
-    TrackSegEnd * ep = &ps->Seg->Ends[ps->EndIndex];
+    TrackSegEnd * ep = &ps->Seg->GetEnd(ps->EndIndex);
     
     float fx = ep->wpx + disp*costheta;
     float fy = ep->wpy + disp*sintheta;

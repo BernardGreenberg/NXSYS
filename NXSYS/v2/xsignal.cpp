@@ -20,7 +20,7 @@
 #define mAx(a,b) (((a) > (b)) ? (a) : (b))
 
 PanelSignal::PanelSignal
-   (TrackSeg * ts, int end_index, Signal * s, char * text) {
+   (TrackSeg * ts, TSEX end_index, Signal * s, char * text) {
     Seg = ts;
     Sig = s;
     s->PSignal = this;
@@ -53,7 +53,7 @@ void PanelSignal::EditContextMenu (HMENU m) {
 void PanelSignal::GetAngles (float &costheta, float&sintheta) {
     
     //TrackSegEnd * ep = &Seg->Ends[EndIndex];
-    if (EndIndex == 0) {
+    if (EndIndex == TSEX::E0) {
 	costheta = Seg->CosTheta;
 	sintheta = Seg->SinTheta;
     }
@@ -67,8 +67,8 @@ void PanelSignal::GetAngles (float &costheta, float&sintheta) {
 void PanelSignal:: Reposition() {
     float costheta, sintheta;
     GetAngles(costheta, sintheta);
-    TrackSegEnd * ep = &Seg->Ends[EndIndex];
-    double fxc = ep->wpx, fyc = ep->wpy;
+    TrackSegEnd&E = Seg->GetEnd(EndIndex);
+    double fxc = E.wpx, fyc = E.wpy;
     fxc += costheta * TRelX;
     fyc += sintheta * TRelX;		/* point on tk corresp to sig head */
     float downcostheta = -sintheta;

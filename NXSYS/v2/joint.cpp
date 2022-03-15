@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <cassert>
 
 #include "compat32.h"
 #include "nxgo.h"
@@ -91,7 +92,17 @@ void TrackJoint::Display (HDC dc) {
 #endif
 }
 
-
+TrackSeg* TrackJoint::GetBranch(TSAX branch_index) {
+    if (branch_index == TSAX::STEM)
+        return TSA[0];
+    else if (branch_index == TSAX::NORMAL)
+        return TSA[1];
+    else if (branch_index == TSAX::REVERSE)
+        return TSA[2];
+    else
+        assert(!"Invalid Branch Index");
+    return nullptr;
+}
 
 BOOL TrackJoint::AddBranch (TrackSeg * ts) {
     if (AvailablePorts() <= 0)
@@ -100,19 +111,15 @@ BOOL TrackJoint::AddBranch (TrackSeg * ts) {
     return TRUE;
 }
 
-static void DBB1 () {
-  DebugBreak();
-}
-
-BOOL TrackJoint::FindEndIndex (TrackSeg * ts) {
+TSAX TrackJoint::FindBranchIndex (TrackSeg * ts) {
     if (ts == NULL)
-        DBB1();
+        return TSAX::NOTFOUND;
     for (int i = 0; i < TSCount; i++)
 	if (TSA[i] == ts)
 	    for (int j = 0; j < 2; j++)
 		if (ts->Ends[j].Joint == this)
-		    return j;
-    return TSA_NOTFOUND;
+		    return (TSAX)j;
+    return TSAX::NOTFOUND;
 }
 
 int TrackJoint::AvailablePorts () {
@@ -216,6 +223,7 @@ static int OrgDataCompare (const void * e1p, const void * e2p) {
 void TrackJoint::GetOrganization (JointOrganizationData *jod) {
 
     int i;
+//    assert(TSCount == 3); not so
     /* Compute positive, clockwise angles from positive X origin */
     for (i = 0; i < TSCount; i++) {
 	TrackSeg * ts = TSA[i];
@@ -223,15 +231,15 @@ void TrackJoint::GetOrganization (JointOrganizationData *jod) {
 	jod[i].TSeg = ts;
         if (ts == nullptr)
             return;
-	int fx = FindEndIndex (ts);
+        TSEX endx = ts->FindEndIndex(this);
 #if TLEDIT
-	if (fx == TSA_NOTFOUND) {
+	if (endx == TSEX::NOTFOUND) {
 	    usererr ("GetJointOrganization finds estranged segment/joint.");
 	    return;
 	}
 #endif
-	TrackSegEnd *farp = &ts->Ends[1-fx];
-	jod[i].SignalExists =(ts->Ends[fx].SignalProtectingEntrance != NULL);
+        TrackSegEnd *farp = &ts->GetOtherEnd(endx);
+	jod[i].SignalExists =(ts->GetEnd(endx).SignalProtectingEntrance != NULL);
 	jod[i].Radang = CircleSub (atan2 ((double)(farp->wpy - wp_y),
 					 (double)(farp->wpx - wp_x)), 0.0);
     }

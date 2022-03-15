@@ -15,12 +15,12 @@
 #define mIn(a,b) (((a) < (b)) ? (a) : (b))
 #define mAx(a,b) (((a) > (b)) ? (a) : (b))
 
-ExitLight::ExitLight (TrackSeg * seg, int end_index, int xno) {
+ExitLight::ExitLight (TrackSeg * seg, TSEX end_index, int xno) {
 
     XlkgNo = xno;
     Seg = seg;
     EndIndex = end_index;
-    seg->Ends[end_index].ExLight = this;
+    seg->GetEnd(end_index).ExLight = this;
     Lit = RedFlash = Blacking = FALSE;
     XPB = NULL;
     Reposition();
@@ -37,7 +37,7 @@ void ExitLight::Reposition () {
     double len = sqrt (delx*delx + dely*dely); /* yay Pythagoras! */
     double ulen = 2.0*Track_Seg_Len;
     if (ulen < len) {
-	if (EndIndex == 0) {
+	if (EndIndex == TSEX::E0) {
 	    wpx2 = (int) (wpx1 + ulen*Seg->CosTheta);
 	    wpy2 = (int) (wpy1 + ulen*Seg->SinTheta);
 	}
@@ -71,7 +71,7 @@ Virtual void ExitLight::Display (HDC hDC) {
     double len = sqrt (delx*delx + dely*dely); /* yay Pythagoras! */
     double ulen = 2*Track_Seg_Len*NXGO_Scale;
     if (ulen < len) {
-	if (EndIndex == 0) {
+	if (EndIndex == TSEX::E0) {
 	    scx2 = (int) (scx1 + ulen*Seg->CosTheta);
 	    scy2 = (int) (scy1 + ulen*Seg->SinTheta);
 	}
@@ -167,6 +167,6 @@ void ExitLight::KReporter(BOOL state, void* v) {
 ExitLight::~ExitLight () {
     if (!NXGODeleteAll) {
 	Seg->Invalidate();
-	Seg->Ends[EndIndex].ExLight = NULL;
+	Seg->GetEnd(EndIndex).ExLight = NULL;
     }
 }

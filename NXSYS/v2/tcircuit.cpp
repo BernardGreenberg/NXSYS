@@ -219,7 +219,7 @@ BOOL TrackSeg::ComputeSwitchRoutedEndState(int ex) {
     TrackJoint * tj = ep->Joint;
     if (tj == NULL) {
 next:
-	return ep->Next->ComputeSwitchRoutedEndState(1-ep->EndIndexNormal);
+	return ep->Next->ComputeSwitchRoutedEndState(1-(int)ep->EndIndexNormal);
     }
 
     if (tj->TSCount < 3)
@@ -227,12 +227,12 @@ next:
     if (tj->TurnOut == NULL)
 	return TRUE;
     BOOL Thrown = tj->TurnOut->Thrown;
-    if (this == tj->TSA[TSA_REVERSE])
+    if (this == tj->GetBranch(TSAX::REVERSE))
 	if (Thrown)
 	    goto next;
 	else
 	    return FALSE;
-    else if (this == tj->TSA[TSA_NORMAL])
+    else if (this == tj->GetBranch(TSAX::NORMAL))
 	if (Thrown)
 	    return FALSE;
 	else
@@ -240,7 +240,7 @@ next:
     else {
 	if (Thrown)
 	    return ep->NextIfSwitchThrown
-		    ->ComputeSwitchRoutedEndState(1-ep->EndIndexReverse);
+		    ->ComputeSwitchRoutedEndState(1-(int)ep->EndIndexReverse);
 	else
 	    goto next;
     }

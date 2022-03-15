@@ -18,13 +18,13 @@ void TLEditCreateExitLightFromSignal (PanelSignal* ps, bool upright) {
 #ifndef NXSYSMac
     upright;
 #endif
-    TrackSegEnd * ep = &ps->Seg->Ends[ps->EndIndex];
-    ExitLight * xl = ep->ExLight;
+    TrackSegEnd& E = ps->Seg->GetEnd(ps->EndIndex);
+    ExitLight * xl = E.ExLight;
 
     if (!xl) {
 	BufferModified = TRUE;
 
-	xl = ep->ExLight = new ExitLight (ps->Seg, ps->EndIndex, ps->Sig->XlkgNo);
+	xl = E.ExLight = new ExitLight (ps->Seg, ps->EndIndex, ps->Sig->XlkgNo);
     }
 
     xl->GetVisible();
@@ -36,12 +36,12 @@ void TLEditCreateExitLightFromSignal (PanelSignal* ps, bool upright) {
 }
 
 void ExitLight::Cut () {
-    TrackSegEnd * ep = &Seg->Ends[EndIndex];
+    TrackSegEnd & E = Seg->GetEnd(EndIndex);
     delete this;
-    if (ep->SignalProtectingEntrance)
-	ep->SignalProtectingEntrance->PSignal->Select();
+    if (E.SignalProtectingEntrance)
+	E.SignalProtectingEntrance->PSignal->Select();
     else
-	ep->Joint->Select();
+	E.Joint->Select();
     BufferModified = TRUE;
 }
 
@@ -55,15 +55,15 @@ int ExitLight::Dump (FILE * f) {
     if (f) {
 	if (XlkgNo != 0L
 	    &&
-	    Seg->Ends[EndIndex].SignalProtectingEntrance
+	    Seg->GetEnd(EndIndex).SignalProtectingEntrance
 	    &&
-	    Seg->Ends[EndIndex].SignalProtectingEntrance->XlkgNo == XlkgNo)
+	    Seg->GetEnd(EndIndex).SignalProtectingEntrance->XlkgNo == XlkgNo)
 	    fprintf (f, "  (EXITLIGHT\t%4d)\n", XlkgNo);
 	else
 	    fprintf (f, "  (EXITLIGHT\t%4d %c %5d)\n",
 		     XlkgNo,
 		     Seg->EndOrientationKey(EndIndex),
-		     (int)Seg->Ends[EndIndex].Joint->Nomenclature);
+		     (int)Seg->GetEnd(EndIndex).Joint->Nomenclature);
     }
     return 300;				/* dump order */
 }
@@ -78,7 +78,7 @@ BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 	    SetDlgItemInt (hDlg, IDC_EDIT_XLIGHT_XLNO, XlkgNo, FALSE);
 	    SetDlgItemTextS (hDlg, IDC_EDIT_XLIGHT_IJNO,
                             FormatString("Exit Light at IJ %ld",
-                                         Seg->Ends[EndIndex].Joint->Nomenclature));
+                                         Seg->GetEnd(EndIndex).Joint->Nomenclature));
 
 	    o = Seg->EndOrientationKey(EndIndex);
 	    SetDlgItemTextS (hDlg, IDC_EDIT_XLIGHT_ORIENT,

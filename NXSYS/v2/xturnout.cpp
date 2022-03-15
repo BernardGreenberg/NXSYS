@@ -64,43 +64,47 @@ int Turnout::AssignJoint (TrackJoint * tj) {
     else if (NEnds == 0)
 	NEnds = 1;
     tj->TurnOut = this;
-    for (int i = 0; i < 3; i++) {
+    for (int i = (int)TSAX::MIN; i <= (int)TSAX::MAX; i++) {
+        TSAX ibx = (TSAX)i;
 	int nkx = 0;
 	TrackSeg * ts = tj->TSA[i];
-	int ex = tj->FindEndIndex(ts);
-	TrackSegEnd * ep = &ts->Ends[ex];
-	if (!ep->ExLight)
-	    ep->ExLight = new ExitLight (ts, ex, 0);
-	switch (i) {
-	    case TSA_STEM:
-		ep->FacingSwitch = this;
-		ep->NextIfSwitchThrown = tj->TSA[TSA_REVERSE];
-		ep->EndIndexReverse = tj->FindEndIndex(ep->NextIfSwitchThrown);		ep->Next = tj->TSA[TSA_NORMAL];
+	TSEX endx = ts->FindEndIndex(tj);
+	TrackSegEnd& E = ts->GetEnd(endx);
+	if (!E.ExLight)
+	    E.ExLight = new ExitLight (ts, endx, 0);
+	switch (ibx) {
+            case TSAX::STEM:
+		E.FacingSwitch = this;
+		E.NextIfSwitchThrown = tj->GetBranch(TSAX::REVERSE);
+                E.EndIndexReverse = E.NextIfSwitchThrown->FindEndIndex(tj);
+                E.Next = tj->GetBranch(TSAX::NORMAL);
 
 		break;
 
-	    case TSA_REVERSE:
+            case TSAX::REVERSE:
 		if (ts->OwningTurnout)
 		    /* slip switches'll do that to ya .... */
 		    SegConflict (ts->OwningTurnout);
 		else
 		    ts->OwningTurnout = this;
-		ep->Next = tj->TSA[TSA_STEM];
+                E.Next = tj->GetBranch(TSAX::STEM);
 		
 		nkx = NKX_R;
 		break;
 
-	    case TSA_NORMAL:
-		ep->Next = tj->TSA[TSA_STEM];
+            case TSAX::NORMAL:
+		E.Next = tj->GetBranch(TSAX::STEM);
 		nkx = NKX_N;
 		break;
+            case TSAX::NOTFOUND:
+                assert ("!TSAX::NOTFOUND in turnout creation.");
 	}
-	if (i != TSA_STEM) {
-	    NK[ab0][nkx].ExLight = ep->ExLight;
+	if (ibx != TSAX::STEM) {
+	    NK[ab0][nkx].ExLight = E.ExLight;
 	    NK[ab0][nkx].Circuit = ts->Circuit;
 	    NK[ab0][nkx].Status = 0;
 	}
-	ep->EndIndexNormal = tj->FindEndIndex(ep->Next);
+	E.EndIndexNormal = E.Next->FindEndIndex(tj);
 
     }
     return 1;
@@ -235,7 +239,7 @@ void Turnout::Hit (int mousewhat, TrackSeg* ht) {
 void Turnout::UpdateRoutings () {
     for (int i = 0; i < NEnds; i++) {
 	TrackJoint * tj = Joints[i];
-	TrackCircuit * circuit = tj->TSA[TSA_STEM]->Circuit;
+	TrackCircuit * circuit = tj->GetBranch(TSAX::STEM)->Circuit;
 	if (circuit && circuit->MultipleSegmentsP())
 	    circuit->ComputeSwitchRoutedState();
     }
@@ -260,7 +264,7 @@ GraphicObject * FindDemoHitTurnout (long id) {
 
 TrackSeg * Turnout::GetOwningSeg() {
     TrackJoint * tj = Joints[0];
-    return tj->TSA[TSA_REVERSE];
+    return tj->GetBranch(TSAX::REVERSE);
 }
 
 

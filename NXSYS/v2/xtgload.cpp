@@ -70,13 +70,13 @@ DEFLSYM2(aVIEW_ORIGIN,VIEW-ORIGIN);
 
 static std::vector<TrackJoint*> SwitchJoints;
 
-static bool DecodeBranchType (Sexpr s, int* brtype) {
+static bool DecodeBranchType (Sexpr s, TSAX* brtype) {
     if (s == aSTEM)
-	*brtype = TSA_STEM;
+	*brtype = TSAX::STEM;
     else if (s == aNORMAL)
-	*brtype = TSA_NORMAL;
+	*brtype = TSAX::NORMAL;
     else if (s == aREVERSE)
-	*brtype = TSA_REVERSE;
+	*brtype = TSAX::REVERSE;
     else return false;
     return true;
 }
@@ -186,7 +186,7 @@ int ProcessLayoutForm (Sexpr f) {
     
 #ifndef TLEDIT
     // DON'T demand matching in TLEdit, or you couldn't fix the problems.
-    if (auto r = SwitchConsistencyTotalCheck() {
+    if (auto r = SwitchConsistencyTotalCheck()) {
         LispBarf(r.value.c_str());
         return 0;
     }
@@ -258,11 +258,11 @@ static void SetTCID (TrackSeg * ts, long id) {
 static TrackSeg * LinkTS (TrackSeg * last_ts, TrackSeg* ts) {
 #ifdef REALLY_NXSYS
     if (last_ts) {
-	last_ts->Ends[1].EndIndexNormal = 0;
+	last_ts->Ends[1].EndIndexNormal = TSEX::E0;
 	last_ts->Ends[1].Next = ts;
     }
     ts->Ends[0].Next = last_ts;
-    ts->Ends[0].EndIndexNormal = 1;
+    ts->Ends[0].EndIndexNormal = TSEX::E1;
 #else
     last_ts = ts;
 #endif
@@ -273,8 +273,8 @@ static TrackSeg * LinkTS (TrackSeg * last_ts, TrackSeg* ts) {
 static int ProcessPathForm (Sexpr f) {
     TrackJoint * last_joint = NULL;
     BOOL first = TRUE, last_was_switch = FALSE;
-    int last_switch_arc_type = 0;
-	struct ppf_coords coords {};;
+    TSAX last_switch_arc_type = TSAX::NOTFOUND;
+    struct ppf_coords coords {};;
     coords.last_y = 0; /* placate flow-analyzer */
     TrackSeg * ts;
     TrackSeg * last_ts = NULL;
@@ -313,7 +313,7 @@ create_simple:
 		ts->Ends[1].Joint = tj;
 
 		if (last_was_switch)
-		    last_joint->TSA[last_switch_arc_type] = ts;
+		    last_joint->TSA[(int)last_switch_arc_type] = ts;
 		else
 		    if (last_joint)
 			last_joint->AddBranch (ts);
@@ -386,7 +386,7 @@ invsw:	    LispBarf ("Invalid SWITCH subform", s);
 	}
 	if (CAR(s).type != Lisp::ATOM)
 	    goto invsw;
-	int brtype;
+	TSAX brtype;
 	if (!DecodeBranchType (CAR(s), &brtype)) {
 	    LispBarf ("Unknown switch branch type", CAR(s));
 	    return 0;
@@ -474,18 +474,18 @@ invsw:	    LispBarf ("Invalid SWITCH subform", s);
 			       coords.x, coords.y);
 	    last_ts = LinkTS (last_ts, ts);
 	    SetTCID (ts, last_tcid);
-	    swj->TSA[brtype] = ts;
+	    swj->TSA[(int)brtype] = ts;
 	    ts->Ends[1].Joint = swj;
 	    ts->Ends[0].Joint = last_joint;
 #ifndef xTLEDIT
 	    if (last_was_switch)
-		last_joint->TSA[last_switch_arc_type] = ts;
+		last_joint->TSA[(int)last_switch_arc_type] = ts;
 	    else
 		if (last_joint)
 		    last_joint->AddBranch (ts);
 #endif
 	    last_switch_arc_type
-		    = (brtype == TSA_STEM) ? TSA_NORMAL : TSA_STEM;
+		    = (brtype == TSAX::STEM) ? TSAX::NORMAL : TSAX::STEM;
 	}
 /* NEED WHOLE BUSINESS FOR LINKING THESE JOINTS WITHOUT TJ NODES */
 	last_joint = swj;
@@ -518,12 +518,12 @@ static int SigMatchOrientation (char orient, TrackSeg * ts, int end_index) {
     return 0;
 }
     
-static TrackSeg * FindBranchFromOrientation (TrackJoint * tj, char orient, int& ex) {
+static TrackSeg * FindBranchFromOrientation (TrackJoint * tj, char orient, TSEX& endx) {
     for (int i = 0; i < tj->TSCount; i++) {
 	TrackSeg * ts = tj->TSA[i];
-	ex = tj->FindEndIndex(ts);
+        endx = ts->FindEndIndex(tj);
 	//TrackSegEnd * ep = &ts->Ends[ex];
-	if (tj->TSCount == 1 || SigMatchOrientation (orient, ts, ex))
+	if (tj->TSCount == 1 || SigMatchOrientation (orient, ts, (int)endx))
 	    return ts;
     }
     return NULL;
@@ -559,7 +559,7 @@ static int ProcessExitlightForm (Sexpr s) {
 	    LispBarf ("Cannot find signal for EXITLIGHT", Sexpr(xno));
 	    return 0;
 	}
-	ps->Seg->Ends[ps->EndIndex].ExLight
+	ps->Seg->GetEnd(ps->EndIndex).ExLight
 		= new ExitLight (ps->Seg, ps->EndIndex, (int)xno);
 	return 1;
     }
@@ -580,13 +580,13 @@ static int ProcessExitlightForm (Sexpr s) {
 	    LispBarf ("Cannot find Joint for EXITLIGHT", CAR(s));
 	    return 0;
 	}
-	int ex;
-	TrackSeg * ts = FindBranchFromOrientation (tj, orient, ex);
+	TSEX endx;
+	TrackSeg * ts = FindBranchFromOrientation (tj, orient, endx);
 	if (!ts) {
 	    LispBarf ("Cannot find EXITLIGHT IJ/orient reference.");
 	    return 0;
 	}
-	ts->Ends[ex].ExLight = new ExitLight (ts, ex, (int)xno);
+	ts->GetEnd(endx).ExLight = new ExitLight (ts, endx, (int)xno);
 	return 1;
     }
     LispBarf ("Bogus EXITLIGHT item", s);
@@ -652,8 +652,8 @@ static int ProcessSignalForm (Sexpr s) {
     {PLATENO 2415}
 	    / * +++++++++++++++++++++process all the other crap here +++++ */
 
-    int ex;
-    TrackSeg* ts = FindBranchFromOrientation (tj, orient, ex);
+    TSEX endx;
+    TrackSeg* ts = FindBranchFromOrientation (tj, orient, endx);
     if (!ts) {
 	LispBarf ("Failed to find signal from orientation:", ss);
 	return 0;
@@ -664,7 +664,7 @@ static int ProcessSignalForm (Sexpr s) {
         head_strings.push_back(CAR(Heads).u.a);
 
     if (StaNo == 0) {
-	TrackSegEnd * end = &ts->Ends[ex];
+	TrackSegEnd * end = &ts->GetEnd(endx);
 	TrackJoint * tj = end->Joint;
 	if (tj)
 	    StaNo = tj->Nomenclature;
@@ -672,8 +672,8 @@ static int ProcessSignalForm (Sexpr s) {
     // Now identical constructors in TLEdit and the main app
     Signal * sig = new Signal (xlno, (int)StaNo, head_strings);
 	
-    ts->Ends[ex].SignalProtectingEntrance = sig;
-    /*PanelSignal * Ps = */ new PanelSignal (ts, ex, sig, NULL);
+    ts->GetEnd(endx).SignalProtectingEntrance = sig;
+    /*PanelSignal * Ps = */ new PanelSignal (ts, endx, sig, NULL);
     if (HasStop)
 	sig->TStop = new Stop (sig);	/* looks at PanelSignal */
 

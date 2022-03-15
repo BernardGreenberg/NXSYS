@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <cassert>
 
 #include "compat32.h"
 #include "nxgo.h"
@@ -300,11 +301,11 @@ static void MovButtonDown (HWND hWnd, int x, int y) {
     ReportCoordsWP (MovTrackJoint->wp_x, MovTrackJoint->wp_y);
     for (int j = 0; j < MovTrackJoint->TSCount; j++) {
 	TrackSeg * ts = MovTrackJoint->TSA[j];
-	int fx = MovTrackJoint->FindEndIndex(ts);
-        if (fx != TSA_NOTFOUND) {
+	TSEX fx = ts->FindEndIndex(MovTrackJoint);
+        if (fx != TSEX::NOTFOUND) {
             MovRB[j] = new RubberBand (hWnd,
-				       WPXtoSC(ts->Ends[1-fx].wpx),
-                                       WPYtoSC(ts->Ends[1-fx].wpy),
+				       WPXtoSC(ts->GetOtherEnd(fx).wpx),
+                                       WPYtoSC(ts->GetOtherEnd(fx).wpy),
                                        j
                                        );
         }
@@ -517,47 +518,58 @@ void TrackJoint::Cut () {
 	    return;
     }
 
-    TrackSeg * ts1 = TSA[0];
-    TrackSeg * ts2 = TSA[1];
-    int fx[2];
-    fx[0] = FindEndIndex(ts1);
-    fx[1] = FindEndIndex(ts2);
-    if (fx[0] == TSA_NOTFOUND || fx[1] == TSA_NOTFOUND) {
-	usererr ("BUG: tracks and joint estranged; won't delete");
-	return;
+    /* Guaranteed to be 2-branch joint*/
+    if (TSA[0] == NULL || TSA[1]== NULL) {
+        usererr ("BUG: Null segment pointer in alleged 2-branch IJ.");
+        return;
+    }
+
+    TrackSeg& ts1 = *TSA[0];
+    TrackSeg& ts2 = *TSA[1];
+
+    TSEX endxs[2];
+    /* These are the indexes in the end-arrays of our rays for this joint. */
+    endxs[0] = ts1.FindEndIndex(this);
+    endxs[1] = ts2.FindEndIndex(this);
+    if (endxs[0] == TSEX::NOTFOUND || endxs[1] == TSEX::NOTFOUND) {
+        usererr ("BUG: tracks and joint estranged; won't delete");
+        return;
     }
     for (int jj = 0; jj < 2; jj++) {
-	TrackSegEnd * epp = &TSA[jj]->Ends[fx[jj]];
-	if (epp->SignalProtectingEntrance) {
-	    epp->SignalProtectingEntrance->PSignal->Select();
+        TrackSegEnd& E = TSA[jj]->GetEnd(endxs[jj]);
+	if (E.SignalProtectingEntrance) {
+	    E.SignalProtectingEntrance->PSignal->Select();
 	    usererr ("Cannot delete a joint with signals at it. "
 		     "Delete this signal first.");
 	    return;
 	}
-	if (epp->ExLight) {
-	    epp->ExLight->Select();
+	if (E.ExLight) {
+	    E.ExLight->Select();
 	    usererr ("Cannot delete a joint with exit lights at it. "
 		     "Delete this exit light first.");
 	    return;
 	}
     }
 
-    ts1->Invalidate();
-    ts2->Invalidate();
-    TrackSegEnd * ep = &ts1->Ends[fx[0]];
-    *ep = ts2->Ends[1-fx[1]];
-    if (ep->SignalProtectingEntrance) {
-	PanelSignal * ps = ep->SignalProtectingEntrance->PSignal;
-	ps->Seg = ts1;
-	ps->Reposition();
+    ts1.Invalidate();
+    ts2.Invalidate();
+    /* ts1 is going to swallow ts2, which latter will be deleted */
+    TrackSegEnd& OurEndInTS1 = ts1.GetEnd(endxs[0]);
+    TrackSegEnd& DistantEndInTS2 = ts2.GetOtherEnd(endxs[1]);
+    OurEndInTS1 = DistantEndInTS2;  // copy the data to make it so.
+
+    if (OurEndInTS1.SignalProtectingEntrance) {
+	PanelSignal& S = *OurEndInTS1.SignalProtectingEntrance->PSignal;
+	S.Seg = &ts1;
+	S.Reposition();
     }
-    ep->Joint->DelBranch(ts2);
-    ep->Joint->AddBranch(ts1);
-    ts1->Align();
-    ts1->ComputeVisibleLast();		/* s/b in align? */
-    ts1->Select();
-    ts1->Invalidate();
-    delete ts2;
+    OurEndInTS1.Joint->DelBranch(&ts2);
+    OurEndInTS1.Joint->AddBranch(&ts1);
+    ts1.Align();
+    ts1.ComputeVisibleLast();		/* s/b in align? */
+    ts1.Select();
+    ts1.Invalidate();
+    delete TSA[1]; // = tsa2
     delete this;
     BufferModified = TRUE;
 }
@@ -610,11 +622,12 @@ void TrackJoint::MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1) {
 
     for (int j = 0; j < TSCount; j++) {
 	TrackSeg * ts = TSA[j];
-	int fx = FindEndIndex(ts);
-	if (fx != TSA_NOTFOUND) {
-	    ts->Hide();
-	    ts->Ends[fx].wpx = wpx1;
-	    ts->Ends[fx].wpy = wpy1;
+	TSEX endx = ts->FindEndIndex(this);
+	if (endx != TSEX::NOTFOUND) {
+            TrackSegEnd &E = ts->GetEnd(endx);
+	    E.wpx = wpx1;
+	    E.wpy = wpy1;
+            ts->Hide();
 	    ts->Align(); //ts->Ends[0].wpx, was ist das?
 	    ts->MakeSelfVisible();
 	}
@@ -626,14 +639,15 @@ void TrackJoint::MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1) {
 void TrackJoint::SwallowOtherJoint (TrackJoint * tj) {
     for (int j = 0; j < tj->TSCount; j++) {
 	TrackSeg * ts = tj->TSA[j];
+        assert(ts != NULL);
 	AddBranch(ts);
         if (TSCount > 2) {
 	    EnsureID();
             Insulated = FALSE; // 3-12-2022
         }
-	int fx = tj->FindEndIndex(ts);
-	if (fx != TSA_NOTFOUND) 
-	    ts->Ends[fx].Joint = this;
+	TSEX endx = ts->FindEndIndex(this);
+	if (endx != TSEX::NOTFOUND)
+	    ts->GetEnd(endx).Joint = this;
     }
     delete tj;
 }
@@ -666,10 +680,10 @@ void PanelSignal::Select() {
     if (Sig->XlkgNo)
 	StatusMessage ("Signal %d at IJ %ld",
 		       Sig->XlkgNo, 
-		       Seg->Ends[EndIndex].Joint->Nomenclature);
+		       Seg->GetEnd(EndIndex).Joint->Nomenclature);
     else
 	StatusMessage ("Auto signal at IJ %ld",
-		       Seg->Ends[EndIndex].Joint->Nomenclature);
+		       Seg->GetEnd(EndIndex).Joint->Nomenclature);
 }
 
 void TrackSeg::Select () {
@@ -745,8 +759,8 @@ int TrackJoint::SignalCount () {
     int s = 0;
     for (int i = 0; i < TSCount; i++) {
 	TrackSeg * ts = TSA[i];
-	int ex = FindEndIndex(ts);
-	if (ts->Ends[ex].SignalProtectingEntrance)
+        TSEX endx = ts->FindEndIndex(this);
+	if (ts->GetEnd(endx).SignalProtectingEntrance)
 	    s++;
     }
     return s;

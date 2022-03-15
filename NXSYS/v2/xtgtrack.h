@@ -24,6 +24,35 @@ class Turnout;
 #include "TLDlgProc.h"
 #endif
 
+/* Track section (branch) array index(es)*/
+enum class TSAX {
+    NOTFOUND = -1,
+    MIN = 0,
+
+    /* if TSCount = 2 */
+    IJR0 = 0,
+    IJR1 = 1,
+    IJRMAX = 1,
+
+    /* if TSCount = 3 */
+    STEM   = 0,
+    NORMAL = 1,
+    REVERSE = 2,
+
+    MAX = 2
+};
+
+/* Track Section end index(es) */
+enum class TSEX {
+    NOTFOUND = -1,
+    MIN = 0,
+    
+    E0 = 0,
+    E1 = 1,
+
+    MAX = 1
+};
+
 struct JointOrganizationData {
     double Radang;
     double RRadang;
@@ -64,7 +93,9 @@ class TrackJoint
 	void	Organize();
 	void    GetOrganization(JointOrganizationData*);
 	void	PositionLabel();
-	BOOL	FindEndIndex (TrackSeg * ts);
+	TSAX	FindBranchIndex (TrackSeg * ts);
+        TrackSeg* GetBranch(TSAX brx);
+    
 	virtual void Display (HDC dc);
 	virtual int TypeID ();
 	virtual int ObjIDp(long);
@@ -130,7 +161,7 @@ class TrackSegEnd {			//NOT a graphic object
 	Turnout *FacingSwitch; 
 #endif
 	Signal * SignalProtectingEntrance; //Train sys uses this for instruc
-	short EndIndexNormal, EndIndexReverse;
+	TSEX EndIndexNormal, EndIndexReverse;
 	ExitLight * ExLight;   // Has to know to redisplay this when lit.
 	TrackJoint*Joint;
 #ifdef REALLY_NXSYS
@@ -177,8 +208,11 @@ class TrackSeg : public GraphicObject {
 	void GetGraphicsCoords (int ex, int& x, int& y);
 	virtual BOOL HitP (long x, long y);
 	BOOL HasCircuitBrothers();
+        TSEX FindEndIndex (TrackJoint * tj);
+        TrackSegEnd& GetEnd(TSEX ex);
+        TrackSegEnd& GetOtherEnd(TSEX ex);
 #ifdef TLEDIT
-	char         EndOrientationKey (int whichend);
+	char         EndOrientationKey (TSEX whichend);
 	virtual void Select();
 	virtual void Cut();
 	void         SelectMsg();
@@ -191,7 +225,7 @@ class TrackSeg : public GraphicObject {
 	void ProcessLoadComplete();
 	void ComputeSwitchRoutedState();
 	BOOL ComputeSwitchRoutedEndState(int ex);
-	int  StationPointsEnd (WP_cord &wpcordlen, int end_index);
+	int  StationPointsEnd (WP_cord &wpcordlen, TSEX end_index);
 	virtual void EditContextMenu(HMENU m);
 #ifndef NOTRAINS
 private:
@@ -205,20 +239,16 @@ public:
 
 };
 
-#define TSA_NOTFOUND -1
-#define TSA_STEM    0
-#define TSA_NORMAL  1
-#define TSA_REVERSE 2
 
 class PanelSignal  : public GraphicObject {
     public:    
-	PanelSignal(TrackSeg * ts, int end_index, Signal * s, char * text);
+	PanelSignal(TrackSeg * ts, TSEX endx, Signal * s, char * text);
 	~PanelSignal();
 
 	Signal * Sig;			/* operational logic object */
 
 	TrackSeg * Seg;
-	int     EndIndex;
+	TSEX       EndIndex;
 
 	WP_cord TRelX, TRelY;		/* track-aligned rel to IJ */
 	WP_cord Radius;			/* head radius */
@@ -325,15 +355,15 @@ public:
     int  XlkgNo;
     Relay * XPB;
 
+    TSEX EndIndex;
     unsigned char Lit;
-    unsigned char EndIndex;
     unsigned char RedFlash;
     unsigned char Blacking;
 
 
 public:
 
-    ExitLight (TrackSeg * seg, int EndIndex, int xno);
+    ExitLight (TrackSeg * seg, TSEX EndIndex, int xno);
     ~ExitLight();
     void DisplayExit (HDC hdc, int sw);
     void Reposition();

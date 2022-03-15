@@ -20,6 +20,17 @@
 
 // SULT = "SetUpLayout - Train Metrics" */
 
+
+static TSEX flip_end (TSEX endx) {
+    if (endx == TSEX::E0)
+        return TSEX::E1;
+    else if (endx == TSEX::E1)
+        return TSEX::E0;
+    else
+        assert (!"Bad end index to trains' flip_end");
+    return TSEX::E0;
+}
+
 #if 0
 static int SULTMMapper3 (GraphicObject * g) {
     TrackSeg* ts = (TrackSeg *) g;
@@ -30,7 +41,7 @@ static int SULTMMapper3 (GraphicObject * g) {
 #endif
 
 static int SULTMMapper1 (GraphicObject * g) {
-    int ex;
+    TSEX endx;
 
     TrackSeg* ts = (TrackSeg *) g;
     if (ts->RWLength >= 0.0f)		/* processed already. */
@@ -38,14 +49,14 @@ static int SULTMMapper1 (GraphicObject * g) {
 
     if (ts->Ends[0].Joint && ts->Ends[0].Joint->Insulated
 	&& ts->Ends[0].Joint->Nomenclature)
-	ex = 0;
+	endx = TSEX::E0;
     else if (ts->Ends[1].Joint && ts->Ends[1].Joint->Insulated
 	     && ts->Ends[1].Joint->Nomenclature)
-	ex = 1;
+	endx = TSEX::E1;
     else return 0;
     WP_cord wpcordlen;
-    int this_joint_sn = ts->Ends[ex].Joint->StationNumber();
-    int that_joint_sn = ts->StationPointsEnd (wpcordlen, ex);
+    int this_joint_sn = ts->GetEnd(endx).Joint->StationNumber();
+    int that_joint_sn = ts->StationPointsEnd (wpcordlen, endx);
     double rwlen = fabs((double)(this_joint_sn-that_joint_sn));
     ts->SpreadRWFactor(rwlen/wpcordlen);
     return 0;
@@ -71,21 +82,21 @@ Signal * Train::FindNextSig () {
     front.FindTrackSeg();
     X_Of_Next_Signal = front.x_at_seg_start;
     TrackSeg * ts = front.ts;
-    int ex = front.facing_ex;
+    TSEX endx = front.facing_ex;
     while (ts) {
-	TrackSegEnd * ep = &ts->Ends[ex];
+        TrackSegEnd * ep = &ts->GetEnd(endx);
 	X_Of_Next_Signal += ts->RWLength;
 	if (ep->Next == NULL)
 	    return NULL;
 	if (ep->FacingSwitch == NULL || !ep->FacingSwitch->Thrown) {
 	    ts = ep->Next;
-	    ex = 1-ep->EndIndexNormal;
+            endx = flip_end(ep->EndIndexNormal);
 	}
 	else {
 	    ts = ep->NextIfSwitchThrown;
-	    ex = 1-ep->EndIndexReverse;
+            endx = flip_end(ep->EndIndexReverse);
 	}
-	Signal * s = ts->Ends[1-ex].SignalProtectingEntrance;
+	Signal * s = ts->GetOtherEnd(endx).SignalProtectingEntrance;
 	if (s)
 	    return s;
     }
@@ -106,18 +117,18 @@ BOOL VerifyTrackSelectionAcceptability (TrackUnit * ts) {
 void Train::InitPositionTracking (TrackUnit * ts) {
     /* really track seg */
 
-    int ex = 0; /* undef val bothers mac analyzer, I suppose it's right ... */
+    TSEX endx = TSEX::E0; /* undef val bothers mac analyzer, I suppose it's right ... */
     if (ts->Ends[0].Next == NULL)
-	ex = 1;
+	endx = TSEX::E1;
     else if (ts->Ends[1].Next == NULL)
-	ex = 0;
+	endx = TSEX::E0;
     front.ts = ts;
     front.x = 0.0;
     front.x_at_seg_start = 0.0;
-    front.facing_ex = ex;
+    front.facing_ex = endx;
     front.IAmFront = TRUE;
     front.Trn = this;
-    front.PassJoint (ts->Ends[1-ex].Joint);
+    front.PassJoint (ts->GetOtherEnd(endx).Joint);
     SetOccupied(ts);
 
     /* now figure out the back of the train. */
@@ -141,7 +152,7 @@ void Pointpos::Reverse (double new_x) {
 	strcpy (LastIJID, "");
 	FSLIJatSegStart = FeetSinceLastIJ = 0.0f;
 
-	facing_ex = 1 - facing_ex;
+        facing_ex = flip_end(facing_ex);
 	x_at_seg_start = new_x - (ts->RWLength - fabs(x - x_at_seg_start));
 	x = new_x;
     }
@@ -162,7 +173,7 @@ int Pointpos::FindTrackSeg () {
 	    /* must move into next track segment */
 	    if (!IAmFront)
 		Trn->SetUnoccupied (ts);
-	    TrackSegEnd * ep = &ts->Ends[facing_ex];
+            TrackSegEnd * ep = &ts->GetEnd(facing_ex);
 
 	    if (ep->Joint && ep->Joint->Insulated && ep->Joint->Nomenclature){
 		PassJoint (ep->Joint);
@@ -181,11 +192,11 @@ int Pointpos::FindTrackSeg () {
 
 	    if (ep->FacingSwitch == NULL || !ep->FacingSwitch->Thrown) {
 		ts = ep->Next;
-		facing_ex = 1 - ep->EndIndexNormal;
+                facing_ex = flip_end(ep->EndIndexNormal);
 	    }
 	    else {
 		ts = ep->NextIfSwitchThrown;
-		facing_ex = 1 - ep->EndIndexReverse;
+                facing_ex = flip_end(ep->EndIndexReverse);
 	    }
 
 	    if (IAmFront)

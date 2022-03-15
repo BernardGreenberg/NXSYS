@@ -101,15 +101,15 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 		case IDC_SWITCH_HILITE_NORMAL:
 		    if (!Organized)
 			Organize();
-		    TSA[TSA_NORMAL]->Select();
+		    TSA[(int)TSAX::NORMAL]->Select();
 		    break;
 		case IDC_SWITCH_SWAP_NORMAL:
 		    if (!Organized)
 			Organize();
 
-		    std::swap (TSA[TSA_NORMAL], TSA[TSA_REVERSE]);
+		    std::swap (TSA[(int)TSAX::NORMAL], TSA[(int)TSAX::REVERSE]);
 		    BufferModified = TRUE;
-		    TSA[TSA_NORMAL]->Select();
+		    TSA[(int)TSAX::NORMAL]->Select();
 		    break;
 		case IDCANCEL:
 		    EndDialog (hDlg, FALSE);
