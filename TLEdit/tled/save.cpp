@@ -21,6 +21,7 @@
 #include <cassert>
 #include <exception>
 #include <unordered_set>
+#include <unordered_map>
 
 #ifdef WIN32
 #include <getmodtm.h>
@@ -94,8 +95,16 @@ int IDAssign::MakeNew() {
 static IDAssign SwitchNumbers(UNASSIGNED_BASE_SWITCH_NO, 2);
 static IDAssign IJNumbers(UNASSIGNED_BASE_IJ_NO, 1);
 
-static const char *SWKeys[3] = { "STEM", "NORMAL", "REVERSE" };
-static const int Alternate[3] = { 1, 0, 0 };
+static std::unordered_map<TSAX, const char *> SWKeys {
+    {TSAX::STEM,"STEM"},
+    {TSAX::NORMAL,"NORMAL"},
+    {TSAX::REVERSE, "REVERSE"}};
+
+static std::unordered_map<TRKPET, const char *> KeyStrings {
+    {TRKPET::KINK, ""},
+    {TRKPET::IJ, "IJ"},
+    {TRKPET::SWITCH, "SWITCH"}
+};
 
 /* Declare-aheads; flaw in C language. PL/I didn't need 'em. */
 static void SaveTheLayout(FILE * f), DumpRemainingObjects(FILE * f);
@@ -131,6 +140,8 @@ struct SaveState {
 } SvS, *SvSP;
 
 static BOOL MakeBackupCopy(const char * path) {
+    /* This is a hedge against USER error, not app error. */
+
 	std::string drive, dir, fname, ext;
 	STLfnsplit(path, drive, dir, fname, ext);
 	std::string bkpath = STLfnmerge(drive, dir, fname, ".bak");
@@ -188,14 +199,31 @@ BOOL SaveLayout(const char * path) {
         return FALSE;
     }
 
-	if (!MakeBackupCopy(path)) {
-		if (IDYES != MessageBox
-		(G_mainwindow,
-			"Cannot make backup copy of layout. Proceed to save anyway?",
-			app_name,
-			MB_YESNOCANCEL | MB_ICONEXCLAMATION))
-			return FALSE;
-	}
+    /* THREE separate strategies to protect against writing corrupt files
+       1. Run the dumper in effigy (i.e., with no output), just run-through and endure
+          possible aborts (some side effects, such as insulating loose ends and assigning #'s)
+       2. Write to a temporary file and only copy when succeeds.
+       3. Don't even make a backup copy if there is an aborting error in the effigy run.
+
+     */
+    
+    /* Run the dumper in effigy (no output) */
+    try {
+        ValidateTrackGraph();
+    } catch (TLEditSaveException e) {
+        return FALSE;
+    }
+    
+    if (!MakeBackupCopy(path)) {
+        if (IDYES != MessageBox
+        (G_mainwindow,
+            "Cannot make backup copy of layout. Proceed to save anyway?",
+            app_name,
+            MB_YESNOCANCEL | MB_ICONEXCLAMATION))
+            return FALSE;
+    }
+    
+    /* Run the dumper for real into a temp file */
     FILE * temp_file = tmpfile();
 	if (temp_file == NULL) {
         usererr("Cannot open temp file for writing: %s", STRERROR(NULL));
@@ -204,18 +232,20 @@ BOOL SaveLayout(const char * path) {
     try {
         SaveTheLayout(temp_file);
     } catch (TLEditSaveException e) {
+        /* If the dumper aborts, delete the temp file and don't touch the real one */
         //Message already printed by exception ctor
         fclose(temp_file);
         return FALSE;  //Skip file install/copy.
     }
 
+    /* Copy the content from the temp file into the real file, delete the temp file.*/
     auto length = ftell(temp_file);
     std::vector<char>total_file_content((size_t)length);
     rewind(temp_file);
     size_t did_read = (size_t)fread(total_file_content.data(), 1, total_file_content.size(), temp_file);
-    fclose(temp_file);
+    fclose(temp_file);   // This will delete it.
 
-    FILE * real_file = fopen(path, "w");
+    FILE * real_file = fopen(path, "w");  // Text mode!
     if (real_file == NULL) {
         usererr("Cannot open file %s for writing: %s", path, STRERROR(NULL));
         return FALSE;
@@ -243,8 +273,6 @@ static void SaveTheLayout(FILE * f) {
     /* date, time, layout name, stuff now in ROUTE */
     /* much of this as comments*/
     
-    ValidateTrackGraph();
-
     DumpTheActualGraph(f);
 
     DumpRemainingObjects(f);
@@ -274,12 +302,12 @@ static int FinalCleanUp(GraphicObject *g) {
 	return 0;
 }
 
-static void ChasePathWithStartKey(TrackJoint&J, int k, const char * key, FILE* f) {
+static void ChasePathWithStartKey(TrackJoint&J, TRKPET elt_type, TSAX k, FILE* f) {
     if (f)
         fprintf(f, "  (PATH\n");
     S_YKnown = false;
-    J.TDump(f, key);
-    DumpPath(f, J.TSA[k], &J);
+    J.TDump(f, elt_type, k);
+    DumpPath(f, J[k], &J);
     if (f)
         fprintf(f, "  )\n");
 }
@@ -290,7 +318,7 @@ static int ChaseLooseTrackEnds(GraphicObject *g, void * vfp) {
     /* marking track-ends is necessary even with this improved loop, because an end can
        be found (and marked) by forward motion and must not be found again by this loop. */
     if (J.TSCount == 1 && !J.Marked)
-        ChasePathWithStartKey(J, 0, "IJ", f);
+        ChasePathWithStartKey(J, TRKPET::IJ, TSAX::IJR0, f);
     return 0; /* never stop */
 }
 
@@ -298,9 +326,9 @@ static int ChaseUnmarkedSwitchBranches(GraphicObject * g, void * vfp) {
     TrackJoint& J = *(TrackJoint*)g;
     FILE * f = (FILE*)vfp;
     if (J.TSCount == 3)   // "SWITCH" means "** S W I T C H **", you Doofus!!! 3/12/2022
-        for (int k = 0; k < 3; k++)
-            if (!J.TSA[k]->Marked)  // Branch is NOT MARKED ....
-                ChasePathWithStartKey(J, k, SCAT<20>("SWITCH ", SWKeys[k]), f);
+        for (auto k : {TSAX::STEM, TSAX::NORMAL, TSAX::REVERSE})
+            if (!J[k]->Marked)  // Branch is NOT MARKED ....
+                ChasePathWithStartKey(J, TRKPET::SWITCH, k, f);
     return 0;
 }
 
@@ -311,6 +339,10 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 	long LastTCID = 0;
 
 	while (true) {
+        if (ts->Marked)
+            throw TLEditSaveException("Dumper found already marked segment.");
+
+
 		TSEX fx = ts->FindEndIndex(tj);
 		if (fx == TSEX::NOTFOUND)
             throw TLEditSaveException("Estranged track segment found.");
@@ -323,58 +355,68 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
                 fprintf(f, "     (TC %ld)\n", LastTCID = id);
 
 		ts->Marked = TRUE;
-		tj = ts->GetOtherEnd(fx).Joint;
-        long jnom = tj->Nomenclature;
-		if (tj->Marked) {
-			if (tj->TSCount != 3)
+        TrackJoint& J = *(ts->GetOtherEnd(fx).Joint);
+        long jnom = J.Nomenclature;
+		if (J.Marked) {
+			if (J.TSCount != 3)
 				throw TLEditSaveException("Dumper finds marked node #%ld not switch.", jnom);
-			else if (ts == tj->GetBranch(TSAX::STEM))
+			else if (ts == J[TSAX::STEM])
                 throw TLEditSaveException ("Dumper found way into marked switch %ld via stem.", jnom);
-            else if (ts == tj->GetBranch(TSAX::NORMAL))
-                tj->TDump(f, "SWITCH NORMAL");
-            else if (ts == tj->GetBranch(TSAX::REVERSE))
-                tj->TDump(f, "SWITCH REVERSE");
+            else if (ts == J[TSAX::NORMAL])
+                J.TDump(f, TRKPET::SWITCH, TSAX::NORMAL);
+            else if (ts == J[TSAX::REVERSE])
+                J.TDump(f, TRKPET::SWITCH, TSAX::REVERSE);
             else
                 throw TLEditSaveException("Dumper entered switch %ld %c from segment %p, "
                                           "but the latter is none of its branches",
-                                          tj->Nomenclature, ts,
-                                          CharizeAB0(tj->Nomenclature, tj->SwitchAB0));
+                                          J.Nomenclature,
+                                          CharizeAB0(J.Nomenclature, J.SwitchAB0),
+                                          ts);
 			return;  // Marked switch hit,
 		}
-		else if (tj->TSCount == 1) {   // A loose end; the path is complete!
-			tj->TDump(f, "IJ");
+		else if (J.TSCount == 1) {   // A loose end; the path is complete!
+			J.TDump(f, TRKPET::IJ, TSAX::NOTFOUND);
 			return;
 		}
+        assert (J.TSCount != 1);
 
-        const char* dir = nullptr;
-		if (tj->TSCount == 3) {   // An unmarked (new) SWITCH
-			dir = NULL;
-            for (int k = 0; k < 3; k++){
-                if (tj->TSA[k] == nullptr)
+		if (J.TSCount == 3) {   // An unmarked (new) SWITCH
+            TSAX found_tsax = TSAX::NOTFOUND;
+            for (TSAX k : {TSAX::STEM, TSAX::NORMAL, TSAX::REVERSE}){
+                TrackSeg* branch = J[k];
+                if (branch == nullptr)
                     throw TLEditSaveException ("Null segment pointer @k=%d found in joint %ld", k, jnom);
-				if (ts == tj->TSA[k]) {
-					dir = SWKeys[k];
-					ts = tj->TSA[Alternate[k]];
-					break;
-				}
+                if (branch == ts) {
+                    found_tsax = k;
+
+                    /* This is why we can never enter a marked switch via the stem. If we enter an
+                     unmarked switch via the stem, the stem seg is marked.  If we enter via the reverse
+                     or normal branches, we exit via the stem.  Next time we hit this switch, it must
+                     be through the other non-stem branch and it will be marked. */
+                    
+                    TSAX next = (k == TSAX::STEM) ? TSAX::NORMAL : TSAX::STEM;
+                    ts = J[next];
+                    break;
+                }
             }
-			if (dir == NULL)
+			if (found_tsax == TSAX::NOTFOUND)
                 throw TLEditSaveException("Dumper found switch %ld, but can't find seg in it.", jnom);
 			if (ts->Marked)
 				throw TLEditSaveException("Dumper found already marked segment in unmarked switch %ld.", jnom);
 
-			tj->TDump(f, SCAT<20>("SWITCH ", dir));
+            J.TDump(f, TRKPET::SWITCH, found_tsax);
+            tj = &J;  //!!!!! for the loop!
 			continue;
 		}
         else {
-            assert (tj->TSCount == 2);
-			ts = (ts == tj->TSA[0]) ? tj->TSA[1] : tj->TSA[0];
+            assert (J.TSCount == 2);
+			ts = (ts == J[TSAX::IJR0]) ? J[TSAX::IJR1] : J[TSAX::IJR0];
         }
 
-		tj->TDump(f, NULL);
+		J.TDump(f, TRKPET::KINK, TSAX::NOTFOUND);
 
-		if (ts->Marked)
-			throw TLEditSaveException("Dumper found already marked segment.");
+
+        tj = &J;  // looooop.....
 	}
 }
 
@@ -436,12 +478,12 @@ static char CharizeAB0(long nomen, short AB0) {
     }
 }
 
-void TrackJoint::TDump(FILE * f, const char * key) {
+void TrackJoint::TDump(FILE * f, TRKPET elt_type, TSAX branch_type) {
     // f = NULL means "check only"
 
     if (TSCount == 2 && !Insulated //not terminal, not switch, not IJ, just random joint
         && S_YKnown && wp_y == S_LastY
-        && key == NULL) {
+        && elt_type == TRKPET::KINK) {
 
         if (f)
             fprintf(f, "%37s%4ld\n", "", wp_x);  // simple single-number form
@@ -455,29 +497,33 @@ void TrackJoint::TDump(FILE * f, const char * key) {
     if (Insulated) {
         if (TSCount == 3)
             throw TLEditSaveException("Insulated switch found: %ld", Nomenclature);
-        if (key == NULL)
-            key = "IJ";
+        if (elt_type == TRKPET::KINK)
+            elt_type = TRKPET::IJ;  // shouldn't really happen
         sprintf(identifier, " %ld", Nomenclature);
     }
 
     if (TSCount == 3) {
         sprintf(identifier, " %ld %c", Nomenclature, CharizeAB0(Nomenclature, SwitchAB0));
-		if (key == NULL)
-			key = "SWITCH";
-        else if (!!strncmp(key, "SWITCH", 6))
+        if (elt_type == TRKPET::KINK) {
+            elt_type = TRKPET::SWITCH;
+            assert (!"kink presented as tsc=3");
+        }
+        else if (elt_type != TRKPET::SWITCH)
             throw TLEditSaveException("Count=3, but key is not SWITCH #%ld", Nomenclature);
     }
-    else  if (key != NULL && !strncmp(key, "SWITCH", 6))
-        throw TLEditSaveException("Overrode type %s %ld has non-3 TSCount %d", key, Nomenclature, TSCount);
-
+    else  if (elt_type == TRKPET::SWITCH)
+        throw TLEditSaveException("Overrode type %ld has non-3 TSCount %d", Nomenclature, TSCount);
+/*
 	if ((key == NULL || !strcmp(key, "")) && !!strcmp(identifier, "")) //NOT a vanilla kink
         throw TLEditSaveException ("Not-easy-to-categorize object #%ld id \"%s\"", Nomenclature, identifier);
-
-    if (f) {
-        if (key == NULL)
-            key = "";
+*/
+    if (f) {  // !f = dumper running in effigy/pre-test mode
         char key_plus_id[64];
-        sprintf(key_plus_id, "%-20s  %s", key, identifier);
+        if (elt_type == TRKPET::SWITCH)
+            sprintf(key_plus_id, "SWITCH %-14s %s", SWKeys[branch_type], identifier);
+        else
+            sprintf(key_plus_id, "%-20s  %s", KeyStrings[elt_type], identifier);
+
         if (Marked && TSCount == 3)   // Marked switch, location already published.
             fprintf(f, "    (%s)\n", key_plus_id); //(SWITCH NORMAL 10089 0)
         else {

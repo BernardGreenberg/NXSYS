@@ -93,9 +93,9 @@ void TrackJoint::Display (HDC dc) {
 }
 
 TrackSeg* TrackJoint::GetBranch(TSAX branch_index) {
-    if (branch_index == TSAX::STEM)
+    if (branch_index == TSAX::STEM || branch_index == TSAX::IJR0)
         return TSA[0];
-    else if (branch_index == TSAX::NORMAL)
+    else if (branch_index == TSAX::NORMAL || branch_index == TSAX::IJR1)
         return TSA[1];
     else if (branch_index == TSAX::REVERSE)
         return TSA[2];

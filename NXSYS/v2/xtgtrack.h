@@ -53,6 +53,12 @@ enum class TSEX {
     MAX = 1
 };
 
+enum class TRKPET {  // .trk path element types
+    KINK = 1,
+    IJ = 2,
+    SWITCH = 3
+};
+
 struct JointOrganizationData {
     double Radang;
     double RRadang;
@@ -71,6 +77,10 @@ class TrackJoint
     public:
 	TrackJoint (WP_cord wpx1, WP_cord wpy1);
 	~TrackJoint();
+
+    TrackSeg* operator [](TSAX branch_index) {
+        return GetBranch(branch_index);
+    };
 
 	long	Nomenclature;
 	BOOL	Insulated;
@@ -109,7 +119,7 @@ class TrackJoint
 	virtual BOOL ClickToSelectP();
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
 	void	SwallowOtherJoint (TrackJoint * tj);
-	void	TDump (FILE * F, const char * form_head);
+        void	TDump (FILE * F, TRKPET pet, TSAX branch);
 	void	EnsureID();
 	void	Insulate();
 	void	FlipNum();

@@ -227,12 +227,12 @@ next:
     if (tj->TurnOut == NULL)
 	return TRUE;
     BOOL Thrown = tj->TurnOut->Thrown;
-    if (this == tj->GetBranch(TSAX::REVERSE))
+    if (this == (*tj)[TSAX::REVERSE])
 	if (Thrown)
 	    goto next;
 	else
 	    return FALSE;
-    else if (this == tj->GetBranch(TSAX::NORMAL))
+    else if (this == (*tj)[TSAX::NORMAL])
 	if (Thrown)
 	    return FALSE;
 	else

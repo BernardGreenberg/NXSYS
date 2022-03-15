@@ -636,20 +636,21 @@ void TrackJoint::MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1) {
 }
 
 
-void TrackJoint::SwallowOtherJoint (TrackJoint * tj) {
-    for (int j = 0; j < tj->TSCount; j++) {
-	TrackSeg * ts = tj->TSA[j];
-        assert(ts != NULL);
-	AddBranch(ts);
-        if (TSCount > 2) {
+void TrackJoint::SwallowOtherJoint (TrackJoint * other_tj) {
+    for (int j = 0; j < other_tj->TSCount; j++) {
+        TrackSeg& S = *(other_tj->TSA[j]);
+        TSEX his_end_in_this_ts = S.FindEndIndex(other_tj);
+        assert(his_end_in_this_ts != TSEX::NOTFOUND);
+	AddBranch(&S);
+        S.GetEnd(his_end_in_this_ts).Joint = this;
+        
+        if (TSCount > 2) {  // français pour "3"
 	    EnsureID();
             Insulated = FALSE; // 3-12-2022
+            Organized = FALSE; // 3-14-2022
         }
-	TSEX endx = ts->FindEndIndex(this);
-	if (endx != TSEX::NOTFOUND)
-	    ts->GetEnd(endx).Joint = this;
     }
-    delete tj;
+    delete other_tj;
 }
 
 void TrackJoint::Organize () {
