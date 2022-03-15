@@ -36,8 +36,8 @@
 #define UNASSIGNED_BASE_SWITCH_NO 10001
 #define UNASSIGNED_BASE_IJ_NO     30001
 
-static BOOL S_YKnown;
-static double S_LastY;
+static bool S_YKnown;
+static WP_cord S_LastY;
 //static double S_LastZ;  // I wish .
 
 #ifdef NXSYSMac
@@ -45,6 +45,8 @@ static double S_LastY;
 #else
 #define STRERROR _strerror
 #endif
+
+#define NOSAVE_MSG " -- NXSYS cannot load it until you fix this.  Won't save."
 
 /* Rewritten 13 Mar 2022 to remove C-style coding, use modern C++ with lambdas, thrown exceptions,
  sets, and little value-containers with conversion operators. Also changed to write to temp file first,
@@ -103,7 +105,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj);
 template <int LEN>
 struct SCAT {   /* gato corto */
     char B[LEN];
-    SCAT(const char *a, const char*b) {
+    SCAT(const char* a, const char* b) {
         strcpy(B, a);
         strcat(B, b);
     }
@@ -153,7 +155,7 @@ static int ReportCorruptedJoints(GraphicObject *g) {
     
     TrackJoint& J = *(TrackJoint*)g;
     if (J.TSCount == 0) {
-        usererr(FormatString("Dumper finds TJ#%d with TSCount 0.", J.Nomenclature).c_str());
+        usererr("Dumper finds TJ#%d with TSCount 0.", J.Nomenclature);
         return 1;
     }
     for (int x = 0; x < J.TSCount; x++) {
@@ -173,14 +175,12 @@ static int ReportCorruptedJoints(GraphicObject *g) {
 }
 
 BOOL SaveLayout(const char * path) {
-    std::string complaint;
-    if (!SwitchConsistencyTotalCheck(complaint)) {
-        complaint += " -- NXSYS cannot load it until you fix this.  Won't save.";
-        MessageBox(G_mainwindow, complaint.c_str(), app_name, MB_ICONEXCLAMATION);
+    if (auto r = SwitchConsistencyTotalCheck()) {
+        MessageBox(G_mainwindow, r.value +  NOSAVE_MSG, app_name, MB_ICONEXCLAMATION);
         return FALSE;
     }
     if (MapGraphicObjectsOfType(ID_JOINT, ReportCorruptedJoints)) {
-        usererr("Corrupted joints found; won't save. Go fix them.");
+        usererr("Corrupted joints found" NOSAVE_MSG);
         return FALSE;
     }
 
@@ -201,7 +201,8 @@ BOOL SaveLayout(const char * path) {
         SaveTheLayout(temp_file);
     } catch (TLEditSaveException e) {
         //Message already printed by exception ctor
-        return FALSE;
+        fclose(temp_file);
+        return FALSE;  //Skip file install/copy.
     }
 
     auto length = ftell(temp_file);
@@ -265,7 +266,7 @@ static int FinalCleanUp(GraphicObject *g) {
 
 static void ChasePathWithStartKey(TrackJoint&J, int k, const char * key, FILE* f) {
     fprintf(f, "  (PATH\n");
-    S_YKnown = FALSE;
+    S_YKnown = false;
     J.TDump(f, key);
     DumpPath(f, J.TSA[k], &J);
     fprintf(f, "  )\n");
@@ -465,7 +466,7 @@ void TrackJoint::TDump(FILE * f, const char * key) {
         fprintf(f, "    (%-30s  %s%s)\n", key_plus_id, coordinates, addendum);
     }
 
-	S_YKnown = TRUE;
+	S_YKnown = true;
 	S_LastY = wp_y;
 	Marked = TRUE;
 }

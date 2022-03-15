@@ -4,6 +4,9 @@
 #include <string>
 #include <stdio.h>
 #include "SwitchConsistency.h"
+#include "STLExtensions.h"
+
+using std::string;
 
 typedef std::map<long, int>tSwitchMap;
 
@@ -52,27 +55,44 @@ void SwitchConsistencyClear() {
 
 
 bool SwitchConsistencyDefine(long ID, int AB0, std::string& complaint) {
-    if (!SwitchConsistencyDefineCheck(ID, AB0, complaint)) {
+    if (auto r = SwitchConsistencyDefine(ID, AB0)) {
+        complaint = r.value;
         return false;
     }
+    complaint.clear();
+    return true;
+}
+
+ValidatingValue<string> SwitchConsistencyDefine(long ID, int AB0) {
+    string complaint;
+    if (!SwitchConsistencyDefineCheck(ID, AB0, complaint))
+        return complaint;
+
     int current = 0;
     if (SwitchMap.count(ID) != 0) {
         current = SwitchMap[ID];
     }
     SwitchMap[ID] = current | massageTag(AB0);
-    return true;
+    return {};
 }
 
 bool SwitchConsistencyDefineCheck(long ID, int AB0, std::string& complaint) {
-    char buf [256];
     complaint.clear();
-    tSwitchMap::iterator it = SwitchMap.find(ID);
-    if (it == SwitchMap.end()) {  // terrific!
-        return true;
+    if (auto r = SwitchConsistencyDefineCheck(ID, AB0)) {
+        complaint = r.value;
+        return false;
     }
+    return true;
+}
+
+
+ValidatingValue<string> SwitchConsistencyDefineCheck(long ID, int AB0) {
+    tSwitchMap::iterator it = SwitchMap.find(ID);
+    if (it == SwitchMap.end())  // terrific!
+        return {}; // no complaint
     int current = it->second;
     if (current == 0) { // this shouldn't happen, either
-        return true;
+        return {}; // no complaint
     }
     int tag = massageTag(AB0);
     const char * descrip;
@@ -90,45 +110,40 @@ bool SwitchConsistencyDefineCheck(long ID, int AB0, std::string& complaint) {
             descrip = "??";
             break;
     }
-    if ((current & tag) != 0) {
-        sprintf (buf, "Switch %ld %s is already defined elsewhere.", ID, descrip);
-        complaint = buf;
-        return false;
+    if ((current & tag) != 0)
+        return FormatString ("Switch %ld %s is already defined elsewhere.", ID, descrip);
+    if ((current | tag) == 3){ // ideal
+        return {};
     }
-    if ((current | tag) == 3) { // ideal
-        return true;
-    }
-    if (tag == ID_SINGLETON) {
-        sprintf (buf, "Switch %ld already has A and/or B somewhere, can't create singleton.", ID);
-        complaint = buf;
-        return false;
-    }
-    sprintf (buf, "Switch %ld is already defined as a singleton, so can't create %ld %s.",
+    if (tag == ID_SINGLETON)
+        return FormatString("Switch %ld already has A and/or B somewhere, can't create singleton.", ID);
+    return FormatString("Switch %ld is already defined as a singleton, so can't create %ld %s.",
              ID, ID, descrip);
-    complaint = buf;
-    return false;
 }
 
-bool SwitchConsistencyTotalCheck (std::string& complaint) {
+bool SwitchConsistencyTotalCheck (string& complaint) {
+    if (auto r = SwitchConsistencyTotalCheck()) {
+        complaint = r.value;
+        return false;
+    }
     complaint.clear();
-    char buf[256];
+    return true;
+}
+
+ValidatingValue<string> SwitchConsistencyTotalCheck() {
     for (const auto& it : SwitchMap) {
         long id = it.first;
-        int tag = it.second;
-        if (tag == 1) {
-            sprintf (buf, "Switch half %ld A exists but there is no B.", id);
-            complaint = buf;
-            return false;
-        } else if (tag == 2) {
-            sprintf (buf, "Switch half %ld B exists, but there is no A.", id);
-            complaint = buf;
-            return false;
-        } else if (tag > ID_SINGLETON) {
-            sprintf (buf, "Switch %ld has both singleton and paired points (bug).", id);
-            complaint = buf;
-            return false;
+        switch(it.second) {
+            case 1:
+                return FormatString("Switch half %ld A exists but there is no B.", id);
+            case 2:
+                return FormatString("Switch half %ld B exists, but there is no A.", id);
+            default:
+                if (it.second > ID_SINGLETON)
+                    return FormatString("Switch %ld has both singleton and paired points (bug).", id);
+                break;
         }
     }
-    return true;
+    return{};
 }
 

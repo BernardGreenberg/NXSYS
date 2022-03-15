@@ -407,6 +407,7 @@
 		5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = SwitchConsistency.cpp; sourceTree = "<group>"; };
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
+		5BA5385227DF75DB00D39B28 /* ValidatingValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValidatingValue.h; sourceTree = "<group>"; };
 		5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tlehlptx.txt; sourceTree = "<group>"; };
 		5BA6F73019CCA375002551F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SignalProperties.xib; sourceTree = "<group>"; };
 		5BA6F73519CCBB1A002551F7 /* GenericWindlgController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericWindlgController.h; sourceTree = "<group>"; };
@@ -1140,6 +1141,7 @@
 				5BB5803227C4115C00FB0ED5 /* GetResourceDirectoryPathname.h */,
 				5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */,
 				5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */,
+				5BA5385227DF75DB00D39B28 /* ValidatingValue.h */,
 			);
 			name = NewShared;
 			sourceTree = "<group>";

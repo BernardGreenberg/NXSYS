@@ -179,15 +179,15 @@ int ProcessLayoutForm (Sexpr f) {
 	    return 0;
 	}
     }
-    std::string sjcomplaint;
+
     for (auto tj : SwitchJoints)
-        if (!SwitchConsistencyDefine(tj->Nomenclature, tj->SwitchAB0, sjcomplaint))
-            LispBarf(sjcomplaint.c_str());
+        if (auto r = SwitchConsistencyDefine(tj->Nomenclature, tj->SwitchAB0))
+            LispBarf(r.value.c_str());
     
 #ifndef TLEDIT
     // DON'T demand matching in TLEdit, or you couldn't fix the problems.
-    if (!SwitchConsistencyTotalCheck(sjcomplaint)) {
-        LispBarf(sjcomplaint.c_str());
+    if (auto r = SwitchConsistencyTotalCheck() {
+        LispBarf(r.value.c_str());
         return 0;
     }
         

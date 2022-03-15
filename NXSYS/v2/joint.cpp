@@ -135,6 +135,8 @@ void TrackJoint::DelBranch (TrackSeg * ts) {
 		TSA[j] = TSA[j+1];
 	    break;
 	}
+    for (int i = TSCount; i < 3; i++)  //Clear unused slots for better look in debugger
+        TSA[i] = NULL;
 }
 
 int TrackJoint::TypeID () {return ID_JOINT;}
