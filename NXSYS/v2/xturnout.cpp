@@ -24,6 +24,7 @@ int meterNTurnouts () {return NTurnouts;}
 Turnout::Turnout (int xno) {
     XlkgNo = xno;
     MovingPhase = CLKCodingPhase = Thrown = 0;
+    MoveStartTime = 0; /* placate Visual C++ */
     LockSafe = 1;
     NWP = RWP = NULL;
     NWZ = RWZ = NL = RL = NULL;
