@@ -1,4 +1,4 @@
-﻿"DeployProject"
+"DeployProject"
 {
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
@@ -3171,7 +3171,7 @@
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.6.1"
+        "ProductVersion" = "8:2.6.2"
         "Manufacturer" = "8:Bernard Greenberg"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://BernardGreenberg.com"

@@ -291,6 +291,7 @@
 		5B2B337723036B52004007A9 /* pswitch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pswitch.h; sourceTree = "<group>"; };
 		5B2B337923045D5C004007A9 /* DynmenuMacCalls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DynmenuMacCalls.h; path = NXSYSMac/DynmenuMacCalls.h; sourceTree = SOURCE_ROOT; };
 		5B2B337A2306FE94004007A9 /* rlyapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlyapi.h; sourceTree = "<group>"; };
+		5B30B10527E16383000D59C8 /* Setup32 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Setup32; sourceTree = "<group>"; };
 		5B43834B19C4B47600BEECDC /* AppDelegateGlobals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegateGlobals.h; sourceTree = "<group>"; };
 		5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BigYellowXView.mm; sourceTree = "<group>"; };
 		5B46B9FD19A9188F0041C4FE /* FullSignalView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FullSignalView.h; sourceTree = "<group>"; };
@@ -997,6 +998,7 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5B30B10527E16383000D59C8 /* Setup32 */,
 				5BB5802227C3329900FB0ED5 /* Installer */,
 				5BB5802027C32E7900FB0ED5 /* NXSYSWinApp.h */,
 				5BB5801F27C32E7900FB0ED5 /* WinApp.cpp */,

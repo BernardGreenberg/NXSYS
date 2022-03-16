@@ -8,6 +8,10 @@
 <body style="max-width:800px">
 <h1><span class=nxsys>NXSYS Release notes — Mac &amp; Windows</h1>
 
+<h2>3/14/22  &mdash; 2.6.2</h2>
+
+<p>Fixes <nxf>TLEdit</nxf> bugs in node merging (drag-and-dropping switches, IJs or &ldquo;kinks&rdquo; on others to build higher-order nodes).  Implements a more conservative policy in the dumper, of pre-running it once &ldquo;in effigy&rdquo; to not even rename the backup file if there are errors, and <i>even so</i> write to a temporary file fully before copying into the desired file. Improves other aspects of dumper error handling (there should not ever be errors detected by the dumper, but <i>c&rsquo;est la vie</i>.  Modernizes the dumper code greatly, too.)</p>
+
 <h2>3/12/22  &mdash; 2.6.1</h2>
 
 <p>Fixes an apparently longstanding bug in <nxf>TLEdit</nxf> that would, on certain rare occasions, write out corrupt layout descriptions which could not be read back in (to it or the simulator). It had not hit me or anyone until now.  Some documentation was corrected (links), too. No simulator functional changes.</p>

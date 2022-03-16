@@ -125,7 +125,7 @@ BEGIN
     CTEXT           "Bernard Greenberg",IDC_STATIC,15,83,149,8
     CTEXT           "TLEdit for MS Windows",IDC_STATIC,51,5,77,8
     CTEXT           "NXSYS Version 2 Track Layout Editor",IDC_STATIC,4,16,170,8
-    LTEXT           "Version 2.6.1",IDC_STATIC,66,44,44,8
+    LTEXT           "Version 2.6.2",IDC_STATIC,66,44,44,8
 END
 
 IDD_TLEDIT_HELP DIALOG 100, 100, 329, 258
