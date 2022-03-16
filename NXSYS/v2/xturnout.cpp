@@ -5,6 +5,7 @@
 #include "nxgo.h"
 #include "timers.h"
 #include <math.h>
+#include <cassert>
 
 #include "objid.h"
 

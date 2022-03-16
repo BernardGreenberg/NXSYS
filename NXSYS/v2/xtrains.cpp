@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <cassert>
 
 #include "xtgtrack.h"
 #include "lyglobal.h"
