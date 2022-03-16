@@ -191,7 +191,7 @@ static int ReportCorruptedJoints(GraphicObject *g) {
 
 BOOL SaveLayout(const char * path) {
     if (auto r = SwitchConsistencyTotalCheck()) {
-        MessageBox(G_mainwindow, r.value +  NOSAVE_MSG, app_name, MB_ICONEXCLAMATION);
+        MessageBox(G_mainwindow, (r.value +  NOSAVE_MSG).c_str(), app_name, MB_ICONEXCLAMATION);
         return FALSE;
     }
     if (MapGraphicObjectsOfType(ID_JOINT, ReportCorruptedJoints)) {
