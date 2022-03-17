@@ -123,6 +123,8 @@ TSAX TrackJoint::FindBranchIndex (TrackSeg * ts) {
 }
 
 int TrackJoint::AvailablePorts () {
+    if (Insulated && TSCount == 2)  // Do not create "insulated switches" - cannot be repr in LAYOUT
+        return 0;   // 3-17-2022
     return 3-TSCount;
 }
 
