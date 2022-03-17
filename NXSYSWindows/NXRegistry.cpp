@@ -7,7 +7,6 @@ using std::string;
 
 static const char* NXSYS_REG_KEY = "SOFTWARE\\B.Greenberg\\NXSYS";
 
-
 HKEY GetAppKey(LPCSTR subk) {
 	HKEY hk;
 	string path{ NXSYS_REG_KEY };
@@ -39,7 +38,7 @@ DWORD GetDWORDRegval(HKEY key, LPCSTR vname, DWORD val) {
 	return val;
 }
 
-DWORDRegValue getDWORDRegVal(HKEY key, const string& name) {
+ValidatingValue<DWORD> getDWORDRegVal(HKEY key, const string& name) {
 	if (key) {
 		DWORD val;
 		DWORD bufsize = sizeof(val);
@@ -47,9 +46,9 @@ DWORDRegValue getDWORDRegVal(HKEY key, const string& name) {
 		DWORD ec = RegQueryValueEx(key, name.c_str(), NULL,
 			&type, (PBYTE)&val, &bufsize);
 		if (ec == ERROR_SUCCESS)
-			return DWORDRegValue(val);
+			return val;
 	}
-	return DWORDRegValue();
+	return{};
 }
 
 DWORD PutDWORDRegval(HKEY key, LPCSTR vname, DWORD value) {
@@ -59,7 +58,7 @@ DWORD PutDWORDRegval(HKEY key, LPCSTR vname, DWORD value) {
 	return value;
 }
 
-StringRegValue getStringRegval(HKEY key, const std::string& vname, size_t size) {
+ValidatingValue<std::string> getStringRegval(HKEY key, const std::string& vname, size_t size) {
 	std::vector<char> buff(size);
 	DWORD bufsize = (DWORD)size;
 	DWORD type;
@@ -68,9 +67,9 @@ StringRegValue getStringRegval(HKEY key, const std::string& vname, size_t size) 
 		/* Bombs lay in trailing zeros! */
 		while (bufsize > 0 && buff[bufsize - 1] == 0)
 			bufsize -= 1;
-		return StringRegValue(string(buff.data(), bufsize));
+		return string(buff.data(), bufsize);
 	}
-	return StringRegValue();
+	return {};
 }
 
 bool putStringRegval(HKEY key, const std::string& vname, const std::string& value) {

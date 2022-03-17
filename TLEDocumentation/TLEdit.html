@@ -8,11 +8,13 @@
 <h1>TLEdit&mdash;NXSYS Track Layout Editor </h1>
 
 <p>&copy;Bernard S. Greenberg 1997&ndash;2022<br/>
-Updated 17 February 2022</p>
+Updated 17 March 2022</p>
 
 <p>This is the documentation for TLEdit, the NXSYS track layout editor. It is used to create and edit layouts as seen on the interlocking panel. It does not create or edit logic in any way.</p>
 
-<p>Layouts consist of straight line <b>track segments</b> which connect <b>joints</b>, which latter appear in TLEdit as red dots (but do not appear at all in NXSYS).  Tracks can only bend or join at joints. A joint can sport one, two, or three segments (“branches”) emanating from it &mdash; one is the end of a track, two is an insulated joint, or a “kink” in a track, and three is a switch.</p>
+<p>Layouts consist of straight line <b>track segments</b> which connect <b>joints</b>, which latter appear in TLEdit as red dots (but do not appear at all in NXSYS).  Tracks can only bend or join at joints. A joint can sport one, two, or three segments (“branches”) emanating from it &mdash; one is the end of a track, two is an insulated joint, or a (non-insulated) “kink” in a track, and three is a switch.</p>
+
+<p>By (left) click-and-drag, you can create segments between any two points or extant joints (making them into switches, or extending a track end), or to or from arbitrary points on extant segments, turning them into switches. You cannot draw a segment to or from a switch (joint already having three branches) or an insulated joint which is not the end of a track.  Joints of one or two branches can be insulated or de-insulated from their <b>Properties</b> dialog; you cannot de-insulate a joint which has a signal or exit light, or insulate a switch.  Saving the layout insulates all track-ends.</p>
 
 <h2>TLEdit three-line summary!</h2>
 <ul style="font-size:135%">
@@ -52,7 +54,7 @@ Updated 17 February 2022</p>
 
 <h2>Creating and editing track</h2>
 
-<p>Click and drag mouse left (Windows, or Mac trackpad, single finger) to create a new track segment.  Click left on either an extant joint which is not already “full” (i.e., has less than  3 branches), some other point on an extant segment, or elsewhere, and drag the mouse, left button held.  You will be dragging the end of a &ldquo;rubber band&rdquo;, whose other end is where you started.  Drop the mouse on either an extant joint which is <b>not full</b>, some other point on an extant segment, or elsewhere &mdash; a new segment will be created.  To cancel, i.e., change your mind and create no new segment, drop the mouse end of the rubber band back on the stationary end.  Slopes of less than 4% from the vertical or horizontal are assumed to be vertical or horizontal, and “snapped” into place.</p>
+<p>Click and drag mouse left (Windows, or Mac trackpad, single finger) to create a new track segment.  Click left on either an extant joint which is not already “full” (i.e., has less than  3 branches), some other point on an extant segment, or elsewhere, and drag the mouse, left button held.  You will be dragging the end of a &ldquo;rubber band&rdquo;, whose other end is where you started.  Drop the mouse on either an extant joint which is <b>not full</b>, some other point on an extant segment, or elsewhere &mdash; a new segment will be created. An insulated joint with two branches (as normal) is considered &ldquo;full&rdquo;.  To cancel, i.e., change your mind and create no new segment, drop the mouse end of the rubber band back on the stationary end.  Slopes of less than 4% from the vertical or horizontal are assumed to be vertical or horizontal, and “snapped” into place.</p>
 
 <p>To <b>move an extant joint</b>, click and drag it with mouse right (on Windows; control-mouse on the Mac). Clicking and dragging mouse right in the middle of an extant segment creates a joint and moves it &mdash; you can insert a “kink” this way. If you drag a joint to another joint, and there are no more than three branches among the two of them, the joints will merge into one.  The rubber band lines will “click” onto a detente (and show as red) if TLEdit thinks it knows what you are trying to do.</p>
 
@@ -85,14 +87,18 @@ Updated 17 February 2022</p>
 
 <h2>Assigning Track Circuit Identifiers</h2>
 
-<p>Track segments assemble into track <b>sections</b> (<b>track circuits</b>); NXSYS generates and manages T relays and "line-o-lite"s on a per-circuit basis.  Select and <b>property edit</b> a track segment to assign a numeric track circuit relay ID.  If <b>Wildfire spread by contact</b> is selected, all track segments reachable from the one being edited without passing an insulated joint will have their Circuit ID's changed as well.  NXSYS will not equip a track segment with the default ID (0).  Track segments with circuits assigned light with white "line-o-lites" in TLEdit. The algorithm for managing segments dependent on switch position, within one circuit, is a complex heuristic built into NXSYS (which occasionally fails).  Individual segments are not &ldquo;programmable&rdquo; as they are in real life.
+<p>Track segments assemble into track <b>sections</b> (<b>track circuits</b>); NXSYS generates and manages T relays and "line-o-lite"s on a per-circuit basis.  Select and <b>property edit</b> a track segment to assign a numeric track circuit relay ID.  If <b>Wildfire spread by contact</b> is selected, all track segments reachable from the one being edited without passing an insulated joint will have their Circuit ID's changed as well.  NXSYS will not equip a track segment with the default ID (0).  Track segments with circuits assigned light with white "line-o-lites" in TLEdit. The algorithm for managing the lighting of segments dependent on switch position, within one circuit, is a complex heuristic built into NXSYS (which occasionally fails).  Individual segments are not &ldquo;programmable&rdquo; as they are in real life.
 
 <h2>Switch Orientation (which route is “normal”?)</h2>
 
 <p>TLEdit by default assigns the three branches emanating from a switch joint the designations <b>stem, normal,</b> and <b>reverse</b>, based upon the angles between them.  In some cases, notably for slip switches, this default is not correct.  The two buttons <b>highlight normal</b> and <b>swap normal</b> on the switch&rsquo;s <b>properties dialog</b> can be used to see which branch is “normal” (selecting it) and swap the definitions of normal and reverse (highlighting the new <b>normal</b>, as it were) to facilitate manual adjustment.
 </p>
 
-<p>========================================================================</p>
+<h2>Switch Consistency (A and B switches vs. singletons)</h2>
+
+<p>Any switch is either a &ldquo;singleton&rdquo; or half of an A-B pair, i.e., a crossover.  You choose which from the switch&rsquo;s <b>Properties</b> dialog.  15A and 15B are different switches but operated and interlocked by the same logic. Normally, A and B are two ends of a crossover; NYCT practice at double-crossovers is to group the As and Bs together on one track, although NXSYS does not require or force this. TLEdit will not let you save, and NXSYS will refuse to load, a layout in which an A or B switch exists without its other half.
+
+<hr/>
 
 <p>Use <b>Ctrl-W</b> (or <b>New</b>) to “wipe” the drawing clear, on Windows, but <b>⌘N</b> (<b>New</b>) on the Mac.</p>
 
@@ -100,6 +106,6 @@ Updated 17 February 2022</p>
 
 <p>You can save and restore your creations.  The app will accept a file name as a command argument.</p>
 
-<p>You can <tt>(include "foo.trk")</tt> in an NXSYS <tt>.trk</tt> file.  The outer file should contain, or co-include, all the relay definitions and the TLEdit-generated file, which latter should not be hand-edited.  (The language is fairly obvious, and is left as an exercise for the user. You should not have to understand its details.)</p>
+<p>You can <tt>(include "foo.trk")</tt> in an NXSYS <tt>.trk</tt> file.  The outer file should contain, or co-include, all the relay definitions and the TLEdit-generated file, which latter should not be hand-edited; there is no provision for layouts made unloadable or uneditable by corruption introduced by hand-editing.  (There is no need to understand the layout/path graph-representation language.)</p>
 </body>
 </html>

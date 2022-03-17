@@ -67,8 +67,7 @@ void InitMenuRecentFiles(HMENU submenu) {
 	if (ctr.valid)
 	    count = NXMIN((int)ctr.value, MAX_COUNT);
 	for (int i = FIRST_INDEX; i < count;i++) {
-		auto srslt = getStringRegval(hk, Regkey(i));
-		if (srslt.valid) {
+		if (auto srslt = getStringRegval(hk, Regkey(i))) {
 			string lresult = stolower(srslt.value);
 			if (sfile_paths.count(lresult) == 0) {
 				sfile_paths.insert(lresult);
