@@ -13,6 +13,7 @@
 #include "swkey.h"
 #include "trafficlever.h"
 #include "objid.h"
+#include "assignid.h"
 #include "tledit.h"
 #include <string>
 #include "STLfnsplit.h"
@@ -50,7 +51,7 @@ static WP_cord S_LastY;
 #define NOSAVE_MSG " -- NXSYS cannot load it until you fix this.  Won't save."
 
 /* Rewritten 13 Mar 2022 to remove C-style coding, use modern C++ with lambdas, thrown exceptions,
- sets, and little value-containers with conversion operators. Also changed to write to temp file first,
+ sets, type-checkable enums instead of numbers or strings. Also changed to write to temp file first,
  to protect against blowouts overwriting good files with partially-written ones */
 
 /* These exceptions are thrown by the dumper (saver) when it finds problems or logic errors
@@ -65,7 +66,7 @@ struct TLEditSaveException : public std::exception {
         message = FormatStringVA(ctlstring, args);
         MessageBox(nullptr, message.c_str(), "TLEdit Save logic error detected:", 0);
 #ifdef DEBUG  /* In debug mode (XCode/VS) break into the debugger.  Release build will not. */
-        assert(!"Save debug break");
+        message.clear(); //breakpoint this -- assert not as useful
 #endif
     }
 };
@@ -113,18 +114,6 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj);
 static char CharizeAB0(long nomen, short AB0);
 void ValidateTrackGraph();
 
-template <int LEN>
-struct SCAT {   /* gato corto */
-    char B[LEN];
-    SCAT(const char* a, const char* b) {
-        strcpy(B, a);
-        strcat(B, b);
-    }
-    operator const char *() {return B;}
-};
-
-
-
 typedef
 struct SaveEntry {
 	int Priority;
@@ -153,16 +142,28 @@ static BOOL MakeBackupCopy(const char * path) {
 	if (access(path, 6) != 0) /* if can't write it, we're in trouble. */
 		return FALSE;
 	/* .trk exists and we can write it. */
-	if (access(bkpath.c_str(), 0) == 0) 		/* if bk path exists */
-	/* try to delete it */
+    if (access(bkpath.c_str(), 0) == 0) {		/* if bk path exists */
+        /* try to delete it */
 		if (remove(bkpath.c_str()) != 0)	/* if we can't delete it */
 			return FALSE;		/* report trouble. */
+    }
 		/* try to rename real path to bkpath */
 	if (rename(path, bkpath.c_str()) != 0)
 		return FALSE;
+
 	return TRUE;
 }
 
+static int ReportUnreachableSegments(GraphicObject *g) {
+    TrackSeg& S = *(TrackSeg*)g;
+    if (!S.Marked) {
+        usererr("There are unreachable track loops (e.g., attempted station platforms). "
+                "Delete them or break them.  Selecting one such segment.");
+        S.Select();
+        return 1;
+    }
+    return 0;
+}
 
 static int ReportCorruptedJoints(GraphicObject *g) {
     
@@ -176,13 +177,9 @@ static int ReportCorruptedJoints(GraphicObject *g) {
         if (J.TSA[x] == NULL) {
             usererr(FormatString("Dumper finds TJ#%d with TSCount %d, TSA[%d] null.",
                                  J.Nomenclature, J.TSCount, x).c_str());
-            if (x == 2) {
-                usererr("Downgrading TJ#%ld to order 1. Selecting it. Try again.", J.Nomenclature);
-                J.TSCount = 1;
-                J.TSA[1] = NULL;
-                J.Select();
-            }
-
+            J.TSCount = x;
+            J.Select();
+            usererr("Downgrading TJ#%ld to order %d. Selecting it. Won't save now. Try again.", J.Nomenclature, J.TSCount);
             return 1;
         }
     }
@@ -195,7 +192,7 @@ BOOL SaveLayout(const char * path) {
         return FALSE;
     }
     if (MapGraphicObjectsOfType(ID_JOINT, ReportCorruptedJoints)) {
-        usererr("Corrupted joints found" NOSAVE_MSG);
+   /*     Message already displayed */
         return FALSE;
     }
 
@@ -208,8 +205,13 @@ BOOL SaveLayout(const char * path) {
      */
     
     /* Run the dumper in effigy (no output) */
+    /* Finds unreachable segments, too! */
     try {
         ValidateTrackGraph();
+        
+        if (MapGraphicObjectsOfType(ID_TRACKSEG, ReportUnreachableSegments))
+            return FALSE;
+
     } catch (TLEditSaveException e) {
         return FALSE;
     }
@@ -302,12 +304,12 @@ static int FinalCleanUp(GraphicObject *g) {
 	return 0;
 }
 
-static void ChasePathWithStartKey(TrackJoint&J, TRKPET elt_type, TSAX k, FILE* f) {
+static void ChasePath(TrackJoint&J, TSAX branch_type, FILE* f) {
     if (f)
         fprintf(f, "  (PATH\n");
     S_YKnown = false;
-    J.TDump(f, elt_type, k);
-    DumpPath(f, J[k], &J);
+    J.TDump(f, branch_type);
+    DumpPath(f, J[branch_type], &J);
     if (f)
         fprintf(f, "  )\n");
 }
@@ -318,7 +320,7 @@ static int ChaseLooseTrackEnds(GraphicObject *g, void * vfp) {
     /* marking track-ends is necessary even with this improved loop, because an end can
        be found (and marked) by forward motion and must not be found again by this loop. */
     if (J.TSCount == 1 && !J.Marked)
-        ChasePathWithStartKey(J, TRKPET::IJ, TSAX::IJR0, f);
+        ChasePath(J, TSAX::IJR0, f);
     return 0; /* never stop */
 }
 
@@ -326,9 +328,9 @@ static int ChaseUnmarkedSwitchBranches(GraphicObject * g, void * vfp) {
     TrackJoint& J = *(TrackJoint*)g;
     FILE * f = (FILE*)vfp;
     if (J.TSCount == 3)   // "SWITCH" means "** S W I T C H **", you Doofus!!! 3/12/2022
-        for (auto k : {TSAX::STEM, TSAX::NORMAL, TSAX::REVERSE})
-            if (!J[k]->Marked)  // Branch is NOT MARKED ....
-                ChasePathWithStartKey(J, TRKPET::SWITCH, k, f);
+        for (auto branch_type : {TSAX::STEM, TSAX::NORMAL, TSAX::REVERSE})
+            if (!J[branch_type]->Marked)  // Branch is NOT MARKED ....
+                ChasePath(J, branch_type, f);
     return 0;
 }
 
@@ -358,14 +360,16 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
         TrackJoint& J = *(ts->GetOtherEnd(fx).Joint);
         long jnom = J.Nomenclature;
 		if (J.Marked) {
-			if (J.TSCount != 3)
-				throw TLEditSaveException("Dumper finds marked node #%ld not switch.", jnom);
+            if (J.TSCount != 3) {
+                J.Select();
+				throw TLEditSaveException("Dumper finds marked node #%ld not switch. Selecting it; Delete this trackage.", jnom);
+            }
 			else if (ts == J[TSAX::STEM])
                 throw TLEditSaveException ("Dumper found way into marked switch %ld via stem.", jnom);
             else if (ts == J[TSAX::NORMAL])
-                J.TDump(f, TRKPET::SWITCH, TSAX::NORMAL);
+                J.TDump(f, TSAX::NORMAL);
             else if (ts == J[TSAX::REVERSE])
-                J.TDump(f, TRKPET::SWITCH, TSAX::REVERSE);
+                J.TDump(f, TSAX::REVERSE);
             else
                 throw TLEditSaveException("Dumper entered switch %ld %c from segment %p, "
                                           "but the latter is none of its branches",
@@ -375,7 +379,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 			return;  // Marked switch hit,
 		}
 		else if (J.TSCount == 1) {   // A loose end; the path is complete!
-			J.TDump(f, TRKPET::IJ, TSAX::NOTFOUND);
+			J.TDump(f, TSAX::NOTFOUND);
 			return;
 		}
         assert (J.TSCount != 1);
@@ -404,7 +408,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 			if (ts->Marked)
 				throw TLEditSaveException("Dumper found already marked segment in unmarked switch %ld.", jnom);
 
-            J.TDump(f, TRKPET::SWITCH, found_tsax);
+            J.TDump(f, found_tsax);
             tj = &J;  //!!!!! for the loop!
 			continue;
 		}
@@ -413,7 +417,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 			ts = (ts == J[TSAX::IJR0]) ? J[TSAX::IJR1] : J[TSAX::IJR0];
         }
 
-		J.TDump(f, TRKPET::KINK, TSAX::NOTFOUND);
+		J.TDump(f, TSAX::NOTFOUND);
 
 
         tj = &J;  // looooop.....
@@ -446,6 +450,8 @@ static void DumpTheActualGraph(FILE* f) {
                 J.Nomenclature = SwitchNumbers.MakeNew();
             else
                 J.Nomenclature = IJNumbers.MakeNew();
+            /* Cooperate with older system. */
+            MarkIDAssign((int)J.Nomenclature);
         }
         return 0;
     });
@@ -478,12 +484,11 @@ static char CharizeAB0(long nomen, short AB0) {
     }
 }
 
-void TrackJoint::TDump(FILE * f, TRKPET elt_type, TSAX branch_type) {
+void TrackJoint::TDump(FILE * f, TSAX branch_type) {
     // f = NULL means "check only"
 
-    if (TSCount == 2 && !Insulated //not terminal, not switch, not IJ, just random joint
-        && S_YKnown && wp_y == S_LastY
-        && elt_type == TRKPET::KINK) {
+    if (TSCount == 2 && !Insulated //not terminal, not switch, not IJ, just random joint ("kink")
+        && S_YKnown && wp_y == S_LastY) {
 
         if (f)
             fprintf(f, "%37s%4ld\n", "", wp_x);  // simple single-number form
@@ -493,48 +498,37 @@ void TrackJoint::TDump(FILE * f, TRKPET elt_type, TSAX branch_type) {
     }
 
     char identifier [30] = "";   // Assumption = "vanilla kink",i.e., non-insulated joint
+    TRKPET type;
 
     if (Insulated) {
         if (TSCount == 3)
             throw TLEditSaveException("Insulated switch found: %ld", Nomenclature);
-        if (elt_type == TRKPET::KINK)
-            elt_type = TRKPET::IJ;  // shouldn't really happen
+        /* 2 or 1 is right*/
+        type = TRKPET::IJ;  // shouldn't really happen
         sprintf(identifier, " %ld", Nomenclature);
     }
+    else
+        type = TRKPET::KINK;
 
     if (TSCount == 3) {
+        type = TRKPET::SWITCH;
         sprintf(identifier, " %ld %c", Nomenclature, CharizeAB0(Nomenclature, SwitchAB0));
-        if (elt_type == TRKPET::KINK) {
-            elt_type = TRKPET::SWITCH;
-            assert (!"kink presented as tsc=3");
-        }
-        else if (elt_type != TRKPET::SWITCH)
-            throw TLEditSaveException("Count=3, but key is not SWITCH #%ld", Nomenclature);
     }
-    else  if (elt_type == TRKPET::SWITCH)
-        throw TLEditSaveException("Overrode type %ld has non-3 TSCount %d", Nomenclature, TSCount);
-/*
-	if ((key == NULL || !strcmp(key, "")) && !!strcmp(identifier, "")) //NOT a vanilla kink
-        throw TLEditSaveException ("Not-easy-to-categorize object #%ld id \"%s\"", Nomenclature, identifier);
-*/
+
     if (f) {  // !f = dumper running in effigy/pre-test mode
         char key_plus_id[64];
-        if (elt_type == TRKPET::SWITCH)
+        if (type == TRKPET::SWITCH)
             sprintf(key_plus_id, "SWITCH %-14s %s", SWKeys[branch_type], identifier);
         else
-            sprintf(key_plus_id, "%-20s  %s", KeyStrings[elt_type], identifier);
+            sprintf(key_plus_id, "%-20s  %s", KeyStrings[type], identifier);
 
         if (Marked && TSCount == 3)   // Marked switch, location already published.
             fprintf(f, "    (%s)\n", key_plus_id); //(SWITCH NORMAL 10089 0)
-        else {
-            const char *addendum = NumFlip ? " NUMFLIP" : "";
-            char coordinates[30];
-            if (S_YKnown && wp_y == S_LastY && !strcmp(addendum, ""))
-                sprintf(coordinates, "%4ld", wp_x);
-            else
-                sprintf(coordinates, "%4ld  %4ld", wp_x, wp_y);
-            fprintf(f, "    (%-30s  %s%s)\n", key_plus_id, coordinates, addendum);
-        }
+        else if (S_YKnown && wp_y == S_LastY && !NumFlip)
+            fprintf(f, "    (%-30s  %4ld)\n", key_plus_id, wp_x);
+        else
+            fprintf(f, "    (%-30s  %4ld  %4ld%s)\n", key_plus_id, wp_x, wp_y,
+                    NumFlip ? " NUMFLIP" : "");
     }
 
 	S_YKnown = true;
