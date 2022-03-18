@@ -22,6 +22,7 @@
 		5B2B336923021CDF004007A9 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B2B336B230220B4004007A9 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B2B336D2302E13F004007A9 /* plight_apponly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336C2302E13F004007A9 /* plight_apponly.cpp */; };
+		5B30B10827E4FDCC000D59C8 /* salvager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B30B10627E4FDCC000D59C8 /* salvager.cpp */; };
 		5B3AE7682313619700E5779E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B47F34819AFAFE800CBB80A /* WebKit.framework */; };
 		5B43834E19C4C38A00BEECDC /* BigYellowXView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */; };
 		5B46B9FF19A9188F0041C4FE /* FullSignalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B46B9FE19A9188F0041C4FE /* FullSignalView.mm */; };
@@ -292,6 +293,8 @@
 		5B2B337923045D5C004007A9 /* DynmenuMacCalls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DynmenuMacCalls.h; path = NXSYSMac/DynmenuMacCalls.h; sourceTree = SOURCE_ROOT; };
 		5B2B337A2306FE94004007A9 /* rlyapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlyapi.h; sourceTree = "<group>"; };
 		5B30B10527E16383000D59C8 /* Setup32 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Setup32; sourceTree = "<group>"; };
+		5B30B10627E4FDCC000D59C8 /* salvager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = salvager.cpp; sourceTree = "<group>"; };
+		5B30B10727E4FDCC000D59C8 /* salvager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = salvager.hpp; sourceTree = "<group>"; };
 		5B43834B19C4B47600BEECDC /* AppDelegateGlobals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegateGlobals.h; sourceTree = "<group>"; };
 		5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BigYellowXView.mm; sourceTree = "<group>"; };
 		5B46B9FD19A9188F0041C4FE /* FullSignalView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FullSignalView.h; sourceTree = "<group>"; };
@@ -895,6 +898,7 @@
 				5B5AE66D2311BFD300348612 /* tledit.h */,
 				5B5AE66E2311BFEA00348612 /* tlengovf.h */,
 				5B5AE66A2311BF9600348612 /* tletoolb.h */,
+				5B30B10727E4FDCC000D59C8 /* salvager.hpp */,
 				5B5AE6692311BF8600348612 /* tlpropdlg.h */,
 			);
 			name = Headers;
@@ -1105,6 +1109,7 @@
 				5BAC937219C9B66C00673BDC /* objreg.cpp */,
 				5BAC937019C9B63400673BDC /* assignid.cpp */,
 				5BAC936C19C8FFC600673BDC /* appwin.cpp */,
+				5B30B10627E4FDCC000D59C8 /* salvager.cpp */,
 				5BAC936A19C8FFAA00673BDC /* tledit.cpp */,
 				5B5AE6652311BF4E00348612 /* Headers */,
 			);
@@ -1740,6 +1745,7 @@
 				5BAC935619C8FECC00673BDC /* trackseg.cpp in Sources */,
 				5B5AE639230DDBEA00348612 /* main.mm in Sources */,
 				5BAC935719C8FECC00673BDC /* xexlight.cpp in Sources */,
+				5B30B10827E4FDCC000D59C8 /* salvager.cpp in Sources */,
 				5BAC935819C8FECC00673BDC /* xsignal.cpp in Sources */,
 				5BAC935919C8FECC00673BDC /* xstop.cpp in Sources */,
 				5BAC935B19C8FECC00673BDC /* xtgload.cpp in Sources */,

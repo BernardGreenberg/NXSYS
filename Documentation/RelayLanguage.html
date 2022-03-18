@@ -202,22 +202,19 @@ pre > code {
 <body>
 <h1 id="toc_0">NXSYS scenario and relay language</h1>
 
-<p><strong>Copyright ©Bernard S. Greenberg</strong> 1994, 1995, 1996, 1997
-  18 June 1995 (upd: 10 November 1996, 2 February 1997. 19 Feb 97, 18 Nov1997, 2 Dec97., 6 Jan 98, 14 Jan 98, 23 April 98, 16 May 98, 16 January 01, 26 July 01, 19 February 2022</p>
+<h5 id="toc_1">Status 18 March 2022</h5>
 
-<p>This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts (no, it is not trivial).  Pay particular attention to the 1998 tutorial <a href="https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg">Duckburg Tower A</a>!</p>
+<p>This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts.  Pay particular attention to the 1998 tutorial <a href="https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg">Duckburg Tower A</a>!</p>
 
 <p>The term <em>the simulator</em> is used below to denote the NXSYS application in such contexts where there is a need to draw a clear distinction between logic and actions effected by that application, and that effected by the relays whose definitions you supply to it.  The simulator operates some of your relays, and is operated by others of them, as described below.</p>
 
-<p><strong>NB: This document was first written around the turn of the century for Version 1 NXSYS.  While the relay language has not changed at all, the Version 2 track-definition language differs completely, and with the advent of TLEdit, the Track Layout Editor, there is no need ever to code in, or understand, the track definition language (it&#39;s not really very complicated, anyway).  So all that has been removed.</strong></p>
-
-<p>Making the signals and switches actually work is not so easy: one must design all the signal circuitry, which is not easily explained in a short (or even long) helpfile - that is a whole study.  The authoritative source document for that study is NYCTA/MTA drawing-set 733-33, their &quot;typical signal/interlocking prints&quot;, not readily available.  More stuff coming from me, hopefully, though (2022) --</p>
+<p>Making the signals and switches actually work is not so easy: You must learn signalling logic design.   Consume everything in the main helpfile, then go on to the “(Advanced) Signalling Logic Tutorial&quot; in the application help menu (or the <code>Documentation</code> folder in <a href="https://github.com/BernardGreenberg/NXSYS">this GitHub repository</a>).</p>
 
 <p>Of course, you are free and encouraged to study and mimic the circuitry provided in the examples; you can start with what we supply and modify until it becomes something else.  With NXSYS, you can actually <em>watch</em> the relays in operation and experiment with modifying their circuits, privileges I never had when learning this material from paper in the mid-1960&#39;s.  (However, I warn and declare unequivocally that my designs are for entertainment and educational purposes only and include certain simplifications and possible errors, and are not fit for use for controlling real railroads or other life-critical systems, and I assume no risk or responsibility should any of this information, or designs correctly or incorrectly derived from it, be faulty and lead to harm, damage, loss, or injury. Use it at your own risk.)</p>
 
 <p>The <a href="https://BernardGreenberg.com/Subway">NXSYS web page</a> on my <a href="https://BernardGreenberg.com">personal site</a> is presently the official location for executables. Critical updates will be posted there.  <a href="https://github.com/BernardGreenberg/NXSYS">This GitHub repository</a> is the authoritative source.</p>
 
-<h3 id="toc_1">NXSYS pseudo-Lisp</h3>
+<h3 id="toc_2">NXSYS pseudo-Lisp</h3>
 
 <p>The relay language is a modified subset of <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>. In effect, this means little more than that parentheses define <em>forms</em> recursively and extant Lisp editing tools (e.g., Emacs) may be used to advantage.  All whitespace is equivalent, case is insignificant except in quoted strings, and semicolons start a rest-of-line comment.</p>
 
@@ -231,7 +228,7 @@ pre > code {
 </thead><tbody>
 <tr>
 <td>2345</td>
-<td>Integer, must be 32-bit (signed), decimal</td>
+<td>Integer, (possibly) signed, decimal</td>
 </tr>
 <tr>
 <td>foobar</td>
@@ -255,17 +252,17 @@ pre > code {
 </tr>
 <tr>
 <td>782.3</td>
-<td>Floating-point number - not supported yet in compiler (10/96)</td>
+<td>Floating-point number</td>
 </tr>
 <tr>
 <td>355/113</td>
-<td>Rational number—not supported yet in compiler (10/96)</td>
+<td>Rational number</td>
 </tr>
 </tbody></table>
 
 <p>Top-level (not contained in other forms) forms define the track layout, its signals, and its relays.</p>
 
-<h3 id="toc_2">Interlocking definitions</h3>
+<h3 id="toc_3">Interlocking definitions</h3>
 
 <p>A <code>ROUTE</code> form must appear first in the first file.  Unfortunately, it bears a couple of Version 1 compatibility artifacts presently devoid of meaning, but extant interlockings have them.</p>
 
@@ -302,7 +299,7 @@ pre > code {
 
 <p><code>Help-string</code> will be taken as help text to be displayed as text, unless it starts with <code>@</code>, in which case will be taken as a pathname (relative to the <code>.trk</code>-containing directory) of a text file containing the documentation text.</p>
 
-<p>The third argument is optional, and only recognized by 2.6 and newer (it will be ignored by earlier versions).  If supplied, it must be a string starting with <code>@</code> and ending with <code>.html</code>.  The application will web-browse that file in the containing directory, in the HTML help viewer on the Mac and the system browser on Windows (If you want it to work on both versions, you must supply a real text file, too).</p>
+<p>The third argument is optional, and only recognized by 2.6 and newer (it will be ignored by earlier versions).  If supplied, it must be a string starting with <code>@</code> and ending with <code>.html</code>.  The application will web-browse that file in the containing directory, in the HTML help viewer on the Mac and the system browser on Windows (If you want it to work on older versions, you must supply a real text file, too).</p>
 
 <p>These next two property pairs are only recognized in NXSYS 2.5.0 and newer, and, by careful contract, are <em>ignored</em> by earlier versions:</p>
 
@@ -316,18 +313,18 @@ pre > code {
 
 <p>(or &quot;MM&quot; or whatever), a <em>string</em>, which NXSYS 2.5 and later will use in signal plates instead of the <code>LINE-ID</code> letter.</p>
 
-<h3 id="toc_3">Defining track, signals, and switches</h3>
+<h3 id="toc_4">Defining track, signals, and switches</h3>
 
 <p><strong>Use TLEdit!</strong></p>
 
-<p>Documentation describing the track/panel layout forms, all from Version 1, was removed from here (they are all different now, anyway).  With Version 2, you create track and panel layout with TLEdit, including all the traffic levers, random keys/controls, etc.  The forms are fairly straightforward, but you should never need to look at them.  You must include the TLEdit-generated track layout with an <code>include</code> form, e.g.,</p>
+<p>You create track and panel layout with TLEdit, including all the traffic levers, random keys/controls, etc.  The <code>LAYOUT</code> form used is not intended for user editing, but described, for completeness only, <a href="#layout">below</a>.  You should never have to look at it, and must not edit it by hand lest you create an unloadable, uneditable file.  You must include the TLEdit-generated track layout with an <code>include</code> form, e.g.,</p>
 
 <pre><code>        (include &quot;GrandCentralLayout.trk&quot;)
 </code></pre>
 
 <p>and never edit it, other than by using TLEdit.</p>
 
-<h3 id="toc_4">Defining relays</h3>
+<h3 id="toc_5">Defining relays</h3>
 
 <p>Finally, one defines the relays.  I will give brief descriptions of the important known relay nomenclatures below, although the technique of interlocking design will not be explained here, although much may be inferred from my prototypes.</p>
 
@@ -381,7 +378,7 @@ pre > code {
 
 <p>Labels are used to define common subexpressions that would implemented in real relays by shared wires. <code>(LABEL name expr1 expr2 ....)</code> defines the AND (series wiring) of all the <em>expr</em>&#39;s in it as <em>name</em>, and allows that name to be used as a synonym in subsequent relay definitions.</p>
 
-<p>(2022: <code>LABEL</code>s were a weak attempt to &quot;share wiring&quot; between relays, both to reduce error-prone code duplication and strive towards what I call &quot;topomorphic circuits&quot;, that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious technique used ubiquitously by the real circuitry, brought forward from ancient lever-frame interlockings, where it minimized contacts and wires. At its most potent, bidirectional current flow mirrors the bidirectional movement of trains.  Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)</p>
+<p>(2022: <code>LABEL</code>s were a weak attempt to “share wiring” between relays, both to reduce error-prone code duplication and strive towards what I call “topomorphic circuits”, that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious and venerable technique used ubiquitously by the real circuitry. See the logic document for a good example. Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)</p>
 
 <p><strong>Macros</strong> are used to define standardized identical relay definitions, identical in shape but not in relay numbers.  For example.</p>
 
@@ -414,7 +411,7 @@ pre > code {
 
 <p>The following relays are known to the simulator.  Some are read by it to update the panel, and others are operated by it to reflect interaction. If you don&#39;t have them, the corresponding feature will not be implemented for the object in question.  If you have them, they be used as expected.</p>
 
-<h3 id="toc_5">Relays read by the simulator</h3>
+<h3 id="toc_6">Relays read by the simulator</h3>
 
 <p>These relays are read (i.e., logically observed) by the simulator to operate the panel, and which the (your) relay logic must drive to make the panel &quot;work&quot;.  They are called <em>reporting relays</em> in the code, and trigger nomenclature-specific code execution when they change state.</p>
 
@@ -452,11 +449,11 @@ pre > code {
 </tr>
 <tr>
 <td>SK</td>
-<td>White &quot;S&quot; light (with yellow) in advance of GT signals.</td>
+<td>White <code>S</code> light (with yellow) in advance of GT signals.</td>
 </tr>
 <tr>
 <td>DK</td>
-<td>White &quot;D&quot; light (with yellow) in advance of GT signals. Signal must be clear (HV, if exists) or H to display.</td>
+<td>White <code>D</code> light (with yellow) in advance of GT signals. Signal must be clear (HV, if exists) or H to display.</td>
 </tr>
 <tr>
 <td>STR</td>
@@ -528,7 +525,7 @@ pre > code {
 </tr>
 </tbody></table>
 
-<h3 id="toc_6">Relays operated by the simulator</h3>
+<h3 id="toc_7">Relays operated by the simulator</h3>
 
 <p>The following are the relays operated by the simulator in response to the panel, providing input to rest of the relay system from the user interface. They are called <em>Quisling relays</em> in the code, in dishonor of Vidkun Quisling (1887-1945), the Norwegian traitor who operated his government on orders from the Nazi regime.</p>
 
@@ -646,9 +643,9 @@ pre > code {
 
 <p><strong>The simulator initializes all relays with nomenclatures RGP, AS, D, DV at interlocking load time by computing their state by evaluating their expressions</strong> - this is a very inelegant solution to a fairly massive initial-state problem not yet solved in general.</p>
 
-<h3 id="toc_7">Other relays of honorable mention</h3>
+<h3 id="toc_8">Other relays of honorable mention</h3>
 
-<p>Here are some other relays, not known to the simulator proper. See the main NXSYS helpfile for explanation of the Vital/Non-vital distinction.</p>
+<p>Here are some other relays, not known to the simulator proper. See the main NXSYS helpfile for explanation of the Vital/Non-vital distinction, and the logic document for even more.</p>
 
 <table><thead>
 <tr>
@@ -738,9 +735,9 @@ pre > code {
 </tr>
 </tbody></table>
 
-<p><strong>Relays operated by &quot;random button&quot; controls, and operating &quot;random panel lights&quot; and the like are usually named by you in TLEdit.</strong>  If you care about the superterrific &quot;Train ID button system&quot; and its lights and buttons, study <a href="https://github.com/BernardGreenberg/NXSYS/blob/master/Interlockings/Myrtle/myrautop.trk">myrautop.trk at Myrtle Av.</a> and maybe the couldn&#39;t-be-cooler <a href="https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYS/v2/dynmenu.cpp">dynmenu.cpp</a> which implements its model.</p>
+<p><strong>Relays operated by “random button” controls, and operating &quot;random panel lights&quot; and the like are usually named by you in TLEdit.</strong>  If you care about the superterrific “Train ID button system” and its lights and buttons, study <a href="https://github.com/BernardGreenberg/NXSYS/blob/master/Interlockings/Myrtle/myrautop.trk">myrautop.trk at Myrtle Av.</a> and maybe the couldn&#39;t-be-cooler <a href="https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYS/v2/dynmenu.cpp">dynmenu.cpp</a> which implements its model.</p>
 
-<p>You can define any other relays you want, freely.</p>
+<p>You can define any other relays you want, freely. Right now their names must be valid “relay symbols”, i.e., digits followed by alphabetics.  The number will associate it with a track section or lever, and it will show up on relay list dialogs for that object.</p>
 
 <p>There is a new class of &quot;optional&quot; relays, currently including</p>
 
@@ -770,7 +767,7 @@ pre > code {
 
 <p>These optional relays need not be coded, but if they are, they will be utilized as  indicated above.</p>
 
-<h3 id="toc_8">&quot;Special timing consideration&quot;</h3>
+<h3 id="toc_9">“Special timing consideration”</h3>
 
 <p>With one exception, relay definitions may appear in the source file in any order.  If the circuit is correctly designed and race-free, the order of relays will not matter.  There is, however, one case in the standard interlocking design where relative timing is critical, and thus the detail of the simulator&#39;s algorithm, and hence, source order, become considerations.</p>
 
@@ -780,14 +777,14 @@ pre > code {
 
 <hr/>
 
-<h4 id="toc_9">Additional special forms (19 February 1997)</h4>
+<h4 id="toc_10">Additional special forms (19 February 1997)</h4>
 
 <p>The Common Lisp special forms <code>COMMENT</code>, <code>EVAL-WHEN</code>, and <code>INCLUDE</code> are supported by NXSYS and the compiler.</p>
 
 <p><code>COMMENT</code>   all subforms are read, but ignored when it appears at top level. Example</p>
 
-<pre><code>         (COMMENT (RELAY 240R 240PBS 125RWK 127NWK 212XS)) ;;old 240R
-         (RELAY 24          ;;real definition.
+<pre><code>(COMMENT (RELAY 240R 240PBS 125RWK 127NWK 212XS)) ;;old 240R
+(RELAY 240R          ;;real definition.
 </code></pre>
 
 <p><code>(EVAL-WHEN  tags form1 form2 form3 ....)</code>
@@ -798,9 +795,29 @@ pre > code {
 
 <p>A special relay called <code>0LogicHalt</code> has been defined.  If you provide a definition for this relay, and it ever picks, at that time a message box will pop up stating this: if you press &quot;Yes&quot;, the relay simulator engine will halt and allow you to examine its state in detail with the Draftsperson and other tools.  You must (currently) reload the interlocking after such a breakpoint.</p>
 
-<p><strong>2022: Description and usage of the Relay Compiler removed.  It can&#39;t compile for the Mac, and interlockings run rapidly enough on both platforms without compilation.</strong></p>
+<p><a id="layout"></a></p>
 
-<h1 id="toc_10"></h1>
+<h4 id="toc_11">Track Layout Language</h4>
+
+<p>The Lisp-embedded language used in track layout files generated by TLEdit is, contrary to prior (sarcastic) claims, not at all obvious.  You should never have to deal with it or code in it, unless bugs in either TLEdit or NXSYS proper require immediate fix and I am not available.  That should not happen, but in NXSYS, as with real rapid transit, errors do happen.</p>
+
+<p>The layout is a graph (in the mathematical sense), of “nodes” and “rays” (arcs). Nodes are either </p>
+
+<ul>
+<li>Insulated joints, from which emanate either 1 or 2 rays, 1 in the case of a track termination/end, and 2 otherwise.</li>
+<li>“kinks”, i.e., track bends, also 1 or 2 rays, but track terminations are forcibly insulated at “save” time</li>
+<li>switches, from which invariably emanate 3 rays (<em>tres rayos</em>, no <em>Tres Reyes</em>).</li>
+</ul>
+
+<p>“Rays” are track segments, which always connect two nodes.</p>
+
+<p>The <code>LAYOUT</code> form, other than its positioning subform at its top, consists solely of <code>PATH</code>s.  Each <code>PATH</code> is from one track termination or switch to another. Paths with neither (e.g., closed loops with no switches) cannot be represented and are diagnosed by TLEdit at “save” time.  Kinks are designated by the absence of an explicit node type.  Track circuit designation subforms (<code>TC</code>) are dumped between the nodes of segments having them.</p>
+
+<p>The three rays emanating from a switch are called its <em>stem</em>, <em>normal</em>, and <em>reverse</em> branches.  The dumper notes which it traverses when it does so. Rather than starting a new <code>PATH</code> when traversing a switch not before encountered, the dumper incorporates it into the <code>PATH</code> being recorded, of necessity either entering or leaving via the <em>stem</em>.  The dumper meticulously verifies the validity of its graph-theoretic assumptions to avoid creating unloadable layouts.</p>
+
+<p>Again, hopefully you will never have to deal with any of this. If you really care, study <code>save.cpp</code>.</p>
+
+<h1 id="toc_12"></h1>
 
 <p>(END)</p>
 

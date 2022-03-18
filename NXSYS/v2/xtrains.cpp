@@ -57,7 +57,7 @@ static int SULTMMapper1 (GraphicObject * g) {
     else return 0;
     WP_cord wpcordlen;
     int this_joint_sn = ts->GetEnd(endx).Joint->StationNumber();
-    int that_joint_sn = ts->StationPointsEnd (wpcordlen, endx);
+    int that_joint_sn = ts->StationPointsEnd (wpcordlen, endx, 0);
     double rwlen = fabs((double)(this_joint_sn-that_joint_sn));
     ts->SpreadRWFactor(rwlen/wpcordlen);
     return 0;

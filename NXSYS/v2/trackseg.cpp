@@ -286,7 +286,7 @@ BOOL TrackSeg::SnapIntoLine (WP_cord& wpx1, WP_cord& wpy1) {
 	return FALSE;
     double relx = ptlen * cos(psi);
 #else /* new way 29 June 1999 */
-    /* see http://www.basistech.com/bsg/linedist.html */
+    /* see linedist.html */
     /* relx and rely have precisely the same meanings as above,
        i.e., relx = directed projection of the point-vector upon the trackseg
              rely = directed perpendicular from the point to the trackseg */
@@ -456,8 +456,12 @@ int TrackSeg::ObjIDp(long x) {
 
 
 #ifdef REALLY_NXSYS 
-int TrackSeg::StationPointsEnd (WP_cord &wpcordlen, TSEX end_index) {
+int TrackSeg::StationPointsEnd (WP_cord &wpcordlen, TSEX end_index, int loop_check) {
 
+    if (loop_check >= 200) {
+        MessageBox(0, "Chasing infinite track loop.", "Train system init", 0);
+        return 0;
+    }
     //TrackSegEnd * local = &Ends[end_index];
     TSEX tse = (end_index == TSEX::E0) ? TSEX::E1 : TSEX::E0;
     TrackSegEnd * distant = &GetEnd(tse);
@@ -470,7 +474,7 @@ int TrackSeg::StationPointsEnd (WP_cord &wpcordlen, TSEX end_index) {
     }
     WP_cord farwplen;
     sno = distant->Next->StationPointsEnd
-	       (farwplen, distant->EndIndexNormal);
+	       (farwplen, distant->EndIndexNormal, loop_check + 1);
     wpcordlen += farwplen;
     return sno;
 }

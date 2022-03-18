@@ -119,7 +119,7 @@ class TrackJoint
 	virtual BOOL ClickToSelectP();
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
 	void	SwallowOtherJoint (TrackJoint * tj);
-        void	TDump (FILE * F, TRKPET pet, TSAX branch);
+        void	TDump (FILE * F, TSAX branch);
 	void	EnsureID();
 	void	Insulate();
 	void	FlipNum();
@@ -235,7 +235,7 @@ class TrackSeg : public GraphicObject {
 	void ProcessLoadComplete();
 	void ComputeSwitchRoutedState();
 	BOOL ComputeSwitchRoutedEndState(int ex);
-	int  StationPointsEnd (WP_cord &wpcordlen, TSEX end_index);
+	int  StationPointsEnd (WP_cord &wpcordlen, TSEX end_index, int loop_check);
 	virtual void EditContextMenu(HMENU m);
 #ifndef NOTRAINS
 private:

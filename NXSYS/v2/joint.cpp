@@ -131,21 +131,27 @@ int TrackJoint::AvailablePorts () {
 void TrackJoint::DelBranch (TrackSeg * ts) {
     for (int i = 0; i < TSCount; i++)
 	if (TSA[i] == ts) {
-	    TSCount--;
 #ifdef TLEDIT
-            if (TSCount == 2) {
+            if (TSCount == 3) {
                 SwitchConsistencyUndefine(Nomenclature, SwitchAB0);
                 SwitchAB0 = 0;
                 Nomenclature = AssignID(1);
                 PositionLabel();
             }
 #endif
+            if (ts->Ends[0].Joint == this)
+                ts->Ends[0].Joint = nullptr;
+            if (ts->Ends[1].Joint == this)
+                ts->Ends[1].Joint = nullptr;
+
+            TSCount--;
+
 	    for (int j = i; j < TSCount; j++)
 		TSA[j] = TSA[j+1];
 	    break;
 	}
     for (int i = TSCount; i < 3; i++)  //Clear unused slots for better look in debugger
-        TSA[i] = NULL;
+        TSA[i] = nullptr;
 }
 
 int TrackJoint::TypeID () {return ID_JOINT;}
@@ -177,7 +183,7 @@ void TrackJoint::PositionLabel() {
     sprintf (buf, "%ld", (long)Nomenclature);
     if (TSCount == 3 && SwitchAB0 != 0) 
 	strcat (buf, (SwitchAB0 == 1) ? "A" : "B");
-    Lab->SetText (buf);
+    Lab->SetText (buf); 
 
     GetOrganization(jod);
     /* pointer to biggest interangle */

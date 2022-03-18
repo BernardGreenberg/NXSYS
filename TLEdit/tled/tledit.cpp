@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <cassert>
+#include <unordered_set>
 
 #include "compat32.h"
 #include "nxgo.h"
@@ -18,6 +19,7 @@
 #include "resource.h"
 #include "assignid.h"
 #include "signal.h"
+#include "salvager.hpp"
 
 #ifdef NXSYSMac
 void StartRubberBand(int index, long x, long y);
@@ -80,13 +82,14 @@ static BOOL DefButtonDown (int& x, int &y) {
     DefCreatedTrackJoint = (DefStartTrackJoint == NULL);
     DefStartTrackSeg = NULL;
     DefStartDelay = FALSE;
+    StatusMessage("");
 
     if (DefCreatedTrackJoint) {
 	WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
 	DefStartTrackSeg = SnapToTrackSeg (wpx, wpy);
 	if (DefStartTrackSeg) {
 	    DefStartTrackSeg->Select();
-	    DefStartWPX = (int) wpx;
+	    DefStartWPX = (int)wpx;
 	    DefStartWPY = (int)wpy;
 	    DefStartTrackJoint = NULL;
 	    DefStartDelay = TRUE;
@@ -110,38 +113,70 @@ static BOOL DefButtonDown (int& x, int &y) {
     return TRUE;
 }
 
+static bool OneOfRaysOfStart (TrackJoint* radiator, TrackJoint* tj) {
+    /* 3-17-2022 --  Disallow direct overlay of extant segment !!!! Causes chaos and loops!  */
+    /* It would be cool to cancel if you get near. Collinear drops are a problem, too. */
+    for (int i = 0; i < radiator->TSCount; i++) {
+        TrackSeg* ray = radiator->TSA[i];
+        TSEX myex = ray->FindEndIndex(radiator);  /* trick and track magliozzi */
+        TrackSegEnd& E = ray->GetOtherEnd(myex);
+        TrackJoint* tom = E.Joint;
+        if (tj == tom)
+            return true;
+    }
+    return false;
+}
 
-static void DefButtonUp (int x, int y) {
+static bool DropOnRayFromStart(TrackSeg* ts) {
+    for (int i = 0; i < DefStartTrackJoint->TSCount; i++) {
+        if (ts == DefStartTrackJoint->TSA[i])
+            return true;
+    }
+    return false;
+}
+
+static bool valid_drop_target(TrackJoint* tj){
+    if (tj == DefStartTrackJoint)
+        return false;
+    if (tj->AvailablePorts() <= 0)
+        return false;
+    if (OneOfRaysOfStart(DefStartTrackJoint, tj))
+        return false;
     
-    WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
+    return true;
+}
 
+static void DefButtonUp2 (int x, int y) {
+    
     TrackJoint * tj = (TrackJoint *) FindHitObjectOfType (ID_JOINT, x, y);
-    TrackSeg * ts = NULL;
-
-    if (!DefStartTrackJoint || (tj && tj->AvailablePorts() == 0))
-	goto clr;
 
     if (tj == NULL) {
-	ts = SnapToTrackSeg (wpx, wpy);
-	tj = new TrackJoint (wpx, wpy);
+        WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
+	TrackSeg* ts = SnapToTrackSeg (wpx, wpy);
+        if (ts) {
+            if (DropOnRayFromStart(ts)) {// 3-17-2022
+                StatusMessage("Cannot drop on emanation from same joint");
+                return;
+            }
+            tj = new TrackJoint(wpx, wpy);
+            ts->Split (wpx, wpy, tj);
+        }
+        else
+            tj = new TrackJoint(wpx, wpy);
     }
-    else {
-	wpx = tj->wp_x;
-	wpy = tj->wp_y;
-	if (tj == DefStartTrackJoint) {
-	    if (DefCreatedTrackJoint)
-		delete tj;
-#ifndef NXSYSMac  /* this screws up on Mac because of left's redef */
-	    StatusMessage ("  ");
-#endif   /* this is a kludge of ignorance */
-	    goto clr;
-	}
+    else if (!valid_drop_target(tj)) {
+        if (tj == DefStartTrackJoint)
+            StatusMessage("");
+        else
+            StatusMessage ("Invalid joint for drop target");
+        if (DefCreatedTrackJoint)
+            delete DefStartTrackJoint;
+        return;
     }
+    /* else drop into new space or tj */
 
+    /* This is the COMMIT point */
     BufferModified = TRUE;
-
-    if (ts)
-	ts->Split (wpx, wpy, tj);
 
     if (DefStartTrackSeg)
 	DefStartTrackSeg->Split (DefStartTrackJoint->wp_x,
@@ -149,25 +184,32 @@ static void DefButtonUp (int x, int y) {
 				 DefStartTrackJoint);
 
     if (tj) {
-	TrackSeg * tsg = new TrackSeg
-			 (DefStartTrackJoint->wp_x,
-			  DefStartTrackJoint->wp_y, wpx, wpy);
+	TrackSeg * ts = new TrackSeg (DefStartTrackJoint->wp_x,
+                                      DefStartTrackJoint->wp_y,
+                                      tj->wp_x, tj->wp_y);
 
-	tsg->Ends[0].Joint = DefStartTrackJoint;
-	tsg->Ends[1].Joint = tj;
-	tj->AddBranch(tsg);
+	ts->Ends[0].Joint = DefStartTrackJoint;
+	ts->Ends[1].Joint = tj;
+	tj->AddBranch(ts);
+
 	tj->EnsureID();
-	DefStartTrackJoint->AddBranch(tsg);
+	DefStartTrackJoint->AddBranch(ts);
 	DefStartTrackJoint->EnsureID();
-	tsg->Select();
+	ts->Select();
+        SALVAGER("After DefButtonUp2");
     }
 
-clr:
+}
+
+static void DefButtonUp (int x, int y) {
+    
+    if (DefStartTrackJoint)
+        DefButtonUp2 (x, y);
+    
     DefStartTrackSeg = NULL;
     DefCreatedTrackJoint = FALSE;
     DefStartTrackJoint = NULL;
 }
-
 
 static BOOL Collineate (WP_cord wpx0, WP_cord wpy0,
 			WP_cord wpx1, WP_cord wpy1,
@@ -312,6 +354,23 @@ static void MovButtonDown (HWND hWnd, int x, int y) {
     }
 }
 
+static std::unordered_set<TrackJoint*> all_far_nodes (TrackJoint* tj) {
+    std::unordered_set<TrackJoint*> S;
+    for (int i = 0; i < tj->TSCount; i++){
+        TrackSeg * ts = tj->TSA[i];
+        TrackJoint* other = ts->FindOtherJoint(tj);
+        S.insert(other);
+    }
+    return S;
+}
+
+static bool set_intersects(std::unordered_set<TrackJoint*> s1, std::unordered_set<TrackJoint*> s2) {
+    for (auto s1i = s1.begin(); s1i != s1.end(); s1i++)
+        if (s2.count(*s1i))
+            return true;
+    return false;
+}
+
 static void MovButtonUp (HWND hWnd, int x, int y) {
 
     MoveModeCollineate(x, y);
@@ -320,7 +379,29 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
 
     TrackJoint * tj = (TrackJoint *)FindHitObjectOfType(ID_JOINT, x, y);
 
-    if (tj && tj != MovTrackJoint) {	/* Try to merge nodes */
+    if (!tj) {
+        TrackSeg* ts = (TrackSeg*)FindHitObjectOfType(ID_TRACKSEG, x, y);
+        if (ts && MovTrackJoint->FindBranchIndex(ts) == TSAX::NOTFOUND) {
+            usererr("A joint being moved may not be directly dropped onto a track segment. "
+                    "You can only drop into empty space or onto extant joints. "
+                    "Create a new joint here if that is what you want, and then move.");
+            return;
+        }
+    }
+    
+    if (tj == MovTrackJoint)  // not really possible when moving, but
+        return;
+    
+    if (tj) {	/* Try to merge nodes */
+        if (OneOfRaysOfStart(MovTrackJoint, tj)) {// disallow drop on current neighbor node 3-18-2022
+            StatusMessage("Cannot drop joint on end of ray from itself; cut segment instead.");
+            return;
+        }
+        if (set_intersects(all_far_nodes(tj), all_far_nodes(MovTrackJoint))) {
+            usererr("A joint being moved may not be dropped on a joint at the end of a colocated segment.  Delete the segment if that is what you want.");
+            return;
+        }
+
 	if (tj->TSCount + MovTrackJoint->TSCount > 3)
 	    return;
 	wpx = tj->wp_x;
@@ -381,6 +462,7 @@ static BOOL MovButtonFirst = TRUE;
 	    }
 	    break;
     }
+    SALVAGER("After rodentate");
 
 }
 
@@ -501,6 +583,33 @@ void InsulateJoint (TrackJoint * tj) {
     }
 }
 
+static bool triangle_collapse_condition(TrackJoint * tj){
+    assert(tj->TSCount == 2);  // only valid call
+    /* If this node and the two nodes at the other ends of its two rays
+     form a triangle, disallow the deletion of this node, which would
+     create a situation of two overlaid rays between the same two nodes */
+
+    TSEX myx0 = tj->TSA[0]->FindEndIndex(tj);
+    if (myx0 == TSEX::NOTFOUND)
+        return false;  // should not happen;
+    TrackJoint * tj_other_0 = tj->TSA[0]->GetOtherEnd(myx0).Joint;
+
+    TSEX myx1 = tj->TSA[1]->FindEndIndex(tj);
+    if (myx1 == TSEX::NOTFOUND)
+        return false;  // should not happen;
+    TrackJoint * tj_other_1 = tj->TSA[1]->GetOtherEnd(myx1).Joint;
+    
+    for (int i = 0; i < tj_other_0->TSCount; i++) {
+        TrackSeg * tstest = tj_other_0->TSA[i];
+        for (int j = 0; j < tj_other_1->TSCount; j++) {
+            if (tj_other_1->TSA[j] == tstest)
+                return true;
+        }
+    }
+    return false;
+}
+
+
 void TrackJoint::Cut () {
     switch (TSCount) {
 	case 0:
@@ -524,13 +633,13 @@ void TrackJoint::Cut () {
         return;
     }
 
-    TrackSeg& ts1 = *TSA[0];
-    TrackSeg& ts2 = *TSA[1];
+    TrackSeg& ts0 = *TSA[0];
+    TrackSeg& ts1 = *TSA[1];
 
     TSEX endxs[2];
     /* These are the indexes in the end-arrays of our rays for this joint. */
-    endxs[0] = ts1.FindEndIndex(this);
-    endxs[1] = ts2.FindEndIndex(this);
+    endxs[0] = ts0.FindEndIndex(this);
+    endxs[1] = ts1.FindEndIndex(this);
     if (endxs[0] == TSEX::NOTFOUND || endxs[1] == TSEX::NOTFOUND) {
         usererr ("BUG: tracks and joint estranged; won't delete");
         return;
@@ -550,28 +659,50 @@ void TrackJoint::Cut () {
 	    return;
 	}
     }
+    
+    if (TSCount == 2 && triangle_collapse_condition(this)) {
+        usererr("Triangle collapse error: Deleting this joint would create coincident "
+                "segments (track collision), physically impossible. "
+                "Delete the branches emanating from it if that is what you mean.");
+        return;
+    }
 
+    ts0.Invalidate();
     ts1.Invalidate();
-    ts2.Invalidate();
-    /* ts1 is going to swallow ts2, which latter will be deleted */
-    TrackSegEnd& OurEndInTS1 = ts1.GetEnd(endxs[0]);
-    TrackSegEnd& DistantEndInTS2 = ts2.GetOtherEnd(endxs[1]);
-    OurEndInTS1 = DistantEndInTS2;  // copy the data to make it so.
+    /*
+                    ts0          this         ts1
+     O  ------------------------- O --------------------- O
+        DETS0             OurETS0    OurETS1         DETS1
+     changing to
+                     ts0
+     O  ------------------------------------------------- O
+        DETS0                                      OurETS0
+     former DETS1
 
-    if (OurEndInTS1.SignalProtectingEntrance) {
-	PanelSignal& S = *OurEndInTS1.SignalProtectingEntrance->PSignal;
-	S.Seg = &ts1;
+    */
+    
+    /* ts0 is going to swallow ts1, which latter will be deleted */
+    TrackSegEnd& OurEndInTS0 = ts0.GetEnd(endxs[0]);
+    TrackSegEnd& DistantEndInTS1 = ts1.GetOtherEnd(endxs[1]);
+    OurEndInTS0 = DistantEndInTS1;  // copy the data to make it so.
+
+    if (DistantEndInTS1.SignalProtectingEntrance) {
+	PanelSignal& S = *DistantEndInTS1.SignalProtectingEntrance->PSignal;
+	S.Seg = &ts0;
 	S.Reposition();
     }
-    OurEndInTS1.Joint->DelBranch(&ts2);
-    OurEndInTS1.Joint->AddBranch(&ts1);
-    ts1.Align();
-    ts1.ComputeVisibleLast();		/* s/b in align? */
-    ts1.Select();
-    ts1.Invalidate();
-    delete TSA[1]; // = tsa2
+
+    OurEndInTS0.Joint->DelBranch(&ts1);
+    OurEndInTS0.Joint->AddBranch(&ts0);
+    ts0.Align();
+    ts0.ComputeVisibleLast();		/* s/b in align? */
+    ts0.Select();
+    ts0.Invalidate();
+    // Salvager will fail here.  ...Message box will make redisplay crash.
+    delete &ts1;
     delete this;
-    BufferModified = TRUE;
+    SALVAGER("TrackJoint::Cut final");
+    BufferModified = TRUE;  // I'll say ...
 }
 
 
@@ -611,6 +742,7 @@ void TrackSeg::Cut () {
     else if (j1->TSCount == 3)
 	j1->Select();
     delete this;
+    SALVAGER("TrackSeg::Cut final");
     BufferModified = TRUE;
 }
 
@@ -641,6 +773,7 @@ void TrackJoint::SwallowOtherJoint (TrackJoint * other_tj) {
         TrackSeg& S = *(other_tj->TSA[j]);
         TSEX his_end_in_this_ts = S.FindEndIndex(other_tj);
         assert(his_end_in_this_ts != TSEX::NOTFOUND);
+        Insulated = FALSE; //otherwisem AddBranch will fail silently....
 	AddBranch(&S);
         S.GetEnd(his_end_in_this_ts).Joint = this;
         

@@ -181,16 +181,35 @@ int ProcessLayoutForm (Sexpr f) {
     }
 
     for (auto tj : SwitchJoints)
-        if (auto r = SwitchConsistencyDefine(tj->Nomenclature, tj->SwitchAB0))
+        if (auto r = SwitchConsistencyDefine(tj->Nomenclature, tj->SwitchAB0)) {
             LispBarf(r.value.c_str());
-    
+            return 0;
+        }
 #ifndef TLEDIT
+
+    for (auto j : AllJoints) {  // 3-17-2022
+        TrackJoint& J = *j;
+        for (int i = 0; i < J.TSCount; i++)
+            if (J.TSA[i] == nullptr) {
+                std::string msg =
+                FormatString("Corrupt layout. "
+                             "Joint/switch #%ld (%d) claims %d branches, but TSA[%ld] is null. "
+                             "Editing and and re-save in TLEdit may or may not help.",
+                             J.Nomenclature, J.SwitchAB0, J.TSCount, i);
+                LispBarf(msg.c_str());
+                return 0;
+            }
+    }
+
+
+
     // DON'T demand matching in TLEdit, or you couldn't fix the problems.
     if (auto r = SwitchConsistencyTotalCheck()) {
         LispBarf(r.value.c_str());
         return 0;
     }
         
+    
     for (auto j : AllJoints)
 	j->PositionLabel();
     if (!SwitchJoints.empty())
