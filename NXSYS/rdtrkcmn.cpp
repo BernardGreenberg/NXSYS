@@ -8,6 +8,7 @@
 #include <vector>
 #include <set>
 #include <filesystem>
+#include <cerrno>
 
 #include "lisp.h"
 
@@ -158,7 +159,7 @@ static BOOL LoadExprcodeFile (const char * fname) {
     FILE* f = fopen (fname, "r");
     if (f == NULL) {
 	usermsgstop ("Cannot open exprcode track file %s for reading: %s",
-		     fname, strerror(errno));
+		     fname, std::strerror(errno));
 	return FALSE;
     }
     //printf("Load exprcode file %s\n", fname);

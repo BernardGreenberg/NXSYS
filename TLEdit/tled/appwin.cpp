@@ -1,6 +1,8 @@
 #include "windows.h"
 #include <string.h>
 #include <stdio.h>
+#include <cerrno>
+
 
 #ifdef WIN32
 #include <commdlg.h>
@@ -197,12 +199,7 @@ void ClearItOut() {
 static BOOL ReadIt() {
 	FILE * f = fopen(FileName.c_str(), "r");
 	if (f == NULL) {
-		usererr("Can't open %s for reading: %s", FileName.c_str(),
-#ifdef NXSYSMac
-			strerror(NULL));
-#else
-			_strerror(NULL));
-#endif
+        usererr("Can't open %s for reading: %s", FileName.c_str(), std::strerror(errno));
 		return FALSE;
 	}
 	ClearItOut();

@@ -20,6 +20,7 @@
 #include "SwitchConsistency.h"
 #include "STLExtensions.h"
 #include <cassert>
+#include <cerrno>
 #include <exception>
 #include <unordered_set>
 #include <unordered_map>
@@ -40,13 +41,6 @@
 
 static bool S_YKnown;
 static WP_cord S_LastY;
-//static double S_LastZ;  // I wish .
-
-#ifdef NXSYSMac
-#define STRERROR strerror
-#else
-#define STRERROR _strerror
-#endif
 
 #define NOSAVE_MSG " -- NXSYS cannot load it until you fix this.  Won't save."
 
@@ -228,7 +222,7 @@ BOOL SaveLayout(const char * path) {
     /* Run the dumper for real into a temp file */
     FILE * temp_file = tmpfile();
 	if (temp_file == NULL) {
-        usererr("Cannot open temp file for writing: %s", STRERROR(NULL));
+        usererr("Cannot open temp file for writing: %s", std::strerror(errno));
         return FALSE;
 	}
     try {
@@ -249,7 +243,7 @@ BOOL SaveLayout(const char * path) {
 
     FILE * real_file = fopen(path, "w");  // Text mode!
     if (real_file == NULL) {
-        usererr("Cannot open file %s for writing: %s", path, STRERROR(NULL));
+        usererr("Cannot open file %s for writing: %s", path, std::strerror(errno));
         return FALSE;
     }
     fwrite(total_file_content.data(), 1, did_read, real_file);
