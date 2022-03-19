@@ -179,7 +179,7 @@ TLEditAppDelegate* getTLEDelegate() {
         [self SaveDefaultPath:url];
         
     } else {
-        MessageBox(NULL, "Unable to save file.", "TLEdit Application", 0);
+        MessageBox(NULL, "Unable to save file.", "TLEdit Application", MB_OK);
     }
 }
 -(IBAction)newDocument:(id)sender

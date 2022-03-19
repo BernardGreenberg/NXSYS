@@ -58,7 +58,7 @@ struct TLEditSaveException : public std::exception {
         va_list args;
         va_start(args, ctlstring);
         message = FormatStringVA(ctlstring, args);
-        MessageBox(nullptr, message.c_str(), "TLEdit Save logic error detected:", 0);
+        MessageBox(nullptr, message.c_str(), "TLEdit Save logic error detected:", MB_OK);
 #ifdef DEBUG  /* In debug mode (XCode/VS) break into the debugger.  Release build will not. */
         message.clear(); //breakpoint this -- assert not as useful
 #endif

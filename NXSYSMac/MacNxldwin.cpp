@@ -135,7 +135,7 @@ void HelpText::Display () {
 
 void ScenarioHelp(int n) {
     if (HelpTexts.size() == 0) {
-        MessageBox(NULL, "This scenario doesn't provide any interlocking-specific help.", "NXSYS / Mac help", 0);
+        MessageBox(NULL, "This scenario doesn't provide any interlocking-specific help.", "NXSYS / Mac help", MB_OK);
         return;
     }
     // assert(n - 1 < N)
