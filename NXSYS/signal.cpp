@@ -4,11 +4,6 @@
 #include <string>
 #include "STLExtensions.h"
 
-#ifndef XTG
-#include "track.h"
-#define PSIGQUAL
-#endif
-
 #include "nxsysapp.h"
 #include "lyglobal.h"
 #include "signal.h"
@@ -21,13 +16,9 @@
 #include "rlymenu.h"
 #include "resource.h"
 
-#ifdef XTG
-#define PSIGQUAL PSignal->
 #include "xtgtrack.h"
 #include "lyglobal.h"
-#else
-#include "stop.h"
-#endif
+
 
 extern HFONT Fnt;
 extern HPEN SigPen, BgPen;
@@ -42,7 +33,6 @@ HWND MakeSigWin (Signal * s, int x, int y);
 
 std::string Signal::FormatPlate(TrackSec* ts, const std::string& lights, bool first) {
     if (first) {
-#ifdef XTG
         std::string routid;
         int trkno;
         int stano;
@@ -51,19 +41,6 @@ std::string Signal::FormatPlate(TrackSec* ts, const std::string& lights, bool fi
             return FormatString("%d\n%s", 10*stano + trkno, routid.c_str());
         else
             return FormatString("%s%d\n%d", routid.c_str(), trkno, stano);
-#else
-        TrackDef* td = ts->Track;
-        if (Glb.TorontoStyle)
-            return FormatString("%c%s\n%d",
-                                td->Route,
-                                ((td->TrackNo > 2)
-                                 || Southp != ForwardTS->NominalSouthp) ? "A" : "",
-                                StationNo);
-        else if (Glb.IRTStyle)
-            return FormatString("%d\n%c", 10*StationNo + td->TrackNo, td->Route);
-        else
-            return FormatString("%c%d\n%d", td->Route, td->TrackNo,  StationNo);
-#endif
     }
     else if (XlkgNo > 0 && lights.size() > 2)
         return FormatString("X\n%d", XlkgNo);
@@ -71,11 +48,7 @@ std::string Signal::FormatPlate(TrackSec* ts, const std::string& lights, bool fi
     
 }
 
-#ifndef NXV2    // Can't work any more, v1 load needs help.
-Signal::Signal (TrackSec * ts, int sno, HeadsArray& headstrings, int xno, BOOL rdp)
-#else
 Signal::Signal (int xno, int sno, HeadsArray& headstrings)
-#endif
 {
     TrackSec * ts = nullptr;   // need Version 1, forget it.
     StationNo = sno;
@@ -83,31 +56,6 @@ Signal::Signal (int xno, int sno, HeadsArray& headstrings)
     HG = HVG = DG = DivG = 0;
     MiscG = 0;				/* flags */
     //rdp;
-
-#ifndef XTG
-    RealStationPos = sno;		/* can be patched */
-    TrackDef*td = ts->Track;
-    Southp = ts->NominalSouthp;
-    if (rdp)
-	Southp = !Southp;
-    ForwardTS = ts;
-    if (Southp)
-	ts->SigSouth = this;
-    else
-	ts->SigNorth = this;
-    NumW = 0;
-    if (XlkgNo)  {
-	RECT txr;
-	txr.top = txr.right = txr.left = txr.bottom = 0;
-        std::string t(std::tostring(XlkgNo));
-	HDC dc = GetDC(G_mainwindow);
-	SelectObject (dc, Fnt);
-	DrawText (dc, t.c_str(), t.size(), &txr,
-		  DT_TOP | DT_LEFT |DT_SINGLELINE | DT_NOCLIP |DT_CALCRECT);
-	ReleaseDC (G_mainwindow, dc);
-	NumW = txr.right;
-    }
-#endif
 
     bool first = true;
     for (const std::string& headstring : headstrings) {
@@ -117,21 +65,6 @@ Signal::Signal (int xno, int sno, HeadsArray& headstrings)
     }
 
     /* really should only do GK for interlocked */
-#ifndef XTG
-    wp_x = ts->wp_x + (Southp ? -2 : 2)*GU2;
-    wp_y = ts->wp_y + (Southp? -4 : 4)*GU2;
-    if (Southp) wp_x += ts->wp_len;
-
-    wp_limits.left = - 4*GU2;
-    wp_limits.right = -wp_limits.left;
-    wp_limits.top =  (int)(-2.5*GU2);
-    wp_limits.bottom =  - wp_limits.top;
-    if (NumW)
-	if (Southp)
-	    wp_limits.left -= NumW;
-	else
-	    wp_limits.right += NumW;
-#endif
 
     Selected = Fleeted = 0;
     Coding = 0;
@@ -155,7 +88,6 @@ std::string Signal::CompactName () {
 
 void Signal::GetPlateData (std::string& routid, int& trkno, int& stano) {
 
-#ifdef XTG
     if (Glb.IRTStyle) {
 	trkno = StationNo % 10;
 	stano = StationNo / 10;
@@ -172,12 +104,6 @@ void Signal::GetPlateData (std::string& routid, int& trkno, int& stano) {
 	}					/* KLUUUUDGGEEE ++++++++++ */
     }
     routid = Glb.RouteIdentifier;
-#else
-    TrackDef *ftd = ForwardTS->Track;
-    routid = ftd->Route;
-    trkno = ftd->TrackNo;
-    stano = StationNo;
-#endif
 }
 
 int Signal::AK_p () {
@@ -227,30 +153,13 @@ int Signal::ObjIDp (long id) {
 	return 1;
     if (StationNo && id == StationNo)
 	return 1;
-#if 0
-    int tn = -1;
-    int sn = -1;
-    if (id > 1000) {
-	tn = id/1000;
-	sn = id % 1000;
-    }
-    if (tn == ForwardTS->Track->TrackNo && sn == StationNo)
-	return 1;
-#endif
     return 0;
 }
 
 
 void Signal::Display (HDC dc) {
     /* hook kludge needs work */
-#if 0
-    int cosbc = (MiscG & SIGF_CO) && TStop->Tripping;
-    if (!cosbc && Coding > 0) {
-	ReportToHook();
-	KillOneCoder (this);
-	Coding = 0;
-    }
-#endif
+
     char tbuf[10];
     
     SC_cord height = sc_limits.bottom - sc_limits.top;
@@ -310,11 +219,7 @@ void Signal::Display (HDC dc) {
 
 
 void Signal::Invalidate() {
-#ifdef XTG
     PSignal->Invalidate();
-#else
-    GraphicObject::Invalidate();
-#endif
     UpdateLights();
 }
 
@@ -335,10 +240,8 @@ void Signal::UpdateLights() {
 }
 
 void Signal::ReportToHook() {
-#ifndef NOTRAINS
     if (TrainLooking != NULL)
 	TrainSigHook (this, TrainLooking);
-#endif
 }
 
 BOOL Signal::ShouldBeCoding () {
@@ -349,7 +252,7 @@ BOOL Signal::ShouldBeCoding () {
 }
 
 void Signal::GKCoder (BOOL state) {
-    if (!PSIGQUAL Visible)
+    if (!PSignal->Visible)
 	return;
     if (ShouldBeCoding()) {
 	Coding = state ? 1 : 2;
@@ -397,7 +300,7 @@ BOOL Signal::InitiateClick () {
 	return FALSE;
     long clicks = RelayClicks;
     BOOL was_selected = Selected;
-    PSIGQUAL WantMouseUp();
+    PSignal->WantMouseUp();
     ReportToRelay (PB, TRUE);
     if (was_selected)
 	/* Whoops - must test for UR exit feature */
@@ -425,16 +328,9 @@ BOOL Signal::ShowFullsigWindow (BOOL ShowNotHide) {
 	
     if (Window == NULL) {
 	POINT p;
-#ifdef XTG
 	p.x = WPXtoSC (PSignal->wp_x);
 	p.y = WPYtoSC (PSignal->wp_y) + 2*(int)(PSignal->Radius*NXGO_Scale);
 
-#else
-	p.x = sc_limits.left;
-	p.y = sc_limits.bottom;
-	if (Southp)
-	    p.y += 4*GU2;
-#endif
 	ClientToScreen (G_mainwindow, &p);
 	Window = MakeSigWin(this, p.x, p.y);
     }
@@ -520,7 +416,7 @@ void Signal::EditContextMenu(HMENU m) {
 
 void Signal::ContextMenu () {
     int id = XlkgNo ? XlkgNo : StationNo;
-    int option = PSIGQUAL RunContextMenu (IDR_SIGNAL_CONTEXT_MENU);
+    int option = PSignal->RunContextMenu (IDR_SIGNAL_CONTEXT_MENU);
     switch (option) {
 	case ID_DRAW_RELAY:
 	    DrawRelaysForObject (id, "Signal");
@@ -658,11 +554,7 @@ BOOL Signal::Fleet (BOOL onoff) {
 }
 
 int DropperFunarg (GraphicObject * go) {
-#ifdef NXV2
     ((PanelSignal *) go)->Sig->Cancel();
-#else
-    ((Signal *) go)->Cancel();
-#endif
     return 0;
 }
 
