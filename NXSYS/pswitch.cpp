@@ -2,11 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#ifdef NXV2
 #include "xtgtrack.h"
-#else
-#include "track.h"
-#endif
 #include "pswitch.h"
 #include "objid.h"
 #include "brushpen.h"
@@ -20,14 +16,6 @@
 
 #ifndef Virtual
 #define Virtual
-#endif
-
-#ifndef NXV2
-#ifndef TLEDIT
-#ifndef NXV1
-#define NXV1
-#endif
-#endif
 #endif
 
 static HPEN Pen = NULL;

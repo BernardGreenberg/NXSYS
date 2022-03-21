@@ -1,12 +1,6 @@
 #ifndef _NX_TRAFFICLEVER_H__
 #define _NX_TRAFFICLEVER_H__
 
-#ifndef NXV2
-#ifndef TLEDIT
-#include "track.h"
-#endif
-#endif
-
 #ifdef TLEDIT
 #ifndef _FILE_DEFINED
 #include <stdio.h>

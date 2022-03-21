@@ -1,9 +1,6 @@
 #include "windows.h"
 #include <string.h>
 #include <vector>
-#ifndef NXV2
-#include "track.h"
-#endif
 #include "text.h"
 #include "objid.h"
 #include "brushpen.h"
@@ -75,16 +72,8 @@ TextString::TextString (const char * string, LOGFONT * lf,
 			RW_cord x, long y, COLORREF color, BOOL colorgiven) :
    Color(color), ColorGiven(colorgiven), String(string) {
 
-/* version 1 nonsense */
-
-#if NXV2
     wp_x = x;
     wp_y = y;
-#else
-    TrackDef * td = TrackDefs[0];	/* better be one */
-    wp_x = RWx_to_WPx (td, rw_x = x);
-    wp_y = RWyhun_to_WPy (y);
-#endif
     SetNewLogfont (lf);
 }
    

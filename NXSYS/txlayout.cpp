@@ -45,9 +45,6 @@ int ProcessTextForm (Sexpr s) {
     if (!CONSP(s) || !NUMBERP(CAR(s)))
 pcnn:	BARF (("Panel coordinates missing, or not numbers, in TEXT layout form."));
     x = CAR(s).u.n;
-#ifndef NXV2
-    x *= 100;
-#endif
     SPop(s);
     if (!CONSP(s) || !NUMBERP(CAR(s)))
 	goto pcnn;

@@ -1,12 +1,6 @@
 #ifndef _NX_SWITCH_KEY_H__
 #define _NX_SWITCH_KEY_H__
 
-#ifndef NXV2
-#ifndef TLEDIT
-#include "track.h"
-#endif
-#endif
-
 #ifdef TLEDIT
 #include <stdio.h>
 #endif

@@ -1,13 +1,6 @@
 #ifndef _NX_PANEL_LIGHT_H__
 #define _NX_PANEL_LIGHT_H__
 
-
-#ifndef NXV2
-#ifndef TLEDIT
-#include "track.h"
-#endif
-#endif
-
 #if !TLEDIT
 #include "relays.h"
 #endif

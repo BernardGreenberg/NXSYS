@@ -15,11 +15,7 @@
 /* 11 January 2001 */
 /* thorough rewrite 19 Feb 2022 */
 
-#ifdef NXV2
 #define HELP_SUBMENU_X 5
-#else
-#define HELP_SUBMENU_X 6
-#endif
 using std::string, std::vector;
 
 static WNDPROC wpOrigEditProc;

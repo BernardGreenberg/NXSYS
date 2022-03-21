@@ -33,8 +33,7 @@ These are set automatically by headers in the Mac build, but must be manually sp
 Flag          |Meaning
 --------------|-------------------
 PRODUCT_NAME  |This has to be ="NXSYS" or ="TLEdit". This is obsolescent. Quotes significant until then.
-XTG, NXV2      |(Extended track geometry). Both signify NXSYS Version 2 (or TLEdit, which is only version 2). A trivial amount of Version 1 code remains and is being extirpated.
-
+XTG, NXV2      |(Extended track geometry). Both signify NXSYS Version 2 (or TLEdit, which is only version 2).(3/20/22) It is thought that all Version 1 code has been extirpated, and that these are no longer necessary.
 ### Wholly obsolete flags still in the source
 ##### but are not ever to be specified.
 

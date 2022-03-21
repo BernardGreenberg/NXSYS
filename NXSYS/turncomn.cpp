@@ -6,16 +6,11 @@
 #include "nxsysapp.h"
 #include "rlyapi.h"
 
-#ifdef NXV2
-#include "xtgtrack.h"
-#include "xturnout.h"
-#else
-#include "track.h"
-#endif
-
 #include "timers.h"
 #include <math.h>
 #include "rlyapi.h"
+#include "xtgtrack.h"
+#include "xturnout.h"
 
 const int SwitchMoveTimeMS = 1800;
 
@@ -43,23 +38,6 @@ void Turnout::CoderReporter(void* v, BOOL codestate) {
     Turnout * t = (Turnout *) v;
     t->CodingFlash (codestate);
 }
-
-#ifndef NXV2
-void Turnout::DisplayNoDC () {
-#ifdef NXSYSMac
-    invalidateAndTurnouts()
-#else
-    HDC dc = GetDC (G_mainwindow);
-    Display (dc);
-    ReleaseDC (G_mainwindow, dc);
-#endif
-}
-
-void Turnout::InvalidateAndTurnouts () {
-    TrackSec1->InvalidateAndTurnouts();
-    TrackSec2->InvalidateAndTurnouts();
-}
-#endif
 
 void Turnout::StartMove() {
     if (MovingPhase > 0)
@@ -129,17 +107,12 @@ void Turnout::Timer () {
     if (CLKCodingPhase == 0)
 	KillOneCoder (this);
     Thrown = !Thrown;
-#ifndef NXV2
-    InvalidateAndTurnouts();
-#endif
 
     if ((Thrown && RelayState(NWZ)) || (!Thrown && RelayState(RWZ)))
 	StartMove();
     else {
 	ReportToRelay (Thrown ? RWP : NWP, TRUE);
-#ifdef NXV2
 	UpdateRoutings();
 	InvalidateAndTurnouts();
-#endif
     }
 }

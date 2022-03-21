@@ -3,13 +3,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-#ifdef NXV2
+
 #include "xtgtrack.h"
 #include "xturnout.h"
-#else
-#include "track.h"
-#include "lyglobal.h"
-#endif
+
 #include "trafficlever.h"
 #include "objid.h"
 #include "ssdlg.h"
@@ -39,14 +36,6 @@ static HPEN LinePen;
 
 #ifndef Virtual
 #define Virtual
-#endif
-
-#ifndef NXV2
-#ifndef TLEDIT
-#ifndef NXV1
-#define NXV1
-#endif
-#endif
 #endif
 
 TrafficLever::TrafficLever (int xno, WP_cord p_wpx, WP_cord p_wpy,
@@ -97,15 +86,6 @@ void TrafficLever::SetXlkgNo (int xno) {
     NumString = std::to_string(xno);
 }
 
-#ifdef NXV1
-
-
-static void CreateTrafficLever (int xno) {
-    xno;
-}
-
-#endif
-
 void InitTrafficLeverData () {
     int gu = GU2;			/* expected to be about 3 */
     KnobRadius = 6*gu;
@@ -136,13 +116,6 @@ void TrafficLever::InitState() {
         ReportToRelay(NL, TRUE);
 }
 #endif
-
-#ifdef NXV1
-void CreateTrafficLevers () {
-    InitTrafficLeverData();
-}
-#endif
-
 
 Virtual void TrafficLever::Display (HDC hdc) {
 

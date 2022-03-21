@@ -3,13 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <vector>
-#ifdef NXV2
 #include "xtgtrack.h"
 #include "xturnout.h"
-#else
-#include "track.h"
-#include "lyglobal.h"
-#endif
 #include "swkey.h"
 #include "objid.h"
 #include "ssdlg.h"
@@ -36,14 +31,6 @@ static int ctSwitches;
 #endif
 #ifndef Virtual
 #define Virtual
-#endif
-
-#ifndef NXV2
-#ifndef TLEDIT
-#ifndef NXV1
-#define NXV1
-#endif
-#endif
 #endif
 
 #ifndef TLEDIT
@@ -123,62 +110,6 @@ void SwitchKey::SetXlkgNo (int xno) {
     NumStrLen = (int)strlen(NumStr);
 }
 
-#ifdef NXV1
-BOOL SwitchKey::XIntersectP (WP_cord wpx1, WP_cord wpx2) {
-    return (wpx2 > wp_x + wp_limits.left)
-	    &&(wpx1 < wp_x + wp_limits.right);
-}
-
-static int MapSwitchCounter (GraphicObject * g) {
-    if (AllSwitches)
-	AllSwitches[ctSwitches] = (Turnout *)g;
-    ctSwitches++;
-    return 0;
-}
-
-static void CreateSwitchKey (Turnout * t) {
-    
-    int km = Width + Margin;
-    int km2 = km + Margin;
-    WP_cord wpx = t->wpx1, wpx1, wpx2;
-    if (!t->Singleton)
-	if (t->wpx2 < t->wpx1)
-	    wpx = t->wpx2;
-
-    wpx -= Width/2;			/* center it */
-
-    int InsertAt;
-
-    for (InsertAt = 0; InsertAt < XFill; InsertAt++) {
-	if (wpx >= Keys[InsertAt]->wp_x)
-	    continue;
-	wpx1 = wpx - Margin;
-	wpx2 = wpx + km;
-	if (((InsertAt == 0) ||
-	     !Keys[InsertAt-1]->XIntersectP(wpx1, wpx2))
-	    && !Keys[InsertAt]->XIntersectP(wpx1, wpx2))
-	    break;			/* fits just fine naturally */
-	if (InsertAt != 0) {		/* try sticking after prev */
-	    wpx = Keys[InsertAt-1]->wp_x + km2;
-	    wpx1 = wpx - Margin;
-	    wpx2 = wpx + km;
-	    if (!Keys[InsertAt]->XIntersectP(wpx1, wpx2))
-		break;			/* ok, clears this one */
-	    /* must not be enough space between that one and this one */
-	}
-	wpx = Keys[InsertAt]->wp_x;	/* try to overclobber this one */
-    }
-    /* if found nothing, will stick at end */
-    if (XFill > 0 && InsertAt == XFill && wpx < Keys[XFill-1]->wp_x + km2)
-	wpx = Keys[XFill-1]->wp_x + km2;
-
-    SwitchKey * sk = new SwitchKey (t, wpx, Top);
-    for (int i = XFill-1; i >=InsertAt; i--)
-	Keys[i+1] = Keys[i];
-    Keys[InsertAt] = sk;
-}
-
-#endif
 
 void InitSwitchKeyData () {
     int gu = GU2;			/* expected to be about 3 */ 
@@ -187,11 +118,7 @@ void InitSwitchKeyData () {
     LKRadius = (int) (1.7*gu);
     LKOffset = (int) (1.5*LKRadius);
 
-#ifdef NXV1
-    Top = RWy_to_WPy (NULL, Glb.TrackDefCount);
-#else
     Top = 0;
-#endif
     Bottom = Top + Height;
 
     HDC hDC = GetDC (G_mainwindow);
@@ -203,26 +130,6 @@ void InitSwitchKeyData () {
     Bottom += r.bottom + BottomMargin;
     ReleaseDC (G_mainwindow, hDC);
 }
-
-#ifdef NXV1
-void CreateSwitchKeys () {
-
-    InitSwitchKeyData();
-
-    AllSwitches =NULL;
-    ctSwitches = 0;
-    MapGraphicObjectsOfType (ID_TURNOUT, MapSwitchCounter);
-    AllSwitches = new Turnout * [ctSwitches];
-    Keys = new SwitchKey * [ctSwitches];
-    ctSwitches = 0;
-    MapGraphicObjectsOfType (ID_TURNOUT, MapSwitchCounter);
-    qsort (AllSwitches, ctSwitches, sizeof(Turnout*), SwitchByXlkgNoComparer);
-    for (XFill = 0; XFill < ctSwitches; XFill++)
-	CreateSwitchKey (AllSwitches[XFill]);
-    delete Keys;
-    delete AllSwitches;
-}
-#endif
 
 
 Virtual void SwitchKey::Display (HDC hdc) {
@@ -379,16 +286,7 @@ void SwitchKey::SetTurnSwkeyFlags() {
 	newkeys |= TN_AUXKEY_FORCE_REVERSE;
     if (newkeys != Turn->AuxKeyForce)  {
 	Turn->AuxKeyForce = (char)newkeys;
-#ifdef NXV2
 	Turn->InvalidateAndTurnouts();
-#else
-	Turn->InvalidateNKs();
-	Turn->Invalidate();
-	if (Turn->TrackSec1)
-	    Turn->TrackSec1->Invalidate();
-	if (Turn->TrackSec2)
-	    Turn->TrackSec2->Invalidate();
-#endif
     }
 }
 

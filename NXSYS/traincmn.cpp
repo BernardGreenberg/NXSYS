@@ -18,12 +18,9 @@
 
 */
 
-#ifdef NXV2
+
 /* 60fps = 41fps */
 #define DEFAULT_SPEED 60.0
-#else
-#define DEFAULT_SPEED 150.0
-#endif
 
 #define DEFAULT_TRAIN_LENGTH 610.0
 #define DEFAULT_YELLOW_SPEED 60.0
@@ -43,20 +40,13 @@ double YellowFeetPerSecond = DEFAULT_YELLOW_SPEED;
 #include <algorithm>
 #include <cassert>
 #include "nxsysapp.h"
-#if NXV2
+
 #include "xtgtrack.h"
 #include "signal.h"
 #include "dynmenu.h"
 #include "NXSYSMinMax.h"
 
 #include "track.h" /// ?? otherwise TrackDef not defined!?!?!
-
-#else
-#include "track.h"
-#include "signal.h"
-#include "stop.h"
-
-#endif
 
 #if NXSYSMac
 HWND MacCreateTrainDialog(void* train, int id, bool observant);
@@ -87,9 +77,7 @@ const int INTVL_MS = 500;
 #endif
 
 const double INTVL_SECS = ((double)INTVL_MS)/1000.;
-#if NXV1
-const int IDIST = 3;			/* 100 ft outside xlkg. */  //seemingly unused (says mac compiler)
-#endif
+
 const double MIN_ACCEL = -30.0;
 const double MAX_ACCEL = 30.0;
 
@@ -283,17 +271,9 @@ void Train::UpdateSwitches () {
 
 void Train::UpdatePositionReport () {
 
-#if NXV1
-    double x = front.x;
-    int ix = (int)x;
-    StringFldF(TRD_LOC, "%c%d-%d+%02d",
-               front.td->Route, front.td->TrackNo,
-               ix,
-               (int) (100.0 * (x  - (double) ix)));
-#else
     StringFldF(TRD_LOC, "%s+%02d", front.LastIJID,
 	     (int)(100.0*front.FeetSinceLastIJ));
-#endif
+
 
 #if NXSYSMac
     double fraction = Speed/Cruise;
@@ -327,9 +307,6 @@ Train::Train (int train_no, GraphicObject * g, int options) {
 #else
     DLGPROC dd = reinterpret_cast<DLGPROC>(&Train_DlgProc);
     Dialog = CreateDialog (app_instance, "Train", G_mainwindow, dd);
-#endif
-#if NXV1
-    TrackTime = 0;
 #endif
 
     Length = Glb.TrainLengthFeet;
@@ -373,17 +350,6 @@ void Train::SetCabviewCheck (BOOL v) {
 }
 #endif
 
-#if NXV1         //v2 is in xtrains.cpp
-void Train::InitPositionTracking (TrackUnit * ts) {
-    southp = ts->NominalSouthp;
-    front.td = ts->Track;
-    front.ts = NULL;
-    front.x = southp ? front.td->LastSno + IDIST
-	      : front.td->Station_base - IDIST;
-    back.td = front.td;
-    back.ts = NULL;
-}
-#endif
 
 void Train::InitPosition () {
 
@@ -391,10 +357,7 @@ void Train::InitPosition () {
 	NextSig->Hook (NULL);
     NextSig = NULL;
     InstallNextSig();
-#if NXV1
-    StringFld (TRD_NORTHSOUTH, (southp ^ Glb.RightIsSouth)
-	       ? "Southbound" : "Northbound");
-#endif
+
     StringFld (TRD_LAST_SIG_NAME, "None");
     StringFld (TRD_LAST_SIG_STATE, "");
 
@@ -407,10 +370,8 @@ void Train::InitPosition () {
 
 void TrainDialog (GraphicObject* g, int haltctl) {
 
-#if NXV2
     if (!VerifyTrackSelectionAcceptability ((TrackUnit *) g))
 	return;
-#endif
     
     MakeTrainGenId (g, (haltctl & TRAIN_HALTCTL_HALTED) ? TRAIN_CTL_HALTED : 0);
 }
@@ -442,29 +403,12 @@ void Train::Observance () {
 
     double next_loc;
 
-#if NXV1
-    if (NextSig == NULL)
-	if (southp)
-	    next_loc = (int)(front.td->Station_base -(Length+99.0)/100.- 2);
-	else
-	    next_loc = (int)(front.td->LastSno + (Length+99.0)/100.+ 2);
-    else
-	next_loc = NextSig->RealStationPos;
-
-    if (southp)
-	s = (front.x - next_loc)*100.0;
-    else
-	s = (next_loc - front.x)*100.0;
-#endif
-
-#if NXV2
     if (NextSig == NULL)
 	next_loc = front.x + 100.0;
     else
 	next_loc = X_Of_Next_Signal;
 
     s = (next_loc - front.x)*100.0;
-#endif
 
     if (target_speed == 0.0)
 	s -= HaltSpaceBeforeStopSignal;
@@ -496,18 +440,9 @@ void Train::ComputeNextMotion() {
     int interval = (int)(now - Time);
     double move = ((double)interval*(Speed/100.0))/1000.0; /* ms, not seconds */
     double flength = (double) Length/100.0;
-#if NXV1
-    if (southp) {
-	front.x -= move;
-	back.x = front.x + flength;
-    }
-    else {
-#endif
-	front.x += move;
-	back.x = front.x - flength;
-#if NXV1
-    }
-#endif
+    front.x += move;
+    back.x = front.x - flength;
+
     Time = now;
     int tripstop =
       NextSig!= NULL && NextSig->TStop != NULL && NextSig->TStop->Tripping;
@@ -597,21 +532,19 @@ void Train::TimerHandler(){
     ComputeNextMotion();  //Can vanish the Train
 }
 
-#if NXV2
+
 void Train::SetUnoccupied (TrackUnit * ts) {
     if (Occupied.count(ts)) {
         Occupied.erase(ts);
         ts->DecrementTrainOccupation();
     }
 }
-#endif
+
 
 void Train::SetOccupied (TrackUnit * ts) {
     if (Occupied.count(front.ts))
         return;
-#if NXV1
-    OcTrackTime[i] = ++TrackTime;
-#endif
+
     Occupied.insert(ts);
     ts->IncrementTrainOccupation();   //Will not work in V1;  to hell with V1.
 }
@@ -641,21 +574,18 @@ void Train::KillTimer() {
 
 
 void Train::Reverse (){
-#if NXV1
-    southp = !southp;
-#endif
+
     std::swap<Pointpos>(front, back);
-#if NXV2
+
     front.IAmFront = TRUE;
     back.IAmFront = FALSE;
     front.Reverse(0.0f);
     back.Reverse(front.x - Length/100.0);
-#endif
+
     InitPosition();
-#if NXV2
+
     if (NextSig && NextSig->XlkgNo != 0)
 	TrySignalIDBox (NextSig->XlkgNo);
-#endif
 }
 
 int Train::Command (WPARAM cmd) {
@@ -844,14 +774,6 @@ void Train::ComputeWindowPlacement() {
     MoveWindow (Dialog, X, (int)(dth - 1.25*dlh), dlw, dlh, FALSE);
 }
 
-#if NXV1
-TrackUnit * ChooseTrackNumber (int tn) {
-    for (int i = 0; i < Glb.TrackDefCount; i++)
-	if (TrackDefs[i]->TrackNo == tn)
-	    return TrackDefs[i]->First;
-    return NULL;
-}
-#endif
 
 void SetTrainKinematicsDefaults() {
      CruisingSpeed = DEFAULT_SPEED;
@@ -867,14 +789,10 @@ int TrainAutoCreate   (int train_no, long track_id_no, long options) {
 
 /* maybe create by track section number, find loose end? */
     TrackUnit * tk;
-#if NXV1
-    const char * what = "track number";
-    tk = ChooseTrackNumber (track_id_no);
-#endif
-#if NXV2
+
     const char * what = "track end IJ #";
     tk = FindTrainEntryTrackSectionByNomenclature (track_id_no);
-#endif
+
     if (!tk) {
 	usermsgstop ("Invalid train starting %s in demo form: %ld", what, track_id_no);
 	return 0;

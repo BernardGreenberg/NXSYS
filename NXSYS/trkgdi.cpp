@@ -33,9 +33,8 @@ HPEN TrackPen, SigPen, BgPen, HighlightTrackPen,
 #if TLEDIT
   SelectedExitLightPen,
 #endif
-#if NXV2
+
   RedExitLightPen,
-#endif
   BlackExitLightPen,
   ExitLightPen;
 
@@ -137,9 +136,7 @@ void InitTrackGDI (int mww, int mwh) {
     GKGreenBrush = CreateSBrush (RGB(0,255,0));
     GKOffBrush = CreateSBrush (RGB(128,128,128));
     GKWhiteBrush = CreateSBrush (RGB(255,255,255));
-#if ! NXV2
-    Glb.TrackDefCount = 0;
-#endif
+
     GU1= mwh/300;
     Track_Normal_Halfwidth = GU1;
     GU2 = mwh/200;
@@ -164,9 +161,9 @@ void InitTrackGDI (int mww, int mwh) {
 #if TLEDIT
     SelectedExitLightPen = CreateSPen (3*Track_Normal_Halfwidth,RGB(0,255,0));
 #endif
-#if NXV2
+
     RedExitLightPen = CreateSPen (3*Track_Normal_Halfwidth,RGB(255,0,0));
-#endif
+
     int w = (int)(1.2*GU2);
 
     YellowXPen = CreateSPen (GU2, RGB (255, 255, 0));

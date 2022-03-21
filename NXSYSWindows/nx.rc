@@ -164,9 +164,7 @@ CAPTION "Simulated Train Control"
 BEGIN
 	RADIOBUTTON "Observant", TRD_OBSERVANT, 5, 4, 48, 12
 	RADIOBUTTON "Free Will", TRD_DEFIANT, 5, 16, 48, 12
-#ifndef NXV2
-	LTEXT "Northbound", TRD_NORTHSOUTH, 2, 32, 40, 8, WS_GROUP
-#endif
+
 	LTEXT "Len:", -1, 2, 42, 16, 8
 	LTEXT "642", TRD_LENGTH, 20, 42, 16, 8
 	LTEXT "Speed:", -1, 2, 62, 26, 8

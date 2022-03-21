@@ -75,8 +75,6 @@ static std::unique_ptr<DemoState> State;
 
 extern unsigned smeasure (HDC dc, char * str);
 
-#ifdef NXV2
-
 GraphicObject * FindDemoHitTurnout (long id);
 GraphicObject * FindDemoHitCircuit (long id);
 
@@ -96,7 +94,6 @@ static  GraphicObject *  FindDemoObjectByID (long id, int key) {
 	    return NULL;
     }
 }
-#endif
 
 
 void DemoTrain (Sexpr);
@@ -226,11 +223,7 @@ static bool ProcessGOForm(int key, Sexpr s, int mousecmd) {
         DemoSay (CADR(CDR(s)).u.s);
     }
     else DemoSay("");
-#ifdef NXV2
     GraphicObject * g = FindDemoObjectByID (CADR(s).u.n, key);
-#else
-    GraphicObject * g = FindHitObject (CADR(s).u.n, key);
-#endif
     if (g != NULL)
         if (State->MakeBigX(g, mousecmd))
             return true;

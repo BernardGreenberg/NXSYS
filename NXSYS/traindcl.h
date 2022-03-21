@@ -1,13 +1,6 @@
 #ifndef _NXSYS_TRAIN_SYSTEM_INTERNAL_HEADER_H__
 #define _NXSYS_TRAIN_SYSTEM_INTERNAL_HEADER_H__
 
-#ifndef NXV2
-#ifndef NXV1
-#define NXV1
-#endif
-#endif
-
-#ifdef NXV2
 
 #include <set>
 
@@ -37,20 +30,6 @@ struct _Pointpos {
     void Reverse(double new_x);
     Train * Trn;
 };
-#endif
-
-#ifdef NXV1
-
-typedef TrackSec TrackUnit;
-const int MaxOccupied = 15;
-
-struct _Pointpos {
-    TrackDef* td;
-    TrackSec * ts;
-    double x;
-    int FindTrackSec(short southp);
-};
-#endif
 
 typedef struct _Pointpos Pointpos;
 
@@ -69,9 +48,7 @@ public:
 
 private:
     bool        TimerPending;
-#ifdef NXV1
-    char	southp;
-#endif
+
     bool	observant;
 
     Pointpos	front;
@@ -82,13 +59,7 @@ private:
     double	LastTargetSpeed;
     long	Time;
     Signal*	NextSig;
-#ifdef NXV2
     std::set<TrackSeg*> Occupied;
-#else
-    int		TrackTime;
-    TrackSec	*Occupied[MaxOccupied];
-    int		OcTrackTime [MaxOccupied];
-#endif
     double	X_Of_Next_Signal;
     
     bool    CODisplay;
@@ -129,9 +100,7 @@ public:
     void    SetCabviewCheck (BOOL v);
 #endif
     void    SetOccupied (TrackUnit * ts);
-#ifdef NXV2
     void    SetUnoccupied (TrackUnit * ts);
-#endif
 
     void    MaybeNoticeSignalChange (Signal * g);
             ~Train();
@@ -143,10 +112,8 @@ static void StaticTimerHandler(void *);
 
 typedef class Train Train;
 
-#ifdef NXV2
 BOOL VerifyTrackSelectionAcceptability (TrackUnit * ts);
 TrackUnit * FindTrainEntryTrackSectionByNomenclature (long nomenclatura);
 BOOL WindowToTopFromTrackUnit(TrackUnit * ts);
-#endif
 
 #endif
