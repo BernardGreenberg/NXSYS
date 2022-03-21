@@ -295,6 +295,7 @@
 		5B30B10527E16383000D59C8 /* Setup32 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Setup32; sourceTree = "<group>"; };
 		5B30B10627E4FDCC000D59C8 /* salvager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = salvager.cpp; sourceTree = "<group>"; };
 		5B30B10727E4FDCC000D59C8 /* salvager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = salvager.hpp; sourceTree = "<group>"; };
+		5B30B10927E929C5000D59C8 /* nxproduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxproduct.h; sourceTree = "<group>"; };
 		5B43834B19C4B47600BEECDC /* AppDelegateGlobals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegateGlobals.h; sourceTree = "<group>"; };
 		5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BigYellowXView.mm; sourceTree = "<group>"; };
 		5B46B9FD19A9188F0041C4FE /* FullSignalView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FullSignalView.h; sourceTree = "<group>"; };
@@ -805,6 +806,7 @@
 		5B5AE6462311529700348612 /* Random Headers */ = {
 			isa = PBXGroup;
 			children = (
+				5B30B10927E929C5000D59C8 /* nxproduct.h */,
 				5BFB4A0027ADD720006BE311 /* StartShut.h */,
 				5BFB49E327AC626B006BE311 /* pival.h */,
 				5BFB49E227AC622E006BE311 /* nxhelp.h */,
