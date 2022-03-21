@@ -48,6 +48,12 @@ static WP_cord S_LastY;
  sets, type-checkable enums instead of numbers or strings. Also changed to write to temp file first,
  to protect against blowouts overwriting good files with partially-written ones */
 
+enum class TRKPET {  // .trk path element types
+    KINK = 1,
+    IJ = 2,
+    SWITCH = 3
+};
+
 /* These exceptions are thrown by the dumper (saver) when it finds problems or logic errors
  OTHER THAN USER ERRORS (e.g., A switch with no B). These indicate bugs, but they must be
  aggressively checked for lest the dumper write out bad files, clobbering good ones and losing work. */

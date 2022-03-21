@@ -26,37 +26,32 @@ class Turnout;
 
 /* Track section (branch) array index(es)*/
 enum class TSAX {
-    NOTFOUND = -1,
-    MIN = 0,
 
-    /* if TSCount = 2 */
-    IJR0 = 0,
-    IJR1 = 1,
-    IJRMAX = 1,
-
-    /* if TSCount = 3 */
+    /* if TSCount = 3 (switch) */
     STEM   = 0,
     NORMAL = 1,
     REVERSE = 2,
 
+
+    /* if TSCount = 2 (nonterminal IJ/kink) */
+    IJR0 = 0,
+    IJR1 = 1,
+    IJRMAX = 1,
+
+    NOTFOUND = -1,
+    MIN = 0,
     MAX = 2
 };
 
 /* Track Section end index(es) */
 enum class TSEX {
-    NOTFOUND = -1,
-    MIN = 0,
-    
-    E0 = 0,
+
+    E0 = 0,   /* meaningful items should appear first (for debugger) */
     E1 = 1,
 
+    NOTFOUND = -1,
+    MIN = 0,
     MAX = 1
-};
-
-enum class TRKPET {  // .trk path element types
-    KINK = 1,
-    IJ = 2,
-    SWITCH = 3
 };
 
 struct JointOrganizationData {
