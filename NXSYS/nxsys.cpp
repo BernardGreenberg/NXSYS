@@ -261,9 +261,7 @@ void DeInstallLayout () {
     }
 #endif
     /* loose trains are nasty. destroy them first. */
-#ifndef NOTRAINS
     TrainMiscCtl (CmKillTrains);
-#endif
 
     ClearHelpMenu();
     DraftsbeingCleanupForOneLayout();

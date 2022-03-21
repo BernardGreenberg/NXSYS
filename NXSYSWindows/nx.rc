@@ -60,13 +60,10 @@ BEGIN
       MENUITEM "&Command Dialog\tAlt+X", CmCommandDlg
 #endif
       MENUITEM SEPARATOR
-#ifdef APPDEMO
-      MENUITEM "&Print Logic...", CmPrintLogic,GRAYED
-      MENUITEM "Print Logic &File...", CmPrintLogicFile,GRAYED
-#else
+
       MENUITEM "&Print Logic...", CmPrintLogic
       MENUITEM "Print Logic &File...", CmPrintLogicFile
-#endif
+
       MENUITEM SEPARATOR
       MENUITEM "E&xit",      CmQuit
     END

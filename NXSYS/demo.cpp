@@ -291,10 +291,10 @@ static bool ProcessForm (Sexpr s, int mousecmd = WM_LBUTTONDOWN) {
     else if (name == "SWITCH")
         return ProcessGOForm(ID_TURNOUT, s, mousecmd);
 
-#ifndef NOTRAINS
+
     else if (name == "TRAIN")
         DemoTrain (CDR (s));    /* continue, no time */
-#endif
+
     else if (name == "CIRCUIT")
         for (Sexpr q = CDR (s); q != NIL; q= CDR(q)) {
             Sexpr e = CAR(q);
@@ -415,8 +415,6 @@ void DecodeOptions (Sexpr S) {
     }
 }
 
-
-#ifndef NOTRAINS
 void DemoTrain (Sexpr S) {
 
     if (S.type != Lisp::tCONS || CAR(S).type != Lisp::NUM)
@@ -478,8 +476,6 @@ void DemoTrain (Sexpr S) {
         }
     }
 }
-#endif
-    
 
 /* this is an external API  -- see demoapi.h*/
 void DemoPause (int haltsw) {

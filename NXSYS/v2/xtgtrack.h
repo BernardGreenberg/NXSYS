@@ -232,13 +232,14 @@ class TrackSeg : public GraphicObject {
 	BOOL ComputeSwitchRoutedEndState(int ex);
 	int  StationPointsEnd (WP_cord &wpcordlen, TSEX end_index, int loop_check);
 	virtual void EditContextMenu(HMENU m);
-#ifndef NOTRAINS
+
+/*  Trains */
 private:
-    void UpdateCircuitOccupation();
+        void UpdateCircuitOccupation();
 public:
-    void IncrementTrainOccupation();
-    void DecrementTrainOccupation();
-#endif
+        void IncrementTrainOccupation();
+        void DecrementTrainOccupation();
+
 	virtual void Hit (int mb);
 #endif
 

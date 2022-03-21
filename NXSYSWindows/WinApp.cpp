@@ -77,7 +77,8 @@ void NXSYS_Command(unsigned int cmd) {
 				PutDWORDRegval(hk, "ShowStops", ShowStopPolicy);
 		}
 		break;
-#ifndef NOTRAINS
+            
+    /* of trains ... */
 	case CmHaltTrains:
 	case CmKillTrains:
 	case CmHideTrainWindows:
@@ -95,7 +96,6 @@ void NXSYS_Command(unsigned int cmd) {
 	case CmNewTrainStopped:
 		TrainType = TRAIN_HALTCTL_HALTED;
 		goto ctc;
-#endif
 
 	case CmResetAllAbove:
 		AllAbove();
@@ -255,11 +255,7 @@ void NXSYS_Command(unsigned int cmd) {
 		CheckMainMenuItem(CmAutoOp, EnableAutoOperation);
 		EnableAutomaticOperation(EnableAutoOperation);
 		break;
-#if defined(APPDEMO) 
-	case CmV2Info:
-		DoV2Dialog();
-		break;
-#endif
+
 	case CmScrollRight:
 		NXGO_HScroll(G_mainwindow, SB_LINERIGHT, 0);
 		break;
@@ -448,11 +444,8 @@ WORD WindowsMessageLoop(HWND window, HACCEL hAccel, UINT closemsg) {
 		if (IsCmdLoopDlgMessage(&message))
 			continue;
 #endif
-
-#ifndef NOTRAINS
 		if (FilterTrainDialogMessages(&message))
 			continue;
-#endif
 		if (hAccel == NULL || !TranslateAccelerator(window, hAccel, &message)) {
 			TranslateMessage(&message);
 			DispatchMessage(&message);
