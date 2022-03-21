@@ -4,10 +4,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifndef XTG
-#include "track.h"
-#endif
-
 #include "lyglobal.h"
 #include "signal.h"
 #include "compat32.h"
@@ -23,13 +19,9 @@ HWND MacMakeFSW(int x, int y, int w, int h, void*signal);
 void MacFillPlateSexily(HWND, int, int, int, int);
 #endif
 
-#if XTG
 #include "xtgtrack.h"
-#else
-#include "stop.h"
-#endif
 
-#if ! NXSYSMac
+#if WIN32
 static char SigWinClass[] = PRODUCT_NAME ":SignalAspect";
 #endif
 
@@ -58,14 +50,14 @@ SigWinStopWidth = 15;
 
 static HFONT Font = NULL, SFont = NULL;
 
-#if ! NXSYSMac
+#if WIN32
 HWND SigWins[100];
 int  SigWinCount = 0;
 static int LastX = 0;
 #endif
 
 void DestroySigWins() {
-#if ! NXSYSMac
+#if WIN32
 	LastX = 0;
 	for (int i = 0; i < SigWinCount; i++) {
 		HWND win = SigWins[i];
@@ -139,19 +131,17 @@ HWND MakeSigWin(Signal * s, int x, int y) {
 #endif
     char plate[20];
     if (s->XlkgNo)
-#if NXV2
         if (s->XlkgNo >= 7000)
             sprintf(plate,
                     "X %c%d",
                     'A' + ((s->XlkgNo / 1000) - 7),
                     s->XlkgNo % 1000);
         else
-#endif
             sprintf(plate, "X %d", s->XlkgNo);
     else
         strcpy(plate, s->CompactName().c_str());
     SetWindowText(window, plate);
-#if ! NXSYSMac
+#if WIN32
     SigWins[SigWinCount++] = window;
 #endif
     return window;
@@ -426,7 +416,7 @@ int SigHead::DisplayWin(Signal* S,
     return y;
 }
 
-#if ! NXSYSMac
+#if WIN32
 static WNDPROC_DCL SigWin_WndProc
 (HWND window, unsigned message, WPARAM wParam, LPARAM lParam) {
 

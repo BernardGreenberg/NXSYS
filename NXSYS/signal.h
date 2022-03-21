@@ -3,12 +3,6 @@
 
 #include "nxgo.h"
 
-#ifdef XTG
-#define _SIG_virtual
-#else
-#define _SIG_virtual virtual
-#endif
-
 #include <string>
 #include <vector>
 
@@ -43,18 +37,10 @@ public:
 
 typedef std::vector<std::string> HeadsArray;
 class Signal
-#ifndef XTG
-   : public GraphicObject
-#endif
 {
 public:
     std::vector<SigHead> Heads;
-#ifdef XTG
     PanelSignal * PSignal;
-#else
-    TrackSec	*ForwardTS;
-    short	Southp;
-#endif
     int		StationNo;
     int		RealStationPos;
     short	XlkgNo;
@@ -95,11 +81,11 @@ public:
     static void SigStateExt(Signal * s);
            void FlagReporterCommon (unsigned int flag, BOOL state);
 
-    _SIG_virtual void Display (HDC dc);
-    _SIG_virtual void Invalidate();
-    _SIG_virtual void Hit (int mb);
-    _SIG_virtual void UnHit();
-    _SIG_virtual int TypeID(), ObjIDp(long);
+     void Display (HDC dc);
+     void Invalidate();
+     void Hit (int mb);
+     void UnHit();
+     int TypeID(), ObjIDp(long);
 
     void	Hook(void*v) {TrainLooking = v;};
     char	ComputeState();

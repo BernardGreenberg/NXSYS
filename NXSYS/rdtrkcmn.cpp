@@ -14,10 +14,6 @@
 
 #define RGP_BOBBLE_TIME_MS 3000
 
-#ifndef XTG
-#include "track.h"
-#endif
-
 #include "signal.h"
 #include "relays.h"
 #include <ctype.h>
@@ -36,6 +32,7 @@
 #include "helpdlg.h"
 #include "STLfnsplit.h"
 #include "STLExtensions.h"
+#include "ValidatingValue.h"
 
 
 
@@ -93,9 +90,7 @@ static int LoadError (const char * msg, Sexpr s) {
 
 static void FinishUpLoad () {
     ProcessLoadComplete();
-#ifndef NOAUXK
     AuxKeysLoadComplete();
-#endif
     InterlockingLoaded = 1;
     ReportAllTrackSecsClear ();
     BRGP0 = CreateQuislingRelay (0, "BRGP");
@@ -103,9 +98,7 @@ static void FinishUpLoad () {
     CPB0 = CreateQuislingRelay (0, "CPB");
 
     EnableDynMenus(TRUE);
-#if !NOTRAINS
     SetUpLayoutTrainMetrics();
-#endif
 
     map_relay_syms (Goose_Generale, nullptr);
     DropAllApproach();
@@ -248,12 +241,9 @@ const char * ReadLayout (const char* fname) {
 static void ResetRouteDefaults() {
     Glb.TorontoStyle = FALSE;
     Glb.IRTStyle = FALSE;
-    Glb.RightIsSouth = FALSE;
     Glb.TrafficLeversTristate = FALSE;
     SetTrackGeometryDefaults();
-#ifndef NOTRAINS
     SetTrainKinematicsDefaults();
-#endif
 }
 
 extern "C" int malloc_zone_check(int );
@@ -510,9 +500,7 @@ void RegisterHelpMenuTextCRLF1 (const char* text, const char* title) {
     RegisterHelpMenuText (fixed.c_str(), title); //help system copies it. STL now 8/2019
 }
 
-typedef std::pair<bool, std::string> LassieRet;
-
-static LassieRet LassieGetHelp(std::string path) {
+static ValidatingValue<std::string> LassieGetHelp(std::string path) {
     FILE* f = fopen(path.c_str(), "r");
     if (f) {
         fseek(f, 0L, SEEK_END);
@@ -520,10 +508,10 @@ static LassieRet LassieGetHelp(std::string path) {
         rewind(f);
         size_t we_read = fread(b.data(), 1, b.size(), f); //could be CRLF issues on Windows.
         fclose(f);
-        return LassieRet(true, std::string(b.data(), we_read));
+        return std::string(b.data(), we_read);
     }
     else
-        return LassieRet(false, "");
+        return {};
 }
 
 int ProcessRouteForm (Sexpr s, const char* fname) {
@@ -543,11 +531,7 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
 	LERROR ("#5 item in route list not ATOM", CAR(s));
 
     Sexpr NS = SPopCar(s);
-    if (symcmp (NS, "NORTH"))
-       Glb.RightIsSouth = FALSE;
-    else if (symcmp (NS, "SOUTH"))
-       Glb.RightIsSouth = TRUE;
-    else LERROR ("Unknown north/south symbol", NS);
+    (void)NS;  /* just ignore the damned thing */
 
     for(;CONSP(s) && CONSP(CDR(s)); s = CDDR(s)) {
 	Sexpr p = CAR(s);
@@ -593,9 +577,8 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
             else {
                 helpMenuText = s2.u.s;
                 if (helpMenuText.length() && helpMenuText[0] == '@') {
-                    auto [valid, data] = LassieGetHelp(STLincexppath(fname, helpMenuText.substr(1)));
-                    if (valid)  // Astonishing C++17
-                        helpMenuText = data;
+                    if (auto retr = LassieGetHelp(STLincexppath(fname, helpMenuText.substr(1))))
+                        helpMenuText = retr.value;
                     else
                         LERROR("Cannot open referenced text help file", s2); // macro returns 0.
                 }

@@ -1,9 +1,5 @@
 #include "windows.h"
-#ifdef XTG
 #include "xtgtrack.h"
-#else
-#include "track.h"
-#endif
 #include "signal.h"
 #include "objid.h"
 #include "ssdlg.h"
@@ -23,40 +19,7 @@ int StopsChanging = 0;
 #define STOP_BAR_WIDTH 5
 #define STOP_STEM_WIDTH 4
 
-#ifndef XTG
-#include "stop.h"
 
-
-Stop::Stop (Signal * g) {
-    Sig = g;
-    Tripping = 1;
-    RVP = NVP = VPB = NULL;
-    g->TStop = this;
-    wp_y = g->ForwardTS->wp_y;
-    wp_x = g->ForwardTS->wp_x;
-
-    wp_limits.left = - 2*GU1;
-    wp_limits.right = 2*GU1;
-    if (g->Southp) {
-	wp_x += g->ForwardTS->wp_len;
-	wp_x -= GU1;
-	wp_limits.bottom = -GU1;
-	wp_limits.top = wp_limits.bottom-5*GU1;
-    }
-    else {
-	wp_x += GU1;
-	wp_limits.top = GU1;
-	wp_limits.bottom = wp_limits.top+5*GU1;
-    }
-    coding = 0;
-    code_clicks = 0;
-}
-
-
-int Stop::TypeID() {return ID_STOP;}
-int Stop::ObjIDp(long x) {return Sig->ObjIDp(x);};
-
-#endif
 
 bool Stop::MouseSensitive () {return false;}
 
@@ -89,50 +52,6 @@ int Stop::PressStopPB() {
     }
     return 0;
 }
-
-#ifndef XTG
-
-void Stop::Display (HDC dc) {
-    HGDIOBJ brush;
-
-    if (ShowStopPolicy == SHOW_STOPS_NEVER && !StopsChanging)
-	return;
-
-    brush = Tripping ? GKRedBrush : GKYellowBrush;
-
-    if (ShowStopPolicy == SHOW_STOPS_NEVER)
-	brush = GetStockObject(BLACK_BRUSH);
-    else if (coding)
-	if (code_clicks & 1)
-	    brush = GetStockObject(BLACK_BRUSH);
-	else;
-    else
-	if (ShowStopPolicy == SHOW_STOPS_RED && !Tripping)
-	    brush = GetStockObject(BLACK_BRUSH);
-
-    SelectObject (dc, NullPen);
-    SelectObject (dc, brush);
-
-    POINT point[3];
-    point[0].x = sc_limits.left;
-    point[1].x = sc_limits.right;
-    point[2].x = (sc_limits.left + sc_limits.right)/2;
-
-    if (Sig->Southp) {
-	point[0].y = sc_limits.bottom;
-	point[1].y = sc_limits.bottom;
-	point[2].y = sc_limits.top;
-    }
-    else {
-	point[0].y = sc_limits.top;
-	point[1].y = sc_limits.top;
-	point[2].y = sc_limits.bottom;
-    }
-    Polygon (dc, point, 3);
-}
-
-#endif
-
 void Stop::CodingDisplay() {
     if (ShowStopPolicy != SHOW_STOPS_NEVER) {
 #ifdef NXSYSMac
