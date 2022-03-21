@@ -1,9 +1,9 @@
 # NXSYS Compiler Flags
-##### 26 February 2022
+##### 21 March 2022
 
 The NXSYS sources are ridden with C++ Preprocessor conditionalizations.  Many are obsolete.  I'm trying to extirpate the latter, but that is a tedious and unrewarding, hence low-priority task, as each such step requires lengthy (on Windows) rebuilding and careful testing.
 
-Some flags are “pairs” of which one or the other must be true at all times.  Currently, `WIN32` (or its brethren) versus `NXSYSMac` is one such.  If, of course, there ever arises a Linux or other third platform, a stricter regime would be required.
+Some flags are “pairs” of which one or the other must be true at all times.  Currently, `_WIN32` versus `NXSYSMac` is one such.  If, of course, there ever arises a Linux or other third platform, a stricter regime would be required.
 
 Many of these flags represent developments, incidents, or test stages of the application; three are mandatory until they are extirpated.  The actual flags as specified to the compiler, in Visual Studio on Windows and Xcode on the Mac, are the authoritative source on what is necessary. The Mac `windows.h` spoof header defines the three “necessary“ ones on that platform.
 
