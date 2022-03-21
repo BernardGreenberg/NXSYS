@@ -333,25 +333,6 @@ public:
 #endif
 };
 
-
-#ifdef TLEDIT
-
-class zSignal {
-    public:
-	zSignal();
-	~zSignal();
-	PanelSignal * PSignal;
-	HBRUSH GetGKBrush();
-	short  XlkgNo;
-	int StationNo;
-	const char * HeadsString;
-	Stop * TStop;
-	BOOL ExplicitID;
-};
-
-
-#endif
-
 #pragma pack (push,xl)
 #pragma pack(1)
 
