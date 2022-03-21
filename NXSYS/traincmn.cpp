@@ -46,8 +46,6 @@ double YellowFeetPerSecond = DEFAULT_YELLOW_SPEED;
 #include "dynmenu.h"
 #include "NXSYSMinMax.h"
 
-#include "track.h" /// ?? otherwise TrackDef not defined!?!?!
-
 #if NXSYSMac
 HWND MacCreateTrainDialog(void* train, int id, bool observant);
 void setSliderValue(HWND, int, int);
