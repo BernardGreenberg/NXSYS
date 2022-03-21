@@ -6,7 +6,9 @@
 /* Modernized to C++11 containers, 15 Aug 2019 BSG, relay stuff mainly
    moved out to RelayLispSubstrate.cpp */
 
-#include "oscond.h"
+#if defined(__POWERPC__) | defined(__MC68K__) | defined(NXSYSMac)
+#define MAC_OS 1  /* fron dam's changes -- might not be NXSYS! */
+#endif
 
 #include <stdlib.h>
 

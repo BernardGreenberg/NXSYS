@@ -72,7 +72,7 @@ static bool isbutnotendswith(const std::string& s, char c) {
 std::string STLfnmerge (const std::string drive, const std::string dir, const std::string fname, const std::string ext) {
     std::string result;
 
-#ifdef WINDOWS
+#ifdef _WIN32
     result += drive;
     if (isbutnotendswith(drive, driveDelim)) {
         result += driveDelim;

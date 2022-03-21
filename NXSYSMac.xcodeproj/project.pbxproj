@@ -555,7 +555,6 @@
 		5BE487EE199D0A5C007BD6BF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		5BE49431199D0B2D007BD6BF /* readsexp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = readsexp.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BE49436199D1A14007BD6BF /* lisp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lisp.h; sourceTree = "<group>"; tabWidth = 8; };
-		5BE4A069199D1D6D007BD6BF /* oscond.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oscond.h; sourceTree = "<group>"; };
 		5BED455D19D1ADD300A22DE8 /* Plights.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plights.png; sourceTree = "<group>"; };
 		5BED456019D1B5EA00A22DE8 /* Pswitch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pswitch.png; sourceTree = "<group>"; };
 		5BED456219D1BC4E00A22DE8 /* PanelSwitchProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PanelSwitchProperties.xib; sourceTree = "<group>"; };
@@ -1297,7 +1296,6 @@
 				5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */,
 				5B93AB8319B208D700F70DDB /* MacRlyDlg.h */,
 				5BCEA76519C24A8C003BA3A7 /* NXTimers.mm */,
-				5BE4A069199D1D6D007BD6BF /* oscond.h */,
 				5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */,
 				5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */,
 				5BA7E74219D57EDB006F9A04 /* STLfnsplit.h */,

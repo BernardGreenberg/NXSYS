@@ -842,7 +842,7 @@ BOOL WindowToTopFromTrackUnit (TrackUnit * tu) {
     }
     return FALSE;
 }
-#if WINDOWS
+#if _WIN32
 
 extern HWND ChooseTrackDlg;
 

@@ -102,9 +102,16 @@ std::vector<GDIEnt>GDIEnt::Objects;
 
 
 HPEN CreateSPen (int width, COLORREF color) {
-#if WINDOWS
+#if _WIN32
     return CreatePen(PS_SOLID, width, color);
 #endif
+    /* 3/21/2022 -- It is not currently known why the code below fails on Windows.
+     Tracks don't get drawn.  The kludge of just bypassing the whole thing, and calling
+     CreateSoldBrush and CreatePen directly, is acceptable because these objects are
+     NOT allocated on the fly, but cached into more specific variables whose lifetime
+     is that of the app invocation, e.g., TrackPen, HighlightPen, etc.
+     
+     */
     GDIEnt * pE = GDIEnt::FindEntry(true, color, PS_SOLID, width);
     if (!pE) {
 	HPEN p = CreatePen (PS_SOLID, width, color);
@@ -114,7 +121,7 @@ HPEN CreateSPen (int width, COLORREF color) {
 }
 
 HBRUSH CreateSBrush (COLORREF color) {
-#if WINDOWS
+#if _WIN32
     return CreateSolidBrush(color);
 #endif
   GDIEnt * pE = GDIEnt::FindEntry (false, color, 0, 0);

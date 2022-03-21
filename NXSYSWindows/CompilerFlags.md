@@ -18,13 +18,23 @@ Unfortunately, however, ***no*** Windows APIs accept STL strings, and many requi
 
 Flag          |Meaning/remarks
 --------------|---------------
-NXSYSMac      |Means "we are compiling on/for the Mac", for all applications and utilities.
-WINDOWS, WIN32, _WIN32|These ***all*** mean, "We are compiling on/for Windows.", whether 32 ***or 64 bits*** (Microsoft edict). All are required if so.
-_WIN64        |64-bit Windows build. Required if so. Used in `About` dialog to proclaim same.
-DEBUG, _DEBUG |Debug build. Both needed if so. Don’t do much in the applications, but many language & OS headers need them if debugging.
+NXSYSMac      |Means "we are compiling on/for the Mac", for all applications and utilities. Supplied in Xcode build config.
+WIN32, _WIN32|_WIN32 is defined and supplied by the Microsoft compiler. These both mean "We are compiling on/for Windows.", whether 32 ***or 64 bits*** (Microsoft edict). WIN32 (no _) should go away, but is still relied on, and must be specified by VC.
+_WIN64        |64-bit Windows build, defined and supplied by the Microsoft compiler. Required if so. Used in `About` dialog to proclaim same.
+DEBUG, _DEBUG |Debug build. Both needed if so, both platforms. Some traps are conditionalized by them, and many language & OS headers rely upon them. **NOT** set by compiler!
+NDEBUG        |For release builds. **NOT** set by compiler!
 TLEDIT        |This is the track-layout editor, not the interlocking simulator.
 REALLY_NXSYS  |This is the interlocking simulator, not the track-layout editor (inferred from TLEDIT on Mac).
 _BLISP         |This is the Lisp test build, not either GUI app.
+
+### Flags thought to be obsolete/removed
+
+These should no longer appear in the source (3/21/2022)
+
+Flag          |Meaning
+--------------|-------------------
+WINDOWS       | Meant same as _WIN32.  There was 16-bit long [sic]  ago.
+XTG, NXV2     |(Extended track geometry). Both signify NXSYS Version 2 (or TLEdit, which is only version 2). Version 1 no longer exists.
 
 ### Currently necessary, but obsolete, flags
 
@@ -33,7 +43,7 @@ These are set automatically by headers in the Mac build, but must be manually sp
 Flag          |Meaning
 --------------|-------------------
 PRODUCT_NAME  |This has to be ="NXSYS" or ="TLEdit". This is obsolescent. Quotes significant until then.
-XTG, NXV2      |(Extended track geometry). Both signify NXSYS Version 2 (or TLEdit, which is only version 2).(3/20/22) It is thought that all Version 1 code has been extirpated, and that these are no longer necessary.
+
 ### Wholly obsolete flags still in the source
 ##### but are not ever to be specified.
 
