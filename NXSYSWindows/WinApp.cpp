@@ -181,7 +181,6 @@ void NXSYS_Command(unsigned int cmd) {
 			StatusReportDialog(G_mainwindow, GetModuleHandle(NULL));
 		break;
 
-#ifndef	NODEMO
 	case CmHaltDemo:
 		DemoPause(1);
 		break;
@@ -211,7 +210,7 @@ void NXSYS_Command(unsigned int cmd) {
 		CommandLoopDlg();
 		break;
 #endif
-#endif
+
 	case CmShowRelayCircuit:
 		AskForAndDrawRelay(G_mainwindow);
 		SetFocus(G_mainwindow);
@@ -497,9 +496,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 
 	app_instance = hInstance;
 	string initial_layout_name{};
-#ifndef NODEMO
 	string initial_demo_file{};
-#endif
+
 	auto args = ParseCommandLineToVector(command_line); //handles zero and null case
 	for (size_t ano = 0; ano < args.size(); ano++) {
 		string arg = args[ano];

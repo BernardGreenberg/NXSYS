@@ -406,9 +406,8 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
   Glb.AppBaseMajor = 2;
   Glb.AppBaseMinor = NXSYS_APP_BASE_MINOR_VERSION;
 
-#ifndef NODEMO
   CreateDemoWindow(window);
-#endif
+
   LOGFONT lf;
   memset (&lf, 0, sizeof(LOGFONT));
   lf.lfHeight = dth/60;
@@ -461,14 +460,13 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 		 DeInstallLayout();
       }
   }
-#ifndef NODEMO
+
   else if (!initial_demo_file)
 #ifdef NXOLE
       if (automation)
 		 DemoBlurb (PRODUCT_NAME " via OLE automation!");
       else
 		if (!initial_script_file)
-#endif
 #endif
              
 #ifdef WIN32 // for now
