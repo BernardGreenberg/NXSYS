@@ -106,7 +106,7 @@ static const char* InitialTitleBar = "Version 2 NXSYS -- New York Subway NX/UR P
 #ifdef _WIN64
   " (64-bit)"
 #endif
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEBUG)
   " (DEBUG)"
 #endif
    ;

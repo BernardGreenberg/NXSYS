@@ -188,7 +188,7 @@ DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPAR
 #endif
 		SetDlgItemText(dialog, ABOUT_NUM_VSN, sversion);
 		const char * build_type = 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(DEBUG)
 			"Debug"
 #else
 			"Release"

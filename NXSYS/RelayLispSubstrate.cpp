@@ -20,7 +20,7 @@ typedef bool BOOL;   // windows.h, don't need much more ... seems to work on Mac
 
 
 /*
- Stuff extracted from readsexp.cpp from "if ! _BLISP"/_RELAYS" conditionals.
+ Stuff extracted from readsexp.cpp from "if ! BLISP"/_RELAYS" conditionals.
 
  This has to be used in TLEdit as well as NXSYS, because relay symbols still have to be
  read from interlocking definitions, and "tracked" properly.

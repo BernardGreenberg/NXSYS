@@ -16,7 +16,7 @@
 #include <tchar.h>
 #endif
 
-#if _BLISP
+#if BLISP
 #define GOOD_SYM_DELIMS "&+-_@$%*=:<>!?"
 #else
 #define _RELAYS 1
@@ -76,7 +76,7 @@ int MessageBox(void*, const char *, const char *, int);
 static const std::string ESC_CHARs(1, ESC_CHAR);
 static const std::string FRACTION_BARs(1, FRACTION_BAR);
 
-#if _BLISP
+#if BLISP
 #include "lispmath.h"
 #define LISP_ERRORS_TO_CIO 1
 #define MB_ICONEXCLAMATION 0
@@ -385,7 +385,7 @@ colnum:
 		LispBarf("Zero denominator in rational fraction.");
 		return NIL;
 	    }
-#if _BLISP && REDUCED_RATIONALS
+#if BLISP && REDUCED_RATIONALS
 	    v1 = CreateReducedRational (sign*numerator, num);
 #else
 	    v1 = CreateRational (sign*numerator, (int)num);
@@ -490,7 +490,7 @@ colsym:
 	    f.Ungetc(ch);
 	if (rlyf) {
 	    rlyf = 0;
-#if _BLISP
+#if BLISP
 	    LispBarf("Invalid symbol (numbers followed by letters");
 	    return NIL;
 #else
@@ -597,7 +597,7 @@ reterr:	    v1 = READ_ERROR_OBJ;
 	     goto reterr;
 	}
     }
-#if ! _BLISP
+#if ! BLISP
     else if (ch == '!') {
 	notf = 1 - notf;
 	ch = f.Getc();
@@ -877,7 +877,7 @@ loop:
     }
 }
 
-#if ! _BLISP
+#if ! BLISP
 void dealloc_lisp_sys() {
 #if ! TLEDIT
     MacroCleanup();
@@ -953,7 +953,7 @@ bool TestRunExprf(const char * fpathname) {
     return true;
 }
 
-#if _BLISP
+#if BLISP
 int main (int argc, char ** argv) {
     if (argc < 2) {
 	fprintf (stderr, "Arg missing.\n");
