@@ -8,6 +8,10 @@
 <body style="max-width:800px">
 <h1><span class=nxsys>NXSYS Release notes — Mac &amp; Windows</h1>
 
+<h2> upcoming </h2>
+
+<p>TLEdit: The <b>Edit Joint &gt;&gt;&gt;</b> button in <b>Switch Properties</b> dialog has been implemented and enabled. It edits the switch location (may not insulate or change nomenclature).  <b>0</b> is now acceptable as in IJ designation (meaning &ldquo;undassigned&rdquo;) in the <b>Joint Properties</b> dialog.  The latter dialog can be used to force coincidence of IJ&rsquo;s at a double crossover.</p>
+
 <h2>3/18/22  &mdash; 2.6.2</h2>
 
 <p>Significant <nxf>TLEdit</nxf> fixes: cures bugs in node merging (drag-and-dropping switches, IJs or &ldquo;kinks&rdquo; on others to build higher-order nodes).  Prohibits drawing track branches out of inline (non-terminal) insulated joints, or (accidentally) overlaying two coincident segments (both of which cause confusion and misbehavior.)  Diagnoses unreachable loops (e.g., attempted station platforms). Implements a more conservative policy in the dumper, of pre-running it once &ldquo;in effigy&rdquo; not even renaming/creating the backup file if there are errors, and <i>even so</i> write to a temporary file fully before copying into the desired file. Improves other aspects of dumper error handling (there should not ever be errors detected by the dumper, but <i>c&rsquo;est la vie</i>). <nxf>TLEdit</nxf> documentation upgraded a bit. Modernizes and simplifies the dumper code greatly, too. Simulator protected against some corrupt layout issues.</p>

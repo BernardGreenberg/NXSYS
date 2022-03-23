@@ -351,6 +351,12 @@ typedef void *HWND;
     }
     assert(!"Didn't find here-routed active button in data structure.");
 }
+-(void)EnableControl:(NSInteger)ctl_id yesNo:(NSInteger)yesNo;
+{
+    HWND hWnd = CtlidToHWND[ctl_id];
+    assert(hWnd);
+    RawEnableHWND(hWnd, yesNo ? true : false);    
+}
 @end
 
 /* Can't use STL -- load time initializes it at unpredictable time compared to our registrees */

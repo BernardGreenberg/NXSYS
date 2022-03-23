@@ -35,6 +35,7 @@ void setFrameTopLeft(HWND hWnd, int x, int  y);
 NSPoint NXViewToScreen (NSPoint point);
 void MacDeleteMenuItem(void* menu_cell, int cmd);
 void MacEnableMenuItem(void* menu_cell, int cmd, bool yesNo);
+void RawEnableHWND(HWND hWnd, bool b);
 
 /* NXSYS-specific stuff */
 HWND getDrafterHWND(); // from main delegate frame.
