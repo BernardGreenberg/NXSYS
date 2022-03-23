@@ -353,9 +353,10 @@ typedef void *HWND;
 }
 -(void)EnableControl:(NSInteger)ctl_id yesNo:(NSInteger)yesNo;
 {
-    HWND hWnd = CtlidToHWND[ctl_id];
-    assert(hWnd);
-    RawEnableControlByHWND(hWnd, yesNo ? true : false);    
+    NSView* view = [self GetControlView:ctl_id];
+    assert([view isKindOfClass:[NSControl class]]);
+    NSControl* control = (NSControl*)view;
+    [control setEnabled: yesNo ? YES : NO];
 }
 @end
 

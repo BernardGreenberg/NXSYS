@@ -56,7 +56,6 @@ struct __WND_ {
     void EnableWindow(bool b);
     void DestroyWindow();
     void SetText(NSString* text);
-    void RawEnableWindow(bool b);
     id<WinDialog> WinDlg() {
         return (id<WinDialog>)controller;
     }
@@ -339,15 +338,6 @@ void __WND_::EnableWindow(bool b) {
         if ([controller conformsToProtocol:@protocol(WinDialog)])
             [WinDlg() EnableControl:control_id yesNo:(b ? YES : NO)];
     }
-}
-
-void __WND_::RawEnableWindow(bool b){
-    NSControl * c = (NSControl*)view;
-    [c setEnabled: b ? YES : NO];
-}
-
-void RawEnableControlByHWND(HWND hWnd, bool b) {
-    redeemHWND(hWnd)->RawEnableWindow(b);
 }
 
 /* These two need windows.h -- need better solution */
