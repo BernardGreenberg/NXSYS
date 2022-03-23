@@ -195,6 +195,8 @@ typedef void *HWND;
 
 -(void)recordIt:(NSView*)view rid:(int)rid
 {
+    printf("recordIt: %d %p\n", rid, view);
+    assert(CtlidToHWND.count(rid) == 0); /* should not ever be found twice!  */
     CtlidToHWND[rid] = WinWrapControl(self, view, rid, @"Generic Windlg"); // wwc adds ctlid#
 }
 
@@ -348,7 +350,7 @@ typedef void *HWND;
             return;
         }
     }
-    assert("Didn't find here-routed active button in data structure.");
+    assert(!"Didn't find here-routed active button in data structure.");
 }
 @end
 
@@ -356,7 +358,7 @@ typedef void *HWND;
 /* Can't use structs, either, as funargs get gc'ed if not protected by strong pointer */
 /* This is a lot easier. */
 static size_t nRegisteredStaticDialogs = 0;
-#define MAX_DLG_STATIC_INIT_TABLE 20
+#define MAX_DLG_STATIC_INIT_TABLE 40
 static unsigned int RIDS[MAX_DLG_STATIC_INIT_TABLE];
 static __strong TLEditDlgCreator creators[MAX_DLG_STATIC_INIT_TABLE]; /* let 'em lie at app close - no dealloc needed. */
 

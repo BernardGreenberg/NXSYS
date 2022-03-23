@@ -101,7 +101,8 @@ static DefVector SWdefs = {
     {IDC_SWITCH_HEURISTICATE, "Heur"},
     {IDC_SWITCH_SWAP_NORMAL, "Swap"},
     {IDC_SWITCH_HILITE_NORMAL, "High"},
-    {IDC_SWITCH_EDIT_JOINT_ATTRIBUTES, "Edit"},
+    /* Just plain "edit" not good enough!  Text boxes have that by default! -- 1 day lost 3/23/2022 */
+    {IDC_SWITCH_EDIT_JOINT_ATTRIBUTES, "Edit Joint"},
 };
 
 REGISTER_DIALOG_4(d7,IDD_SWITCH_ATTR, @"SwitchProperties", SWdefs)
