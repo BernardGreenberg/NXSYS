@@ -195,7 +195,6 @@ typedef void *HWND;
 
 -(void)recordIt:(NSView*)view rid:(int)rid
 {
-    printf("recordIt: %d %p\n", rid, view);
     assert(CtlidToHWND.count(rid) == 0); /* should not ever be found twice!  */
     CtlidToHWND[rid] = WinWrapControl(self, view, rid, @"Generic Windlg"); // wwc adds ctlid#
 }
