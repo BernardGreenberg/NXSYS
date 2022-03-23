@@ -50,6 +50,7 @@ TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
     Organized = FALSE;
     Selected = FALSE;
     Marked = FALSE;
+    EditAsJointInProgress = false;
     rw_x = rw_y = 0;
     int r = 2*JointGlyphRadius;
     wp_limits.left  = -r;

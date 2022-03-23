@@ -83,6 +83,10 @@ class TrackJoint
 #ifdef TLEDIT
 	BOOL    Marked;
 	BOOL	Organized;
+        bool    EditAsJointInProgress;
+        bool    EditAsSwitchP() {
+            return (TSCount == 3) && !EditAsJointInProgress;
+        }
 #else
 	WP_cord wp_x, wp_y;
 	Turnout * TurnOut;

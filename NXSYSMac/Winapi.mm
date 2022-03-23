@@ -346,7 +346,7 @@ void __WND_::RawEnableWindow(bool b){
     [c setEnabled: b ? YES : NO];
 }
 
-void RawEnableHWND(HWND hWnd, bool b) {
+void RawEnableControlByHWND(HWND hWnd, bool b) {
     redeemHWND(hWnd)->RawEnableWindow(b);
 }
 

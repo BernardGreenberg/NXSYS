@@ -355,7 +355,7 @@ typedef void *HWND;
 {
     HWND hWnd = CtlidToHWND[ctl_id];
     assert(hWnd);
-    RawEnableHWND(hWnd, yesNo ? true : false);    
+    RawEnableControlByHWND(hWnd, yesNo ? true : false);    
 }
 @end
 

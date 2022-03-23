@@ -32,7 +32,7 @@ void MacDialogDispatcher(UINT did, void*Object);
 static UINT SwitchIsIDs [3] = {IDC_SWITCH_IS_SINGLETON, IDC_SWITCH_IS_A, IDC_SWITCH_IS_B};
 
 UINT TrackJoint::DlgId () {
-    return  (TSCount == 3) ? IDD_SWITCH_ATTR : IDD_JOINT;}
+    return  EditAsSwitchP() ? IDD_SWITCH_ATTR : IDD_JOINT;}
 UINT TrackSeg::DlgId () {return IDD_SEG_ATTRIBUTES;}
 
 
@@ -113,8 +113,12 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 		    break;
 		case IDCANCEL:
 		    EndDialog (hDlg, FALSE);
-		    return TRUE;		    
+		    return TRUE;
 		case IDC_SWITCH_EDIT_JOINT_ATTRIBUTES:
+                    EditAsJointInProgress = true;
+                    EditProperties();  /* quel crocque ...*/
+                    EditAsJointInProgress = false;
+                    return TRUE;
 		default:
 		    return FALSE;
 	    }
@@ -127,7 +131,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     BOOL es;
 
-    if (TSCount== 3)
+    if (EditAsSwitchP())
 	return SwitchDlgProc (hDlg, message, wParam, lParam);
 
     switch (message) {
@@ -136,7 +140,14 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 	    SetDlgItemInt (hDlg, IDC_JOINT_STATION_ID, (int)Nomenclature, FALSE);
 	    SetDlgItemInt (hDlg, IDC_JOINT_WPX, (int)wp_x, FALSE);
 	    SetDlgItemInt (hDlg, IDC_JOINT_WPY, (int)wp_y, FALSE);
+            
+            /* Can't set these for a switch. Use Switch dlg. */
+            if (EditAsJointInProgress) {
+               EnableWindow(GetDlgItem(hDlg, IDC_JOINT_INSULATED), false);
+               EnableWindow(GetDlgItem(hDlg, IDC_JOINT_STATION_ID), false);
+            }
 	    return TRUE;
+
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
@@ -151,21 +162,27 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 		
 		{
 		    long newnom = GetDlgItemInt (hDlg, IDC_JOINT_STATION_ID, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Station ID.");
-			return TRUE;
-		    }
+
 		    if (newnom != Nomenclature) {
-			if (!CheckID((int) newnom)) {
-			    uerr(hDlg, "ID %ld is bad or already in use.", newnom);
-			    return TRUE;
-			}
-			DeAssignID ((int)Nomenclature);
-			Nomenclature = newnom;
-			MarkIDAssign ((int)Nomenclature);
-			delete Lab;
-			Lab = NULL;
-			PositionLabel();
+                        /* 3-23-2022 -- ok to say 0 to delete nomenclature */
+                        if (newnom == 0){
+                            DeAssignID ((int)Nomenclature);
+                            Nomenclature = 0;
+                            delete Lab;
+                            Lab = NULL;
+                        }
+                        else {
+                            if (!CheckID((int) newnom)) {
+                                uerr(hDlg, "ID %ld is bad or already in use.", newnom);
+                                return TRUE;
+                            }
+                            DeAssignID ((int)Nomenclature);
+                            Nomenclature = newnom;
+                            MarkIDAssign ((int)Nomenclature);
+                            delete Lab;
+                            Lab = NULL;
+                            PositionLabel();
+                        }
 		    }
 		}
 
