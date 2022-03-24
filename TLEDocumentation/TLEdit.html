@@ -8,7 +8,7 @@
 <h1>TLEdit&mdash;NXSYS Track Layout Editor </h1>
 
 <p>&copy;Bernard S. Greenberg 1997&ndash;2022<br/>
-Updated 18 March 2022</p>
+Updated 24 March 2022</p>
 
 <p>This is the documentation for TLEdit, the NXSYS track layout editor. It is used to create and edit layouts as seen on the interlocking panel. It does not create or edit logic in any way.</p>
 
@@ -67,6 +67,8 @@ Updated 18 March 2022</p>
 <p>A joint of two branches can be made insulated by selecting it and clicking the <b>Insulate</b> tool (insulated joints appear as yellow dots.)  Creating a signal at an uninsulated joint of two branches it insulates the joint automatically. Insulation can be removed with the joint's <b>Properties</b> dialog.</p>
 
 <p>(3/2022) There are various joint creation and deletion scenarios which, if not caught by TLEdit, would produce invalid layouts that cannot be saved, or worse, loaded or programmed.  Typical of these is attempting to create a segment between a joint and a point on a (or the) track segment already emanating from it, or deleting one of the joints of a three-joint &ldquo;segment triangle&rdquo;. Of course, real-life tracks do not bend at acute angles (although converging routes at a switch do), but TLEdit does not prevent you from experimenting with such.  However, it is (or was) all too easy to do this by accident when editing trackage in a small space, and nearly impossible to diagnose or remedy the resultant chaos. TLEdit will now diagnose and disallow dropping nodes being created or dragged in known cases of such conditions.  If you can create unloadable/uneditable trackage, please let me know.</p>
+
+<p>As TLEdit now makes it virtually impossible to overlay joints on top of each other (when they cannot be merged), the one case where this overlay is necessary, to wit, the center of a double-crossover, where the two insulated joints of both crossovers coincide, requires unusual means.  Adjust the exact location of both joints with their <b>Properties Dialog</b>s.  It will likely be difficult or impossible to click on the &ldquo;lower&rdquo; one&mdash;move the &ldquo;upper&rdquo; one reasonably far away (with either the mouse or the dialog), set the location of the lower one, and then the upper one (both with the dialog).</p>
 
 <p>Scroll down or to the right to extend layout those ways.  To extend up or to the left, use <b>View|Shift Layout</b> (<b>Alt+S</b> on Windows, no accelerator on Mac).  This takes much time to run.  To set the default view origin that comes up in NXSYS, scroll until you are looking at it, and use <b>View|Set Viewport here</b>.</p>
 
