@@ -366,32 +366,23 @@ typedef void *HWND;
 }
 @end
 
-/* Can't use STL -- load time initializes it at unpredictable time compared to our registrees */
+/* Can't use static STL -- load time initializes it at unpredictable time compared to our registrees */
 /* Can't use structs, either, as funargs get gc'ed if not protected by strong pointer */
 /* This is a lot easier. */
-static size_t nRegisteredStaticDialogs = 0;
-#define MAX_DLG_STATIC_INIT_TABLE 40
-static unsigned int RIDS[MAX_DLG_STATIC_INIT_TABLE];
-static __strong TLEditDlgCreator creators[MAX_DLG_STATIC_INIT_TABLE]; /* let 'em lie at app close - no dealloc needed. */
 
-/* this gets called at load-time in unpredictable order */
+/* solution found 3-24-2022 -- create it first time called. */
+typedef std::unordered_map<unsigned int, TLEditDlgCreator> t_TabulaCreatorum;
+static t_TabulaCreatorum *TabulaCreatorum = nullptr;
+
 int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator) {
-    assert(nRegisteredStaticDialogs < MAX_DLG_STATIC_INIT_TABLE);
-    size_t ix = nRegisteredStaticDialogs++;
-    creators[ix] = creator;
-    RIDS[ix] = resource_id;
+    if (TabulaCreatorum == nullptr)
+        TabulaCreatorum = new t_TabulaCreatorum;
+    (*TabulaCreatorum)[resource_id] = creator;
     return 0;
 }
 
-
 void MacDialogDispatcher(unsigned int resource_id, void * obj) {
-    for (size_t i = 0; i < nRegisteredStaticDialogs; i++) {
-        if (RIDS[i] == resource_id) {
-            (creators[i])(obj);
-            return;
-        }
-    }
-    char barf[200];
-    sprintf(barf, "The dialog with Resource ID %d hasn't been implemented yet.  How lucky we didn't crash!", (int)resource_id);
-    MessageBox(NULL, barf, "TLEdit Attribute Dialog Manager", MB_OK);
+    if ((*TabulaCreatorum).count(resource_id) == 0)
+        return;  /*this happens sometimes -- clicking on odd things -- just ignore */
+    (*TabulaCreatorum)[resource_id](obj);
 };
