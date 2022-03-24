@@ -11,7 +11,8 @@ typedef void *HWND;
 #import "GenericWindlgController.h"
 #include "MessageBox.h"
 #include "WinMacCalls.h"
-#include <map>
+#include "STLExtensions.h"
+#include <unordered_map>
 
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
  respective deficiencies of the Windows and Macintosh dialog systems.
@@ -41,6 +42,14 @@ typedef void *HWND;
  little snippets of them (and find input controls by their labels and the "tab order"). While 
  proclaimed a "no no" by wise engineers, as it defeats localizability, c'est la vie, 
  mein guter amigo.
+ 
+ 3-24-2022
+ 
+ Nevertheless, we can use that strategy to stuff the "tags" fields programmatically, which, while
+ not solving the dialog specification design problem, at least greatly simplifies the
+ taking of the desired action at button-push time.  Making hash-tables of strong pointers to
+ integers, which would be otherwise required, is quite difficult.  Linear lookup wasn't bad,
+ but this is better.
 
 */
 
@@ -49,7 +58,7 @@ typedef void *HWND;
     /* Finally, here is how you "do" instance variables:  { } at the beginning of @interface. */
     std::vector<char>boxboeuf;
     DefVector* pDefs;
-    std::map<NSInteger,HWND> CtlidToHWND;
+    std::unordered_map<NSInteger,HWND> CtlidToHWND;
 }
 @end
 
@@ -164,8 +173,7 @@ typedef void *HWND;
 
 -(void)maybeSubregisterButton:(NSButton*)button
 {
-    int rid = [self lookUpInDefs:button.title];
-    if (rid > 0) {
+    if (int rid = [self lookUpInDefs:button.title]) {
         [button setState:NO];
         [self recordIt:button rid:rid];
     }
@@ -196,7 +204,9 @@ typedef void *HWND;
 -(void)recordIt:(NSView*)view rid:(int)rid
 {
     assert(CtlidToHWND.count(rid) == 0); /* should not ever be found twice!  */
-    CtlidToHWND[rid] = WinWrapControl(self, view, rid, @"Generic Windlg"); // wwc adds ctlid#
+    HWND hWnd = WinWrapControl(self, view, rid, @"Generic Windlg"); // wwc adds ctlid#
+    CtlidToHWND[rid] = hWnd;
+    [(NSControl*)view setTag:rid];
 }
 
 -(void)setControlMapRecurseViews:(NSView*)view
@@ -251,12 +261,10 @@ typedef void *HWND;
     [self setControlMapRecurseViews:self.window.contentView];
  
     for (auto& def : *pDefs) {
-        if (! CtlidToHWND.count(def.control_id)) {
-            char buf[128];
-            sprintf(buf, "Did not find control for resource id %d, matching \"%s\".",
-                    def.control_id,
-                    def.key);
-            MessageBox(NULL, buf, "Generic Windlg Controller init", MB_OK|MB_ICONSTOP);
+        if (!CtlidToHWND.count(def.control_id)) {
+            MessageBoxS(NULL, FormatString("Did not find control for resource id %d, matching \"%s\".",
+                                           def.control_id, def.key),
+                        "Generic Windlg Controller init", MB_OK|MB_ICONSTOP);
             abort();
         }
     }
@@ -340,16 +348,14 @@ typedef void *HWND;
         NSMatrix * mater = (NSMatrix *)sender;  // juxta filium clamantem
         sender = mater.selectedCell;
     }
-    /* A reverse-hash-map on strongptrs is really called for, but this is for $@$@# buttons
-     that get pushed by humans; scanning a 2-dozen-long map for EQ is no issue. */
-    for (auto& iterator : CtlidToHWND) {
-        auto hWnd = iterator.second;
-        if (getHWNDView(hWnd) == sender) {
-            [self reflectCommand:getHWNDCtlid(hWnd)];
-            return;
-        }
-    }
-    assert(!"Didn't find here-routed active button in data structure.");
+    assert([sender isKindOfClass:[NSControl class]]);
+    NSControl* control = (NSControl*)sender;
+
+    /* The control's "tag" is the Windows resource.h command code for the control */
+
+    int tag = (int)[control tag];
+    assert(tag != 0);
+    [self reflectCommand:tag];
 }
 -(void)EnableControl:(NSInteger)ctl_id yesNo:(NSInteger)yesNo;
 {

@@ -10,7 +10,7 @@
    Windows code forwarded through TLWindowsSide,or simply being read by the IDOK handler.
    Right now, that's only TrackSeg with his view-circuit timer and the hirsute text string. */
 
-/* The format here is King of Simpicity -- Resource ID followed by a string to be found
+/* The format here is King of Simplicity -- Resource ID followed by a string to be found
    in the text of the control, unless it has a slash in it, then the first part is the
    name of a box containing the control matching the second part, to disambiguate boxes
    with identically-texted controls.  Whether this actually designates the control
