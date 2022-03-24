@@ -684,6 +684,7 @@ void TrackJoint::Cut () {
     /* ts0 is going to swallow ts1, which latter will be deleted */
     TrackSegEnd& OurEndInTS0 = ts0.GetEnd(endxs[0]);
     TrackSegEnd& DistantEndInTS1 = ts1.GetOtherEnd(endxs[1]);
+    TrackSegEnd& OurEndInTS1 = ts1.GetEnd(endxs[1]);
     OurEndInTS0 = DistantEndInTS1;  // copy the data to make it so.
 
     if (DistantEndInTS1.SignalProtectingEntrance) {
@@ -692,13 +693,23 @@ void TrackJoint::Cut () {
 	S.Reposition();
     }
 
-    OurEndInTS0.Joint->DelBranch(&ts1);
-    OurEndInTS0.Joint->AddBranch(&ts0);
+    TrackJoint& DJ0 = *OurEndInTS0.Joint;
+    /* DelBranch/AddBranch is useless for this -- loses nomenclature in between. 3/23/2022*/
+    bool found = false;
+    for (int i = 0; i < DJ0.TSCount; i++) {
+        if (DJ0.TSA[i] == &ts1) {
+            DJ0.TSA[i] = &ts0;
+            found = true;
+            break;
+        }
+    }
+    assert(found);
+    OurEndInTS1.Joint = nullptr;
     ts0.Align();
     ts0.ComputeVisibleLast();		/* s/b in align? */
     ts0.Select();
     ts0.Invalidate();
-    // Salvager will fail here.  ...Message box will make redisplay crash.
+    // Salvager will fail if we salvage here.  ... Message box will make redisplay crash, too
     delete &ts1;
     delete this;
     SALVAGER("TrackJoint::Cut final");

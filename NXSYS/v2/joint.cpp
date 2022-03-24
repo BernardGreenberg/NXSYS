@@ -129,6 +129,8 @@ int TrackJoint::AvailablePorts () {
     return 3-TSCount;
 }
 
+/* this is utterly useless when swapping segments going into a switch, as it hoses the nomenclature and the label.  See new TrackJoint::Cut. */
+
 void TrackJoint::DelBranch (TrackSeg * ts) {
     for (int i = 0; i < TSCount; i++)
 	if (TSA[i] == ts) {
