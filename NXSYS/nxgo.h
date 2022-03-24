@@ -79,7 +79,7 @@ class NXGOLabel : public GraphicObject {
 
 	NXGOLabel (GraphicObject * parg, WP_cord x, WP_cord y, const char * lab);
 	void SetText(const char * p_s);
-
+        void Select() override {};   /* disallow selection */
 	float Radius();
 	void PositionCenter (WP_cord x, WP_cord y);
 	void Diddle (int xadj, int yadj);
