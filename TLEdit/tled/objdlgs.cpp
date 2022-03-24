@@ -162,7 +162,10 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 		
 		{
 		    long newnom = GetDlgItemInt (hDlg, IDC_JOINT_STATION_ID, &es, FALSE);
-
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Joint ID.");
+                        return TRUE;
+                    }
 		    if (newnom != Nomenclature) {
                         /* 3-23-2022 -- ok to say 0 to delete nomenclature */
                         if (newnom == 0){
