@@ -348,12 +348,10 @@ typedef void *HWND;
         NSMatrix * mater = (NSMatrix *)sender;  // juxta filium clamantem
         sender = mater.selectedCell;
     }
-    assert([sender isKindOfClass:[NSControl class]]);
-    NSControl* control = (NSControl*)sender;
-
     /* The control's "tag" is the Windows resource.h command code for the control */
+    /* Might not be NSControl (e.g., for radio-buttons), but if it supports "tag", good enough */
 
-    int tag = (int)[control tag];
+    int tag = (int)[(id)sender tag];
     assert(tag != 0);
     [self reflectCommand:tag];
 }
