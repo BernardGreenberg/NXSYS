@@ -351,7 +351,7 @@ typedef void *HWND;
     /* The control's "tag" is the Windows resource.h command code for the control */
     /* Might not be NSControl (e.g., for radio-buttons), but if it supports "tag", good enough */
 
-    int tag = (int)[(id)sender tag];
+    auto tag = [sender tag];
     assert(tag != 0);
     [self reflectCommand:tag];
 }
