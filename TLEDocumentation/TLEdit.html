@@ -8,7 +8,7 @@
 <h1>TLEdit&mdash;NXSYS Track Layout Editor </h1>
 
 <p>&copy;Bernard S. Greenberg 1997&ndash;2022<br/>
-Updated 24 March 2022</p>
+Updated 25 March 2022</p>
 
 <p>This is the documentation for TLEdit, the NXSYS track layout editor. It is used to create and edit layouts as seen on the interlocking panel. It does not create or edit logic in any way.</p>
 
@@ -82,9 +82,9 @@ Updated 24 March 2022</p>
 
 <p><b>Insulated joint station numbers</b> and <b>switch numbers</b> can be assigned via the joint&rsquo;s <b>Properties dialog</b>.  All insulated joints and switch joints are automatically assigned unique numbers (to facilitate reload) over 10000, which do not display on the panel.  Set them as you want via the dialog.  You can “flip” IJ station numbers and switch numbers between sides of the track (to address visual collisions) with the <b>Flip Numbers</b> tool.</p>
 
-<p><b>Auxiliary switch keys</b> are created by pressing the tool that resembles one: move the mouse to the final position, and click left to drop it there.  Type any character or click right to abort.  To edit a key&rsquo;s switch number or board position, click right on it or use the <b>Properties dialog</b> tool.  To move one, select it first, release the mouse button, and then click and drag left to a new position.  Select it and <b>Cut</b> to destroy it.</p>
+<p><b>Auxiliary switch keys, generic panel switches, and lamps</b> are created by pressing the tools that resembles them: move the mouse to the final position, and click left to drop it there. <i>Do not attempt to drag</i> from the toolbar. Type any character or click right to abort.  To edit a key&rsquo;s switch number or board position, click right on it or use the <b>Properties dialog</b> tool.  To move one, select it first, release the mouse button, and then click and drag left to a new position.  Select it and <b>Cut</b> to destroy it later.</p>
 
-<p><b>Traffic levers</b> and <b>generic panel switches</b> and <b>lamps</b> are created with the three tools that resemble them.  Creation and property editing is identical to that for auxiliary switch keys (above).  Traffic lever graphics in-line with track is not supported yet; use arbitrary text to label to taste.  “Normal” direction (left or right &mdash; affects relay nomenclature and initial state) is set from the <b>Properties</b> dialog.</p>
+<p><b>Traffic levers</b> and <b>generic panel switches</b> and <b>lamps</b> are created with the three tools that resemble them.  Creation and property editing is identical to that for auxiliary switch keys (above).  Traffic lever graphics may overlay tracks; although they will (currently) appear &ldquo;behind&rdquo; trackage in TLEdit, they will show in front in NXSYS. Use arbitrary text to label to taste beyond the lever number.  “Normal” direction (left or right &mdash; affects relay nomenclature and initial state) is set from the <b>Properties Dialog</b>.</p>
 
 <p><b>Arbitrary text strings</b> of any size or font are created by pressing the tool labelled “abc”: move the mouse to the final position, click left to drop.  Dragging/moving, selection, destruction, and editing is the same as for auxiliary switch keys.  Click right or use the properties tool to set text content, font, size. etc.  Don&rsquo;t use private fonts not likely to be on someone else&rsquo;s machine.</p>
 
