@@ -389,8 +389,8 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
         }
     }
     
-    if (tj == MovTrackJoint)  // not really possible when moving, but
-        return;
+    if (tj == MovTrackJoint)
+        tj = nullptr;  // fall into "just move" 3-26-2022
     
     if (tj) {	/* Try to merge nodes */
         if (OneOfRaysOfStart(MovTrackJoint, tj)) {// disallow drop on current neighbor node 3-18-2022
