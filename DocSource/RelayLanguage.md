@@ -1,12 +1,12 @@
 # NXSYS scenario and relay language
-##### Status 18 March 2022
+##### Status 26 March 2022
 
 
-This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts.  Pay particular attention to the 1998 tutorial [Duckburg Tower A](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg)!
+This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts.
 
 The term *the simulator* is used below to denote the NXSYS application in such contexts where there is a need to draw a clear distinction between logic and actions effected by that application, and that effected by the relays whose definitions you supply to it.  The simulator operates some of your relays, and is operated by others of them, as described below.
 
-Making the signals and switches actually work is not so easy: You must learn signalling logic design.   Consume everything in the main helpfile, then go on to the “(Advanced) Signalling Logic Tutorial" in the application help menu (or the `Documentation` folder in [this GitHub repository](https://github.com/BernardGreenberg/NXSYS)).
+Making the signals and switches actually work is not so easy: You must learn signalling logic design.   Consume everything in the main helpfile, then go on to the “(Advanced) Signalling Logic Tutorial" in the application help menu (or the `Documentation` folder in [this GitHub repository](https://github.com/BernardGreenberg/NXSYS)).  Also, study the 1998 tutorial [Duckburg Tower A](https://github.com/BernardGreenberg/NXSYS/tree/master/Interlockings/Duckburg)!
 
 Of course, you are free and encouraged to study and mimic the circuitry provided in the examples; you can start with what we supply and modify until it becomes something else.  With NXSYS, you can actually *watch* the relays in operation and experiment with modifying their circuits, privileges I never had when learning this material from paper in the mid-1960's.  (However, I warn and declare unequivocally that my designs are for entertainment and educational purposes only and include certain simplifications and possible errors, and are not fit for use for controlling real railroads or other life-critical systems, and I assume no risk or responsibility should any of this information, or designs correctly or incorrectly derived from it, be faulty and lead to harm, damage, loss, or injury. Use it at your own risk.)
 
@@ -70,7 +70,7 @@ The third argument is optional, and only recognized by 2.6 and newer (it will be
 
 These next two property pairs are only recognized in NXSYS 2.5.0 and newer, and, by careful contract, are *ignored* by earlier versions:
 
-		:TRISTATE-TRAFFIC-CONTROL T
+		:TRAFFIC-LEVERS-TRISTATE T
 		
 Enables three-state, center-neutral traffic-control knobs. If elected, the interlocking logic must work with or without them. See the Release Notes.
 
