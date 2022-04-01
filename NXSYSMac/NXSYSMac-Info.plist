@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BundleBuildDate</key>
-	<date>2022-03-19T00:40:23Z</date>
+	<date>2022-03-21T21:54:42Z</date>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -38,11 +38,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.6.2/Mac</string>
+	<string>2.6.3/Mac</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1377</string>
+	<string>1412</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.education</string>
 	<key>LSMinimumSystemVersion</key>
