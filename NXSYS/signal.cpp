@@ -188,7 +188,7 @@ void Signal::GKCoder (BOOL state) {
         Invalidate();
 #else
 	HDC dc = GetDC (G_mainwindow);
-	PSIGQUAL Display(dc);
+	PSignal->Display(dc);
 	ReleaseDC (G_mainwindow, dc);
 #endif
     }
