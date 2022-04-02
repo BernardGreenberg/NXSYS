@@ -8,7 +8,7 @@
 
 #import "Preferences.h"
 #include "ssdlg.h"
-
+#include <map>
 static NSString * FullSigKey = @"FullSignalDisplaysAreViews";
 static NSString * ShowStopsKey = @"LastShowStopsPolicy";
 static NSString * SignalRightMenuKey = @"SignalRightClickIsMenu";
@@ -19,6 +19,7 @@ extern bool SignalRIsMenu;
 @interface Preferences ()
 {
     NSUserDefaults * defaults;
+    std::map<id, int> StopsMap; /* map works, but not unordered_map. */
 }
 @property (weak) IBOutlet NSButtonCell* fullSigsWindows;
 @property (weak) IBOutlet NSButtonCell* fullSigsViews;
@@ -46,6 +47,9 @@ extern bool SignalRIsMenu;
     SignalRIsMenu = rightClickIsMenu;
     
 }
+-(void)setBoolBox:(id)control onValue:(bool)value {
+    [control setState: value ? NSControlStateValueOn : NSControlStateValueOff];
+}
 -(Preferences*)init
 {
     return (Preferences*)[self initWithWindowNibName:@"Preferences"];
@@ -58,20 +62,22 @@ extern bool SignalRIsMenu;
     if (ssp == 0) {
         ssp = SHOW_STOPS_RED;
     }
+    
+    StopsMap[_stopsTripping] = SHOW_STOPS_RED;
+    StopsMap[_stopsNever] = SHOW_STOPS_NEVER;
+    StopsMap[_stopsAlways] = SHOW_STOPS_ALWAYS;
 
     bool rightClickIsMenu = [defaults boolForKey:SignalRightMenuKey] ? true: false;
     bool fullSigsAreViews = [defaults boolForKey:FullSigKey] ? true : false;
+    
+    for (auto [control, policy] : StopsMap)
+        [control setState: (ssp == policy) ? NSControlStateValueOn : NSControlStateValueOff];
 
-    [((NSButton*)_stopsTripping) setState: (ssp == SHOW_STOPS_RED) ? NSControlStateValueOn : NSControlStateValueOff];
-    [((NSButton*)_stopsNever) setState: (ssp == SHOW_STOPS_NEVER) ? NSControlStateValueOn : NSControlStateValueOff];
-    [((NSButton*)_stopsAlways) setState: (ssp == SHOW_STOPS_ALWAYS) ? NSControlStateValueOn : NSControlStateValueOff];
+    [self setBoolBox: _fullSigsViews   onValue: fullSigsAreViews];
+    [self setBoolBox: _fullSigsWindows onValue: !fullSigsAreViews];
 
-    [(NSButton*)_fullSigsViews setState: fullSigsAreViews? NSControlStateValueOn: NSControlStateValueOff];
-    [(NSButton*)_fullSigsWindows setState: fullSigsAreViews? NSControlStateValueOff: NSControlStateValueOn];
-
-    [(NSButton*)_rightClickMenus setState: rightClickIsMenu? NSControlStateValueOn: NSControlStateValueOff];
-    [(NSButton*)_rightClickFSDs setState: rightClickIsMenu ? NSControlStateValueOff: NSControlStateValueOn];
-
+    [self setBoolBox: _rightClickMenus onValue: rightClickIsMenu];
+    [self setBoolBox: _rightClickFSDs  onValue: !rightClickIsMenu];
 }
 -(void)showModal
 {
@@ -85,22 +91,17 @@ extern bool SignalRIsMenu;
 }
 -(IBAction)OK:(id)sender
 {
-    int nsp = 0;
-    if ([(NSButton*)_stopsTripping state] == NSControlStateValueOn)
-        nsp = SHOW_STOPS_RED;
-    if ([(NSButton*)_stopsAlways state] == NSControlStateValueOn)
-        nsp = SHOW_STOPS_ALWAYS;
-    if ([(NSButton*)_stopsNever state] == NSControlStateValueOn)
-        nsp = SHOW_STOPS_NEVER;
-    if (nsp != 0) {
-        [defaults  setInteger:nsp forKey:ShowStopsKey];
-        ImplementShowStopPolicy(nsp);
-    }
-    
-    FullSigsAreViews = ([(NSButton*)_fullSigsViews state] == NSControlStateValueOn);
+    for (auto [control, policy] : StopsMap)
+        if ([control state] == NSControlStateValueOn) {
+            [defaults setInteger:policy forKey:ShowStopsKey];
+            ImplementShowStopPolicy(policy);
+            break;
+        }
+
+    FullSigsAreViews = ([_fullSigsViews state] == NSControlStateValueOn);
     [defaults setBool:(FullSigsAreViews ? YES : NO) forKey:FullSigKey];
 
-    SignalRIsMenu = ([(NSButton*)_rightClickMenus state] == NSControlStateValueOn);
+    SignalRIsMenu = ([_rightClickMenus state] == NSControlStateValueOn);
     [defaults setBool:(SignalRIsMenu ? YES : NO) forKey:SignalRightMenuKey];
     [[self window] close];
     [NSApp stopModal];

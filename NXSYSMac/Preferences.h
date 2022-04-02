@@ -10,6 +10,7 @@
 
 @interface Preferences : NSWindowController
 +(void)initPreferredSettings;
+-(void)setBoolBox:(id)control onValue:(bool)value;
 -(void)showModal;
 -(Preferences*)init;
 @end
