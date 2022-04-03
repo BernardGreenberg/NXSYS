@@ -965,6 +965,7 @@
 		5BA6F72D19CCA335002551F7 /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
+				5BAC2DA727FA6184000B43CF /* Track Seg Dialog */,
 				5BA7E73A19D4C085006F9A04 /* Text String Dialog */,
 				5BD064D319CDCC3700564BD5 /* JointProperties.xib */,
 				5BED456B19D1E19300A22DE8 /* TrafficLeverProperties.xib */,
@@ -974,8 +975,6 @@
 				5B6705D219D19BA7002B6E28 /* ExitLightProperties.xib */,
 				5BD064DA19CE44A600564BD5 /* SwitchProperties.xib */,
 				5BA6F72F19CCA375002551F7 /* SignalProperties.xib */,
-				5BD6200B19CD997C00DB8A8F /* TrackSegProperties.xib */,
-				5BD6200D19CD9E6E00DB8A8F /* TrackSegDialog.mm */,
 				5B6705CA19D1840E002B6E28 /* Mac Support */,
 			);
 			name = Dialogs;
@@ -1065,6 +1064,15 @@
 				5BABBE6527B7143200AED491 /* NXSYS.vcxproj.filters */,
 			);
 			path = NXSYS;
+			sourceTree = "<group>";
+		};
+		5BAC2DA727FA6184000B43CF /* Track Seg Dialog */ = {
+			isa = PBXGroup;
+			children = (
+				5BD6200B19CD997C00DB8A8F /* TrackSegProperties.xib */,
+				5BD6200D19CD9E6E00DB8A8F /* TrackSegDialog.mm */,
+			);
+			name = "Track Seg Dialog";
 			sourceTree = "<group>";
 		};
 		5BAC930D19C8FE7200673BDC /* TLEdit */ = {
