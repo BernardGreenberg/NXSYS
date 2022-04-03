@@ -32,32 +32,34 @@ static bool DefaultBoldness = true;
 @property (weak) IBOutlet NSTextField* theString;
 @end
 
-static DefVector defs = {
-    {IDC_TEXT_TEXT, "String"},
-    {IDC_ETEXT_SAMPLE, "Sample"},
-    {IDC_ETEXT_HEIGHT_EDIT, "Height/px"},
-    {IDC_ETEXT_HEIGHT_SPIN, "Height/spin"}, // NSSteppers legal here.
-    
-    {IDC_ETEXT_FACE_SELECTION, "Face/Name"},
-    
-    {IDC_ETEXT_WPX, "Position on panel/X"},
-    {IDC_ETEXT_WPY, "Position on panel/Y"},
+#define R(x) {#x, x},
 
-    {IDC_ETEXT_HEIGHT_DEFAULT, "Height/Default"},
-    {IDC_ETEXT_HEIGHT_CUSTOM, "Height/Custom"},
+static RIDVector rids {
+    R(IDC_TEXT_TEXT)
+    R(IDC_ETEXT_SAMPLE)
+    R(IDC_ETEXT_HEIGHT_EDIT)
+    R(IDC_ETEXT_HEIGHT_SPIN) // NSSteppers legal
     
-    {IDC_ETEXT_WEIGHT_DEFAULT, "Weight/Default"},
-    {IDC_ETEXT_WEIGHT_NORMAL, "Weight/Normal"},
-    {IDC_ETEXT_WEIGHT_BOLD, "Weight/Bold"},
+    R(IDC_ETEXT_FACE_SELECTION)
+    
+    R(IDC_ETEXT_WPX)
+    R(IDC_ETEXT_WPY)
 
-    {IDC_ETEXT_COLOR_DEFAULT, "Color/Default"},
-    {IDC_ETEXT_COLOR_CUSTOM, "Color/Custom"},
+    R(IDC_ETEXT_HEIGHT_DEFAULT)
+    R(IDC_ETEXT_HEIGHT_CUSTOM)
+    
+    R(IDC_ETEXT_WEIGHT_DEFAULT)
+    R(IDC_ETEXT_WEIGHT_NORMAL)
+    R(IDC_ETEXT_WEIGHT_BOLD)
+
+    R(IDC_ETEXT_COLOR_DEFAULT)
+    R(IDC_ETEXT_COLOR_CUSTOM)
  
-    {IDC_ETEXT_FACE_DEFAULT, "Face/Default"},
-    {IDC_ETEXT_FACE_CUSTOM,  "Face/Custom"},
+    R(IDC_ETEXT_FACE_DEFAULT)
+    R(IDC_ETEXT_FACE_CUSTOM)
 };
 
-REGISTER_DIALOG_2S(IDD_EDIT_TEXT, TextStringDlg, @"TextStringProperties", defs)
+REGISTER_DIALOG_2R(IDD_EDIT_TEXT, TextStringDlg, @"TextStringProperties", rids)
 
 
 @implementation TextStringDlg
