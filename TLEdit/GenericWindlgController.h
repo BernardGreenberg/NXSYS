@@ -11,11 +11,6 @@
 #include <functional>
 #include "WinDialogProtocol.h"
 
-struct TextKey {
-    int control_id;
-    const char * key;
-};
-
 struct RIDPair {
     const char * Symbol;
     int resource_id;
@@ -31,7 +26,6 @@ struct CompareNSString: public std::binary_function<NSString*, NSString*, bool> 
     }
 };
 
-typedef const std::initializer_list<TextKey> DefVector;
 typedef const std::initializer_list<RIDPair> RIDVector;
 
 typedef void (^TLEditDlgCreator)(void*);
@@ -43,23 +37,12 @@ typedef void (^TLEditDlgCreator)(void*);
                      object:obj] showModal];});
 
 
-#define REGISTER_DIALOG_2S(RESOURCE_ID, CLASS_NAME, NIB_NAME,DEFS) \
-    static int dumy = RegisterTLEDitDialog \
-        (RESOURCE_ID, ^(void *obj) { \
-            [[[CLASS_NAME alloc] initWithNibObjectAndDefs:NIB_NAME \
-                object:obj defs:DEFS] showModal];});
 
 #define REGISTER_DIALOG_2R(RESOURCE_ID, CLASS_NAME, NIB_NAME,RIDS) \
     static int dumy = RegisterTLEDitDialog \
         (RESOURCE_ID, ^(void *obj) { \
             [[[CLASS_NAME alloc] initWithNibObjectAndRIDs:NIB_NAME \
                 object:obj rids:RIDS] showModal];});
-
-#define REGISTER_DIALOG_4(dumy,RESOURCE_ID,NIB_NAME,DEFS) \
-    static int dumy = RegisterTLEDitDialog \
-      (RESOURCE_ID, ^(void *obj) { \
-        [[[GenericWindlgController alloc] initWithNibObjectAndDefs:NIB_NAME \
-                object:obj defs:DEFS] showModal];});
 
 #define REGISTER_DIALOG_4R(dumy,RESOURCE_ID,NIB_NAME,RIDS) \
     static int dumy = RegisterTLEDitDialog \
@@ -74,9 +57,6 @@ int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator);
 @property void* hWnd;
 @property void* NXGObject;
 
--(GenericWindlgController*)initWithNibObjectAndDefs:(NSString*)nibName
-                                             object:(void*)object
-                                               defs:(DefVector&)defs;
 -(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
                                              object:(void*)object
                                                rids:(RIDVector&)rids;
