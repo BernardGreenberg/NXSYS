@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,7 +22,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="365" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="py5-jG-Sbc">
+                    <button identifier="IDC_JOINT_INSULATED" translatesAutoresizingMaskIntoConstraints="NO" id="py5-jG-Sbc">
                         <rect key="frame" x="59" y="219" width="80" height="18"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="78" id="8gf-pI-bsH"/>
@@ -47,7 +47,7 @@
                             <outlet property="nextKeyView" destination="y06-oO-nen" id="jA7-Kt-keV"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y06-oO-nen">
+                    <textField identifier="IDC_JOINT_STATION_ID" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y06-oO-nen">
                         <rect key="frame" x="178" y="182" width="96" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="RaR-Bc-nNe">
                             <font key="font" metaFont="system"/>
@@ -93,7 +93,7 @@
                                         <outlet property="nextKeyView" destination="3T9-iA-5ob" id="3E0-Mk-XuD"/>
                                     </connections>
                                 </textField>
-                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jdQ-Mc-1vJ">
+                                <textField identifier="IDC_JOINT_WPX" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jdQ-Mc-1vJ">
                                     <rect key="frame" x="138" y="55" width="79" height="22"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="79" id="ET0-46-5Uj"/>
@@ -107,7 +107,7 @@
                                         <outlet property="nextKeyView" destination="bYl-v2-V1G" id="yRk-ZM-CKY"/>
                                     </connections>
                                 </textField>
-                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3T9-iA-5ob">
+                                <textField identifier="IDC_JOINT_WPY" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3T9-iA-5ob">
                                     <rect key="frame" x="138" y="21" width="79" height="22"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="r1D-F4-Tl3">
                                         <font key="font" metaFont="system"/>

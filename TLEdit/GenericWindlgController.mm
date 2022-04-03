@@ -13,6 +13,11 @@ typedef void *HWND;
 #include "WinMacCalls.h"
 #include "STLExtensions.h"
 #include <unordered_map>
+#include <map>
+
+#include <functional>
+#include <map>
+
 
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
  respective deficiencies of the Windows and Macintosh dialog systems.
@@ -59,6 +64,8 @@ typedef void *HWND;
     std::vector<char>boxboeuf;
     DefVector* pDefs;
     std::unordered_map<NSInteger,HWND> CtlidToHWND;
+    std::map<NSString*, int, CompareNSString> RIDValMap;
+    
 }
 @end
 
@@ -121,7 +128,7 @@ typedef void *HWND;
 }
 - (void)windowDidLoad
 {
-    
+
     [self setControlMap];
 
     [super windowDidLoad];
@@ -153,6 +160,8 @@ typedef void *HWND;
 
 -(int)lookUpInDefs:(NSString*)s
 {
+    if (pDefs == NULL)
+        return 0;
     const char * bb = &boxboeuf[0];
     const char * u = s.UTF8String;
     for (auto& def : *pDefs) {
@@ -173,6 +182,13 @@ typedef void *HWND;
 
 -(void)maybeSubregisterButton:(NSButton*)button
 {
+    if (id identifier = button.identifier) {
+        if (! [self bogusCocoaIdentifier: identifier] && RIDValMap.count(identifier)) {
+            [button setState:NO];
+            [self recordIt:button rid: RIDValMap[identifier]];
+            return;
+        }
+    }
     if (int rid = [self lookUpInDefs:button.title]) {
         [button setState:NO];
         [self recordIt:button rid:rid];
@@ -208,14 +224,32 @@ typedef void *HWND;
     CtlidToHWND[rid] = hWnd;
     [(NSControl*)view setTag:rid];
 }
-
+-(bool)bogusCocoaIdentifier:(NSString*)s
+{
+    if (s.length >= 4) {
+        const char* u = s.UTF8String;
+        if (!strncmp(u, "_NS:", 4))
+            return true;
+    }
+    return false;
+}
 -(void)setControlMapRecurseViews:(NSView*)view
 {
     for (NSView* childView in view.subviews) {
+        id identifier = [childView identifier];
+
+        if (identifier && not [self bogusCocoaIdentifier:identifier]) {
+            if(RIDValMap.count(identifier)) {
+                [self recordIt:childView rid:RIDValMap[identifier]];
+                continue;
+            }
+        }
+
         if ([childView isKindOfClass:[NSTextField class]]){
             NSTextField * textField = (NSTextField*)childView;
             int rid = [self lookUpInDefs:textField.stringValue];
             if (rid != 0) {
+                assert (!RIDValMap.size());
                 /* We like this guy. Is he our man, or his John-the-Baptist? */
                 if ([self jtbp:textField])
                     [self recordIt:textField.nextKeyView rid:rid];
@@ -260,12 +294,24 @@ typedef void *HWND;
 
     [self setControlMapRecurseViews:self.window.contentView];
  
-    for (auto& def : *pDefs) {
-        if (!CtlidToHWND.count(def.control_id)) {
-            MessageBoxS(NULL, FormatString("Did not find control for resource id %d, matching \"%s\".",
-                                           def.control_id, def.key),
+    if (RIDValMap.size()) {
+        for (auto [nss, rid] : RIDValMap) {
+            if (!CtlidToHWND.count(rid)) {
+                MessageBoxS(NULL, FormatString("Did not find control for resource id %d (%s)",
+                                           rid, nss.UTF8String),
                         "Generic Windlg Controller init", MB_OK|MB_ICONSTOP);
-            abort();
+                abort();
+            }
+        }
+    }
+    else {
+        for (auto& def : *pDefs) {
+            if (!CtlidToHWND.count(def.control_id)) {
+                MessageBoxS(NULL, FormatString("Did not find control for resource id %d, matching \"%s\".",
+                                               def.control_id, def.key),
+                            "Generic Windlg Controller init", MB_OK|MB_ICONSTOP);
+                abort();
+            }
         }
     }
 }
@@ -334,9 +380,17 @@ typedef void *HWND;
 
 -(GenericWindlgController*)initWithNibObjectAndDefs:(NSString*)nibName
                                              object:(void*)object
-                                             defs:(DefVector&)defs
+                                               defs:(DefVector&)defs
 {
     pDefs = &defs;
+    return [self initWithNibAndObject:nibName object:object];
+}
+-(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
+                                             object:(void*)object
+                                               rids:(RIDVector&)rids
+{
+    for (auto p : rids)
+        RIDValMap[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
     return [self initWithNibAndObject:nibName object:object];
 }
 -(IBAction)activeButton:(id)sender

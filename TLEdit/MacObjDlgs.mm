@@ -1,123 +1,188 @@
 //
 //  Created by Bernard Greenberg on 9/24/14.
 //  Copyright (c) 2014 Bernard Greenberg. All rights reserved.
+//  Totalmente revidiert 3 aprilis anno iii della peste.
 
 #import "GenericWindlgController.h"
 #include "resource.h"
+#include <unordered_map>
+#include <map>
+
+#define R(x)  {#x, x},
+
+/* These global maps aren't used right now, but they conceivably might be.  The local
+ maps are not strictly necessary -- the symbol values could be retrieved from the global
+ map, but the local maps present the advantage that the dialog builder can run through the
+ list and ensure that all the referenced resource ID's have, in fact been found in controls,
+ and diagnose an absence.
+
+ The global table could easily be automatically generated from the windows resource include
+ file, though ...
+ 
+ */
+
+std::map<NSString*, int, CompareNSString>WindowsRIDNameToValue;
+std::unordered_map<int, const char *>WindowsRIDValueToName;
+
 
 /* This handles all dialog objects which don't need their own classes.  They need their
    own classes if and only if they have buttons that actually act in Mac code, not
    Windows code forwarded through TLWindowsSide,or simply being read by the IDOK handler.
    Right now, that's only TrackSeg with his view-circuit timer and the hirsute text string. */
 
-/* The format here is King of Simplicity -- Resource ID followed by a string to be found
-   in the text of the control, unless it has a slash in it, then the first part is the
-   name of a box containing the control matching the second part, to disambiguate boxes
-   with identically-texted controls.  Whether this actually designates the control
-   that matches, or the NEXT control in keySequence is complex -- see the method jtbp.
-   This is used to exploit labels, visible and hidden, as "labels" for text input ctls.
+/* This declares all the controls known to the Windows code by the ID's named, that is, all
+ the controls that have to be mapped from Mac IB View artifacts into apparent Windows controls.
+ 
+ This replaces an ugly and error-prone system based upon matching text strings and labels.  The
+ watershed event that prompted this change is the introduction of text "identifier" fields in
+ Cocoa controls, later than the 2014 initial conversion.  The "identifier" fields must be the
+ exact strings below, i.e., the Windows resource symbols.  All controls without such ID's are left
+ alone.
 
-   If not linked in that way, the controls can be labels or buttons or checkboxes or just
-   about any damned thing, although the "assert"s in GenericWindlgController need be told.
  */
 
-//static struct TextKey jointDefs[] = {
-static DefVector jointDefs = {
-    {IDC_JOINT_STATION_ID, "Station"},
-    {IDC_JOINT_WPX, "X pos"},
-    {IDC_JOINT_WPY, "Y pos"},
+REGISTER_DIALOG_4R(d1, IDD_JOINT, @"JointProperties", RIDVector{
+    R(IDC_JOINT_STATION_ID)
+    R(IDC_JOINT_WPX)
+    R(IDC_JOINT_WPY)
+    R(IDC_JOINT_INSULATED)
+})
 
-    {IDC_JOINT_INSULATED, "nsulated"},
-};
+REGISTER_DIALOG_4R(d2, IDD_TRAFFICLEVER, @"TrafficLeverProperties", RIDVector{
+    R(IDC_TRAFFICLEVER_LEVER)
+    R(IDC_TRAFFICLEVER_WPX)
+    R(IDC_TRAFFICLEVER_WPY)
+    R(IDC_TRAFFICLEVER_LEFT)
+    R(IDC_TRAFFICLEVER_RIGHT)
+})
 
-REGISTER_DIALOG_4(d1,IDD_JOINT,@"JointProperties",jointDefs)
+REGISTER_DIALOG_4R(d3, IDD_SWKEY, @"SwitchKeyProperties", RIDVector{
+    R(IDC_SWKEY_LEVER)
+    R(IDC_SWKEY_WPX)
+    R(IDC_SWKEY_WPY)
+})
 
-static DefVector TLDefs = {
-    {IDC_TRAFFICLEVER_LEVER, "Lever"},
-    {IDC_TRAFFICLEVER_WPX,"X pos"},
-    {IDC_TRAFFICLEVER_WPY,"Y pos"},
+REGISTER_DIALOG_4R(d4, IDD_PANELSWITCH, @"PanelSwitchProperties", RIDVector{
+    R(IDC_PANELSWITCH_LEVER)
+    R(IDC_PANELSWITCH_NOMENCLATURE)
+    R(IDC_PANELSWITCH_STRING)
+    R(IDC_PANELSWITCH_WPX)
+    R(IDC_PANELSWITCH_WPY)
+})
 
-    {IDC_TRAFFICLEVER_LEFT, "Left"},
-    {IDC_TRAFFICLEVER_RIGHT, "Right"},
-};
-
-REGISTER_DIALOG_4(d2,IDD_TRAFFICLEVER, @"TrafficLeverProperties", TLDefs)
-
-static DefVector swkeyInputs = {
-    {IDC_SWKEY_LEVER, "lever"},
-    {IDC_SWKEY_WPX, "X position"},
-    {IDC_SWKEY_WPY, "Y position"},
-};
-
-REGISTER_DIALOG_4(d3,IDD_SWKEY, @"SwitchKeyProperties", swkeyInputs)
-
-static DefVector PSinputs = {
-    {IDC_PANELSWITCH_LEVER, "nterlock"},
-    {IDC_PANELSWITCH_NOMENCLATURE, "omenclature"},
-    {IDC_PANELSWITCH_STRING, "Key"},
+REGISTER_DIALOG_4R(d5, IDD_PANELLIGHT, @"PanelLightProperties", RIDVector{
+    R(IDC_PANELLIGHT_LEVER)
+    R(IDC_PANELLIGHT_GREEN)
+    R(IDC_PANELLIGHT_YELLOW)
+    R(IDC_PANELLIGHT_RED)
+    R(IDC_PANELLIGHT_WHITE)
     
-    {IDC_PANELSWITCH_WPX, "X po"},
-    {IDC_PANELSWITCH_WPY, "Y po"},
-};
-
-REGISTER_DIALOG_4(d4,IDD_PANELSWITCH, @"PanelSwitchProperties", PSinputs)
-
-static DefVector PLinputs = {
-    {IDC_PANELLIGHT_LEVER, "nterlock"},
-    {IDC_PANELLIGHT_GREEN, "Green"},
-    {IDC_PANELLIGHT_YELLOW, "Yellow"},
-    {IDC_PANELLIGHT_RED, "Red"},
-    {IDC_PANELLIGHT_WHITE, "White"},
+    R(IDC_PANELLIGHT_WPX)
+    R(IDC_PANELLIGHT_WPY)
     
-    {IDC_PANELLIGHT_WPX, "X po"},
-    {IDC_PANELLIGHT_WPY, "Y po"},
-    
-    {IDC_PANELLIGHT_RADIUS, "Radius"},
-    {IDC_PANELLIGHT_STRING, "Label"},
-};
+    R(IDC_PANELLIGHT_RADIUS)
+    R(IDC_PANELLIGHT_STRING)
+})
 
-REGISTER_DIALOG_4(d5,IDD_PANELLIGHT, @"PanelLightProperties", PLinputs)
+REGISTER_DIALOG_4R(d6, IDD_EDIT_EXLIGHT, @"ExitLightProperties", RIDVector{
+    R(IDC_EDIT_XLIGHT_XLNO)
+    R(IDC_EDIT_XLIGHT_IJNO)
+    R(IDC_EDIT_XLIGHT_ORIENT)
+})
 
-static DefVector XLDefs = {
-    {IDC_EDIT_XLIGHT_XLNO, "lever"},
+REGISTER_DIALOG_4R(d7, IDD_SWITCH_ATTR, @"SwitchProperties", RIDVector{
+    R(IDC_SWITCH_EDIT)  /* poorly-named lever number */
 
-    {IDC_EDIT_XLIGHT_IJNO, "IJ"},
-    {IDC_EDIT_XLIGHT_ORIENT, "Orient"},
-};
+    R(IDC_SWITCH_WARN)
 
-REGISTER_DIALOG_4(d6,IDD_EDIT_EXLIGHT, @"ExitLightProperties", XLDefs)
-
-static DefVector SWdefs = {
-    {IDC_SWITCH_EDIT, "Switch Number"},
-
-    {IDC_SWITCH_WARN, "Error:"},
-
-    {IDC_SWITCH_IS_A, "A points"},
-    {IDC_SWITCH_IS_B, "B points"},
-    {IDC_SWITCH_IS_SINGLETON, "Singleton"},
+    R(IDC_SWITCH_IS_A)
+    R(IDC_SWITCH_IS_B)
+    R(IDC_SWITCH_IS_SINGLETON)
     /* These buttons have been routed at IB time to GenericWindlgController::activeButton;
      their presence here is used by that method to route them to the Windows DLGPROC when
      that method is invoked (presumably by them). */
-    {IDC_SWITCH_HEURISTICATE, "Heur"},
-    {IDC_SWITCH_SWAP_NORMAL, "Swap"},
-    {IDC_SWITCH_HILITE_NORMAL, "High"},
-    /* Just plain "edit" not good enough!  Text boxes have that by default! -- 1 day lost 3/23/2022 */
-    {IDC_SWITCH_EDIT_JOINT_ATTRIBUTES, "Edit Joint"},
-};
+    R(IDC_SWITCH_HEURISTICATE)
+    R(IDC_SWITCH_SWAP_NORMAL)
+    R(IDC_SWITCH_HILITE_NORMAL)
 
-REGISTER_DIALOG_4(d7,IDD_SWITCH_ATTR, @"SwitchProperties", SWdefs)
+    R(IDC_SWITCH_EDIT_JOINT_ATTRIBUTES)
+})
 
-static DefVector Sigdefs = {
-    {IDC_EDIT_SIG_LEVER, "Lever"},
-    {IDC_EDIT_SIG_TRACK_ID, "Track"},
-    {IDC_EDIT_SIG_STATION_NO, "Station"},
-    {IDC_EDIT_SIG_HEADS, "Heads"},
+REGISTER_DIALOG_4R(d8, IDD_EDIT_SIGNAL, @"SignalProperties", RIDVector{
+    R(IDC_EDIT_SIG_LEVER)
+    R(IDC_EDIT_SIG_TRACK_ID)
+    R(IDC_EDIT_SIG_STATION_NO)
+    R(IDC_EDIT_SIG_HEADS)
 
-    {IDC_EDIT_SIG_ORIENTATION, "Orientation"},
-    {IDC_EDIT_SIG_IJID, "Identification"},
+    R(IDC_EDIT_SIG_ORIENTATION)
+    R(IDC_EDIT_SIG_IJID)
 
-    {IDC_EDIT_SIG_STOP, "top"},
-    {IDC_EDIT_SIGNAL_JOINT, "Edi"},
-};
+    R(IDC_EDIT_SIG_STOP)
+    R(IDC_EDIT_SIGNAL_JOINT)
+})
 
-REGISTER_DIALOG_4(d8,IDD_EDIT_SIGNAL, @"SignalProperties",Sigdefs)
+static int RegisterWindowsResourceIDs (std::initializer_list<RIDPair> list) {
+    for (auto p : list) {
+        WindowsRIDValueToName[p.resource_id] = p.Symbol;
+        WindowsRIDNameToValue[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
+    }
+    return 0;
+}
+
+int dumy9 = RegisterWindowsResourceIDs ({
+    R(IDC_JOINT_STATION_ID)
+    R(IDC_JOINT_WPX)
+    R(IDC_JOINT_WPY)
+    R(IDC_JOINT_INSULATED)
+
+    R(IDC_PANELLIGHT_LEVER)
+    R(IDC_PANELLIGHT_GREEN)
+    R(IDC_PANELLIGHT_YELLOW)
+    R(IDC_PANELLIGHT_RED)
+    R(IDC_PANELLIGHT_WHITE)
+    R(IDC_PANELLIGHT_WPX)
+    R(IDC_PANELLIGHT_WPY)
+    R(IDC_PANELLIGHT_RADIUS)
+    R(IDC_PANELLIGHT_STRING)
+    
+    R(IDC_PANELSWITCH_LEVER)
+    R(IDC_PANELSWITCH_NOMENCLATURE)
+    R(IDC_PANELSWITCH_STRING)
+    R(IDC_PANELSWITCH_WPX)
+    R(IDC_PANELSWITCH_WPY)
+    
+    R(IDC_SWITCH_EDIT)
+    R(IDC_SWITCH_WARN)
+    R(IDC_SWITCH_IS_A)
+    R(IDC_SWITCH_IS_B)
+    R(IDC_SWITCH_IS_SINGLETON)
+    R(IDC_SWITCH_HEURISTICATE)
+    R(IDC_SWITCH_SWAP_NORMAL)
+    R(IDC_SWITCH_HILITE_NORMAL)
+    R(IDC_SWITCH_EDIT_JOINT_ATTRIBUTES)
+    
+    R(IDC_SWKEY_LEVER)
+    R(IDC_SWKEY_WPX)
+    R(IDC_SWKEY_WPY)
+    
+    R(IDC_EDIT_SIG_LEVER)
+    R(IDC_EDIT_SIG_TRACK_ID)
+    R(IDC_EDIT_SIG_STATION_NO)
+    R(IDC_EDIT_SIG_HEADS)
+    R(IDC_EDIT_SIG_ORIENTATION)
+    R(IDC_EDIT_SIG_IJID)
+    R(IDC_EDIT_SIG_STOP)
+    R(IDC_EDIT_SIGNAL_JOINT)
+    
+    R(IDC_EDIT_XLIGHT_XLNO)
+    R(IDC_EDIT_XLIGHT_IJNO)
+    R(IDC_EDIT_XLIGHT_ORIENT)
+    
+    R(IDC_TRAFFICLEVER_LEVER)
+    R(IDC_TRAFFICLEVER_WPX)
+    R(IDC_TRAFFICLEVER_WPY)
+    R(IDC_TRAFFICLEVER_LEFT)
+    R(IDC_TRAFFICLEVER_RIGHT)
+
+});
+

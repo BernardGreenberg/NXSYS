@@ -61,7 +61,7 @@ Gw
                             <outlet property="nextKeyView" destination="saH-J6-XCs" id="wXQ-hc-TAe"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AGK-2Y-QXW">
+                    <button identifier="IDC_EDIT_SIGNAL_JOINT" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AGK-2Y-QXW">
                         <rect key="frame" x="19" y="50" width="195" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="181" id="ngy-tf-xkM"/>
@@ -89,7 +89,7 @@ Gw
                             <outlet property="nextKeyView" destination="SdK-LS-XqH" id="lNa-rt-dgI"/>
                         </connections>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ipV-ui-Yvi">
+                    <textField identifier="IDC_EDIT_SIG_IJID" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ipV-ui-Yvi">
                         <rect key="frame" x="20" y="271" width="189" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="HKq-hy-Zzv"/>
@@ -100,7 +100,7 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="HPK-1h-AgL">
+                    <textField identifier="IDC_EDIT_SIG_ORIENTATION" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="HPK-1h-AgL">
                         <rect key="frame" x="20" y="247" width="100" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="96" id="jZ8-gE-nDm"/>
@@ -111,7 +111,7 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="GYZ-M8-nTg">
+                    <button identifier="IDC_EDIT_SIG_STOP" translatesAutoresizingMaskIntoConstraints="NO" id="GYZ-M8-nTg">
                         <rect key="frame" x="266" y="163" width="80" height="18"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="74" id="Gai-ip-GmV"/>
@@ -124,7 +124,7 @@ Gw
                             <outlet property="nextKeyView" destination="AGK-2Y-QXW" id="3Mf-hQ-LYH"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="87t-Yv-SDs">
+                    <textField identifier="IDC_EDIT_SIG_LEVER" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="87t-Yv-SDs">
                         <rect key="frame" x="135" y="198" width="92" height="21"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="1Oq-3h-X1P">
                             <font key="font" metaFont="system"/>
@@ -135,7 +135,7 @@ Gw
                             <outlet property="nextKeyView" destination="lxN-Zx-ZMx" id="zz9-DA-w1U"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AaV-xJ-gtu">
+                    <textField identifier="IDC_EDIT_SIG_TRACK_ID" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AaV-xJ-gtu">
                         <rect key="frame" x="135" y="161" width="92" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="ao2-Ca-g4X">
                             <font key="font" metaFont="system"/>
@@ -146,7 +146,7 @@ Gw
                             <outlet property="nextKeyView" destination="xo7-YJ-FfD" id="4Zo-aL-xOA"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O16-Gu-vH3">
+                    <textField identifier="IDC_EDIT_SIG_STATION_NO" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O16-Gu-vH3">
                         <rect key="frame" x="135" y="126" width="92" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="6R3-Sk-Tvc">
                             <font key="font" metaFont="system"/>
@@ -157,7 +157,7 @@ Gw
                             <outlet property="nextKeyView" destination="N69-iQ-MKz" id="rDW-71-8Ws"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SdK-LS-XqH">
+                    <textField identifier="IDC_EDIT_SIG_HEADS" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SdK-LS-XqH">
                         <rect key="frame" x="123" y="89" width="186" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="dTq-ef-d46">
                             <font key="font" metaFont="system"/>
@@ -254,7 +254,7 @@ Gw
                     <constraint firstAttribute="trailing" secondItem="Lvc-PJ-dxg" secondAttribute="trailing" constant="26" id="yem-dm-7EH"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="140" y="145"/>
+            <point key="canvasLocation" x="139.5" y="144.5"/>
         </window>
     </objects>
 </document>

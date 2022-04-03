@@ -8,12 +8,10 @@
 @interface TrackSegDlg : GenericWindlgController
 @end
 
-static DefVector TSdefs = {
-    {IDC_EDIT_SEG_TC, "Relay"},
-    {IDC_EDIT_SEG_SPREAD, "ildfire"},
-};
-
-REGISTER_DIALOG_2S(IDD_SEG_ATTRIBUTES, TrackSegDlg, @"TrackSegProperties", TSdefs)
+REGISTER_DIALOG_2R(IDD_SEG_ATTRIBUTES, TrackSegDlg, @"TrackSegProperties", RIDVector({
+    {"IDC_EDIT_SEG_TC", IDC_EDIT_SEG_TC},
+    {"IDC_EDIT_SEG_SPREAD", IDC_EDIT_SEG_SPREAD}
+}))
 
 @implementation TrackSegDlg
 
