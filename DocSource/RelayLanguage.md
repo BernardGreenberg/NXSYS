@@ -296,14 +296,14 @@ The layout is a graph (in the mathematical sense), of “nodes” and “rays”
 + “Kinks”, i.e., uninsulated track bends, also 1 or 2 rays, but track terminations are forcibly insulated at “save” time. Of course, real tracks do not join or bend at angles, but panel track representations typically do.
 + Switches, from which invariably emanate 3 rays (*tres rayos*, no *Tres Reyes*).
 
-“Rays” are track segments, which always connect two nodes.
+“Rays” are track segments, which always connect two nodes. Every node thus has an *order*, the number of rays emanating from it, of 1, 2, or 3: 1 is a track termination, 2 a non-terminal insulated joint or kink, and 3 a switch.
 
 The `LAYOUT` form consists of
 + A  `VIEW-ORIGIN` subform defining the initial screen position on the layout
 + Any number of `PATH` subforms, described below, describing the graph
 + Any number of “random object” subforms, defining signals, exit lights, traffic levers, and other panel artifacts.
 
-Each `PATH` describes a journey from one track termination or switch to another by the nodes it visits. Paths with neither (e.g., closed loops with no switches) cannot be represented and are diagnosed by TLEdit at “save” time.  Kinks are designated by the absence of an explicit node type.  Track circuit designation subforms (`TC`) are dumped between the nodes of segments having them.
+Each `PATH` describes a journey from one track termination or switch to another by the nodes it visits. Paths with neither (i.e., closed loops with no switches) cannot be represented and are diagnosed by TLEdit at “save” time.  Kinks are designated by the absence of an explicit node type.  Track circuit designation subforms (`TC`) are dumped between the nodes of segments having them.
 
 The three rays emanating from a switch are called its *stem*, *normal*, and *reverse* branches.  The dumper notes which it traverses when it does so. Rather than starting a new `PATH` when traversing a switch not before encountered, the dumper incorporates it into the `PATH` being recorded, of necessity either entering or leaving via the *stem*.  The dumper meticulously verifies the validity of its graph-theoretic assumptions, as well as the well-formedness of the graph, to avoid creating unloadable layouts.
 
