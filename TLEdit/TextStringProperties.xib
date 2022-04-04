@@ -174,7 +174,7 @@ DQ
                                     </cells>
                                 </matrix>
                                 <textField identifier="IDC_ETEXT_HEIGHT_EDIT" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZVu-dA-OGh">
-                                    <rect key="frame" x="101" y="11" width="44" height="22"/>
+                                    <rect key="frame" x="101" y="11" width="44" height="21"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="44" id="OWG-yw-Zi7"/>
                                         <constraint firstAttribute="height" constant="22" id="qRD-Dx-kdT"/>
@@ -186,7 +186,7 @@ DQ
                                     </textFieldCell>
                                 </textField>
                                 <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3go-Jo-4Db">
-                                    <rect key="frame" x="125" y="37" width="31" height="17"/>
+                                    <rect key="frame" x="125" y="36" width="31" height="17"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="27" id="o8I-Y2-CK0"/>
                                     </constraints>
@@ -199,12 +199,13 @@ DQ
                                         <outlet property="nextKeyView" destination="nYa-ZM-9Lr" id="Usb-yU-eeS"/>
                                     </connections>
                                 </textField>
-                                <stepper identifier="IDC_ETEXT_HEIGHT_SPIN" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nYa-ZM-9Lr">
+                                <stepper identifier="IDC_ETEXT_HEIGHT_SPIN" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="nYa-ZM-9Lr">
                                     <rect key="frame" x="141" y="8" width="19" height="27"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="0Yd-Cu-5zy"/>
                                 </stepper>
                                 <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OOa-ts-6Eo">
-                                    <rect key="frame" x="98" y="37" width="20" height="17"/>
+                                    <rect key="frame" x="98" y="36" width="20" height="17"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="16" id="2kw-va-c6j"/>
                                         <constraint firstAttribute="height" constant="17" id="rzy-2H-RBx"/>
@@ -220,7 +221,7 @@ DQ
                                 </textField>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="nYa-ZM-9Lr" firstAttribute="top" secondItem="3go-Jo-4Db" secondAttribute="bottom" constant="6" id="EL8-li-NPc"/>
+                                <constraint firstItem="nYa-ZM-9Lr" firstAttribute="top" relation="lessThanOrEqual" secondItem="3go-Jo-4Db" secondAttribute="bottom" constant="6" id="EL8-li-NPc"/>
                                 <constraint firstItem="ZVu-dA-OGh" firstAttribute="leading" secondItem="42A-2o-XnS" secondAttribute="trailing" constant="19" id="EOd-yy-wjS"/>
                                 <constraint firstItem="42A-2o-XnS" firstAttribute="leading" secondItem="CFm-sB-xLS" secondAttribute="leading" constant="10" id="N2i-C6-mLF"/>
                                 <constraint firstAttribute="bottom" secondItem="ZVu-dA-OGh" secondAttribute="bottom" constant="11" id="NN8-jM-Tx8"/>
@@ -325,8 +326,8 @@ DQ
                             <outlet property="nextKeyView" destination="auE-fa-Kpk" id="5pk-H4-RBT"/>
                         </connections>
                     </textField>
-                    <textField identifier="IDC_ETEXT_SAMPLE" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="auE-fa-Kpk">
-                        <rect key="frame" x="70" y="337" width="348" height="72"/>
+                    <textField identifier="IDC_ETEXT_SAMPLE" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="auE-fa-Kpk">
+                        <rect key="frame" x="70" y="337" width="348" height="73"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="stuff" drawsBackground="YES" id="duI-dS-WI2">
                             <font key="font" metaFont="system" size="64"/>
                             <color key="textColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -337,12 +338,12 @@ DQ
                         <rect key="frame" x="348" y="64" width="100" height="109"/>
                         <view key="contentView" id="IvG-bw-vyI">
                             <rect key="frame" x="3" y="3" width="94" height="91"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xZR-41-FFa">
-                                    <rect key="frame" x="7" y="23" width="68" height="58"/>
+                                    <rect key="frame" x="7" y="23" width="70" height="58"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="cellSize" width="68" height="18"/>
+                                    <size key="cellSize" width="70" height="18"/>
                                     <size key="intercellSpacing" width="4" height="2"/>
                                     <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="kC4-xh-g1b">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -377,7 +378,7 @@ DQ
                             </subviews>
                             <constraints>
                                 <constraint firstItem="xZR-41-FFa" firstAttribute="leading" secondItem="IvG-bw-vyI" secondAttribute="leading" constant="7" id="5b7-na-k5c"/>
-                                <constraint firstAttribute="trailing" secondItem="xZR-41-FFa" secondAttribute="trailing" constant="19" id="BVz-m6-XVd"/>
+                                <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="xZR-41-FFa" secondAttribute="trailing" constant="19" id="BVz-m6-XVd"/>
                                 <constraint firstItem="xZR-41-FFa" firstAttribute="top" secondItem="IvG-bw-vyI" secondAttribute="top" constant="10" id="kfV-fG-kFQ"/>
                             </constraints>
                         </view>

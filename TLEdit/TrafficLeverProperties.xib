@@ -58,13 +58,14 @@ Gw
                         <rect key="frame" x="54" y="166" width="161" height="86"/>
                         <view key="contentView" id="noy-Zj-oqS">
                             <rect key="frame" x="3" y="3" width="155" height="68"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fx4-wa-JMp">
-                                    <rect key="frame" x="16" y="27" width="120" height="18"/>
+                                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" id="Fx4-wa-JMp">
+                                    <rect key="frame" x="16" y="27" width="124" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="cellSize" width="58" height="18"/>
-                                    <size key="intercellSpacing" width="4" height="2"/>
+                                    <size key="cellSize" width="62" height="18"/>
+                                    <size key="intercellSpacing" width="0.0" height="2"/>
                                     <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="d0I-Ke-buN">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
