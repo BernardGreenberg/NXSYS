@@ -79,10 +79,11 @@ typedef void *HWND;
 
 -(GenericWindlgController*)initWithNibAndObject:(NSString *)nibName object:(void *)object
 {
+   // nibName = @"Bad Nib Name"; // for (unrewarding) testing.
     self = [super initWithWindowNibName:nibName];
     if (self == nil)
-    /* this never happens, no matter how bad the Nib name is.  You get nil in
-    windowDid(supposedly)Load if it's bad. */
+    /* this never happens, no matter how bad the Nib name is. Not at all clear how to catch
+     the error. */
         [self barf: FormatString("Cannot initialize from NIB %s", nibName.UTF8String)];
 
     _NXGObject = object;
@@ -90,13 +91,16 @@ typedef void *HWND;
 }
 -(void)showModal
 {
+    if (!self.window) //Not clear why this is the first we see it.
+        [self barf: FormatString("Dialog window did not load from nib %s", self.windowNibName.UTF8String)];
+
     NSPoint p = NXViewToScreen(NXGOLocAsPoint(_NXGObject)); //whole panel -> whole mac screen
     NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "yup".
     [self.window setFrameTopLeftPoint:placement];
 
     [self showWindow:self]; // if you don't do this yourself, runModal will toss your frame.
          //Don't believe me, try it yourself (comment out this line).
-    
+
     [NSApp runModalForWindow:self.window];
 }
 -(void)DestroyWindow
@@ -117,7 +121,8 @@ typedef void *HWND;
     for (auto& iterator : CtlidToHWND) // not deleting from map here, but in clear(), no skip-step.
          DeleteHwndObject(iterator.second);
     CtlidToHWND.clear(); // probably not necessary, hope C++ dtor will do it.
-    DeleteHwndObject(_hWnd);
+    if(_hWnd) // can be null in error situations
+        DeleteHwndObject(_hWnd);
 }
 -(IBAction)GenericCancel:(NSNotification*)noti
 {
@@ -131,9 +136,7 @@ typedef void *HWND;
 }
 - (void)windowDidLoad
 {
-    
-    if (!self.window)
-        [self barf: "Window was not created."];
+    assert(self.window);  // this never happens, even with deliberately bad nib.
 
     [self createControlMap];
     [super windowDidLoad];
