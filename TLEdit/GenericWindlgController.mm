@@ -15,10 +15,6 @@ typedef void *HWND;
 #include <unordered_map>
 #include <map>
 
-#include <functional>
-#include <map>
-
-
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
  respective deficiencies of the Windows and Macintosh dialog systems.
  The Windows system requires defining a file full of batty control ID numbers, which,
@@ -62,9 +58,9 @@ typedef void *HWND;
  "identifier" field in Cocoa controls, where not only can we store an arbitrary string, but
  the string turns up in Xcode searches!  The new system puts the actual name of the intended
  Windows resource ID in it (e.g., "IDC_EDIT_SWITCH"), which is supplied by macros with the
- corresponding value in the calls to instantiate this class (and its progeny).  The entire
- system of searching label texts is gone.  The numeric resource codes are stored in the tag
- fields by the code below at dialog creation time.
+ corresponding value in the calls to instantiate this class (and its progeny). The entire
+ system of searching label texts and tracking container hierarchy names is gone. The
+ numeric resource codes are stored in the tag fields by the code below at dialog creation time.
 
 */
 
@@ -135,7 +131,6 @@ typedef void *HWND;
 }
 - (void)windowDidLoad
 {
-
     [self setControlMap];
 
     [super windowDidLoad];
@@ -175,7 +170,6 @@ typedef void *HWND;
     }
     return false;
 }
-
 -(void)recordIt:(NSView*)view rid:(int)rid
 {
     assert(CtlidToHWND.count(rid) == 0); /* should not ever be found twice!  */
@@ -200,7 +194,8 @@ typedef void *HWND;
         }
         else if ([view isKindOfClass:[NSBox class]]) {
             [self setControlMapRecurseViews:view.subviews[0]];
-        } else if ([view isKindOfClass:[NSMatrix class]]) {
+        }
+        else if ([view isKindOfClass:[NSMatrix class]]) {
             NSMatrix * matrix = (NSMatrix*)view;
             for (NSButtonCell* cell in matrix.cells) {
                 if ([self maybeRegisterView: (NSView*)cell])
@@ -225,7 +220,6 @@ typedef void *HWND;
         }
     }
 }
-
 -(void)SetControlText:(NSInteger)ctlid text:(NSString*)text
 {
     NSView* view = [self GetControlView:ctlid];
@@ -234,7 +228,6 @@ typedef void *HWND;
 }
 -(long)GetControlText:(NSInteger)ctlid buf:(char*)buf length:(NSInteger)len
 {
-
     NSView* view = [self GetControlView:ctlid];
     assert([view isKindOfClass:[NSTextField class]]);
     NSString *ns = ((NSTextField *)view).stringValue;
@@ -292,8 +285,12 @@ typedef void *HWND;
                                              object:(void*)object
                                                rids:(RIDVector&)rids
 {
+    /* Make the RID map. It is worth it because it is going to be searched
+    n times (n = number of entries) when dialog is recursively-scanned */
+
     for (auto p : rids)
         RIDValMap[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
+
     return [self initWithNibAndObject:nibName object:object];
 }
 -(IBAction)activeButton:(id)sender
