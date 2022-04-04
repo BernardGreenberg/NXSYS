@@ -10,7 +10,7 @@
             <connections>
                 <outlet property="faceName" destination="QGC-ju-eXf" id="Qfq-ZH-Gla"/>
                 <outlet property="heightField" destination="ZVu-dA-OGh" id="b5t-O6-D5w"/>
-                <outlet property="heightStepper" destination="nYa-ZM-9Lr" id="e1q-Fi-hH9"/>
+                <outlet property="heightStepper" destination="VGU-3l-ogI" id="wOA-Wo-p94"/>
                 <outlet property="sampleTextField" destination="auE-fa-Kpk" id="dwD-P8-4UK"/>
                 <outlet property="theString" destination="Tau-Oo-276" id="ZVq-nZ-xIp"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="ACe-vJ-QDo"/>
@@ -183,15 +183,16 @@ DQ
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <stepper identifier="IDC_ETEXT_HEIGHT_SPIN" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="nYa-ZM-9Lr">
-                                    <rect key="frame" x="141" y="32" width="19" height="25"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="0Yd-Cu-5zy"/>
+                                <stepper identifier="IDC_ETEXT_HEIGHT_SPIN" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VGU-3l-ogI">
+                                    <rect key="frame" x="150" y="30" width="19" height="28"/>
+                                    <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="DI3-Fa-n61"/>
                                 </stepper>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="ZVu-dA-OGh" firstAttribute="centerY" secondItem="nYa-ZM-9Lr" secondAttribute="centerY" id="Cs5-NV-eoi"/>
+                                <constraint firstItem="VGU-3l-ogI" firstAttribute="leading" secondItem="ZVu-dA-OGh" secondAttribute="trailing" constant="8" symbolic="YES" id="3em-gn-5Rf"/>
+                                <constraint firstItem="ZVu-dA-OGh" firstAttribute="top" secondItem="CFm-sB-xLS" secondAttribute="top" constant="32" id="MXT-hN-3yb"/>
                                 <constraint firstItem="ZVu-dA-OGh" firstAttribute="leading" secondItem="42A-2o-XnS" secondAttribute="trailing" constant="19" id="Nq0-3w-bnl"/>
+                                <constraint firstItem="VGU-3l-ogI" firstAttribute="bottom" secondItem="ZVu-dA-OGh" secondAttribute="bottom" id="bpJ-nA-kpk"/>
                                 <constraint firstItem="42A-2o-XnS" firstAttribute="leading" secondItem="CFm-sB-xLS" secondAttribute="leading" constant="10" id="iSy-yG-S0W"/>
                                 <constraint firstItem="42A-2o-XnS" firstAttribute="top" secondItem="CFm-sB-xLS" secondAttribute="top" constant="10" id="p0D-u3-6f1"/>
                             </constraints>
@@ -201,7 +202,7 @@ DQ
                         <rect key="frame" x="41" y="188" width="177" height="114"/>
                         <view key="contentView" id="OTp-0e-KXe">
                             <rect key="frame" x="3" y="3" width="171" height="96"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autorecalculatesCellSize="YES" translatesAutoresizingMaskIntoConstraints="NO" id="meI-pL-txN">
                                     <rect key="frame" x="10" y="16" width="73" height="70"/>
