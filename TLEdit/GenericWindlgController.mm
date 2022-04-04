@@ -15,6 +15,8 @@ typedef void *HWND;
 #include <unordered_map>
 #include <map>
 
+#define PRGNAME "Generic WinDlg Controller"
+
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
  respective deficiencies of the Windows and Macintosh dialog systems.
  The Windows system requires defining a file full of batty control ID numbers, which,
@@ -52,7 +54,7 @@ typedef void *HWND;
  integers, which would be otherwise required, is quite difficult.  Linear lookup wasn't bad,
  but this is better.
 
-4-3-2022
+4-4-2022
  
  This house was cleaned from basement to spire by taking advantage of the (new since 2014)
  "identifier" field in Cocoa controls, where not only can we store an arbitrary string, but
@@ -61,6 +63,7 @@ typedef void *HWND;
  corresponding value in the calls to instantiate this class (and its progeny). The entire
  system of searching label texts and tracking container hierarchy names is gone. The
  numeric resource codes are stored in the tag fields by the code below at dialog creation time.
+ With this scheme, the code now can diagnose missing, unknown, and duplicate tags/id's!
 
 */
 
@@ -77,16 +80,13 @@ typedef void *HWND;
 -(GenericWindlgController*)initWithNibAndObject:(NSString *)nibName object:(void *)object
 {
     self = [super initWithWindowNibName:nibName];
-    if (self != nil) {
-        _NXGObject = object;
-        return self;
-    } else {
-        /* this never happens, no matter how bad the Nib name is.  You get nil in
-        windowDid(supposedly)Load if it's bad. */
-        MessageBox(NULL, nibName.UTF8String, "Cannot initialize GenericWndlg from NIB", MB_ICONSTOP|MB_OK);
-        abort();
-    }
-    return nil;
+    if (self == nil)
+    /* this never happens, no matter how bad the Nib name is.  You get nil in
+    windowDid(supposedly)Load if it's bad. */
+        [self barf: FormatString("Cannot initialize from NIB %s", nibName.UTF8String)];
+
+    _NXGObject = object;
+    return self;
 }
 -(void)showModal
 {
@@ -131,8 +131,11 @@ typedef void *HWND;
 }
 - (void)windowDidLoad
 {
-    [self setControlMap];
+    
+    if (!self.window)
+        [self barf: "Window was not created."];
 
+    [self createControlMap];
     [super windowDidLoad];
 
     /* we are retained on the stack, not in c++ code */
@@ -159,67 +162,77 @@ typedef void *HWND;
 
     callWndProcInitDialog(_hWnd, _NXGObject);
 }
+-(void)barf:(std::string) message
+{
+    /* These are not user errors, but logic/coding resource-tagging errors that should be
+     debugged out.  Nevertheless, it is better to say something that a user can report, something
+     better than "Internal logic error... please do so and so ..." */
+
+    MessageBoxS(NULL, message, PRGNAME, MB_OK|MB_ICONSTOP);
+    abort();
+}
 
 -(bool)maybeRegisterView:(NSView*)view
 {
-    if (id identifier = view.identifier) {
-        if (! [self bogusCocoaIdentifier: identifier] && RIDValMap.count(identifier)) {
-            [self recordIt:view rid: RIDValMap[identifier]];
-            return true;
-        }
+    /* Controls of any type which have a non-_ "identifier" string get registered
+       by the value of the Windows symbol so named.  Allow unknown identifiers
+       if they don't start with IDC_.
+     */
+    if (!view.identifier)  // test for null -- not sure it can happen.
+        return false;
+
+    NSString* identifier = (NSString*)view.identifier;
+    
+    /* Avoid hash search if Cocoa internal. No Windows RID starts with _. */
+    if ([identifier characterAtIndex:0] == '_')
+        return false;
+
+    if (RIDValMap.count(identifier)) {  //If we have it
+        int resource_id = RIDValMap[identifier];
+        if (CtlidToHWND.count(resource_id))
+            [self barf: FormatString("More than one control has identifier: %s", identifier.UTF8String)];
+
+        /* Create and link an HWND object to the control, and register it in the
+         resource_id to HWND map. Insert the numeric ID into the control's "tag" attribute. */
+        CtlidToHWND[resource_id] = WinWrapControl(self, view, resource_id, @"Generic Windlg");
+        [(NSControl*)view setTag: resource_id];
+        return true;
     }
+    /* Not found.  Diagnose IDC_ (but not IDCANCEL!). Leave others alone. */
+    if (identifier.length >= 4)
+        if ([[identifier substringToIndex:4] isEqualTo:@"IDC_"])
+            [self barf: FormatString("Identifier %s in control not known to RID table.", identifier.UTF8String)];
     return false;
 }
--(void)recordIt:(NSView*)view rid:(int)rid
-{
-    assert(CtlidToHWND.count(rid) == 0); /* should not ever be found twice!  */
-    HWND hWnd = WinWrapControl(self, view, rid, @"Generic Windlg"); // wwc adds ctlid#
-    CtlidToHWND[rid] = hWnd;
-    [(NSControl*)view setTag:rid];
-}
--(bool)bogusCocoaIdentifier:(NSString*)s
-{
-    if (s.length >= 4) {
-        const char* u = s.UTF8String;
-        if (!strncmp(u, "_NS:", 4))
-            return true;
-    }
-    return false;
-}
--(void)setControlMapRecurseViews:(NSView*)parentView
+
+-(void)createControlMapRecurse:(NSView*)parentView
 {
     for (NSView* view in parentView.subviews) {
         if ([self maybeRegisterView: view]) {
-
+            // "pass;"
         }
         else if ([view isKindOfClass:[NSBox class]]) {
-            [self setControlMapRecurseViews:view.subviews[0]];
+            [self createControlMapRecurse: view.subviews[0]];
         }
         else if ([view isKindOfClass:[NSMatrix class]]) {
             NSMatrix * matrix = (NSMatrix*)view;
             for (NSButtonCell* cell in matrix.cells) {
                 if ([self maybeRegisterView: (NSView*)cell])
-                    [cell setState: NO];
+                    [cell setState: NO];  // not clear if this be useful
             }
         }
     }
 }
 
--(void)setControlMap
+-(void)createControlMap
 {
-    assert(self.window != nil);
-
-    [self setControlMapRecurseViews:self.window.contentView];
+    [self createControlMapRecurse:self.window.contentView];
  
-    for (auto [nss, rid] : RIDValMap) {
-        if (!CtlidToHWND.count(rid)) {
-            MessageBoxS(NULL, FormatString("Did not find control for resource id %d (%s)",
-                                           rid, nss.UTF8String),
-                        "Generic Windlg Controller init", MB_OK|MB_ICONSTOP);
-            abort();
-        }
-    }
+    for (auto [nss, rid] : RIDValMap)
+        if (!CtlidToHWND.count(rid))
+            [self barf: FormatString("Did not find control for resource id %d (%s)", rid, nss.UTF8String)];
 }
+
 -(void)SetControlText:(NSInteger)ctlid text:(NSString*)text
 {
     NSView* view = [self GetControlView:ctlid];
@@ -244,20 +257,20 @@ typedef void *HWND;
 -(bool)getDlgItemCheckState:(NSInteger)ctl_id
 {
     NSView* view = [self GetControlView:ctl_id];
-    //checkboxes report as "nsbutton", but radios as "nsbuttoncell"
+    //checkboxes report as "NSButton", but radios as "NSButtonCell"
     assert([view isKindOfClass:[NSButtonCell class]] |[view isKindOfClass:[NSButton class]]);
     NSButton* button = (NSButton*)view; // don't understand class structure
     return [button state] ? true : false;
 }
 -(HWND)GetControlHWND:(NSInteger)ctlid
 {
-    assert(CtlidToHWND.count(ctlid) > 0);
+    if (CtlidToHWND.count(ctlid) == 0)
+        [self barf: FormatString("Rcvd action from Cocoa control tagged %d, for which no emulation exists.", ctlid)];
     return CtlidToHWND[ctlid];
 }
 -(NSView*)GetControlView:(NSInteger)ctlid
 {
-    assert(CtlidToHWND.count(ctlid) > 0);
-    return getHWNDView(CtlidToHWND[ctlid]);
+    return getHWNDView([self GetControlHWND: ctlid]);
 }
 -(void)showControl:(NSInteger)control showYes:(NSInteger)yesno
 {
