@@ -29,9 +29,9 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hDC-U4-Otj">
-                                    <rect key="frame" x="18" y="13" width="125" height="25"/>
+                                    <rect key="frame" x="18" y="13" width="126" height="25"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="121" id="rif-je-yqf"/>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="121" id="rif-je-yqf"/>
                                     </constraints>
                                     <buttonCell key="cell" type="squareTextured" title="Show Track Circuit" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qxM-a6-U2E">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
