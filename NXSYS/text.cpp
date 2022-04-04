@@ -101,7 +101,7 @@ void TextString::ScaleSelf () {
     wp_limits.left = - r.right/2 - 1;
     wp_limits.right = r.right/2 + 1;
     wp_limits.top = -height/2 - 1;
-    wp_limits.bottom = height/2 + 1;
+    wp_limits.bottom = height/2 + 2; //+ 2 instead of +1 eliminates turding on drag 4/4/2022
     AssumedScale = NXGO_Scale;
 }
 
