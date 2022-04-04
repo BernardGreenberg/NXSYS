@@ -202,7 +202,7 @@ pre > code {
 <body>
 <h1 id="toc_0">NXSYS scenario and relay language</h1>
 
-<h5 id="toc_1">Status 26 March 2022</h5>
+<h5 id="toc_1">Status 4 April 2022</h5>
 
 <p>This file documents the language used with NXSYS to define track scenarios and interlockings. Using this language, and looking at the supplied examples, you should be able to define your own layouts.</p>
 
@@ -272,7 +272,7 @@ pre > code {
 
 <p><em>Line-ID</em> is the single letter used on signal plates for the whole layout, e.g., <code>#\F</code> in <strong>F4-334</strong> (i.e., Fourth Avenue BMT). Note that in 2.5 and later, <code>:EXTENDED-ROUTE-LETTER</code> can override this with a string of more than one character.  Yes, multiple subway lines joining don&#39;t work well (planned).</p>
 
-<p><em>Origin</em> is a Version 1 artifact that is ignored in Version 2 NXSYS. It must be a number, and 00 will do well. <em>Direction</em> is another Version 1 artifact meaningless in Version 2 NXSYS, but anything other than <code>NORTH</code> or <code>SOUTH</code> will err. Sorry.</p>
+<p><em>Origin</em> is a Version 1 artifact that is ignored in Version 2 NXSYS. It must be a number, and 0 will do well. <em>Direction</em> is another Version 1 artifact meaningless in Version 2 NXSYS, but anything other than <code>NORTH</code> or <code>SOUTH</code> will err. Sorry.</p>
 
 <p>After <em>direction</em>, zero or more <strong>property pairs</strong> can appear, each being a <strong>Symbol</strong> and a value. Unknown or misspelled properties are <strong><em>guaranteed to be ignored</em></strong>.  This opens the door to downward-compatible, conditionally-used features. These are most definitely still relevant.</p>
 
@@ -378,7 +378,7 @@ pre > code {
 
 <p>Labels are used to define common subexpressions that would implemented in real relays by shared wires. <code>(LABEL name expr1 expr2 ....)</code> defines the AND (series wiring) of all the <em>expr</em>&#39;s in it as <em>name</em>, and allows that name to be used as a synonym in subsequent relay definitions.</p>
 
-<p>(2022: <code>LABEL</code>s were a weak attempt to “share wiring” between relays, both to reduce error-prone code duplication and strive towards what I call “topomorphic circuits”, that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious and venerable technique used ubiquitously by the real circuitry. See the logic document for a good example. Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)</p>
+<p>(2022: <code>LABEL</code>s were a weak attempt to “shared wiring” between relays, both to reduce error-prone code duplication and strive towards what I call “topomorphic circuits”, that is, circuitry whose topology mirrors that of the track layout.  This is an ingenious and venerable technique used ubiquitously by the real circuitry. See the logic document for a good example. Neither the NXSYS Lisp language nor the current simulator (let alone the relay graphics system!) is adequate to represent such circuits.)</p>
 
 <p><strong>Macros</strong> are used to define standardized identical relay definitions, identical in shape but not in relay numbers.  For example.</p>
 
@@ -805,15 +805,23 @@ pre > code {
 
 <ul>
 <li>Insulated joints, from which emanate either 1 or 2 rays, 1 in the case of a track termination/end, and 2 otherwise.</li>
-<li>“kinks”, i.e., track bends, also 1 or 2 rays, but track terminations are forcibly insulated at “save” time</li>
-<li>switches, from which invariably emanate 3 rays (<em>tres rayos</em>, no <em>Tres Reyes</em>).</li>
+<li>“Kinks”, i.e., uninsulated track bends, also 1 or 2 rays, but track terminations are forcibly insulated at “save” time. Of course, real tracks do not join or bend at angles, but panel track representations typically do.</li>
+<li>Switches, from which invariably emanate 3 rays (<em>tres rayos</em>, no <em>Tres Reyes</em>).</li>
 </ul>
 
 <p>“Rays” are track segments, which always connect two nodes.</p>
 
-<p>The <code>LAYOUT</code> form, other than its positioning subform at its top, consists solely of <code>PATH</code>s.  Each <code>PATH</code> is from one track termination or switch to another. Paths with neither (e.g., closed loops with no switches) cannot be represented and are diagnosed by TLEdit at “save” time.  Kinks are designated by the absence of an explicit node type.  Track circuit designation subforms (<code>TC</code>) are dumped between the nodes of segments having them.</p>
+<p>The <code>LAYOUT</code> form consists of</p>
 
-<p>The three rays emanating from a switch are called its <em>stem</em>, <em>normal</em>, and <em>reverse</em> branches.  The dumper notes which it traverses when it does so. Rather than starting a new <code>PATH</code> when traversing a switch not before encountered, the dumper incorporates it into the <code>PATH</code> being recorded, of necessity either entering or leaving via the <em>stem</em>.  The dumper meticulously verifies the validity of its graph-theoretic assumptions to avoid creating unloadable layouts.</p>
+<ul>
+<li>A  <code>VIEW-ORIGIN</code> subform defining the initial screen position on the layout</li>
+<li>Any number of <code>PATH</code> subforms, described below, describing the graph</li>
+<li>Any number of “random object” subforms, defining signals, exit lights, traffic levers, and other panel artifacts.</li>
+</ul>
+
+<p>Each <code>PATH</code> describes a journey from one track termination or switch to another by the nodes it visits. Paths with neither (e.g., closed loops with no switches) cannot be represented and are diagnosed by TLEdit at “save” time.  Kinks are designated by the absence of an explicit node type.  Track circuit designation subforms (<code>TC</code>) are dumped between the nodes of segments having them.</p>
+
+<p>The three rays emanating from a switch are called its <em>stem</em>, <em>normal</em>, and <em>reverse</em> branches.  The dumper notes which it traverses when it does so. Rather than starting a new <code>PATH</code> when traversing a switch not before encountered, the dumper incorporates it into the <code>PATH</code> being recorded, of necessity either entering or leaving via the <em>stem</em>.  The dumper meticulously verifies the validity of its graph-theoretic assumptions, as well as the well-formedness of the graph, to avoid creating unloadable layouts.</p>
 
 <p>Again, hopefully you will never have to deal with any of this. If you really care, study <code>save.cpp</code>.</p>
 
