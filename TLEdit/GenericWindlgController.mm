@@ -175,28 +175,6 @@ typedef void *HWND;
         }
     }
 }
--(BOOL)jtbp:(NSTextField*)textField
-{
-    // At this point, we know that
-    // 1) The current field is a text field
-    // 2) Its string-content, possibly box-qualified, is on our watch-list.
-    if (textField.isEditable) // Now we must be pure
-        return NO;
-    NSView* nextField = textField.nextKeyView;
-    if (nextField == nil) // we must be chained on.
-        return NO;
-    if ([nextField isKindOfClass:[NSStepper class]]) // why not? we need this.
-        return YES;
-    if (![nextField isKindOfClass:[NSTextField class]])
-        return NO; // he'd better be a text field.
-    return YES; // the sample text pane in the text dlg isn't editable!#@#$@
-    // This will screw up if you are careless and nextKey one label to the next; the second
-     // will get clobbered with dlg content.
-//    NSTextField * nextTextField = (NSTextField*)nextField;
-  //  return YES;
- //    return nextTextField.isEditable; // and editable.
-
-}
 
 -(void)recordIt:(NSView*)view rid:(int)rid
 {
