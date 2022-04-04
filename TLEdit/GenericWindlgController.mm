@@ -165,15 +165,15 @@ typedef void *HWND;
     callWndProcInitDialog(_hWnd, _NXGObject);
 }
 
--(void)maybeSubregisterButton:(NSButton*)button
+-(bool)maybeRegisterView:(NSView*)view
 {
-    if (id identifier = button.identifier) {
+    if (id identifier = view.identifier) {
         if (! [self bogusCocoaIdentifier: identifier] && RIDValMap.count(identifier)) {
-            [button setState:NO];
-            [self recordIt:button rid: RIDValMap[identifier]];
-            return;
+            [self recordIt:view rid: RIDValMap[identifier]];
+            return true;
         }
     }
+    return false;
 }
 
 -(void)recordIt:(NSView*)view rid:(int)rid
@@ -192,23 +192,19 @@ typedef void *HWND;
     }
     return false;
 }
--(void)setControlMapRecurseViews:(NSView*)view
+-(void)setControlMapRecurseViews:(NSView*)parentView
 {
-    for (NSView* childView in view.subviews) {
-        id identifier = [childView identifier];
+    for (NSView* view in parentView.subviews) {
+        if ([self maybeRegisterView: view]) {
 
-        if (identifier && not [self bogusCocoaIdentifier:identifier]) {
-            if(RIDValMap.count(identifier)) {
-                [self recordIt:childView rid:RIDValMap[identifier]];
-                continue;
-            }
         }
-       if ([childView isKindOfClass:[NSBox class]]) {
-            [self setControlMapRecurseViews:childView.subviews[0]];
-        } else if ([childView isKindOfClass:[NSMatrix class]]) {
-            NSMatrix * matrix = (NSMatrix*)childView;
+        else if ([view isKindOfClass:[NSBox class]]) {
+            [self setControlMapRecurseViews:view.subviews[0]];
+        } else if ([view isKindOfClass:[NSMatrix class]]) {
+            NSMatrix * matrix = (NSMatrix*)view;
             for (NSButtonCell* cell in matrix.cells) {
-                [self maybeSubregisterButton:(NSButton*)cell];
+                if ([self maybeRegisterView: (NSView*)cell])
+                    [cell setState: NO];
             }
         }
     }
