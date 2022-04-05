@@ -13,9 +13,8 @@ typedef void *HWND;
 #include "WinMacCalls.h"
 #include "STLExtensions.h"
 #include <unordered_map>
+#include <exception>
 #include <map>
-
-#define PRGNAME "Generic WinDlg Controller"
 
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
  respective deficiencies of the Windows and Macintosh dialog systems.
@@ -66,6 +65,7 @@ typedef void *HWND;
  With this scheme, the code now can diagnose missing, unknown, and duplicate tags/id's!
 
 */
+struct GenericWindlgException : public std::exception {};
 
 @interface GenericWindlgController () // () means append to def. given already.
 {
@@ -83,7 +83,7 @@ typedef void *HWND;
     self = [super initWithWindowNibName:nibName];
     if (self == nil)
     /* this never happens, no matter how bad the Nib name is. Not at all clear how to catch
-     the error. */
+     the error. Will throw an unhandled exception if ever happens. */
         [self barf: FormatString("Cannot initialize from NIB %s", nibName.UTF8String)];
 
     _NXGObject = object;
@@ -91,17 +91,25 @@ typedef void *HWND;
 }
 -(void)showModal
 {
-    if (!self.window) //Not clear why this is the first we see it.
-        [self barf: FormatString("Dialog window did not load from nib %s", self.windowNibName.UTF8String)];
+    try {
+        if (!self.window) //Not clear why this is the first we see it.
+            [self barf: FormatString("Dialog window did not load from nib %s", self.windowNibName.UTF8String)];
 
-    NSPoint p = NXViewToScreen(NXGOLocAsPoint(_NXGObject)); //whole panel -> whole mac screen
-    NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "yup".
-    [self.window setFrameTopLeftPoint:placement];
+        NSPoint p = NXViewToScreen(NXGOLocAsPoint(_NXGObject)); //whole panel -> whole mac screen
+        NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "yup".
 
-    [self showWindow:self]; // if you don't do this yourself, runModal will toss your frame.
-         //Don't believe me, try it yourself (comment out this line).
+        // Oddly enough, this seems to be the place where WindowDidLoad gets invoked.
+        [self.window setFrameTopLeftPoint:placement];
 
-    [NSApp runModalForWindow:self.window];
+        if (CtlidToHWND.size() == 0) // If there was an error, don't show
+           return;
+
+        [self showWindow:self]; // if you don't do this yourself, runModal will toss your frame.
+        //Don't believe me, try it yourself (comment out this line).
+        [NSApp runModalForWindow:self.window];
+    } catch (GenericWindlgException e) {
+        //pass;
+    }
 }
 -(void)DestroyWindow
 {
@@ -134,20 +142,9 @@ typedef void *HWND;
     /* See EndDialog */
     callWndProcIdOK(_hWnd, _NXGObject);
 }
-- (void)windowDidLoad
+-(void)setupOKCancelButtons
 {
-    assert(self.window);  // this never happens, even with deliberately bad nib.
-
-    [self createControlMap];
-    [super windowDidLoad];
-
-    /* we are retained on the stack, not in c++ code */
-    _hWnd = WinWrapNoRetain(self, self.window.contentView, @"Generic Dialog");
-    
-   /* Find and direct the OK and Cancel buttons to this good office. */
-
-    NSView * view = self.window.contentView;
-    for (NSWindow* childView in view.subviews) {
+    for (NSWindow* childView in self.window.contentView.subviews) {
         if ([childView isKindOfClass:[NSButton class]]){
             NSButton * button = (NSButton* )childView;
             NSString * title = button.title;
@@ -160,19 +157,40 @@ typedef void *HWND;
             }
         }
     }
+}
 
-    /* now run all the code that uses the stuff set before we were called*/
+- (void)windowDidLoad
+{
+    assert(self.window);  // this never happens, even with deliberately bad nib.
 
-    callWndProcInitDialog(_hWnd, _NXGObject);
+    try {
+        [self createControlMap];
+        [super windowDidLoad];
+
+        /* we are retained on the stack, not in c++ code */
+        _hWnd = WinWrapNoRetain(self, self.window.contentView, @"Generic Dialog");
+    
+        /* Find and direct the OK and Cancel buttons to this good office. */
+
+        [self setupOKCancelButtons];
+
+        /* now run all the code that uses the stuff set before we were called*/
+        callWndProcInitDialog(_hWnd, _NXGObject);
+
+    } catch (GenericWindlgException e){
+        CtlidToHWND.clear();
+    }
+
 }
 -(void)barf:(std::string) message
 {
     /* These are not user errors, but logic/coding resource-tagging errors that should be
      debugged out.  Nevertheless, it is better to say something that a user can report, something
-     better than "Internal logic error... please do so and so ..." */
+     better than "Internal logic error... please do so and so ..." Breakpoint here
+     to debug. */
 
-    MessageBoxS(NULL, message, PRGNAME, MB_OK|MB_ICONSTOP);
-    abort();
+    MessageBoxS(NULL, message, "Generic Windlg Controller internal error", MB_OK|MB_ICONSTOP);
+    throw GenericWindlgException();
 }
 
 -(bool)maybeRegisterView:(NSView*)view
@@ -268,7 +286,7 @@ typedef void *HWND;
 -(HWND)GetControlHWND:(NSInteger)ctlid
 {
     if (CtlidToHWND.count(ctlid) == 0)
-        [self barf: FormatString("Rcvd action from Cocoa control tagged %d, for which no emulation exists.", ctlid)];
+        [self barf: FormatString("Received action from Cocoa control tagged %d, for which no emulation exists.", ctlid)];
     return CtlidToHWND[ctlid];
 }
 -(NSView*)GetControlView:(NSInteger)ctlid
