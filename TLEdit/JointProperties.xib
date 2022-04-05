@@ -48,7 +48,7 @@
                         </connections>
                     </textField>
                     <textField identifier="IDC_JOINT_STATION_ID" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y06-oO-nen">
-                        <rect key="frame" x="178" y="168" width="18" height="22"/>
+                        <rect key="frame" x="178" y="168" width="71" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="RaR-Bc-nNe">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -171,7 +171,7 @@ Gw
                     <constraint firstItem="VXr-Tx-WxR" firstAttribute="baseline" secondItem="lP4-nO-abL" secondAttribute="baseline" id="ZJR-zI-nLt"/>
                     <constraint firstItem="SPZ-SF-lD4" firstAttribute="top" secondItem="py5-jG-Sbc" secondAttribute="bottom" constant="18" id="afm-B1-cHj"/>
                     <constraint firstAttribute="trailing" secondItem="lP4-nO-abL" secondAttribute="trailing" constant="58" id="b00-C0-Zrr"/>
-                    <constraint firstAttribute="trailing" secondItem="y06-oO-nen" secondAttribute="trailing" constant="91" id="bUX-Uk-v1J"/>
+                    <constraint firstAttribute="trailing" secondItem="y06-oO-nen" secondAttribute="trailing" constant="38" id="bUX-Uk-v1J"/>
                     <constraint firstItem="lP4-nO-abL" firstAttribute="leading" secondItem="VXr-Tx-WxR" secondAttribute="trailing" constant="41" id="cXD-NZ-uQ6"/>
                     <constraint firstItem="y06-oO-nen" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="66" id="dWK-v0-jmb"/>
                 </constraints>
