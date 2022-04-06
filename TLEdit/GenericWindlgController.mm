@@ -65,6 +65,9 @@ typedef void *HWND;
  With this scheme, the code now can diagnose missing, unknown, and duplicate tags/id's!
 
 */
+
+static std::map<NSString*, int> ByTitle{{@"OK", IDOK}, {@"Cancel", IDCANCEL}};
+
 struct GenericWindlgException : public std::exception {};
 
 @interface GenericWindlgController () // () means append to def. given already.
@@ -99,6 +102,7 @@ struct GenericWindlgException : public std::exception {};
         NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "yup".
 
         // Oddly enough, this seems to be the place where WindowDidLoad gets invoked.
+        // Thus, CtlidToHwnd will be empty at this point even if all is well.
         [self.window setFrameTopLeftPoint:placement];
 
         if (CtlidToHWND.size() == 0) // If there was an error, don't show
@@ -132,52 +136,25 @@ struct GenericWindlgException : public std::exception {};
     if(_hWnd) // can be null in error situations
         DeleteHwndObject(_hWnd);
 }
--(IBAction)GenericCancel:(NSNotification*)noti
-{
-    /* See EndDialog */
-    callWndProcIdCancel(_hWnd, _NXGObject);
-}
--(IBAction)GenericOK:(NSNotification*)noti
-{
-    /* See EndDialog */
-    callWndProcIdOK(_hWnd, _NXGObject);
-}
--(void)setupOKCancelButtons
-{
-    for (NSWindow* childView in self.window.contentView.subviews) {
-        if ([childView isKindOfClass:[NSButton class]]){
-            NSButton * button = (NSButton* )childView;
-            NSString * title = button.title;
-            if (![title compare:@"Cancel"]) {
-                [button setTarget: self];
-                [button setAction: @selector(GenericCancel:)];
-            } else if (![title compare:@"OK"]) {
-                [button setTarget: self];
-                [button setAction: @selector(GenericOK:)];
-            }
-        }
-    }
-}
-
 - (void)windowDidLoad
 {
     assert(self.window);  // this never happens, even with deliberately bad nib.
 
     try {
-        [self createControlMap];
-        [super windowDidLoad];
+        [self createControlMap];  //Set up all the HWND and resource-id linkages.
+        
+        [super windowDidLoad];   //Do whatever Cocoa needs/wants.
 
         /* we are retained on the stack, not in c++ code */
         _hWnd = WinWrapNoRetain(self, self.window.contentView, @"Generic Dialog");
     
-        /* Find and direct the OK and Cancel buttons to this good office. */
-
-        [self setupOKCancelButtons];
-
-        /* now run all the code that uses the stuff set before we were called*/
+        /* now run all the code that uses the stuff set before we were called, all the Windows code */
         callWndProcInitDialog(_hWnd, _NXGObject);
 
     } catch (GenericWindlgException e){
+        /* If there was a "crash", don't crash, but leave an empty basket to assert it.
+         Can't be here if message box was not already raised.*/
+
         CtlidToHWND.clear();
     }
 
@@ -234,6 +211,14 @@ struct GenericWindlgException : public std::exception {};
         }
         else if ([view isKindOfClass:[NSBox class]]) {
             [self createControlMapRecurse: view.subviews[0]];
+        }
+        /* Necessary until all OK/Cancel buttons supplied witn "identifier"s.
+         Don't even need entry in CtlidToHWND. */
+        else if ([view isKindOfClass:[NSButton class]] && ByTitle.count(((NSButton*)view).title)) {
+            NSButton* button = (NSButton*)view;
+            [button setTag:ByTitle[button.title]]; //Install numeric Windows resource_id.
+            [button setTarget: self];    //should be redundant for current controls
+            [button setAction: @selector(activeButton:)];  //but this will be different!
         }
         else if ([view isKindOfClass:[NSMatrix class]]) {
             NSMatrix * matrix = (NSMatrix*)view;
