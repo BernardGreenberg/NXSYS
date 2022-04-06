@@ -97,11 +97,14 @@ struct GenericWindlgException : public std::exception {};
     try {
         /* "What we clearly mean here is not so clear, and is rooted in NCOMPLR."
          It turns out that this reference to self.window calls a method that invokes
-         the windowDidLoad chain, which does not get invoked until now.  The test of the
-         map population would fail if done before then.  Thus, remove this test
-         that side-effects self.window, and the method will exit at the next! */
+         the windowDidLoad chain, which does not get invoked until now. Without this,
+         both the test for having loaded and the test for map population will fail
+         when all is well.  Remove this seemingly effect-free statement and all fails:
+         The test will report "not loaded". */
 
-        if (!self.window)
+        [self window];
+
+        if (![self isWindowLoaded])
             [self barf: FormatString("Dialog window did not load from nib %s", self.windowNibName.UTF8String)];
 
         if (CtlidToHWND.size() == 0) // If there was an error, don't show
@@ -140,26 +143,29 @@ struct GenericWindlgException : public std::exception {};
     if(_hWnd) // can be null in error situations
         DeleteHwndObject(_hWnd);
 }
-- (void)windowDidLoad
+-(void)windowDidLoad
 {
     assert(self.window);  // this never happens, even with deliberately bad nib.
 
     try {
         [self createControlMap];  //Set up all the HWND and resource-id linkages.
         
-        [super windowDidLoad];   //Do whatever Cocoa needs/wants.
+        [super windowDidLoad];   //Do whatever Cocoa needs/wants.  (probably nothing, I read)
 
         /* we are retained on the stack, not in c++ code */
         _hWnd = WinWrapNoRetain(self, self.window.contentView, @"Generic Dialog");
     
-        /* now run all the code that uses the stuff set before we were called, all the Windows code */
+        /* Now run all the Windows code that uses the stuff set before we were called */
         callWndProcInitDialog(_hWnd, _NXGObject);
 
     } catch (GenericWindlgException e){
         /* If there was a "crash", don't crash, but leave an empty basket to assert it.
          Can't be here if message box was not already raised.*/
+        /* Note that this catch is not really necessary, because windowDidLoad will be
+         called within the scope of the showModal method, which has a catch, but relying
+         on that seems perverse. */
 
-        CtlidToHWND.clear();
+        CtlidToHWND.clear();  // Leave a sign for showModal.
     }
 
 }
