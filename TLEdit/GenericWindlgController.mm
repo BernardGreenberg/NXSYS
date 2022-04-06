@@ -95,18 +95,22 @@ struct GenericWindlgException : public std::exception {};
 -(void)showModal
 {
     try {
-        if (!self.window) //Not clear why this is the first we see it.
+        /* "What we clearly mean here is not so clear, and is rooted in NCOMPLR."
+         It turns out that this reference to self.window calls a method that invokes
+         the windowDidLoad chain, which does not get invoked until now.  The test of the
+         map population would fail if done before then.  Thus, remove this test
+         that side-effects self.window, and the method will exit at the next! */
+
+        if (!self.window)
             [self barf: FormatString("Dialog window did not load from nib %s", self.windowNibName.UTF8String)];
+
+        if (CtlidToHWND.size() == 0) // If there was an error, don't show
+           return;
 
         NSPoint p = NXViewToScreen(NXGOLocAsPoint(_NXGObject)); //whole panel -> whole mac screen
         NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "yup".
 
-        // Oddly enough, this seems to be the place where WindowDidLoad gets invoked.
-        // Thus, CtlidToHwnd will be empty at this point even if all is well.
         [self.window setFrameTopLeftPoint:placement];
-
-        if (CtlidToHWND.size() == 0) // If there was an error, don't show
-           return;
 
         [self showWindow:self]; // if you don't do this yourself, runModal will toss your frame.
         //Don't believe me, try it yourself (comment out this line).
