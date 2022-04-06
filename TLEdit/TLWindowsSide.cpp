@@ -22,11 +22,3 @@ bool callWndProcInitDialog(HWND hWnd, void * v) {
 bool callWndProcGeneralCommandParam(HWND hWnd, void * v, int command, long lParam) {
     return callWndProcGeneralMessage(hWnd, v, WM_COMMAND, command, lParam);
 }
-
-bool callWndProcIdOK(HWND hWnd, void * v) {
-    return callWndProcGeneralCommandParam(hWnd, v, IDOK, 0);
-}
-
-bool callWndProcIdCancel(HWND hWnd, void * v) {
-    return callWndProcGeneralCommandParam(hWnd, v, IDCANCEL, 0);
-}

@@ -10,8 +10,6 @@
 #define NXSYSMac_TLWindowsSide_h
 
 bool callWndProcInitDialog(HWND hWnd, void*v);
-bool callWndProcIdOK(HWND hWnd, void*v);
-bool callWndProcIdCancel(HWND hWnd, void*v);
 bool callWndProcGeneralCommandParam(HWND hWnd, void * v, int command,  long lparam);
 
 #endif
