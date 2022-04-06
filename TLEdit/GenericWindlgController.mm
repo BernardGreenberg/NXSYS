@@ -66,7 +66,7 @@ typedef void *HWND;
 
 */
 
-static std::map<NSString*, int> ByTitle{{@"OK", IDOK}, {@"Cancel", IDCANCEL}};
+static std::map<std::string, int> ByTitle{{"OK", IDOK}, {"Cancel", IDCANCEL}};
 
 struct GenericWindlgException : public std::exception {};
 
@@ -80,7 +80,7 @@ struct GenericWindlgException : public std::exception {};
 
 @implementation GenericWindlgController
 
--(GenericWindlgController*)initWithNibAndObject:(NSString *)nibName object:(void *)object
+-(GenericWindlgController*)initWithNibAndObject:(NSString *)nibName object:(class GraphicObject *)object
 {
    // nibName = @"Bad Nib Name"; // for (unrewarding) testing.
     self = [super initWithWindowNibName:nibName];
@@ -214,11 +214,14 @@ struct GenericWindlgException : public std::exception {};
         }
         /* Necessary until all OK/Cancel buttons supplied witn "identifier"s.
          Don't even need entry in CtlidToHWND. */
-        else if ([view isKindOfClass:[NSButton class]] && ByTitle.count(((NSButton*)view).title)) {
+        else if ([view isKindOfClass:[NSButton class]]) {
             NSButton* button = (NSButton*)view;
-            [button setTag:ByTitle[button.title]]; //Install numeric Windows resource_id.
-            [button setTarget: self];    //should be redundant for current controls
-            [button setAction: @selector(activeButton:)];  //but this will be different!
+            std::string title =  button.title.UTF8String; // hashing on "NSCFString" doesn't work.
+            if (ByTitle.count(title)) {
+                [button setTag:ByTitle[title]]; //Install numeric Windows resource_id.
+                [button setTarget: self];    //should be redundant for current controls
+                [button setAction: @selector(activeButton:)];  //but this will be different!
+            }
         }
         else if ([view isKindOfClass:[NSMatrix class]]) {
             NSMatrix * matrix = (NSMatrix*)view;
@@ -301,7 +304,7 @@ struct GenericWindlgException : public std::exception {};
 }
 
 -(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
-                                             object:(void*)object
+                                             object:(class GraphicObject*)object
                                                rids:(RIDVector&)rids
 {
     /* Make the RID map. It is worth it because it is going to be searched
@@ -352,7 +355,7 @@ int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator) {
     return 0;
 }
 
-void MacDialogDispatcher(unsigned int resource_id, void * obj) {
+void MacDialogDispatcher(unsigned int resource_id, class GraphicObject * obj) {
     if ((*TabulaCreatorum).count(resource_id) == 0)
         return;  /*this happens sometimes -- clicking on odd things -- just ignore */
     (*TabulaCreatorum)[resource_id](obj);

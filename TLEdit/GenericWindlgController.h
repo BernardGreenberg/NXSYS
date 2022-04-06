@@ -28,11 +28,12 @@ struct CompareNSString: public std::binary_function<NSString*, NSString*, bool> 
 
 typedef const std::initializer_list<RIDPair> RIDVector;
 
-typedef void (^TLEditDlgCreator)(void*);
+typedef void (^TLEditDlgCreator)(class GraphicObject*);
 
+/* These macros must expand in an NXSYS compile environment with GraphicObject defined.*/
 #define REGISTER_DIALOG(RESOURCE_ID, CLASS_NAME, NIB_NAME) \
      static int dumy = RegisterTLEDitDialog \
-        (RESOURCE_ID, ^(void *obj) { \
+        (RESOURCE_ID, ^(GraphicObject *obj) { \
         [[[CLASS_NAME alloc] initWithNibAndObject:NIB_NAME \
                      object:obj] showModal];});
 
@@ -40,13 +41,13 @@ typedef void (^TLEditDlgCreator)(void*);
 
 #define REGISTER_DIALOG_2R(RESOURCE_ID, CLASS_NAME, NIB_NAME,RIDS) \
     static int dumy = RegisterTLEDitDialog \
-        (RESOURCE_ID, ^(void *obj) { \
+        (RESOURCE_ID, ^(GraphicObject *obj) { \
             [[[CLASS_NAME alloc] initWithNibObjectAndRIDs:NIB_NAME \
                 object:obj rids:RIDS] showModal];});
 
 #define REGISTER_DIALOG_4R(dumy,RESOURCE_ID,NIB_NAME,RIDS) \
     static int dumy = RegisterTLEDitDialog \
-      (RESOURCE_ID, ^(void *obj) { \
+      (RESOURCE_ID, ^(GraphicObject *obj) { \
         [[[GenericWindlgController alloc] initWithNibObjectAndRIDs:NIB_NAME \
                 object:obj rids:RIDS] showModal];});
 
@@ -55,10 +56,10 @@ int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator);
 @interface GenericWindlgController : NSWindowController<WinDialog>
 
 @property void* hWnd;
-@property void* NXGObject;
+@property class GraphicObject* NXGObject;
 
 -(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
-                                             object:(void*)object
+                                             object:(GraphicObject*)object
                                                rids:(RIDVector&)rids;
 
 -(IBAction)activeButton:(id)sender;

@@ -26,13 +26,16 @@
 
 #ifdef NXSYSMac
 void Sleep(long);
-void MacDialogDispatcher(UINT did, void*Object);
+void MacDialogDispatcher(UINT did, GraphicObject *Object);
 #endif
 
 static UINT SwitchIsIDs [3] = {IDC_SWITCH_IS_SINGLETON, IDC_SWITCH_IS_A, IDC_SWITCH_IS_B};
 
 UINT TrackJoint::DlgId () {
-    return  EditAsSwitchP() ? IDD_SWITCH_ATTR : IDD_JOINT;}
+    return  EditAsSwitchP() ? IDD_SWITCH_ATTR : IDD_JOINT;
+    
+}
+
 UINT TrackSeg::DlgId () {return IDD_SEG_ATTRIBUTES;}
 
 
@@ -297,24 +300,25 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
     }
 }
 
+#ifdef _WIN32
 static DLGPROC_DCL GeneralDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-#ifndef NXSYSMac
+
     if (message == WM_INITDIALOG)
 	SetWindowLongPtr (hDlg, GWLP_USERDATA, lParam);
     LONG_PTR l = GetWindowLongPtr (hDlg, GWLP_USERDATA);
     if (l)
 	return (BOOL)((GraphicObject *) l)->DlgProc(hDlg, message, wParam, lParam);
     else
-#endif
 	return FALSE;
 }
+#endif
+
 
 void GraphicObject::EditProperties() {
     UINT id = DlgId();
 #ifdef NXSYSMac
-    GeneralDlgProc(NULL, 0, 0, 0);  // removes compiler warning!
-    MacDialogDispatcher(id, (void*) this);
+    MacDialogDispatcher(id, this);
 #else
     if (id)
 	DialogBoxParam (app_instance, MAKEINTRESOURCE(id), G_mainwindow,
