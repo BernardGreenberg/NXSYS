@@ -86,13 +86,13 @@ struct GenericWindlgException : public std::exception {};
 {
     //  nibName = @"Bad-Nib-Name"; // for testing, remove leading //
 
+    self = [super initWithWindowNibName:nibName]; //will never fail to return a controller
+
     /* Make the RID map. It is worth it because it is going to be searched
     n times (n = number of entries) when dialog is recursively-scanned */
 
     for (auto p : rids)
         RIDValMap[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
-
-    self = [super initWithWindowNibName:nibName]; //will never fail to return a controller
 
     try {
         /* This call [self window] will side-effect call windowDidLoad if and only if the window
@@ -100,6 +100,9 @@ struct GenericWindlgException : public std::exception {};
 
         if (![self window])
             [self barf: FormatString("Cannot load NIB \"%s\"", nibName.UTF8String)];
+
+        /* we are retained on the stack, not in C++ code */
+        _hWnd = WinWrapNoRetain(self, self.window.contentView, nibName);
 
         return self;
 
@@ -165,10 +168,13 @@ struct GenericWindlgException : public std::exception {};
 
     [super windowDidLoad];   //Do whatever Cocoa needs/wants (probably nothing, I read)
 
-    [self createControlMap];  //Set up all the HWND and resource-id linkages.
-
-    /* we are retained on the stack, not in C++ code */
-    _hWnd = WinWrapNoRetain(self, self.window.contentView, @"Generic Dialog");
+    /* Recurse over the view; create HWND objects and install resource_id codes, and link them */
+    [self createControlMapRecurse:self.window.contentView];
+     
+    /* Verify that all resources in the init map were actually found*/
+    for (auto [nss, rid] : RIDValMap)
+        if (!CtlidToHWND.count(rid))
+            [self barf: FormatString("Did not find control for resource id %d (%s)", rid, nss.UTF8String)];
 }
 
 -(void)barf:(std::string) message
@@ -204,7 +210,7 @@ struct GenericWindlgException : public std::exception {};
 
         /* Create and link an HWND object to the control, and register it in the
          resource_id to HWND map. Insert the numeric ID into the control's "tag" attribute. */
-        CtlidToHWND[resource_id] = WinWrapControl(self, view, resource_id, @"Generic Windlg");
+        CtlidToHWND[resource_id] = WinWrapControl(self, view, resource_id, identifier);
         [(NSControl*)view setTag: resource_id];
         return true;
     }
@@ -243,15 +249,6 @@ struct GenericWindlgException : public std::exception {};
             }
         }
     }
-}
-
--(void)createControlMap
-{
-    [self createControlMapRecurse:self.window.contentView];
- 
-    for (auto [nss, rid] : RIDValMap)
-        if (!CtlidToHWND.count(rid))
-            [self barf: FormatString("Did not find control for resource id %d (%s)", rid, nss.UTF8String)];
 }
 
 -(void)SetControlText:(NSInteger)ctlid text:(NSString*)text
