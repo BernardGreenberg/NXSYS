@@ -11,6 +11,8 @@
 #include <functional>
 #include "WinDialogProtocol.h"
 
+class GraphicObject;  // don't want nxgo.h
+
 struct RIDPair {
     const char * Symbol;
     int resource_id;
@@ -56,7 +58,7 @@ int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator);
 @interface GenericWindlgController : NSWindowController<WinDialog>
 
 @property void* hWnd;
-@property class GraphicObject* NXGObject;
+@property  GraphicObject* NXGObject;
 
 -(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
                                              object:(GraphicObject*)object

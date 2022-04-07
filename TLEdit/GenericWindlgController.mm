@@ -80,45 +80,63 @@ struct GenericWindlgException : public std::exception {};
 
 @implementation GenericWindlgController
 
--(GenericWindlgController*)initWithNibAndObject:(NSString *)nibName object:(class GraphicObject *)object
-{
-   // nibName = @"Bad Nib Name"; // for (unrewarding) testing.
-    self = [super initWithWindowNibName:nibName];
-    if (self == nil)
-    /* this never happens, no matter how bad the Nib name is. Not at all clear how to catch
-     the error. Will throw an unhandled exception if ever happens. */
-        [self barf: FormatString("Cannot initialize from NIB %s", nibName.UTF8String)];
+/* Usage by the macro is
+ [[xxxxWindlgController alloc] initWithNibAndObjectAndRIDs: nibname nxgobject rids].showModal();
+ The boundary between the two methods is arbitrary and stylistic. One would suffice.
+*/
 
-    _NXGObject = object;
+-(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
+                                             object:(GraphicObject*)object
+                                               rids:(RIDVector&)rids
+{
+    //  nibName = @"Bad-Nib-Name"; // for testing, remove leading //
+
+    /* Make the RID map. It is worth it because it is going to be searched
+    n times (n = number of entries) when dialog is recursively-scanned */
+
+    for (auto p : rids)
+        RIDValMap[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
+
+    self = [super initWithWindowNibName:nibName]; //will never fail to return a controller
+    _NXGObject = object;   //remember the NXGO Object
+
+    try {
+        /* This call [self window] will side-effect call windowDidLoad if and only if the window
+        did, in fact, load.  So all of the barf: errors will throw and be caught at this point. */
+
+        if (![self window])
+            [self barf: FormatString("Cannot load NIB \"%s\"", nibName.UTF8String)];
+
+    } catch (GenericWindlgException e) {
+        /* Message already messageboxed by barf: */
+        CtlidToHWND.clear();   //Leave a sign for showModal not to try.
+    }
+
     return self;
 }
+
 -(void)showModal
 {
+    if (!CtlidToHWND.size()) //will happen if init failed for any reason
+        return;
+
     try {
-        /* "What we clearly mean here is not so clear, and is rooted in NCOMPLR."
-         It turns out that this reference to self.window calls a method that invokes
-         the windowDidLoad chain, which does not get invoked until now. Without this,
-         both the test for having loaded and the test for map population will fail
-         when all is well.  Remove this seemingly effect-free statement and all fails:
-         The test will report "not loaded". */
-
-        [self window];
-
-        if (![self isWindowLoaded])
-            [self barf: FormatString("Dialog window did not load from nib %s", self.windowNibName.UTF8String)];
-
-        if (CtlidToHWND.size() == 0) // If there was an error, don't show
-           return;
-
+        /* Compute and set dialog position */
         NSPoint p = NXViewToScreen(NXGOLocAsPoint(_NXGObject)); //whole panel -> whole mac screen
-        NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "yup".
-
+        NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "y=up".
         [self.window setFrameTopLeftPoint:placement];
 
-        [self showWindow:self]; // if you don't do this yourself, runModal will toss your frame.
-        //Don't believe me, try it yourself (comment out this line).
+        /* Now run all the Windows code that uses the stuff set before we were called */
+        callWndProcInitDialog(_hWnd, _NXGObject);
+
+        /* Show the window */
+        [self showWindow:self]; // runModalFW doesn't do this for you ....
+
+        /* And run (accept user interaction calling back in) */
         [NSApp runModalForWindow:self.window];
+
     } catch (GenericWindlgException e) {
+        /* Errors can be thrown by user interaction during [NSApp runModal...] */
         //pass;
     }
 }
@@ -145,30 +163,18 @@ struct GenericWindlgException : public std::exception {};
 }
 -(void)windowDidLoad
 {
-    assert(self.window);  // this never happens, even with deliberately bad nib.
+    /* This will get called during the benign-looking [self window] in the init method
+     if and only if the window did load from the nib. All error throws will be caught
+     by the init method. */
 
-    try {
-        [self createControlMap];  //Set up all the HWND and resource-id linkages.
-        
-        [super windowDidLoad];   //Do whatever Cocoa needs/wants.  (probably nothing, I read)
+    [super windowDidLoad];   //Do whatever Cocoa needs/wants (probably nothing, I read)
 
-        /* we are retained on the stack, not in c++ code */
-        _hWnd = WinWrapNoRetain(self, self.window.contentView, @"Generic Dialog");
-    
-        /* Now run all the Windows code that uses the stuff set before we were called */
-        callWndProcInitDialog(_hWnd, _NXGObject);
+    [self createControlMap];  //Set up all the HWND and resource-id linkages.
 
-    } catch (GenericWindlgException e){
-        /* If there was a "crash", don't crash, but leave an empty basket to assert it.
-         Can't be here if message box was not already raised.*/
-        /* Note that this catch is not really necessary, because windowDidLoad will be
-         called within the scope of the showModal method, which has a catch, but relying
-         on that seems perverse. */
-
-        CtlidToHWND.clear();  // Leave a sign for showModal.
-    }
-
+    /* we are retained on the stack, not in C++ code */
+    _hWnd = WinWrapNoRetain(self, self.window.contentView, @"Generic Dialog");
 }
+
 -(void)barf:(std::string) message
 {
     /* These are not user errors, but logic/coding resource-tagging errors that should be
@@ -177,7 +183,7 @@ struct GenericWindlgException : public std::exception {};
      to debug. */
 
     MessageBoxS(NULL, message, "Generic Windlg Controller internal error", MB_OK|MB_ICONSTOP);
-    throw GenericWindlgException();
+    throw GenericWindlgException();  //caught by init method or runModal method
 }
 
 -(bool)maybeRegisterView:(NSView*)view
@@ -313,22 +319,10 @@ struct GenericWindlgException : public std::exception {};
     [self real_deall];
 }
 
--(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
-                                             object:(class GraphicObject*)object
-                                               rids:(RIDVector&)rids
-{
-    /* Make the RID map. It is worth it because it is going to be searched
-    n times (n = number of entries) when dialog is recursively-scanned */
-
-    for (auto p : rids)
-        RIDValMap[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
-
-    return [self initWithNibAndObject:nibName object:object];
-}
 -(IBAction)activeButton:(id)sender
 {
-    /* If you route buttons here via IB, that is, in effect, routing the Windows IDC_FOO_BAR
-       to the Windows DlgProc of this dialog. */
+    /* Buttons routed here either by IB action or this code (in some versions) call the
+     Windows dialog code responsive to the WM_COMMAND code stored by this code into their "tag"s. */
 
     if ([sender isKindOfClass:[NSMatrix class]]) {
         NSMatrix * mater = (NSMatrix *)sender;  // juxta filium clamantem
@@ -365,7 +359,7 @@ int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator) {
     return 0;
 }
 
-void MacDialogDispatcher(unsigned int resource_id, class GraphicObject * obj) {
+void MacDialogDispatcher(unsigned int resource_id, GraphicObject * obj) {
     if ((*TabulaCreatorum).count(resource_id) == 0)
         return;  /*this happens sometimes -- clicking on odd things -- just ignore */
     (*TabulaCreatorum)[resource_id](obj);
