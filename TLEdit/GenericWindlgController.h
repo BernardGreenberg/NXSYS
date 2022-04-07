@@ -32,26 +32,24 @@ typedef const std::initializer_list<RIDPair> RIDVector;
 
 typedef void (^TLEditDlgCreator)(class GraphicObject*);
 
+void OfferGenericWindlg(Class clazz, NSString* nib_name, RIDVector rid_vector, GraphicObject* obj);
+
 /* These macros must expand in an NXSYS compile environment with GraphicObject defined.*/
 #define REGISTER_DIALOG(RESOURCE_ID, CLASS_NAME, NIB_NAME) \
      static int dumy = RegisterTLEDitDialog \
-        (RESOURCE_ID, ^(GraphicObject *obj) { \
-        [[[CLASS_NAME alloc] initWithNibAndObject:NIB_NAME \
-                     object:obj] showModal];});
-
-
+        (RESOURCE_ID, \
+            ^(GraphicObject *obj) {OfferGenericWindlg([CLASS_NAME class], NIB_NAME, RIDS, obj);});
 
 #define REGISTER_DIALOG_2R(RESOURCE_ID, CLASS_NAME, NIB_NAME,RIDS) \
     static int dumy = RegisterTLEDitDialog \
-        (RESOURCE_ID, ^(GraphicObject *obj) { \
-            [[[CLASS_NAME alloc] initWithNibObjectAndRIDs:NIB_NAME \
-                object:obj rids:RIDS] showModal];});
+        (RESOURCE_ID, \
+           ^(GraphicObject *obj) {OfferGenericWindlg([CLASS_NAME class], NIB_NAME, RIDS, obj);});
 
 #define REGISTER_DIALOG_4R(dumy,RESOURCE_ID,NIB_NAME,RIDS) \
     static int dumy = RegisterTLEDitDialog \
-      (RESOURCE_ID, ^(GraphicObject *obj) { \
-        [[[GenericWindlgController alloc] initWithNibObjectAndRIDs:NIB_NAME \
-                object:obj rids:RIDS] showModal];});
+      (RESOURCE_ID, \
+          ^(GraphicObject *obj) {OfferGenericWindlg([GenericWindlgController class], NIB_NAME, RIDS, obj);});
+       
 
 int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator);
 
@@ -60,13 +58,11 @@ int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator);
 @property void* hWnd;
 @property  GraphicObject* NXGObject;
 
--(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
-                                             object:(GraphicObject*)object
-                                               rids:(RIDVector&)rids;
+-(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(RIDVector&)rids;
 
 -(IBAction)activeButton:(id)sender;
 
--(void)showModal;
+-(void)showModal:(GraphicObject*)object;
 -(void)reflectCommand:(NSInteger)command;
 -(void)reflectCommandParam:(NSInteger)command lParam:(NSInteger)param;
 

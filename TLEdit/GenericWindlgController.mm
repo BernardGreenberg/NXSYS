@@ -85,9 +85,7 @@ struct GenericWindlgException : public std::exception {};
  The boundary between the two methods is arbitrary and stylistic. One would suffice.
 */
 
--(GenericWindlgController*)initWithNibObjectAndRIDs:(NSString*)nibName
-                                             object:(GraphicObject*)object
-                                               rids:(RIDVector&)rids
+-(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(RIDVector&)rids
 {
     //  nibName = @"Bad-Nib-Name"; // for testing, remove leading //
 
@@ -98,7 +96,6 @@ struct GenericWindlgException : public std::exception {};
         RIDValMap[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
 
     self = [super initWithWindowNibName:nibName]; //will never fail to return a controller
-    _NXGObject = object;   //remember the NXGO Object
 
     try {
         /* This call [self window] will side-effect call windowDidLoad if and only if the window
@@ -107,20 +104,23 @@ struct GenericWindlgException : public std::exception {};
         if (![self window])
             [self barf: FormatString("Cannot load NIB \"%s\"", nibName.UTF8String)];
 
+        return self;
+
     } catch (GenericWindlgException e) {
         /* Message already messageboxed by barf: */
-        CtlidToHWND.clear();   //Leave a sign for showModal not to try.
+        return nil;   //OfferGenericWindlg will not show if so.
     }
 
-    return self;
 }
 
--(void)showModal
+-(void)showModal: (GraphicObject*)object
 {
     if (!CtlidToHWND.size()) //will happen if init failed for any reason
         return;
 
     try {
+        _NXGObject = object;   //
+
         /* Compute and set dialog position */
         NSPoint p = NXViewToScreen(NXGOLocAsPoint(_NXGObject)); //whole panel -> whole mac screen
         NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "y=up".
@@ -136,7 +136,8 @@ struct GenericWindlgException : public std::exception {};
         [NSApp runModalForWindow:self.window];
 
     } catch (GenericWindlgException e) {
-        /* Errors can be thrown by user interaction during [NSApp runModal...] */
+        /* Errors can be thrown by user interaction during [NSApp runModal...]
+         as well as WndProcInitDialog */
         //pass;
     }
 }
@@ -343,6 +344,12 @@ struct GenericWindlgException : public std::exception {};
     [control setEnabled: yesNo ? YES : NO];
 }
 @end
+
+void OfferGenericWindlg(Class clazz, NSString* nib_name, RIDVector rid_vector, GraphicObject* object) {
+    id dialog = [[clazz alloc] initWithNibAndRIDs:nib_name rids:rid_vector];
+    if (dialog)   // if any kind of error, including no nib, don't show.
+        [dialog showModal:object];
+}
 
 /* Can't use static STL -- load time initializes it at unpredictable time compared to our registrees */
 /* Can't use structs, either, as funargs get gc'ed if not protected by strong pointer */
