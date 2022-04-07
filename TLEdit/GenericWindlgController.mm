@@ -112,6 +112,9 @@ struct GenericWindlgException : public std::exception {};
     }
 
 }
+-(void)didInitDialog {
+    
+}
 
 /* This will not get called if init failed (returned nil) */
 -(void)showModal: (GraphicObject*)object
@@ -126,6 +129,7 @@ struct GenericWindlgException : public std::exception {};
 
         /* Now run all the Windows code that uses the stuff set before we were called */
         callWndProcInitDialog(_hWnd, _NXGObject);
+        [self didInitDialog];
 
         /* Show the window */
         [self showWindow:self]; // runModalFW doesn't do this for you ....

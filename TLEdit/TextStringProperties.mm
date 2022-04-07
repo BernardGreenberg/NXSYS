@@ -64,13 +64,11 @@ REGISTER_DIALOG_2R(IDD_EDIT_TEXT, TextStringDlg, @"TextStringProperties", rids)
 
 @implementation TextStringDlg
 
--(void)windowDidLoad
+-(void)didInitDialog        /* All this gets run after WM_INITDIALOG */
 {
     defaultColor = colorFromCOLORREF(TrackDftCol);
-    [super windowDidLoad];
+
     [[self window] setDelegate:self];
-    
-    /* All this gets run after WM_INITDIALOG */
     
     /* Sic oramus, Papa! "Pater noster, qui es in caelis .... " Clam scit indeed.*/
     /* the font dialog won't route messages here without this. */

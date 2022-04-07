@@ -65,5 +65,5 @@ int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator);
 -(void)showModal:(GraphicObject*)object;
 -(void)reflectCommand:(NSInteger)command;
 -(void)reflectCommandParam:(NSInteger)command lParam:(NSInteger)param;
-
+-(void)didInitDialog;
 @end
