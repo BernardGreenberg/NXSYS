@@ -80,10 +80,7 @@ struct GenericWindlgException : public std::exception {};
 
 @implementation GenericWindlgController
 
-/* Usage by the macro is
- [[xxxxWindlgController alloc] initWithNibAndObjectAndRIDs: nibname nxgobject rids].showModal();
- The boundary between the two methods is arbitrary and stylistic. One would suffice.
-*/
+/* See OfferGenericWindlg at bottom of this file for the callin gprotocol of these 2 methods. */
 
 -(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(RIDVector&)rids
 {
@@ -113,13 +110,11 @@ struct GenericWindlgException : public std::exception {};
 
 }
 
+/* This will not get called if init failed (returned nil) */
 -(void)showModal: (GraphicObject*)object
 {
-    if (!CtlidToHWND.size()) //will happen if init failed for any reason
-        return;
-
     try {
-        _NXGObject = object;   //
+        _NXGObject = object;   //Establish linkage with NXGO object.
 
         /* Compute and set dialog position */
         NSPoint p = NXViewToScreen(NXGOLocAsPoint(_NXGObject)); //whole panel -> whole mac screen
