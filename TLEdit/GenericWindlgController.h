@@ -30,40 +30,39 @@ struct CompareNSString: public std::binary_function<NSString*, NSString*, bool> 
 
 typedef const std::initializer_list<RIDPair> RIDVector;
 
-typedef void (^TLEditDlgCreator)(class GraphicObject*);
+typedef void (^TLEditDlgCreator)(GraphicObject*);
 
 void OfferGenericWindlg(Class clazz, NSString* nib_name, RIDVector rid_vector, GraphicObject* obj);
 
-/* These macros must expand in an NXSYS compile environment with GraphicObject defined.*/
-#define REGISTER_DIALOG(RESOURCE_ID, CLASS_NAME, NIB_NAME) \
-     static int dumy = RegisterTLEDitDialog \
-        (RESOURCE_ID, \
-            ^(GraphicObject *obj) {OfferGenericWindlg([CLASS_NAME class], NIB_NAME, RIDS, obj);});
+/* Macros to declare property dialogs at top level load time. They capture their arguments in an
+   Objective-C closure, which is saved in a map by resource ID for invocation at run time. */
 
-#define REGISTER_DIALOG_2R(RESOURCE_ID, CLASS_NAME, NIB_NAME,RIDS) \
-    static int dumy = RegisterTLEDitDialog \
-        (RESOURCE_ID, \
-           ^(GraphicObject *obj) {OfferGenericWindlg([CLASS_NAME class], NIB_NAME, RIDS, obj);});
+#define REGISTER_DIALOG_GENERAL(DUMMY, RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST) \
+static int DUMMY = RegisterTLEDitDialog \
+    (RESOURCE_ID, \
+       ^(GraphicObject *object) {OfferGenericWindlg([CLASS_NAME class], NIB_NAME, (RID_LIST), object);});
 
-#define REGISTER_DIALOG_4R(dumy,RESOURCE_ID,NIB_NAME,RIDS) \
-    static int dumy = RegisterTLEDitDialog \
-      (RESOURCE_ID, \
-          ^(GraphicObject *obj) {OfferGenericWindlg([GenericWindlgController class], NIB_NAME, RIDS, obj);});
-       
+/* Form used in files that subclass Generic Window controller, only one allowed per such file */
+#define REGISTER_DIALOG_2R(RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST) \
+    REGISTER_DIALOG_GENERAL(dumy1, RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST)
+
+/* Form used in MacObjDlgs.mm for all the rest */
+#define REGISTER_DIALOG_4R(DUMMY, RESOURCE_ID, NIB_NAME, RID_LIST) \
+    REGISTER_DIALOG_GENERAL(DUMMY, RESOURCE_ID, GenericWindlgController, NIB_NAME, (RID_LIST))
 
 int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator);
 
 @interface GenericWindlgController : NSWindowController<WinDialog>
 
-@property void* hWnd;
-@property  GraphicObject* NXGObject;
+@property void* hWnd;                  /* the Windows simulation HWND object for the dialog*/
+@property  GraphicObject* NXGObject;   /* the NXSYS graphic object on which it is to be applied */
 
 -(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(RIDVector&)rids;
 
--(IBAction)activeButton:(id)sender;
+-(IBAction)activeButton:(id)sender;    /* Target action from buttons, set in IB */
 
 -(void)showModal:(GraphicObject*)object;
 -(void)reflectCommand:(NSInteger)command;
 -(void)reflectCommandParam:(NSInteger)command lParam:(NSInteger)param;
--(void)didInitDialog;
+-(void)didInitDialog;  /* "virtual" to be overriden */
 @end
