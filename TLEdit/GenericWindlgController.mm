@@ -74,17 +74,22 @@ typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
 
 @interface GenericWindlgController () // () means append to def. given already.
 {
-    /* Finally, here is how you "do" instance variables:  { } at the beginning of @interface. */
+    /* Map of Windows IDC_xxx integer control ID's to our HWND objects for controls */
     std::unordered_map<NSInteger,HWND> CtlidToHWND;
+
+    /* Map of Windows IDC_xxx resource NAMEs as NSStrings, to integer values, supplied
+     by caller of DefineWindlg... . Must be copied out of call-time list structure. */
     tIDStringMap RIDValMap;
 }
+@property GraphicObject* NXGObject;   //The object to which this dialog is being applied.
+@property HWND hWnd;                  //The HWND object wrapping this dialog presenting it to Win code.
 @end
 
 @implementation GenericWindlgController
 
 /* See OfferGenericWindlg at bottom of this file for the callin gprotocol of these 2 methods. */
 
--(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(tIDStringMap) rid_map
+-(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(tIDStringMap&) rid_map
 {
     //  nibName = @"Bad-Nib-Name"; // for testing, remove leading //
 
@@ -118,15 +123,15 @@ typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
 -(void)showModal: (GraphicObject*)object
 {
     try {
-        _NXGObject = object;   //Establish linkage with NXGO object.
+        self.NXGObject = object;   //Establish linkage with NXGO object.
 
         /* Compute and set dialog position */
-        NSPoint p = NXViewToScreen(NXGOLocAsPoint(_NXGObject)); //whole panel -> whole mac screen
+        NSPoint p = NXViewToScreen(NXGOLocAsPoint(self.NXGObject)); //whole panel -> whole mac screen
         NSPoint placement = NSMakePoint(p.x-150, p.y-60); //mac coord "y=up".
         [self.window setFrameTopLeftPoint:placement];
 
         /* Now run all the Windows code that uses the stuff set before we were called */
-        callWndProcInitDialog(_hWnd, _NXGObject);
+        callWndProcInitDialog(self.hWnd, self.NXGObject);
         [self didInitDialog];
 
         /* Show the window */
@@ -159,8 +164,8 @@ typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
     for (auto& iterator : CtlidToHWND) // not deleting from map here, but in clear(), no skip-step.
          DeleteHwndObject(iterator.second);
     CtlidToHWND.clear(); // probably not necessary, hope C++ dtor will do it.
-    if(_hWnd) // can be null in error situations
-        DeleteHwndObject(_hWnd);
+    if(self.hWnd) // can be null in error situations
+        DeleteHwndObject(self.hWnd);
 }
 -(void)windowDidLoad
 {
@@ -299,12 +304,12 @@ typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
 
 -(void)reflectCommand:(NSInteger)command
 {
-    callWndProcGeneralCommandParam(_hWnd, _NXGObject, (int)command, 0);
+    callWndProcGeneralCommandParam(self.hWnd, self.NXGObject, (int)command, 0);
 }
 
 -(void)reflectCommandParam:(NSInteger)command lParam:(NSInteger)param
 {
-    callWndProcGeneralCommandParam(_hWnd, _NXGObject, (int)command, param);
+    callWndProcGeneralCommandParam(self.hWnd, self.NXGObject, (int)command, param);
 }
 -(void)dealloc
 {

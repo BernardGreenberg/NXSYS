@@ -8,6 +8,9 @@
 #include <unordered_map>
 #include <map>
 
+#define DEFINE_WINDLG_GENERIC(dummy_name, ...) \
+static int dummy_name = DefineWindlgGeneric(__VA_ARGS__);
+
 #define R(x)  {#x, x},
 
 /* Global maps aren't used right now, but they conceivably might be.  The local

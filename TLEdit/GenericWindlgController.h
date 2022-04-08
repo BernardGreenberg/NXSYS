@@ -33,16 +33,10 @@ typedef const std::initializer_list<RIDPair> RIDVector;
 int DefineWindlgGeneric(int resource_id, NSString* nib_name, RIDVector rid_vector);
 int DefineWindlgWithClass(Class clazz, int resource_id, NSString* nib_name, RIDVector rid_vector);
 
-#define DEFINE_WINDLG_GENERIC(dummy_name, ...) \
-static int dummy_name = DefineWindlgGeneric(__VA_ARGS__);
-
 #define DEFINE_WINDLG_WITH_CLASS(dummy_name, RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST) \
 static int dummy_name = DefineWindlgWithClass([CLASS_NAME class], RESOURCE_ID, NIB_NAME, RID_LIST);
 
 @interface GenericWindlgController : NSWindowController<WinDialog>
-
-@property void* hWnd;                  /* the Windows simulation HWND object for the dialog*/
-@property  GraphicObject* NXGObject;   /* the NXSYS graphic object on which it is to be applied */
 
 -(IBAction)activeButton:(id)sender;    /* Target action from buttons, set in IB */
 
