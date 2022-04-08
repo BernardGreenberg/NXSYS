@@ -70,11 +70,13 @@ static std::map<std::string, int> ByTitle{{"OK", IDOK}, {"Cancel", IDCANCEL}};
 
 struct GenericWindlgException : public std::exception {};
 
+typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
+
 @interface GenericWindlgController () // () means append to def. given already.
 {
     /* Finally, here is how you "do" instance variables:  { } at the beginning of @interface. */
     std::unordered_map<NSInteger,HWND> CtlidToHWND;
-    std::map<NSString*, int, CompareNSString> RIDValMap;
+    tIDStringMap RIDValMap;
 }
 @end
 
@@ -82,17 +84,13 @@ struct GenericWindlgException : public std::exception {};
 
 /* See OfferGenericWindlg at bottom of this file for the callin gprotocol of these 2 methods. */
 
--(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(RIDVector&)rids
+-(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(tIDStringMap) rid_map
 {
     //  nibName = @"Bad-Nib-Name"; // for testing, remove leading //
 
     self = [super initWithWindowNibName:nibName]; //will never fail to return a controller
 
-    /* Make the RID map. It is worth it because it is going to be searched
-    n times (n = number of entries) when dialog is recursively-scanned */
-
-    for (auto p : rids)
-        RIDValMap[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
+    RIDValMap = rid_map;  // Copy the damned thing to make sure all is retained.
 
     try {
         /* This call [self window] will side-effect call windowDidLoad if and only if the window
@@ -341,8 +339,8 @@ struct GenericWindlgException : public std::exception {};
 }
 @end
 
-void OfferGenericWindlg(Class clazz, NSString* nib_name, RIDVector rid_vector, GraphicObject* object) {
-    id dialog = [[clazz alloc] initWithNibAndRIDs:nib_name rids:rid_vector];
+void OfferGenericWindlg(Class clazz, NSString* nib_name, tIDStringMap rid_map, GraphicObject* object) {
+    id dialog = [[clazz alloc] initWithNibAndRIDs:nib_name rids:rid_map];
     if (dialog)   // if any kind of error, including no nib, don't show.
         [dialog showModal:object];
 }
@@ -352,14 +350,28 @@ void OfferGenericWindlg(Class clazz, NSString* nib_name, RIDVector rid_vector, G
 /* This is a lot easier. */
 
 /* solution found 3-24-2022 -- create it first time called. */
+typedef void (^TLEditDlgCreator)(GraphicObject*);
 typedef std::unordered_map<unsigned int, TLEditDlgCreator> t_TabulaCreatorum;
 static t_TabulaCreatorum *TabulaCreatorum = nullptr;
 
-int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator) {
+int DefineWindlgWithClass(Class clazz, int resource_id, NSString* nib_name, RIDVector rid_vector) {
     if (TabulaCreatorum == nullptr)
         TabulaCreatorum = new t_TabulaCreatorum;
-    (*TabulaCreatorum)[resource_id] = creator;
+
+    //Mqp must be copied, and retained; RIDVector will vanish at end of call.
+    //The funarg/closure retains it.
+    tIDStringMap rid_map;
+    for (auto entry : rid_vector)
+        rid_map[[NSString stringWithUTF8String:entry.Symbol]] = entry.resource_id;
+
+    (*TabulaCreatorum)[resource_id] = ^(GraphicObject* object) {
+        OfferGenericWindlg(clazz, nib_name, rid_map, object);
+    };
     return 0;
+}
+
+int DefineWindlgGeneric(int resource_id, NSString* nib_name, RIDVector rid_vector) {
+    return DefineWindlgWithClass([GenericWindlgController class], resource_id, nib_name, rid_vector);
 }
 
 void MacDialogDispatcher(unsigned int resource_id, GraphicObject * obj) {

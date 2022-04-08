@@ -30,38 +30,22 @@ struct CompareNSString: public std::binary_function<NSString*, NSString*, bool> 
 
 typedef const std::initializer_list<RIDPair> RIDVector;
 
-typedef void (^TLEditDlgCreator)(GraphicObject*);
+int DefineWindlgGeneric(int resource_id, NSString* nib_name, RIDVector rid_vector);
+int DefineWindlgWithClass(Class clazz, int resource_id, NSString* nib_name, RIDVector rid_vector);
 
-void OfferGenericWindlg(Class clazz, NSString* nib_name, RIDVector rid_vector, GraphicObject* obj);
+#define DEFINE_WINDLG_GENERIC(dummy_name, ...) \
+static int dummy_name = DefineWindlgGeneric(__VA_ARGS__);
 
-/* Macros to declare property dialogs at top level load time. They capture their arguments in an
-   Objective-C closure, which is saved in a map by resource ID for invocation at run time. */
-
-#define REGISTER_DIALOG_GENERAL(DUMMY, RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST) \
-static int DUMMY = RegisterTLEDitDialog \
-    (RESOURCE_ID, \
-       ^(GraphicObject *object) {OfferGenericWindlg([CLASS_NAME class], NIB_NAME, (RID_LIST), object);});
-
-/* Form used in files that subclass Generic Window controller, only one allowed per such file */
-#define REGISTER_DIALOG_2R(RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST) \
-    REGISTER_DIALOG_GENERAL(dumy1, RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST)
-
-/* Form used in MacObjDlgs.mm for all the rest */
-#define REGISTER_DIALOG_4R(DUMMY, RESOURCE_ID, NIB_NAME, RID_LIST) \
-    REGISTER_DIALOG_GENERAL(DUMMY, RESOURCE_ID, GenericWindlgController, NIB_NAME, (RID_LIST))
-
-int RegisterTLEDitDialog(unsigned int resource_id,  TLEditDlgCreator creator);
+#define DEFINE_WINDLG_WITH_CLASS(dummy_name, RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST) \
+static int dummy_name = DefineWindlgWithClass([CLASS_NAME class], RESOURCE_ID, NIB_NAME, RID_LIST);
 
 @interface GenericWindlgController : NSWindowController<WinDialog>
 
 @property void* hWnd;                  /* the Windows simulation HWND object for the dialog*/
 @property  GraphicObject* NXGObject;   /* the NXSYS graphic object on which it is to be applied */
 
--(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(RIDVector&)rids;
-
 -(IBAction)activeButton:(id)sender;    /* Target action from buttons, set in IB */
 
--(void)showModal:(GraphicObject*)object;
 -(void)reflectCommand:(NSInteger)command;
 -(void)reflectCommandParam:(NSInteger)command lParam:(NSInteger)param;
 -(void)didInitDialog;  /* "virtual" to be overriden */

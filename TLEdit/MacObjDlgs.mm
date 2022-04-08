@@ -10,13 +10,13 @@
 
 #define R(x)  {#x, x},
 
-/* These global maps aren't used right now, but they conceivably might be.  The local
- maps are not strictly necessary -- the symbol values could be retrieved from the global
+/* Global maps aren't used right now, but they conceivably might be.  The local
+ maps are not strictly necessary -- the symbol values could be retrieved from a global
  map, but the local maps present the advantage that the dialog builder can run through the
  list and ensure that all the referenced resource ID's have, in fact been found in controls,
  and diagnose an absence.
 
- The global table could easily be automatically generated from the windows resource include
+ A global table could easily be automatically generated from the windows resource include
  file, though ...
  
  */
@@ -41,14 +41,14 @@ std::unordered_map<int, const char *>WindowsRIDValueToName;
 
  */
 
-REGISTER_DIALOG_4R(d1, IDD_JOINT, @"JointProperties", RIDVector{
+DEFINE_WINDLG_GENERIC(d1, IDD_JOINT, @"JointProperties", RIDVector{
     R(IDC_JOINT_STATION_ID)
     R(IDC_JOINT_WPX)
     R(IDC_JOINT_WPY)
     R(IDC_JOINT_INSULATED)
 })
 
-REGISTER_DIALOG_4R(d2, IDD_TRAFFICLEVER, @"TrafficLeverProperties", RIDVector{
+DEFINE_WINDLG_GENERIC(d2, IDD_TRAFFICLEVER, @"TrafficLeverProperties", RIDVector{
     R(IDC_TRAFFICLEVER_LEVER)
     R(IDC_TRAFFICLEVER_WPX)
     R(IDC_TRAFFICLEVER_WPY)
@@ -56,13 +56,13 @@ REGISTER_DIALOG_4R(d2, IDD_TRAFFICLEVER, @"TrafficLeverProperties", RIDVector{
     R(IDC_TRAFFICLEVER_RIGHT)
 })
 
-REGISTER_DIALOG_4R(d3, IDD_SWKEY, @"SwitchKeyProperties", RIDVector{
+DEFINE_WINDLG_GENERIC(d3, IDD_SWKEY, @"SwitchKeyProperties", RIDVector{
     R(IDC_SWKEY_LEVER)
     R(IDC_SWKEY_WPX)
     R(IDC_SWKEY_WPY)
 })
 
-REGISTER_DIALOG_4R(d4, IDD_PANELSWITCH, @"PanelSwitchProperties", RIDVector{
+DEFINE_WINDLG_GENERIC(d4, IDD_PANELSWITCH, @"PanelSwitchProperties", RIDVector{
     R(IDC_PANELSWITCH_LEVER)
     R(IDC_PANELSWITCH_NOMENCLATURE)
     R(IDC_PANELSWITCH_STRING)
@@ -70,7 +70,7 @@ REGISTER_DIALOG_4R(d4, IDD_PANELSWITCH, @"PanelSwitchProperties", RIDVector{
     R(IDC_PANELSWITCH_WPY)
 })
 
-REGISTER_DIALOG_4R(d5, IDD_PANELLIGHT, @"PanelLightProperties", RIDVector{
+DEFINE_WINDLG_GENERIC(d5, IDD_PANELLIGHT, @"PanelLightProperties", RIDVector{
     R(IDC_PANELLIGHT_LEVER)
     R(IDC_PANELLIGHT_GREEN)
     R(IDC_PANELLIGHT_YELLOW)
@@ -84,13 +84,13 @@ REGISTER_DIALOG_4R(d5, IDD_PANELLIGHT, @"PanelLightProperties", RIDVector{
     R(IDC_PANELLIGHT_STRING)
 })
 
-REGISTER_DIALOG_4R(d6, IDD_EDIT_EXLIGHT, @"ExitLightProperties", RIDVector{
+DEFINE_WINDLG_GENERIC(d6, IDD_EDIT_EXLIGHT, @"ExitLightProperties", RIDVector{
     R(IDC_EDIT_XLIGHT_XLNO)
     R(IDC_EDIT_XLIGHT_IJNO)
     R(IDC_EDIT_XLIGHT_ORIENT)
 })
 
-REGISTER_DIALOG_4R(d7, IDD_SWITCH_ATTR, @"SwitchProperties", RIDVector{
+DEFINE_WINDLG_GENERIC(d7, IDD_SWITCH_ATTR, @"SwitchProperties", RIDVector{
     R(IDC_SWITCH_EDIT)  /* poorly-named lever number */
 
     R(IDC_SWITCH_WARN)
@@ -108,7 +108,7 @@ REGISTER_DIALOG_4R(d7, IDD_SWITCH_ATTR, @"SwitchProperties", RIDVector{
     R(IDC_SWITCH_EDIT_JOINT_ATTRIBUTES)
 })
 
-REGISTER_DIALOG_4R(d8, IDD_EDIT_SIGNAL, @"SignalProperties", RIDVector{
+DEFINE_WINDLG_GENERIC(d8, IDD_EDIT_SIGNAL, @"SignalProperties", RIDVector{
     R(IDC_EDIT_SIG_LEVER)
     R(IDC_EDIT_SIG_TRACK_ID)
     R(IDC_EDIT_SIG_STATION_NO)
@@ -120,69 +120,3 @@ REGISTER_DIALOG_4R(d8, IDD_EDIT_SIGNAL, @"SignalProperties", RIDVector{
     R(IDC_EDIT_SIG_STOP)
     R(IDC_EDIT_SIGNAL_JOINT)
 })
-
-static int RegisterWindowsResourceIDs (std::initializer_list<RIDPair> list) {
-    for (auto p : list) {
-        WindowsRIDValueToName[p.resource_id] = p.Symbol;
-        WindowsRIDNameToValue[[NSString stringWithUTF8String:p.Symbol]] = p.resource_id;
-    }
-    return 0;
-}
-
-int dumy9 = RegisterWindowsResourceIDs ({
-    R(IDC_JOINT_STATION_ID)
-    R(IDC_JOINT_WPX)
-    R(IDC_JOINT_WPY)
-    R(IDC_JOINT_INSULATED)
-
-    R(IDC_PANELLIGHT_LEVER)
-    R(IDC_PANELLIGHT_GREEN)
-    R(IDC_PANELLIGHT_YELLOW)
-    R(IDC_PANELLIGHT_RED)
-    R(IDC_PANELLIGHT_WHITE)
-    R(IDC_PANELLIGHT_WPX)
-    R(IDC_PANELLIGHT_WPY)
-    R(IDC_PANELLIGHT_RADIUS)
-    R(IDC_PANELLIGHT_STRING)
-    
-    R(IDC_PANELSWITCH_LEVER)
-    R(IDC_PANELSWITCH_NOMENCLATURE)
-    R(IDC_PANELSWITCH_STRING)
-    R(IDC_PANELSWITCH_WPX)
-    R(IDC_PANELSWITCH_WPY)
-    
-    R(IDC_SWITCH_EDIT)
-    R(IDC_SWITCH_WARN)
-    R(IDC_SWITCH_IS_A)
-    R(IDC_SWITCH_IS_B)
-    R(IDC_SWITCH_IS_SINGLETON)
-    R(IDC_SWITCH_HEURISTICATE)
-    R(IDC_SWITCH_SWAP_NORMAL)
-    R(IDC_SWITCH_HILITE_NORMAL)
-    R(IDC_SWITCH_EDIT_JOINT_ATTRIBUTES)
-    
-    R(IDC_SWKEY_LEVER)
-    R(IDC_SWKEY_WPX)
-    R(IDC_SWKEY_WPY)
-    
-    R(IDC_EDIT_SIG_LEVER)
-    R(IDC_EDIT_SIG_TRACK_ID)
-    R(IDC_EDIT_SIG_STATION_NO)
-    R(IDC_EDIT_SIG_HEADS)
-    R(IDC_EDIT_SIG_ORIENTATION)
-    R(IDC_EDIT_SIG_IJID)
-    R(IDC_EDIT_SIG_STOP)
-    R(IDC_EDIT_SIGNAL_JOINT)
-    
-    R(IDC_EDIT_XLIGHT_XLNO)
-    R(IDC_EDIT_XLIGHT_IJNO)
-    R(IDC_EDIT_XLIGHT_ORIENT)
-    
-    R(IDC_TRAFFICLEVER_LEVER)
-    R(IDC_TRAFFICLEVER_WPX)
-    R(IDC_TRAFFICLEVER_WPY)
-    R(IDC_TRAFFICLEVER_LEFT)
-    R(IDC_TRAFFICLEVER_RIGHT)
-
-});
-
