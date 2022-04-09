@@ -59,7 +59,7 @@ static RIDVector rids {
     R(IDC_ETEXT_FACE_CUSTOM)
 };
 
-DEFINE_WINDLG_WITH_CLASS(dummy, IDD_EDIT_TEXT, TextStringDlg, @"TextStringProperties", rids);
+DEFINE_WINDLG_WITH_CLASS(IDD_EDIT_TEXT, TextStringDlg, @"TextStringProperties", rids);
 
 
 @implementation TextStringDlg

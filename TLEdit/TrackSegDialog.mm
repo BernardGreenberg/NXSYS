@@ -12,7 +12,7 @@ static RIDVector rids {
     {"IDC_EDIT_SEG_TC", IDC_EDIT_SEG_TC},
     {"IDC_EDIT_SEG_SPREAD", IDC_EDIT_SEG_SPREAD}
 };
-DEFINE_WINDLG_WITH_CLASS(dumy, IDD_SEG_ATTRIBUTES, TrackSegDlg, @"TrackSegProperties", rids);
+DEFINE_WINDLG_WITH_CLASS(IDD_SEG_ATTRIBUTES, TrackSegDlg, @"TrackSegProperties", rids);
 
 @implementation TrackSegDlg
 
