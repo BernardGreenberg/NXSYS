@@ -103,6 +103,7 @@ BEGIN
     "^S",           CmSave,                 ASCII,  NOINVERT
     "^W",           CmClear,                ASCII,  NOINVERT
     "^X",           CmCut,                  ASCII,  NOINVERT
+    VK_BACK,        CmCut,                  VIRTKEY, NOINVERT
 END
 
 
