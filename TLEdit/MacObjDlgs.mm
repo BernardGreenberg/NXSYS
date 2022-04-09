@@ -5,28 +5,11 @@
 
 #import "GenericWindlgController.h"
 #include "resource.h"
-#include <unordered_map>
-#include <map>
 
 #define DEFINE_WINDLG_GENERIC(dummy_name, ...) \
 static int dummy_name = DefineWindlgGeneric(__VA_ARGS__);
 
 #define R(x)  {#x, x},
-
-/* Global maps aren't used right now, but they conceivably might be.  The local
- maps are not strictly necessary -- the symbol values could be retrieved from a global
- map, but the local maps present the advantage that the dialog builder can run through the
- list and ensure that all the referenced resource ID's have, in fact been found in controls,
- and diagnose an absence.
-
- A global table could easily be automatically generated from the windows resource include
- file, though ...
- 
- */
-
-std::map<NSString*, int, CompareNSString>WindowsRIDNameToValue;
-std::unordered_map<int, const char *>WindowsRIDValueToName;
-
 
 /* This handles all dialog objects which don't need their own classes.  They need their
    own classes if and only if they have buttons that actually act in Mac code, not
@@ -42,6 +25,17 @@ std::unordered_map<int, const char *>WindowsRIDValueToName;
  exact strings below, i.e., the Windows resource symbols.  All controls without such ID's are left
  alone.
 
+ */
+
+/* Global maps aren't used right now, but they conceivably might be.  The local
+ maps are not strictly necessary -- the symbol values could be retrieved from a global
+ map, but the local maps present the advantage that the dialog builder can run through the
+ list and ensure that all the referenced resource ID's have, in fact been found in controls,
+ and diagnose an absence.
+
+ A global table could easily be automatically generated from the windows resource include
+ file, though ...
+ 
  */
 
 DEFINE_WINDLG_GENERIC(d1, IDD_JOINT, @"JointProperties", RIDVector{
