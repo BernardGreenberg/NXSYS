@@ -15,6 +15,7 @@ typedef void *HWND;
 #include <unordered_map>
 #include <exception>
 #include <map>
+class GraphicObject;    // don't want nxgo.h
 
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
  respective deficiencies of the Windows and Macintosh dialog systems.

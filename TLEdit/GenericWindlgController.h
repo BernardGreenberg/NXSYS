@@ -11,12 +11,12 @@
 #include <functional>
 #include "WinDialogProtocol.h"
 
-class GraphicObject;  // don't want nxgo.h
-
 struct RIDPair {
     const char * Symbol;
     int resource_id;
 };
+
+typedef const std::initializer_list<RIDPair> RIDVector;
 
 /* https://stackoverflow.com/questions/8945909/how-to-use-nsstring-as-key-in-objective-c-stdmap */
 struct CompareNSString: public std::binary_function<NSString*, NSString*, bool> {
@@ -27,8 +27,6 @@ struct CompareNSString: public std::binary_function<NSString*, NSString*, bool> 
             return false;
     }
 };
-
-typedef const std::initializer_list<RIDPair> RIDVector;
 
 int DefineWindlgGeneric(int resource_id, NSString* nib_name, RIDVector rid_vector);
 int DefineWindlgWithClass(Class clazz, int resource_id, NSString* nib_name, RIDVector rid_vector);
