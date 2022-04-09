@@ -73,6 +73,17 @@ struct GenericWindlgException : public std::exception {};
 
 typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
 
+struct dlgInitData {
+    Class clazz;
+    NSString* nibName;
+    tIDStringMap IDTable;
+    void addMap(const char* idName, int idValue) {
+        IDTable[[NSString stringWithUTF8String: idName]] = idValue;
+    }
+};
+
+static std::unordered_map<int, dlgInitData> *pInitDataMap;
+
 @interface GenericWindlgController () // () means append to def. given already.
 {
     /* Map of Windows IDC_xxx integer control ID's to our HWND objects for controls */
@@ -88,7 +99,7 @@ typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
 
 @implementation GenericWindlgController
 
-/* See OfferGenericWindlg at bottom of this file for the callin gprotocol of these 2 methods. */
+/* See MacDialogDispatcher at bottom of this file for the calling protocol of these 2 methods. */
 
 -(GenericWindlgController*)initWithNibAndRIDs:(NSString*)nibName rids:(tIDStringMap&) rid_map
 {
@@ -96,7 +107,7 @@ typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
 
     self = [super initWithWindowNibName:nibName]; //will never fail to return a controller
 
-    RIDValMap = rid_map;  // Copy the damned thing to make sure all is retained.
+    RIDValMap = rid_map;  // Copy the damned thing. Not really needed now, but ...
 
     try {
         /* This call [self window] will side-effect call windowDidLoad if and only if the window
@@ -345,34 +356,21 @@ typedef std::map<NSString*, int, CompareNSString> tIDStringMap;
 }
 @end
 
-void OfferGenericWindlg(Class clazz, NSString* nib_name, tIDStringMap rid_map, GraphicObject* object) {
-    id dialog = [[clazz alloc] initWithNibAndRIDs:nib_name rids:rid_map];
-    if (dialog)   // if any kind of error, including no nib, don't show.
-        [dialog showModal:object];
-}
-
 /* Can't use static STL -- load time initializes it at unpredictable time compared to our registrees */
-/* Can't use structs, either, as funargs get gc'ed if not protected by strong pointer */
-/* This is a lot easier. */
 
 /* solution found 3-24-2022 -- create it first time called. */
-typedef void (^TLEditDlgCreator)(GraphicObject*);
-typedef std::unordered_map<unsigned int, TLEditDlgCreator> t_TabulaCreatorum;
-static t_TabulaCreatorum *TabulaCreatorum = nullptr;
+/* No more closures.  4/9/2022 */
 
 int DefineWindlgWithClass(Class clazz, int resource_id, NSString* nib_name, RIDVector rid_vector) {
-    if (TabulaCreatorum == nullptr)
-        TabulaCreatorum = new t_TabulaCreatorum;
+    if (pInitDataMap == nullptr)
+        pInitDataMap = new std::unordered_map<int, dlgInitData>;
 
-    //Mqp must be copied, and retained; RIDVector will vanish at end of call.
-    //The funarg/closure retains it.
-    tIDStringMap rid_map;
+    dlgInitData initData{clazz, nib_name, {}};
+
+    //Map must be copied, and retained; RIDVector will vanish at end of call.
     for (auto entry : rid_vector)
-        rid_map[[NSString stringWithUTF8String:entry.Symbol]] = entry.resource_id;
-
-    (*TabulaCreatorum)[resource_id] = ^(GraphicObject* object) {
-        OfferGenericWindlg(clazz, nib_name, rid_map, object);
-    };
+        initData.addMap(entry.Symbol, entry.resource_id);
+    (*pInitDataMap)[resource_id] = initData;
     return 0;
 }
 
@@ -380,8 +378,12 @@ int DefineWindlgGeneric(int resource_id, NSString* nib_name, RIDVector rid_vecto
     return DefineWindlgWithClass([GenericWindlgController class], resource_id, nib_name, rid_vector);
 }
 
-void MacDialogDispatcher(unsigned int resource_id, GraphicObject * obj) {
-    if ((*TabulaCreatorum).count(resource_id) == 0)
+void MacDialogDispatcher(unsigned int resource_id, GraphicObject * NXGobject) {
+    if ((*pInitDataMap).count(resource_id) == 0)
         return;  /*this happens sometimes -- clicking on odd things -- just ignore */
-    (*TabulaCreatorum)[resource_id](obj);
+
+    dlgInitData& data = (*pInitDataMap)[resource_id];
+    id dialog = [[data.clazz alloc] initWithNibAndRIDs: data.nibName rids: data.IDTable];
+    if (dialog)   // if any kind of error, including no nib, don't show.
+        [dialog showModal:NXGobject];
 };
