@@ -152,6 +152,15 @@
                                     <action selector="Cut:" target="Voe-Tx-rLC" id="Wif-Ht-TVc"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Cut bksp" hidden="YES" allowsKeyEquivalentWhenHidden="YES" id="k1H-I8-WLP">
+                                <string key="keyEquivalent" base64-UTF8="YES">
+CA
+</string>
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="Cut:" target="Voe-Tx-rLC" id="B38-PG-D2p"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Copy" keyEquivalent="c" id="x3v-GG-iWU">
                                 <connections>
                                     <action selector="copy:" target="-1" id="G1f-GL-Joy"/>
@@ -558,7 +567,7 @@
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="120" y="317"/>
+            <point key="canvasLocation" x="109" y="468"/>
         </menu>
         <window title="TLEdit" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
