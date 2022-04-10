@@ -476,6 +476,7 @@
 		5BABBE7627B9655700AED491 /* Resources2022.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Resources2022.rc; sourceTree = "<group>"; };
 		5BABBE7727B9655700AED491 /* Resources2022.aps */ = {isa = PBXFileReference; lastKnownFileType = file; path = Resources2022.aps; sourceTree = "<group>"; };
 		5BABBE7827B9655800AED491 /* Resources2022.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Resources2022.h; sourceTree = "<group>"; };
+		5BAC2DA828025C8D000B43CF /* LoadFiascoMaps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoadFiascoMaps.h; sourceTree = "<group>"; };
 		5BAC92B419C78AE400673BDC /* BigYellowXView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BigYellowXView.h; sourceTree = "<group>"; };
 		5BAC92B519C84A9000673BDC /* WinMacCalls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinMacCalls.h; sourceTree = "<group>"; };
 		5BAC930B19C8FE7100673BDC /* TLEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TLEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1309,6 +1310,7 @@
 				5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */,
 				5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */,
 				5BA7E74219D57EDB006F9A04 /* STLfnsplit.h */,
+				5BAC2DA828025C8D000B43CF /* LoadFiascoMaps.h */,
 			);
 			name = NXMac;
 			path = NXSYS;

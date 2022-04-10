@@ -15,6 +15,7 @@ typedef void *HWND;
 #include <unordered_map>
 #include <exception>
 #include <map>
+#include "LoadFiascoMaps.h"
 class GraphicObject;    // don't want nxgo.h
 
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
@@ -82,7 +83,7 @@ struct dlgInitData {
     }
 };
 
-static std::unordered_map<int, dlgInitData> *pInitDataMap;
+static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
 
 @interface GenericWindlgController () // () means append to def. given already.
 {
@@ -357,33 +358,34 @@ static std::unordered_map<int, dlgInitData> *pInitDataMap;
 @end
 
 /* Can't use static STL -- load time initializes it at unpredictable time compared to our registrees */
-
 /* solution found 3-24-2022 -- create it first time called. */
-/* No more closures.  4/9/2022 */
+/* solved generally 4/9/2022 - see LoadFiascoMaps.h which does that for a living */
+/* No more closures 4/9/2022 */
 
 int DefineWindlgWithClass(Class clazz, int resource_id, NSString* nib_name, RIDVector rid_vector) {
-    if (pInitDataMap == nullptr)
-        pInitDataMap = new std::unordered_map<int, dlgInitData>;
 
-    dlgInitData initData{clazz, nib_name, {}};
+    dlgInitData initData{clazz, nib_name, {}};  // make an entry to get stuffed in the dlg id map
 
     //Map must be copied, and retained; RIDVector will vanish at end of call.
     for (auto entry : rid_vector)
         initData.addMap(entry.Symbol, entry.resource_id);
-    (*pInitDataMap)[resource_id] = initData;
-    return 0;
+
+    /* Study LoadFiascoMaps.h!!!! */
+    InitDataMap[resource_id] = initData;   //stuff it in the map
+
+    return 0; //return value (necessary) ignored.
 }
 
+/* special case to keep class name out of MacObjDlgs.mm */
 int DefineWindlgGeneric(int resource_id, NSString* nib_name, RIDVector rid_vector) {
     return DefineWindlgWithClass([GenericWindlgController class], resource_id, nib_name, rid_vector);
 }
 
 void MacDialogDispatcher(unsigned int resource_id, GraphicObject * NXGobject) {
-    if ((*pInitDataMap).count(resource_id) == 0)
+    if (InitDataMap.count(resource_id) == 0)
         return;  /*this happens sometimes -- clicking on odd things -- just ignore */
 
-    dlgInitData& data = (*pInitDataMap)[resource_id];
-    id dialog = [[data.clazz alloc] initWithNibAndRIDs: data.nibName rids: data.IDTable];
-    if (dialog)   // if any kind of error, including no nib, don't show.
+    dlgInitData& data = InitDataMap[resource_id];
+    if (id dialog = [[data.clazz alloc] initWithNibAndRIDs: data.nibName rids: data.IDTable])
         [dialog showModal:NXGobject];
 };

@@ -1,10 +1,10 @@
 #include "windows.h"
-#include <unordered_map>
 
 #include "compat32.h"
 #include "nxgo.h"
 #include "tledit.h"
 #include "objreg.h"
+#include "LoadFiascoMaps.h"
 
 /* Rewritten for dyn-create STL 4/9/2022 */
 
@@ -13,27 +13,24 @@ struct NXObjectRegistryEntry {
     ObjClassInitFn ObjectClassInitFunction;
 };
 
-static std::unordered_map<int, UINT> *DlgIdByObjid = nullptr;
-static std::unordered_map<int, NXObjectRegistryEntry> *FnsByCommand = nullptr;
 
-NXObTypeRegistrar::NXObTypeRegistrar
-   (int objid, int command, UINT dlg_id, ObjCreateFn ocf, ObjClassInitFn ocif) {
-    /* "load order fiasco" "pattern" -- can't use static maps */
-    if (FnsByCommand == nullptr) {
-        DlgIdByObjid = new std::unordered_map<int, UINT>;
-        FnsByCommand= new std::unordered_map<int, NXObjectRegistryEntry>;
-    }
+static LoadFiascoProtectedUnorderedMap<int, UINT> DlgIdByObjid;
+static LoadFiascoProtectedUnorderedMap<int, NXObjectRegistryEntry>FnsByCommand;
 
-    (*FnsByCommand)[command] = NXObjectRegistryEntry{ocf, ocif};
-    (*DlgIdByObjid)[objid] = dlg_id;
+/* this can be called from toplevels in other files even before this file's STL (would have been)
+ initialized */
+NXObTypeRegistrar::NXObTypeRegistrar (int objid, int command, UINT dlg_id, ObjCreateFn ocf, ObjClassInitFn ocif) {
+
+    FnsByCommand[command] = NXObjectRegistryEntry{ocf, ocif};
+    DlgIdByObjid[objid] = dlg_id;
 }
 
 UINT FindDialogIdFromObjClassRegistry (int objid) {
-    return (*DlgIdByObjid).count(objid) ? (*DlgIdByObjid)[objid] : 0;
+    return DlgIdByObjid.count(objid) ? DlgIdByObjid[objid] : 0;
 }
 
 GraphicObject * CreateObjectFromCommand (HWND hWnd, int command, int x, int y) {
-    if ((*FnsByCommand).count(command) == 0)
+    if (FnsByCommand.count(command) == 0)
         return NULL;
 
     RECT r;
@@ -44,11 +41,11 @@ GraphicObject * CreateObjectFromCommand (HWND hWnd, int command, int x, int y) {
     if (y > r.bottom) y = r.bottom;
     int wpx = (int)(SCXtoWP (x) /* + Xoff*/);
     int wpy = (int)(SCYtoWP (y) /* + Yoff*/);
-    return (*FnsByCommand)[command].ObjectCreationFunction(wpx, wpy);
+    return FnsByCommand[command].ObjectCreationFunction(wpx, wpy);
 }
 
 void InitializeRegisteredObjectClasses() {
-    for (auto& pair : *FnsByCommand) {
+    for (auto& pair : FnsByCommand) {
         auto E = pair.second;
         if (E.ObjectClassInitFunction != NULL)
             E.ObjectClassInitFunction();
