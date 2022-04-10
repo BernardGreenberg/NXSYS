@@ -51,6 +51,11 @@ class LoadFiascoProtectedGeneralMap {
 #endif
 
 public:
+    ~LoadFiascoProtectedGeneralMap() {
+        if (map_ptr)
+            delete map_ptr;
+        map_ptr = nullptr;
+    }
     datumtype& operator [](keytype k) {
         ensure_map();
         return (*map_ptr)[k];
