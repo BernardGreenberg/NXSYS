@@ -33,7 +33,7 @@ class LoadFiascoProtectedGeneralMap {
    is not an accident.*/
 
 #ifdef FIASCO_PRINT_TRACE
-        printf("%3ld %p %p %d\n", size(), this, map_ptr, x++);
+        printf("%3ld %p %p %d\n", map_ptr->size(), this, map_ptr, x++);
 #endif
     }
 
