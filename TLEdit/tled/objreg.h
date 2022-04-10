@@ -18,11 +18,10 @@ void RegisterNXObjectType (int objid,	/* object type */
 class NXObTypeRegistrar {
     public:
 	NXObTypeRegistrar(int objid, int command, UINT dlg_id, ObjCreateFn, ObjClassInitFn);
-	char dumy;
 };
 
 #define REGISTER_NXTYPE(objid,command,did,obfn,cifn) \
-						     static NXObTypeRegistrar Registrar##objid (objid,command,did,obfn,cifn);
+static NXObTypeRegistrar Registrar##objid (objid,command,did,obfn,cifn);
 
 
 GraphicObject * CreateObjectFromCommand (HWND hWnd, int command, int x, int y);
