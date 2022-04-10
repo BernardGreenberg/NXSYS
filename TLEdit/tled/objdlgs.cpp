@@ -316,13 +316,12 @@ static DLGPROC_DCL GeneralDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARA
 
 
 void GraphicObject::EditProperties() {
-    UINT id = DlgId();
+    if (UINT id = DlgId())
 #ifdef NXSYSMac
-    MacDialogDispatcher(id, this);
+        MacDialogDispatcher(id, this);
 #else
-    if (id)
-	DialogBoxParam (app_instance, MAKEINTRESOURCE(id), G_mainwindow,
-			(DLGPROC) GeneralDlgProc, (LPARAM) this);
+        DialogBoxParam (app_instance, MAKEINTRESOURCE(id), G_mainwindow,
+                        (DLGPROC) GeneralDlgProc, (LPARAM) this);
 #endif
 }
 
