@@ -1159,6 +1159,7 @@
 				5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */,
 				5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */,
 				5BA5385227DF75DB00D39B28 /* ValidatingValue.h */,
+				5BAC2DA828025C8D000B43CF /* LoadFiascoMaps.h */,
 			);
 			name = NewShared;
 			sourceTree = "<group>";
@@ -1310,7 +1311,6 @@
 				5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */,
 				5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */,
 				5BA7E74219D57EDB006F9A04 /* STLfnsplit.h */,
-				5BAC2DA828025C8D000B43CF /* LoadFiascoMaps.h */,
 			);
 			name = NXMac;
 			path = NXSYS;
