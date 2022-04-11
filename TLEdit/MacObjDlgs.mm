@@ -6,13 +6,12 @@
 #import "GenericWindlgController.h"
 #include "resource.h"
 
-/* See GenericWindlgController.h for how that unique variable name is generated!
-   Initializing top-level static variables is the only way to get load-time
-   executed code in C++. All that is left for some formerly extraordinarily
+/* Initializing top-level static variables is the only way to get load-time
+   executed code in C++. All that is left of some formerly extraordinarily
    complicated closure-generating macros. */
 
-#define DEFDLG(...) \
-static int UNIQUE_VARIABLE = DefineWindlgGeneric(__VA_ARGS__);
+#define DEFDLG(DLGID, ...) \
+static int dlgRslt_ ## DLGID = DefineWindlgGeneric(DLGID, __VA_ARGS__);
 
 #define R(x)  {#x, x},
 

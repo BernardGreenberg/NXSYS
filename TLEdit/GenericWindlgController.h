@@ -11,14 +11,6 @@
 #include <functional>
 #include "WinDialogProtocol.h"
 
-/*
- Finally, a solution to the gensym problem!  9 April 2022
- https://stackoverflow.com/questions/1597007/creating-c-macro-with-and-line-token-concatenation-with-positioning-macr
- */
-#define TOKENPASTE(x, y) x ## y
-#define TOKENPASTE2(x, y) TOKENPASTE(x, y)
-#define UNIQUE_VARIABLE TOKENPASTE2(Unique_, __LINE__)
-
 struct RIDPair {
     const char * Symbol;
     int resource_id;
@@ -40,7 +32,7 @@ int DefineWindlgGeneric(int resource_id, NSString* nib_name, RIDVector rid_vecto
 int DefineWindlgWithClass(Class clazz, int resource_id, NSString* nib_name, RIDVector rid_vector);
 
 #define DEFINE_WINDLG_WITH_CLASS(RESOURCE_ID, CLASS_NAME, NIB_NAME, RID_LIST) \
-static int UNIQUE_VARIABLE = DefineWindlgWithClass([CLASS_NAME class], RESOURCE_ID, NIB_NAME, RID_LIST);
+static int dlgRslt_ ## RESOURCE_ID = DefineWindlgWithClass([CLASS_NAME class], RESOURCE_ID, NIB_NAME, RID_LIST);
 
 @interface GenericWindlgController : NSWindowController<WinDialog>
 
