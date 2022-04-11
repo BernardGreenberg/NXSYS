@@ -18,6 +18,19 @@ typedef void *HWND;
 #include "LoadFiascoMaps.h"
 class GraphicObject;    // don't want nxgo.h
 
+/* Custom unique_ptr class; needed because a custom deleter is involved. 4-10-2022
+   When used consistently, removes the need for the custom controller deallocator. */
+class HWNDUptr  {
+    HWND hWnd = nullptr;
+public:
+    ~HWNDUptr() {
+        if (hWnd)
+            DeleteHwndObject(hWnd);
+    }
+    operator HWND () { return hWnd;}
+    void set(HWND h) {hWnd = h;}
+};
+
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
  respective deficiencies of the Windows and Macintosh dialog systems.
  The Windows system requires defining a file full of batty control ID numbers, which,
@@ -88,14 +101,15 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
 @interface GenericWindlgController () // () means append to def. given already.
 {
     /* Map of Windows IDC_xxx integer control ID's to our HWND objects for controls */
-    std::unordered_map<NSInteger,HWND> CtlidToHWND;
+    std::unordered_map<NSInteger,HWNDUptr> CtlidToHWND;
 
     /* Map of Windows IDC_xxx resource NAMEs as NSStrings, to integer values, supplied
      by caller of DefineWindlg... . Must be copied out of call-time list structure. */
     tIDStringMap RIDValMap;
+     HWNDUptr hWnd;                  //The HWND object wrapping this dialog presenting it to Win code.
 }
 @property GraphicObject* NXGObject;   //The object to which this dialog is being applied.
-@property HWND hWnd;                  //The HWND object wrapping this dialog presenting it to Win code.
+
 @end
 
 @implementation GenericWindlgController
@@ -118,7 +132,7 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
             [self barf: FormatString("Cannot load NIB \"%s\"", nibName.UTF8String)];
 
         /* we are retained on the stack, not in C++ code */
-        _hWnd = WinWrapNoRetain(self, self.window.contentView, nibName);
+        hWnd.set( WinWrapNoRetain(self, self.window.contentView, nibName));
 
         return self;
 
@@ -144,7 +158,7 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
         [self.window setFrameTopLeftPoint:placement];
 
         /* Now run all the Windows code that uses the stuff set before we were called */
-        callWndProcInitDialog(self.hWnd, self.NXGObject);
+        callWndProcInitDialog(hWnd, self.NXGObject);
         [self didInitDialog];
 
         /* Show the window */
@@ -169,17 +183,7 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
     self = [super initWithWindow:window];
     return self;
 }
--(void)real_deall
-{
 
-  /* this will get called at exit time because the hWnd is weak and not retaining us. */
-
-    for (auto& iterator : CtlidToHWND) // not deleting from map here, but in clear(), no skip-step.
-         DeleteHwndObject(iterator.second);
-    CtlidToHWND.clear(); // probably not necessary, hope C++ dtor will do it.
-    if(self.hWnd) // can be null in error situations
-        DeleteHwndObject(self.hWnd);
-}
 -(void)windowDidLoad
 {
     /* This will get called during the benign-looking [self window] in the init method
@@ -230,7 +234,7 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
 
         /* Create and link an HWND object to the control, and register it in the
          resource_id to HWND map. Insert the numeric ID into the control's "tag" attribute. */
-        CtlidToHWND[resource_id] = WinWrapControl(self, view, resource_id, identifier);
+        CtlidToHWND[resource_id].set(WinWrapControl(self, view, resource_id, identifier));
         [(NSControl*)view setTag: resource_id];
         return true;
     }
@@ -317,19 +321,12 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
 
 -(void)reflectCommand:(NSInteger)command
 {
-    callWndProcGeneralCommandParam(self.hWnd, self.NXGObject, (int)command, 0);
+    callWndProcGeneralCommandParam(hWnd, self.NXGObject, (int)command, 0);
 }
 
 -(void)reflectCommandParam:(NSInteger)command lParam:(NSInteger)param
 {
-    callWndProcGeneralCommandParam(self.hWnd, self.NXGObject, (int)command, param);
-}
--(void)dealloc
-{
- // important to debug here.  This really gets called when you manage
-// your strongptrs correctly.
- //   printf("GenericWindlgController dealloc called\n");
-    [self real_deall];
+    callWndProcGeneralCommandParam(hWnd, self.NXGObject, (int)command, param);
 }
 
 -(IBAction)activeButton:(id)sender
