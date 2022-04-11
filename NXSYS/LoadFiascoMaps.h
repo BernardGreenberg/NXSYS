@@ -25,7 +25,7 @@
      generic_object* foo_fun () { return new foo(...);}
      static int dummy_var = Register("foo", foo_fun);
  File B:
-     std::map(std::string, generic_object*(*)void)) creators;
+     std::map<std::string, generic_object*(*)void)> creators;
      void Register (const char * key, generic_object*(*function)(void))) {
           creators[key] = function;
      }
@@ -39,9 +39,11 @@ the above code will work flawlessly.
  
 It relies on a fairly recent enhancement to C++ that initializes elements of statically-
 allocated structures declared with "inline" initializers (int foo = 3;) not at the time
-that the module's static initializers are run, but at the much earlier time that the
-module is first loaded and "simple" static variables are initialized and contained
-functions defined.  This works IF AND ONLY IF the structures DO NOT CONTAIN ANY ELEMENTS
+that the module's static initializers are run, but at the much earlier time that ALL
+modules are first loaded and "simple" static variables are initialized and contained
+functions defined. That happens before ANY static initialization code is run in ANY file.
+
+This technique works IF AND ONLY IF the structures DO NOT CONTAIN ANY ELEMENTS
 REQUIRING CODE TO INITIALIZE; as can be proven below, if ANY elements do require code
 to be run, the structure is re-initialized when the load-time code of the containing module
 is executed, corrupting content (e.g., emptying the map by virtue of the pointer being reset
