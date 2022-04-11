@@ -16,9 +16,9 @@
  Assume files A and B contain the following.  "Register" is a function that is
  called by load-time code in many files to register objects defined in them. The
  assumption is that there are many files like A, registering their own objects.
- This architecture is far better, having diverse files do this independently and
- anonymously rather than that the central registrar be required to know about how
- to call into each of them separately:
+ This architecture, having diverse files do this independently and anonymously,
+ is far more modular than having the central registrar know how to call into each
+ of them separately:
  
  File A:
      class foo : public generic_object { ... ... };
@@ -54,7 +54,7 @@ template<class keytype, class datumtype, class maptype>
 class LoadFiascoProtectedGeneralMap {
     
     /* As long as there is no initialization code that needs to be run to initialize
-     instances of this, just POD, it all seems to work (Mac clamg & Windows VC). Can't yet
+     instances of this, just POD, it all seems to work (Mac clang & Windows VC). Can't yet
      find appropriate language refs. */
 
     /* The null or non-null status of this variable determines whether or not a map
