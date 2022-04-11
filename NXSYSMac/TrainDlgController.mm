@@ -161,6 +161,25 @@ void sendTrainSlider (HWND, int of100);
     //former is subsequently going to call DeleteHWNDObject,
     //which is going to delete exactly that and void the strongptr
     //to the controller, which is (provably) going to dealloc this instance.
+
+/*
+Proof,  4-10-2022:
+
+#0    [TrainDlgController DestroyWindow]
+#1    __WND_::DestroyWindow() Winapi.mm:288
+#2    DestroyWindow(void*) Winapi.mm:218
+#3    Train::~Train() at traincmn.cpp:563
+#4    Train::~Train() at traincmn.cpp:555
+#5    std::__1::default_delete<Train>::operator()(Train*)
+#6    std::__1::unique_ptr<Train, std::__1::default_delete<Train> >::reset(Train*)
+#7    std::__1::unique_ptr<Train, std::__1::default_delete<Train> >::~unique_ptr()
+#8    std::__1::unique_ptr<Train, std::__1::default_delete<Train> >::~unique_ptr()
+#9    std::__1::pair<int const, std::__1::unique_ptr<Train, std::__1::default_delete<Train> > >::~pair()
+....
+#14   std::__1::map<int, std::__1::unique_ptr<Train, std::__1::default_delete<Train> (erase)
+#15   Train::vanish() traincmn.cpp
+#16   Train::Command(int)
+*/
 }
 
 
