@@ -43,6 +43,28 @@ NSPoint NXGOLocAsPoint(void* NXGObject);
 void RelayGraphicsLeftClick(int x, int y);
 const char* RelayGraphicsNameFromXY(int x, int y);
 
+/* Custom unique_ptr class; needed because a custom deleter is involved. 4-10-2022
+   When used consistently, removes the need for the custom deallocator. */
+/* https://en.wikipedia.org/wiki/C++11#Explicitly_defaulted_and_deleted_special_member_functions */
 
+class HWNDAutoPtr  {
+    HWND hWnd = nullptr;  /* What a miracle that this is legal and works these days... */
+    /* make non-copyable */
+    HWNDAutoPtr & operator=(const HWNDAutoPtr&) = delete;
+    HWNDAutoPtr(const HWNDAutoPtr&) = delete;
+public:
+    HWNDAutoPtr() = default;
+    HWNDAutoPtr(HWND h) {hWnd = h;}
+    ~HWNDAutoPtr() {
+        if (hWnd)
+            DeleteHwndObject(hWnd);
+    }
+    operator HWND () { return hWnd;}
+    void set(HWND h){
+        assert(hWnd == nullptr);
+        hWnd = h;
+    }
+    void operator = (HWND h) {set(h);}
+};
 
 #endif

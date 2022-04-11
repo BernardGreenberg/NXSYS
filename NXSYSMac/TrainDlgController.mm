@@ -19,7 +19,7 @@ void sendTrainSlider (HWND, int of100);
 {
     void* NXSYSTrain;
     bool initial_observant;
-    std::map<NSInteger,HWND> CtlidToHWND;
+    std::map<NSInteger,HWNDAutoPtr> CtlidToHWND;
     NSInteger trainNo;
 }
 @end
@@ -155,11 +155,7 @@ void sendTrainSlider (HWND, int of100);
 {
     [self.window orderOut:nil];
 
-    for (auto& iterator : CtlidToHWND) {
-        // note that we are NOT erasing map entry here, but in clear(); No skip-step needed.
-        DeleteHwndObject(iterator.second);
-    }
-    CtlidToHWND.clear();
+    /* Deallocating this instance will clear CtlidToHWND, which will now (4-11-2022) deallocate the HWND instances for the controls via HWNDAutoPtr */
 
     //We are called by ::DestroyWindow, (called by Train::~Train), which
     //former is subsequently going to call DeleteHWNDObject,

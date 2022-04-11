@@ -18,19 +18,6 @@ typedef void *HWND;
 #include "LoadFiascoMaps.h"
 class GraphicObject;    // don't want nxgo.h
 
-/* Custom unique_ptr class; needed because a custom deleter is involved. 4-10-2022
-   When used consistently, removes the need for the custom controller deallocator. */
-class HWNDUptr  {
-    HWND hWnd = nullptr;
-public:
-    ~HWNDUptr() {
-        if (hWnd)
-            DeleteHwndObject(hWnd);
-    }
-    operator HWND () { return hWnd;}
-    void set(HWND h) {hWnd = h;}
-};
-
 /* While I am proud of this piece of work, it is a but a kludge to reconcile the
  respective deficiencies of the Windows and Macintosh dialog systems.
  The Windows system requires defining a file full of batty control ID numbers, which,
@@ -101,12 +88,12 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
 @interface GenericWindlgController () // () means append to def. given already.
 {
     /* Map of Windows IDC_xxx integer control ID's to our HWND objects for controls */
-    std::unordered_map<NSInteger,HWNDUptr> CtlidToHWND;
+    std::unordered_map<NSInteger,HWNDAutoPtr> CtlidToHWND;
 
     /* Map of Windows IDC_xxx resource NAMEs as NSStrings, to integer values, supplied
      by caller of DefineWindlg... . Must be copied out of call-time list structure. */
     tIDStringMap RIDValMap;
-     HWNDUptr hWnd;                  //The HWND object wrapping this dialog presenting it to Win code.
+    HWNDAutoPtr hDlg;                 //The HWND object wrapping this dialog presenting it to Win code.
 }
 @property GraphicObject* NXGObject;   //The object to which this dialog is being applied.
 
@@ -131,8 +118,8 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
         if (![self window])
             [self barf: FormatString("Cannot load NIB \"%s\"", nibName.UTF8String)];
 
-        /* we are retained on the stack, not in C++ code */
-        hWnd.set( WinWrapNoRetain(self, self.window.contentView, nibName));
+        /* Auto-ptr will DeleteHwndObject at stack deallocation */
+        hDlg = WinWrapNoRetain(self, self.window.contentView, nibName);
 
         return self;
 
@@ -158,7 +145,7 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
         [self.window setFrameTopLeftPoint:placement];
 
         /* Now run all the Windows code that uses the stuff set before we were called */
-        callWndProcInitDialog(hWnd, self.NXGObject);
+        callWndProcInitDialog(hDlg, self.NXGObject);
         [self didInitDialog];
 
         /* Show the window */
@@ -234,7 +221,7 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
 
         /* Create and link an HWND object to the control, and register it in the
          resource_id to HWND map. Insert the numeric ID into the control's "tag" attribute. */
-        CtlidToHWND[resource_id].set(WinWrapControl(self, view, resource_id, identifier));
+        CtlidToHWND[resource_id] = WinWrapControl(self, view, resource_id, identifier);
         [(NSControl*)view setTag: resource_id];
         return true;
     }
@@ -321,12 +308,12 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
 
 -(void)reflectCommand:(NSInteger)command
 {
-    callWndProcGeneralCommandParam(hWnd, self.NXGObject, (int)command, 0);
+    callWndProcGeneralCommandParam(hDlg, self.NXGObject, (int)command, 0);
 }
 
 -(void)reflectCommandParam:(NSInteger)command lParam:(NSInteger)param
 {
-    callWndProcGeneralCommandParam(hWnd, self.NXGObject, (int)command, param);
+    callWndProcGeneralCommandParam(hDlg, self.NXGObject, (int)command, param);
 }
 
 -(IBAction)activeButton:(id)sender

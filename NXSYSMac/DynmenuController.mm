@@ -20,7 +20,7 @@ static const int DYNMENU_ROW_HEIGHT = 25;
 
 @interface DynmenuController : NSWindowController<WinDialog>
 {
- std::map<NSInteger,HWND>CtlidToHWND;
+ std::map<NSInteger,HWNDAutoPtr>CtlidToHWND;
  std::vector<LittleYellowView*> lights;
 }
 @property void* actor;
@@ -48,12 +48,9 @@ void DynmenuButtonPushCallback(void * actor, int control_id);
 
 -(HWND)GetControlHWND:(NSInteger)control_id
 {
-    if (CtlidToHWND.count(control_id))
-        return CtlidToHWND[control_id];
-    NSString* descrip = [[NSString alloc] initWithFormat:@"Dynamic menu"];
-    HWND chw = WinWrapControl(self, nil, control_id, descrip);
-    CtlidToHWND[control_id] = chw;
-    return chw;
+    if (CtlidToHWND.count(control_id) == 0)
+        CtlidToHWND[control_id] = WinWrapControl(self, nil, control_id, @"Dynamic menu");
+    return CtlidToHWND[control_id];
 }
 -(NSInteger)GetControlText:(NSInteger)control_id buf:(char*)buf length:(NSInteger)len
 {
@@ -132,13 +129,7 @@ void DynmenuButtonPushCallback(void * actor, int control_id);
 {
     [self.window close]; // apparently the controller can provably go away just fine and the window stays up!
    // printf("dynmenu DestroyWindow really called\n");
-    for (auto& iterator : CtlidToHWND) //not deleting from map.
-        DeleteHwndObject(iterator.second);
-    CtlidToHWND.clear();
-}
--(void)dealloc{
-    //useful to prove it really gets here.
-    // printf("Dynmenu dealloc\n");
+   CtlidToHWND.clear();
 }
 
 @end
