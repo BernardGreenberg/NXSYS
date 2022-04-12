@@ -25,7 +25,7 @@
      generic_object* foo_fun () { return new foo(...);}
      static int dummy_var = Register("foo", foo_fun);
  File B:
-     std::map<std::string, generic_object*(*)void)> creators;
+     std::map<std::string, generic_object*(*)(void)> creators;
      void Register (const char * key, generic_object*(*function)(void))) {
           creators[key] = function;
      }
