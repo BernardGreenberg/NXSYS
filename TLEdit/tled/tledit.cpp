@@ -388,6 +388,7 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
             return;
         }
     }
+    assert(MovTrackJoint!=nullptr); /* not at all likely, but placates flow analyzer */
     
     if (tj == MovTrackJoint)
         tj = nullptr;  // fall into "just move" 3-26-2022
