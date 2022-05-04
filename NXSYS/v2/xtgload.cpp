@@ -282,8 +282,6 @@ static TrackSeg * LinkTS (TrackSeg * last_ts, TrackSeg* ts) {
     }
     ts->Ends[0].Next = last_ts;
     ts->Ends[0].EndIndexNormal = TSEX::E1;
-#else
-    last_ts = ts;
 #endif
     return ts;
 }
