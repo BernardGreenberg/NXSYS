@@ -107,11 +107,12 @@ void TrackSeg::SetTrackCircuitWildfire (TrackCircuit * tc) {
 	if (ep->Joint && ep->Joint->Insulated)
 	    continue;
 #ifdef TLEDIT
-	TrackJoint * tj = ep->Joint;
-	for (int i = 0; i < tj->TSCount; i++) {
-	    if (tj->TSA[i] != this)
-		tj->TSA[i]->SetTrackCircuitWildfire(tc);
-	}
+        if (TrackJoint * tj = ep->Joint) {
+            for (int i = 0; i < tj->TSCount; i++) {
+                if (tj->TSA[i] != this)
+                    tj->TSA[i]->SetTrackCircuitWildfire(tc);
+            }
+        }
 #else
 	if (ep->Next)
 	    ep->Next->SetTrackCircuitWildfire (tc);
