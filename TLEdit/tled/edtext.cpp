@@ -231,7 +231,7 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 #else
     static CHOOSEFONT Cf{};	/* says should be static, beats me */
 #endif
-    WP_cord new_wp_x = wp_x, new_wp_y = wp_y;
+    WP_cord new_wp_x, new_wp_y; /* must be outside "switch" stmt */
 
     switch (message) {
 	case WM_INITDIALOG:

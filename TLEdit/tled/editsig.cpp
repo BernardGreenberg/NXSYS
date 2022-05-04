@@ -150,11 +150,9 @@ BOOL PanelSignal::DlgOK(HWND hDlg) {
         }
     }
 
-    int new_sta_no = Sig->StationNo;
+    int new_sta_no = 0;
     std::string stano_string = GetDlgItemText(hDlg, IDC_EDIT_SIG_STATION_NO);
-    if (stano_string.empty())
-        new_sta_no = 0;
-    else {
+    if (! stano_string.empty()) {
         new_sta_no = GetDlgItemInt (hDlg, IDC_EDIT_SIG_STATION_NO, &es ,FALSE);
         if (new_sta_no == 0 || !es) {
             uerr (hDlg, "Bad signal Station/Relay ID number: %s", stano_string.c_str());
