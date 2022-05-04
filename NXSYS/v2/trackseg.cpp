@@ -460,6 +460,7 @@ int TrackSeg::StationPointsEnd (WP_cord &wpcordlen, TSEX end_index, int loop_che
 
     if (loop_check >= 200) {
         MessageBox(0, "Chasing infinite track loop.", "Train system init", 0);
+        wpcordlen = 0; /* satisfy flow analyzer, which really checks recursive calls! */
         return 0;
     }
     //TrackSegEnd * local = &Ends[end_index];
