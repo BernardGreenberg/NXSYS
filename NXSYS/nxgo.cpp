@@ -226,6 +226,11 @@ GraphicObject::GraphicObject () {
 #endif
 }
 
+void GraphicObject::Consume() {
+    /* here to fake out flow analyzer, who doesn't know that the above
+     constructor stores a reference to the object */
+}
+
 bool GraphicObject::MouseSensitive() {
     return true;
 }                                          /* default "yes" */

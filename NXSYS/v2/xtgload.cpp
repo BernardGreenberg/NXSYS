@@ -322,6 +322,7 @@ create_simple:
 		ts = new TrackSeg (coords.last_x, coords.last_y,
 				   coords.x, coords.y);
 		last_ts = LinkTS (last_ts, ts);
+                last_ts->Consume();
 		SetTCID (ts, last_tcid);
 
 		if (tj)
@@ -348,7 +349,8 @@ finish_create_any:
 	    
 	    continue;
 	}
-
+        if (last_joint)
+            last_joint->Consume(); /* LispBarf's cause flow analyzer to flag last_joint leakage */
 	if (s.type != Lisp::tCONS) {
 	    LispBarf ("Element other than number or list in PATH", s);
 	    return 0;
@@ -506,9 +508,14 @@ invsw:	    LispBarf ("Invalid SWITCH subform", s);
 	}
 /* NEED WHOLE BUSINESS FOR LINKING THESE JOINTS WITHOUT TJ NODES */
 	last_joint = swj;
+        last_joint->Consume();
 	last_was_switch = TRUE;
 	goto finish_create_any;
     }
+    if (last_joint)
+        last_joint->Consume();
+    if (last_ts)
+        last_ts->Consume();
     return 1;
 }
 
@@ -709,7 +716,7 @@ static int ProcessSwitchkeyForm (Sexpr s) {
     SPop(s);
     WP_cord wpy = CAR(s);
 #if TLEDIT
-    new SwitchKey (xno, wpx, wpy);
+    (new SwitchKey (xno, wpx, wpy))->Consume();
 #else
     (new SwitchKey (NULL, wpx, wpy))->SetXlkgNo(xno);
 #endif
@@ -733,7 +740,7 @@ static int ProcessTrafficleverForm (Sexpr s) {
     WP_cord wpx = CAR(s);    SPop(s);
     WP_cord wpy = CAR(s);    SPop(s);
     int rightnormal = CAR(s);
-    new TrafficLever (xno, wpx, wpy, rightnormal);
+    (new TrafficLever (xno, wpx, wpy, rightnormal))->Consume();
     return 1;
 }
 
@@ -765,6 +772,7 @@ static int ProcessPanelLightForm (Sexpr s) {
 	}
 	/* else diagnose */
     }
+    p->Consume();
     return TRUE;
 }
 
@@ -789,7 +797,7 @@ static int ProcessPanelSwitchForm (Sexpr s) {
 
     /* just the nomenclature alphas, not a rlysym */
     const char * rlyname = CAR(s).u.s;   SPop(s); /* 7 */
-    new PanelSwitch (xno, wpx, wpy, rlyname);
+    (new PanelSwitch (xno, wpx, wpy, rlyname))->Consume();
     return TRUE;
 }
 

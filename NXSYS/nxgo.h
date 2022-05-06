@@ -70,6 +70,8 @@ public:
     void	    ComputeVisibleLast();
     void	    GetVisible();
     void            ContributeToLayoutRect();
+    void            Consume(); /* to fool flow analyzer, which doesn't know
+                                that the constructor stores a reference */
 };
 
 class NXGOLabel : public GraphicObject {
