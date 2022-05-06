@@ -243,7 +243,7 @@ void GNode::Flatten () {
 	    /* hack with width/height ? */
 	    for (GNode* ssn = sn->Child; ssn != NULL; ssn = ssn->Next)
 		ssn->Parent = this;
-
+            assert(sn->Child);  /*placate analyzer*/
 	    sn->Child->Prev = sn->Prev;
 	    sn->LastChild->Next = sn->Next;
 
