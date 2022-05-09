@@ -46,8 +46,6 @@ void XTGLoadClose() {
 aDEFLSYM (LAYOUT);
 aDEFLSYM (SWITCH);
 aDEFLSYM (IJ);
-aDEFLSYM (PATH);
-aDEFLSYM (SIGNAL);
 aDEFLSYM (STEM);
 aDEFLSYM (NORMAL);
 aDEFLSYM (REVERSE);
@@ -59,15 +57,8 @@ aDEFLSYM (R);
 aDEFLSYM (NUMFLIP);
 aDEFLSYM (NOSTOP);
 aDEFLSYM (TC);
-aDEFLSYM (EXITLIGHT);
 aDEFLSYM (PLATENO);
 aDEFLSYM (ID);
-aDEFLSYM (SWITCHKEY);
-aDEFLSYM (TRAFFICLEVER);
-aDEFLSYM (PANELLIGHT);
-aDEFLSYM (PANELSWITCH);
-aDEFLSYM (TEXT);
-DEFLSYM2(aVIEW_ORIGIN,VIEW-ORIGIN);
 
 static std::vector<TrackJoint*> SwitchJoints;
 
@@ -81,7 +72,6 @@ static bool DecodeBranchType (Sexpr s, TSAX* brtype) {
     else return false;
     return true;
 }
-
 
 static TrackJoint * FindSwitchJoint (long id, int ab0) {
     for (auto tj : SwitchJoints)
@@ -106,22 +96,28 @@ static int
     ProcessViewOriginForm (Sexpr s);
 
 static std::unordered_map< void*, tFormLoader>  FormLoaderMap;
+static std::string AllowedNames;
 
 void XTGLoadInit() {
     /* Can't do as static because of "load order fiasco" and nonhashability of Sexpr */
-    std::vector<std::pair<Sexpr, tFormLoader>>data {
-        {aPATH, ProcessPathForm},
-        {aSIGNAL, ProcessSignalForm},
-        {aEXITLIGHT, ProcessExitlightForm},
-        {aTRAFFICLEVER, ProcessTrafficleverForm},
-        {aPANELLIGHT, ProcessPanelLightForm},
-        {aPANELSWITCH, ProcessPanelSwitchForm},
-        {aVIEW_ORIGIN, ProcessViewOriginForm},
-        {aSWITCHKEY, ProcessSwitchkeyForm},
-        {aTEXT, ProcessTextForm}
+    std::vector<std::pair<const char *, tFormLoader>> data {
+        {"PATH", ProcessPathForm},
+        {"SIGNAL", ProcessSignalForm},
+        {"EXITLIGHT", ProcessExitlightForm},
+        {"TRAFFICLEVER", ProcessTrafficleverForm},
+        {"PANELLIGHT", ProcessPanelLightForm},
+        {"PANELSWITCH", ProcessPanelSwitchForm},
+        {"VIEW-ORIGIN", ProcessViewOriginForm},
+        {"SWITCHKEY", ProcessSwitchkeyForm},
+        {"TEXT", ProcessTextForm}
     };
     for (auto p : data) {
-        FormLoaderMap[(void*)p.first.u.s] = p.second;
+        const char* s = p.first;
+        if (!AllowedNames.empty())
+            AllowedNames += ", ";
+        AllowedNames += s;
+        Sexpr atom = intern(s);
+        FormLoaderMap[(void*)atom.u.a] = p.second;
     }
 }
 
@@ -147,17 +143,14 @@ int XTGLoad (FILE * f) {
 int ProcessLayoutForm (Sexpr f) {
     for ( ;f.type == Lisp::tCONS; f = CDR(f)) {
 	Sexpr s = CAR(f);
-#if 0
-	MessageBox (0, s.PRep(), "Layout subform about to be processed", MB_OK);
-#endif
 	if (s.type != Lisp::tCONS) {
 	    LispBarf ("Non-list element found in LAYOUT", s);
 	    return 0;
 	}
 	Sexpr fn = CAR(s);
-        void* fnkey = (void*)fn.u.s;
+        void* fnkey = (void*)fn.u.a;
         if (!FormLoaderMap.count(fnkey)) {
-            LispBarf ("Element other than PATH, SIGNAL, EXITLIGHT, SWITCHKEY, TRAFFICLEVER, TEXT, PANELSWITCH, PANELLIGHT or VIEW-ORIGIN found in LAYOUT ", s);
+            LispBarf (("Element other than " + AllowedNames + "found in LAYOUT ").c_str(), s);
             return 0;
         }
 
