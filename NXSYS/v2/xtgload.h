@@ -4,11 +4,7 @@
 void XTGLoadInit();
 void XTGLoadClose();
 
-#ifdef _MSC_VER
-#ifndef _FILE_DEFINED
-struct FILE;
-#endif
-#endif
+#include <stdio.h>
 
 void InitXTGReader ();
 void SwitchesLoadComplete();

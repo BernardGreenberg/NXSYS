@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 #include "compat32.h"
 #include "nxgo.h"
@@ -81,9 +82,6 @@ static bool DecodeBranchType (Sexpr s, TSAX* brtype) {
     return true;
 }
 
-void XTGLoadInit() {
-}
-
 
 static TrackJoint * FindSwitchJoint (long id, int ab0) {
     for (auto tj : SwitchJoints)
@@ -91,6 +89,8 @@ static TrackJoint * FindSwitchJoint (long id, int ab0) {
 	    return tj;
     return nullptr;
 }
+
+using tFormLoader = std::function<int(Sexpr)>;
 
 int ProcessLayoutForm (Sexpr s),
     ProcessTextForm (Sexpr s);
@@ -104,6 +104,26 @@ static int
     ProcessPanelLightForm (Sexpr s),
     ProcessPanelSwitchForm (Sexpr s),
     ProcessViewOriginForm (Sexpr s);
+
+static std::unordered_map< void*, tFormLoader>  FormLoaderMap;
+
+void XTGLoadInit() {
+    /* Can't do as static because of "load order fiasco" and nonhashability of Sexpr */
+    std::vector<std::pair<Sexpr, tFormLoader>>data {
+        {aPATH, ProcessPathForm},
+        {aSIGNAL, ProcessSignalForm},
+        {aEXITLIGHT, ProcessExitlightForm},
+        {aTRAFFICLEVER, ProcessTrafficleverForm},
+        {aPANELLIGHT, ProcessPanelLightForm},
+        {aPANELSWITCH, ProcessPanelSwitchForm},
+        {aVIEW_ORIGIN, ProcessViewOriginForm},
+        {aSWITCHKEY, ProcessSwitchkeyForm},
+        {aTEXT, ProcessTextForm}
+    };
+    for (auto p : data) {
+        FormLoaderMap[(void*)p.first.u.s] = p.second;
+    }
+}
 
 void InitXTGReader () {  // called from rdtrkcmn, too.
     SwitchJoints.clear();
@@ -135,49 +155,14 @@ int ProcessLayoutForm (Sexpr f) {
 	    return 0;
 	}
 	Sexpr fn = CAR(s);
-	Sexpr data = CDR(s);
-	if (fn == aPATH) {
-	    if (!ProcessPathForm (data))
-		return 0;
-	}
-	else if (fn == aSIGNAL) {
-	    if (!ProcessSignalForm (data))
-		return 0;
-	}
-	else if (fn == aEXITLIGHT) {
-	    if (!ProcessExitlightForm (data))
-		return 0;
-	}
-	else if (fn == aVIEW_ORIGIN) {
-	    if (!ProcessViewOriginForm (data))
-		return 0;
-	}
-#ifndef NOAUXK
-	else if (fn == aSWITCHKEY) {
-	    if (!ProcessSwitchkeyForm (data))
-		return 0;
-	}
-#endif
-	else if (fn == aTRAFFICLEVER) {
-	    if (!ProcessTrafficleverForm (data))
-		return 0;
-	}
-	else if (fn == aPANELLIGHT) {
-	    if (!ProcessPanelLightForm (data))
-		return 0;
-	}
-	else if (fn == aPANELSWITCH) {
-	    if (!ProcessPanelSwitchForm (data))
-		return 0;
-	}
-	else if (fn == aTEXT) {
-	    if (!ProcessTextForm (data))
-		return 0;
-	}
-	else {
-	    LispBarf ("Element other than PATH, SIGNAL, EXITLIGHT, SWITCHKEY, TEXT, or VIEW-ORIGIN found in LAYOUT ", s);
-	    return 0;
-	}
+        void* fnkey = (void*)fn.u.s;
+        if (!FormLoaderMap.count(fnkey)) {
+            LispBarf ("Element other than PATH, SIGNAL, EXITLIGHT, SWITCHKEY, TRAFFICLEVER, TEXT, PANELSWITCH, PANELLIGHT or VIEW-ORIGIN found in LAYOUT ", s);
+            return 0;
+        }
+
+        if (!FormLoaderMap[fnkey](CDR(s)))  /* Process the form. */
+            return 0;
     }
 
     for (auto tj : SwitchJoints)

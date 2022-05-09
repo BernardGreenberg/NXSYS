@@ -16,6 +16,7 @@
 #include "compat32.h"
 #include "lyglobal.h"
 #include "loaddcls.h"
+#include "xtgload.h"
 #include "xtgtrack.h"
 #include "nxglapi.h"
 #include "demoapi.h"
@@ -401,6 +402,7 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
 
   InitRelaySys();
   InitTrackGDI (dtw, dth);
+  XTGLoadInit();
 
   Glb.TorontoStyle = FALSE;
   Glb.AppBaseMajor = 2;
