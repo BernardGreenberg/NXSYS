@@ -128,6 +128,7 @@ class TrackJoint
 
 #ifdef REALLY_NXSYS
 	int	StationNumber();	/* mod off Nomenclature */
+        void    Consume() {};
 #endif
 };
 
