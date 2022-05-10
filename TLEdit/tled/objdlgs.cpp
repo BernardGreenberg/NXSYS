@@ -11,6 +11,7 @@
 #include "xtgtrack.h"
 #include "tledit.h"
 #include "assignid.h"
+#include "undo.h"
 
 #include "tlecmds.h"
 #include "resource.h"

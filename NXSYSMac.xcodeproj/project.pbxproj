@@ -49,6 +49,7 @@
 		5B54429519B0F00F00FB5537 /* RelaySelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B54429419B0F00F00FB5537 /* RelaySelector.xib */; };
 		5B54429819B0F1F500FB5537 /* RelayListView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429719B0F1F500FB5537 /* RelayListView.mm */; };
 		5B54429E19B148D300FB5537 /* RelaySelectorController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429D19B148D300FB5537 /* RelaySelectorController.mm */; };
+		5B556418282B095B00FB2CF6 /* undo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B556416282B095B00FB2CF6 /* undo.cpp */; };
 		5B5AE614230C4C5400348612 /* RelayLispSubstrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */; };
 		5B5AE615230C505000348612 /* RelayLispSubstrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */; };
 		5B5AE622230C784200348612 /* readsexp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BE49431199D0B2D007BD6BF /* readsexp.cpp */; };
@@ -335,6 +336,8 @@
 		5B54429619B0F1F500FB5537 /* RelayListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelayListView.h; sourceTree = "<group>"; };
 		5B54429719B0F1F500FB5537 /* RelayListView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayListView.mm; sourceTree = "<group>"; };
 		5B54429D19B148D300FB5537 /* RelaySelectorController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelaySelectorController.mm; sourceTree = "<group>"; };
+		5B556416282B095B00FB2CF6 /* undo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = undo.cpp; sourceTree = "<group>"; };
+		5B556417282B095B00FB2CF6 /* undo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = undo.h; sourceTree = "<group>"; };
 		5B5AE60E230B2C3200348612 /* MapperThunker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapperThunker.h; sourceTree = "<group>"; };
 		5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayLispSubstrate.cpp; sourceTree = "<group>"; };
 		5B5AE616230C57B300348612 /* RelayLispSubstrate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RelayLispSubstrate.h; sourceTree = "<group>"; };
@@ -889,8 +892,8 @@
 		5B5AE6652311BF4E00348612 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				5BB5804327C6B2E300FB0ED5 /* TLDlgProc.h */,
 				5B5AE6702311C05800348612 /* assignid.h */,
+				5BB5804327C6B2E300FB0ED5 /* TLDlgProc.h */,
 				5B5AE6662311BF5F00348612 /* dialogs.h */,
 				5B5AE6672311BF6900348612 /* dragger.h */,
 				5B5AE66B2311BFB000348612 /* objreg.h */,
@@ -902,6 +905,7 @@
 				5B5AE66A2311BF9600348612 /* tletoolb.h */,
 				5B30B10727E4FDCC000D59C8 /* salvager.hpp */,
 				5B5AE6692311BF8600348612 /* tlpropdlg.h */,
+				5B556417282B095B00FB2CF6 /* undo.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -1121,6 +1125,7 @@
 				5BAC936C19C8FFC600673BDC /* appwin.cpp */,
 				5B30B10627E4FDCC000D59C8 /* salvager.cpp */,
 				5BAC936A19C8FFAA00673BDC /* tledit.cpp */,
+				5B556416282B095B00FB2CF6 /* undo.cpp */,
 				5B5AE6652311BF4E00348612 /* Headers */,
 			);
 			name = TLEdit;
@@ -1745,6 +1750,7 @@
 				5B67045419CF90DF002B6E28 /* RubberBandView.mm in Sources */,
 				5B5AE630230D74D000348612 /* WinApiSTL.cpp in Sources */,
 				5BAD55FD1A011A2F006AEEAB /* WinDialogProtocol.mm in Sources */,
+				5B556418282B095B00FB2CF6 /* undo.cpp in Sources */,
 				5BAC935219C8FECC00673BDC /* trkgdi.cpp in Sources */,
 				5BAECC9B19DDA55F00B949EA /* NXMessageBox.mm in Sources */,
 				5BAC935319C8FECC00673BDC /* txlayout.cpp in Sources */,

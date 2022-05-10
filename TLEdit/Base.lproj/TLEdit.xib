@@ -15,14 +15,16 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="TLEditAppDelegate">
             <connections>
+                <outlet property="RedoMenuItem" destination="6dh-zS-Vam" id="Pjg-Wc-Vv4"/>
                 <outlet property="StatusBar" destination="25e-gx-hC0" id="D8f-Q2-PT0"/>
+                <outlet property="UndoMenuItem" destination="dRJ-4n-Yzg" id="CkJ-SE-lD1"/>
                 <outlet property="theScrollView" destination="cq3-Ui-K8w" id="ty0-iK-zpg"/>
                 <outlet property="theView" destination="6tK-76-rxe" id="Wz2-Ey-ojD"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
-        <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
+        <menu title="Main Menu" systemMenu="main" autoenablesItems="NO" id="AYu-sK-qS6">
             <items>
                 <menuItem title="TLEdit" id="1Xt-HY-uBw">
                     <modifierMask key="keyEquivalentModifierMask"/>
@@ -136,14 +138,14 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Edit" id="W48-6f-4Dl">
                         <items>
-                            <menuItem title="Undo" keyEquivalent="z" id="dRJ-4n-Yzg">
+                            <menuItem title="Undo" enabled="NO" keyEquivalent="z" id="dRJ-4n-Yzg">
                                 <connections>
-                                    <action selector="undo:" target="-1" id="M6e-cu-g7V"/>
+                                    <action selector="Undo:" target="Voe-Tx-rLC" id="kOh-hE-mHZ"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Redo" keyEquivalent="Z" id="6dh-zS-Vam">
+                            <menuItem title="Redo" enabled="NO" keyEquivalent="Z" id="6dh-zS-Vam">
                                 <connections>
-                                    <action selector="redo:" target="-1" id="oIA-Rs-6OD"/>
+                                    <action selector="Redo:" target="Voe-Tx-rLC" id="u8p-TC-cvT"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="WRV-NI-Exz"/>

@@ -15,10 +15,13 @@
 @property (weak) IBOutlet NSScrollView *theScrollView;
 @property (weak) IBOutlet MainView *theView;
 @property (weak) IBOutlet NSTextField *StatusBar;
+@property (weak) IBOutlet NSMenuItem *UndoMenuItem;
+@property (weak) IBOutlet NSMenuItem *RedoMenuItem;
 @property (strong) ToolbarController * toolbar;
 @property (assign) IBOutlet NSWindow *window;
 @property bool wporg_set;
 @property NSPoint wporg;
+-(void)setUndoMenu:(const char*)undo Redo:(const char *)redo;
 @end
 
 TLEditAppDelegate* getTLEDelegate();

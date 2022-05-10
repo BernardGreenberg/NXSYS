@@ -280,6 +280,12 @@ TLEditAppDelegate* getTLEDelegate() {
 - (IBAction)Properties:(id)sender {
     AppCommand(CmEditProperties);
 }
+- (IBAction)Undo:(id)sender {
+    AppCommand(CmUndo);
+}
+- (IBAction)Redo:(id)sender {
+    AppCommand(CmRedo);
+}
 -(IBAction)ShiftLayout:(id)sender {
     [[[ShiftLayoutDialog alloc] init] showModal];
 }
@@ -299,6 +305,21 @@ TLEditAppDelegate* getTLEDelegate() {
         return [_theScrollView documentVisibleRect].origin;
     else
         return _wporg;
+}
+-(void)setUrMenu:(NSMenuItem*) item str:(const char *)sp dft:(NSString*)deft
+{
+    if (sp == nullptr) {
+        [item setTitle: deft];
+        [item setEnabled: NO];
+    } else {
+        [item setTitle: [NSString stringWithUTF8String:sp]];
+        [item setEnabled: YES];
+    }
+}
+-(void)setUndoMenu:(const char*)undo Redo:(const char *)redo
+{
+    [self setUrMenu: _UndoMenuItem str:undo dft:@"Undo"];
+    [self setUrMenu: _RedoMenuItem str:redo dft:@"Redo"];
 }
 @end
 
@@ -326,6 +347,10 @@ void SetMainWindowTitle(const char * text) {
     temp += "  -  TLEdit  NXSYS layout editor";
     NSString* title = [[NSString alloc] initWithUTF8String:temp.c_str()];
     [getMainWindow() setTitle:title];
+}
+
+void SetUndoRedoMenu(const char * undo, const char* redo) {
+    [getTLEDelegate() setUndoMenu:undo Redo:redo];
 }
 
 void Mac_SetDisplayWPOrg(long x, long y) {

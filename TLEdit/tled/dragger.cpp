@@ -11,6 +11,7 @@
 #include "tledit.h"
 #include "dragger.h"
 #include "resource.h"
+#include "undo.h"
 
 Dragger * RodentatingDragon = NULL;
 Dragger * MouseupDragon = NULL;
@@ -97,6 +98,7 @@ void Dragger::Rodentate (HWND hWnd, int x, int y, UINT message, WPARAM wParam) {
 	MovingState = MOVSTATE_NOT;
 	MouseupDragon = RodentatingDragon = NULL;
 	Object->Select();
+        Undo::RecordGOCreation(Object);
 	Object = NULL;
 	BufferModified = TRUE;
 #ifdef NXSYSMac

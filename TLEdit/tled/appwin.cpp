@@ -31,6 +31,7 @@
 #include "dragger.h"
 #include "objreg.h"
 #include "signal.h"
+#include "undo.h"
 #include <stdarg.h>
 #include <string>
 #include "STLExtensions.h"
@@ -321,6 +322,15 @@ void AppCommand(UINT command) {
 			if (SelectedObject->TypeID() == ID_JOINT)
 				((TrackJoint *)SelectedObject)->FlipNum();
 		break;
+            
+        case CmUndo:
+            Undo::Undo();
+            break;
+            
+        case CmRedo:
+            Undo::Redo();
+            break;
+            
 
 #ifndef NXSYSMac  // hic non est auxilium
 	case CmHelp:
