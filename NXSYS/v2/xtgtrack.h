@@ -292,7 +292,7 @@ class PanelSignal  : public GraphicObject {
 	virtual void ComputeWPRect();
 #ifdef TLEDIT
 	virtual void Select();
-	virtual int Dump (FILE * f);
+	virtual int Dump (ObjectWriter& W);
 #else
 	virtual void Hit (int mb);
 	virtual void UnHit();
@@ -365,7 +365,7 @@ public:
     virtual BOOL HitP (long x, long y);
     virtual int TypeID(), ObjIDp(long);
 #ifdef TLEDIT
-    virtual int Dump (FILE * f);
+    virtual int Dump (ObjectWriter& W);
     virtual void Select();
     virtual void Cut();
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);

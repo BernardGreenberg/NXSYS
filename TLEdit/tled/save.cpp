@@ -128,6 +128,29 @@ struct SaveState {
 	SvEP Table;
 } SvS, *SvSP;
 
+class NullObjectWriter : public GraphicObject:: ObjectWriter {
+    FILE* file;
+public:
+    NullObjectWriter() {};
+    void puts(const char * s) {(void)s;}
+    void putf(const char * s, ...){(void)s;}
+    void putc(char c) {(void)c;}
+};
+
+class FileObjectWriter : public GraphicObject:: ObjectWriter {
+    FILE* file;
+public:
+    FileObjectWriter (FILE * f) : file(f) {}
+    void puts(const char * s) {fputs(s, file);};
+    void putc(char c) {fputc(c, file);}
+    void putf(const char * s, ...){
+        va_list list;
+        va_start(list, s);
+        vfprintf(file, s, list);
+    }
+};
+
+
 static BOOL MakeBackupCopy(const char * path) {
     /* This is a hedge against USER error, not app error. */
 
@@ -557,13 +580,16 @@ char TrackSeg::EndOrientationKey(TSEX end_index) {
 }
 
 
-int GraphicObject::Dump(FILE * f) {
+int GraphicObject::Dump(ObjectWriter& w) {
 	return 0;
 }
 
+
+
 static int DROMapper(GraphicObject * g, void * v) {
 	SvSP sv = (SvSP)v;
-	int priority = g->Dump(NULL);
+    NullObjectWriter N;
+	int priority = g->Dump(N);
 	if (priority > 0) {
 		int index = sv->Index++;
 		if (!sv->Counting) {
@@ -590,7 +616,9 @@ static int DROComparer(const void * v1, const void * v2) {
 	return 0;
 }
 
+
 static void DumpRemainingObjects(FILE * f) {
+    FileObjectWriter W(f);
     SaveState SS{};
 	SS.Index = 0;
 	SS.Counting = TRUE;
@@ -610,7 +638,7 @@ static void DumpRemainingObjects(FILE * f) {
 			last_prio = prio;
 			fprintf(f, "\n");
 		}
-		SS.Table[i].Object->Dump(f);
+		SS.Table[i].Object->Dump(W);
 	}
 	delete SS.Table;
 }

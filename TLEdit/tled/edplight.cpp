@@ -56,14 +56,13 @@ void PanelLight::EditClick (int x, int y) {
     Dragon.ClickOn (G_mainwindow, this, d, x, y);
 }
 
-int PanelLight::Dump (FILE * f) {
-    if (f != NULL)  {
-	fprintf (f, "  (PANELLIGHT %d %d %d\t%s\t%4ld %4ld",
-		 1, XlkgNo, Radius, "\"\"", wp_x, wp_y);
-        for (auto& aspect : Aspects)
-	    fprintf (f, "(%s %s)", aspect.Colorstring.c_str(), aspect.RelayName.c_str());
-	fprintf (f, ")\n");
-    }
+int PanelLight::Dump (ObjectWriter& W) {
+    W.putf("  (PANELLIGHT %d %d %d\t%s\t%4ld %4ld",
+           1, XlkgNo, Radius, "\"\"", wp_x, wp_y);
+    for (auto& aspect : Aspects)
+        W.putf("(%s %s)", aspect.Colorstring.c_str(), aspect.RelayName.c_str());
+    W.putf(")\n");
+
     return 520;				/* dump order */
 }
 

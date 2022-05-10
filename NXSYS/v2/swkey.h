@@ -44,7 +44,7 @@ class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
     virtual void EditClick(int x, int y);
     virtual ~SwitchKey();
-    virtual int Dump (FILE * f);
+    virtual int Dump (ObjectWriter& W);
 #else
     virtual void EditContextMenu (HMENU m);
 #endif

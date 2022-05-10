@@ -27,9 +27,8 @@ void SwitchKey::EditClick (int x, int y) {
     Dragon.ClickOn (G_mainwindow, this, d, x, y);
 }
 
-int SwitchKey::Dump (FILE * f) {
-    if (f != NULL)
-	fprintf (f, "  (SWITCHKEY\t%4d\t%4ld  %4ld)\n", XlkgNo, wp_x, wp_y);
+int SwitchKey::Dump (ObjectWriter& W) {
+    W.putf ("  (SWITCHKEY\t%4d\t%4ld  %4ld)\n", XlkgNo, wp_x, wp_y);
     return 400;
 }
 

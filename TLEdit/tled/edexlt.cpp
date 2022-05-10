@@ -51,20 +51,18 @@ void ExitLight::Select () {
 }
 
 
-int ExitLight::Dump (FILE * f) {
-    if (f) {
-	if (XlkgNo != 0L
-	    &&
-	    Seg->GetEnd(EndIndex).SignalProtectingEntrance
-	    &&
-	    Seg->GetEnd(EndIndex).SignalProtectingEntrance->XlkgNo == XlkgNo)
-	    fprintf (f, "  (EXITLIGHT\t%4d)\n", XlkgNo);
-	else
-	    fprintf (f, "  (EXITLIGHT\t%4d %c %5d)\n",
-		     XlkgNo,
-		     Seg->EndOrientationKey(EndIndex),
-		     (int)Seg->GetEnd(EndIndex).Joint->Nomenclature);
-    }
+int ExitLight::Dump (ObjectWriter& W) {
+    if (XlkgNo != 0L
+        &&
+        Seg->GetEnd(EndIndex).SignalProtectingEntrance
+        &&
+        Seg->GetEnd(EndIndex).SignalProtectingEntrance->XlkgNo == XlkgNo)
+        W.putf("  (EXITLIGHT\t%4d)\n", XlkgNo);
+    else
+        W.putf("  (EXITLIGHT\t%4d %c %5d)\n",
+               XlkgNo,
+               Seg->EndOrientationKey(EndIndex),
+               (int)Seg->GetEnd(EndIndex).Joint->Nomenclature);
     return 300;				/* dump order */
 }
 

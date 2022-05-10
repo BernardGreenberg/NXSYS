@@ -45,49 +45,47 @@ void TextString::EditClick (int x, int y) {
 
 /* ------------------------------------------------------------*/
 
-static void DumpString (const char * s, FILE * f) {
-    putc ('"', f);
+static void DumpString (const char * s, GraphicObject::ObjectWriter& W) {
+    W.putc ('"');
     for (const char * p = s; *p != '\0'; p++) {
 	char c = *p;
-	if (c == '\r') fprintf (f, "\\r");
-	else if (c == '\n') fprintf (f, "\\n");
-	else if (c == '\t') fprintf (f, "\\t");
+	if (c == '\r') W.puts("\\r");
+	else if (c == '\n') W.puts("\\n");
+	else if (c == '\t') W.puts("\\t");
 	else if (strchr ("\\\"", c))
-	    fprintf (f, "\\%c",c);
-	else putc (c, f);
+	    W.putf("\\%c",c);
+        else W.putc(c);
     }
-    putc ('"', f);
+    W.putc ('"');
 }
 
-int TextString::Dump (FILE * f) {
-    if (f == NULL)
-	return TEXT_DUMP_PRIORITY;
-    fprintf (f, "  (TEXT\t");
-    DumpString (String.c_str(), f);
-    fprintf (f,"\n\t\t%4ld\t%4ld", wp_x, wp_y);
+int TextString::Dump (ObjectWriter& W) {
+    W.puts("  (TEXT\t");
+    DumpString(String.c_str(), W);
+    W.putf("\n\t\t%4ld\t%4ld", wp_x, wp_y);
     LOGFONT& lf = RedeemLogfont();
     if (lf.lfFaceName[0] != '\0')
-	fprintf (f, "\n\tFACE\t\"%s\"", lf.lfFaceName);
+	W.putf("\n\tFACE\t\"%s\"", lf.lfFaceName);
     if (lf.lfHeight != 0)
-	fprintf (f, "\n\tHEIGHT\t%d", lf.lfHeight);
+	W.putf("\n\tHEIGHT\t%d", lf.lfHeight);
     if (lf.lfWidth != 0)
-	fprintf (f, "\n\tWIDTH\t%d\n", lf.lfWidth);
+	W.putf("\n\tWIDTH\t%d\n", lf.lfWidth);
     if (lf.lfWeight != 0) {
 	if  (lf.lfWeight == FW_NORMAL)
-	    fprintf (f, "\n\tWEIGHT\tNORMAL");
+	    W.puts("\n\tWEIGHT\tNORMAL");
 	else if (lf.lfWeight == FW_BOLD)
-	    fprintf (f, "\n\tWEIGHT\tBOLD");
+	    W.puts("\n\tWEIGHT\tBOLD");
         else if (lf.lfWeight == FW_BOLD)
-	    fprintf (f, "\n\tWEIGHT\t%d", lf.lfWeight);
+	    W.putf("\n\tWEIGHT\t%d", lf.lfWeight);
     }
     if (lf.lfItalic)
-	fprintf (f, "\n\tITALIC\tT");
+	W.puts("\n\tITALIC\tT");
 
     if (ColorGiven)
-	fprintf (f, "\n\tCOLOR\t(%d %d %d)",
-		 GetRValue (Color), GetGValue (Color), GetBValue (Color));
+        W.putf("\n\tCOLOR\t(%d %d %d)",
+               GetRValue (Color), GetGValue (Color), GetBValue (Color));
 
-    fprintf (f, ")\n");
+    W.puts(")\n");
     return TEXT_DUMP_PRIORITY;
 }
 /* ------------------------------------------------------------*/

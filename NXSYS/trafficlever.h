@@ -59,7 +59,7 @@ class TrafficLever : public GraphicObject {
     virtual void EditClick(int x, int y);
     virtual ~TrafficLever();
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
-    virtual int Dump (FILE * f);
+    virtual int Dump (ObjectWriter& W);
 #endif
 private:
     void DrawKnob(HDC hdc);

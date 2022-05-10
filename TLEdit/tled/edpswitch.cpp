@@ -32,14 +32,12 @@ void PanelSwitch::EditClick (int x, int y) {
     Dragon.ClickOn (G_mainwindow, this, d, x, y);
 }
 
-int PanelSwitch::Dump (FILE * f) {
+int PanelSwitch::Dump (ObjectWriter& W) {
     if (RelayNomenclature.size() == 0) {
         RelayNomenclature = "PNLSW";
     }
-    if (f != NULL)  {
-	fprintf (f, "  (PANELSWITCH %d %d %d\t%s\t%4ld %4ld %s)\n",
-		 1, XlkgNo, 2, "\"\"", wp_x, wp_y, RelayNomenclature.c_str());
-    }
+    W.putf("  (PANELSWITCH %d %d %d\t%s\t%4ld %4ld %s)\n",
+	 1, XlkgNo, 2, "\"\"", wp_x, wp_y, RelayNomenclature.c_str());
     return 523;				/* dump order */
 }
 

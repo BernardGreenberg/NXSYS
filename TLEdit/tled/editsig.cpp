@@ -244,9 +244,7 @@ char PanelSignal::Orientation () {
 }
 
 
-int PanelSignal::Dump (FILE * f) {
-    if (f == NULL)
-	return SIGNAL_DUMP_ORDER;
+int PanelSignal::Dump (ObjectWriter& W) {
     /* New format!
     (SIGNAL 10101 {  2}  {R/L/T/B} (GYR ...) keywords {ST 20} {GT} {ID 2415}
             IJ id opt  
@@ -273,8 +271,8 @@ int PanelSignal::Dump (FILE * f) {
 	strcat (extra, idbuf);
     }
 
-    fprintf (f, "  (SIGNAL %6ld %6s %c (%s)%s)\n",
-	     tj->Nomenclature, xlbuf, Orientation(), Sig->HeadsString.c_str(),
-	     extra);
+    W.putf("  (SIGNAL %6ld %6s %c (%s)%s)\n",
+           tj->Nomenclature, xlbuf, Orientation(), Sig->HeadsString.c_str(),
+           extra);
     return SIGNAL_DUMP_ORDER;
 }

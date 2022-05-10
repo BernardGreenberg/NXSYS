@@ -17,9 +17,6 @@ struct WPRECT {
     WP_cord top, bottom, left, right;
 };
 
-#ifdef TLEDIT				/* must be at top level */
-#include <stdio.h>
-#endif
 
 class GraphicObject {
 public:

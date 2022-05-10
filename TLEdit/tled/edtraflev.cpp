@@ -31,10 +31,9 @@ void TrafficLever::EditClick (int x, int y) {
     Dragon.ClickOn (G_mainwindow, this, d, x, y);
 }
 
-int TrafficLever::Dump (FILE * f) {
-    if (f != NULL) 
-	fprintf (f, "  (TRAFFICLEVER 1\t%4d\t%4ld  %4ld %1d)\n",
-		 XlkgNo, wp_x, wp_y, NormalIndex);
+int TrafficLever::Dump (ObjectWriter& W) {
+    W.putf("  (TRAFFICLEVER 1\t%4d\t%4ld  %4ld %1d)\n",
+	 XlkgNo, wp_x, wp_y, NormalIndex);
     return 500;				/* dump order */
 }
 

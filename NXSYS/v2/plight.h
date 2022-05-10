@@ -63,7 +63,7 @@ class PanelLight : public GraphicObject {
     virtual void EditClick(int x, int y);
     virtual ~PanelLight();
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
-    virtual int Dump (FILE * f);
+    virtual int Dump (ObjectWriter& W);
 #else
     void ClearAllActives();
     void ProcessLoadComplete();
