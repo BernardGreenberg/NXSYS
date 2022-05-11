@@ -77,8 +77,8 @@ Virtual void PanelSwitch::Display (HDC hdc) {
     return;
 }
 
-Virtual int PanelSwitch::TypeID() {
-    return ID_PANELSWITCH;
+Virtual ObjId PanelSwitch::TypeID() {
+    return ObjId::PANELSWITCH;
 }
 
 Virtual int PanelSwitch::ObjIDp(long id) {

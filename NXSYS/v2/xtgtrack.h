@@ -106,7 +106,7 @@ class TrackJoint
         TrackSeg* GetBranch(TSAX brx);
     
 	virtual void Display (HDC dc);
-	virtual int TypeID ();
+	virtual ObjId TypeID ();
 	virtual int ObjIDp(long);
 #ifdef TLEDIT
 
@@ -210,7 +210,7 @@ class TrackSeg : public GraphicObject {
 	~TrackSeg();
 
 	virtual void Display (HDC dc);
-	virtual int TypeID ();
+	virtual ObjId TypeID ();
 	virtual int ObjIDp(long);
 	TrackCircuit* SetTrackCircuit (long ID, BOOL wildfire);
 	void SetTrackCircuit0 (TrackCircuit * tc);
@@ -287,7 +287,7 @@ class PanelSignal  : public GraphicObject {
 #endif
 	virtual void Display (HDC dc);
 	void Reposition();
-	virtual int TypeID ();
+	virtual ObjId TypeID ();
 	virtual int ObjIDp(long);
 	virtual void ComputeWPRect();
 #ifdef TLEDIT
@@ -326,7 +326,7 @@ public:
     static  void  StopCoderReporter(void *v, BOOL state);
 
     virtual void Display (HDC dc) override;
-    virtual int TypeID() override;
+    virtual ObjId TypeID() override;
     virtual int ObjIDp(long) override;
     virtual BOOL HitP(long, long) override;
 #if REALLY_NXSYS   // if really nxsys, override with "false"; default is true.
@@ -363,7 +363,8 @@ public:
 
     virtual void Display (HDC hdc);
     virtual BOOL HitP (long x, long y);
-    virtual int TypeID(), ObjIDp(long);
+    virtual ObjId TypeID();
+    virtual int ObjIDp(long);
 #ifdef TLEDIT
     virtual int Dump (ObjectWriter& W);
     virtual void Select();

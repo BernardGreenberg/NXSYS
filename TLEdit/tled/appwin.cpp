@@ -112,7 +112,7 @@ static int MapShowExitLight(GraphicObject * g) {
 
 static void ShowExitLights(BOOL whichway) {
 	ExitLightsShowing = whichway;
-	MapGraphicObjectsOfType(ID_EXITLIGHT, MapShowExitLight);
+	MapGraphicObjectsOfType(ObjId::EXITLIGHT, MapShowExitLight);
 }
 
 static void GraphicsWindow_Rodentate
@@ -206,8 +206,8 @@ static BOOL ReadIt() {
 	ClearItOut();
 	if (XTGLoad(f)) {
 		InitAssignID();
-		MapGraphicObjectsOfType(ID_JOINT, MapAssignIDs);
-		MapGraphicObjectsOfType(ID_SIGNAL, MapAssignSigNos);
+		MapGraphicObjectsOfType(ObjId::JOINT, MapAssignIDs);
+		MapGraphicObjectsOfType(ObjId::SIGNAL, MapAssignSigNos);
         SetMainWindowTitle(FileName.c_str());
 		ComputeVisibleObjectsLast();
 		FullRedisplay();
@@ -293,7 +293,7 @@ void AppCommand(UINT command) {
 		break;
 	case CmToggleExitLights:
 		ExitLightsShowing = GetToolbarCheckState(S_Toolbar, command);
-		if (SelectedObject && SelectedObject->TypeID() == ID_EXITLIGHT)
+		if (SelectedObject && SelectedObject->TypeID() == ObjId::EXITLIGHT)
 			SelectedObject->Deselect();
 		ShowExitLights(ExitLightsShowing);
 		break;
@@ -303,7 +303,7 @@ void AppCommand(UINT command) {
 		FullRedisplay();
 		break;
 	case CmIJ:
-		if (SelectedObject && SelectedObject->TypeID() == ID_JOINT) {
+		if (SelectedObject && SelectedObject->TypeID() == ObjId::JOINT) {
 			InsulateJoint((TrackJoint *)SelectedObject);
 			//			    SelectedObject->Deselect();
 		}
@@ -314,12 +314,12 @@ void AppCommand(UINT command) {
 		break;
 	case CmFlipSignal:
 		if (SelectedObject)
-			if (SelectedObject->TypeID() == ID_SIGNAL)
+			if (SelectedObject->TypeID() == ObjId::SIGNAL)
 				FlipSignal((PanelSignal *)SelectedObject);
 		break;
 	case CmFlipNum:
 		if (SelectedObject)
-			if (SelectedObject->TypeID() == ID_JOINT)
+			if (SelectedObject->TypeID() == ObjId::JOINT)
 				((TrackJoint *)SelectedObject)->FlipNum();
 		break;
             
@@ -345,11 +345,11 @@ void AppCommand(UINT command) {
 #endif 
 	case CmSignalUpRight:
 	case CmSignalDownLeft:
-		if (SelectedObject && SelectedObject->TypeID() == ID_JOINT)
+		if (SelectedObject && SelectedObject->TypeID() == ObjId::JOINT)
 			TLEditCreateSignal
 			((TrackJoint *)SelectedObject,
 				command == CmSignalUpRight);
-		else if (SelectedObject && SelectedObject->TypeID() == ID_SIGNAL)
+		else if (SelectedObject && SelectedObject->TypeID() == ObjId::SIGNAL)
 			TLEditCreateSignalFromSignal
 			((PanelSignal *)SelectedObject,
 				command == CmSignalUpRight);
@@ -357,7 +357,7 @@ void AppCommand(UINT command) {
 			usererr("An insulated joint must be selected to define a signal.");
 		break;
 	case CmCreateExitLight:
-		if (SelectedObject && SelectedObject->TypeID() == ID_SIGNAL)
+		if (SelectedObject && SelectedObject->TypeID() == ObjId::SIGNAL)
 			TLEditCreateExitLightFromSignal
 			((PanelSignal *)SelectedObject, TRUE);
 		break;
@@ -577,14 +577,14 @@ static long WindowsMessageLoop(HWND window, HACCEL hAccel) {
 #endif
 
 static void SelectHook(GraphicObject * go) {
-	int objid = go ? go->TypeID() : -1;
-	EnableCommand(CmCut, objid > 0);
-	EnableCommand(CmEditProperties, objid > 0);
-	EnableCommand(CmFlipNum, objid == ID_JOINT);
-	EnableCommand(CmIJ, objid == ID_JOINT);
-	EnableCommand(CmSignalUpRight, objid == ID_JOINT || objid == ID_SIGNAL);
-	EnableCommand(CmSignalDownLeft, objid == ID_JOINT || objid == ID_SIGNAL);
-	EnableCommand(CmCreateExitLight, objid == ID_JOINT || objid == ID_SIGNAL);
+    ObjId objid = go ? go->TypeID() : ObjId::NONE;
+	EnableCommand(CmCut, objid != ObjId::NONE);
+	EnableCommand(CmEditProperties, objid != ObjId::NONE);
+	EnableCommand(CmFlipNum, objid == ObjId::JOINT);
+	EnableCommand(CmIJ, objid == ObjId::JOINT);
+	EnableCommand(CmSignalUpRight, objid == ObjId::JOINT || objid == ObjId::SIGNAL);
+	EnableCommand(CmSignalDownLeft, objid == ObjId::JOINT || objid == ObjId::SIGNAL);
+	EnableCommand(CmCreateExitLight, objid == ObjId::JOINT || objid == ObjId::SIGNAL);
 }
 
 void InitTLEditApp(int dtw, int dth) {

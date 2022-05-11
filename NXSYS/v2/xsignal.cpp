@@ -81,8 +81,8 @@ void PanelSignal:: Reposition() {
 	Sig->TStop->Reposition();
 }
 
-int PanelSignal::TypeID() {
-    return ID_SIGNAL;
+ObjId PanelSignal::TypeID() {
+    return ObjId::SIGNAL;
 }
 
 int PanelSignal::ObjIDp (long id) {

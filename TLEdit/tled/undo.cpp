@@ -13,23 +13,24 @@
 #include <cstdarg>
 
 using std::vector, std::string;
-int ProcessNonGraphObjectCreateFormString(const char * s);
+using GOptr = GraphicObject*;
+GOptr ProcessNonGraphObjectCreateFormString(const char * s);
 
 void SetUndoRedoMenu(const char * undo, const char * redo);
 
 namespace Undo {
 
-std::unordered_map<int, string> ObjIdNames {
-    {ID_TRACKSEG, "track segment"},
-    {ID_SIGNAL, "signal"},
-    {ID_JOINT, "joint"},
-    {ID_STOP, "stop"},
-    {ID_EXITLIGHT, "exit light"},
-    {ID_PANELLIGHT, "panel light"},
-    {ID_PANELSWITCH, "panel switch"},
-    {ID_TRAFFICLEVER, "traffic lever"},
-    {ID_SWITCHKEY, "switch key"},
-    {ID_TEXT, "text string"}
+std::unordered_map<ObjId, string> ObjIdNames {
+    {ObjId::TRACKSEG, "track segment"},
+    {ObjId::SIGNAL, "signal"},
+    {ObjId::JOINT, "joint"},
+    {ObjId::STOP, "stop"},
+    {ObjId::EXITLIGHT, "exit light"},
+    {ObjId::PANELLIGHT, "panel light"},
+    {ObjId::PANELSWITCH, "panel switch"},
+    {ObjId::TRAFFICLEVER, "traffic lever"},
+    {ObjId::SWITCHKEY, "switch key"},
+    {ObjId::TEXT, "text string"}
 };
 
 enum class RecType {CreateGO, DeleteGO, PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
@@ -47,7 +48,26 @@ struct UndoRecord {
         object = o;
         obj_id_type = object->TypeID();
     }
-    UndoRecord(RecType type, string img, int obt) {
+    UndoRecord(RecType type, string img, ObjId obt) {
+       rec_type = type;
+       image = img;
+       object = nullptr;
+       obj_id_type = obt;
+   }
+
+    RecType rec_type;
+    string image;                    /* not valid or needed for create*/
+    GOptr object = nullptr; /* not valid or needed for delete*/
+    ObjId obj_id_type;
+    
+    string DescribeAction() {
+        return "Undo " + RecTypeNames[rec_type] + " " + ObjIdNames[obj_id_type];
+    }
+
+};
+
+struct RedoRecord {
+     RedoRecord(RecType type, string img, ObjId obt) {
         rec_type = type;
         image = img;
         object = nullptr;
@@ -55,14 +75,15 @@ struct UndoRecord {
     }
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
-    GraphicObject* object = nullptr; /* not valid or needed for delete*/
-    int obj_id_type;
+    GOptr object = nullptr; /* not valid or needed for delete*/
+    ObjId obj_id_type;
     
-    string DescribeCommand(string cmd) {
-        return cmd + " " + RecTypeNames[rec_type] + " " + ObjIdNames[obj_id_type];
+    string DescribeAction() {
+        return "Redo " + RecTypeNames[rec_type] + " " + ObjIdNames[obj_id_type];
     }
 
 };
+
 
 static vector <UndoRecord> UndoStack;
 static vector <UndoRecord> RedoStack;
@@ -99,11 +120,11 @@ static void compute_menu_state() {
     const char * undo_avl = nullptr;
     const char * redo_avl = nullptr;
     if (IsUndoPossible()) {
-        undo_str = UndoStack.back().DescribeCommand("Undo");
+        undo_str = UndoStack.back().DescribeAction();
         undo_avl = undo_str.c_str();
     }
     if (IsRedoPossible()) {
-        redo_str = RedoStack.back().DescribeCommand("Redo");
+        redo_str = RedoStack.back().DescribeAction();
         redo_avl = redo_str.c_str();
     }
     SetUndoRedoMenu(undo_avl, redo_avl);
@@ -140,8 +161,9 @@ void Redo() {
     UndoRecord R = RedoStack.back();
     RedoStack.pop_back();
     if (R.rec_type == RecType::CreateGO) {
-        ProcessNonGraphObjectCreateFormString(R.image.c_str());
-        /* need way to get created object */
+        GraphicObject* obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
+        obj->MakeSelfVisible();
+        obj->Select();
     }
     compute_menu_state();
 };

@@ -23,7 +23,7 @@ static GraphicObject* CreateTrafficLever (int wpx, int wpy) {
     return Dragon.StartMoving (new TrafficLever (0, wpx, wpy, 0), "New Traffic Lever", G_mainwindow);
 }
 
-REGISTER_NXTYPE(ID_TRAFFICLEVER, CmTrafficLever, IDD_TRAFFICLEVER, CreateTrafficLever, InitTrafficLeverData);
+REGISTER_NXTYPE(ObjId::TRAFFICLEVER, CmTrafficLever, IDD_TRAFFICLEVER, CreateTrafficLever, InitTrafficLeverData);
 
 void TrafficLever::EditClick (int x, int y) {
     char d[30];

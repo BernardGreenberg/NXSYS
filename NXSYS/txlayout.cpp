@@ -15,9 +15,9 @@
 
 #ifdef TLEDIT
 void usererr (const char *, ...);
-#define BARF(x) {usererr x ;return 0;};
+#define BARF(x) {usererr x ;return nullptr;};
 #else
-#define BARF(x) {usermsgstop x ;return 0;};
+#define BARF(x) {usermsgstop x ;return nullptr;};
 #endif
 
 #ifndef STRINGP
@@ -34,7 +34,7 @@ void usererr (const char *, ...);
 
 		  */
 		  
-int ProcessTextForm (Sexpr s) {
+GraphicObject* ProcessTextForm (Sexpr s) {
     const char * string;
     long x, y;
 
@@ -125,6 +125,5 @@ badcol:		BARF (("Font color in TEXT form not list of 3 numbers (RGB)."));
 	else BARF(("Unknown Font keyword in TEXT form: %s", Keyword.u.s));
     }
 
-    LayoutTextString (string, &lf, x, y, Color, ColorGiven);
-    return 1;
+    return LayoutTextString (string, &lf, x, y, Color, ColorGiven);
 }

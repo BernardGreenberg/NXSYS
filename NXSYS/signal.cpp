@@ -488,7 +488,7 @@ int DropperFunarg (GraphicObject * go) {
 
 
 void DropAllSignals () {
-    MapGraphicObjectsOfType (ID_SIGNAL, DropperFunarg);
+    MapGraphicObjectsOfType (ObjId::SIGNAL, DropperFunarg);
     if (CPB0 != NULL)
 	PulseToRelay (CPB0);
 }
@@ -534,8 +534,8 @@ static int FSDCloser(GraphicObject * g) {
 /* This strategy is arguably better than maintaining a registry of FSW's. */
 void CloseAllFSWs (bool destroy) {
     if (destroy)
-        MapGraphicObjectsOfType(ID_SIGNAL, FSDDestructor);
+        MapGraphicObjectsOfType(ObjId::SIGNAL, FSDDestructor);
     else
         //but for a closer walk with thee, o Kali destructress . . .
-        MapGraphicObjectsOfType(ID_SIGNAL, FSDCloser);
+        MapGraphicObjectsOfType(ObjId::SIGNAL, FSDCloser);
 }

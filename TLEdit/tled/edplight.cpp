@@ -43,7 +43,7 @@ static GraphicObject* CreatePanelLight (int wpx, int wpy) {
 
 void null_f() {};
 
-REGISTER_NXTYPE(ID_PANELLIGHT, CmPanelLight, IDD_PANELLIGHT, CreatePanelLight, null_f);
+REGISTER_NXTYPE(ObjId::PANELLIGHT, CmPanelLight, IDD_PANELLIGHT, CreatePanelLight, null_f);
 
 static const std::string GetPLDlgString (HWND hDlg, UINT id) {
     return stoupper(GetDlgItemText(hDlg, id));

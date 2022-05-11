@@ -33,7 +33,8 @@ class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
     BOOL Press (BOOL reverse, BOOL lock);
 
     virtual void Display (HDC hdc);
-    virtual int TypeID(), ObjIDp(long);
+    virtual ObjId TypeID();
+    virtual int ObjIDp(long);
 #ifndef TLEDIT
     virtual void Hit (int mb);
     virtual void UnHit();

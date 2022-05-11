@@ -37,7 +37,7 @@ static GraphicObject* CreateTextString (int wpx, int wpy) {
     return Dragon.StartMoving (txs, "New text string", G_mainwindow);
 }
 
-REGISTER_NXTYPE(ID_TEXT, CmText, IDD_EDIT_TEXT, CreateTextString, NULL);
+REGISTER_NXTYPE(ObjId::TEXT, CmText, IDD_EDIT_TEXT, CreateTextString, NULL);
 
 void TextString::EditClick (int x, int y) {
     Dragon.ClickOn (G_mainwindow, this, "Text string", x, y);

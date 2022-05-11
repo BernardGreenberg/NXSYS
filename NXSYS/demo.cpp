@@ -78,18 +78,18 @@ extern unsigned smeasure (HDC dc, char * str);
 GraphicObject * FindDemoHitTurnout (long id);
 GraphicObject * FindDemoHitCircuit (long id);
 
-static  GraphicObject *  FindDemoObjectByID (long id, int key) {
-    switch (key) {			/* as it were!!!!! */
-	case ID_SIGNAL:
-	case ID_SWITCHKEY:
-	case ID_EXITLIGHT:
-	case ID_PLATFORM:
-	case ID_TRAFFICLEVER:
-	    return FindHitObject (id, key);
-	case ID_TURNOUT:
-	    return FindDemoHitTurnout (id);
-	case ID_TRACKSEC:
-	    return FindDemoHitCircuit (id);
+static  GraphicObject *  FindDemoObjectByID (long nomen, ObjId type) {
+    switch (type) {
+        case ObjId::SIGNAL:
+        case ObjId::SWITCHKEY:
+        case ObjId::EXITLIGHT:
+        case ObjId::PLATFORM:
+        case ObjId::TRAFFICLEVER:
+	    return FindHitObject (nomen, type);
+        case ObjId::TURNOUT:
+	    return FindDemoHitTurnout (nomen);
+        case ObjId::TRACKSEC:
+	    return FindDemoHitCircuit (nomen);
 	default:
 	    return NULL;
     }
@@ -212,7 +212,7 @@ bool DemoState::MakeBigX(GraphicObject* g, int mousecmd) {
     return false;
 }
 
-static bool ProcessGOForm(int key, Sexpr s, int mousecmd) {
+static bool ProcessGOForm(ObjId type, Sexpr s, int mousecmd) {
     if (CDR(s).type != Lisp::tCONS)
         throw DemoErr ("Mouse hit form too short in demo script.");
     if (CADR(s).type != Lisp::NUM)
@@ -223,7 +223,7 @@ static bool ProcessGOForm(int key, Sexpr s, int mousecmd) {
         DemoSay (CADR(CDR(s)).u.s);
     }
     else DemoSay("");
-    GraphicObject * g = FindDemoObjectByID (CADR(s).u.n, key);
+    GraphicObject * g = FindDemoObjectByID (CADR(s).u.n, type);
     if (g != NULL)
         if (State->MakeBigX(g, mousecmd))
             return true;
@@ -283,13 +283,13 @@ static bool ProcessForm (Sexpr s, int mousecmd = WM_LBUTTONDOWN) {
         return ProcessForm(CDR(s), WM_NXGO_LBUTTONSHIFT);
 
     else if (name == "SIGNAL")
-        return ProcessGOForm(ID_SIGNAL, s, mousecmd);
+        return ProcessGOForm(ObjId::SIGNAL, s, mousecmd);
     else if (name == "TRACK")
-        return ProcessGOForm(ID_TRACKSEC, s, mousecmd);
+        return ProcessGOForm(ObjId::TRACKSEC, s, mousecmd);
     else if (name == "EXITLIGHT")
-        return ProcessGOForm(ID_EXITLIGHT, s, mousecmd);
+        return ProcessGOForm(ObjId::EXITLIGHT, s, mousecmd);
     else if (name == "SWITCH")
-        return ProcessGOForm(ID_TURNOUT, s, mousecmd);
+        return ProcessGOForm(ObjId::TURNOUT, s, mousecmd);
 
 
     else if (name == "TRAIN")

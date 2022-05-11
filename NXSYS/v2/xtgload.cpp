@@ -44,6 +44,7 @@ void XTGLoadClose() {
 }
 
 aDEFLSYM (LAYOUT);
+aDEFLSYM (PATH);
 aDEFLSYM (SWITCH);
 aDEFLSYM (IJ);
 aDEFLSYM (STEM);
@@ -59,6 +60,8 @@ aDEFLSYM (NOSTOP);
 aDEFLSYM (TC);
 aDEFLSYM (PLATENO);
 aDEFLSYM (ID);
+DEFLSYM2 (aVIEW_ORIGIN,VIEW-ORIGIN);
+
 
 static std::vector<TrackJoint*> SwitchJoints;
 
@@ -80,42 +83,40 @@ static TrackJoint * FindSwitchJoint (long id, int ab0) {
     return nullptr;
 }
 
-using tFormLoader = std::function<int(Sexpr)>;
+using GOptr = GraphicObject*;
+//using tFormLoader = std::function<GOptr(Sexpr)>;
+typedef GOptr(tFormLoader)(Sexpr);
 
-int ProcessLayoutForm (Sexpr s),
-    ProcessTextForm (Sexpr s);
+int ProcessLayoutForm (Sexpr);
+static int ProcessViewOriginForm(Sexpr),
+  ProcessPathForm(Sexpr);
+GOptr ProcessTextForm (Sexpr);
 
-static int
-    ProcessPathForm (Sexpr s),
-    ProcessSignalForm (Sexpr s),
-    ProcessExitlightForm (Sexpr s),
-    ProcessSwitchkeyForm (Sexpr s),
-    ProcessTrafficleverForm (Sexpr s),
-    ProcessPanelLightForm (Sexpr s),
-    ProcessPanelSwitchForm (Sexpr s),
-    ProcessViewOriginForm (Sexpr s);
+static GOptr
+    ProcessSignalForm (Sexpr),
+    ProcessExitlightForm (Sexpr),
+    ProcessSwitchkeyForm (Sexpr),
+    ProcessTrafficleverForm (Sexpr),
+    ProcessPanelLightForm (Sexpr),
+    ProcessPanelSwitchForm (Sexpr);
 
-static std::unordered_map< void*, tFormLoader>  FormLoaderMap;
-static std::string AllowedNames;
+static std::unordered_map< void*, tFormLoader*>  FormLoaderMap;
+static std::string AllowedNames {"PATH, VIEW-ORIGIN"};
 
 void XTGLoadInit() {
     /* Can't do as static because of "load order fiasco" and nonhashability of Sexpr */
-    std::vector<std::pair<const char *, tFormLoader>> data {
-        {"PATH", ProcessPathForm},
+    std::vector<std::pair<const char *, tFormLoader*>> data {
         {"SIGNAL", ProcessSignalForm},
         {"EXITLIGHT", ProcessExitlightForm},
         {"TRAFFICLEVER", ProcessTrafficleverForm},
         {"PANELLIGHT", ProcessPanelLightForm},
         {"PANELSWITCH", ProcessPanelSwitchForm},
-        {"VIEW-ORIGIN", ProcessViewOriginForm},
         {"SWITCHKEY", ProcessSwitchkeyForm},
         {"TEXT", ProcessTextForm}
     };
     for (auto p : data) {
         const char* s = p.first;
-        if (!AllowedNames.empty())
-            AllowedNames += ", ";
-        AllowedNames += s;
+        AllowedNames += ", " + std::string(s);
         Sexpr atom = intern(s);
         FormLoaderMap[(void*)atom.u.a] = p.second;
     }
@@ -140,17 +141,17 @@ int XTGLoad (FILE * f) {
     return ProcessLayoutForm (CDR(s));
 }
 
-int ProcessNonGraphObjectCreateForm(Sexpr s) {
+GOptr ProcessNonGraphObjectCreateForm(Sexpr s) {
     Sexpr fn = CAR(s);
     void* fnkey = (void*)fn.u.a;
     if (!FormLoaderMap.count(fnkey)) {
         LispBarf (("Element other than " + AllowedNames + " found in LAYOUT ").c_str(), s);
-        return 0;
+        return nullptr;
     }
     return FormLoaderMap[fnkey](CDR(s)); /* Process the form. */
 }
 
-int ProcessNonGraphObjectCreateFormString (const char * s) {
+GOptr ProcessNonGraphObjectCreateFormString (const char * s) {
     Sexpr S = read_sexp_from_char_string(s, nullptr);;
     return ProcessNonGraphObjectCreateForm(S);
 }
@@ -162,6 +163,22 @@ int ProcessLayoutForm (Sexpr f) {
 	    LispBarf ("Non-list element found in LAYOUT", s);
 	    return 0;
 	}
+        Sexpr fn = CAR(s);
+        Sexpr data = CDR(s);
+        if (fn == aPATH) {
+            if (ProcessPathForm(data))
+                continue;
+            else
+                return 0;
+        }
+    
+        if (fn == aVIEW_ORIGIN) {
+            if (ProcessViewOriginForm(data))
+                continue;
+            else
+                return 0;
+        }
+
         if (!ProcessNonGraphObjectCreateForm(s))
             return 0;
     }
@@ -542,7 +559,7 @@ static TrackSeg * FindBranchFromOrientation (TrackJoint * tj, char orient, TSEX&
 
 static TrackJoint * FindTrackJoint (long nn) {
 #if TLEDIT
-    return (TrackJoint *) FindHitObject (nn, ID_JOINT);
+    return (TrackJoint *) FindHitObject (nn, ObjId::JOINT);
 #else
     for (auto j : AllJoints)
 	if (j->Nomenclature == nn)
@@ -552,7 +569,7 @@ static TrackJoint * FindTrackJoint (long nn) {
 }
 
 
-static int ProcessExitlightForm (Sexpr s) {
+static GOptr ProcessExitlightForm (Sexpr s) {
     if (s.type != Lisp::tCONS) {
 	LispBarf ("EXITLIGHT form missing data.");
 	return 0;
@@ -564,14 +581,14 @@ static int ProcessExitlightForm (Sexpr s) {
     long xno = CAR(s);
     SPop(s);
     if (s == NIL) {
-	PanelSignal * ps = (PanelSignal*) FindHitObject (xno, ID_SIGNAL);
+	PanelSignal * ps = (PanelSignal*) FindHitObject (xno, ObjId::SIGNAL);
 	if (!ps) {
 	    LispBarf ("Cannot find signal for EXITLIGHT", Sexpr(xno));
 	    return 0;
 	}
-	ps->Seg->GetEnd(ps->EndIndex).ExLight
-		= new ExitLight (ps->Seg, ps->EndIndex, (int)xno);
-	return 1;
+        ExitLight * xl = new ExitLight (ps->Seg, ps->EndIndex, (int)xno);
+        ps->Seg->GetEnd(ps->EndIndex).ExLight = xl;
+        return xl;
     }
     /* (xno orient ij) */
     Sexpr e = CAR(s);
@@ -596,14 +613,15 @@ static int ProcessExitlightForm (Sexpr s) {
 	    LispBarf ("Cannot find EXITLIGHT IJ/orient reference.");
 	    return 0;
 	}
-	ts->GetEnd(endx).ExLight = new ExitLight (ts, endx, (int)xno);
-	return 1;
+        ExitLight * xl = new ExitLight (ts, endx, (int)xno);
+        ts->GetEnd(endx).ExLight = xl;
+	return xl;
     }
     LispBarf ("Bogus EXITLIGHT item", s);
     return 0;
 }
 
-static int ProcessSignalForm (Sexpr s) {
+static GOptr ProcessSignalForm (Sexpr s) {
     Sexpr ss = s;
     long ijid = 0;
     Sexpr Heads = NIL;
@@ -687,11 +705,10 @@ static int ProcessSignalForm (Sexpr s) {
     if (HasStop)
 	sig->TStop = new Stop (sig);	/* looks at PanelSignal */
 
-    return 1;
+    return sig->PSignal;
 }
 
-#if ! NOAUXK
-static int ProcessSwitchkeyForm (Sexpr s) {
+static GOptr ProcessSwitchkeyForm (Sexpr s) {
     if (ListLen (s) < 3) {
 	LispBarf ("Not enough stuff in SWITCHKEY:", s);
 	return 0;
@@ -701,17 +718,18 @@ static int ProcessSwitchkeyForm (Sexpr s) {
     WP_cord wpx = CAR(s);
     SPop(s);
     WP_cord wpy = CAR(s);
-#if TLEDIT
-    (new SwitchKey (xno, wpx, wpy))->Consume();
+#if TLEdit
+    return new SwitchKey (xno, wpx, wpy))
 #else
-    (new SwitchKey (NULL, wpx, wpy))->SetXlkgNo(xno);
+    SwitchKey * sk =new SwitchKey (NULL, wpx, wpy);
+    sk->SetXlkgNo(xno);
+    return sk;
 #endif
-    return 1;
 }
 
-#endif
 
-static int ProcessTrafficleverForm (Sexpr s) {
+
+static GOptr ProcessTrafficleverForm (Sexpr s) {
     if (ListLen (s) < 5) {
 	LispBarf ("Not enough stuff in TRAFFICLEVER:", s);
 	return 0;
@@ -726,11 +744,10 @@ static int ProcessTrafficleverForm (Sexpr s) {
     WP_cord wpx = CAR(s);    SPop(s);
     WP_cord wpy = CAR(s);    SPop(s);
     int rightnormal = CAR(s);
-    (new TrafficLever (xno, wpx, wpy, rightnormal))->Consume();
-    return 1;
+    return new TrafficLever (xno, wpx, wpy, rightnormal);
 }
 
-static int ProcessPanelLightForm (Sexpr s) {
+static GOptr ProcessPanelLightForm (Sexpr s) {
     if (ListLen (s) < 6) {
 	LispBarf ("Not enough stuff in PanelLight:", s);
 	return 0;
@@ -758,12 +775,11 @@ static int ProcessPanelLightForm (Sexpr s) {
 	}
 	/* else diagnose */
     }
-    p->Consume();
-    return TRUE;
+    return p;
 }
 
 
-static int ProcessPanelSwitchForm (Sexpr s) {
+static GOptr ProcessPanelSwitchForm (Sexpr s) {
     if (ListLen (s) < 7) {
 	LispBarf ("Not enough stuff in PanelSwitch:", s);
 	return 0;
@@ -783,8 +799,7 @@ static int ProcessPanelSwitchForm (Sexpr s) {
 
     /* just the nomenclature alphas, not a rlysym */
     const char * rlyname = CAR(s).u.s;   SPop(s); /* 7 */
-    (new PanelSwitch (xno, wpx, wpy, rlyname))->Consume();
-    return TRUE;
+    return new PanelSwitch (xno, wpx, wpy, rlyname);
 }
 
 
@@ -822,7 +837,7 @@ void AuxKeysLoadComplete () {
 	Turnout * turnout = joint->TurnOut;
 	if (turnout) {
 	    int xno = turnout->XlkgNo;
-	    SwitchKey* sk = (SwitchKey*) FindHitObject (xno, ID_SWITCHKEY);
+	    SwitchKey* sk = (SwitchKey*) FindHitObject (xno, ObjId::SWITCHKEY);
 	    if (sk)
 		sk->AssociateTurnout (turnout);
 	}

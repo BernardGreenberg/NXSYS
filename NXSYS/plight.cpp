@@ -33,8 +33,8 @@ void PanelLight::Paint(HDC hdc, HBRUSH brush) {
 }
 
 
-int PanelLight::TypeID() {
-    return ID_PANELLIGHT;
+ObjId PanelLight::TypeID() {
+    return ObjId::PANELLIGHT;
 }
 
 int PanelLight::ObjIDp(long id) {

@@ -214,7 +214,7 @@ BOOL SaveLayout(const char * path) {
         MessageBox(G_mainwindow, (r.value +  NOSAVE_MSG).c_str(), app_name, MB_ICONEXCLAMATION);
         return FALSE;
     }
-    if (MapGraphicObjectsOfType(ID_JOINT, ReportCorruptedJoints)) {
+    if (MapGraphicObjectsOfType(ObjId::JOINT, ReportCorruptedJoints)) {
    /*     Message already displayed */
         return FALSE;
     }
@@ -232,7 +232,7 @@ BOOL SaveLayout(const char * path) {
     try {
         ValidateTrackGraph();
         
-        if (MapGraphicObjectsOfType(ID_TRACKSEG, ReportUnreachableSegments))
+        if (MapGraphicObjectsOfType(ObjId::TRACKSEG, ReportUnreachableSegments))
             return FALSE;
 
     } catch (TLEditSaveException e) {
@@ -454,7 +454,7 @@ static void DumpTheActualGraph(FILE* f) {
     /* Register all known IJ and Switch numbers with the generator maps */
     SwitchNumbers.Clear();
     IJNumbers.Clear();
-    MapGraphicObjectsOfType(ID_JOINT, [](GraphicObject *g) {
+    MapGraphicObjectsOfType(ObjId::JOINT, [](GraphicObject *g) {
         TrackJoint & J = *(TrackJoint*)g;
         if (J.Nomenclature) {
             if (J.TSCount == 3)
@@ -466,7 +466,7 @@ static void DumpTheActualGraph(FILE* f) {
     });
 
     /* Assign currently unused numbers to unassigned joints and switches */
-    MapGraphicObjectsOfType(ID_JOINT, [](GraphicObject *g) {
+    MapGraphicObjectsOfType(ObjId::JOINT, [](GraphicObject *g) {
         TrackJoint& J = *(TrackJoint*)g;
         if (J.Nomenclature == 0) {
             if (J.TSCount == 3)
@@ -480,17 +480,17 @@ static void DumpTheActualGraph(FILE* f) {
     });
 
     /* Clear Marked bits of track sections */
-    MapGraphicObjectsOfType(ID_TRACKSEG, [](GraphicObject *g) {
+    MapGraphicObjectsOfType(ObjId::TRACKSEG, [](GraphicObject *g) {
         ((TrackSeg*)g)->Marked = FALSE;
         return 0;
     });
     
     /* Unmark joints/switches, insulate loose ends, "organize" switches */
-	MapGraphicObjectsOfType(ID_JOINT, FinalCleanUp);
+	MapGraphicObjectsOfType(ObjId::JOINT, FinalCleanUp);
 
     /* These produce the actual output, must use 3 arg form and pass file */
-    MapFindGraphicObjectsOfType (ID_JOINT, ChaseLooseTrackEnds, f);
-    MapFindGraphicObjectsOfType (ID_JOINT, ChaseUnmarkedSwitchBranches, f);
+    MapFindGraphicObjectsOfType (ObjId::JOINT, ChaseLooseTrackEnds, f);
+    MapFindGraphicObjectsOfType (ObjId::JOINT, ChaseUnmarkedSwitchBranches, f);
     if (f)
         fprintf(f, "\n");
 }

@@ -250,7 +250,7 @@ DynMenu::DynMenu(Sexpr rlysym, const char* title, Sexpr items) {
     Up = FALSE;
 
     /* point to NXSYS object not interested in their referrers */
-    TiedObject = FindHitObject (Nomenclature, ID_SIGNAL);
+    TiedObject = FindHitObject (Nomenclature, ObjId::SIGNAL);
     MNZ = GetRelay2NoCreate (Nomenclature, "MNZ");
 
     /* Create and stack the entries for the TrainID Box rows.  Moving others

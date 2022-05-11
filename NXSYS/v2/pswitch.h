@@ -23,7 +23,8 @@ class PanelSwitch : public GraphicObject {
 
 
     virtual void Display (HDC hdc);
-    virtual int TypeID(), ObjIDp(long);
+    virtual ObjId TypeID();
+    virtual int ObjIDp(long);
 #ifndef TLEDIT
     Relay * Rly;
     virtual void Hit (int mb);

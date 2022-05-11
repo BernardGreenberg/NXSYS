@@ -148,7 +148,7 @@ static int SSMapper (GraphicObject * go) {
 void ImplementShowStopPolicy (int policy){
     if (policy > 0) {
 	if (policy != ShowStopPolicy)
-	    MapGraphicObjectsOfType (ID_STOP, SSMapper);
+	    MapGraphicObjectsOfType (ObjId::STOP, SSMapper);
 	ShowStopPolicy = policy;
 	StopsChanging = 1;
 	UpdateWindow (G_mainwindow);

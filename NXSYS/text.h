@@ -2,7 +2,7 @@
 #define _NXSYS_TEXT_STRING_H__
 
 /* 14 January 1998 */
-
+#include "objid.h"
 #include "nxgo.h"
 #ifdef TLEDIT
 #include <stdio.h>
@@ -30,7 +30,7 @@ class TextString : public GraphicObject {
 	BOOL ColorGiven;
 
 	virtual void    Display(HDC dc) ;
-	virtual int     TypeID();
+	virtual ObjId   TypeID();
 	virtual BOOL    HitP (long x, long y);
         virtual bool    MouseSensitive();
 #ifdef TLEDIT
@@ -45,8 +45,8 @@ class TextString : public GraphicObject {
 };
 
 
-void  LayoutTextString (const char * string, 	LOGFONT * lftemplate,
-			long x, long y, COLORREF color, BOOL colorgiven);
+GraphicObject*  LayoutTextString (const char * string, 	LOGFONT * lftemplate,
+                                  long x, long y, COLORREF color, BOOL colorgiven);
 
 
 #endif

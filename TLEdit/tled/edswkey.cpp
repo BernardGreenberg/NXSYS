@@ -7,6 +7,7 @@
 #include "resource.h"
 #include "tlpropdlg.h"
 #include "dragger.h"
+#include "objid.h"
 #include "objreg.h"
 
 SwitchKey::~SwitchKey() {};
@@ -19,7 +20,7 @@ GraphicObject* CreateSwKey (int wpx, int wpy) {
 			       "New switch key", G_mainwindow);
 }
 
-REGISTER_NXTYPE(ID_SWITCHKEY, CmAuxKey, IDD_SWKEY, CreateSwKey, InitSwitchKeyData);
+REGISTER_NXTYPE(ObjId::SWITCHKEY, CmAuxKey, IDD_SWKEY, CreateSwKey, InitSwitchKeyData);
 
 void SwitchKey::EditClick (int x, int y) {
     char d[30];

@@ -69,8 +69,8 @@ Stop::Stop (Signal * s) {
 }
 
 
-/*   virtual */ int Stop::TypeID() {
-    return ID_STOP;
+/*   virtual */ ObjId Stop::TypeID() {
+    return ObjId::STOP;
 }
 
 /*   virtual */ int Stop::ObjIDp(long) {

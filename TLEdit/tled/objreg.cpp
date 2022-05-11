@@ -14,18 +14,18 @@ struct NXObjectRegistryEntry {
 };
 
 
-static LoadFiascoProtectedUnorderedMap<int, UINT> DlgIdByObjid;
+static LoadFiascoProtectedUnorderedMap<ObjId, UINT> DlgIdByObjid;
 static LoadFiascoProtectedUnorderedMap<int, NXObjectRegistryEntry>FnsByCommand;
 
 /* this can be called from toplevels in other files even before this file's STL (would have been)
  initialized */
-NXObTypeRegistrar::NXObTypeRegistrar (int objid, int command, UINT dlg_id, ObjCreateFn ocf, ObjClassInitFn ocif) {
+NXObTypeRegistrar::NXObTypeRegistrar (ObjId objid, int command, UINT dlg_id, ObjCreateFn ocf, ObjClassInitFn ocif) {
 
     FnsByCommand[command] = NXObjectRegistryEntry{ocf, ocif};
     DlgIdByObjid[objid] = dlg_id;
 }
 
-UINT FindDialogIdFromObjClassRegistry (int objid) {
+UINT FindDialogIdFromObjClassRegistry (ObjId objid) {
     return DlgIdByObjid.count(objid) ? DlgIdByObjid[objid] : 0;
 }
 

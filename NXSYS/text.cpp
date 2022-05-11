@@ -137,7 +137,7 @@ bool TextString::MouseSensitive() {return true;}
 bool TextString::MouseSensitive() {return false;}
 #endif
 
-int TextString::TypeID () {return ID_TEXT;}
+ObjId TextString::TypeID () {return ObjId::TEXT;}
 
 BOOL TextString::HitP(long x, long y) {
     if (MouseSensitive())
@@ -148,9 +148,9 @@ BOOL TextString::HitP(long x, long y) {
 
 /* how's this get deleted?   -- (answer 9/2019: General GraphicObject deletion) */
 
-void  LayoutTextString (const char * string, LOGFONT * lf, long x, long y,
+GraphicObject*  LayoutTextString (const char * string, LOGFONT * lf, long x, long y,
 		       COLORREF color, BOOL color_given){
-    new TextString (string, lf, (RW_cord) x, y, color, color_given);
+    return new TextString (string, lf, (RW_cord) x, y, color, color_given);
 }
 
 void TextFontCleanup() {

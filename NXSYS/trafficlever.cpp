@@ -223,8 +223,8 @@ void TrafficLever::DrawKnob(HDC hdc) {
     LineTo(hdc, tpx, tpy);
 }
 
-Virtual int TrafficLever::TypeID() {
-    return ID_TRAFFICLEVER;
+Virtual ObjId TrafficLever::TypeID() {
+    return ObjId::TRAFFICLEVER;
 }
 
 Virtual int TrafficLever::ObjIDp(long id) {

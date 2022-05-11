@@ -152,8 +152,8 @@ Virtual BOOL ExitLight::HitP (long x, long y) {
     return (Lit || Selected) && GraphicObject::HitP (x, y);
 }
 
-int ExitLight::TypeID (){
-    return ID_EXITLIGHT;
+ObjId ExitLight::TypeID (){
+    return ObjId::EXITLIGHT;
 }
 
 int ExitLight::ObjIDp(long id) {

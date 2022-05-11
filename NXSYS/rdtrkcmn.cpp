@@ -616,7 +616,7 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
 
 
 // A good old Lisp Macro
-template <class T, int item_type>
+template <class T, ObjId item_type>
 static inline void ProcessLoadCompleteMacro(){
     MapGraphicObjectsOfType(item_type, [](GraphicObject* g) {
         ((T *)g)->ProcessLoadComplete();
@@ -629,17 +629,17 @@ static inline void ProcessLoadCompleteMacro(){
 /*Version 2 process load complete */
 void ProcessLoadComplete () {
     TrackCircuitSystemLoadTimeComplete ();
-    ProcessLoadCompleteMacro<PanelSignal, ID_SIGNAL>();
-    ProcessLoadCompleteMacro<Turnout, ID_TURNOUT>();
-    ProcessLoadCompleteMacro<ExitLight, ID_EXITLIGHT>();
-    ProcessLoadCompleteMacro<Stop, ID_STOP>();
-    ProcessLoadCompleteMacro<TrafficLever, ID_TRAFFICLEVER>();
-    ProcessLoadCompleteMacro<PanelLight, ID_PANELLIGHT>();
+    ProcessLoadCompleteMacro<PanelSignal, ObjId::SIGNAL>();
+    ProcessLoadCompleteMacro<Turnout, ObjId::TURNOUT>();
+    ProcessLoadCompleteMacro<ExitLight, ObjId::EXITLIGHT>();
+    ProcessLoadCompleteMacro<Stop, ObjId::STOP>();
+    ProcessLoadCompleteMacro<TrafficLever, ObjId::TRAFFICLEVER>();
+    ProcessLoadCompleteMacro<PanelLight, ObjId::PANELLIGHT>();
     SwitchesLoadComplete();
 }
 
 void ReportAllTrafficLeversNormal () {
-    MapGraphicObjectsOfType (ID_TRAFFICLEVER, [](GraphicObject*g) {
+    MapGraphicObjectsOfType (ObjId::TRAFFICLEVER, [](GraphicObject*g) {
         ((TrafficLever *)g)->InitState();
         return 0;
     });

@@ -1,6 +1,8 @@
 #ifndef _NX_PANEL_LIGHT_H__
 #define _NX_PANEL_LIGHT_H__
 
+#include "objid.h"
+
 #if !TLEDIT
 #include "relays.h"
 #endif
@@ -56,7 +58,8 @@ class PanelLight : public GraphicObject {
     void SetRadius(int rad);
     void Paint(HDC hdc, HBRUSH brush);
     virtual void Display (HDC hdc);
-    virtual int TypeID(), ObjIDp(long);
+    virtual ObjId TypeID();
+    int ObjIDp(long);
 #ifdef TLEDIT
     BOOL InstallDlgLights (HWND hDlg);
     bool InstallCheckCorrespondence(HWND hDlg);

@@ -396,7 +396,7 @@ TrackSeg * SnapToTrackSeg (WP_cord& wpx, WP_cord& wpy) {
     S_ts = NULL;
     S_wpx = wpx;
     S_wpy = wpy;
-    if (MapGraphicObjectsOfType  (ID_TRACKSEG, SnapMapper)) {
+    if (MapGraphicObjectsOfType  (ObjId::TRACKSEG, SnapMapper)) {
 	wpx = S_wpx;
 	wpy = S_wpy;
 	return S_ts;
@@ -447,7 +447,7 @@ TrackSeg::~TrackSeg () {
 	Circuit->DeleteSeg(this);
 }
 
-int TrackSeg::	TypeID () { return ID_TRACKSEG;};
+ObjId TrackSeg::	TypeID () { return ObjId::TRACKSEG;};
 
 
 int TrackSeg::ObjIDp(long x) {
