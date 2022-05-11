@@ -21,6 +21,7 @@
 @property (assign) IBOutlet NSWindow *window;
 @property bool wporg_set;
 @property NSPoint wporg;
+- (BOOL)validateMenuItem:(NSMenuItem *)item;
 -(void)setUndoMenu:(const char*)undo Redo:(const char *)redo;
 @end
 

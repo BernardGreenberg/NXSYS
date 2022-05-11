@@ -321,6 +321,9 @@ TLEditAppDelegate* getTLEDelegate() {
     [self setUrMenu: _UndoMenuItem str:undo dft:@"Undo"];
     [self setUrMenu: _RedoMenuItem str:redo dft:@"Redo"];
 }
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+    return [menuItem isEnabled];
+}
 @end
 
 NSView* getMainView() {

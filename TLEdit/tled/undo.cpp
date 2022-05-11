@@ -18,7 +18,7 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 
 namespace Undo {
 
-std::unordered_map<int, const char *> ObjIdNames {
+std::unordered_map<int, string> ObjIdNames {
     {ID_TRACKSEG, "track segment"},
     {ID_SIGNAL, "signal"},
     {ID_JOINT, "joint"},
@@ -31,7 +31,13 @@ std::unordered_map<int, const char *> ObjIdNames {
     {ID_TEXT, "text string"}
 };
 
-enum class RecType {CreateGO, DeleteGO, PropChangeBefore, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
+enum class RecType {CreateGO, DeleteGO, PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
+
+std::unordered_map<RecType, string> RecTypeNames {
+    {RecType::CreateGO, "create"},
+    {RecType::DeleteGO, "delete"},
+    {RecType::PropChange, "property change"}
+};
 
 struct UndoRecord {
     UndoRecord(RecType type, string img, GraphicObject* o) {
@@ -52,9 +58,7 @@ struct UndoRecord {
     int obj_id_type;
     
     string DescribeCommand(string cmd) {
-        string s = cmd + " CREATE ";
-        s + ObjIdNames[obj_id_type];
-        return s;
+        return cmd + " " + RecTypeNames[rec_type] + " " + ObjIdNames[obj_id_type];
     }
 
 };
@@ -106,6 +110,7 @@ static void compute_menu_state() {
 
 void RecordGOCreation(GraphicObject* g){
     UndoStack.emplace_back(RecType::CreateGO, "", g);
+    RedoStack.clear();
     compute_menu_state();
 }
 
