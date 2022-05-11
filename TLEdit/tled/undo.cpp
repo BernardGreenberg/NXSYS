@@ -13,6 +13,7 @@
 #include <cstdarg>
 
 using std::vector, std::string;
+int ProcessNonGraphObjectCreateFormString(const char * s);
 
 void SetUndoRedoMenu(const char * undo, const char * redo);
 
@@ -136,6 +137,12 @@ void Undo() {
 void Redo() {
     if (!IsRedoPossible())
         return;
+    UndoRecord R = RedoStack.back();
+    RedoStack.pop_back();
+    if (R.rec_type == RecType::CreateGO) {
+        ProcessNonGraphObjectCreateFormString(R.image.c_str());
+        /* need way to get created object */
+    }
     compute_menu_state();
 };
 

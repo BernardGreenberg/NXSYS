@@ -140,6 +140,21 @@ int XTGLoad (FILE * f) {
     return ProcessLayoutForm (CDR(s));
 }
 
+int ProcessNonGraphObjectCreateForm(Sexpr s) {
+    Sexpr fn = CAR(s);
+    void* fnkey = (void*)fn.u.a;
+    if (!FormLoaderMap.count(fnkey)) {
+        LispBarf (("Element other than " + AllowedNames + " found in LAYOUT ").c_str(), s);
+        return 0;
+    }
+    return FormLoaderMap[fnkey](CDR(s)); /* Process the form. */
+}
+
+int ProcessNonGraphObjectCreateFormString (const char * s) {
+    Sexpr S = read_sexp_from_char_string(s, nullptr);;
+    return ProcessNonGraphObjectCreateForm(S);
+}
+
 int ProcessLayoutForm (Sexpr f) {
     for ( ;f.type == Lisp::tCONS; f = CDR(f)) {
 	Sexpr s = CAR(f);
@@ -147,14 +162,7 @@ int ProcessLayoutForm (Sexpr f) {
 	    LispBarf ("Non-list element found in LAYOUT", s);
 	    return 0;
 	}
-	Sexpr fn = CAR(s);
-        void* fnkey = (void*)fn.u.a;
-        if (!FormLoaderMap.count(fnkey)) {
-            LispBarf (("Element other than " + AllowedNames + "found in LAYOUT ").c_str(), s);
-            return 0;
-        }
-
-        if (!FormLoaderMap[fnkey](CDR(s)))  /* Process the form. */
+        if (!ProcessNonGraphObjectCreateForm(s))
             return 0;
     }
 
