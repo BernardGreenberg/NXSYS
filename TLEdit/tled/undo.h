@@ -13,7 +13,7 @@
 namespace Undo {
 
 void RecordGOCreation(GraphicObject* g);
-void RecordGODeletion(GraphicObject* g);
+void RecordGOCut(GraphicObject* g);
 bool IsUndoPossible();
 bool IsRedoPossible();
 void Undo();

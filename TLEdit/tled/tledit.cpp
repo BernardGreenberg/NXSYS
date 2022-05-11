@@ -20,6 +20,7 @@
 #include "assignid.h"
 #include "signal.h"
 #include "salvager.hpp"
+#include "undo.h"
 
 #ifdef NXSYSMac
 void StartRubberBand(int index, long x, long y);
@@ -947,6 +948,7 @@ void ShiftLayout (int x, int y) {
 
 Virtual void	GraphicObject:: Cut() {
     BufferModified = TRUE;
+    Undo::RecordGOCut(this);
     delete this;
     StatusMessage ("  ");
 }

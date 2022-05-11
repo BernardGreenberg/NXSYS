@@ -33,11 +33,11 @@ std::unordered_map<ObjId, string> ObjIdNames {
     {ObjId::TEXT, "text string"}
 };
 
-enum class RecType {CreateGO, DeleteGO, PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
+enum class RecType {CreateGO, CutGO, PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
 
 std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CreateGO, "create"},
-    {RecType::DeleteGO, "delete"},
+    {RecType::CutGO, "cut"},
     {RecType::PropChange, "property change"}
 };
 
@@ -72,6 +72,12 @@ struct RedoRecord {
         image = img;
         object = nullptr;
         obj_id_type = obt;
+    }
+    RedoRecord(RecType type, string img, GraphicObject* o) {
+        rec_type = type;
+        image = img;
+        object = o;
+        obj_id_type = object->TypeID();
     }
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
@@ -130,14 +136,25 @@ static void compute_menu_state() {
     SetUndoRedoMenu(undo_avl, redo_avl);
 }
 
-void RecordGOCreation(GraphicObject* g){
-    UndoStack.emplace_back(RecType::CreateGO, "", g);
+static string StringImageObject(GOptr o) {
+    StringOutputWriter W;
+    o->Dump(W);
+    return W.get();
+}
+
+static void MarkForwardAction() {
     RedoStack.clear();
     compute_menu_state();
 }
-
-void RecordGODeletion(GraphicObject* g) {
     
+void RecordGOCreation(GraphicObject* g){
+    UndoStack.emplace_back(RecType::CreateGO, "", g);
+    MarkForwardAction();
+}
+
+void RecordGOCut(GraphicObject* g) {
+    UndoStack.emplace_back(RecType::CutGO, StringImageObject(g), g->TypeID());
+    MarkForwardAction();
 }
 
 void Undo() {
@@ -145,25 +162,52 @@ void Undo() {
         return;
     UndoRecord R = UndoStack.back();
     UndoStack.pop_back();
-    if (R.rec_type == RecType::CreateGO) {
-        StringOutputWriter W;
-        R.object->Dump(W);
-        RedoStack.emplace_back(R.rec_type, W.get(), R.obj_id_type);
-        delete R.object;
+    switch(R.rec_type) {
+        case RecType::CreateGO:
+            RedoStack.emplace_back(R.rec_type, StringImageObject(R.object), R.obj_id_type);
+            delete R.object;
+            break;
+            
+        case RecType::CutGO:
+        {
+            GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            obj->MakeSelfVisible();
+            obj->Select();
+            RedoStack.emplace_back(R.rec_type, "", obj);
+            break;
+        }
+        default:
+            break;
+            
     }
     compute_menu_state();
     
     
 };
+
+/* Snapshot and manage BufferModified */
 void Redo() {
     if (!IsRedoPossible())
         return;
     RedoRecord R = RedoStack.back();
     RedoStack.pop_back();
-    if (R.rec_type == RecType::CreateGO) {
-        GraphicObject* obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
-        obj->MakeSelfVisible();
-        obj->Select();
+    switch(R.rec_type) {
+        case RecType::CreateGO:
+        {
+            GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            obj->MakeSelfVisible();
+            obj->Select();
+            UndoStack.emplace_back(R.rec_type, "", obj);
+            break;
+        }
+        case RecType::CutGO:
+        {
+            UndoStack.emplace_back(R.rec_type, StringImageObject(R.object), R.obj_id_type);
+            delete R.object;
+            break;
+        }
+        default:
+            break;
     }
     compute_menu_state();
 };
