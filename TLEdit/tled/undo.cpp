@@ -86,7 +86,7 @@ struct RedoRecord {
 
 
 static vector <UndoRecord> UndoStack;
-static vector <UndoRecord> RedoStack;
+static vector <RedoRecord> RedoStack;
 
 class StringOutputWriter : public GraphicObject::ObjectWriter {
     string S;
@@ -158,7 +158,7 @@ void Undo() {
 void Redo() {
     if (!IsRedoPossible())
         return;
-    UndoRecord R = RedoStack.back();
+    RedoRecord R = RedoStack.back();
     RedoStack.pop_back();
     if (R.rec_type == RecType::CreateGO) {
         GraphicObject* obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
