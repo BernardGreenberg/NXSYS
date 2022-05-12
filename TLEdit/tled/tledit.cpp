@@ -79,7 +79,7 @@ static void ReportCoordsSC (SC_cord x, SC_cord y) {
 
 static BOOL DefButtonDown (int& x, int &y) {
 
-    DefStartTrackJoint = (TrackJoint *)FindHitObjectOfType(ObjId::JOINT, x, y);
+    DefStartTrackJoint = (TrackJoint *)FindHitObjectOfType(TypeId::JOINT, x, y);
     DefCreatedTrackJoint = (DefStartTrackJoint == NULL);
     DefStartTrackSeg = NULL;
     DefStartDelay = FALSE;
@@ -149,7 +149,7 @@ static bool valid_drop_target(TrackJoint* tj){
 
 static void DefButtonUp2 (int x, int y) {
     
-    TrackJoint * tj = (TrackJoint *) FindHitObjectOfType (ObjId::JOINT, x, y);
+    TrackJoint * tj = (TrackJoint *) FindHitObjectOfType (TypeId::JOINT, x, y);
 
     if (tj == NULL) {
         WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
@@ -329,7 +329,7 @@ store_cvt:
 }
 
 static void MovButtonDown (HWND hWnd, int x, int y) {
-    MovTrackJoint = (TrackJoint *)FindHitObjectOfType(ObjId::JOINT, x, y);
+    MovTrackJoint = (TrackJoint *)FindHitObjectOfType(TypeId::JOINT, x, y);
     WP_cord wpx = SCXtoWP (x), wpy = SCYtoWP(y);
     if (MovTrackJoint == NULL) {
 	TrackSeg * ts = SnapToTrackSeg (wpx, wpy);
@@ -378,10 +378,10 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
 
     WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
 
-    TrackJoint * tj = (TrackJoint *)FindHitObjectOfType(ObjId::JOINT, x, y);
+    TrackJoint * tj = (TrackJoint *)FindHitObjectOfType(TypeId::JOINT, x, y);
 
     if (!tj) {
-        TrackSeg* ts = (TrackSeg*)FindHitObjectOfType(ObjId::TRACKSEG, x, y);
+        TrackSeg* ts = (TrackSeg*)FindHitObjectOfType(TypeId::TRACKSEG, x, y);
         if (ts && MovTrackJoint->FindBranchIndex(ts) == TSAX::NOTFOUND) {
             usererr("A joint being moved may not be directly dropped onto a track segment. "
                     "You can only drop into empty space or onto extant joints. "

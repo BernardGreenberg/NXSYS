@@ -81,13 +81,13 @@ void SalvInstance::Salvage() {
         return 0;
     }, this);
     
-    MapFindGraphicObjectsOfType(ObjId::JOINT, [](GraphicObject *g, void* thus) {
+    MapFindGraphicObjectsOfType(TypeId::JOINT, [](GraphicObject *g, void* thus) {
         SalvInstance& SI = *(SalvInstance*) thus;
         SI.SalvageJoint((TrackJoint*)g);
         return 0;
     }, this);
     
-    MapFindGraphicObjectsOfType(ObjId::TRACKSEG, [](GraphicObject *g, void* thus) {
+    MapFindGraphicObjectsOfType(TypeId::TRACKSEG, [](GraphicObject *g, void* thus) {
         SalvInstance& SI = *(SalvInstance*) thus;
         SI.SalvageSeg((TrackSeg*)g);
         return 0;

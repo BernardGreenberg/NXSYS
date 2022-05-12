@@ -245,8 +245,8 @@ int GraphicObject::IsNomenclature(long) {
     return 0;
 }
 
-ObjId GraphicObject::TypeID() {
-    return ObjId::NONE;
+TypeId GraphicObject::TypeID() {
+    return TypeId::NONE;
 }
 
 GraphicObject * GetMouseHitObject (WORD x, WORD y) {
@@ -295,7 +295,7 @@ GraphicObject * MapAllVisibleGraphicObjects (GOGOMapperFcn fn, void * arg) {
     return NULL;
 }
 
-int MapGraphicObjectsOfType (ObjId type, GOMapperFcn fn) {
+int MapGraphicObjectsOfType (TypeId type, GOMapperFcn fn) {
     for (GraphicObject * g : AllObjects)
         if (g->TypeID() == type)
 	    if (fn (g))
@@ -303,7 +303,7 @@ int MapGraphicObjectsOfType (ObjId type, GOMapperFcn fn) {
     return 0;
 }
 
-GraphicObject* MapFindGraphicObjectsOfType (ObjId type, GOGOMapperFcn fn, void* arg) {
+GraphicObject* MapFindGraphicObjectsOfType (TypeId type, GOGOMapperFcn fn, void* arg) {
        for (GraphicObject * g : AllObjects)
            if (g->TypeID() == type)
                if (fn (g, arg))
@@ -394,7 +394,7 @@ void FreeGraphicObjects () {
 }
 
 
-GraphicObject * FindHitObject (long id, ObjId type) {
+GraphicObject * FindHitObject (long id, TypeId type) {
     for (GraphicObject * g : AllObjects) {
 	if (g->TypeID() == type)
 	    if (g->IsNomenclature (id))
@@ -404,7 +404,7 @@ GraphicObject * FindHitObject (long id, ObjId type) {
 }
 
 
-GraphicObject * FindHitObjectOfType (ObjId type, WORD x, WORD y) {
+GraphicObject * FindHitObjectOfType (TypeId type, WORD x, WORD y) {
     for (GraphicObject *g : VisibleObjects)
 	if (g->TypeID () == type)
 	    if (g->HitP((long)x, (long)y))
@@ -412,11 +412,11 @@ GraphicObject * FindHitObjectOfType (ObjId type, WORD x, WORD y) {
     return NULL;
 }
 
-GraphicObject * FindHitObjectOfTypes (ObjId *keys, int nkeys, WORD x, WORD y){
+GraphicObject * FindHitObjectOfTypes (TypeId *keys, int nkeys, WORD x, WORD y){
     long lx = (long) x;
     long ly = (long) y;
     for (GraphicObject *g : VisibleObjects) {
-	ObjId type = g->TypeID();
+	TypeId type = g->TypeID();
 	for (int j = 0; j < nkeys; j++)
 	    if (keys[j] == type)
 		if (g->HitP(lx, ly))

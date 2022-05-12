@@ -20,7 +20,7 @@ GraphicObject* CreateSwKey (int wpx, int wpy) {
 			       "New switch key", G_mainwindow);
 }
 
-REGISTER_NXTYPE(ObjId::SWITCHKEY, CmAuxKey, IDD_SWKEY, CreateSwKey, InitSwitchKeyData);
+REGISTER_NXTYPE(TypeId::SWITCHKEY, CmAuxKey, IDD_SWKEY, CreateSwKey, InitSwitchKeyData);
 
 void SwitchKey::EditClick (int x, int y) {
     char d[30];

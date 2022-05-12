@@ -69,8 +69,8 @@ Stop::Stop (Signal * s) {
 }
 
 
-/*   virtual */ ObjId Stop::TypeID() {
-    return ObjId::STOP;
+/*   virtual */ TypeId Stop::TypeID() {
+    return TypeId::STOP;
 }
 
 /*   virtual */ int Stop::IsNomenclature(long) {

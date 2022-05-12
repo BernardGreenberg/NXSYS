@@ -20,17 +20,17 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 
 namespace Undo {
 
-std::unordered_map<ObjId, string> ObjIdNames {
-    {ObjId::TRACKSEG, "track segment"},
-    {ObjId::SIGNAL, "signal"},
-    {ObjId::JOINT, "joint"},
-    {ObjId::STOP, "stop"},
-    {ObjId::EXITLIGHT, "exit light"},
-    {ObjId::PANELLIGHT, "panel light"},
-    {ObjId::PANELSWITCH, "panel switch"},
-    {ObjId::TRAFFICLEVER, "traffic lever"},
-    {ObjId::SWITCHKEY, "switch key"},
-    {ObjId::TEXT, "text string"}
+std::unordered_map<TypeId, string> ObjIdNames {
+    {TypeId::TRACKSEG, "track segment"},
+    {TypeId::SIGNAL, "signal"},
+    {TypeId::JOINT, "joint"},
+    {TypeId::STOP, "stop"},
+    {TypeId::EXITLIGHT, "exit light"},
+    {TypeId::PANELLIGHT, "panel light"},
+    {TypeId::PANELSWITCH, "panel switch"},
+    {TypeId::TRAFFICLEVER, "traffic lever"},
+    {TypeId::SWITCHKEY, "switch key"},
+    {TypeId::TEXT, "text string"}
 };
 
 enum class RecType {CreateGO, CutGO, MoveGO,PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
@@ -53,7 +53,7 @@ struct UndoRecord {
         object = o;
         obj_id_type = object->TypeID();
     }
-    UndoRecord(RecType type, string img, ObjId obt) {
+    UndoRecord(RecType type, string img, TypeId obt) {
        rec_type = type;
        image = img;
        object = nullptr;
@@ -69,7 +69,7 @@ struct UndoRecord {
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
     GOptr object = nullptr; /* not valid or needed for delete*/
-    ObjId obj_id_type;
+    TypeId obj_id_type;
     Coords coords;
 
     string DescribeAction() {
@@ -79,7 +79,7 @@ struct UndoRecord {
 };
 
 struct RedoRecord {
-     RedoRecord(RecType type, string img, ObjId obt) {
+     RedoRecord(RecType type, string img, TypeId obt) {
         rec_type = type;
         image = img;
         object = nullptr;
@@ -94,7 +94,7 @@ struct RedoRecord {
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
     GOptr object = nullptr; /* not valid or needed for delete*/
-    ObjId obj_id_type;
+    TypeId obj_id_type;
     
     string DescribeAction() {
         return "Redo " + RecTypeNames[rec_type] + " " + ObjIdNames[obj_id_type];

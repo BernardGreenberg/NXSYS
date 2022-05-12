@@ -78,17 +78,17 @@ extern unsigned smeasure (HDC dc, char * str);
 GraphicObject * FindDemoHitTurnout (long id);
 GraphicObject * FindDemoHitCircuit (long id);
 
-static  GraphicObject *  FindDemoObjectByID (long nomen, ObjId type) {
+static  GraphicObject *  FindDemoObjectByID (long nomen, TypeId type) {
     switch (type) {
-        case ObjId::SIGNAL:
-        case ObjId::SWITCHKEY:
-        case ObjId::EXITLIGHT:
-        case ObjId::PLATFORM:
-        case ObjId::TRAFFICLEVER:
+        case TypeId::SIGNAL:
+        case TypeId::SWITCHKEY:
+        case TypeId::EXITLIGHT:
+        case TypeId::PLATFORM:
+        case TypeId::TRAFFICLEVER:
 	    return FindHitObject (nomen, type);
-        case ObjId::TURNOUT:
+        case TypeId::TURNOUT:
 	    return FindDemoHitTurnout (nomen);
-        case ObjId::TRACKSEC:
+        case TypeId::TRACKSEC:
 	    return FindDemoHitCircuit (nomen);
 	default:
 	    return NULL;
@@ -212,7 +212,7 @@ bool DemoState::MakeBigX(GraphicObject* g, int mousecmd) {
     return false;
 }
 
-static bool ProcessGOForm(ObjId type, Sexpr s, int mousecmd) {
+static bool ProcessGOForm(TypeId type, Sexpr s, int mousecmd) {
     if (CDR(s).type != Lisp::tCONS)
         throw DemoErr ("Mouse hit form too short in demo script.");
     if (CADR(s).type != Lisp::NUM)
@@ -283,13 +283,13 @@ static bool ProcessForm (Sexpr s, int mousecmd = WM_LBUTTONDOWN) {
         return ProcessForm(CDR(s), WM_NXGO_LBUTTONSHIFT);
 
     else if (name == "SIGNAL")
-        return ProcessGOForm(ObjId::SIGNAL, s, mousecmd);
+        return ProcessGOForm(TypeId::SIGNAL, s, mousecmd);
     else if (name == "TRACK")
-        return ProcessGOForm(ObjId::TRACKSEC, s, mousecmd);
+        return ProcessGOForm(TypeId::TRACKSEC, s, mousecmd);
     else if (name == "EXITLIGHT")
-        return ProcessGOForm(ObjId::EXITLIGHT, s, mousecmd);
+        return ProcessGOForm(TypeId::EXITLIGHT, s, mousecmd);
     else if (name == "SWITCH")
-        return ProcessGOForm(ObjId::TURNOUT, s, mousecmd);
+        return ProcessGOForm(TypeId::TURNOUT, s, mousecmd);
 
 
     else if (name == "TRAIN")

@@ -74,8 +74,8 @@ static int SULTMMapper2 (GraphicObject * g) {
 
 /* delay until first train ?  */
 void SetUpLayoutTrainMetrics () {
-    MapGraphicObjectsOfType (ObjId::TRACKSEG, SULTMMapper1);
-    MapGraphicObjectsOfType (ObjId::TRACKSEG, SULTMMapper2);
+    MapGraphicObjectsOfType (TypeId::TRACKSEG, SULTMMapper1);
+    MapGraphicObjectsOfType (TypeId::TRACKSEG, SULTMMapper2);
 }
 
 
@@ -235,5 +235,5 @@ static int FTETSBNMapper (GraphicObject * g, void * v) {
 TrackUnit *  FindTrainEntryTrackSectionByNomenclature (long id_no) {
 
     return (TrackUnit *)
-	    MapFindGraphicObjectsOfType (ObjId::TRACKSEG, FTETSBNMapper, &id_no);
+	    MapFindGraphicObjectsOfType (TypeId::TRACKSEG, FTETSBNMapper, &id_no);
 }

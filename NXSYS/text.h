@@ -30,7 +30,7 @@ class TextString : public GraphicObject {
 	BOOL ColorGiven;
 
 	virtual void    Display(HDC dc) ;
-	virtual ObjId   TypeID();
+	virtual TypeId   TypeID();
 	virtual BOOL    HitP (long x, long y);
         virtual bool    MouseSensitive();
 #ifdef TLEDIT

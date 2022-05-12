@@ -47,7 +47,7 @@ void getFileTime(const char* filename, std::string& result) {
 
 int InterlockingFileStatus::contemplari (GraphicObject* g) {
     switch (g->TypeID()) {
-        case ObjId::SIGNAL:
+        case TypeId::SIGNAL:
         {
             PanelSignal * psp = (PanelSignal*)g;
             Signal * sp = psp->Sig;
@@ -57,15 +57,15 @@ int InterlockingFileStatus::contemplari (GraphicObject* g) {
             }
             break;
         }
-        case ObjId::EXITLIGHT:
+        case TypeId::EXITLIGHT:
             nExitLights += 1;
             break;
-        case ObjId::TURNOUT: // not in nxgo table in real NXSYS
+        case TypeId::TURNOUT: // not in nxgo table in real NXSYS
             break;
-        case ObjId::JOINT:
+        case TypeId::JOINT:
             nJoints += 1;
             break;
-        case ObjId::TRACKSEG:
+        case TypeId::TRACKSEG:
         {
             const TrackSeg* tsp = (const TrackSeg*) g;
             const TrackCircuit * tcp = (const TrackCircuit*) tsp->Circuit;

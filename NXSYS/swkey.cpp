@@ -190,8 +190,8 @@ Virtual void SwitchKey::Display (HDC hdc) {
     Ellipse(hdc, xcen - rad, ycen - rad, xcen + rad, ycen + rad);
 }
 
-Virtual ObjId SwitchKey::TypeID() {
-    return ObjId::SWITCHKEY;
+Virtual TypeId SwitchKey::TypeID() {
+    return TypeId::SWITCHKEY;
 }
 
 Virtual int SwitchKey::IsNomenclature(long id) {
@@ -312,7 +312,7 @@ static int ClearAllFunarg (GraphicObject * g) {
 }
 
 void ClearAllAuxLevers () {
-    MapGraphicObjectsOfType (ObjId::SWITCHKEY, ClearAllFunarg);
+    MapGraphicObjectsOfType (TypeId::SWITCHKEY, ClearAllFunarg);
 }
 
 #endif

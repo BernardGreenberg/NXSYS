@@ -137,7 +137,7 @@ bool TextString::MouseSensitive() {return true;}
 bool TextString::MouseSensitive() {return false;}
 #endif
 
-ObjId TextString::TypeID () {return ObjId::TEXT;}
+TypeId TextString::TypeID () {return TypeId::TEXT;}
 
 BOOL TextString::HitP(long x, long y) {
     if (MouseSensitive())

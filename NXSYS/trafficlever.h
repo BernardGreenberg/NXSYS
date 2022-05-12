@@ -46,7 +46,7 @@ class TrafficLever : public GraphicObject {
     void NormalizeTrafficLever();
     void SetXlkgNo(int xno);
     virtual void Display (HDC hdc);
-    virtual ObjId TypeID();
+    virtual TypeId TypeID();
     virtual int IsNomenclature(long);
     void InitState();
 #ifndef TLEDIT

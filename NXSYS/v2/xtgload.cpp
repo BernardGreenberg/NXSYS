@@ -559,7 +559,7 @@ static TrackSeg * FindBranchFromOrientation (TrackJoint * tj, char orient, TSEX&
 
 static TrackJoint * FindTrackJoint (long nn) {
 #if TLEDIT
-    return (TrackJoint *) FindHitObject (nn, ObjId::JOINT);
+    return (TrackJoint *) FindHitObject (nn, TypeId::JOINT);
 #else
     for (auto j : AllJoints)
 	if (j->Nomenclature == nn)
@@ -581,7 +581,7 @@ static GOptr ProcessExitlightForm (Sexpr s) {
     long xno = CAR(s);
     SPop(s);
     if (s == NIL) {
-	PanelSignal * ps = (PanelSignal*) FindHitObject (xno, ObjId::SIGNAL);
+	PanelSignal * ps = (PanelSignal*) FindHitObject (xno, TypeId::SIGNAL);
 	if (!ps) {
 	    LispBarf ("Cannot find signal for EXITLIGHT", Sexpr(xno));
 	    return 0;
@@ -837,7 +837,7 @@ void AuxKeysLoadComplete () {
 	Turnout * turnout = joint->TurnOut;
 	if (turnout) {
 	    int xno = turnout->XlkgNo;
-	    SwitchKey* sk = (SwitchKey*) FindHitObject (xno, ObjId::SWITCHKEY);
+	    SwitchKey* sk = (SwitchKey*) FindHitObject (xno, TypeId::SWITCHKEY);
 	    if (sk)
 		sk->AssociateTurnout (turnout);
 	}

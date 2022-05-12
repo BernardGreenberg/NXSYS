@@ -24,7 +24,7 @@ static GraphicObject* CreatePanelSwitch (int wpx, int wpy) {
     return Dragon.StartMoving (new PanelSwitch (0, wpx, wpy, ""), "New Panel Switch", G_mainwindow);
 }
 
-REGISTER_NXTYPE(ObjId::PANELSWITCH, CmPanelSwitch, IDD_PANELSWITCH, CreatePanelSwitch, InitPanelSwitchData);
+REGISTER_NXTYPE(TypeId::PANELSWITCH, CmPanelSwitch, IDD_PANELSWITCH, CreatePanelSwitch, InitPanelSwitchData);
 
 void PanelSwitch::EditClick (int x, int y) {
     char d[30];

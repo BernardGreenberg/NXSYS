@@ -37,7 +37,7 @@ public:
     virtual void    Display(HDC dc) = 0;
     virtual void    ComputeWP();
     virtual BOOL    ComputeVisible (WPRECT& v);
-    virtual ObjId     TypeID();  // not pure - defaiult is -1, no.
+    virtual TypeId     TypeID();  // not pure - defaiult is -1, no.
     virtual int     IsNomenclature(long);
 
     virtual void    Hit (int mh);
@@ -98,14 +98,14 @@ void DisplayVisibleObjectsRect (HDC dc, RECT& ur);
 void FreeGraphicObjects();
 int GraphicObjectCount();
 extern GraphicObject * SelectedObject;
-GraphicObject * FindHitObject (long nomenclature, ObjId type);
-GraphicObject * FindHitObjectOfType (ObjId type, WORD x, WORD y);
-GraphicObject * FindHitObjectOfTypes (ObjId *types, int nkeys, WORD x, WORD y);
+GraphicObject * FindHitObject (long nomenclature, TypeId type);
+GraphicObject * FindHitObjectOfType (TypeId type, WORD x, WORD y);
+GraphicObject * FindHitObjectOfTypes (TypeId *types, int nkeys, WORD x, WORD y);
 typedef int (*GOMapperFcn) (GraphicObject*);
 typedef int (*GOGOMapperFcn) (GraphicObject*, void*);
 
-int MapGraphicObjectsOfType (ObjId, GOMapperFcn fn);
-GraphicObject* MapFindGraphicObjectsOfType (ObjId type, GOGOMapperFcn, void*);
+int MapGraphicObjectsOfType (TypeId, GOMapperFcn fn);
+GraphicObject* MapFindGraphicObjectsOfType (TypeId type, GOGOMapperFcn, void*);
 GraphicObject* GetMouseHitObject (WORD x, WORD y);
 GraphicObject* MapAllGraphicObjects (GOGOMapperFcn fn, void * arg);
 GraphicObject* MapAllVisibleGraphicObjects (GOGOMapperFcn fn, void * arg);

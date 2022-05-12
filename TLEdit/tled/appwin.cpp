@@ -112,7 +112,7 @@ static int MapShowExitLight(GraphicObject * g) {
 
 static void ShowExitLights(BOOL whichway) {
 	ExitLightsShowing = whichway;
-	MapGraphicObjectsOfType(ObjId::EXITLIGHT, MapShowExitLight);
+	MapGraphicObjectsOfType(TypeId::EXITLIGHT, MapShowExitLight);
 }
 
 static void GraphicsWindow_Rodentate
@@ -206,8 +206,8 @@ static BOOL ReadIt() {
 	ClearItOut();
 	if (XTGLoad(f)) {
 		InitAssignID();
-		MapGraphicObjectsOfType(ObjId::JOINT, MapAssignIDs);
-		MapGraphicObjectsOfType(ObjId::SIGNAL, MapAssignSigNos);
+		MapGraphicObjectsOfType(TypeId::JOINT, MapAssignIDs);
+		MapGraphicObjectsOfType(TypeId::SIGNAL, MapAssignSigNos);
         SetMainWindowTitle(FileName.c_str());
 		ComputeVisibleObjectsLast();
 		FullRedisplay();
@@ -293,7 +293,7 @@ void AppCommand(UINT command) {
 		break;
 	case CmToggleExitLights:
 		ExitLightsShowing = GetToolbarCheckState(S_Toolbar, command);
-		if (SelectedObject && SelectedObject->TypeID() == ObjId::EXITLIGHT)
+		if (SelectedObject && SelectedObject->TypeID() == TypeId::EXITLIGHT)
 			SelectedObject->Deselect();
 		ShowExitLights(ExitLightsShowing);
 		break;
@@ -303,7 +303,7 @@ void AppCommand(UINT command) {
 		FullRedisplay();
 		break;
 	case CmIJ:
-		if (SelectedObject && SelectedObject->TypeID() == ObjId::JOINT) {
+		if (SelectedObject && SelectedObject->TypeID() == TypeId::JOINT) {
 			InsulateJoint((TrackJoint *)SelectedObject);
 			//			    SelectedObject->Deselect();
 		}
@@ -314,12 +314,12 @@ void AppCommand(UINT command) {
 		break;
 	case CmFlipSignal:
 		if (SelectedObject)
-			if (SelectedObject->TypeID() == ObjId::SIGNAL)
+			if (SelectedObject->TypeID() == TypeId::SIGNAL)
 				FlipSignal((PanelSignal *)SelectedObject);
 		break;
 	case CmFlipNum:
 		if (SelectedObject)
-			if (SelectedObject->TypeID() == ObjId::JOINT)
+			if (SelectedObject->TypeID() == TypeId::JOINT)
 				((TrackJoint *)SelectedObject)->FlipNum();
 		break;
             
@@ -345,11 +345,11 @@ void AppCommand(UINT command) {
 #endif 
 	case CmSignalUpRight:
 	case CmSignalDownLeft:
-		if (SelectedObject && SelectedObject->TypeID() == ObjId::JOINT)
+		if (SelectedObject && SelectedObject->TypeID() == TypeId::JOINT)
 			TLEditCreateSignal
 			((TrackJoint *)SelectedObject,
 				command == CmSignalUpRight);
-		else if (SelectedObject && SelectedObject->TypeID() == ObjId::SIGNAL)
+		else if (SelectedObject && SelectedObject->TypeID() == TypeId::SIGNAL)
 			TLEditCreateSignalFromSignal
 			((PanelSignal *)SelectedObject,
 				command == CmSignalUpRight);
@@ -357,7 +357,7 @@ void AppCommand(UINT command) {
 			usererr("An insulated joint must be selected to define a signal.");
 		break;
 	case CmCreateExitLight:
-		if (SelectedObject && SelectedObject->TypeID() == ObjId::SIGNAL)
+		if (SelectedObject && SelectedObject->TypeID() == TypeId::SIGNAL)
 			TLEditCreateExitLightFromSignal
 			((PanelSignal *)SelectedObject, TRUE);
 		break;
@@ -577,14 +577,14 @@ static long WindowsMessageLoop(HWND window, HACCEL hAccel) {
 #endif
 
 static void SelectHook(GraphicObject * go) {
-    ObjId objid = go ? go->TypeID() : ObjId::NONE;
-	EnableCommand(CmCut, objid != ObjId::NONE);
-	EnableCommand(CmEditProperties, objid != ObjId::NONE);
-	EnableCommand(CmFlipNum, objid == ObjId::JOINT);
-	EnableCommand(CmIJ, objid == ObjId::JOINT);
-	EnableCommand(CmSignalUpRight, objid == ObjId::JOINT || objid == ObjId::SIGNAL);
-	EnableCommand(CmSignalDownLeft, objid == ObjId::JOINT || objid == ObjId::SIGNAL);
-	EnableCommand(CmCreateExitLight, objid == ObjId::JOINT || objid == ObjId::SIGNAL);
+    TypeId objid = go ? go->TypeID() : TypeId::NONE;
+	EnableCommand(CmCut, objid != TypeId::NONE);
+	EnableCommand(CmEditProperties, objid != TypeId::NONE);
+	EnableCommand(CmFlipNum, objid == TypeId::JOINT);
+	EnableCommand(CmIJ, objid == TypeId::JOINT);
+	EnableCommand(CmSignalUpRight, objid == TypeId::JOINT || objid == TypeId::SIGNAL);
+	EnableCommand(CmSignalDownLeft, objid == TypeId::JOINT || objid == TypeId::SIGNAL);
+	EnableCommand(CmCreateExitLight, objid == TypeId::JOINT || objid == TypeId::SIGNAL);
 }
 
 void InitTLEditApp(int dtw, int dth) {

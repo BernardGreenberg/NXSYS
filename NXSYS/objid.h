@@ -1,6 +1,6 @@
 #pragma once
 
-enum class ObjId {
+enum class TypeId {
    TRACKSEC  = 1,
    SIGNAL    = 2,
    EXITLIGHT = 3,
