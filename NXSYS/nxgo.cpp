@@ -393,11 +393,19 @@ void FreeGraphicObjects () {
     VisibleObjects.clear();
 }
 
+GraphicObject * FindObjectByTypeAndWPpos(TypeId type, WP_cord wp_x, WP_cord wp_y) {
+    for (GraphicObject * g : AllObjects) {
+        if (g->TypeID() == type)
+            if (g->wp_x == wp_x && g->wp_y == wp_y)
+                return g;
+    }
+    return NULL;
+}
 
-GraphicObject * FindHitObject (long id, TypeId type) {
+GraphicObject * FindHitObject (long nomenclature, TypeId type) {
     for (GraphicObject * g : AllObjects) {
 	if (g->TypeID() == type)
-	    if (g->IsNomenclature (id))
+	    if (g->IsNomenclature (nomenclature))
 		return g;
     }
     return NULL;

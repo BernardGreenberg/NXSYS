@@ -13,6 +13,7 @@
 #include <string>
 #include <unordered_map>
 #include <cstdarg>
+#include <cassert>
 
 using std::vector, std::string;
 using GOptr = GraphicObject*;
@@ -35,38 +36,35 @@ std::unordered_map<RecType, string> RecTypeNames {
 };
 
 struct Coords {
-    Coords(int xx, int yy) {
-        x = xx; y = yy;
+    Coords(WP_cord x, WP_cord y) {
+        wp_x = x;
+        wp_y = y;
     }
     Coords(GOptr g) {
-        x = g->wp_x;
-        y = g->wp_y;
+        wp_x = g->wp_x;
+        wp_y = g->wp_y;
     }
-    WP_cord x, y;
+    WP_cord wp_x, wp_y;
 };
 
 struct UndoRecord {
     UndoRecord(RecType type, string img, GraphicObject* o) {
         rec_type = type;
         image = img;
-        object = o;
-        obj_type = object->TypeID();
+        obj_type = o->TypeID();
     }
     UndoRecord(RecType type, string img, TypeId obt) {
        rec_type = type;
        image = img;
-       object = nullptr;
        obj_type = obt;
     }
     UndoRecord(RecType type, GOptr g, Coords C) : coords (C) {
         rec_type = type;
-        object = g;
-        obj_type = object->TypeID();
+        obj_type = g->TypeID();
     }
 
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
-    GOptr object = nullptr; /* not valid or needed for delete*/
     TypeId obj_type;
     Coords coords {0,0};
 
@@ -185,9 +183,16 @@ void Undo() {
     UndoStack.pop_back();
     switch(R.rec_type) {
         case RecType::CreateGO:
-            RedoStack.emplace_back(R.rec_type, StringImageObject(R.object), R.obj_type);
-            delete R.object;
+        {
+            /* Can't store real object pointer in undo stack -- the object can be deleted and recreated
+             (but at the same position) before the undo element is used. */
+
+            GOptr g = FindObjectByTypeAndWPpos(R.obj_type, R.coords.wp_x, R.coords.wp_y);
+            assert (g != nullptr);
+            RedoStack.emplace_back(R.rec_type, StringImageObject(g), R.obj_type);
+            delete g;
             break;
+        }
             
         case RecType::CutGO:
         {

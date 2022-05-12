@@ -101,6 +101,7 @@ extern GraphicObject * SelectedObject;
 GraphicObject * FindHitObject (long nomenclature, TypeId type);
 GraphicObject * FindHitObjectOfType (TypeId type, WORD x, WORD y);
 GraphicObject * FindHitObjectOfTypes (TypeId *types, int nkeys, WORD x, WORD y);
+GraphicObject * FindObjectByTypeAndWPpos(TypeId type, WP_cord wp_x, WP_cord wp_y);
 typedef int (*GOMapperFcn) (GraphicObject*);
 typedef int (*GOGOMapperFcn) (GraphicObject*, void*);
 
