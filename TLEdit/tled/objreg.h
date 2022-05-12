@@ -2,7 +2,6 @@
 #define _TLEDIT_OBJECT_REGISTRY_H__
 
 #include "typeid.h"
-#include "resource.h"
 #include "tlecmds.h"
 
 typedef GraphicObject* (*ObjCreateFn)(int wp_x, int wp_y);
@@ -26,6 +25,7 @@ static NXObTypeRegistrar Registrar##did (typeid,command,did,obfn,cifn);
 
 GraphicObject * CreateObjectFromCommand (HWND hWnd, int command, int x, int y);
 UINT FindDialogIdFromObjClassRegistry (TypeId type);
+const char * NXObjectTypeName(TypeId);
 
 void InitializeRegisteredObjectClasses();
 

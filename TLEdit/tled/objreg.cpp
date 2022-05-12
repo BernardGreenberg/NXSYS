@@ -5,6 +5,7 @@
 #include "tledit.h"
 #include "objreg.h"
 #include "LoadFiascoMaps.h"
+#include <unordered_map>
 
 /* Rewritten for dyn-create STL 4/9/2022 */
 
@@ -13,6 +14,19 @@ struct NXObjectRegistryEntry {
     ObjClassInitFn ObjectClassInitFunction;
 };
 
+static std::unordered_map<TypeId, std::string> TypeIdNames {
+    {TypeId::TRACKSEG, "track segment"},
+    {TypeId::SIGNAL, "signal"},
+    {TypeId::JOINT, "joint"},
+    {TypeId::STOP, "stop"},
+    {TypeId::EXITLIGHT, "exit light"},
+    {TypeId::PANELLIGHT, "panel light"},
+    {TypeId::PANELSWITCH, "panel switch"},
+    {TypeId::TRAFFICLEVER, "traffic lever"},
+    {TypeId::SWITCHKEY, "switch key"},
+    {TypeId::TEXT, "text string"},
+    {TypeId::NONE, "?NONE?"}
+};
 
 static LoadFiascoProtectedUnorderedMap<TypeId, UINT> DlgByTypeid;
 static LoadFiascoProtectedUnorderedMap<int, NXObjectRegistryEntry>FnsByCommand;
@@ -50,4 +64,11 @@ void InitializeRegisteredObjectClasses() {
         if (E.ObjectClassInitFunction != NULL)
             E.ObjectClassInitFunction();
     }
+}
+
+const char * NXObjectTypeName(TypeId type) {
+    if (TypeIdNames.count(type))
+        return TypeIdNames[type].c_str();
+    else
+        return "??type??";
 }

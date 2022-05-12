@@ -6,6 +6,8 @@
 //  Copyright © 2022 BernardGreenberg. All rights reserved.
 //
 #include "typeid.h"
+#include "nxgo.h"
+#include "objreg.h"
 #include "undo.h"
 #include <vector>
 #include <string>
@@ -20,29 +22,26 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 
 namespace Undo {
 
-std::unordered_map<TypeId, string> ObjIdNames {
-    {TypeId::TRACKSEG, "track segment"},
-    {TypeId::SIGNAL, "signal"},
-    {TypeId::JOINT, "joint"},
-    {TypeId::STOP, "stop"},
-    {TypeId::EXITLIGHT, "exit light"},
-    {TypeId::PANELLIGHT, "panel light"},
-    {TypeId::PANELSWITCH, "panel switch"},
-    {TypeId::TRAFFICLEVER, "traffic lever"},
-    {TypeId::SWITCHKEY, "switch key"},
-    {TypeId::TEXT, "text string"}
+enum class RecType {CreateGO, CutGO, MoveGO,PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint,
+    SimpleMoveJoint
 };
-
-enum class RecType {CreateGO, CutGO, MoveGO,PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
 
 std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CreateGO, "create"},
     {RecType::CutGO, "cut"},
     {RecType::PropChange, "property change"},
-    {RecType::MoveGO, "move"}
+    {RecType::MoveGO, "move"},
+    {RecType::SimpleMoveJoint, "move"}
 };
 
 struct Coords {
+    Coords(int xx, int yy) {
+        x = xx; y = yy;
+    }
+    Coords(GOptr g) {
+        x = g->wp_x;
+        y = g->wp_y;
+    }
     WP_cord x, y;
 };
 
@@ -51,29 +50,28 @@ struct UndoRecord {
         rec_type = type;
         image = img;
         object = o;
-        obj_id_type = object->TypeID();
+        obj_type = object->TypeID();
     }
     UndoRecord(RecType type, string img, TypeId obt) {
        rec_type = type;
        image = img;
        object = nullptr;
-       obj_id_type = obt;
+       obj_type = obt;
     }
-    UndoRecord(RecType type, GOptr g, Coords C) {
+    UndoRecord(RecType type, GOptr g, Coords C) : coords (C) {
         rec_type = type;
         object = g;
-        coords = C;
-        obj_id_type = object->TypeID();
+        obj_type = object->TypeID();
     }
 
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
     GOptr object = nullptr; /* not valid or needed for delete*/
-    TypeId obj_id_type;
-    Coords coords;
+    TypeId obj_type;
+    Coords coords {0,0};
 
     string DescribeAction() {
-        return "Undo " + RecTypeNames[rec_type] + " " + ObjIdNames[obj_id_type];
+        return "Undo " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
     }
 
 };
@@ -97,7 +95,7 @@ struct RedoRecord {
     TypeId obj_id_type;
     
     string DescribeAction() {
-        return "Redo " + RecTypeNames[rec_type] + " " + ObjIdNames[obj_id_type];
+        return "Redo " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_id_type);
     }
 
 };
@@ -169,11 +167,10 @@ void RecordGOCut(GraphicObject* g) {
     MarkForwardAction();
 }
 
-static Coords GOMovCoords;
+static Coords GOMovCoords {0, 0};
 
 void RecordGOMoveStart(GraphicObject* g) {
-    GOMovCoords.x = g->wp_x;
-    GOMovCoords.y = g->wp_y;
+    GOMovCoords = Coords(g);
 }
 
 void RecordGOMoveComplete(GraphicObject* g) {
@@ -188,7 +185,7 @@ void Undo() {
     UndoStack.pop_back();
     switch(R.rec_type) {
         case RecType::CreateGO:
-            RedoStack.emplace_back(R.rec_type, StringImageObject(R.object), R.obj_id_type);
+            RedoStack.emplace_back(R.rec_type, StringImageObject(R.object), R.obj_type);
             delete R.object;
             break;
             
