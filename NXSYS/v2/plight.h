@@ -59,7 +59,7 @@ class PanelLight : public GraphicObject {
     void Paint(HDC hdc, HBRUSH brush);
     virtual void Display (HDC hdc);
     virtual ObjId TypeID();
-    int ObjIDp(long);
+    int IsNomenclature(long);
 #ifdef TLEDIT
     BOOL InstallDlgLights (HWND hDlg);
     bool InstallCheckCorrespondence(HWND hDlg);

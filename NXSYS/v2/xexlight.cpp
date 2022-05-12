@@ -156,7 +156,7 @@ ObjId ExitLight::TypeID (){
     return ObjId::EXITLIGHT;
 }
 
-int ExitLight::ObjIDp(long id) {
+int ExitLight::IsNomenclature(long id) {
     return id == XlkgNo;
 }
 

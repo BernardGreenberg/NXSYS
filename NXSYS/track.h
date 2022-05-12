@@ -38,7 +38,7 @@ public:
     virtual void Display (HDC hdc);
     virtual void Hit (int mb);
     virtual BOOL HitP (long x, long y);
-    virtual int TypeID(), ObjIDp(long);
+    virtual int TypeID(), IsNomenclature(long);
     virtual void Invalidate();
     virtual void EditContextMenu(HMENU m);
     void SetOccupied (BOOL sta);
@@ -80,7 +80,7 @@ class TrackLabel: public GraphicObject {
 public:
     TrackDef* td;
     TrackLabel (TrackDef * td_, RW_cord rwx, RW_cord rwy);
-    virtual int TypeID(), ObjIDp(long);
+    virtual int TypeID(), IsNomenclature(long);
     virtual void Display (HDC dc);
 };
 
@@ -112,7 +112,7 @@ public:
     virtual void Display (HDC hdc);
             void DisplayTurnout (HDC dc, int control);
     virtual void Hit (int mb);
-    virtual int TypeID(), ObjIDp(long);
+    virtual int TypeID(), IsNomenclature(long);
     virtual BOOL HitP (long x, long y);
     virtual BOOL ComputeVisible (WPRECT& view);
     

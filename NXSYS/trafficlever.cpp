@@ -227,7 +227,7 @@ Virtual ObjId TrafficLever::TypeID() {
     return ObjId::TRAFFICLEVER;
 }
 
-Virtual int TrafficLever::ObjIDp(long id) {
+Virtual int TrafficLever::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 

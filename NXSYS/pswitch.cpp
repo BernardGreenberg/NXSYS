@@ -81,7 +81,7 @@ Virtual ObjId PanelSwitch::TypeID() {
     return ObjId::PANELSWITCH;
 }
 
-Virtual int PanelSwitch::ObjIDp(long id) {
+Virtual int PanelSwitch::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 

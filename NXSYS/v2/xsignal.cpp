@@ -85,7 +85,7 @@ ObjId PanelSignal::TypeID() {
     return ObjId::SIGNAL;
 }
 
-int PanelSignal::ObjIDp (long id) {
+int PanelSignal::IsNomenclature (long id) {
     /* +++++ gonna need a lot of work with symbolic object names */
     return (Sig
 	    &&

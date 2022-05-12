@@ -450,7 +450,7 @@ TrackSeg::~TrackSeg () {
 ObjId TrackSeg::	TypeID () { return ObjId::TRACKSEG;};
 
 
-int TrackSeg::ObjIDp(long x) {
+int TrackSeg::IsNomenclature(long x) {
     return 0;
 }
 

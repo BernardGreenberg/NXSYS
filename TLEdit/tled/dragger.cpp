@@ -89,16 +89,21 @@ void Dragger::Rodentate (HWND hWnd, int x, int y, UINT message, WPARAM wParam) {
 	    remark = "Click right on it to edit lever #, drag left to move";
 	    break;
 	case WM_LBUTTONDOWN:
+            Undo::RecordGOMoveStart(Object);
 	    remark = "Drag to move, release mouse to drop.";
 	    break;
     }
 
     StatusMessage ("%s at (%d, %d) %s", Descrip, wpx, wpy, remark);
     if (message == endbutton) {
+        if (MovingState == MOVSTATE_FROM_MOUSEUP) // Creation
+            Undo::RecordGOCreation(Object);
+        else if (MovingState == MOVSTATE_FROM_MOUSEDOWN)  //Movation
+            Undo::RecordGOMoveComplete(Object);
+            
 	MovingState = MOVSTATE_NOT;
 	MouseupDragon = RodentatingDragon = NULL;
 	Object->Select();
-        Undo::RecordGOCreation(Object);
 	Object = NULL;
 	BufferModified = TRUE;
 #ifdef NXSYSMac

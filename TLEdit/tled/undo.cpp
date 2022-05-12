@@ -33,12 +33,17 @@ std::unordered_map<ObjId, string> ObjIdNames {
     {ObjId::TEXT, "text string"}
 };
 
-enum class RecType {CreateGO, CutGO, PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
+enum class RecType {CreateGO, CutGO, MoveGO,PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint };
 
 std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CreateGO, "create"},
     {RecType::CutGO, "cut"},
-    {RecType::PropChange, "property change"}
+    {RecType::PropChange, "property change"},
+    {RecType::MoveGO, "move"}
+};
+
+struct Coords {
+    WP_cord x, y;
 };
 
 struct UndoRecord {
@@ -53,13 +58,20 @@ struct UndoRecord {
        image = img;
        object = nullptr;
        obj_id_type = obt;
-   }
+    }
+    UndoRecord(RecType type, GOptr g, Coords C) {
+        rec_type = type;
+        object = g;
+        coords = C;
+        obj_id_type = object->TypeID();
+    }
 
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
     GOptr object = nullptr; /* not valid or needed for delete*/
     ObjId obj_id_type;
-    
+    Coords coords;
+
     string DescribeAction() {
         return "Undo " + RecTypeNames[rec_type] + " " + ObjIdNames[obj_id_type];
     }
@@ -155,6 +167,18 @@ void RecordGOCreation(GraphicObject* g){
 void RecordGOCut(GraphicObject* g) {
     UndoStack.emplace_back(RecType::CutGO, StringImageObject(g), g->TypeID());
     MarkForwardAction();
+}
+
+static Coords GOMovCoords;
+
+void RecordGOMoveStart(GraphicObject* g) {
+    GOMovCoords.x = g->wp_x;
+    GOMovCoords.y = g->wp_y;
+}
+
+void RecordGOMoveComplete(GraphicObject* g) {
+    UndoStack.emplace_back(RecType::MoveGO, g, GOMovCoords);
+    
 }
 
 void Undo() {

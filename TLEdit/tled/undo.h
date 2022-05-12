@@ -14,6 +14,8 @@ namespace Undo {
 
 void RecordGOCreation(GraphicObject* g);
 void RecordGOCut(GraphicObject* g);
+void RecordGOMoveStart(GraphicObject* g);
+void RecordGOMoveComplete(GraphicObject* g);
 bool IsUndoPossible();
 bool IsRedoPossible();
 void Undo();

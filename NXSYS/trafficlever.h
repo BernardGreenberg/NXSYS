@@ -47,7 +47,7 @@ class TrafficLever : public GraphicObject {
     void SetXlkgNo(int xno);
     virtual void Display (HDC hdc);
     virtual ObjId TypeID();
-    virtual int ObjIDp(long);
+    virtual int IsNomenclature(long);
     void InitState();
 #ifndef TLEDIT
     BOOL Throw (BOOL reverse_wanted);

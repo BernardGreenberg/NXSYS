@@ -241,7 +241,7 @@ void GraphicObject::Hit (int /*mh*/) {
 void GraphicObject::UnHit () {
 }
 
-int GraphicObject::ObjIDp(long) {
+int GraphicObject::IsNomenclature(long) {
     return 0;
 }
 
@@ -397,7 +397,7 @@ void FreeGraphicObjects () {
 GraphicObject * FindHitObject (long id, ObjId type) {
     for (GraphicObject * g : AllObjects) {
 	if (g->TypeID() == type)
-	    if (g->ObjIDp (id))
+	    if (g->IsNomenclature (id))
 		return g;
     }
     return NULL;
