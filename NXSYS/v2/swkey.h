@@ -34,7 +34,7 @@ class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
 
     virtual void Display (HDC hdc);
     virtual TypeId TypeID();
-    virtual int IsNomenclature(long);
+    virtual bool IsNomenclature(long);
 #ifndef TLEDIT
     virtual void Hit (int mb);
     virtual void UnHit();

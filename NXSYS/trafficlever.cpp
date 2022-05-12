@@ -227,7 +227,7 @@ Virtual TypeId TrafficLever::TypeID() {
     return TypeId::TRAFFICLEVER;
 }
 
-Virtual int TrafficLever::IsNomenclature(long id) {
+Virtual bool TrafficLever::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 

@@ -194,7 +194,7 @@ Virtual TypeId SwitchKey::TypeID() {
     return TypeId::SWITCHKEY;
 }
 
-Virtual int SwitchKey::IsNomenclature(long id) {
+Virtual bool SwitchKey::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 

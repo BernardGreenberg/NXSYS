@@ -158,7 +158,7 @@ void TrackJoint::DelBranch (TrackSeg * ts) {
 }
 
 TypeId TrackJoint::TypeID () {return TypeId::JOINT;}
-int TrackJoint::IsNomenclature(long x) {return Nomenclature == x;}
+bool TrackJoint::IsNomenclature(long x) {return Nomenclature == x;}
 
 
 

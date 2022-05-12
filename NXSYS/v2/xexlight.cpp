@@ -156,7 +156,7 @@ TypeId ExitLight::TypeID (){
     return TypeId::EXITLIGHT;
 }
 
-int ExitLight::IsNomenclature(long id) {
+bool ExitLight::IsNomenclature(long id) {
     return id == XlkgNo;
 }
 

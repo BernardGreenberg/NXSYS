@@ -241,7 +241,7 @@ void GraphicObject::Hit (int /*mh*/) {
 void GraphicObject::UnHit () {
 }
 
-int GraphicObject::IsNomenclature(long) {
+bool GraphicObject::IsNomenclature(long) {
     return 0;
 }
 

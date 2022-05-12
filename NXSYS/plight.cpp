@@ -37,7 +37,7 @@ TypeId PanelLight::TypeID() {
     return TypeId::PANELLIGHT;
 }
 
-int PanelLight::IsNomenclature(long id) {
+bool PanelLight::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 

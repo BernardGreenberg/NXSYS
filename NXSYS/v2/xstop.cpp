@@ -73,7 +73,7 @@ Stop::Stop (Signal * s) {
     return TypeId::STOP;
 }
 
-/*   virtual */ int Stop::IsNomenclature(long) {
+/*   virtual */ bool Stop::IsNomenclature(long) {
     return 0;
 }
 

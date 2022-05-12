@@ -447,11 +447,11 @@ TrackSeg::~TrackSeg () {
 	Circuit->DeleteSeg(this);
 }
 
-TypeId TrackSeg::	TypeID () { return TypeId::TRACKSEG;};
+TypeId TrackSeg::TypeID () { return TypeId::TRACKSEG;};
 
 
-int TrackSeg::IsNomenclature(long x) {
-    return 0;
+bool TrackSeg::IsNomenclature(long x) {
+    return false;
 }
 
 

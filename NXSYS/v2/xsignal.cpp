@@ -85,8 +85,8 @@ TypeId PanelSignal::TypeID() {
     return TypeId::SIGNAL;
 }
 
-int PanelSignal::IsNomenclature (long id) {
-    /* +++++ gonna need a lot of work with symbolic object names */
+bool PanelSignal::IsNomenclature (long id) {
+/* +++++ gonna need a lot of work with symbolic object names */
     return (Sig
 	    &&
 	    ((Sig->XlkgNo == id)

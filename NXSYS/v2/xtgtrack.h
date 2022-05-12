@@ -107,7 +107,7 @@ class TrackJoint
     
 	virtual void Display (HDC dc);
 	virtual TypeId TypeID ();
-	virtual int IsNomenclature(long);
+	virtual bool IsNomenclature(long);
 #ifdef TLEDIT
 
 	virtual void Select();
@@ -211,7 +211,7 @@ class TrackSeg : public GraphicObject {
 
 	virtual void Display (HDC dc);
 	virtual TypeId TypeID ();
-	virtual int IsNomenclature(long);
+	virtual bool IsNomenclature(long);
 	TrackCircuit* SetTrackCircuit (long ID, BOOL wildfire);
 	void SetTrackCircuit0 (TrackCircuit * tc);
 	void SetTrackCircuitWildfire (TrackCircuit * tc);
@@ -288,7 +288,7 @@ class PanelSignal  : public GraphicObject {
 	virtual void Display (HDC dc);
 	void Reposition();
 	virtual TypeId TypeID ();
-	virtual int IsNomenclature(long);
+	virtual bool IsNomenclature(long);
 	virtual void ComputeWPRect();
 #ifdef TLEDIT
 	virtual void Select();
@@ -327,7 +327,7 @@ public:
 
     virtual void Display (HDC dc) override;
     virtual TypeId TypeID() override;
-    virtual int IsNomenclature(long) override;
+    virtual bool IsNomenclature(long) override;
     virtual BOOL HitP(long, long) override;
 #if REALLY_NXSYS   // if really nxsys, override with "false"; default is true.
     virtual bool MouseSensitive() override;
@@ -364,7 +364,7 @@ public:
     virtual void Display (HDC hdc);
     virtual BOOL HitP (long x, long y);
     virtual TypeId TypeID();
-    virtual int IsNomenclature(long);
+    virtual bool IsNomenclature(long);
 #ifdef TLEDIT
     virtual int Dump (ObjectWriter& W);
     virtual void Select();

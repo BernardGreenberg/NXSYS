@@ -38,7 +38,7 @@ public:
     virtual void    ComputeWP();
     virtual BOOL    ComputeVisible (WPRECT& v);
     virtual TypeId     TypeID();  // not pure - defaiult is -1, no.
-    virtual int     IsNomenclature(long);
+    virtual bool    IsNomenclature(long);
 
     virtual void    Hit (int mh);
     virtual void    UnHit();
