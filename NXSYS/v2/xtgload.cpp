@@ -152,8 +152,10 @@ GOptr ProcessNonGraphObjectCreateForm(Sexpr s) {
 }
 
 GOptr ProcessNonGraphObjectCreateFormString (const char * s) {
-    Sexpr S = read_sexp_from_char_string(s, nullptr);;
-    return ProcessNonGraphObjectCreateForm(S);
+    Sexpr S = read_sexp_from_char_string(s, nullptr);
+    GOptr g = ProcessNonGraphObjectCreateForm(S);
+    dealloc_ncyclic_sexp(S);
+    return g;
 }
 
 int ProcessLayoutForm (Sexpr f) {
