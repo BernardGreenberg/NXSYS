@@ -22,7 +22,7 @@
 #endif
 #include "xtgtrack.h"
 #include "tledit.h"
-#include "objid.h"
+#include "typeid.h"
 #include "xtgload.h"
 #include "lisp.h"
 #include "dialogs.h"
@@ -577,14 +577,14 @@ static long WindowsMessageLoop(HWND window, HACCEL hAccel) {
 #endif
 
 static void SelectHook(GraphicObject * go) {
-    TypeId objid = go ? go->TypeID() : TypeId::NONE;
-	EnableCommand(CmCut, objid != TypeId::NONE);
-	EnableCommand(CmEditProperties, objid != TypeId::NONE);
-	EnableCommand(CmFlipNum, objid == TypeId::JOINT);
-	EnableCommand(CmIJ, objid == TypeId::JOINT);
-	EnableCommand(CmSignalUpRight, objid == TypeId::JOINT || objid == TypeId::SIGNAL);
-	EnableCommand(CmSignalDownLeft, objid == TypeId::JOINT || objid == TypeId::SIGNAL);
-	EnableCommand(CmCreateExitLight, objid == TypeId::JOINT || objid == TypeId::SIGNAL);
+    TypeId type = go ? go->TypeID() : TypeId::NONE;
+	EnableCommand(CmCut, type != TypeId::NONE);
+	EnableCommand(CmEditProperties, type != TypeId::NONE);
+	EnableCommand(CmFlipNum, type == TypeId::JOINT);
+	EnableCommand(CmIJ, type == TypeId::JOINT);
+	EnableCommand(CmSignalUpRight, type == TypeId::JOINT || type == TypeId::SIGNAL);
+	EnableCommand(CmSignalDownLeft, type == TypeId::JOINT || type == TypeId::SIGNAL);
+	EnableCommand(CmCreateExitLight, type == TypeId::JOINT || type == TypeId::SIGNAL);
 }
 
 void InitTLEditApp(int dtw, int dth) {

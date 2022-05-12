@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "xtgtrack.h"
 #include "pswitch.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "compat32.h"
 #include "rlyapi.h"

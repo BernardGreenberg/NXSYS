@@ -12,7 +12,7 @@
 #include "text.h"
 #include "swkey.h"
 #include "trafficlever.h"
-#include "objid.h"
+#include "typeid.h"
 #include "assignid.h"
 #include "tledit.h"
 #include <string>

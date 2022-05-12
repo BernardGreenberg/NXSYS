@@ -18,7 +18,7 @@
 #include "trafficlever.h"
 #include "plight.h"
 #include "pswitch.h"
-#include "objid.h"
+#include "typeid.h"
 #include "lisp.h"
 #include "xtgload.h"
 #include "pival.h"

@@ -6,7 +6,7 @@
 #include "xtgtrack.h"
 #include "xturnout.h"
 #include "swkey.h"
-#include "objid.h"
+#include "typeid.h"
 #include "ssdlg.h"
 #include "brushpen.h"
 #include "compat32.h"

@@ -1,7 +1,7 @@
 #ifndef _NX_PANEL_LIGHT_H__
 #define _NX_PANEL_LIGHT_H__
 
-#include "objid.h"
+#include "typeid.h"
 
 #if !TLEDIT
 #include "relays.h"

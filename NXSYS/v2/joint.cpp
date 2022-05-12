@@ -9,7 +9,7 @@
 #include "nxgo.h"
 #include "xtgtrack.h"
 #include "lyglobal.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "SwitchConsistency.h"
 

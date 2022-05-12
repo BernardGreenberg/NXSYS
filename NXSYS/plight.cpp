@@ -4,7 +4,7 @@
 
 #include "plight.h"
 #include "brushpen.h"
-#include "objid.h"
+#include "typeid.h"
 
 /* Common stuff to main app and TLEdit   -- 13 Aug 2019 */
 void PanelLight::SetRadius (int r) {

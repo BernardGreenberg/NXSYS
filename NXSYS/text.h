@@ -2,7 +2,7 @@
 #define _NXSYS_TEXT_STRING_H__
 
 /* 14 January 1998 */
-#include "objid.h"
+#include "typeid.h"
 #include "nxgo.h"
 #ifdef TLEDIT
 #include <stdio.h>

@@ -14,7 +14,7 @@
 #include "compat32.h"
 #include "traincfg.h"
 #include "trainaut.h"
-#include "objid.h"
+#include "typeid.h"
 #include "xturnout.h"
 
 #include "nxproduct.h"

@@ -9,7 +9,7 @@
 #include "compat32.h"
 #include "nxgo.h"
 #include "xtgtrack.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 
 #include "pival.h"

@@ -19,7 +19,7 @@
 #include <ctype.h>
 #include "compat32.h"
 #include "lispmath.h"
-#include "objid.h"
+#include "typeid.h"
 #include "traincfg.h"
 #include "incexppt.h"
 #include "nxglapi.h"

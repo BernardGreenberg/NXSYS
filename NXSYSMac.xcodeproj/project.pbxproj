@@ -350,7 +350,7 @@
 		5B5AE6412310908100348612 /* brushpen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brushpen.h; sourceTree = "<group>"; };
 		5B5AE6422310B21600348612 /* lispmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lispmath.h; sourceTree = "<group>"; };
 		5B5AE6442310D6CC00348612 /* nxsysapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxsysapp.h; sourceTree = "<group>"; };
-		5B5AE6472311531700348612 /* objid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objid.h; sourceTree = "<group>"; };
+		5B5AE6472311531700348612 /* typeid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typeid.h; sourceTree = "<group>"; };
 		5B5AE648231153AB00348612 /* trainaut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trainaut.h; sourceTree = "<group>"; };
 		5B5AE649231153C900348612 /* trainapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trainapi.h; sourceTree = "<group>"; };
 		5B5AE64A2311542F00348612 /* ssdlg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssdlg.h; sourceTree = "<group>"; };
@@ -833,7 +833,7 @@
 				5B5AE6572311593700348612 /* nxldapi.h */,
 				5B5AE6582311595800348612 /* nxldwin.h */,
 				5B5AE6442310D6CC00348612 /* nxsysapp.h */,
-				5B5AE6472311531700348612 /* objid.h */,
+				5B5AE6472311531700348612 /* typeid.h */,
 				5B5AE65D2311692F00348612 /* PolyKludge.h */,
 				5B5AE65923115D2000348612 /* resource.h */,
 				5B8A10CF25BF7DF8007857A8 /* rlymenu.h */,

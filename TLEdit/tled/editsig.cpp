@@ -11,7 +11,7 @@
 #include "brushpen.h"
 #include "signal.h"
 #include "xtgtrack.h"
-#include "objid.h"
+#include "typeid.h"
 #include "tledit.h"
 #include "resource.h"
 #include "assignid.h"

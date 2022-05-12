@@ -1,7 +1,7 @@
 #include "windows.h"
 #include "xtgtrack.h"
 #include "signal.h"
-#include "objid.h"
+#include "typeid.h"
 #include "ssdlg.h"
 #include "brushpen.h"
 #include "timers.h"

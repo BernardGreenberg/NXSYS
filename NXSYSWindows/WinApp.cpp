@@ -10,7 +10,7 @@
 #include "commands.h"
 #include "nxgo.h"
 #include "timers.h"
-#include "objid.h"
+#include "typeid.h"
 #include "compat32.h"
 #include "lyglobal.h"
 #include "loaddcls.h"

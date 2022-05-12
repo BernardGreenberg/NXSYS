@@ -7,7 +7,7 @@
 #include "nxsysapp.h"
 #include "lyglobal.h"
 #include "signal.h"
-#include "objid.h"
+#include "typeid.h"
 #include "timers.h"
 #include "compat32.h"
 #include "brushpen.h"

@@ -8,7 +8,7 @@
 #include "xturnout.h"
 
 #include "trafficlever.h"
-#include "objid.h"
+#include "typeid.h"
 #include "ssdlg.h"
 #include "brushpen.h"
 #include "compat32.h"

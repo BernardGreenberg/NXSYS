@@ -7,7 +7,6 @@
 #include "resource.h"
 #include "tlpropdlg.h"
 #include "dragger.h"
-#include "objid.h"
 #include "objreg.h"
 
 SwitchKey::~SwitchKey() {};

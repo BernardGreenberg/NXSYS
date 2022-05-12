@@ -2,7 +2,7 @@
 #include <string.h>
 #include <vector>
 #include "text.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "nxsysapp.h"
 

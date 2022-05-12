@@ -18,7 +18,7 @@ using std::string, std::unordered_set, std::vector;
 #include "xtgtrack.h"
 #include "tledit.h"
 #include "nxgo.h"
-#include "objid.h"
+#include "typeid.h"
 
 
 

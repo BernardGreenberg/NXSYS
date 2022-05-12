@@ -5,7 +5,7 @@
 #include "stdio.h"
 #include "relays.h"
 #include "nxgo.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "nxsysapp.h"
 #include "compat32.h"

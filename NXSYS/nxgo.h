@@ -2,7 +2,7 @@
 #define _NX_GRAPHOBJ_H__
 
 #include "windows.h"
-#include "objid.h"
+#include "typeid.h"
 
 #define Virtual
 

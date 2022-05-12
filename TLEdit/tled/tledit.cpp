@@ -14,7 +14,7 @@
 #ifndef NXSYSMac
 #include "rubberbd.h"
 #endif
-#include "objid.h"
+#include "typeid.h"
 #include "tledit.h"
 #include "resource.h"
 #include "assignid.h"

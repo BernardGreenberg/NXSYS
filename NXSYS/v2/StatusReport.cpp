@@ -27,7 +27,7 @@ int CountRelaySyms();
 
 #include "windows.h"
 #include "nxgo.h"
-#include "objid.h"
+#include "typeid.h"
 #include "signal.h"
 #include "xtgtrack.h"
 #include <time.h>

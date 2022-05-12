@@ -8,7 +8,7 @@
 #include "nxgo.h"
 #include "commands.h"
 #include "lisp.h"
-#include "objid.h"
+#include "typeid.h"
 #include "rlyapi.h"
 #include "compat32.h"
 #include "trainapi.h"
