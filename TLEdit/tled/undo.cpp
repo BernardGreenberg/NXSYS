@@ -68,39 +68,14 @@ struct UndoRecord {
     TypeId obj_type;
     Coords coords {0,0};
 
-    string DescribeAction() {
-        return "Undo " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
+    string DescribeAction(string tag) {
+        return tag + " " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
     }
 
 };
-
-struct RedoRecord {
-     RedoRecord(RecType type, string img, TypeId obt) {
-        rec_type = type;
-        image = img;
-        object = nullptr;
-        obj_id_type = obt;
-    }
-    RedoRecord(RecType type, string img, GraphicObject* o) {
-        rec_type = type;
-        image = img;
-        object = o;
-        obj_id_type = object->TypeID();
-    }
-    RecType rec_type;
-    string image;                    /* not valid or needed for create*/
-    GOptr object = nullptr; /* not valid or needed for delete*/
-    TypeId obj_id_type;
-    
-    string DescribeAction() {
-        return "Redo " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_id_type);
-    }
-
-};
-
 
 static vector <UndoRecord> UndoStack;
-static vector <RedoRecord> RedoStack;
+static vector <UndoRecord> RedoStack;
 
 class StringOutputWriter : public GraphicObject::ObjectWriter {
     string S;
@@ -134,11 +109,11 @@ static void compute_menu_state() {
     const char * undo_avl = nullptr;
     const char * redo_avl = nullptr;
     if (IsUndoPossible()) {
-        undo_str = UndoStack.back().DescribeAction();
+        undo_str = UndoStack.back().DescribeAction("Undo");
         undo_avl = undo_str.c_str();
     }
     if (IsRedoPossible()) {
-        redo_str = RedoStack.back().DescribeAction();
+        redo_str = RedoStack.back().DescribeAction("Redo");
         redo_avl = redo_str.c_str();
     }
     SetUndoRedoMenu(undo_avl, redo_avl);
@@ -215,7 +190,7 @@ void Undo() {
 void Redo() {
     if (!IsRedoPossible())
         return;
-    RedoRecord R = RedoStack.back();
+    UndoRecord R = RedoStack.back();
     RedoStack.pop_back();
     switch(R.rec_type) {
         case RecType::CreateGO:
@@ -228,8 +203,9 @@ void Redo() {
         }
         case RecType::CutGO:
         {
-            UndoStack.emplace_back(R.rec_type, StringImageObject(R.object), R.obj_id_type);
-            delete R.object;
+            GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            UndoStack.emplace_back(R.rec_type, StringImageObject(obj), R.obj_type);
+            delete obj;
             break;
         }
         default:
