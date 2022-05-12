@@ -52,13 +52,15 @@ struct UndoRecord {
         rec_type = type;
         image = img;
         obj_type = o->TypeID();
+        coords = Coords(o);
     }
     UndoRecord(RecType type, string img, TypeId obt) {
        rec_type = type;
        image = img;
        obj_type = obt;
     }
-    UndoRecord(RecType type, GOptr g, Coords C) : coords (C) {
+    UndoRecord(RecType type, GOptr g, Coords C) {
+        coords = C;
         rec_type = type;
         obj_type = g->TypeID();
     }
@@ -174,7 +176,7 @@ void Undo() {
             GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
             obj->MakeSelfVisible();
             obj->Select();
-            RedoStack.emplace_back(R.rec_type, "", obj);
+            RedoStack.emplace_back(R.rec_type, obj, Coords(obj));
             break;
         }
         default:
@@ -203,7 +205,8 @@ void Redo() {
         }
         case RecType::CutGO:
         {
-            GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            GOptr obj = FindObjectByTypeAndWPpos(R.obj_type, R.coords.wp_x, R.coords.wp_y);
+            assert(obj != nullptr);
             UndoStack.emplace_back(R.rec_type, StringImageObject(obj), R.obj_type);
             delete obj;
             break;
