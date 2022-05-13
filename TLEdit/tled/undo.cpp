@@ -234,6 +234,7 @@ void Undo() {
         {
             GOptr g = FindObjByLoc(R.obj_type, R.coords);
             R.orig_props->Restore(g);
+            RedoStack.emplace_back(g, R.orig_props.release(), R.changed_props.release());
             g->Invalidate();
             break;
         }
@@ -277,6 +278,17 @@ void Redo() {
             UndoStack.emplace_back(rt, g, R.coords);
             break;
         }
+            
+        case RecType::PropChange:
+        {
+            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            R.changed_props->Restore(g);
+            UndoStack.emplace_back(g, R.orig_props.release(), R.changed_props.release());
+            g->Invalidate();
+            break;
+        }
+
+ 
 
         default:
             break;
