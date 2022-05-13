@@ -77,16 +77,21 @@ class PanelLight : public GraphicObject, public PropEditor<PanelLight> {
     class PropCell : public PropCellPCRTP<PropCell, PanelLight> {
         int XlkgNo, Radius;
         WP_cord wp_x, wp_y;
+        std::vector<PanelLightAspect> Aspects; /* con manu grave*/
         void Snapshot(GraphicObject* g) {
             wp_x = g->wp_x;
             wp_y = g->wp_y;
-            Radius = ((PanelLight*)g)->Radius;
-            XlkgNo =((PanelLight*)g)->XlkgNo;
+            PanelLight* p = (PanelLight*)g;
+            Radius = p->Radius;
+            XlkgNo = p->XlkgNo;
+            Aspects = p->Aspects;
         }
         void Restore(GraphicObject* g) {
             g->MoveWP (wp_x, wp_y);
-            ((PanelLight*)g)->SetRadius(Radius);
-            ((PanelLight*)g)->XlkgNo = XlkgNo;
+            PanelLight* p = (PanelLight*)g;
+            p->SetRadius(Radius);
+            p->XlkgNo = XlkgNo;
+            p->Aspects = Aspects;
         }
     };
 #endif

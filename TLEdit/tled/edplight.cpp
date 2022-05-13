@@ -142,7 +142,7 @@ BOOL_DLG_PROC_QUAL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         }
                     }
                     
-                    if (!InstallDlgLights (hDlg))
+                    if (!InstallDlgLights (hDlg)) // can't actually fail.
                         return TRUE;
                     
                     if (newnom != XlkgNo) {
