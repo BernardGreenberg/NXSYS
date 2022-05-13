@@ -23,7 +23,7 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 
 namespace Undo {
 
-enum class RecType {CreateGO, CutGO, MoveGO,PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint,
+enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint,
     SimpleMoveJoint
 };
 
@@ -44,6 +44,12 @@ struct Coords {
         wp_x = g->wp_x;
         wp_y = g->wp_y;
     }
+    bool operator == (const Coords& other) const {
+        return wp_x == other.wp_x && wp_y == other.wp_y;
+    }
+    bool operator != (const Coords& other) const {
+        return !(*this == other);
+    }
     WP_cord wp_x, wp_y;
 };
 
@@ -60,15 +66,17 @@ struct UndoRecord {
        obj_type = obt;
     }
     UndoRecord(RecType type, GOptr g, Coords C) {
-        coords = C;
+        coords_old = C;
         rec_type = type;
         obj_type = g->TypeID();
+        coords = Coords(g);
     }
 
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
     TypeId obj_type;
     Coords coords {0,0};
+    Coords coords_old {-1,-1};
 
     string DescribeAction(string tag) {
         return tag + " " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
@@ -127,6 +135,16 @@ static string StringImageObject(GOptr o) {
     return W.get();
 }
 
+static GOptr FindObjByLoc(TypeId type, const Coords& C) {
+    GOptr g = FindObjectByTypeAndWPpos(type, C.wp_x, C.wp_y);
+    assert(g);
+    return g;
+}
+
+static void MoveGO (GOptr g, const Coords& C) {
+    g->MoveWP(C.wp_x, C.wp_y);
+}
+
 static void MarkForwardAction() {
     RedoStack.clear();
     compute_menu_state();
@@ -149,8 +167,11 @@ void RecordGOMoveStart(GraphicObject* g) {
 }
 
 void RecordGOMoveComplete(GraphicObject* g) {
-    UndoStack.emplace_back(RecType::MoveGO, g, GOMovCoords);
-    
+    Coords uploc(g);
+    if (uploc != GOMovCoords) {
+        UndoStack.emplace_back(RecType::MoveGO, g, GOMovCoords);
+        MarkForwardAction();
+    }
 }
 
 void Undo() {
@@ -158,15 +179,15 @@ void Undo() {
         return;
     UndoRecord R = UndoStack.back();
     UndoStack.pop_back();
-    switch(R.rec_type) {
+    RecType rt = R.rec_type;
+    switch(rt) {
         case RecType::CreateGO:
         {
             /* Can't store real object pointer in undo stack -- the object can be deleted and recreated
              (but at the same position) before the undo element is used. */
 
-            GOptr g = FindObjectByTypeAndWPpos(R.obj_type, R.coords.wp_x, R.coords.wp_y);
-            assert (g != nullptr);
-            RedoStack.emplace_back(R.rec_type, StringImageObject(g), R.obj_type);
+            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            RedoStack.emplace_back(rt, StringImageObject(g), R.obj_type);
             delete g;
             break;
         }
@@ -176,17 +197,24 @@ void Undo() {
             GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
             obj->MakeSelfVisible();
             obj->Select();
-            RedoStack.emplace_back(R.rec_type, obj, Coords(obj));
+            RedoStack.emplace_back(rt, obj, Coords(obj));
             break;
         }
+
+        case RecType::MoveGO:
+        {
+            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            MoveGO(g, R.coords_old);
+            RedoStack.emplace_back(rt, g, R.coords);
+            break;
+        }
+
         default:
             break;
             
     }
     compute_menu_state();
-    
-    
-};
+}
 
 /* Snapshot and manage BufferModified */
 void Redo() {
@@ -194,27 +222,37 @@ void Redo() {
         return;
     UndoRecord R = RedoStack.back();
     RedoStack.pop_back();
-    switch(R.rec_type) {
+    RecType rt = R.rec_type;
+    switch(rt) {
         case RecType::CreateGO:
         {
-            GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
-            obj->MakeSelfVisible();
-            obj->Select();
-            UndoStack.emplace_back(R.rec_type, "", obj);
+            GOptr g = ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            g->MakeSelfVisible();
+            g->Select();
+            UndoStack.emplace_back(rt, "", g);
             break;
         }
+
         case RecType::CutGO:
         {
-            GOptr obj = FindObjectByTypeAndWPpos(R.obj_type, R.coords.wp_x, R.coords.wp_y);
-            assert(obj != nullptr);
-            UndoStack.emplace_back(R.rec_type, StringImageObject(obj), R.obj_type);
-            delete obj;
+            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            UndoStack.emplace_back(rt, StringImageObject(g), R.obj_type);
+            delete g;
             break;
         }
+
+        case RecType::MoveGO:
+        {
+            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            MoveGO(g, R.coords_old);
+            UndoStack.emplace_back(rt, g, R.coords);
+            break;
+        }
+
         default:
             break;
     }
     compute_menu_state();
-};
+}
 
 }
