@@ -26,6 +26,7 @@ void TLEditCreateExitLightFromSignal (PanelSignal* ps, bool upright) {
 	BufferModified = TRUE;
 
 	xl = E.ExLight = new ExitLight (ps->Seg, ps->EndIndex, ps->Sig->XlkgNo);
+        Undo::RecordGOCreation(xl);
     }
 
     xl->GetVisible();
@@ -33,7 +34,6 @@ void TLEditCreateExitLightFromSignal (PanelSignal* ps, bool upright) {
     if (ExitLightsShowing)
 	xl->SetLit(TRUE);
     xl->Select();
-    
 }
 
 void ExitLight::Cut () {
