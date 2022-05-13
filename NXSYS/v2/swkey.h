@@ -1,14 +1,12 @@
 #ifndef _NX_SWITCH_KEY_H__
 #define _NX_SWITCH_KEY_H__
 
-#ifdef TLEDIT
-#include <stdio.h>
-#endif
-
 #include "RelayMovingPointer.h"
+#include "PropCell.h"
+
 
 #ifdef TLEDIT
-class SwitchKey : public GraphicObject {
+class SwitchKey : public GraphicObject, public PropEditor<SwitchKey> {
 #else
 class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
 #endif
@@ -42,6 +40,20 @@ class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
 #endif
 
 #ifdef TLEDIT
+    class PropCell : public PropCellPCRTP<PropCell, SwitchKey> {
+        int XlkgNo;
+        WP_cord wp_x, wp_y;
+        virtual void Snapshot(GraphicObject*g) {
+            SwitchKey * k = (SwitchKey*) g;
+            XlkgNo = k->XlkgNo;
+            wp_x = k->wp_x;
+            wp_y = k->wp_y;
+        }
+        virtual void Restore(GraphicObject*g) {
+            ((SwitchKey*)g)->SetXlkgNo(XlkgNo);
+            g->MoveWP(wp_x, wp_y);
+        }
+    };
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
     virtual void EditClick(int x, int y);
     virtual ~SwitchKey();

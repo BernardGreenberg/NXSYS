@@ -8,6 +8,7 @@
 #include "tlpropdlg.h"
 #include "dragger.h"
 #include "objreg.h"
+#include "undo.h"
 
 SwitchKey::~SwitchKey() {};
 static Dragger Dragon;
@@ -33,51 +34,59 @@ int SwitchKey::Dump (ObjectWriter& W) {
 }
 
 BOOL_DLG_PROC_QUAL SwitchKey::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
-    BOOL es;
 
     switch (message) {
 	case WM_INITDIALOG:
 	    SetDlgItemInt (hDlg, IDC_SWKEY_LEVER, XlkgNo, FALSE);
 	    SetDlgItemInt (hDlg, IDC_SWKEY_WPX, (int)wp_x, FALSE);
 	    SetDlgItemInt (hDlg, IDC_SWKEY_WPY, (int)wp_y, FALSE);
+            CacheInitSnapshot();
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
 		{
+                    BOOL es;
+                    WP_cord new_wp_x = GetDlgItemInt (hDlg, IDC_SWKEY_WPX, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Panel X coordinate.");
+                        return TRUE;
+                    }
+                    WP_cord new_wp_y = GetDlgItemInt (hDlg, IDC_SWKEY_WPY, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Panel Y coordinate.");
+                        return TRUE;
+                    }
+
 		    long newnom = GetDlgItemInt (hDlg, IDC_SWKEY_LEVER, &es, FALSE);
 		    if (!es) {
 			uerr (hDlg, "Bad lever number.");
 			return TRUE;
 		    }
+                    
+                    bool mod = false;
 		    if (newnom != XlkgNo) {
 			SetXlkgNo((int)newnom);
 			StatusMessage ("Aux switch key %ld", newnom);
-			Invalidate();
-			BufferModified = TRUE;
+                        mod = true;
 		    }
-		}
-
-		{
-		    WP_cord new_wp_x = GetDlgItemInt (hDlg, IDC_SWKEY_WPX, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Panel X coordinate.");
-			return TRUE;
-		    }
-		    WP_cord new_wp_y = GetDlgItemInt (hDlg, IDC_SWKEY_WPY, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Panel Y coordinate.");
-			return TRUE;
-		    }
-		    if (wp_x != new_wp_x || wp_y != new_wp_y) {
-			MoveWP(new_wp_x, new_wp_y);
-			BufferModified = TRUE;
-		    }
-		}
+                    if (wp_x != new_wp_x || wp_y != new_wp_y) {
+                        MoveWP(new_wp_x, new_wp_y);
+                    mod = true;
+                    }
+                    if (mod) {
+                        BufferModified = TRUE;
+                        Invalidate();
+                        Undo::RecordChangedProps(this, PropCellCache);
+                    }
+                    else
+                        DiscardPropCache();
+                }
 		EndDialog (hDlg, TRUE);
 		return TRUE;
 
 		case IDCANCEL:
+                    DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;
 		default:
