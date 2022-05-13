@@ -10,6 +10,7 @@
 #include "tlpropdlg.h"
 #include "objreg.h"
 #include "nxgo.h"
+#include "undo.h"
 
 #include "dragger.h"
 
@@ -48,53 +49,62 @@ BOOL_DLG_PROC_QUAL TrafficLever::DlgProc  (HWND hDlg, UINT message, WPARAM wPara
 	    SetDlgItemInt (hDlg, IDC_TRAFFICLEVER_WPY, (int)wp_y, FALSE);
 	    SetDlgItemCheckState (hDlg, IDC_TRAFFICLEVER_RIGHT, NormalIndex);
 	    SetDlgItemCheckState (hDlg, IDC_TRAFFICLEVER_LEFT, ReverseIndex);
+            CacheInitSnapshot();
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
 		{
-		    long newnom = GetDlgItemInt (hDlg, IDC_TRAFFICLEVER_LEVER, &es, FALSE);
+		    /* validate all stuff before changing anything! */
+                    WP_cord new_wp_x = GetDlgItemInt (hDlg, IDC_TRAFFICLEVER_WPX, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Panel X coordinate.");
+                        return TRUE;
+                    }
+                    WP_cord new_wp_y = GetDlgItemInt (hDlg, IDC_TRAFFICLEVER_WPY, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Panel Y coordinate.");
+                        return TRUE;
+                    }
+                    long newnom = GetDlgItemInt (hDlg, IDC_TRAFFICLEVER_LEVER, &es, FALSE);
 		    if (!es) {
 			uerr (hDlg, "Bad lever number.");
 			return TRUE;
 		    }
+                    /* commit; change stuff.*/
+                    bool changed = false;
 		    if (newnom != XlkgNo) {
 			SetXlkgNo((int)newnom);
 			StatusMessage ("Traffic Lever %ld", newnom);
-			Invalidate();
-			BufferModified = TRUE;
+                        changed = true;
 		    }
 		    int new_right_normal = GetDlgItemCheckState
 					   (hDlg, IDC_TRAFFICLEVER_RIGHT)
 					   ? 1 : 0;
 		    if (new_right_normal != NormalIndex) {
 			SetNormalReverseStatus (new_right_normal);
-			Invalidate();
-			BufferModified = TRUE;
+                        changed = true;
 		    }
-		}
 
-		{
-		    WP_cord new_wp_x = GetDlgItemInt (hDlg, IDC_TRAFFICLEVER_WPX, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Panel X coordinate.");
-			return TRUE;
-		    }
-		    WP_cord new_wp_y = GetDlgItemInt (hDlg, IDC_TRAFFICLEVER_WPY, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Panel Y coordinate.");
-			return TRUE;
-		    }
 		    if (wp_x != new_wp_x || wp_y != new_wp_y) {
 			MoveWP(new_wp_x, new_wp_y);
-			BufferModified = TRUE;
+                        changed = true;
 		    }
+                    if (changed) {
+                        BufferModified = true;
+                        Invalidate();
+                        Undo::RecordChangedProps(this, PropCellCache);
+                    }
+                    else
+                        DiscardPropCache();
+
 		}
 		EndDialog (hDlg, TRUE);
 		return TRUE;
 
 		case IDCANCEL:
 		    EndDialog (hDlg, FALSE);
+                    DiscardPropCache();
 		    return TRUE;
 		default:
 		    return FALSE;

@@ -24,15 +24,13 @@ public:
 template <class Derived>
 class PropEditor {};
 
-template <class Derived>
-class PropEditorCRTP {};
-
 #else
 
 template <typename Derived>  /* CRTP "Curiously Recurring Template Pattern", from ATLanta, apparently */
 class PropEditor {
 public:
     Undo::PropCellBase* PropCellCache;
+
     Undo::PropCellBase * CacheInitSnapshot() {
         PropCellCache = Derived::PropCell::CreatePropCell();
         PropCellCache->Snapshot(static_cast<Derived*>(this));
@@ -57,15 +55,15 @@ public:
 
 };
 
-template <typename DerivedCellType, typename ObjectType>
-class PropCellPCRTP : public Undo::PropCellBase {
+template <typename DerivedCellType, typename GraphicObjectType>
+class PropCellPCRTP : public Undo::PropCellBase { //P = "pseudo"
 public:
     virtual Undo::PropCellBase* PostSnap (GraphicObject* g) {
-        return ((ObjectType*)g)->PostSnap(g);
+        return ((GraphicObjectType*)g)->PostSnap(g);
     }
+
     static Undo::PropCellBase* CreatePropCell() {
         return new DerivedCellType();
-        
     }
 };
 

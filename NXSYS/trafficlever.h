@@ -9,6 +9,8 @@
 #endif
 #include <string>
 
+#include "PropCell.h"
+
 class TrafficLever;
 
 #define TRAFLEV_LEFT  0
@@ -37,7 +39,7 @@ public:
 #endif
 };
 
-class TrafficLever : public GraphicObject {
+class TrafficLever : public GraphicObject, public PropEditor<TrafficLever> {
   public:
     int XlkgNo;
 
@@ -56,6 +58,28 @@ class TrafficLever : public GraphicObject {
     void ProcessLoadComplete();
 
 #else
+    class PropCell : public PropCellPCRTP<PropCell, TrafficLever> {
+        int XlkgNo;
+        WP_cord wp_x, wp_y;
+        int NormalIndex, ReverseIndex;
+    public:
+        void virtual Snapshot(GraphicObject* g) {
+            TrafficLever * t = (TrafficLever*)g;
+            XlkgNo = t->XlkgNo;
+            wp_x = t->wp_x;
+            wp_y = t->wp_y;
+            NormalIndex = t->NormalIndex;
+            ReverseIndex = t->ReverseIndex;
+        }
+        void virtual Restore(GraphicObject* g) {
+            TrafficLever * t = (TrafficLever*)g;
+            t->SetXlkgNo(XlkgNo);
+            t->wp_x = wp_x;
+            t->wp_y = wp_y;
+            t->NormalIndex = NormalIndex;
+            t->ReverseIndex = ReverseIndex;
+        }
+    };
 
     virtual void EditClick(int x, int y);
     virtual ~TrafficLever();
