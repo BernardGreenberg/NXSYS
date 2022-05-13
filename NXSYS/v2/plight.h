@@ -2,6 +2,7 @@
 #define _NX_PANEL_LIGHT_H__
 
 #include "typeid.h"
+#include "PropCell.h"
 
 #if !TLEDIT
 #include "relays.h"
@@ -43,7 +44,7 @@ class PanelLightAspect
 #endif
 };
 
-class PanelLight : public GraphicObject {
+class PanelLight : public GraphicObject, public PropEditor<PanelLight> {
 
   public:
     int XlkgNo;
@@ -72,6 +73,23 @@ class PanelLight : public GraphicObject {
     void ProcessLoadComplete();
 #endif
 
+#ifdef TLEDIT
+    class PropCell : public PropCellPCRTP<PropCell, PanelLight> {
+        int XlkgNo, Radius;
+        WP_cord wp_x, wp_y;
+        void Snapshot(GraphicObject* g) {
+            wp_x = g->wp_x;
+            wp_y = g->wp_y;
+            Radius = ((PanelLight*)g)->Radius;
+            XlkgNo =((PanelLight*)g)->XlkgNo;
+        }
+        void Restore(GraphicObject* g) {
+            g->MoveWP (wp_x, wp_y);
+            ((PanelLight*)g)->SetRadius(Radius);
+            ((PanelLight*)g)->XlkgNo = XlkgNo;
+        }
+    };
+#endif
 };
 
 void InitPanelLightData();

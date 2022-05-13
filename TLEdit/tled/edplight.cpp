@@ -15,6 +15,7 @@
 #include "dragger.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
+#include "undo.h"
 
 #include <string>
 
@@ -82,7 +83,6 @@ void PanelLight::Display (HDC hdc) {
 
 BOOL_DLG_PROC_QUAL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 
-    BOOL es;
     switch (message) {
 	case WM_INITDIALOG:
 	{
@@ -102,23 +102,37 @@ BOOL_DLG_PROC_QUAL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 		    if (aspect.Colorstring == colord.color_letter)
                         SetDlgItemTextS (hDlg, colord.control_id, aspect.RelayName);
 	    }
+            CacheInitSnapshot();
 	    return TRUE;
 	}
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
-		{
-		    long newnom = GetDlgItemInt (hDlg, IDC_PANELLIGHT_LEVER, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad lever number.");
-			return TRUE;
-		    }
-
-		    int newrad  = GetDlgItemInt (hDlg, IDC_PANELLIGHT_RADIUS, &es, FALSE);
-		    if (!es || newrad <= 3) {
-			uerr (hDlg, "Bad radius.");
-			return TRUE;
-		    }
+                {
+                    BOOL es;
+                    
+                    WP_cord new_wp_x = GetDlgItemInt (hDlg, IDC_PANELLIGHT_WPX, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Panel X coordinate.");
+                        return TRUE;
+                    }
+                    WP_cord new_wp_y = GetDlgItemInt (hDlg, IDC_PANELLIGHT_WPY, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Panel Y coordinate.");
+                        return TRUE;
+                    }
+                    
+                    long newnom = GetDlgItemInt (hDlg, IDC_PANELLIGHT_LEVER, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad lever number.");
+                        return TRUE;
+                    }
+                    
+                    int newrad  = GetDlgItemInt (hDlg, IDC_PANELLIGHT_RADIUS, &es, FALSE);
+                    if (!es || newrad <= 3) {
+                        uerr (hDlg, "Bad radius.");
+                        return TRUE;
+                    }
                     
                     for (auto& colord : ColorData) {
                         std::string data = GetPLDlgString(hDlg, colord.control_id);
@@ -127,46 +141,37 @@ BOOL_DLG_PROC_QUAL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                             return TRUE;
                         }
                     }
-
-		    if (!InstallDlgLights (hDlg))
-			return TRUE;
-
-		    if (newnom != XlkgNo) {
+                    
+                    if (!InstallDlgLights (hDlg))
+                        return TRUE;
+                    
+                    if (newnom != XlkgNo) {
                         XlkgNo =(int)newnom;
-			StatusMessage ("Panel light/%ld", newnom);
-			Invalidate();
-			BufferModified = TRUE;
-		    }
+                        StatusMessage ("Panel light/%ld", newnom);
+                        Invalidate();
+                        BufferModified = TRUE;
+                    }
+                    
+                    if (newrad != Radius) {
+                        SetRadius(newrad);
+                        Invalidate();
+                        ComputeVisibleLast();
+                        BufferModified = TRUE;
+                    }
+                    
+                    if (wp_x != new_wp_x || wp_y != new_wp_y) {
+                        MoveWP(new_wp_x, new_wp_y);
+                        BufferModified = TRUE;
+                    }
 
-		    if (newrad != Radius) {
-			SetRadius(newrad);
-			Invalidate();
-			ComputeVisibleLast();
-			BufferModified = TRUE;
-		    }
-		}
-
-
-		{
-		    WP_cord new_wp_x = GetDlgItemInt (hDlg, IDC_PANELLIGHT_WPX, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Panel X coordinate.");
-			return TRUE;
-		    }
-		    WP_cord new_wp_y = GetDlgItemInt (hDlg, IDC_PANELLIGHT_WPY, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Panel Y coordinate.");
-			return TRUE;
-		    }
-		    if (wp_x != new_wp_x || wp_y != new_wp_y) {
-			MoveWP(new_wp_x, new_wp_y);
-			BufferModified = TRUE;
-		    }
-		}
-		EndDialog (hDlg, TRUE);
-		return TRUE;
+                    /* just assume stuff changed */
+                    Undo::RecordChangedProps(this, PropCellCache);
+                    EndDialog (hDlg, TRUE);
+                    return TRUE;
+                }
 
 		case IDCANCEL:
+                    DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;
 		default:
