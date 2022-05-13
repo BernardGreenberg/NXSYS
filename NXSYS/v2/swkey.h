@@ -42,16 +42,13 @@ class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
 #ifdef TLEDIT
     class PropCell : public PropCellPCRTP<PropCell, SwitchKey> {
         int XlkgNo;
-        WP_cord wp_x, wp_y;
         virtual void Snapshot(GraphicObject*g) {
-            SwitchKey * k = (SwitchKey*) g;
-            XlkgNo = k->XlkgNo;
-            wp_x = k->wp_x;
-            wp_y = k->wp_y;
+            SnapWPpos (g);
+            XlkgNo = ((SwitchKey*)g)->XlkgNo;
         }
         virtual void Restore(GraphicObject*g) {
             ((SwitchKey*)g)->SetXlkgNo(XlkgNo);
-            g->MoveWP(wp_x, wp_y);
+            RestoreWPpos(g);
         }
     };
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);

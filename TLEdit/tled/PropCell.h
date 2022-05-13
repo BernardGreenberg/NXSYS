@@ -12,10 +12,20 @@
 namespace Undo {
 class PropCellBase {
 public:
+    WP_cord wp_x, wp_y;
     virtual ~PropCellBase() = 0;
     virtual void Snapshot (GraphicObject* g) = 0;
     virtual void Restore(GraphicObject* g) = 0;
     virtual PropCellBase* PostSnap(GraphicObject* g) = 0;
+    
+    void SnapWPpos(GraphicObject* g) {
+        wp_x = g->wp_x;
+        wp_y = g->wp_y;
+    }
+    
+    void RestoreWPpos(GraphicObject* g) {
+        g->MoveWP(wp_x, wp_y); // No-op if already in the right place.
+    }
 };
 
 } //namespace Undo

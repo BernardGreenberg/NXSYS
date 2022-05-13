@@ -60,21 +60,19 @@ class TrafficLever : public GraphicObject, public PropEditor<TrafficLever> {
 #else
     class PropCell : public PropCellPCRTP<PropCell, TrafficLever> {
         int XlkgNo;
-        WP_cord wp_x, wp_y;
         int NormalIndex, ReverseIndex;
     public:
         void virtual Snapshot(GraphicObject* g) {
+            SnapWPpos(g);
             TrafficLever * t = (TrafficLever*)g;
             XlkgNo = t->XlkgNo;
-            wp_x = t->wp_x;
-            wp_y = t->wp_y;
             NormalIndex = t->NormalIndex;
             ReverseIndex = t->ReverseIndex;
         }
         void virtual Restore(GraphicObject* g) {
+            RestoreWPpos(g);
             TrafficLever * t = (TrafficLever*)g;
             t->SetXlkgNo(XlkgNo);
-            g->MoveWP(wp_x, wp_y); // will no-op if already in place 
             t->NormalIndex = NormalIndex;
             t->ReverseIndex = ReverseIndex;
         }
