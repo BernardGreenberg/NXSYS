@@ -34,7 +34,7 @@ class PropEditor {
 public:
     Undo::PropCellBase* PropCellCache;
     Undo::PropCellBase * CacheInitSnapshot() {
-        PropCellCache = static_cast<Derived*>(this)->CreatePropCell();
+        PropCellCache = Derived::PropCell::CreatePropCell();
         PropCellCache->Snapshot(static_cast<Derived*>(this));
         return PropCellCache;
     }
@@ -50,18 +50,22 @@ public:
     }
     
     Undo::PropCellBase* PostSnap(GraphicObject* g) {
-        Undo::PropCellBase* npc = static_cast<Derived*>(this)->CreatePropCell();
+        Undo::PropCellBase* npc = Derived::PropCell::CreatePropCell();
         npc->Snapshot(g);
         return npc;
     }
 
 };
 
-template <typename ObjectType>
+template <typename DerivedCellType, typename ObjectType>
 class PropCellPCRTP : public Undo::PropCellBase {
 public:
     virtual Undo::PropCellBase* PostSnap (GraphicObject* g) {
         return ((ObjectType*)g)->PostSnap(g);
+    }
+    static Undo::PropCellBase* CreatePropCell() {
+        return new DerivedCellType();
+        
     }
 };
 

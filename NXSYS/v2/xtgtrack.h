@@ -367,7 +367,9 @@ public:
     virtual TypeId TypeID();
     virtual bool IsNomenclature(long);
 #ifdef TLEDIT
-    class PropCell : public PropCellPCRTP<ExitLight> {
+    /* this is so tricky I can barely understand what I have created, but
+     the goal here is minimal constant code */
+    class PropCell : public PropCellPCRTP<PropCell, ExitLight> {
         int LeverNumber;
     public:
         void virtual Snapshot(GraphicObject* g) {
@@ -377,9 +379,6 @@ public:
             ((ExitLight*)g)->XlkgNo = LeverNumber;
         }
     };
-    static PropCell* CreatePropCell() {
-        return new PropCell();
-    }
 
     virtual int Dump (ObjectWriter& W);
     virtual void Select();
