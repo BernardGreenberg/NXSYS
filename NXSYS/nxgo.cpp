@@ -338,6 +338,10 @@ void GraphicObject::GetVisible () {
 
 
 void GraphicObject::MoveWP (WP_cord x, WP_cord y) {
+    /* 5/13/2022 - very important for null property changes in new TLEdit undo system*/
+    if (x == wp_x && y == wp_y)
+        return;
+
     BOOL wasv = Visible;
     if (wasv)
 	Hide();
