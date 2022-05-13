@@ -11,6 +11,7 @@
 #include "signal.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
+#include "undo.h"
 
 UINT ExitLight::DlgId () {return IDD_EDIT_EXLIGHT;}
 
@@ -37,6 +38,7 @@ void TLEditCreateExitLightFromSignal (PanelSignal* ps, bool upright) {
 
 void ExitLight::Cut () {
     TrackSegEnd & E = Seg->GetEnd(EndIndex);
+    Undo::RecordGOCut(this);
     delete this;
     if (E.SignalProtectingEntrance)
 	E.SignalProtectingEntrance->PSignal->Select();
