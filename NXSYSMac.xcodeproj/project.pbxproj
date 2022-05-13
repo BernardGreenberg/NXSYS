@@ -415,6 +415,7 @@
 		5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = SwitchConsistency.cpp; sourceTree = "<group>"; };
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
+		5B985F12282E851C0036648F /* PropCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropCell.h; sourceTree = "<group>"; };
 		5BA5385227DF75DB00D39B28 /* ValidatingValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValidatingValue.h; sourceTree = "<group>"; };
 		5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tlehlptx.txt; sourceTree = "<group>"; };
 		5BA6F73019CCA375002551F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SignalProperties.xib; sourceTree = "<group>"; };
@@ -557,7 +558,6 @@
 		5BE487E2199D0A5C007BD6BF /* AppDelegate.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; tabWidth = 8; };
 		5BE487E5199D0A5C007BD6BF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5BE487E7199D0A5C007BD6BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		5BE487EE199D0A5C007BD6BF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		5BE49431199D0B2D007BD6BF /* readsexp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = readsexp.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BE49436199D1A14007BD6BF /* lisp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lisp.h; sourceTree = "<group>"; tabWidth = 8; };
 		5BED455D19D1ADD300A22DE8 /* Plights.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plights.png; sourceTree = "<group>"; };
@@ -906,6 +906,7 @@
 				5B30B10727E4FDCC000D59C8 /* salvager.hpp */,
 				5B5AE6692311BF8600348612 /* tlpropdlg.h */,
 				5B556417282B095B00FB2CF6 /* undo.h */,
+				5B985F12282E851C0036648F /* PropCell.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -1239,7 +1240,6 @@
 				5B5AE627230C8B8B00348612 /* libc.tbd */,
 				5B47F34819AFAFE800CBB80A /* WebKit.framework */,
 				5BE487CF199D0A5C007BD6BF /* Cocoa.framework */,
-				5BE487EE199D0A5C007BD6BF /* XCTest.framework */,
 				5BE487D1199D0A5C007BD6BF /* Other Frameworks */,
 			);
 			name = Frameworks;

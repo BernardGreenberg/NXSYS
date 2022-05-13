@@ -83,11 +83,13 @@ BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 	    o = Seg->EndOrientationKey(EndIndex);
 	    SetDlgItemTextS (hDlg, IDC_EDIT_XLIGHT_ORIENT,
                             FormatString("Orientation: %c", o));
+            CacheInitSnapshot();
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDCANCEL:
 		    EndDialog (hDlg, FALSE);
+                    DiscardPropCache();
 		    return TRUE;
 		case IDOK:
 		{
@@ -103,6 +105,7 @@ BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 			Select();	/* cause new status line */
 		    }
 		    EndDialog (hDlg, TRUE);
+                    Undo::RecordChangedProps(this, PropCellCache);
 		    return TRUE;
 		}
 	    }

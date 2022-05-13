@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <cstdarg>
 #include <cassert>
+#include <memory>
 
 using std::vector, std::string;
 using GOptr = GraphicObject*;
@@ -34,6 +35,10 @@ std::unordered_map<RecType, string> RecTypeNames {
     {RecType::MoveGO, "move"},
     {RecType::SimpleMoveJoint, "move"}
 };
+
+PropCellBase::~PropCellBase () {
+    //even though destructor is marked pure, this must be provided!!!
+}
 
 struct Coords {
     Coords(WP_cord x, WP_cord y) {
@@ -71,12 +76,21 @@ struct UndoRecord {
         obj_type = g->TypeID();
         coords = Coords(g);
     }
+    UndoRecord(GOptr g, PropCellBase* pcp_orig, PropCellBase* pcp_changed) {
+        coords = Coords(g);
+        rec_type = RecType::PropChange;
+        obj_type = g->TypeID();
+        orig_props.reset(pcp_orig);
+        changed_props.reset(pcp_changed);
+    }
 
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
     TypeId obj_type;
     Coords coords {0,0};
     Coords coords_old {-1,-1};
+    std::unique_ptr<PropCellBase> orig_props;
+    std::unique_ptr<PropCellBase> changed_props;
 
     string DescribeAction(string tag) {
         return tag + " " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
@@ -174,11 +188,18 @@ void RecordGOMoveComplete(GraphicObject* g) {
     }
 }
 
+void RecordChangedProps(GraphicObject* g, PropCellBase* pcp) {
+    PropCellBase* pre_change = pcp;
+    PropCellBase* post_change = pcp->PostSnap(g);
+    UndoStack.emplace_back(g, pre_change, post_change);
+    MarkForwardAction();
+}
+
+
 void Undo() {
     if (!IsUndoPossible())
         return;
-    UndoRecord R = UndoStack.back();
-    UndoStack.pop_back();
+    UndoRecord& R = UndoStack.back();
     RecType rt = R.rec_type;
     switch(rt) {
         case RecType::CreateGO:
@@ -208,11 +229,20 @@ void Undo() {
             RedoStack.emplace_back(rt, g, R.coords);
             break;
         }
+            
+        case RecType::PropChange:
+        {
+            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            R.orig_props->Restore(g);
+            g->Invalidate();
+            break;
+        }
 
         default:
             break;
             
     }
+    UndoStack.pop_back();
     compute_menu_state();
 }
 
@@ -220,8 +250,7 @@ void Undo() {
 void Redo() {
     if (!IsRedoPossible())
         return;
-    UndoRecord R = RedoStack.back();
-    RedoStack.pop_back();
+    UndoRecord& R = RedoStack.back();
     RecType rt = R.rec_type;
     switch(rt) {
         case RecType::CreateGO:
@@ -252,7 +281,10 @@ void Redo() {
         default:
             break;
     }
+    RedoStack.pop_back();
     compute_menu_state();
 }
+
+
 
 }

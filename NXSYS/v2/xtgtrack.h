@@ -22,6 +22,7 @@ class Turnout;
 #endif
 #ifdef TLEDIT
 #include "TLDlgProc.h"
+#include "PropCell.h"
 #endif
 
 /* Track section (branch) array index(es)*/
@@ -341,7 +342,7 @@ public:
    some methods in common. */
 #define EXLIGHT_DEFINED 1
 
-class ExitLight : public GraphicObject {
+class ExitLight : public PropEditor<ExitLight>, public GraphicObject {
 public:
     TrackSeg * Seg;
     int  XlkgNo;
@@ -366,6 +367,20 @@ public:
     virtual TypeId TypeID();
     virtual bool IsNomenclature(long);
 #ifdef TLEDIT
+    class PropCell : public PropCellPCRTP<ExitLight> {
+        int LeverNumber;
+    public:
+        void virtual Snapshot(GraphicObject* g) {
+            LeverNumber = ((ExitLight*)g)->XlkgNo;
+        }
+        void virtual Restore(GraphicObject* g) {
+            ((ExitLight*)g)->XlkgNo = LeverNumber;
+        }
+    };
+    static PropCell* CreatePropCell() {
+        return new PropCell();
+    }
+
     virtual int Dump (ObjectWriter& W);
     virtual void Select();
     virtual void Cut();
