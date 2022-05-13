@@ -74,8 +74,8 @@ class TrafficLever : public GraphicObject, public PropEditor<TrafficLever> {
         void virtual Restore(GraphicObject* g) {
             TrafficLever * t = (TrafficLever*)g;
             t->SetXlkgNo(XlkgNo);
-            t->wp_x = wp_x;
-            t->wp_y = wp_y;
+            if (wp_x != t->wp_x || wp_y != t->wp_y)
+                g->MoveWP(wp_x, wp_y);
             t->NormalIndex = NormalIndex;
             t->ReverseIndex = ReverseIndex;
         }
