@@ -252,7 +252,7 @@ public:
 };
 
 
-class PanelSignal  : public GraphicObject {
+class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
     public:    
 	PanelSignal(TrackSeg * ts, TSEX endx, Signal * s, char * text);
 	~PanelSignal();
@@ -280,7 +280,7 @@ class PanelSignal  : public GraphicObject {
 
 	virtual void Cut();
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
-    BOOL DlgOK(HWND hDlg);
+        BOOL DlgOK(HWND hDlg);
 	virtual UINT DlgId();
 #else
 	virtual void EditContextMenu(HMENU m);
@@ -299,6 +299,16 @@ class PanelSignal  : public GraphicObject {
 	virtual void UnHit();
 #endif
 
+#ifdef TLEDIT
+    class PropCell : public PropCellPCRTP<PropCell, PanelSignal> {
+        void Snapshot_(PanelSignal * p){
+            
+        }
+        void Restore_(PanelSignal * p) {
+            
+        }
+    };
+#endif
 };
 
 

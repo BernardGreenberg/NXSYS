@@ -13,6 +13,7 @@
 #include "xtgtrack.h"
 #include "typeid.h"
 #include "tledit.h"
+#include "undo.h"
 #include "resource.h"
 #include "assignid.h"
 #include "tlpropdlg.h"
@@ -51,6 +52,7 @@ void TLEditCreateSignal (TrackJoint * tj, bool upright) {
 		Ps->Select();
 		tj->PositionLabel();
 		BufferModified = TRUE;
+                Undo::RecordGOCreation(Ps);
 	    }
 	    else
 		ep->SignalProtectingEntrance->PSignal->Select();
@@ -102,6 +104,7 @@ void PanelSignal::Cut () {
     Seg->GetEnd(EndIndex).Joint->Select();
     /* query ++++++++++++++++++++++ */
     BufferModified = TRUE;
+    Undo::RecordGOCut(this);
     delete this;		/* should del Sig, and fix seg */
 }
 
