@@ -28,13 +28,15 @@ public:
     void SetNewLogfont (LOGFONT *);
     LOGFONT& RedeemLogfont();
 
-    /* variables de estato */
-    double AssumedScale;
-    std::string String;
-    int  OriginalLogfontIndex;
-    HFONT HFont;
-    COLORREF Color;
-    BOOL ColorGiven;
+    struct TextState {
+        /* variables de estato */
+        double AssumedScale;
+        std::string String;
+        int  OriginalLogfontIndex;
+        HFONT HFont;
+        COLORREF Color;
+        BOOL ColorGiven;
+    } S;
 
     /* funciones virtuales de GraphicObject */
     virtual void    Display(HDC dc) ;
@@ -44,28 +46,13 @@ public:
 
 #ifdef TLEDIT
     class PropCell : public PropCellPCRTP<PropCell, TextString> {
-        double AssumedScale;
-        std::string String;
-        int OriginalLogfontIndex;
-        HFONT HFont;
-        COLORREF Color;
-        BOOL ColorGiven;
+        TextState S;
     public:
         void Snapshot_ (TextString* t) {
-            AssumedScale = t->AssumedScale;
-            String = t->String;
-            OriginalLogfontIndex = t->OriginalLogfontIndex;
-            HFont = t->HFont;
-            Color = t->Color;
-            ColorGiven = t->ColorGiven;
+            S = t->S;
         }
         void Restore_ (TextString* t) {
-            t->AssumedScale = AssumedScale;
-            t->String = String;
-            t->OriginalLogfontIndex = OriginalLogfontIndex;
-            t->HFont = HFont;
-            t->Color = Color;
-            t->ColorGiven = ColorGiven;
+            t->S = S;
         }
     };
     

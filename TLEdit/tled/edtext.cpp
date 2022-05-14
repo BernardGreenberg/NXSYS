@@ -62,7 +62,7 @@ static void DumpString (const char * s, GraphicObject::ObjectWriter& W) {
 
 int TextString::Dump (ObjectWriter& W) {
     W.puts("  (TEXT\t");
-    DumpString(String.c_str(), W);
+    DumpString(S.String.c_str(), W);
     W.putf("\n\t\t%4ld\t%4ld", wp_x, wp_y);
     LOGFONT& lf = RedeemLogfont();
     if (lf.lfFaceName[0] != '\0')
@@ -82,9 +82,9 @@ int TextString::Dump (ObjectWriter& W) {
     if (lf.lfItalic)
 	W.puts("\n\tITALIC\tT");
 
-    if (ColorGiven)
+    if (S.ColorGiven)
         W.putf("\n\tCOLOR\t(%d %d %d)",
-               GetRValue (Color), GetGValue (Color), GetBValue (Color));
+               GetRValue (S.Color), GetGValue (S.Color), GetBValue (S.Color));
 
     W.puts(")\n");
     return TEXT_DUMP_PRIORITY;
@@ -234,15 +234,15 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 
     switch (message) {
 	case WM_INITDIALOG:
-            SetDlgItemTextS (hDlg, IDC_TEXT_TEXT, String);
+            SetDlgItemTextS (hDlg, IDC_TEXT_TEXT, S.String);
 #ifdef NXSYSMac
-            SetDlgItemTextS (hDlg, IDC_ETEXT_SAMPLE, String);
+            SetDlgItemTextS (hDlg, IDC_ETEXT_SAMPLE, S.String);
             SetDlgItemInt(hDlg, IDC_ETEXT_WPX, (int)wp_x, TRUE); // upd win dlg some day
             SetDlgItemInt(hDlg, IDC_ETEXT_WPY, (int)wp_y, TRUE);
 #endif
 	    memcpy (&TempLogfont, &RedeemLogfont(), sizeof(LOGFONT));
-	    TempColorGiven = ColorGiven;
-	    TempColor = ColorGiven ? Color : TrackDftCol;
+	    TempColorGiven = S.ColorGiven;
+	    TempColor = S.ColorGiven ? S.Color : TrackDftCol;
 	    SetTSDlgState (hDlg);
             CacheInitSnapshot();
 	    return TRUE;
@@ -263,7 +263,7 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 #endif
 		    Invalidate();
 		    
-                    String = GetDlgItemText (hDlg, IDC_TEXT_TEXT);
+                    S.String = GetDlgItemText (hDlg, IDC_TEXT_TEXT);
 
 		    GetDlgElementsToLogfont(hDlg);
 #ifdef NXSYSMac
@@ -279,8 +279,8 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 
                     ComputeVisibleLast();
 
-		    Color = TempColor;
-		    ColorGiven = TempColorGiven;
+		    S.Color = TempColor;
+		    S.ColorGiven = TempColorGiven;
                     Invalidate();
 
                     if (wp_x != new_wp_x || wp_y != new_wp_y) {

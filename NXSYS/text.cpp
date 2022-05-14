@@ -58,23 +58,25 @@ static HFONT GetCanonicalTextFont (LOGFONT* lfp) {
 }
 
 LOGFONT& TextString::RedeemLogfont() {
-    return LFTemplates[OriginalLogfontIndex];
+    return LFTemplates[S.OriginalLogfontIndex];
 }
 
 void TextString::SetNewLogfont (LOGFONT* lf) {
-    OriginalLogfontIndex = GetCanonicalLogfontIndex (lf);
-    AssumedScale = NXGO_Scale;
+    S.OriginalLogfontIndex = GetCanonicalLogfontIndex (lf);
+    S.AssumedScale = NXGO_Scale;
     ScaleSelf();
     Invalidate();
 }
 
 TextString::TextString (const char * string, LOGFONT * lf,
-			RW_cord x, long y, COLORREF color, BOOL colorgiven) :
-   Color(color), ColorGiven(colorgiven), String(string) {
+			RW_cord x, long y, COLORREF color, BOOL colorgiven) {
 
-    wp_x = x;
-    wp_y = y;
-    SetNewLogfont (lf);
+       S.Color = color;
+       S.ColorGiven = colorgiven;
+       S.String = string;
+        wp_x = x;
+        wp_y = y;
+        SetNewLogfont (lf);
 }
    
 
@@ -90,12 +92,12 @@ void TextString::ScaleSelf () {
     lf.lfHeight = (int) (NXGO_Scale*lf.lfHeight + .5);
     lf.lfWidth = (int) (NXGO_Scale*lf.lfWidth + .5);
     
-    HFont = GetCanonicalTextFont (&lf);
+    S.HFont = GetCanonicalTextFont (&lf);
     HDC hDC = GetDC (G_mainwindow);
     RECT r;
     memset (&r, 0, sizeof(r));
-    SelectObject (hDC, HFont);
-    int height = (int)DrawText (hDC, String.c_str(), (int)String.size(), &r,
+    SelectObject (hDC, S.HFont);
+    int height = (int)DrawText (hDC, S.String.c_str(), (int)S.String.size(), &r,
 			   DT_SINGLELINE | DT_NOCLIP |  DT_CALCRECT);
     ReleaseDC (G_mainwindow, hDC);
     wp_limits.left = - r.right/2 - 1;
@@ -103,11 +105,11 @@ void TextString::ScaleSelf () {
     wp_limits.top = -height/2 - 1;
     /* Descender issues here ... kludge it for now.*/
     wp_limits.bottom = (int)(height*0.7);  //This seems to work best, on Mac at least.
-    AssumedScale = NXGO_Scale;
+    S.AssumedScale = NXGO_Scale;
 }
 
 void TextString::Display (HDC hdc) {
-    if (NXGO_Scale != AssumedScale)
+    if (NXGO_Scale != S.AssumedScale)
 	ScaleSelf();
 
     RECT r;
@@ -115,17 +117,17 @@ void TextString::Display (HDC hdc) {
     r.right = WPXtoSC (wp_x + wp_limits.right);
     r.top = WPYtoSC (wp_y + wp_limits.top);
     r.bottom = WPYtoSC (wp_y + wp_limits.bottom);
-    SelectObject (hdc, HFont);
+    SelectObject (hdc, S.HFont);
     COLORREF tc = GetTextColor (hdc);
 #if TLEDIT
     if (Selected)
 	SetTextColor (hdc, RGB(0,255,0));
     else
 #endif
-	SetTextColor (hdc, ColorGiven ? Color : TrackDftCol);
+	SetTextColor (hdc, S.ColorGiven ? S.Color : TrackDftCol);
     /* whoops have to scale the damned thing for screen scaling*/
-    SelectObject (hdc, HFont);
-    DrawText (hdc, String.c_str(), (int)String.size(), &r,
+    SelectObject (hdc, S.HFont);
+    DrawText (hdc, S.String.c_str(), (int)S.String.size(), &r,
 	      DT_VCENTER | DT_CENTER |DT_SINGLELINE | DT_NOCLIP);
     SetTextColor (hdc, tc);
     SelectObject (hdc, Fnt);
