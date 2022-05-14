@@ -16,6 +16,7 @@
 #include "objreg.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
+#include "undo.h"
 
 #define TEXT_DUMP_PRIORITY 1000
 #ifdef NXSYSMac
@@ -243,6 +244,7 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 	    TempColorGiven = ColorGiven;
 	    TempColor = ColorGiven ? Color : TrackDftCol;
 	    SetTSDlgState (hDlg);
+            CacheInitSnapshot();
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
@@ -286,11 +288,13 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         Invalidate();
                     }
 
+                    Undo::RecordChangedProps(this, StealPropCache());
 		    BufferModified = TRUE;
 		    EndDialog (hDlg, TRUE);
 		    return TRUE;
 
 		case IDCANCEL:
+                    DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;
 
