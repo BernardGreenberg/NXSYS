@@ -49,9 +49,11 @@ public:
         TextState S;
     public:
         void Snapshot_ (TextString* t) {
+            SnapWPpos(t);
             S = t->S;
         }
         void Restore_ (TextString* t) {
+            RestoreWPpos(t);
             t->S = S;
         }
     };
