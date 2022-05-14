@@ -300,6 +300,7 @@ class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
 #endif
 
 #ifdef TLEDIT
+        virtual void MakeSelfVisible();
     class PropCell : public PropCellPCRTP<PropCell, PanelSignal> {
         void Snapshot_(PanelSignal * p){
             

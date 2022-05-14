@@ -108,6 +108,12 @@ void PanelSignal::Cut () {
     delete this;		/* should del Sig, and fix seg */
 }
 
+void PanelSignal::MakeSelfVisible () {
+    GraphicObject::MakeSelfVisible();
+    if (Label)
+        Label->MakeSelfVisible();
+}
+
 Signal::~Signal () {
     if (!NXGODeleteAll) {
 	if (XlkgNo)
