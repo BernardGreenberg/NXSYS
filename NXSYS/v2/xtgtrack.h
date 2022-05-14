@@ -353,7 +353,6 @@ public:
     unsigned char RedFlash;
     unsigned char Blacking;
 
-
 public:
 
     ExitLight (TrackSeg * seg, TSEX EndIndex, int xno);
@@ -367,16 +366,16 @@ public:
     virtual TypeId TypeID();
     virtual bool IsNomenclature(long);
 #ifdef TLEDIT
-    /* this is so tricky I can barely understand what I have created, but
-     the goal here is minimal constant code */
+    /* This is already so tricky that I can barely understand what I have created, but
+     the goal here is minimal duplicated code */
     class PropCell : public PropCellPCRTP<PropCell, ExitLight> {
         int LeverNumber;
     public:
-        void virtual Snapshot(GraphicObject* g) {
-            LeverNumber = ((ExitLight*)g)->XlkgNo;
+        void Snapshot_(ExitLight* e) {
+            LeverNumber = e->XlkgNo;
         }
-        void virtual Restore(GraphicObject* g) {
-            ((ExitLight*)g)->XlkgNo = LeverNumber;
+        void Restore_(ExitLight* e) {
+            e->XlkgNo = LeverNumber;
         }
     };
 

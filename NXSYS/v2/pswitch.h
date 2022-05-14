@@ -24,15 +24,14 @@ class PanelSwitch : public GraphicObject, public PropEditor<PanelSwitch> {
     class PropCell : public PropCellPCRTP<PropCell, PanelSwitch> {
         int XlkgNo;
         std::string RelayNomenclature;
-        void Snapshot(GraphicObject* g) {
-            SnapWPpos(g);
-            PanelSwitch* p = (PanelSwitch*)g;
+    public:
+        void Snapshot_(PanelSwitch* p) {
+            SnapWPpos(p);
             XlkgNo = p->XlkgNo;
             RelayNomenclature = p->RelayNomenclature;
         }
-        void Restore(GraphicObject* g) {
-            RestoreWPpos(g);
-            PanelSwitch* p = (PanelSwitch*)g;
+        void Restore_(PanelSwitch* p) {
+            RestoreWPpos(p);
             p->SetXlkgNo(XlkgNo);
             p->RelayNomenclature = RelayNomenclature;
         }

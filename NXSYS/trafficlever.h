@@ -62,16 +62,14 @@ class TrafficLever : public GraphicObject, public PropEditor<TrafficLever> {
         int XlkgNo;
         int NormalIndex, ReverseIndex;
     public:
-        void virtual Snapshot(GraphicObject* g) {
-            SnapWPpos(g);
-            TrafficLever * t = (TrafficLever*)g;
+        void Snapshot_(TrafficLever* t) {
+            SnapWPpos(t);
             XlkgNo = t->XlkgNo;
             NormalIndex = t->NormalIndex;
             ReverseIndex = t->ReverseIndex;
         }
-        void virtual Restore(GraphicObject* g) {
-            RestoreWPpos(g);
-            TrafficLever * t = (TrafficLever*)g;
+        void Restore_(TrafficLever* t) {
+            RestoreWPpos(t);
             t->SetXlkgNo(XlkgNo);
             t->NormalIndex = NormalIndex;
             t->ReverseIndex = ReverseIndex;

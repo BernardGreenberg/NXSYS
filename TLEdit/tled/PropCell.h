@@ -67,8 +67,18 @@ public:
 template <typename DerivedCellType, typename GraphicObjectType>
 class PropCellPCRTP : public Undo::PropCellBase { //P = "pseudo"
 public:
+    
+
     virtual Undo::PropCellBase* SnapshotNow (GraphicObject* g) {
         return ((GraphicObjectType*)g)->SnapshotNow(g);
+    }
+    
+    void Snapshot(GraphicObject*g) {
+        ((DerivedCellType*)this)->Snapshot_((GraphicObjectType*)g);
+    }
+    
+    void Restore(GraphicObject*g) {
+        ((DerivedCellType*)this)->Restore_((GraphicObjectType*)g);
     }
 };
 
