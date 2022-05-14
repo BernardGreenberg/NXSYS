@@ -188,10 +188,8 @@ void RecordGOMoveComplete(GraphicObject* g) {
     }
 }
 
-void RecordChangedProps(GraphicObject* g, PropCellBase* pcp) {
-    PropCellBase* pre_change = pcp;
-    PropCellBase* post_change = pcp->PostSnap(g);
-    UndoStack.emplace_back(g, pre_change, post_change);
+void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
+    UndoStack.emplace_back(g, pre_change_props, pre_change_props->SnapshotNow(g));
     MarkForwardAction();
 }
 

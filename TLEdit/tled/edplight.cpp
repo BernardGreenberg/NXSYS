@@ -165,7 +165,7 @@ BOOL_DLG_PROC_QUAL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                     }
 
                     /* just assume stuff changed */
-                    Undo::RecordChangedProps(this, PropCellCache);
+                    Undo::RecordChangedProps(this, StealPropCache());
                     EndDialog (hDlg, TRUE);
                     return TRUE;
                 }

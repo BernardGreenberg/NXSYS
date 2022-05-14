@@ -105,7 +105,7 @@ BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 			Select();	/* cause new status line */
 		    }
 		    EndDialog (hDlg, TRUE);
-                    Undo::RecordChangedProps(this, PropCellCache);
+                    Undo::RecordChangedProps(this, StealPropCache());
 		    return TRUE;
 		}
 	    }

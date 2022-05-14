@@ -16,7 +16,7 @@ public:
     virtual ~PropCellBase() = 0;
     virtual void Snapshot (GraphicObject* g) = 0;
     virtual void Restore(GraphicObject* g) = 0;
-    virtual PropCellBase* PostSnap(GraphicObject* g) = 0;
+    virtual PropCellBase* SnapshotNow(GraphicObject* g) = 0;
     
     void SnapWPpos(GraphicObject* g) {
         wp_x = g->wp_x;
@@ -35,32 +35,31 @@ template <class Derived>
 class PropEditor {};
 
 #else
+#include <memory>
 
 template <typename Derived>  /* CRTP "Curiously Recurring Template Pattern", from ATLanta, apparently */
 class PropEditor {
+private:
+    std::unique_ptr<Undo::PropCellBase> PropCellCache;
 public:
-    Undo::PropCellBase* PropCellCache;
 
-    Undo::PropCellBase * CacheInitSnapshot() {
-        PropCellCache = Derived::PropCell::CreatePropCell();
-        PropCellCache->Snapshot(static_cast<Derived*>(this));
-        return PropCellCache;
+    void CacheInitSnapshot() {
+        PropCellCache.reset(SnapshotNow(static_cast<Derived*>(this)));
     }
 
     void DiscardPropCache() {
-        delete TakeAndOwnCache();
+        PropCellCache.reset();
     }
     
-    Undo::PropCellBase* TakeAndOwnCache() {
-        Undo::PropCellBase* val = PropCellCache;
-        PropCellCache = nullptr;
-        return val;
+    Undo::PropCellBase* StealPropCache() {
+        return PropCellCache.release();
     }
-    
-    Undo::PropCellBase* PostSnap(GraphicObject* g) {
-        Undo::PropCellBase* npc = Derived::PropCell::CreatePropCell();
-        npc->Snapshot(g);
-        return npc;
+
+    Undo::PropCellBase* SnapshotNow(GraphicObject* g) {
+        /* Don't understand why "typename" is necessary, but xcode demanded it be there.*/
+        Undo::PropCellBase* new_prop_cell = new typename Derived::PropCell();
+        new_prop_cell->Snapshot(g);
+        return new_prop_cell;
     }
 
 };
@@ -68,12 +67,8 @@ public:
 template <typename DerivedCellType, typename GraphicObjectType>
 class PropCellPCRTP : public Undo::PropCellBase { //P = "pseudo"
 public:
-    virtual Undo::PropCellBase* PostSnap (GraphicObject* g) {
-        return ((GraphicObjectType*)g)->PostSnap(g);
-    }
-
-    static Undo::PropCellBase* CreatePropCell() {
-        return new DerivedCellType();
+    virtual Undo::PropCellBase* SnapshotNow (GraphicObject* g) {
+        return ((GraphicObjectType*)g)->SnapshotNow(g);
     }
 };
 

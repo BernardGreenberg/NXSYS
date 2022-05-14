@@ -106,7 +106,7 @@ BOOL_DLG_PROC_QUAL PanelSwitch::DlgProc  (HWND hDlg, UINT message, WPARAM wParam
                     if (changed) {
                         Invalidate();
                         BufferModified = TRUE;
-                        Undo::RecordChangedProps(this, PropCellCache);
+                        Undo::RecordChangedProps(this, StealPropCache());
                     }
                     else
                         DiscardPropCache();
