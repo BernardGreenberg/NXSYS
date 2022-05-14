@@ -300,7 +300,7 @@ void PanelSignal::PropCell::Snapshot_(PanelSignal * p) {
 
 void PanelSignal::PropCell::Restore_(PanelSignal * p) {
     Signal * S = p->Sig;
-    S->XlkgNo = XlkgNo;
+    p->SetXlkgNo(XlkgNo, TRUE);
     S->StationNo = StationNo;
     /* reconstructing heads may take work/new api */
 }
