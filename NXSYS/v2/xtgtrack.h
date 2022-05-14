@@ -302,12 +302,15 @@ class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
 #ifdef TLEDIT
         virtual void MakeSelfVisible();
     class PropCell : public PropCellPCRTP<PropCell, PanelSignal> {
-        void Snapshot_(PanelSignal * p){
-            
-        }
-        void Restore_(PanelSignal * p) {
-            
-        }
+    public:
+        int XlkgNo;
+        bool HasStop;
+        int StationNo;
+        char Orientation;
+        std::string Heads;
+        /* These are heavily dependent on the real "Signal".  Can't inline them.*/
+        void Snapshot_(PanelSignal * p);
+        void Restore_(PanelSignal * p);
     };
 #endif
 };

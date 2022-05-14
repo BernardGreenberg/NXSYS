@@ -192,6 +192,7 @@ BOOL PanelSignal::DlgOK(HWND hDlg) {
         delete Sig->TStop;
         Sig->TStop = NULL;
     }
+    Undo::RecordChangedProps(this, StealPropCache());
     BufferModified = TRUE;
     EndDialog (hDlg, TRUE);
     return TRUE;
@@ -221,12 +222,14 @@ BOOL_DLG_PROC_QUAL PanelSignal::DlgProc  (HWND hDlg, UINT message, WPARAM wParam
 			       Sig->StationNo, FALSE);
 	    SetDlgItemInt (hDlg, IDC_EDIT_SIG_LEVER, Sig->XlkgNo, FALSE);
             SetDlgItemText (hDlg, IDC_EDIT_SIG_HEADS, Sig->HeadsString.c_str());
+            CacheInitSnapshot();
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
                     return DlgOK(hDlg);
                 case IDCANCEL:
+                    DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;		    
 		case IDC_EDIT_SIGNAL_JOINT:
@@ -285,3 +288,21 @@ int PanelSignal::Dump (ObjectWriter& W) {
            extra);
     return SIGNAL_DUMP_ORDER;
 }
+
+void PanelSignal::PropCell::Snapshot_(PanelSignal * p) {
+    Signal * S = p->Sig;
+    XlkgNo = S->XlkgNo;
+    HasStop = S->TStop != nullptr;
+    Orientation = p->Orientation();
+    StationNo = S->StationNo;
+    /* IJID is probably not negotiable, but IJ position IS. */
+}
+
+void PanelSignal::PropCell::Restore_(PanelSignal * p) {
+    Signal * S = p->Sig;
+    S->XlkgNo = XlkgNo;
+    S->StationNo = StationNo;
+    /* reconstructing heads may take work/new api */
+}
+
+
