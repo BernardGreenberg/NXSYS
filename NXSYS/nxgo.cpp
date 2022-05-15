@@ -397,10 +397,15 @@ void FreeGraphicObjects () {
     VisibleObjects.clear();
 }
 
+WPPOINT GraphicObject::WPPoint() {
+    return WPPOINT(wp_x, wp_y);
+}
+
 GraphicObject * FindObjectByTypeAndWPpos(TypeId type, WP_cord wp_x, WP_cord wp_y) {
+    WPPOINT P(wp_x, wp_y);
     for (GraphicObject * g : AllObjects) {
         if (g->TypeID() == type)
-            if (g->wp_x == wp_x && g->wp_y == wp_y)
+            if (P == g->WPPoint())
                 return g;
     }
     return NULL;

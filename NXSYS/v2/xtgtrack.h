@@ -219,6 +219,7 @@ class TrackSeg : public GraphicObject {
 	void SetTrackCircuitWildfire (TrackCircuit * tc);
 	void GetGraphicsCoords (int ex, int& x, int& y);
 	virtual BOOL HitP (long x, long y);
+        virtual WPPOINT WPPoint();
 	BOOL HasCircuitBrothers();
         TSEX FindEndIndex (TrackJoint * tj);
         TrackSegEnd& GetEnd(TSEX ex);

@@ -141,6 +141,10 @@ void TrackSeg::Align () {
     Align (Ends[0].wpx, Ends[0].wpy, Ends[1].wpx, Ends[1].wpy);
 }
 
+WPPOINT TrackSeg::WPPoint() {
+    return WPPOINT((Ends[0].wpx + Ends[1].wpx)/2, (Ends[0].wpy + Ends[1].wpy)/2);
+}
+
 Virtual void TrackSeg::Display (HDC dc) {
     /* figure out correct state from track sec and containing switch */
     DisplayInState (dc, 0);

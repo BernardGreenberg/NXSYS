@@ -18,6 +18,18 @@ struct WPRECT {
     WP_cord top, bottom, left, right;
 };
 
+struct WPPOINT {
+    WP_cord x, y;
+
+    WPPOINT(WP_cord _x, WP_cord _y) : x(_x), y(_y) {};
+
+    bool operator ==(const WPPOINT& other) {
+        return x == other.x && y == other.y;
+    }
+    bool operator !=(const WPPOINT& other) {
+        return !(*this == other);
+    }
+};
 
 class GraphicObject {
 public:
@@ -47,6 +59,7 @@ public:
     virtual void    Deselect();
     virtual         ~GraphicObject();
     virtual void    ComputeWPRect();
+    virtual WPPOINT WPPoint();
 
     int     FindHitGo (SC_cord& x, SC_cord& y, int mb);
     void        Invalidate();
