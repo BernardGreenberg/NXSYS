@@ -23,43 +23,59 @@
 
 UINT PanelSignal::DlgId () {return IDD_EDIT_SIGNAL;}
 
+using FUTresult = std::pair<TSAX, TSEX>;
+
+static FUTresult FindUprightTSAX(TrackJoint * tj, bool upright) {
+    for (TSAX tsax : {TSAX::IJR0, TSAX::IJR1}) {
+        TrackSeg * ts = tj->GetBranch(tsax);
+        TSEX endx = ts->FindEndIndex(tj);
+        double angle = atan2(ts->SinTheta, ts->CosTheta);
+        if (endx == TSEX::E1)
+            angle += CONST_PI;
+        if (angle > CONST_2PI)
+            angle -= CONST_2PI;
+        if (angle < 0.0)
+            angle += CONST_2PI;
+        bool orient_upright = (angle < CONST_PI_OVER_4 || angle >= 5.0*CONST_PI_OVER_4);
+        if (upright == orient_upright)
+            return FUTresult(tsax,endx);
+    }
+    /* this ought not happen*/
+    assert (!"Can't find an upright TSAX");
+    return FUTresult(TSAX::NOTFOUND, TSEX::NOTFOUND);
+}
+
 void TLEditCreateSignal (TrackJoint * tj, bool upright) {
     if (tj->TSCount == 3) {
 	usererr ("Can't create signal at an actual switch, need an insulated joint.");
 	return;
     }
 
-    tj->Insulate();			/* ensure insulated */
-    for (int i = 0; i < tj->TSCount; i++) {
-	TrackSeg * ts = tj->TSA[i];
-	TSEX endx = ts->FindEndIndex(tj);
-        TrackSegEnd * ep = &ts->GetEnd(endx);
-	double angle = atan2(ts->SinTheta, ts->CosTheta);
-	if (endx == TSEX::E1)
-	    angle += CONST_PI;
-	if (angle > CONST_2PI)
-	    angle -= CONST_2PI;
-	if (angle < 0.0)
-	    angle += CONST_2PI;
-	bool orient_upright
-		= (angle < CONST_PI_OVER_4 || angle >= 5.0*CONST_PI_OVER_4);
-	if (upright == orient_upright) {
-	    if (ep->SignalProtectingEntrance == NULL) {
-                Signal * s = new Signal(0, 0, "GYR");
-		ep->SignalProtectingEntrance = s;
-		PanelSignal * Ps = new PanelSignal (ts, endx, s, NULL);
-		s->TStop = new Stop(s);
-		Ps->Select();
-		tj->PositionLabel();
-		BufferModified = TRUE;
-                Undo::RecordGOCreation(Ps);
-	    }
-	    else
-		ep->SignalProtectingEntrance->PSignal->Select();
-	    return;
-	}
+    auto [tsax, endx] = FindUprightTSAX(tj, upright);
+    TrackSeg * ts = tj->GetBranch(tsax);
+    TrackSegEnd * ep = &ts->GetEnd(endx);
+
+    if (ep->SignalProtectingEntrance != NULL) {  /* TLEdit UI feature */
+        ep->SignalProtectingEntrance->PSignal->Select();
+        return;
     }
 
+    if (!tj->Insulated) {
+        tj->Insulate();            /* ensure insulated  ************ NEEDS UNDO HAIR ********/
+    }
+
+    /* Commit to create the signal */
+
+    Signal * s = new Signal(0, 0, "GYR");
+    ep->SignalProtectingEntrance = s;
+    PanelSignal * Ps = new PanelSignal (ts, endx, s, NULL);
+    s->TStop = new Stop(s);
+    Ps->Select();
+    tj->PositionLabel();
+    BufferModified = TRUE;
+    Undo::RecordGOCreation(Ps);
+      
+    return;
 }
 
 void TLEditCreateSignalFromSignal (PanelSignal * ps, bool upright) {
