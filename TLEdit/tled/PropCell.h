@@ -30,11 +30,6 @@ public:
 
 } //namespace Undo
 
-#if !TLEDIT
-template <class Derived>
-class PropEditor {};
-
-#else
 #include <memory>
 
 template <typename Derived>  /* CRTP "Curiously Recurring Template Pattern", from ATLanta, apparently */
@@ -82,7 +77,5 @@ public:
     }
 };
 
-
-#endif
 
 #endif /* PropCell_h */

@@ -1,15 +1,9 @@
 #ifndef _NX_TRAFFICLEVER_H__
 #define _NX_TRAFFICLEVER_H__
 
-#ifdef TLEDIT
-#ifndef _FILE_DEFINED
-#include <stdio.h>
-#define _FILE_DEFINED
-#endif
-#endif
 #include <string>
 
-#include "PropCell.h"
+#include "propedit.h"
 
 class TrafficLever;
 

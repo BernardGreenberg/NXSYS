@@ -4,16 +4,12 @@
 /* 14 January 1998 */
 #include "typeid.h"
 #include "nxgo.h"
-#ifdef TLEDIT
-#include <stdio.h>
-#endif
-
 
 #define NXSYS_DEFAULT_TEXT_HEIGHT 20
 #define NXSYS_DEFAULT_TEXT_WEIGHT FW_BOLD
 
 #include <string>
-#include "PropCell.h"
+#include "propedit.h"
 
 GraphicObject*  LayoutTextString (const char * string,     LOGFONT * lftemplate,
                                   long x, long y, COLORREF color, BOOL colorgiven);

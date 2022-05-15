@@ -1,7 +1,7 @@
 #ifndef _NX_PANEL_SWITCH_H__
 #define _NX_PANEL_SWITCH_H__
 
-#include "PropCell.h"
+#include "propedit.h"
 #include <string>
 
 class PanelSwitch : public GraphicObject, public PropEditor<PanelSwitch> {

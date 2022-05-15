@@ -2,7 +2,7 @@
 #define _NX_PANEL_LIGHT_H__
 
 #include "typeid.h"
-#include "PropCell.h"
+#include "propedit.h"
 
 #if !TLEDIT
 #include "relays.h"

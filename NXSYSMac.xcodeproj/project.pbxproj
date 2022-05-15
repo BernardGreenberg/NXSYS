@@ -274,6 +274,7 @@
 
 /* Begin PBXFileReference section */
 		5B133A572649F5B800120B10 /* TrainWreck256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrainWreck256.png; sourceTree = "<group>"; };
+		5B1BE71728317E560015F847 /* propedit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = propedit.h; sourceTree = "<group>"; };
 		5B25511825B87D2B00A68D73 /* RelayIndex */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RelayIndex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B25511A25B87D2B00A68D73 /* RelayIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayIndex.cpp; sourceTree = "<group>"; };
 		5B256F4819B52B6D00F41527 /* StopPolicy.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StopPolicy.xib; sourceTree = "<group>"; };
@@ -878,6 +879,7 @@
 				5B2B337523036808004007A9 /* swkey.h */,
 				5B2B336E23033412004007A9 /* xtgtrack.h */,
 				5B5AE65E23116A0C00348612 /* xturnout.h */,
+				5B1BE71728317E560015F847 /* propedit.h */,
 			);
 			name = "V2 Headers";
 			sourceTree = "<group>";

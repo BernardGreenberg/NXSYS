@@ -22,8 +22,9 @@ class Turnout;
 #endif
 #ifdef TLEDIT
 #include "TLDlgProc.h"
-#include "PropCell.h"
 #endif
+
+#include "propedit.h"
 
 /* Track section (branch) array index(es)*/
 enum class TSAX {

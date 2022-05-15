@@ -2,10 +2,12 @@
 #define _NX_SWITCH_KEY_H__
 
 #include "RelayMovingPointer.h"
-#include "PropCell.h"
+
 
 
 #ifdef TLEDIT
+#include "PropCell.h"
+
 class SwitchKey : public GraphicObject, public PropEditor<SwitchKey> {
 #else
 class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
