@@ -105,7 +105,7 @@ void PanelSignal::Cut () {
     /* query ++++++++++++++++++++++ */
     BufferModified = TRUE;
     Undo::RecordGOCut(this);
-    delete this;		/* should del Sig, and fix seg */
+    delete this;		/* it deletes stop and fixes seg */
 }
 
 void PanelSignal::MakeSelfVisible () {
@@ -170,7 +170,19 @@ BOOL PanelSignal::DlgOK(HWND hDlg) {
     }
 
     /* committed to changes at this point */
+    ChangeXlkgNo(new_xlkg_no);
+    Sig->StationNo = new_sta_no;
+    Sig->HeadsString = GetDlgItemText(hDlg, IDC_EDIT_SIG_HEADS);
+    SetStoppiness(GetDlgItemCheckState (hDlg, IDC_EDIT_SIG_STOP) != 0);
+    Undo::RecordChangedProps(this, StealPropCache());
+    BufferModified = TRUE;
+    EndDialog (hDlg, TRUE);
+    return TRUE;
 
+}
+
+void PanelSignal::ChangeXlkgNo(int new_xlkg_no) {
+    int old_xlkg_no = Sig->XlkgNo;
     if (new_xlkg_no != old_xlkg_no) {
         if (old_xlkg_no != 0)
             DeAssignID (old_xlkg_no);
@@ -178,10 +190,11 @@ BOOL PanelSignal::DlgOK(HWND hDlg) {
         if (new_xlkg_no != 0)
             MarkIDAssign(new_xlkg_no);
     }
+}
 
-    Sig->StationNo = new_sta_no;
-    Sig->HeadsString = GetDlgItemText(hDlg, IDC_EDIT_SIG_HEADS);
-    int has_stop = GetDlgItemCheckState (hDlg, IDC_EDIT_SIG_STOP);
+void PanelSignal::SetStoppiness(bool has_stop) {
+    if (has_stop == (Sig->TStop != NULL))
+        return;
     if (has_stop) {
         if (!Sig->TStop) {
             Sig->TStop = new Stop (Sig);
@@ -192,11 +205,6 @@ BOOL PanelSignal::DlgOK(HWND hDlg) {
         delete Sig->TStop;
         Sig->TStop = NULL;
     }
-    Undo::RecordChangedProps(this, StealPropCache());
-    BufferModified = TRUE;
-    EndDialog (hDlg, TRUE);
-    return TRUE;
-
 }
 
 
@@ -295,14 +303,15 @@ void PanelSignal::PropCell::Snapshot_(PanelSignal * p) {
     HasStop = S->TStop != nullptr;
     Orientation = p->Orientation();
     StationNo = S->StationNo;
-    /* IJID is probably not negotiable, but IJ position IS. */
+    HeadsString = S->HeadsString;
 }
 
 void PanelSignal::PropCell::Restore_(PanelSignal * p) {
     Signal * S = p->Sig;
-    p->SetXlkgNo(XlkgNo, TRUE);
+    p->ChangeXlkgNo(XlkgNo);
     S->StationNo = StationNo;
-    /* reconstructing heads may take work/new api */
+    S->HeadsString = HeadsString;
+    p->SetStoppiness(HasStop);
 }
 
 

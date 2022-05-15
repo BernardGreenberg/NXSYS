@@ -282,6 +282,8 @@ class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
         BOOL DlgOK(HWND hDlg);
 	virtual UINT DlgId();
+        void SetStoppiness(bool has_stop);
+        void ChangeXlkgNo(int new_xlkg_no);
 #else
 	virtual void EditContextMenu(HMENU m);
 	void DrawFleeting(HDC dc, BOOL enabled);
@@ -307,7 +309,7 @@ class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
         bool HasStop;
         int StationNo;
         char Orientation;
-        std::string Heads;
+        std::string HeadsString;
         /* These are heavily dependent on the real "Signal".  Can't inline them.*/
         void Snapshot_(PanelSignal * p);
         void Restore_(PanelSignal * p);
