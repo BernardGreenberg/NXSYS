@@ -10,6 +10,7 @@
 #include "tledit.h"
 #include "objreg.h"
 #include "undo.h"
+#include "xtgtrack.h"
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -19,6 +20,7 @@
 
 using std::vector, std::string;
 using GOptr = GraphicObject*;
+using WPVEC = vector<WPPOINT>;
 GOptr ProcessNonGraphObjectCreateFormString(const char * s);
 
 void SetUndoRedoMenu(const char * undo, const char * redo);
@@ -26,7 +28,7 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 namespace Undo {
 
 enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint,
-    SimpleMoveJoint, IrreversibleAct
+    SimpleMoveJoint, IrreversibleAct, Wildfire
 };
 
 std::unordered_map<RecType, string> RecTypeNames {
@@ -35,12 +37,23 @@ std::unordered_map<RecType, string> RecTypeNames {
     {RecType::PropChange, "property change"},
     {RecType::MoveGO, "move"},
     {RecType::SimpleMoveJoint, "move"},
+    {RecType::Wildfire, "wildfire spread track circuit"},
     {RecType::IrreversibleAct, "currently irreversible act"}
 };
 
 PropCellBase::~PropCellBase () {
     //even though destructor is marked pure, this must be provided!!!
 }
+
+struct WildfireRecord {
+    WildfireRecord (const WPVEC& wpvec, int oldtc, int newtc) :
+    Segvec(wpvec), old_tcid(oldtc), new_tcid(newtc) {};
+
+    WPVEC Segvec;
+    int old_tcid;
+    int new_tcid;
+};
+
 
 struct Coords {
     Coords(WP_cord x, WP_cord y) {
@@ -85,18 +98,27 @@ struct UndoRecord {
         orig_props.reset(pcp_orig);
         changed_props.reset(pcp_changed);
     }
+    UndoRecord(WildfireRecord* wfrp) {
+        rec_type = RecType::Wildfire;
+        wf_objptr.reset(wfrp);
+        obj_type = TypeId::NONE;
+    }
 
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
     TypeId obj_type;
+    
     Coords coords {0,0};
     Coords coords_old {-1,-1};
     std::unique_ptr<PropCellBase> orig_props;
     std::unique_ptr<PropCellBase> changed_props;
+    std::unique_ptr<WildfireRecord> wf_objptr;
 
     string DescribeAction(string tag) {
         if (rec_type == RecType::IrreversibleAct)
             return "Can't " + tag + ": " + image;
+        else if (rec_type == RecType::Wildfire)
+            return tag + " wildfire spread TC";
         else
             return tag + " " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
     }
@@ -199,7 +221,12 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
     MarkForwardAction();
 }
 
-void RecordWildfireTCSpread(std::unordered_set<TrackSeg *>& segs) {
+void RecordWildfireTCSpread(std::unordered_set<TrackSeg *>& segs,
+                            int old_tcid, int new_tcid) {
+    vector<WPPOINT>seg_points;
+    for (auto seg : segs)
+        seg_points.push_back(seg->WPPoint());
+    UndoStack.emplace_back(new WildfireRecord(seg_points, old_tcid, new_tcid));
     MarkForwardAction();
 }
 
@@ -257,6 +284,20 @@ void Undo() {
             break;
         }
 
+        case RecType::Wildfire:
+        {
+//            int orig_id = R.wf_objptr->old_tcid; // not quite right -- must use for first TC
+            for (auto wp : R.wf_objptr->Segvec) {
+                TrackSeg* seg = static_cast<TrackSeg*>
+                   (FindObjectByTypeAndWPpos(TypeId::TRACKSEG, wp.x, wp.y));
+                assert(seg);
+                seg->SetTrackCircuit(0, FALSE);
+                seg->Invalidate();
+            }
+            RedoStack.emplace_back(R.wf_objptr.release());
+            break;
+        }
+
         default:
             break;
             
@@ -305,7 +346,19 @@ void Redo() {
             break;
         }
 
- 
+        case RecType::Wildfire:
+        {
+            int new_id = R.wf_objptr->new_tcid;
+            for (auto wp : R.wf_objptr->Segvec) {
+                TrackSeg* seg = static_cast<TrackSeg*>
+                (FindObjectByTypeAndWPpos(TypeId::TRACKSEG, wp.x, wp.y));
+                assert(seg);
+                seg->SetTrackCircuit(new_id, FALSE); // this is right...
+                seg->Invalidate();
+            }
+            UndoStack.emplace_back(R.wf_objptr.release());
+            break;
+        }
 
         default:
             break;

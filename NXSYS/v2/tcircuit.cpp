@@ -90,9 +90,10 @@ TrackCircuit * TrackSeg::SetTrackCircuit (long tcid, BOOL wildfire) {
     TrackCircuit * tc = GetTrackCircuit (tcid);
     if (wildfire) {
 #if TLEDIT
+        long orig_tcid = Circuit ? Circuit->StationNo : 0;
         WildfireLog.clear();
         SetTrackCircuitWildfire (tc);
-        Undo::RecordWildfireTCSpread(WildfireLog);
+        Undo::RecordWildfireTCSpread(WildfireLog, (int)orig_tcid, (int)tcid);
         WildfireLog.clear();
 #else
         SetTrackCircuitWildfire (tc);

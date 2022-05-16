@@ -24,7 +24,7 @@ void RecordGOMoveStart(GraphicObject* g);
 void RecordGOMoveComplete(GraphicObject* g);
 void RecordChangedProps(GraphicObject* g, PropCellBase* pcp);
 void RecordIrreversibleAct(const char * description);
-void RecordWildfireTCSpread(TSSet&);
+void RecordWildfireTCSpread(TSSet&, int old_tcid, int new_tcid);
 
 bool IsUndoPossible();
 bool IsRedoPossible();

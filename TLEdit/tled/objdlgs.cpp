@@ -266,13 +266,11 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 			}
 		    }
 		    long oldid = Circuit ? Circuit->StationNo : 0L;
+                    BOOL wildfire = GetDlgItemCheckState (hDlg, IDC_EDIT_SEG_SPREAD);
 		    if (oldid != newid) {
-			SetTrackCircuit
-				(newid,
-				 GetDlgItemCheckState
-				 (hDlg, IDC_EDIT_SEG_SPREAD))
-				->SetRouted(TRUE);
-                        Undo::RecordIrreversibleAct("change segment properties");
+                        SetTrackCircuit (newid, wildfire)->SetRouted(TRUE);
+                        if (!wildfire) // the track arsonist has his own undo visibility
+                            Undo::RecordIrreversibleAct("change track seg properties");
 		    }
 		    SelectMsg();
 		    EndDialog (hDlg, TRUE);
