@@ -112,7 +112,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 			Organize();
 
 		    std::swap (TSA[(int)TSAX::NORMAL], TSA[(int)TSAX::REVERSE]);
-                    Undo::RecordIrreversibleAct("Switch organization swap");
+                    Undo::RecordIrreversibleAct("swap switch branch tags");
 		    TSA[(int)TSAX::NORMAL]->Select();
 		    break;
 		case IDCANCEL:
@@ -208,7 +208,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 			MoveToNewWPpos(new_wp_x, new_wp_y);
 		}
 		Insulated = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
-                Undo::RecordIrreversibleAct("joint property change");
+                Undo::RecordIrreversibleAct("change track joint properties");
 		EndDialog (hDlg, TRUE);
 		return TRUE;
 
@@ -272,7 +272,7 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 				 GetDlgItemCheckState
 				 (hDlg, IDC_EDIT_SEG_SPREAD))
 				->SetRouted(TRUE);
-                        Undo::RecordIrreversibleAct("segment property change");
+                        Undo::RecordIrreversibleAct("change segment properties");
 		    }
 		    SelectMsg();
 		    EndDialog (hDlg, TRUE);

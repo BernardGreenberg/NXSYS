@@ -177,7 +177,7 @@ static void DefButtonUp2 (int x, int y) {
     /* else drop into new space or tj */
 
     /* This is the COMMIT point */
-    Undo::RecordIrreversibleAct("Joint merge");
+    Undo::RecordIrreversibleAct("create track segment");
 
     if (DefStartTrackSeg)
 	DefStartTrackSeg->Split (DefStartTrackJoint->wp_x,
@@ -410,8 +410,8 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
 	wpy = tj->wp_y;
 	MovTrackJoint->SwallowOtherJoint (tj);
     }
+    else Undo::RecordIrreversibleAct("move or create track joint");
 
-    Undo::RecordIrreversibleAct("Joint merge case 2");
     MovTrackJoint->MoveToNewWPpos (wpx, wpy);
 }
 
@@ -433,7 +433,7 @@ static BOOL MovButtonFirst = TRUE;
 	    if (!MovButtonFirst)
 		MovButtonUp (hWnd, x , y);
 	    else
-                Undo::RecordIrreversibleAct("Move joint case 2");
+                Undo::RecordIrreversibleAct("create mid-seg track joint");
 	    MovTrackJoint = NULL;
 	    for (int j = 0; j < 3; j++) {
 #ifdef NXSYSMac
@@ -715,7 +715,7 @@ void TrackJoint::Cut () {
     delete &ts1;
     delete this;
     SALVAGER("TrackJoint::Cut final");
-    Undo::RecordIrreversibleAct("Track joint delete");
+    Undo::RecordIrreversibleAct("delete track joint");
 }
 
 
@@ -797,6 +797,7 @@ void TrackJoint::SwallowOtherJoint (TrackJoint * other_tj) {
         }
     }
     delete other_tj;
+    Undo::RecordIrreversibleAct("merge track joints");
 }
 
 void TrackJoint::Organize () {
@@ -880,7 +881,7 @@ void TrackJoint::Select () {
 void TrackJoint::EnsureID() {
     if (Nomenclature == 0) {
 	Nomenclature = AssignID(1);
-        Undo::RecordIrreversibleAct("Track joint assign ID");
+        Undo::RecordIrreversibleAct("assign track joint ID");
     }
     PositionLabel();
 }
@@ -888,7 +889,7 @@ void TrackJoint::EnsureID() {
 void TrackJoint::FlipNum() {
     if (TSCount > 1) {
 	NumFlip = !NumFlip;
-        Undo::RecordIrreversibleAct("Track joint flip number");
+        Undo::RecordIrreversibleAct("flip track joint label");
 	PositionLabel();
     }
 }
@@ -897,7 +898,7 @@ void TrackJoint::Insulate() {
     if (!Insulated) {
 	Insulated = TRUE;
 	EnsureID();
-        Undo::RecordIrreversibleAct("Track joint insulate");
+        Undo::RecordIrreversibleAct("insulate track joint");
 	Invalidate();
     }
 }
@@ -941,7 +942,7 @@ void ShiftLayout (int x, int y) {
     MapAllGraphicObjects (ShiftMapper2, &xy);
     SetCursor (old_cursor);
     ComputeVisibleObjectsLast();
-    Undo::RecordIrreversibleAct("Shift layout");
+    Undo::RecordIrreversibleAct("shift layout");
 }
 
 

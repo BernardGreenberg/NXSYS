@@ -96,7 +96,7 @@ struct UndoRecord {
 
     string DescribeAction(string tag) {
         if (rec_type == RecType::IrreversibleAct)
-            return "Can't " + tag + " " + image;
+            return "Can't " + tag + ": " + image;
         else
             return tag + " " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
     }

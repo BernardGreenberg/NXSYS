@@ -100,12 +100,14 @@ void Dragger::Rodentate (HWND hWnd, int x, int y, UINT message, WPARAM wParam) {
             Undo::RecordGOCreation(Object);
         else if (MovingState == MOVSTATE_FROM_MOUSEDOWN)  //Movation
             Undo::RecordGOMoveComplete(Object);
+        else {
+            assert (!"Dragon unclear");
+        }
             
 	MovingState = MOVSTATE_NOT;
 	MouseupDragon = RodentatingDragon = NULL;
 	Object->Select();
 	Object = NULL;
-        Undo::RecordIrreversibleAct("joint creation or move");
 #ifdef NXSYSMac
         MacDragonOff();
 #endif

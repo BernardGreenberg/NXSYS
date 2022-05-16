@@ -118,7 +118,7 @@ void FlipSignal (PanelSignal * ps) {
        It's not at all inconceivable to implement undo, but there is no way to test it without
        UI to invoke it, so not worth it right now.  We should call the late Ub Iwerks. */
 
-    Undo::RecordIrreversibleAct("Flip signal position.");
+    Undo::RecordIrreversibleAct("flip signal position.");
 //    Undo::RecordChangedProps(ps, ps->StealPropCache());
 }
 
