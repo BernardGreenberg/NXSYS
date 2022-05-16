@@ -61,8 +61,9 @@ struct Coords {
         wp_y = y;
     }
     Coords(GOptr g) {
-        wp_x = g->wp_x;
-        wp_y = g->wp_y;
+        WPPOINT wpp = g->WPPoint();
+        wp_x = wpp.x;
+        wp_y = wpp.y;
     }
     bool operator == (const Coords& other) const {
         return wp_x == other.wp_x && wp_y == other.wp_y;

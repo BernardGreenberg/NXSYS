@@ -186,7 +186,7 @@ class TrackSegEnd {			//NOT a graphic object
 };
 
 
-class TrackSeg : public GraphicObject {
+class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
     public:
 	TrackSegEnd Ends[2];
 	TrackCircuit * Circuit;
@@ -225,6 +225,20 @@ class TrackSeg : public GraphicObject {
         TrackSegEnd& GetEnd(TSEX ex);
         TrackSegEnd& GetOtherEnd(TSEX ex);
 #ifdef TLEDIT
+        class PropCell : public PropCellPCRTP<PropCell, TrackSeg>
+        {
+            long tcid;
+        public:
+            void Snapshot_(TrackSeg * ts) {
+                if (ts->Circuit)
+                    tcid = ts->Circuit->StationNo;
+                else
+                    tcid = 0;
+            }
+            void Restore_(TrackSeg* ts) {
+                ts->SetTrackCircuit(tcid, FALSE);
+            }
+        };
 	char         EndOrientationKey (TSEX whichend);
 	virtual void Select();
 	virtual void Cut();
