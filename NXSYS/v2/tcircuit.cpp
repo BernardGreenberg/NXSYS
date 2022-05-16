@@ -5,9 +5,13 @@
 #include "nxgo.h"
 #include "xtgtrack.h"
 #include "math.h"
-#include "undo.h"
+#include <unordered_set>
 
 #include <vector>   // Vectorized for global array and local segs 9/27/2019
+
+#if TLEDIT
+#include "undo.h"
+#endif
 
 #ifdef REALLY_NXSYS
 #include "relays.h"
@@ -15,8 +19,6 @@
 #include "xturnout.h"
 #include "rlyapi.h"
 #endif
-
-#include <unordered_set>
 
 /* Track circuits are not GraphicObjects and need explicit tracking.
    Track seg(ment)s, on the other hand, are GO's and are tracked by the
@@ -80,12 +82,21 @@ void TrackCircuit::AddSeg (TrackSeg * ts) {
     Segments.push_back(ts);
 }
 
+#if TLEDIT
+std::unordered_set<TrackSeg*> WildfireLog;
+#endif
 
 TrackCircuit * TrackSeg::SetTrackCircuit (long tcid, BOOL wildfire) {
     TrackCircuit * tc = GetTrackCircuit (tcid);
     if (wildfire) {
-	SetTrackCircuitWildfire (tc);
-        Undo::RecordIrreversibleAct("spread wildfire track circuit");
+#if TLEDIT
+        WildfireLog.clear();
+        SetTrackCircuitWildfire (tc);
+        Undo::RecordWildfireTCSpread(WildfireLog);
+        WildfireLog.clear();
+#else
+        SetTrackCircuitWildfire (tc);
+#endif
     }
     else
 	SetTrackCircuit0 (tc);
@@ -105,11 +116,15 @@ void TrackSeg::SetTrackCircuitWildfire (TrackCircuit * tc) {
     if (Circuit == tc)
 	return;
     SetTrackCircuit0 (tc);
+#if TLEDIT
+    WildfireLog.insert(this);
+#endif
+    
     for (int ex = 0; ex < 2; ex++) {
 	TrackSegEnd* ep = &Ends[ex];
 	if (ep->Joint && ep->Joint->Insulated)
 	    continue;
-#ifdef TLEDIT
+#if TLEDIT
         if (TrackJoint * tj = ep->Joint) {
             for (int i = 0; i < tj->TSCount; i++) {
                 if (tj->TSA[i] != this)

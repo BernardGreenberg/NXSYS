@@ -11,6 +11,10 @@
 #include "nxgo.h"
 
 #include "PropCell.h"
+#include <unordered_set>
+
+class TrackSeg;
+using TSSet = std::unordered_set<TrackSeg *>;
 
 namespace Undo {
 
@@ -20,6 +24,7 @@ void RecordGOMoveStart(GraphicObject* g);
 void RecordGOMoveComplete(GraphicObject* g);
 void RecordChangedProps(GraphicObject* g, PropCellBase* pcp);
 void RecordIrreversibleAct(const char * description);
+void RecordWildfireTCSpread(TSSet&);
 
 bool IsUndoPossible();
 bool IsRedoPossible();

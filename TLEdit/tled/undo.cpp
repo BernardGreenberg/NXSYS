@@ -199,6 +199,10 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
     MarkForwardAction();
 }
 
+void RecordWildfireTCSpread(std::unordered_set<TrackSeg *>& segs) {
+    MarkForwardAction();
+}
+
 void RecordIrreversibleAct(const char * description) {
     UndoStack.emplace_back(RecType::IrreversibleAct, description, TypeId::NONE);
     MarkForwardAction();
