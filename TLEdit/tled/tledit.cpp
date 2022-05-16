@@ -335,13 +335,16 @@ static void MovButtonDown (HWND hWnd, int x, int y) {
 	TrackSeg * ts = SnapToTrackSeg (wpx, wpy);
 	if (ts) {
 	    MovTrackJoint = new TrackJoint (wpx, wpy);
+            WPPOINT unsplit_wp = ts->WPPoint();
 	    ts->Split (wpx, wpy, MovTrackJoint);
+            Undo::RecordJointCreation(MovTrackJoint, unsplit_wp);
 	}
 	else
 	    return;
     }
     MovTrackJoint->Select();
     ReportCoordsWP (MovTrackJoint->wp_x, MovTrackJoint->wp_y);
+    Undo::RecordGOMoveStart(MovTrackJoint);
     for (int j = 0; j < MovTrackJoint->TSCount; j++) {
 	TrackSeg * ts = MovTrackJoint->TSA[j];
 	TSEX fx = ts->FindEndIndex(MovTrackJoint);
@@ -410,9 +413,14 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
 	wpy = tj->wp_y;
 	MovTrackJoint->SwallowOtherJoint (tj);
     }
-    else Undo::RecordIrreversibleAct("move or create track joint");
+    
 
     MovTrackJoint->MoveToNewWPpos (wpx, wpy);
+
+    if (!tj) {
+        Undo::RecordGOMoveComplete(MovTrackJoint);
+    }
+
 }
 
 
@@ -432,8 +440,9 @@ static BOOL MovButtonFirst = TRUE;
 #endif
 	    if (!MovButtonFirst)
 		MovButtonUp (hWnd, x , y);
-	    else
-                Undo::RecordIrreversibleAct("create mid-seg track joint");
+            else {
+                // MovButton was first.   All set reported ok.
+            }
 	    MovTrackJoint = NULL;
 	    for (int j = 0; j < 3; j++) {
 #ifdef NXSYSMac
@@ -668,6 +677,19 @@ void TrackJoint::Cut () {
                 "Delete the branches emanating from it if that is what you mean.");
         return;
     }
+    
+    Undo::RecordGOCut(this); // gotta do it while we still exist!
+    Cut_();
+}
+
+void TrackJoint::Cut_() {
+
+    TrackSeg& ts0 = *TSA[0];
+    TrackSeg& ts1 = *TSA[1];
+    TSEX endxs[2];
+    /* These are the indexes in the end-arrays of our rays for this joint. */
+    endxs[0] = ts0.FindEndIndex(this);
+    endxs[1] = ts1.FindEndIndex(this);
 
     ts0.Invalidate();
     ts1.Invalidate();
@@ -715,7 +737,6 @@ void TrackJoint::Cut () {
     delete &ts1;
     delete this;
     SALVAGER("TrackJoint::Cut final");
-    Undo::RecordIrreversibleAct("delete track joint");
 }
 
 
@@ -881,7 +902,7 @@ void TrackJoint::Select () {
 void TrackJoint::EnsureID() {
     if (Nomenclature == 0) {
 	Nomenclature = AssignID(1);
-        Undo::RecordIrreversibleAct("assign track joint ID");
+        // don't think we have to undo/redo this
     }
     PositionLabel();
 }

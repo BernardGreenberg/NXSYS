@@ -36,6 +36,7 @@ std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CutGO, "cut"},
     {RecType::PropChange, "property change"},
     {RecType::MoveGO, "move"},
+    {RecType::CreateJoint, "create"},
     {RecType::SimpleMoveJoint, "move"},
     {RecType::Wildfire, "wildfire spread track circuit"},
     {RecType::IrreversibleAct, "currently irreversible act"}
@@ -104,6 +105,12 @@ struct UndoRecord {
         wf_objptr.reset(wfrp);
         obj_type = TypeId::NONE;
     }
+    UndoRecord(RecType type, TrackJoint* tj, WPPOINT a_seg_id) {
+        rec_type =type;
+        obj_type = tj->TypeID();
+        coords = Coords(tj);
+        seg_id = a_seg_id;
+    }
 
     RecType rec_type;
     string image;                    /* not valid or needed for create*/
@@ -114,6 +121,7 @@ struct UndoRecord {
     std::unique_ptr<PropCellBase> orig_props;
     std::unique_ptr<PropCellBase> changed_props;
     std::unique_ptr<WildfireRecord> wf_objptr;
+    WPPOINT seg_id{0,0};
 
     string DescribeAction(string tag) {
         if (rec_type == RecType::IrreversibleAct)
@@ -183,6 +191,10 @@ static GOptr FindObjByLoc(TypeId type, const Coords& C) {
     return g;
 }
 
+static GOptr FindObjByLoc(TypeId type, const WPPOINT& wp) {
+    return FindObjByLoc(type, Coords(wp.x, wp.y));
+}
+
 static void MoveGO (GOptr g, const Coords& C) {
     g->MoveWP(C.wp_x, C.wp_y);
 }
@@ -231,6 +243,11 @@ void RecordWildfireTCSpread(std::unordered_set<TrackSeg *>& segs,
     MarkForwardAction();
 }
 
+void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id) {
+    UndoStack.emplace_back(RecType::CreateJoint, tj, seg_id);
+    MarkForwardAction();
+}
+
 void RecordIrreversibleAct(const char * description) {
     UndoStack.emplace_back(RecType::IrreversibleAct, description, TypeId::NONE);
     MarkForwardAction();
@@ -268,10 +285,22 @@ void Undo() {
             break;
         }
 
+        case RecType::CreateJoint:
+        {
+            auto tj = (TrackJoint*)FindObjByLoc(R.obj_type, R.coords);
+            RedoStack.emplace_back(R.rec_type, tj, R.seg_id);  //do this before obliterating
+            tj->Cut_();
+            break;
+        }
+
         case RecType::MoveGO:
         {
             GOptr g = FindObjByLoc(R.obj_type, R.coords);
-            MoveGO(g, R.coords_old);
+            auto [x,y] = R.coords_old;
+            if (R.obj_type == TypeId::JOINT)
+                ((TrackJoint*)g)->MoveToNewWPpos(x, y);
+            else
+                MoveGO(g, R.coords_old);
             RedoStack.emplace_back(rt, g, R.coords);
             break;
         }
@@ -289,7 +318,7 @@ void Undo() {
         {
             int ct = 0;
             for (auto wp : R.wf_objptr->Segvec) {
-                TrackSeg* seg = static_cast<TrackSeg*>
+                auto seg = static_cast<TrackSeg*>
                    (FindObjectByTypeAndWPpos(TypeId::TRACKSEG, wp.x, wp.y));
                 assert(seg);
                 if (ct++ == 0)
@@ -325,6 +354,17 @@ void Redo() {
             break;
         }
 
+        case RecType::CreateJoint:
+        {
+            auto seg = (TrackSeg*) FindObjByLoc(TypeId::TRACKSEG, R.seg_id);
+            auto [x, y] = R.coords;
+            auto tj = new TrackJoint(x, y);
+            seg->Split(x, y, tj);
+            UndoStack.emplace_back(R.rec_type, tj, R.seg_id);
+            tj->Select();
+            break;
+        }
+
         case RecType::CutGO:
         {
             GOptr g = FindObjByLoc(R.obj_type, R.coords);
@@ -332,11 +372,15 @@ void Redo() {
             delete g;
             break;
         }
-
+            
         case RecType::MoveGO:
         {
             GOptr g = FindObjByLoc(R.obj_type, R.coords);
-            MoveGO(g, R.coords_old);
+            auto [x, y] = R.coords_old;
+            if (R.obj_type == TypeId::JOINT)
+                ((TrackJoint*)g)->MoveToNewWPpos(x, y);
+            else
+                MoveGO(g, R.coords_old);
             UndoStack.emplace_back(rt, g, R.coords);
             break;
         }

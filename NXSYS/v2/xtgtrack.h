@@ -121,6 +121,7 @@ class TrackJoint
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
 	void	SwallowOtherJoint (TrackJoint * tj);
         void	TDump (FILE * F, TSAX branch);
+        void    Cut_();  //Multics convention...
 	void	EnsureID();
 	void	Insulate();
 	void	FlipNum();
