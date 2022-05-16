@@ -105,7 +105,7 @@ void Dragger::Rodentate (HWND hWnd, int x, int y, UINT message, WPARAM wParam) {
 	MouseupDragon = RodentatingDragon = NULL;
 	Object->Select();
 	Object = NULL;
-	BufferModified = TRUE;
+        Undo::RecordIrreversibleAct("joint creation or move");
 #ifdef NXSYSMac
         MacDragonOff();
 #endif

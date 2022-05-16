@@ -72,7 +72,6 @@ void TLEditCreateSignal (TrackJoint * tj, bool upright) {
     s->TStop = new Stop(s);
     Ps->Select();
     tj->PositionLabel();
-    BufferModified = TRUE;
     Undo::RecordGOCreation(Ps);
       
     return;
@@ -108,20 +107,26 @@ void FlipSignal (PanelSignal * ps) {
 	usererr ("Both signal positions at this joint are occupied.  Can't flip this signal.");
 	return;
     }
+//    ps->CacheInitSnapshot();
     E.SignalProtectingEntrance = NULL;
     epother.SignalProtectingEntrance = s;
     ps->Seg = tsother;
     ps->EndIndex = exother;
     ps->Reposition();
-    BufferModified = TRUE;
+
+    /* There is currently (5-16-2022) no user interface in TLEdit which invokes FlipSignal.
+       It's not at all inconceivable to implement undo, but there is no way to test it without
+       UI to invoke it, so not worth it right now.  We should call the late Ub Iwerks. */
+
+    Undo::RecordIrreversibleAct("Flip signal position.");
+//    Undo::RecordChangedProps(ps, ps->StealPropCache());
 }
 
 void PanelSignal::Cut () {
     Seg->GetEnd(EndIndex).Joint->Select();
     /* query ++++++++++++++++++++++ */
-    BufferModified = TRUE;
     Undo::RecordGOCut(this);
-    delete this;		/* it deletes stop and fixes seg */
+    delete this;		/* this destructor deletes the TStop and decouples Seg */
 }
 
 void PanelSignal::MakeSelfVisible () {
@@ -191,7 +196,6 @@ BOOL PanelSignal::DlgOK(HWND hDlg) {
     Sig->HeadsString = GetDlgItemText(hDlg, IDC_EDIT_SIG_HEADS);
     SetStoppiness(GetDlgItemCheckState (hDlg, IDC_EDIT_SIG_STOP) != 0);
     Undo::RecordChangedProps(this, StealPropCache());
-    BufferModified = TRUE;
     EndDialog (hDlg, TRUE);
     return TRUE;
 
@@ -320,6 +324,9 @@ void PanelSignal::PropCell::Snapshot_(PanelSignal * p) {
     Orientation = p->Orientation();
     StationNo = S->StationNo;
     HeadsString = S->HeadsString;
+    TrackSeg* seg = p->Seg;
+    SegSignature = seg->WPPoint();
+    SegTSEX = (seg->Ends[0].SignalProtectingEntrance == S) ? TSEX::E0 : TSEX::E1;
 }
 
 void PanelSignal::PropCell::Restore_(PanelSignal * p) {
@@ -328,6 +335,11 @@ void PanelSignal::PropCell::Restore_(PanelSignal * p) {
     S->StationNo = StationNo;
     S->HeadsString = HeadsString;
     p->SetStoppiness(HasStop);
+    TrackSeg* seg = p->Seg;
+    WPPOINT cur_sig = seg->WPPoint();
+    TSEX cur_segtsex = (seg->Ends[0].SignalProtectingEntrance == S) ? TSEX::E0 : TSEX::E1;
+    if (cur_sig != SegSignature || cur_segtsex != SegTSEX)
+        usererr("Signal Prot Entrance Seg changed.");
 }
 
 

@@ -149,19 +149,16 @@ BOOL_DLG_PROC_QUAL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         XlkgNo =(int)newnom;
                         StatusMessage ("Panel light/%ld", newnom);
                         Invalidate();
-                        BufferModified = TRUE;
                     }
                     
                     if (newrad != Radius) {
                         SetRadius(newrad);
                         Invalidate();
                         ComputeVisibleLast();
-                        BufferModified = TRUE;
                     }
                     
                     if (wp_x != new_wp_x || wp_y != new_wp_y) {
                         MoveWP(new_wp_x, new_wp_y);
-                        BufferModified = TRUE;
                     }
 
                     /* just assume stuff changed */
@@ -226,7 +223,5 @@ BOOL PanelLight::InstallDlgLights (HWND hDlg) {
 	if (!relay_name.empty())
             AddAspect (colord.color_letter, relay_name.c_str());
     }
-
-    BufferModified = TRUE;
     return TRUE;
 }

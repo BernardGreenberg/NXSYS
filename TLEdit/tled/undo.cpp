@@ -7,6 +7,7 @@
 //
 #include "typeid.h"
 #include "nxgo.h"
+#include "tledit.h"
 #include "objreg.h"
 #include "undo.h"
 #include <vector>
@@ -25,7 +26,7 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 namespace Undo {
 
 enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateArc, DeleteArc, CreateJoint, DeleteJoint,
-    SimpleMoveJoint
+    SimpleMoveJoint, IrreversibleAct
 };
 
 std::unordered_map<RecType, string> RecTypeNames {
@@ -33,7 +34,8 @@ std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CutGO, "cut"},
     {RecType::PropChange, "property change"},
     {RecType::MoveGO, "move"},
-    {RecType::SimpleMoveJoint, "move"}
+    {RecType::SimpleMoveJoint, "move"},
+    {RecType::IrreversibleAct, "currently irreversible act"}
 };
 
 PropCellBase::~PropCellBase () {
@@ -93,7 +95,10 @@ struct UndoRecord {
     std::unique_ptr<PropCellBase> changed_props;
 
     string DescribeAction(string tag) {
-        return tag + " " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
+        if (rec_type == RecType::IrreversibleAct)
+            return "Can't " + tag + " " + image;
+        else
+            return tag + " " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
     }
 
 };
@@ -162,6 +167,7 @@ static void MoveGO (GOptr g, const Coords& C) {
 static void MarkForwardAction() {
     RedoStack.clear();
     compute_menu_state();
+    BufferModified = TRUE; /* when this sys is complete, won't need BufferModified*/
 }
     
 void RecordGOCreation(GraphicObject* g){
@@ -193,6 +199,10 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
     MarkForwardAction();
 }
 
+void RecordIrreversibleAct(const char * description) {
+    UndoStack.emplace_back(RecType::IrreversibleAct, description, TypeId::NONE);
+    MarkForwardAction();
+}
 
 void Undo() {
     if (!IsUndoPossible())
@@ -200,6 +210,12 @@ void Undo() {
     UndoRecord& R = UndoStack.back();
     RecType rt = R.rec_type;
     switch(rt) {
+        case RecType::IrreversibleAct:
+        {
+            usererr("Currently irreversible act (%s) may not be undone, nor any earlier acts.",
+                    R.image.c_str());
+            return;
+        }
         case RecType::CreateGO:
         {
             /* Can't store real object pointer in undo stack -- the object can be deleted and recreated
@@ -245,7 +261,6 @@ void Undo() {
     compute_menu_state();
 }
 
-/* Snapshot and manage BufferModified */
 void Redo() {
     if (!IsRedoPossible())
         return;

@@ -23,8 +23,6 @@ void TLEditCreateExitLightFromSignal (PanelSignal* ps, bool upright) {
     ExitLight * xl = E.ExLight;
 
     if (!xl) {
-	BufferModified = TRUE;
-
 	xl = E.ExLight = new ExitLight (ps->Seg, ps->EndIndex, ps->Sig->XlkgNo);
         Undo::RecordGOCreation(xl);
     }
@@ -44,7 +42,6 @@ void ExitLight::Cut () {
 	E.SignalProtectingEntrance->PSignal->Select();
     else
 	E.Joint->Select();
-    BufferModified = TRUE;
 }
 
 void ExitLight::Select () {
@@ -101,7 +98,6 @@ BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 		    }
 		    if (newno != XlkgNo) {
 			XlkgNo = newno;
-			BufferModified = TRUE;
 			Select();	/* cause new status line */
 		    }
 		    EndDialog (hDlg, TRUE);

@@ -312,6 +312,8 @@ class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
         int StationNo;
         char Orientation;
         std::string HeadsString;
+        WPPOINT SegSignature{0,0};
+        TSEX SegTSEX;
         /* These are heavily dependent on the real "Signal".  Can't inline them.*/
         void Snapshot_(PanelSignal * p);
         void Restore_(PanelSignal * p);

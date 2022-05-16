@@ -91,13 +91,11 @@ BOOL_DLG_PROC_QUAL TrafficLever::DlgProc  (HWND hDlg, UINT message, WPARAM wPara
                         changed = true;
 		    }
                     if (changed) {
-                        BufferModified = true;
                         Invalidate();
                         Undo::RecordChangedProps(this, StealPropCache());
                     }
                     else
                         DiscardPropCache();
-
 		}
 		EndDialog (hDlg, TRUE);
 		return TRUE;

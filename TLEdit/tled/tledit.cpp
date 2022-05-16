@@ -177,7 +177,7 @@ static void DefButtonUp2 (int x, int y) {
     /* else drop into new space or tj */
 
     /* This is the COMMIT point */
-    BufferModified = TRUE;
+    Undo::RecordIrreversibleAct("Joint merge");
 
     if (DefStartTrackSeg)
 	DefStartTrackSeg->Split (DefStartTrackJoint->wp_x,
@@ -411,7 +411,7 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
 	MovTrackJoint->SwallowOtherJoint (tj);
     }
 
-    BufferModified = TRUE;
+    Undo::RecordIrreversibleAct("Joint merge case 2");
     MovTrackJoint->MoveToNewWPpos (wpx, wpy);
 }
 
@@ -433,7 +433,7 @@ static BOOL MovButtonFirst = TRUE;
 	    if (!MovButtonFirst)
 		MovButtonUp (hWnd, x , y);
 	    else
-		BufferModified = TRUE;
+                Undo::RecordIrreversibleAct("Move joint case 2");
 	    MovTrackJoint = NULL;
 	    for (int j = 0; j < 3; j++) {
 #ifdef NXSYSMac
@@ -715,7 +715,7 @@ void TrackJoint::Cut () {
     delete &ts1;
     delete this;
     SALVAGER("TrackJoint::Cut final");
-    BufferModified = TRUE;  // I'll say ...
+    Undo::RecordIrreversibleAct("Track joint delete");
 }
 
 
@@ -756,7 +756,7 @@ void TrackSeg::Cut () {
 	j1->Select();
     delete this;
     SALVAGER("TrackSeg::Cut final");
-    BufferModified = TRUE;
+    Undo::RecordIrreversibleAct("delete track segment");
 }
 
 
@@ -880,7 +880,7 @@ void TrackJoint::Select () {
 void TrackJoint::EnsureID() {
     if (Nomenclature == 0) {
 	Nomenclature = AssignID(1);
-	BufferModified = TRUE;
+        Undo::RecordIrreversibleAct("Track joint assign ID");
     }
     PositionLabel();
 }
@@ -888,7 +888,7 @@ void TrackJoint::EnsureID() {
 void TrackJoint::FlipNum() {
     if (TSCount > 1) {
 	NumFlip = !NumFlip;
-	BufferModified = TRUE;
+        Undo::RecordIrreversibleAct("Track joint flip number");
 	PositionLabel();
     }
 }
@@ -897,7 +897,7 @@ void TrackJoint::Insulate() {
     if (!Insulated) {
 	Insulated = TRUE;
 	EnsureID();
-	BufferModified = TRUE;
+        Undo::RecordIrreversibleAct("Track joint insulate");
 	Invalidate();
     }
 }
@@ -912,7 +912,6 @@ int TrackJoint::SignalCount () {
     }
     return s;
 }
-
 
 BOOL TrackSegEnd::InsulatedP() {
     return Joint->Insulated;
@@ -942,12 +941,11 @@ void ShiftLayout (int x, int y) {
     MapAllGraphicObjects (ShiftMapper2, &xy);
     SetCursor (old_cursor);
     ComputeVisibleObjectsLast();
-    BufferModified = TRUE;		/* to put it mildly */
+    Undo::RecordIrreversibleAct("Shift layout");
 }
 
 
 Virtual void	GraphicObject:: Cut() {
-    BufferModified = TRUE;
     Undo::RecordGOCut(this);
     delete this;
     StatusMessage ("  ");

@@ -19,6 +19,7 @@ void RecordGOCut(GraphicObject* g);
 void RecordGOMoveStart(GraphicObject* g);
 void RecordGOMoveComplete(GraphicObject* g);
 void RecordChangedProps(GraphicObject* g, PropCellBase* pcp);
+void RecordIrreversibleAct(const char * description);
 
 bool IsUndoPossible();
 bool IsRedoPossible();

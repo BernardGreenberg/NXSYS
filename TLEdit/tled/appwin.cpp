@@ -412,7 +412,7 @@ void AppCommand(UINT command) {
 			" as currently shown?",
 			app_name, MB_YESNOCANCEL)) {
 			FixOrigin(true);
-			BufferModified = TRUE;
+            Undo::RecordIrreversibleAct("set display origin");
 		}
 		break;
 	default:

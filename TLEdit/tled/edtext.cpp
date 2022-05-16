@@ -289,7 +289,6 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                     }
 
                     Undo::RecordChangedProps(this, StealPropCache());
-		    BufferModified = TRUE;
 		    EndDialog (hDlg, TRUE);
 		    return TRUE;
 

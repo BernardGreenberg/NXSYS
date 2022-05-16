@@ -75,7 +75,6 @@ BOOL_DLG_PROC_QUAL SwitchKey::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
                     mod = true;
                     }
                     if (mod) {
-                        BufferModified = TRUE;
                         Invalidate();
                         Undo::RecordChangedProps(this, StealPropCache());
                     }
