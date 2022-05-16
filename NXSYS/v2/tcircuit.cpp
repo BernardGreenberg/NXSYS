@@ -5,6 +5,7 @@
 #include "nxgo.h"
 #include "xtgtrack.h"
 #include "math.h"
+#include "undo.h"
 
 #include <vector>   // Vectorized for global array and local segs 9/27/2019
 
@@ -82,8 +83,10 @@ void TrackCircuit::AddSeg (TrackSeg * ts) {
 
 TrackCircuit * TrackSeg::SetTrackCircuit (long tcid, BOOL wildfire) {
     TrackCircuit * tc = GetTrackCircuit (tcid);
-    if (wildfire)
+    if (wildfire) {
 	SetTrackCircuitWildfire (tc);
+        Undo::RecordIrreversibleAct("spread wildfire track circuit");
+    }
     else
 	SetTrackCircuit0 (tc);
     return tc;
