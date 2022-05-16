@@ -286,12 +286,15 @@ void Undo() {
 
         case RecType::Wildfire:
         {
-//            int orig_id = R.wf_objptr->old_tcid; // not quite right -- must use for first TC
+            int ct = 0;
             for (auto wp : R.wf_objptr->Segvec) {
                 TrackSeg* seg = static_cast<TrackSeg*>
                    (FindObjectByTypeAndWPpos(TypeId::TRACKSEG, wp.x, wp.y));
                 assert(seg);
-                seg->SetTrackCircuit(0, FALSE);
+                if (ct++ == 0)
+                    seg->SetTrackCircuit(R.wf_objptr->old_tcid, FALSE);
+                else
+                    seg->SetTrackCircuit(0, FALSE);
                 seg->Invalidate();
             }
             RedoStack.emplace_back(R.wf_objptr.release());
@@ -353,7 +356,7 @@ void Redo() {
                 TrackSeg* seg = static_cast<TrackSeg*>
                 (FindObjectByTypeAndWPpos(TypeId::TRACKSEG, wp.x, wp.y));
                 assert(seg);
-                seg->SetTrackCircuit(new_id, FALSE); // this is right...
+                seg->SetTrackCircuit(new_id, FALSE);
                 seg->Invalidate();
             }
             UndoStack.emplace_back(R.wf_objptr.release());
