@@ -87,6 +87,14 @@ std::unordered_set<TrackSeg*> WildfireLog;
 #endif
 
 TrackCircuit * TrackSeg::SetTrackCircuit (long tcid, BOOL wildfire) {
+    if (tcid == 0) {
+        if (Circuit && !wildfire) {
+            Circuit->DeleteSeg(this);
+            Circuit = NULL;
+            Invalidate();
+        }
+        return NULL;
+    }
     TrackCircuit * tc = GetTrackCircuit (tcid);
     if (wildfire) {
 #if TLEDIT
