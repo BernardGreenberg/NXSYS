@@ -242,6 +242,9 @@ void TrackSeg::DisplayInState (HDC dc, int control) {
 
 
 void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
+ 
+    /*  Ends[0]            this                       Ends[1] */
+    /*  Ends[0]  this      Ends[1] TJ [ENDS[0]  nts   Ends[1]] */
 
     TrackSeg* nts = new TrackSeg
 		    (Ends[0].wpx, Ends[0].wpy, Ends[1].wpx, Ends[1].wpy);
@@ -252,6 +255,10 @@ void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
 	nts->Ends[1].SignalProtectingEntrance->PSignal->Seg = nts;
 	nts->Ends[1].SignalProtectingEntrance->PSignal->Reposition();
     }
+    if (Ends[1].ExLight) {  // 5-16-2022 bug found, fixed by this {}.
+        Ends[1].ExLight->Seg = nts;
+        Ends[1].ExLight = NULL;
+    }
     Align (Ends[0].wpx, Ends[0].wpy, wpx1, wpy1);
     nts->Ends[1].Joint = Ends[1].Joint;
     for (int j = 0; j < Ends[1].Joint->TSCount; j++)
@@ -259,6 +266,7 @@ void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
 	    Ends[1].Joint->TSA[j] = nts;
     Ends[1].Joint = nts->Ends[0].Joint = tj;
 #ifdef REALLY_NXSYS
+    assert(!"wtf why should this ever be doing this in real_nxsys!?!?!")'
     Ends[1].Next = nts;
     nts->Ends[0].Next = this;
 #endif
