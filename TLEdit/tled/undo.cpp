@@ -263,6 +263,13 @@ void RecordSegmentCut (TrackSeg* ts) {
     MarkForwardAction();
 }
 
+void RecordSegmentCreation (TrackSeg* ts) {
+    auto tj0 = ts->Ends[0].Joint;
+    auto tj1 = ts->Ends[1].Joint;
+    UndoStack.emplace_back(RecType::CreateSegment, Coords(tj0), Coords(tj1));
+    MarkForwardAction();
+}
+
 void RecordIrreversibleAct(const char * description) {
     UndoStack.emplace_back(RecType::IrreversibleAct, description, TypeId::NONE);
     MarkForwardAction();
@@ -363,6 +370,20 @@ void Undo() {
             RedoStack.emplace_back(R.rec_type, Coords(tj1), Coords(tj2));
             break;
         }
+            
+        case RecType::CreateSegment:
+        {
+            auto tj1 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords);
+            auto tj2 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords_old);
+            auto [x1, y1] = tj1->WPPoint();
+            auto [x2, y2] = tj2->WPPoint();
+            auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG,
+                                    Coords((x1 + x2)/2, (y1 + y2)/2));
+            RedoStack.emplace_back(R.rec_type, R.coords, R.coords_old);
+            tj1->Select(); // tj1 may vanish!
+            seg->Cut_();
+            break;
+        }
 
         default:
             break;
@@ -454,6 +475,25 @@ void Redo() {
             seg->Cut_();
             break;
         }
+            
+        case RecType::CreateSegment:
+        {
+            auto tj1 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords, true);
+            auto tj2 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords_old, true);
+            if (tj1 == nullptr)
+                tj1 = new TrackJoint(R.coords.wp_x, R.coords.wp_y);
+            if (tj2 == nullptr)
+                tj2 = new TrackJoint(R.coords_old.wp_x, R.coords_old.wp_y);
+            auto seg = new TrackSeg(R.coords.wp_x, R.coords.wp_y, R.coords_old.wp_x, R.coords_old.wp_y);
+            tj1->AddBranch(seg);
+            tj2->AddBranch(seg);
+            seg->Ends[0].Joint = tj1;
+            seg->Ends[1].Joint = tj2;
+            seg->Select();
+            UndoStack.emplace_back(R.rec_type, Coords(tj1), Coords(tj2));
+            break;
+        }
+        
 
         default:
             break;

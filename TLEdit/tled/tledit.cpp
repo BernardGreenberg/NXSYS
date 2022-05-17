@@ -159,8 +159,10 @@ static void DefButtonUp2 (int x, int y) {
                 StatusMessage("Cannot drop on emanation from same joint");
                 return;
             }
+            WPPOINT seg_id = ts->WPPoint();
             tj = new TrackJoint(wpx, wpy);
             ts->Split (wpx, wpy, tj);
+            Undo::RecordJointCreation(tj, seg_id);
         }
         else
             tj = new TrackJoint(wpx, wpy);
@@ -177,12 +179,14 @@ static void DefButtonUp2 (int x, int y) {
     /* else drop into new space or tj */
 
     /* This is the COMMIT point */
-    Undo::RecordIrreversibleAct("create track segment");
 
-    if (DefStartTrackSeg)
+    if (DefStartTrackSeg) {
+        WPPOINT seg_id = DefStartTrackSeg->WPPoint();
 	DefStartTrackSeg->Split (DefStartTrackJoint->wp_x,
-				 DefStartTrackJoint->wp_y,
-				 DefStartTrackJoint);
+                                           DefStartTrackJoint->wp_y,
+                                           DefStartTrackJoint);
+        Undo::RecordJointCreation(DefStartTrackJoint, seg_id);
+    }
 
     if (tj) {
 	TrackSeg * ts = new TrackSeg (DefStartTrackJoint->wp_x,
@@ -198,7 +202,9 @@ static void DefButtonUp2 (int x, int y) {
 	DefStartTrackJoint->EnsureID();
 	ts->Select();
         SALVAGER("After DefButtonUp2");
+        Undo::RecordSegmentCreation(ts);
     }
+
 
 }
 
