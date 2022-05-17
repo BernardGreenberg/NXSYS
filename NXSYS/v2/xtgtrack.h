@@ -122,7 +122,10 @@ class TrackJoint
             }
             void Restore_(TrackJoint* tj) {
                 tj->Insulated = Insulated;
-                tj->NumFlip = NumFlip;
+                if (tj->NumFlip != NumFlip) {
+                    tj->NumFlip = NumFlip;
+                    tj->PositionLabel();
+                }
             }
         };
 

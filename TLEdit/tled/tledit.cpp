@@ -201,6 +201,8 @@ static void DefButtonUp2 (int x, int y) {
 	DefStartTrackJoint->AddBranch(ts);
 	DefStartTrackJoint->EnsureID();
 	ts->Select();
+        assert(DefStartTrackJoint->TSCount < 4);
+        assert(tj->TSCount < 4);
         SALVAGER("After DefButtonUp2");
         Undo::RecordSegmentCreation(ts);
     }
