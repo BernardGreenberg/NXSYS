@@ -266,7 +266,7 @@ void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
 	    Ends[1].Joint->TSA[j] = nts;
     Ends[1].Joint = nts->Ends[0].Joint = tj;
 #ifdef REALLY_NXSYS
-    assert(!"wtf why should this ever be doing this in real_nxsys!?!?!")'
+    assert(!"wtf why should this ever be doing this in real_nxsys!?!?!");
     Ends[1].Next = nts;
     nts->Ends[0].Next = this;
 #endif

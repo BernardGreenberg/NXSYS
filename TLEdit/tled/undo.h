@@ -8,6 +8,8 @@
 
 #pragma once
 
+#if TLEDIT
+
 #include "nxgo.h"
 
 #include "PropCell.h"
@@ -28,6 +30,8 @@ void RecordWildfireTCSpread(TSSet&, int old_tcid, int new_tcid);
 void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id);
 void RecordSegmentCut(TrackSeg* ts);
 void RecordSegmentCreation(TrackSeg* ts);
+void RecordShiftLayout(int deltax, int deltay);
+void RecordViewportOrigin(WP_cord x, WP_cord y);
 
 bool IsUndoPossible();
 bool IsRedoPossible();
@@ -35,4 +39,6 @@ void Undo();
 void Redo();
 
 }
+
+#endif
 
