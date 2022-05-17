@@ -764,7 +764,11 @@ void TrackSeg::Cut () {
 	    return;
 	}
     }
+    Undo::RecordSegmentCut(this);
+    Cut_();
+}
 
+void TrackSeg::Cut_() {
     TrackJoint * j0 = Ends[0].Joint;
     TrackJoint * j1 = Ends[1].Joint;
     if (j0->TSCount == 2)
@@ -777,7 +781,6 @@ void TrackSeg::Cut () {
 	j1->Select();
     delete this;
     SALVAGER("TrackSeg::Cut final");
-    Undo::RecordIrreversibleAct("delete track segment");
 }
 
 

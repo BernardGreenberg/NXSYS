@@ -26,6 +26,7 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pcp);
 void RecordIrreversibleAct(const char * description);
 void RecordWildfireTCSpread(TSSet&, int old_tcid, int new_tcid);
 void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id);
+void RecordSegmentCut(TrackSeg* ts);
 
 bool IsUndoPossible();
 bool IsRedoPossible();

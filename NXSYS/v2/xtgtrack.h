@@ -243,6 +243,7 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
 	char         EndOrientationKey (TSEX whichend);
 	virtual void Select();
 	virtual void Cut();
+        void         Cut_();
 	void         SelectMsg();
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual UINT DlgId();
