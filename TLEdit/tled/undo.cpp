@@ -275,25 +275,15 @@ void RecordIrreversibleAct(const char * description) {
     MarkForwardAction();
 }
 
-void Undo() {
-    if (!IsUndoPossible())
-        return;
-    UndoRecord& R = UndoStack.back();
-    RecType rt = R.rec_type;
+static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
     switch(rt) {
-        case RecType::IrreversibleAct:
-        {
-            usererr("Currently irreversible act (%s) may not be undone, nor any earlier acts.",
-                    R.image.c_str());
-            return;
-        }
         case RecType::CreateGO:
         {
             /* Can't store real object pointer in undo stack -- the object can be deleted and recreated
              (but at the same position) before the undo element is used. */
 
             GOptr g = FindObjByLoc(R.obj_type, R.coords);
-            RedoStack.emplace_back(rt, StringImageObject(g), R.obj_type);
+            Stack.emplace_back(rt, StringImageObject(g), R.obj_type);
             delete g;
             break;
         }
@@ -303,14 +293,14 @@ void Undo() {
             GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
             obj->MakeSelfVisible();
             obj->Select();
-            RedoStack.emplace_back(rt, obj, Coords(obj));
+            Stack.emplace_back(rt, obj, Coords(obj));
             break;
         }
 
         case RecType::CreateJoint:
         {
             auto tj = (TrackJoint*)FindObjByLoc(R.obj_type, R.coords);
-            RedoStack.emplace_back(R.rec_type, tj, R.seg_id);  //do this before obliterating
+            Stack.emplace_back(R.rec_type, tj, R.seg_id);  //do this before obliterating
             tj->Cut_();
             break;
         }
@@ -323,7 +313,7 @@ void Undo() {
                 ((TrackJoint*)g)->MoveToNewWPpos(x, y);
             else
                 MoveGO(g, R.coords_old);
-            RedoStack.emplace_back(rt, g, R.coords);
+            Stack.emplace_back(rt, g, R.coords);
             break;
         }
             
@@ -331,7 +321,7 @@ void Undo() {
         {
             GOptr g = FindObjByLoc(R.obj_type, R.coords);
             R.orig_props->Restore(g);
-            RedoStack.emplace_back(g, R.orig_props.release(), R.changed_props.release());
+            Stack.emplace_back(g, R.orig_props.release(), R.changed_props.release());
             g->Invalidate();
             break;
         }
@@ -349,7 +339,7 @@ void Undo() {
                     seg->SetTrackCircuit(0, FALSE);
                 seg->Invalidate();
             }
-            RedoStack.emplace_back(R.wf_objptr.release());
+            Stack.emplace_back(R.wf_objptr.release());
             break;
         }
             
@@ -367,7 +357,7 @@ void Undo() {
             seg->Ends[0].Joint = tj1;
             seg->Ends[1].Joint = tj2;
             seg->Select();
-            RedoStack.emplace_back(R.rec_type, Coords(tj1), Coords(tj2));
+            Stack.emplace_back(R.rec_type, Coords(tj1), Coords(tj2));
             break;
         }
             
@@ -379,15 +369,30 @@ void Undo() {
             auto [x2, y2] = tj2->WPPoint();
             auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG,
                                     Coords((x1 + x2)/2, (y1 + y2)/2));
-            RedoStack.emplace_back(R.rec_type, R.coords, R.coords_old);
+            Stack.emplace_back(R.rec_type, R.coords, R.coords_old);
             tj1->Select(); // tj1 may vanish!
             seg->Cut_();
             break;
         }
-
         default:
             break;
-            
+    }
+}
+
+void Undo() {
+    if (!IsUndoPossible())
+        return;
+    UndoRecord& R = UndoStack.back();
+    RecType rt = R.rec_type;
+    switch(rt) {
+        case RecType::IrreversibleAct:
+        {
+            usererr("Currently irreversible act (%s) may not be undone, nor any earlier acts.",
+                    R.image.c_str());
+            return;
+        }
+        default:
+            undo_guts(RedoStack, rt, R);
     }
     UndoStack.pop_back();
     compute_menu_state();
@@ -463,37 +468,12 @@ void Redo() {
         }
             
         case RecType::CutSegment:
-        {
-            auto tj1 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords);
-            auto tj2 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords_old);
-            auto [x1, y1] = tj1->WPPoint();
-            auto [x2, y2] = tj2->WPPoint();
-            auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG,
-                                    Coords((x1 + x2)/2, (y1 + y2)/2));
-            UndoStack.emplace_back(R.rec_type, R.coords, R.coords_old);
-            tj1->Select(); // tj1 may vanish!
-            seg->Cut_();
+            undo_guts(UndoStack, RecType::CreateSegment, R);
             break;
-        }
             
         case RecType::CreateSegment:
-        {
-            auto tj1 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords, true);
-            auto tj2 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords_old, true);
-            if (tj1 == nullptr)
-                tj1 = new TrackJoint(R.coords.wp_x, R.coords.wp_y);
-            if (tj2 == nullptr)
-                tj2 = new TrackJoint(R.coords_old.wp_x, R.coords_old.wp_y);
-            auto seg = new TrackSeg(R.coords.wp_x, R.coords.wp_y, R.coords_old.wp_x, R.coords_old.wp_y);
-            tj1->AddBranch(seg);
-            tj2->AddBranch(seg);
-            seg->Ends[0].Joint = tj1;
-            seg->Ends[1].Joint = tj2;
-            seg->Select();
-            UndoStack.emplace_back(R.rec_type, Coords(tj1), Coords(tj2));
+            undo_guts(UndoStack, RecType::CutSegment, R);
             break;
-        }
-        
 
         default:
             break;
