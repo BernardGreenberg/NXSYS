@@ -147,8 +147,10 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
             
             /* Can't set these for a switch. Use Switch dlg. */
             if (EditAsJointInProgress) {
-               EnableWindow(GetDlgItem(hDlg, IDC_JOINT_INSULATED), false);
-               EnableWindow(GetDlgItem(hDlg, IDC_JOINT_STATION_ID), false);
+                EnableWindow(GetDlgItem(hDlg, IDC_JOINT_INSULATED), false);
+                EnableWindow(GetDlgItem(hDlg, IDC_JOINT_STATION_ID), false);
+            } else {
+                CacheInitSnapshot();
             }
 	    return TRUE;
 
@@ -156,20 +158,36 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 	    switch (wParam) {
 		case IDOK:
 		{
+                    WP_cord new_wp_x = GetDlgItemInt (hDlg, IDC_JOINT_WPX, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Panel X coordinate.");
+                        return TRUE;
+                    }
+                    WP_cord new_wp_y = GetDlgItemInt (hDlg, IDC_JOINT_WPY, &es, FALSE);
+                    if (!es) {
+                        uerr (hDlg, "Bad number in Panel Y coordinate.");
+                        return TRUE;
+                    }
 		    int new_ins = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
 		    if (new_ins == 0 && SignalCount() > 0) {
 			uerr (hDlg, "Can't make non-insulated as signals are at this joint.",
 			      "TLEDIT Joint properties");
 			return TRUE;
 		    }
-		}
-		
-		{
+
 		    long newnom = GetDlgItemInt (hDlg, IDC_JOINT_STATION_ID, &es, FALSE);
                     if (!es) {
                         uerr (hDlg, "Bad number in Joint ID.");
                         return TRUE;
                     }
+                    
+                    if (newnom != Nomenclature && newnom && !CheckID((int)newnom)) {
+                        uerr(hDlg, "ID %ld is bad or already in use.", newnom);
+                        return TRUE;
+                    }
+
+                    /* Commit Point */
+
 		    if (newnom != Nomenclature) {
                         /* 3-23-2022 -- ok to say 0 to delete nomenclature */
                         if (newnom == 0){
@@ -179,10 +197,6 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                             Lab = NULL;
                         }
                         else {
-                            if (!CheckID((int) newnom)) {
-                                uerr(hDlg, "ID %ld is bad or already in use.", newnom);
-                                return TRUE;
-                            }
                             DeAssignID ((int)Nomenclature);
                             Nomenclature = newnom;
                             MarkIDAssign ((int)Nomenclature);
@@ -191,28 +205,20 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                             PositionLabel();
                         }
 		    }
-		}
 
-		{
-		    WP_cord new_wp_x = GetDlgItemInt (hDlg, IDC_JOINT_WPX, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Panel X coordinate.");
-			return TRUE;
-		    }
-		    WP_cord new_wp_y = GetDlgItemInt (hDlg, IDC_JOINT_WPY, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Panel Y coordinate.");
-			return TRUE;
-		    }
 		    if (wp_x != new_wp_x || wp_y != new_wp_y)
 			MoveToNewWPpos(new_wp_x, new_wp_y);
-		}
-		Insulated = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
-                Undo::RecordIrreversibleAct("change track joint properties");
-		EndDialog (hDlg, TRUE);
+
+                    Insulated = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
+                    if (!EditAsJointInProgress)
+                        Undo::RecordChangedProps(this, StealPropCache());
+                    EndDialog (hDlg, TRUE);
+                }
 		return TRUE;
 
 		case IDCANCEL:
+                    if (!EditAsJointInProgress)
+                        DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;
 		default:

@@ -918,8 +918,9 @@ void TrackJoint::EnsureID() {
 
 void TrackJoint::FlipNum() {
     if (TSCount > 1) {
+        CacheInitSnapshot();
 	NumFlip = !NumFlip;
-        Undo::RecordIrreversibleAct("flip track joint label");
+        Undo::RecordChangedProps(this, StealPropCache());
 	PositionLabel();
     }
 }
@@ -927,8 +928,9 @@ void TrackJoint::FlipNum() {
 void TrackJoint::Insulate() {
     if (!Insulated) {
 	Insulated = TRUE;
+        CacheInitSnapshot();
 	EnsureID();
-        Undo::RecordIrreversibleAct("insulate track joint");
+        Undo::RecordChangedProps(this, StealPropCache());
 	Invalidate();
     }
 }

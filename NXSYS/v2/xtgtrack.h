@@ -68,7 +68,7 @@ struct JointOrganizationData {
 
 class TrackJoint
 #ifdef TLEDIT
-   : public GraphicObject
+   : public GraphicObject, public PropEditor<TrackJoint>
 #endif
 {
     public:
@@ -111,6 +111,20 @@ class TrackJoint
 	virtual TypeId TypeID ();
 	virtual bool IsNomenclature(long);
 #ifdef TLEDIT
+        class PropCell : public PropCellPCRTP<PropCell, TrackJoint> {
+        public:
+            bool Insulated;
+            bool NumFlip;
+            void Snapshot_(TrackJoint* tj) {
+                SnapWPpos(tj);
+                Insulated = tj->Insulated;
+                NumFlip = tj->NumFlip;
+            }
+            void Restore_(TrackJoint* tj) {
+                tj->Insulated = Insulated;
+                tj->NumFlip = NumFlip;
+            }
+        };
 
 	virtual void Select();
 	virtual void ShiftLayout2();
