@@ -275,14 +275,18 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
                     BOOL wildfire = GetDlgItemCheckState (hDlg, IDC_EDIT_SEG_SPREAD);
 		    if (oldid != newid)
                     {
-                        CacheInitSnapshot();
-                        TrackCircuit* tc = SetTrackCircuit (newid, wildfire);
-                        if (tc) {
-                            assert(newid);
-                            tc->SetRouted(TRUE);
+                        if (wildfire)
+                            SetTrackCircuitWildfire(newid);
+                        else {
+                            CacheInitSnapshot();
+                            TrackCircuit* tc = SetTrackCircuit (newid);
+                            if (tc) {
+                                assert(newid);
+                                tc->SetRouted(TRUE);
+                            }
+                            Undo::RecordChangedProps(this, StealPropCache());
+                            Invalidate();
                         }
-                        Undo::RecordChangedProps(this, StealPropCache());
-                        Invalidate();
                     }
 		    SelectMsg();
 		    EndDialog (hDlg, TRUE);

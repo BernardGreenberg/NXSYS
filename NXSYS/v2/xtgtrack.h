@@ -232,9 +232,10 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
 	virtual void Display (HDC dc);
 	virtual TypeId TypeID ();
 	virtual bool IsNomenclature(long);
-	TrackCircuit* SetTrackCircuit (long ID, BOOL wildfire);
+	TrackCircuit* SetTrackCircuit (long ID);
 	void SetTrackCircuit0 (TrackCircuit * tc);
-	void SetTrackCircuitWildfire (TrackCircuit * tc);
+        void SetTrackCircuitWildfire (long ID);
+        void SetTrackCircuitWildfireRecurse (TrackCircuit * tc);
 	void GetGraphicsCoords (int ex, int& x, int& y);
 	virtual BOOL HitP (long x, long y);
         virtual WPPOINT WPPoint();
@@ -254,7 +255,7 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
                     tcid = 0;
             }
             void Restore_(TrackSeg* ts) {
-                ts->SetTrackCircuit(tcid, FALSE);
+                ts->SetTrackCircuit(tcid);
             }
         };
 	char         EndOrientationKey (TSEX whichend);

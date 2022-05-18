@@ -273,9 +273,9 @@ BOOL ppf_coords::Collect (Sexpr s, Sexpr f) {
 static void SetTCID (TrackSeg * ts, long id) {
     if (id)
 #if TLEDIT
-	ts->SetTrackCircuit(id, FALSE)->Routed = TRUE;
+	ts->SetTrackCircuit(id)->Routed = TRUE;
 #else
-        ts->SetTrackCircuit(id, FALSE);
+        ts->SetTrackCircuit(id);
 #endif
 }
 

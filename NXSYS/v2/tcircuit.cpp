@@ -86,9 +86,9 @@ void TrackCircuit::AddSeg (TrackSeg * ts) {
 std::unordered_set<TrackSeg*> WildfireLog;
 #endif
 
-TrackCircuit * TrackSeg::SetTrackCircuit (long tcid, BOOL wildfire) {
+TrackCircuit * TrackSeg::SetTrackCircuit (long tcid) {
     if (tcid == 0) {
-        if (Circuit && !wildfire) {
+        if (Circuit) {
             Circuit->DeleteSeg(this);
             Circuit = NULL;
             Invalidate();
@@ -96,19 +96,8 @@ TrackCircuit * TrackSeg::SetTrackCircuit (long tcid, BOOL wildfire) {
         return NULL;
     }
     TrackCircuit * tc = GetTrackCircuit (tcid);
-    if (wildfire) {
-#if TLEDIT
-        long orig_tcid = Circuit ? Circuit->StationNo : 0;
-        WildfireLog.clear();
-        SetTrackCircuitWildfire (tc);
-        Undo::RecordWildfireTCSpread(WildfireLog, (int)orig_tcid, (int)tcid);
-        WildfireLog.clear();
-#else
-        SetTrackCircuitWildfire (tc);
-#endif
-    }
-    else
-	SetTrackCircuit0 (tc);
+    SetTrackCircuit0 (tc);
+    Invalidate();
     return tc;
 }
 
@@ -121,10 +110,27 @@ void TrackSeg::SetTrackCircuit0 (TrackCircuit * tc) {
     }
 }
 
-void TrackSeg::SetTrackCircuitWildfire (TrackCircuit * tc) {
+void TrackSeg::SetTrackCircuitWildfire(long tcid) {
+#if TLEDIT
+    long orig_tcid = Circuit ? Circuit->StationNo : 0;
+    WildfireLog.clear();
+#endif
+    auto tc = GetTrackCircuit(tcid);
+    SetTrackCircuitWildfireRecurse (tc);
+
+#if TLEDIT
+    Undo::RecordWildfireTCSpread(WildfireLog, (int)orig_tcid, (int)tcid);
+    WildfireLog.clear();
+    tc->SetRouted(TRUE);
+    Circuit->Invalidate();
+#endif
+};
+
+void TrackSeg::SetTrackCircuitWildfireRecurse (TrackCircuit * tc) {
     if (Circuit == tc)
 	return;
     SetTrackCircuit0 (tc);
+
 #if TLEDIT
     WildfireLog.insert(this);
 #endif
@@ -137,14 +143,14 @@ void TrackSeg::SetTrackCircuitWildfire (TrackCircuit * tc) {
         if (TrackJoint * tj = ep->Joint) {
             for (int i = 0; i < tj->TSCount; i++) {
                 if (tj->TSA[i] != this)
-                    tj->TSA[i]->SetTrackCircuitWildfire(tc);
+                    tj->TSA[i]->SetTrackCircuitWildfireRecurse(tc);
             }
         }
 #else
 	if (ep->Next)
 	    ep->Next->SetTrackCircuitWildfire (tc);
 	if (ep->NextIfSwitchThrown)
-	    ep->NextIfSwitchThrown->SetTrackCircuitWildfire (tc);
+	    ep->NextIfSwitchThrown->SetTrackCircuitWildfireRecurse (tc);
 #endif
     }
 }

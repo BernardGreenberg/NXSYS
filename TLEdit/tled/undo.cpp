@@ -90,16 +90,17 @@ struct UndoRecord {
     UndoRecord(RecType rtype) : rec_type(rtype) {}
    
     /* ye nieuww movector ... */
-    UndoRecord(UndoRecord&& urmvbl) {
-        rec_type = urmvbl.rec_type;
-        image = urmvbl.image;
-        obj_type = urmvbl.obj_type;
-        coords = urmvbl.coords;
-        coords_old = urmvbl.coords_old;
-        seg_id = urmvbl.seg_id;
+    UndoRecord(UndoRecord&& other) {
+        rec_type = other.rec_type;
+        image = other.image;
+        obj_type = other.obj_type;
+        coords = other.coords;
+        coords_old = other.coords_old;
+        seg_id = other.seg_id;
 
-        orig_props = std::move(urmvbl.orig_props);
-        changed_props = std::move(urmvbl.changed_props);
+        orig_props = std::move(other.orig_props);
+        changed_props = std::move(other.changed_props);
+        wf_objptr = std::move(other.wf_objptr);
     }
 
     RecType rec_type;
@@ -108,10 +109,11 @@ struct UndoRecord {
     
     Coords coords {0,0};
     Coords coords_old {-1,-1};
+    WPPOINT seg_id{0,0};
+
     std::unique_ptr<PropCellBase> orig_props;
     std::unique_ptr<PropCellBase> changed_props;
     std::unique_ptr<WildfireRecord> wf_objptr;
-    WPPOINT seg_id{0,0};
 
     void TypeCoords(GOptr g) {
         coords = Coords(g);
@@ -342,16 +344,16 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         case RecType::Wildfire:
         {
             int ct = 0;
-            for (auto wp : R.wf_objptr->Segvec) {
-                auto seg = static_cast<TrackSeg*>
-                   (FindObjectByTypeAndWPpos(TypeId::TRACKSEG, wp.x, wp.y));
+            for (auto [x,y] : R.wf_objptr->Segvec) {
+                auto seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
                 assert(seg);
                 if (ct++ == 0)
-                    seg->SetTrackCircuit(R.wf_objptr->old_tcid, FALSE);
+                    seg->SetTrackCircuit(R.wf_objptr->old_tcid);
                 else
-                    seg->SetTrackCircuit(0, FALSE);
+                    seg->SetTrackCircuit(0);
                 seg->Invalidate();
             }
+            StatusMessage("");  //Clear out remains of wildfire's message
             break;
         }
             
@@ -409,7 +411,7 @@ void Undo() {
         {
             usererr("Currently irreversible act (%s) may not be undone, nor any earlier acts.",
                     R.image.c_str());
-            return;
+            return;  // Don't pop
         }
         default:
             undo_guts(RedoStack, rt, R);
@@ -467,17 +469,13 @@ void Redo() {
         }
 
         case RecType::Wildfire:
-        {
-            int new_id = R.wf_objptr->new_tcid;
-            for (auto wp : R.wf_objptr->Segvec) {
-                TrackSeg* seg = static_cast<TrackSeg*>
-                (FindObjectByTypeAndWPpos(TypeId::TRACKSEG, wp.x, wp.y));
+            for (auto [x, y] : R.wf_objptr->Segvec) {
+                TrackSeg* seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
                 assert(seg);
-                seg->SetTrackCircuit(new_id, FALSE);
+                seg->SetTrackCircuit(R.wf_objptr->new_tcid);
                 seg->Invalidate();
             }
             break;
-        }
             
         case RecType::ShiftLayout:
             ShiftLayout_((int)R.coords.wp_x, (int)R.coords.wp_y);
