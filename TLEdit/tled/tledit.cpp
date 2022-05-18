@@ -969,14 +969,18 @@ int ShiftMapper2 (GraphicObject * g, void *) {
 }   
 
 
-void ShiftLayout (int x, int y) {
+void ShiftLayout(int x, int y) {
+    ShiftLayout_(x, y);
+    Undo::RecordShiftLayout(x, y);
+}
+
+void ShiftLayout_ (int x, int y) {
     _sm_xy xy = {x, y};
     HCURSOR old_cursor = SetCursor (LoadCursor (NULL, IDC_WAIT));
     MapAllGraphicObjects (ShiftMapper1, &xy);
     MapAllGraphicObjects (ShiftMapper2, &xy);
     SetCursor (old_cursor);
     ComputeVisibleObjectsLast();
-    Undo::RecordIrreversibleAct("shift layout");
 }
 
 

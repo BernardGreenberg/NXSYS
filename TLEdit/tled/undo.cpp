@@ -14,6 +14,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <cstdarg>
 #include <cassert>
 #include <memory>
@@ -27,11 +28,11 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 
 namespace Undo {
 
-enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateSegment, CutSegment, CreateJoint, DeleteJoint,
-    IrreversibleAct, Wildfire
+enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateSegment, CutSegment, CreateJoint,
+    DeleteJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire
 };
 
-std::unordered_map<RecType, string> RecTypeNames {
+static std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CreateGO, "create"},
     {RecType::CutGO, "cut"},
     {RecType::PropChange, "property change"},
@@ -40,8 +41,16 @@ std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CreateSegment, "create"},
     {RecType::CutSegment, "cut"},
     {RecType::Wildfire, "wildfire spread track circuit"},
+    {RecType::ShiftLayout, "shift layout"},
+    {RecType::SetViewOrigin, "set view origin"},
     {RecType::IrreversibleAct, "currently irreversible act"}
 };
+
+static std::unordered_set<RecType> OpLessOps {
+    RecType::ShiftLayout,
+    RecType::SetViewOrigin,
+    RecType::IrreversibleAct,
+    RecType::Wildfire};
 
 PropCellBase::~PropCellBase () {
     //even though destructor is marked pure, this must be provided!!!
@@ -112,8 +121,8 @@ struct UndoRecord {
     string DescribeAction(string tag) {
         if (rec_type == RecType::IrreversibleAct)
             return "Can't " + tag + ": " + image;
-        else if (rec_type == RecType::Wildfire)
-            return tag + " wildfire spread TC";
+        else if (OpLessOps.count(rec_type))
+            return tag + " " + RecTypeNames[rec_type];
         else
             return tag + " " + RecTypeNames[rec_type] + " " + NXObjectTypeName(obj_type);
     }
@@ -268,9 +277,22 @@ void RecordSegmentCreation (TrackSeg* ts) {
     PlacemForward(R);
 }
 
+void RecordShiftLayout (int delta_x, int delta_y) {
+    UndoRecord R(RecType::ShiftLayout);
+    R.coords = Coords(delta_x, delta_y);
+    PlacemForward(R);
+}
+
 void RecordIrreversibleAct(const char * description) {
     UndoRecord R(RecType::IrreversibleAct);
     R.image = description;
+    PlacemForward(R);
+}
+
+void RecordSetViewOrigin(WPPOINT old, WPPOINT nieuw) {
+    UndoRecord R(RecType::SetViewOrigin);
+    R.coords = Coords(nieuw.x, nieuw.y);
+    R.coords_old = Coords(old.x, old.y);
     PlacemForward(R);
 }
 
@@ -362,6 +384,15 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             seg->Cut_();
             break;
         }
+            
+        case RecType::ShiftLayout:
+            ShiftLayout_(-(int)R.coords.wp_x, -(int)R.coords.wp_y);
+            break;
+            
+        case RecType::SetViewOrigin:
+            AssignFixOrigin(WPPOINT((int)R.coords_old.wp_x, (int)R.coords_old.wp_y));
+            break;
+
         default:
             break;
     }
@@ -448,6 +479,10 @@ void Redo() {
             break;
         }
             
+        case RecType::ShiftLayout:
+            ShiftLayout_((int)R.coords.wp_x, (int)R.coords.wp_y);
+            break;
+            
         case RecType::CutSegment:
             undo_guts(UndoStack, RecType::CreateSegment, R);
             already_emplaced = true;
@@ -458,6 +493,10 @@ void Redo() {
             already_emplaced = true;
             break;
 
+        case RecType::SetViewOrigin:
+            AssignFixOrigin(WPPOINT((int)R.coords.wp_x, (int)R.coords.wp_y));
+            break;
+    
         default:
             break;
     }

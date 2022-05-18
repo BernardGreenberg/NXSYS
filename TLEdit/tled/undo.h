@@ -31,7 +31,7 @@ void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id);
 void RecordSegmentCut(TrackSeg* ts);
 void RecordSegmentCreation(TrackSeg* ts);
 void RecordShiftLayout(int deltax, int deltay);
-void RecordViewportOrigin(WP_cord x, WP_cord y);
+void RecordSetViewOrigin(WPPOINT old, WPPOINT nieuw);
 
 bool IsUndoPossible();
 bool IsRedoPossible();

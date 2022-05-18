@@ -178,17 +178,29 @@ static void FullRedisplay() {
 	InvalidateRect(G_mainwindow, NULL, TRUE);
 }
 
-void FixOrigin(bool really_get_it_from_window) {
+void AssignFixOrigin(WPPOINT nieuw) {
+    FixOriginWPX = (int)nieuw.x;
+    FixOriginWPY = (int)nieuw.y;
+    StatusMessage("Viewpoint origin changed to %d, %d", FixOriginWPX, FixOriginWPY);
+}
+
+void FixOrigin(bool really_get_it_from_window, bool noui = false) {
+    WPPOINT old{FixOriginWPX, FixOriginWPY};
 #ifdef NXSYSMac // gee, SCXtoWP ain't gonna work with NSScrollWindow . . .
 	int coords[2];
 	Mac_GetDisplayWPOrg(coords, really_get_it_from_window);
 	FixOriginWPX = coords[0];
 	FixOriginWPY = coords[1];
 #else
-	really_get_it_from_window;
+	(void)really_get_it_from_window;
 	FixOriginWPX = (int)SCXtoWP(0);
 	FixOriginWPY = (int)SCYtoWP(0);
 #endif
+    if (!noui) {
+        WPPOINT nieuw{FixOriginWPX, FixOriginWPY};
+        StatusMessage("Viewpoint origin changed to %d, %d", FixOriginWPX, FixOriginWPY);
+        Undo::RecordSetViewOrigin(old, nieuw);
+    }
 }
 
 void ClearItOut() {
@@ -197,6 +209,7 @@ void ClearItOut() {
 	InitAssignID();
 	BufferModified = FALSE;
 }
+
 static BOOL ReadIt() {
 	FILE * f = fopen(FileName.c_str(), "r");
 	if (f == NULL) {
@@ -211,7 +224,7 @@ static BOOL ReadIt() {
         SetMainWindowTitle(FileName.c_str());
 		ComputeVisibleObjectsLast();
 		FullRedisplay();
-		FixOrigin(false);
+		FixOrigin(false, true);
 		fclose(f);
 		return TRUE;
 	}
@@ -411,8 +424,7 @@ void AppCommand(UINT command) {
 			"Do you really want to set the display origin"
 			" as currently shown?",
 			app_name, MB_YESNOCANCEL)) {
-			FixOrigin(true);
-            Undo::RecordIrreversibleAct("set display origin");
+			FixOrigin(true, false);
 		}
 		break;
 	default:

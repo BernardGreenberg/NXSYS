@@ -32,6 +32,8 @@ void TLEditCreateExitLightFromSignal(PanelSignal * ps, CBOOL upright);
 void FlipSignal (PanelSignal * ps);
 BOOL DoShiftLayoutDlg(int&x, int&y);
 void ShiftLayout(int delta_x, int delta_y);
+void ShiftLayout_(int delta_x, int delta_y);
+void AssignFixOrigin(WPPOINT coords);
 BOOL RegisterTextSampleClass(HINSTANCE hInstance);
 
 extern int FixOriginWPX, FixOriginWPY;
