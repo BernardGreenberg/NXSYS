@@ -149,7 +149,7 @@ void TrackSeg::SetTrackCircuitWildfireRecurse (TrackCircuit * tc) {
         }
 #else
 	if (ep->Next)
-	    ep->Next->SetTrackCircuitWildfire (tc);
+	    ep->Next->SetTrackCircuitWildfireRecurse (tc);
 	if (ep->NextIfSwitchThrown)
 	    ep->NextIfSwitchThrown->SetTrackCircuitWildfireRecurse (tc);
 #endif
