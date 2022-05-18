@@ -342,20 +342,13 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         }
 
         case RecType::Wildfire:
-        {
-            int ct = 0;
             for (auto [x,y] : R.wf_objptr->Segvec) {
                 auto seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
                 assert(seg);
-                if (ct++ == 0)
-                    seg->SetTrackCircuit(R.wf_objptr->old_tcid);
-                else
-                    seg->SetTrackCircuit(0);
-                seg->Invalidate();
+                seg->SetTrackCircuit(R.wf_objptr->old_tcid);
             }
             StatusMessage("");  //Clear out remains of wildfire's message
             break;
-        }
             
         case RecType::CutSegment:
         {
@@ -470,10 +463,9 @@ void Redo() {
 
         case RecType::Wildfire:
             for (auto [x, y] : R.wf_objptr->Segvec) {
-                TrackSeg* seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
+                auto seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
                 assert(seg);
                 seg->SetTrackCircuit(R.wf_objptr->new_tcid);
-                seg->Invalidate();
             }
             break;
             
