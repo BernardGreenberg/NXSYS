@@ -942,13 +942,15 @@ void TrackJoint::Insulate() {
     }
 }
 
-int TrackJoint::SignalCount () {
+int TrackJoint::SignalExlightCount () {
     int s = 0;
     for (int i = 0; i < TSCount; i++) {
 	TrackSeg * ts = TSA[i];
         TSEX endx = ts->FindEndIndex(this);
 	if (ts->GetEnd(endx).SignalProtectingEntrance)
 	    s++;
+        if (ts->GetEnd(endx).ExLight)
+            s++;
     }
     return s;
 }

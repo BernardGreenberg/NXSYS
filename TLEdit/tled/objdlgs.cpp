@@ -170,13 +170,13 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                     }
                     decltype(Insulated) new_ins = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
                     if (!new_ins) {   /* Attempting to merge segments  */
-                        if (SignalCount() > 0) {
-                            uerr (hDlg, "Can't make non-insulated as signals are at this joint.",
+                        if (SignalExlightCount() > 0) {
+                            uerr (hDlg, "Can't make non-insulated as signals or exit lights are at this joint. Remove them and try again.",
                                   "TLEDIT Joint properties");
                             return TRUE;
                         }
                         if (TSA[0]->Circuit != TSA[1]->Circuit) {
-                            uerr (hDlg, "Cannot remove insulation between differing track circuits. Set them to be the same and try again\.");
+                            uerr (hDlg, "Cannot remove insulation between differing track circuits. Set them to be the same and try again.", "TLEDIT Joint properties");
                             return TRUE;
                         }
                     }

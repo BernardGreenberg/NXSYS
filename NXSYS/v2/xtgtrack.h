@@ -142,7 +142,7 @@ class TrackJoint
 	void	EnsureID();
 	void	Insulate();
 	void	FlipNum();
-	int	SignalCount();
+	int	SignalExlightCount();
 	BOOL_DLG_PROC_QUAL SwitchDlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 #endif
 
