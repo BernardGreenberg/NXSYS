@@ -1,6 +1,6 @@
 # Undo TBDs
 
-Wildfire rename already wildfired segment group; don't allow deinsulate if tc's differ.
+Wildfire rename already wildfired segment group, including wildfire spread of 0.
 
 Cut of joints, overall. jdr (joint del record)
 

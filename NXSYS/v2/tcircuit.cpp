@@ -121,12 +121,13 @@ void TrackSeg::SetTrackCircuitWildfire(long tcid) {
 #if TLEDIT
     Undo::RecordWildfireTCSpread(WildfireLog, (int)orig_tcid, (int)tcid);
     WildfireLog.clear();
-    tc->SetRouted(TRUE);
+    tc->SetRouted(tcid != 0);
     Circuit->Invalidate();
 #endif
 };
 
 void TrackSeg::SetTrackCircuitWildfireRecurse (TrackCircuit * tc) {
+    /* tc == NULL is ok and possible */
     if (Circuit == tc)
 	return;
     SetTrackCircuit0 (tc);
