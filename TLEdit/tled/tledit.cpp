@@ -651,9 +651,14 @@ void TrackJoint::Cut () {
         usererr ("BUG: Null segment pointer in alleged 2-branch IJ.");
         return;
     }
-
+    
     TrackSeg& ts0 = *TSA[0];
     TrackSeg& ts1 = *TSA[1];
+
+    if (ts0.Circuit != ts1.Circuit) { // 5-18-2022
+        usererr ("Cannot delete an insulated joint between track sections with differing circuits.  Set one or the other to 0 or the other.");
+        return;
+    }
 
     TSEX endxs[2];
     /* These are the indexes in the end-arrays of our rays for this joint. */

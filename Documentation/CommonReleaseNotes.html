@@ -13,6 +13,8 @@
 <p><b>Set Locator Path</b> button moved to not be clipped. <nxf>TLEdit</nxf><b>Backspace</b> (<b>delete</b> on the Mac) is available as a synonym for Ctrl-X.</p>
 <p><nxf>TLEdit</nxf>Setting a track circuit ID of 0 for a segment (but not wildfire) undoes its track circuit assignment, returning it to the &ldquo;unassigned&rdquo; state. A bug corrupting layouts when a segment with an exit light was split by a new joint was fixed.</p>
 
+<p><nxf>TLEdit</nxf> will now disallow removing the insulation from a joint, or removing the joint via <b>Cut</b>, if the two track segments abutting are not both identical (which shouldn't happen), or unassigned (0).  None-“wildfire“ track-circuit setting has been removed.  If you accidentally wildfire spread a track circuit, simply <b>Undo</b>.</p>
+
 <h2>3/31/2022 &mdash; 2.6.3</h2>
 
 <p><nxf>TLEdit</nxf>: The <b>Edit Joint &gt;&gt;&gt;</b> button in <b>Switch Properties</b> dialog has been implemented and enabled: it edits the switch location (may not insulate or change nomenclature).  <b>0</b> is now acceptable as in IJ designation (meaning &ldquo;revert to unassigned&rdquo;) in the <b>Joint Properties</b> dialog.  The latter dialog can be used to force coincidence of IJ&rsquo;s at a double crossover. Fixed a bug that sometimes lost adjacent switch nomenclature when a joint was removed.  &ldquo;Small moves&rdquo; of joints and switches (drag right (Mac control-drag)) are now possible (it was a bug/misdesign that they were heretofore prohibited).</p>

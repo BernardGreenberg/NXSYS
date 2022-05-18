@@ -168,14 +168,19 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         uerr (hDlg, "Bad number in Panel Y coordinate.");
                         return TRUE;
                     }
-		    int new_ins = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
-		    if (new_ins == 0 && SignalCount() > 0) {
-			uerr (hDlg, "Can't make non-insulated as signals are at this joint.",
-			      "TLEDIT Joint properties");
-			return TRUE;
-		    }
-
-		    long newnom = GetDlgItemInt (hDlg, IDC_JOINT_STATION_ID, &es, FALSE);
+                    decltype(Insulated) new_ins = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
+                    if (!new_ins) {   /* Attempting to merge segments  */
+                        if (SignalCount() > 0) {
+                            uerr (hDlg, "Can't make non-insulated as signals are at this joint.",
+                                  "TLEDIT Joint properties");
+                            return TRUE;
+                        }
+                        if (TSA[0]->Circuit != TSA[1]->Circuit) {
+                            uerr (hDlg, "Cannot remove insulation between differing track circuits. Set them to be the same and try again\.");
+                            return TRUE;
+                        }
+                    }
+		    decltype(Nomenclature) newnom = GetDlgItemInt (hDlg, IDC_JOINT_STATION_ID, &es, FALSE);
                     if (!es) {
                         uerr (hDlg, "Bad number in Joint ID.");
                         return TRUE;
@@ -209,7 +214,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 		    if (wp_x != new_wp_x || wp_y != new_wp_y)
 			MoveToNewWPpos(new_wp_x, new_wp_y);
 
-                    Insulated = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
+                    Insulated = new_ins;
                     if (!EditAsJointInProgress)
                         Undo::RecordChangedProps(this, StealPropCache());
                     EndDialog (hDlg, TRUE);
