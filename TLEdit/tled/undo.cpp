@@ -29,7 +29,7 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 namespace Undo {
 
 enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateSegment, CutSegment, CreateJoint,
-    DeleteJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire
+    CutJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire
 };
 
 static std::unordered_map<RecType, string> RecTypeNames {
@@ -40,6 +40,7 @@ static std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CreateJoint, "create"},
     {RecType::CreateSegment, "create"},
     {RecType::CutSegment, "cut"},
+    {RecType::CutJoint, "cut"},
     {RecType::Wildfire, "wildfire spread track circuit"},
     {RecType::ShiftLayout, "shift layout"},
     {RecType::SetViewOrigin, "set view origin"},
@@ -68,19 +69,10 @@ struct WildfireRecord {
 
 struct Coords {
     Coords() {}
-    Coords(WP_cord x, WP_cord y) {
-        wp_x = x;
-        wp_y = y;
-    }
-    Coords(GOptr g) {
-        WPPOINT wpp = g->WPPoint();
-        wp_x = wpp.x;
-        wp_y = wpp.y;
-    }
-    Coords(WPPOINT wp) {
-        wp_x = wp.x;
-        wp_y = wp.y;
-    }
+    Coords(WP_cord x, WP_cord y) : wp_x(x), wp_y(y) {}
+    Coords(WPPOINT wp) : Coords(wp.x, wp.y) {}
+    Coords(GOptr g) : Coords(g->WPPoint()) {}
+
     bool operator == (const Coords& other) const {
         return wp_x == other.wp_x && wp_y == other.wp_y;
     }
@@ -324,7 +316,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             ((TrackJoint*)FindObjByLoc(R.obj_type, R.coords))->Cut();
             break;
             
-        case RecType::DeleteJoint:
+        case RecType::CutJoint:
         {
             auto tj = (TrackJoint*)ProcessNonGraphObjectCreateFormString(R.image.c_str());
             Coords dest_loc(tj);
@@ -541,7 +533,7 @@ JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj) {
 }
 
 void RecordJointCutComplete(JointCutSnapInfo* J) {
-    UndoRecord R(RecType::DeleteJoint);
+    UndoRecord R(RecType::CutJoint);
     R.image = J->RecreateInfo;
     R.obj_type = TypeId::JOINT;
     R.coords_old = J->OthersLoc[0];
