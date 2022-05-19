@@ -24,6 +24,7 @@ using GOptr = GraphicObject*;
 using WPVEC = vector<WPPOINT>;
 GOptr ProcessNonGraphObjectCreateFormString(const char * s);
 
+
 void SetUndoRedoMenu(const char * undo, const char * redo);
 
 namespace Undo {
@@ -82,6 +83,8 @@ struct Coords {
     WP_cord wp_x, wp_y;
 };
 
+static GOptr FindObjByLoc(TypeId type, const Coords& wp, bool nf_ok =false);
+
 struct UndoRecord {
     UndoRecord() {}
     UndoRecord(RecType rtype) : rec_type(rtype) {}
@@ -115,6 +118,10 @@ struct UndoRecord {
     void TypeCoords(GOptr g) {
         coords = Coords(g);
         obj_type = g->TypeID();
+    }
+    
+    GOptr Find() {
+        return FindObjByLoc(obj_type, coords);
     }
 
     string DescribeAction(string tag) {
@@ -179,7 +186,7 @@ static string StringImageObject(GOptr o) {
     return W.get();
 }
 
-static GOptr FindObjByLoc(TypeId type, const Coords& C, bool nf_ok = false) {
+static GOptr FindObjByLoc(TypeId type, const Coords& C, bool nf_ok) {
     GOptr g = FindObjectByTypeAndWPpos(type, C.wp_x, C.wp_y);
     assert(g || nf_ok);
     return g;
@@ -301,7 +308,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             /* Can't store real object pointer in undo stack -- the object can be deleted and recreated
              (but at the same position) before the undo element is used. */
 
-            delete FindObjByLoc(R.obj_type, R.coords);
+            delete R.Find();
             break;
             
         case RecType::CutGO:
@@ -313,27 +320,22 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         }
 
         case RecType::CreateJoint:
-            ((TrackJoint*)FindObjByLoc(R.obj_type, R.coords))->Cut();
+            ((TrackJoint*)R.Find())->Cut();
             break;
             
         case RecType::CutJoint:
         {
             auto tj = (TrackJoint*)ProcessNonGraphObjectCreateFormString(R.image.c_str());
             Coords dest_loc(tj);
-            int tscount = (R.coords == R.coords_old) ? 1 : 2;
-            if (tscount == 2) {
-                Coords midpoint((R.coords.wp_x + R.coords_old.wp_x)/2, (R.coords.wp_y + R.coords_old.wp_y)/2);
-                auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG, midpoint);
-                seg->Split(midpoint.wp_x, midpoint.wp_y, tj);
-                
-            }
+            auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG, R.coords_old);
+            seg->Split(R.coords_old.wp_x, R.coords_old.wp_y, tj);
             tj->MoveToNewWPpos(dest_loc.wp_x, dest_loc.wp_y);
             break;
         }
             
         case RecType::MoveGO:
         {
-            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            GOptr g = R.Find();
             auto [x,y] = R.coords_old;
             if (R.obj_type == TypeId::JOINT)
                 ((TrackJoint*)g)->MoveToNewWPpos(x, y);
@@ -344,7 +346,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             
         case RecType::PropChange:
         {
-            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            GOptr g = R.Find();
             R.orig_props->Restore(g);
             g->Invalidate();
             break;
@@ -446,9 +448,13 @@ void Redo() {
             tj->Select();
             break;
         }
+        
+        case RecType::CutJoint:
+            ((TrackJoint*)R.Find())->Cut_();
+             break;
 
         case RecType::CutGO:
-            delete FindObjByLoc(R.obj_type, R.coords);
+            delete R.Find();
             break;
             
         case RecType::MoveGO:
@@ -464,7 +470,7 @@ void Redo() {
             
         case RecType::PropChange:
         {
-            GOptr g = FindObjByLoc(R.obj_type, R.coords);
+            GOptr g = R.Find();
             R.changed_props->Restore(g);
             g->Invalidate();
             break;
@@ -507,8 +513,11 @@ void Redo() {
 
 struct JointCutSnapInfo {
     string RecreateInfo;
-    int TSCount;
     Coords OthersLoc[2];
+    Coords OriginalLoc;
+    Coords OthersAverage() {
+        return Coords((OthersLoc[0].wp_x + OthersLoc[1].wp_x)/2, (OthersLoc[0].wp_y + OthersLoc[1].wp_y)/2);
+    }
 };
 
 
@@ -516,31 +525,26 @@ struct JointCutSnapInfo {
 JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj) {
     auto J = new JointCutSnapInfo;
     J->RecreateInfo = StringImageObject(tj);
-    J->TSCount = tj->TSCount;
+    J->OriginalLoc = Coords(tj);
     TSEX myx0 = tj->TSA[0]->FindEndIndex(tj);
     assert (myx0 != TSEX::NOTFOUND);
-    TrackJoint * tj_other_0 = tj->TSA[0]->GetOtherEnd(myx0).Joint;
-    J->OthersLoc[0] = Coords(tj_other_0);
+    J->OthersLoc[0] = Coords(tj->TSA[0]->GetOtherEnd(myx0).Joint);
     if (tj->TSCount == 1)
         J->OthersLoc[1] = J->OthersLoc[0];
     else {
         TSEX myx1 = tj->TSA[1]->FindEndIndex(tj);
         assert (myx1 != TSEX::NOTFOUND);
-        TrackJoint * tj_other_1 = tj->TSA[1]->GetOtherEnd(myx1).Joint;
-        J->OthersLoc[1] = Coords(tj_other_1);
+        J->OthersLoc[1] = Coords(tj->TSA[1]->GetOtherEnd(myx1).Joint);
     }
     return J;
 }
 
 void RecordJointCutComplete(JointCutSnapInfo* J) {
     UndoRecord R(RecType::CutJoint);
-    R.image = J->RecreateInfo;
     R.obj_type = TypeId::JOINT;
-    R.coords_old = J->OthersLoc[0];
-    if (J->TSCount == 1)
-        R.coords = R.coords_old;
-    else
-        R.coords = J->OthersLoc[1];
+    R.image = J->RecreateInfo;
+    R.coords = J->OriginalLoc;
+    R.coords_old = J->OthersAverage();
     delete J;
     PlacemForward(R);
 }
