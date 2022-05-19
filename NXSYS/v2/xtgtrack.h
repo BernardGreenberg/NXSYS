@@ -73,6 +73,7 @@ class TrackJoint
 {
     public:
 	TrackJoint (WP_cord wpx1, WP_cord wpy1);
+        TrackJoint (WPPOINT wp) : TrackJoint(wp.x, wp.y) {}
 	~TrackJoint();
 
     TrackSeg* operator [](TSAX branch_index) {
@@ -222,6 +223,7 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
 	short TrainCount;
 	short GraphicBlips;
 	TrackSeg (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2);
+        TrackSeg (WPPOINT p1, WPPOINT p2) : TrackSeg(p1.x, p1.y, p2.x, p2.y) {}
 	void DisplayInState (HDC dc, int state);
 	BOOL SnapIntoLine (WP_cord& wpx, WP_cord& wpy);
 	TrackJoint * FindOtherJoint (TrackJoint * tj);

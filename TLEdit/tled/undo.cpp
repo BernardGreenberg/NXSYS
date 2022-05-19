@@ -91,6 +91,14 @@ struct Coords {
 static GOptr FindObjByLoc(TypeId type, const Coords& wp, bool nf_ok =false);
 
 struct UndoRecord {
+    /* The theory of this is that we can't store object pointers in the stacks,
+     because "equivalent" objects are going to be created and destroyed. Thus, the
+     means of identifying an object is the pair of its location and type. For all
+     objects except track segs, that's well-defined. For track-segs, it's their midpoint.
+     After a lot of thinking about the fact that no forward actions escape the stack,
+     you will conclude that these locations remain valid if you ever reach them by
+     undoing (the only way), no matter what else has been done. */
+
     UndoRecord() {}
     UndoRecord(RecType rtype) : rec_type(rtype) {}
    
@@ -312,9 +320,6 @@ void RecordSetViewOrigin(WPPOINT old, WPPOINT nieuw) {
 static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
     switch(rt) {
         case RecType::CreateGO:
-            /* Can't store real object pointer in undo stack -- the object can be deleted and recreated
-             (but at the same position) before the undo element is used. */
-
             delete R.Find();
             break;
             
@@ -373,10 +378,10 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             auto tj1 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords, true);
             auto tj2 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords_old, true);
             if (tj1 == nullptr)
-                tj1 = new TrackJoint(R.coords.wp_x, R.coords.wp_y);
+                tj1 = new TrackJoint(R.coords);
             if (tj2 == nullptr)
-                tj2 = new TrackJoint(R.coords_old.wp_x, R.coords_old.wp_y);
-            auto seg = new TrackSeg(R.coords.wp_x, R.coords.wp_y, R.coords_old.wp_x, R.coords_old.wp_y);
+                tj2 = new TrackJoint(R.coords_old);
+            auto seg = new TrackSeg(R.coords, R.coords_old);
             tj1->AddBranch(seg);
             tj2->AddBranch(seg);
             seg->Ends[0].Joint = tj1;
@@ -449,9 +454,8 @@ void Redo() {
         case RecType::CreateJoint:
         {
             auto seg = (TrackSeg*) FindObjByLoc(TypeId::TRACKSEG, R.seg_id);
-            auto [x, y] = R.coords;
-            auto tj = new TrackJoint(x, y);
-            seg->Split(x, y, tj);
+            auto tj = new TrackJoint(R.coords);
+            seg->Split(R.coords.wp_x, R.coords.wp_y, tj);
             tj->Select();
             break;
         }
