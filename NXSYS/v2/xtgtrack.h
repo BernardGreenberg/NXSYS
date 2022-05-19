@@ -26,6 +26,13 @@ class Turnout;
 
 #include "propedit.h"
 
+
+#include <unordered_set>
+
+class TrackSeg;
+using WildfireSet = std::unordered_set<TrackSeg*>;
+
+
 /* Track section (branch) array index(es)*/
 enum class TSAX {
 
@@ -239,6 +246,7 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
 	void SetTrackCircuit0 (TrackCircuit * tc);
         void SetTrackCircuitWildfire (long ID);
         void SetTrackCircuitWildfireRecurse (TrackCircuit * tc);
+        void CollectContacteesRecurse(WildfireSet&);
 	void GetGraphicsCoords (int ex, int& x, int& y);
 	virtual BOOL HitP (long x, long y);
         virtual WPPOINT WPPoint();
@@ -246,7 +254,7 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
         TSEX FindEndIndex (TrackJoint * tj);
         TrackSegEnd& GetEnd(TSEX ex);
         TrackSegEnd& GetOtherEnd(TSEX ex);
-        void CollectContacteesRecurse();
+
     
 #ifdef TLEDIT
         class PropCell : public PropCellPCRTP<PropCell, TrackSeg>

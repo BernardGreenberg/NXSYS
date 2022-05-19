@@ -5,12 +5,16 @@
 #import "GenericWindlgController.h"
 #include "resource.h"
 
+#ifndef IDC_EDIT_SEG_NSEGS
+#define IDC_EDIT_SEG_NSEGS 1041  //WTF is wrong!?
+#endif
+
 @interface TrackSegDlg : GenericWindlgController
 @end
 
 static RIDVector rids {
     {"IDC_EDIT_SEG_TC", IDC_EDIT_SEG_TC},
-    {"IDC_EDIT_SEG_SPREAD", IDC_EDIT_SEG_SPREAD}
+    {"IDC_EDIT_SEG_NSEGS", IDC_EDIT_SEG_NSEGS}
 };
 DEFINE_WINDLG_WITH_CLASS(IDD_SEG_ATTRIBUTES, TrackSegDlg, @"TrackSegProperties", rids);
 

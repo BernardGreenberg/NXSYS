@@ -13,7 +13,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Track Segment Attributes" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
+        <window title="Track Circuit Identification" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="331" height="196"/>
@@ -22,17 +22,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="331" height="196"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box autoresizesSubviews="NO" borderType="line" title="Track Circuit" translatesAutoresizingMaskIntoConstraints="NO" id="rPW-0Y-umj">
+                    <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Track Circuit" translatesAutoresizingMaskIntoConstraints="NO" id="rPW-0Y-umj">
                         <rect key="frame" x="35" y="52" width="261" height="137"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="e0k-ek-YXR">
                             <rect key="frame" x="3" y="3" width="255" height="119"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hDC-U4-Otj">
-                                    <rect key="frame" x="18" y="13" width="126" height="25"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="121" id="rif-je-yqf"/>
-                                    </constraints>
+                                <button verticalHuggingPriority="750" id="hDC-U4-Otj">
+                                    <rect key="frame" x="21" y="13" width="126" height="25"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="squareTextured" title="Show Track Circuit" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qxM-a6-U2E">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
@@ -41,19 +40,9 @@
                                         <action selector="ShowCircuit:" target="-2" id="sFk-1z-BLF"/>
                                     </connections>
                                 </button>
-                                <button identifier="IDC_EDIT_SEG_SPREAD" translatesAutoresizingMaskIntoConstraints="NO" id="jYp-Ek-TWf">
-                                    <rect key="frame" x="16" y="50" width="214" height="18"/>
-                                    <buttonCell key="cell" type="check" title="Wildfire spread by track circuit" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="TUv-jl-qwo">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                </button>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w3O-q5-uQE">
-                                    <rect key="frame" x="18" y="85" width="55" height="17"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="17" id="drh-46-hXC"/>
-                                        <constraint firstAttribute="width" constant="51" id="qKU-Bj-pbx"/>
-                                    </constraints>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w3O-q5-uQE">
+                                    <rect key="frame" x="21" y="84" width="53" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Relay ID" id="ZNf-n4-gIx">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -63,11 +52,18 @@
                                         <outlet property="nextKeyView" destination="QeV-ln-J5B" id="iX7-0o-lQq"/>
                                     </connections>
                                 </textField>
-                                <textField identifier="IDC_EDIT_SEG_TC" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QeV-ln-J5B">
-                                    <rect key="frame" x="125" y="82" width="96" height="22"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="96" id="xfO-Ed-RJK"/>
-                                    </constraints>
+                                <textField identifier="IDC_EDIT_SEG_NSEGS" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="52O-qH-Tdo">
+                                    <rect key="frame" x="45" y="52" width="165" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" title="0 track segments in circuit" id="jxe-8G-x6e">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField identifier="IDC_EDIT_SEG_TC" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QeV-ln-J5B">
+                                    <rect key="frame" x="128" y="80" width="96" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="JUQ-5D-MWG">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -75,28 +71,14 @@
                                     </textFieldCell>
                                 </textField>
                             </subviews>
-                            <constraints>
-                                <constraint firstItem="jYp-Ek-TWf" firstAttribute="top" secondItem="QeV-ln-J5B" secondAttribute="bottom" constant="15" id="00S-Hx-k8g"/>
-                                <constraint firstItem="w3O-q5-uQE" firstAttribute="baseline" secondItem="QeV-ln-J5B" secondAttribute="baseline" id="0ml-ER-03h"/>
-                                <constraint firstItem="QeV-ln-J5B" firstAttribute="leading" secondItem="w3O-q5-uQE" secondAttribute="trailing" constant="54" id="0yS-8t-mfq"/>
-                                <constraint firstAttribute="trailing" secondItem="jYp-Ek-TWf" secondAttribute="trailing" constant="25" id="2jc-cy-2i8"/>
-                                <constraint firstItem="jYp-Ek-TWf" firstAttribute="leading" secondItem="e0k-ek-YXR" secondAttribute="leading" constant="18" id="Evd-mV-98s"/>
-                                <constraint firstItem="w3O-q5-uQE" firstAttribute="leading" secondItem="hDC-U4-Otj" secondAttribute="leading" id="MO4-oz-vV9"/>
-                                <constraint firstItem="hDC-U4-Otj" firstAttribute="top" secondItem="jYp-Ek-TWf" secondAttribute="bottom" constant="15" id="NgV-ha-J3b"/>
-                                <constraint firstItem="w3O-q5-uQE" firstAttribute="leading" secondItem="e0k-ek-YXR" secondAttribute="leading" constant="20" symbolic="YES" id="Oxe-Uc-clw"/>
-                                <constraint firstAttribute="bottom" secondItem="hDC-U4-Otj" secondAttribute="bottom" constant="16" id="hnp-2k-NXZ"/>
-                                <constraint firstItem="w3O-q5-uQE" firstAttribute="firstBaseline" secondItem="QeV-ln-J5B" secondAttribute="firstBaseline" id="ryn-It-6ax"/>
-                            </constraints>
                         </view>
                         <connections>
                             <outlet property="nextKeyView" destination="QeV-ln-J5B" id="7UX-qF-lun"/>
                         </connections>
                     </box>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fwj-cb-kIb">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fwj-cb-kIb">
                         <rect key="frame" x="131" y="13" width="82" height="32"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="68" id="iF3-jO-BYW"/>
-                        </constraints>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fpX-bC-Zqy">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -105,11 +87,9 @@ Gw
 </string>
                         </buttonCell>
                     </button>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7b7-Yn-Kki">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7b7-Yn-Kki">
                         <rect key="frame" x="240" y="13" width="59" height="32"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="45" id="BJf-Tc-l0Y"/>
-                        </constraints>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="23q-JS-doR">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -119,16 +99,6 @@ DQ
                         </buttonCell>
                     </button>
                 </subviews>
-                <constraints>
-                    <constraint firstItem="fwj-cb-kIb" firstAttribute="baseline" secondItem="7b7-Yn-Kki" secondAttribute="baseline" id="0Sv-R5-am2"/>
-                    <constraint firstItem="7b7-Yn-Kki" firstAttribute="leading" secondItem="fwj-cb-kIb" secondAttribute="trailing" constant="41" id="LIB-oH-fNJ"/>
-                    <constraint firstAttribute="bottom" secondItem="fwj-cb-kIb" secondAttribute="bottom" constant="20" symbolic="YES" id="MQ8-xO-Qrd"/>
-                    <constraint firstAttribute="trailing" secondItem="7b7-Yn-Kki" secondAttribute="trailing" constant="39" id="Sd7-pw-P8f"/>
-                    <constraint firstItem="rPW-0Y-umj" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="7" id="U0c-O4-RHr"/>
-                    <constraint firstItem="rPW-0Y-umj" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="gfk-t7-qfI"/>
-                    <constraint firstItem="rPW-0Y-umj" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="38" id="pW5-zl-4xf"/>
-                    <constraint firstItem="fwj-cb-kIb" firstAttribute="top" secondItem="rPW-0Y-umj" secondAttribute="bottom" constant="16" id="vnr-iq-n7w"/>
-                </constraints>
             </view>
             <point key="canvasLocation" x="140" y="144"/>
         </window>

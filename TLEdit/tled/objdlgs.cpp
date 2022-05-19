@@ -244,13 +244,20 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 
     switch (message) {
 	case WM_INITDIALOG:
+        {
 	    if (Circuit)
 		SetDlgItemInt (hDlg, IDC_EDIT_SEG_TC, (int)(Circuit->StationNo), FALSE);
 	    else
 		SetDlgItemText (hDlg, IDC_EDIT_SEG_TC, "");
-	    SetDlgItemCheckState (hDlg, IDC_EDIT_SEG_SPREAD,
-				  !Circuit || Circuit->MultipleSegmentsP());
-		    return TRUE;
+            WildfireSet S;
+            CollectContacteesRecurse(S);
+            int brethren = (int)S.size();
+            if (brethren == 1)
+                SetDlgItemText(hDlg, IDC_EDIT_SEG_NSEGS, "One track segment");
+            else
+                SetDlgItemTextS(hDlg, IDC_EDIT_SEG_NSEGS, std::to_string(brethren) + " segments in circuit");
+        }
+            return TRUE;
 	case WM_COMMAND:
 #if 0
 	    if (Circuit) {
@@ -282,10 +289,9 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 			}
 		    }
 		    long oldid = Circuit ? Circuit->StationNo : 0L;
-                    BOOL wildfire = GetDlgItemCheckState (hDlg, IDC_EDIT_SEG_SPREAD);
 		    if (oldid != newid)
                     {
-                        if (wildfire)
+                        if (/* DISABLES CODE */ (true))
                             SetTrackCircuitWildfire(newid);
                         else {
                             CacheInitSnapshot();

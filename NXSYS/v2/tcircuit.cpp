@@ -85,10 +85,6 @@ void TrackCircuit::AddSeg (TrackSeg * ts) {
     Segments.push_back(ts);
 }
 
-#if TLEDIT
-std::unordered_set<TrackSeg*> WildfireLog;
-#endif
-
 TrackCircuit * TrackSeg::SetTrackCircuit (long tcid) {
     if (tcid == 0) {
         if (Circuit) {
@@ -119,27 +115,27 @@ void TrackSeg::SetTrackCircuit0 (TrackCircuit * tc) {
 
 void TrackSeg::SetTrackCircuitWildfire(long tcid) {
 
-
     long orig_tcid = Circuit ? Circuit->StationNo : 0;
     TrackCircuit* tc = tcid ? GetTrackCircuit(tcid) : NULL;
 
-    WildfireLog.clear();
-    CollectContacteesRecurse();
+    WildfireSet S;
+    
+    CollectContacteesRecurse(S);
 
-    for (auto seg : WildfireLog)
+    for (auto seg : S)
         seg->SetTrackCircuit0(tc);
 #if TLEDIT
-    Undo::RecordWildfireTCSpread(WildfireLog, orig_tcid, tcid);
+    Undo::RecordWildfireTCSpread(S, orig_tcid, tcid);
 #endif
-    WildfireLog.clear();
+
     if (tc)
         tc->SetRouted(tcid != 0);
 };
 
-void TrackSeg::CollectContacteesRecurse () {
-    if (WildfireLog.count(this))
+void TrackSeg::CollectContacteesRecurse (WildfireSet& S) {
+    if (S.count(this))
         return;
-    WildfireLog.insert(this);
+    S.insert(this);
     
     for (int ex = 0; ex < 2; ex++) {
         TrackSegEnd* ep = &Ends[ex];
@@ -149,45 +145,15 @@ void TrackSeg::CollectContacteesRecurse () {
 #if TLEDIT
             for (int i = 0; i < tj->TSCount; i++) {
                 if (tj->TSA[i] != this)
-                    tj->TSA[i]->CollectContacteesRecurse();
+                    tj->TSA[i]->CollectContacteesRecurse(S);
             }
 #else
             if (ep->Next)
-                ep->Next->CollectContacteesRecurse ();
+                ep->Next->CollectContacteesRecurse (S);
             if (ep->NextIfSwitchThrown)
-                ep->NextIfSwitchThrown->CollectContacteesRecurse ();
+                ep->NextIfSwitchThrown->CollectContacteesRecurse (S);
 #endif
         }
-    }
-}
-
-void TrackSeg::SetTrackCircuitWildfireRecurse (TrackCircuit * tc) {
-    /* tc == NULL is ok and possible */
-    if (Circuit == tc)
-	return;
-    SetTrackCircuit0 (tc);
-
-#if TLEDIT
-    WildfireLog.insert(this);
-#endif
-    
-    for (int ex = 0; ex < 2; ex++) {
-	TrackSegEnd* ep = &Ends[ex];
-	if (ep->Joint && ep->Joint->Insulated)
-	    continue;
-#if TLEDIT
-        if (TrackJoint * tj = ep->Joint) {
-            for (int i = 0; i < tj->TSCount; i++) {
-                if (tj->TSA[i] != this)
-                    tj->TSA[i]->SetTrackCircuitWildfireRecurse(tc);
-            }
-        }
-#else
-	if (ep->Next)
-	    ep->Next->SetTrackCircuitWildfireRecurse (tc);
-	if (ep->NextIfSwitchThrown)
-	    ep->NextIfSwitchThrown->SetTrackCircuitWildfireRecurse (tc);
-#endif
     }
 }
 

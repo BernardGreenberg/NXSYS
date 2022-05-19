@@ -2,9 +2,6 @@
 
 Mod status in titlebar (*)
 CMD /Ctrl I to insulate/uninsulate joint; prohibit if cct at end.
-  
-Change wildfire to accumulate list first, iterate it second.  
-Dialog to display count.
 
 Cut segment should stash and restore circuit.  
 Strategy for cutting tagged end-joint  
@@ -22,3 +19,4 @@ Undo stack before save (document how to use).  Save-point size() stack.
 Windows implementation  
 - Menu management function 
 - Add undo doc to ...something.
+- Segment dialog changes
