@@ -11,6 +11,7 @@
 #include "objreg.h"
 #include "undo.h"
 #include "xtgtrack.h"
+#include "LayoutModified.h"
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -205,9 +206,9 @@ static void MoveGO (GOptr g, const Coords& C) {
 static void MarkForwardAction() {
     RedoStack.clear();
     compute_menu_state();
-    BufferModified = TRUE; /* when this sys is complete, won't need BufferModified*/
 }
     
+
 static void PlacemForward(UndoRecord& ur) {
     UndoStack.emplace_back(std::move(ur));
     MarkForwardAction();
@@ -568,5 +569,13 @@ int TrackJoint::Dump(ObjectWriter &W) {
     
     return -1;  /* sort prio not meaningful in undo-sys call */
 }
+/* Global functions */
+void ClearLayoutModified() {
+    Undo::RedoStack.clear();
+    Undo::UndoStack.clear();
+}
 
+bool IsLayoutModified() {
+    return !Undo::UndoStack.empty();
+}
 

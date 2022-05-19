@@ -17,6 +17,7 @@
 #include "MessageBox.h"
 #include "ShiftLayoutDialog.h"
 #include "HelpController.h"
+#include "LayoutModified.h"
 
 void AppCommand(unsigned int);
 void InitTLEditApp(int w, int h);
@@ -24,7 +25,6 @@ BOOL ReadItKludge(const char *);
 bool SaveItForReal(const char * path);
 void ClearItOut();
 void SetMainWindowTitle(const char * text);
-extern bool BufferModified;
 
 
 static NSString * LastPathnameKey = @"LastInterlockingEditPathname";
@@ -50,7 +50,7 @@ TLEditAppDelegate* getTLEDelegate() {
 }
 -(BOOL)modCheck:(const char *) activity
 {
-    if (!BufferModified)
+    if (!IsLayoutModified())
       return TRUE;
     
     char buf[256];
@@ -211,7 +211,7 @@ TLEditAppDelegate* getTLEDelegate() {
 -(BOOL)windowShouldClose:(id)Sender
 {
     if ([self modCheck:"close this window"]) {
-        BufferModified = false;  // don't complain a second time.
+        ClearLayoutModified();  // don't complain a second time.
         return TRUE;
     }
     return FALSE;

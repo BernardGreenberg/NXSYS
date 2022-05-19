@@ -38,7 +38,6 @@ BOOL RegisterTextSampleClass(HINSTANCE hInstance);
 
 extern int FixOriginWPX, FixOriginWPY;
 extern HWND G_mainwindow;
-extern BOOL BufferModified;
 extern HINSTANCE app_instance;
 extern const char app_name[];
 extern BOOL ExitLightsShowing;

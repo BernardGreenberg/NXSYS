@@ -32,6 +32,7 @@
 #include "objreg.h"
 #include "signal.h"
 #include "undo.h"
+#include "LayoutModified.h"
 #include <stdarg.h>
 #include <string>
 #include "STLExtensions.h"
@@ -42,7 +43,6 @@ HFONT Fnt = NULL;
 int FixOriginWPX = 0, FixOriginWPY = 0;
 HWND G_mainwindow = NULL, AppWindow = NULL;
 HINSTANCE app_instance;
-BOOL BufferModified = FALSE;
 BOOL ExitLightsShowing = FALSE;
 const char app_name[] = PRODUCT_NAME " Track Layout Editor";
 
@@ -207,7 +207,7 @@ void ClearItOut() {
 	FreeGraphicObjects();
     FileName.clear();
 	InitAssignID();
-	BufferModified = FALSE;
+	ClearLayoutModified();
 }
 
 static BOOL ReadIt() {
@@ -235,7 +235,7 @@ static BOOL ReadIt() {
 BOOL SaveItForReal(const char * path) {
 	if (SaveLayout(path)) {
         FileName = path;
-		BufferModified = FALSE;
+        ClearLayoutModified();
 		SetMainWindowTitle(FileName.c_str());
 		StatusMessage("Wrote %s.", FileName.c_str());
 		return TRUE;
@@ -264,7 +264,7 @@ static BOOL SaveIt(BOOL force_query) {
 }
 
 static BOOL CheckBufferModified() {
-	if (!BufferModified)
+	if (!IsLayoutModified())
 		return TRUE;
 	switch (MessageBox(AppWindow,
 		"Layout has been modified.  Save it out?\r\n"
@@ -296,7 +296,7 @@ void AppCommand(UINT command) {
 			FullRedisplay();
 		}
 		InitAssignID();
-		BufferModified = FALSE;
+        ClearLayoutModified();
 		if (command == CmClear)
 			SetMainWindowTitle(NULL);
 		break;
@@ -394,8 +394,8 @@ void AppCommand(UINT command) {
 		break;
 #endif
 	case CmRevertToSaved:
-		if (!BufferModified)
-			usererr("Drawing has not been modified, nothing to revert.");
+		if (!IsLayoutModified())
+			usererr("Layout has not been modified, nothing to revert.");
 		else if (IDOK == MessageBox
 		(AppWindow, "Really discard this image and revert to saved?",
 			app_name, MB_OKCANCEL | MB_ICONEXCLAMATION))
@@ -576,13 +576,14 @@ static long WindowsMessageLoop(HWND window, HACCEL hAccel) {
 		//	if (IsViewerDlgMsg (&message))
 		//	    continue;
 
-		BOOL was_mod = BufferModified;
+		bool was_mod = IsLayoutModified();
 		if (hAccel == NULL || !TranslateAccelerator(window, hAccel, &message)) {
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}
-		if (BufferModified != was_mod)
-			EnableCommand(CmSave, BufferModified);
+        bool now_mod = IsLayoutModified();
+		if (was_mod != now_mod)
+			EnableCommand(CmSave, now_mod ? TRUE : FALSE);
 	}
 	return (long)message.wParam;
 }

@@ -510,6 +510,7 @@
 		5BAD55FE1A011BE2006AEEAB /* DeviceContext.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = DeviceContext.mm; sourceTree = "<group>"; };
 		5BAD56011A014B09006AEEAB /* DumbStubs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DumbStubs.cpp; sourceTree = "<group>"; };
 		5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrainDlg.xib; sourceTree = "<group>"; };
+		5BB30A8B283699DB00788BEC /* LayoutModified.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutModified.h; sourceTree = "<group>"; };
 		5BB5801A27C072B600FB0ED5 /* ParseCommandLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseCommandLine.h; sourceTree = "<group>"; };
 		5BB5801B27C072B600FB0ED5 /* ParseCommandLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseCommandLine.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BB5801D27C1DB1500FB0ED5 /* RecentFileMan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecentFileMan.cpp; sourceTree = "<group>"; tabWidth = 4; };
@@ -909,6 +910,7 @@
 				5B5AE6692311BF8600348612 /* tlpropdlg.h */,
 				5B556417282B095B00FB2CF6 /* undo.h */,
 				5B985F12282E851C0036648F /* PropCell.h */,
+				5BB30A8B283699DB00788BEC /* LayoutModified.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
