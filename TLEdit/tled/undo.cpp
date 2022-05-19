@@ -74,6 +74,10 @@ struct Coords {
     Coords(WP_cord x, WP_cord y) : wp_x(x), wp_y(y) {}
     Coords(WPPOINT wp) : Coords(wp.x, wp.y) {}
     Coords(GOptr g) : Coords(g->WPPoint()) {}
+    operator WPPOINT const () {return WPPOINT(wp_x, wp_y);}
+    Coords operator - () const {
+        return Coords(-wp_x, -wp_y);
+    }
 
     bool operator == (const Coords& other) const {
         return wp_x == other.wp_x && wp_y == other.wp_y;
@@ -194,7 +198,7 @@ static GOptr FindObjByLoc(TypeId type, const Coords& C, bool nf_ok) {
 }
 
 static GOptr FindObjByLoc(TypeId type, const WPPOINT& wp) {
-    return FindObjByLoc(type, Coords(wp.x, wp.y));
+    return FindObjByLoc(type, Coords(wp));
 }
 
 static Coords GOMovCoords {0, 0};
@@ -254,7 +258,7 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
 
 void RecordWildfireTCSpread(std::unordered_set<TrackSeg *>& segs,
                             int old_tcid, int new_tcid) {
-    vector<WPPOINT>seg_points;
+    WPVEC seg_points;
     for (auto seg : segs)
         seg_points.push_back(seg->WPPoint());
     UndoRecord R(RecType::Wildfire);
@@ -399,7 +403,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             break;
             
         case RecType::SetViewOrigin:
-            AssignFixOrigin(WPPOINT((int)R.coords_old.wp_x, (int)R.coords_old.wp_y));
+            AssignFixOrigin(R.coords_old);
             break;
 
         default:
@@ -462,12 +466,12 @@ void Redo() {
             
         case RecType::MoveGO:
         {
-            GOptr g = FindObjByLoc(R.obj_type, R.coords);
-            auto [x, y] = R.coords_old;
+            GOptr g = FindObjByLoc(R.obj_type, R.coords_old);
+            auto [x, y] = R.coords;
             if (R.obj_type == TypeId::JOINT)
                 ((TrackJoint*)g)->MoveToNewWPpos(x, y);
             else
-                MoveGO(g, R.coords_old);
+                MoveGO(g, R.coords);
             break;
         }
             
@@ -502,7 +506,7 @@ void Redo() {
             break;
 
         case RecType::SetViewOrigin:
-            AssignFixOrigin(WPPOINT((int)R.coords.wp_x, (int)R.coords.wp_y));
+            AssignFixOrigin(R.coords);
             break;
     
         default:
@@ -551,8 +555,6 @@ void RecordJointCutComplete(JointCutSnapInfo* J) {
     delete J;
     PlacemForward(R);
 }
-
-
 
 
 }
