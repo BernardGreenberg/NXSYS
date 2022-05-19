@@ -271,6 +271,7 @@ void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id) {
 
 void RecordSegmentCut (TrackSeg* ts) {
     UndoRecord R(RecType::CutSegment);
+    R.obj_type = TypeId::TRACKSEG;
     R.coords_old = Coords(ts->Ends[0].Joint);
     R.coords     = Coords(ts->Ends[1].Joint);
     PlacemForward(R);
@@ -278,6 +279,7 @@ void RecordSegmentCut (TrackSeg* ts) {
 
 void RecordSegmentCreation (TrackSeg* ts) {
     UndoRecord R(RecType::CreateSegment);
+    R.obj_type = TypeId::TRACKSEG;
     R.coords_old = Coords(ts->Ends[0].Joint);
     R.coords     = Coords(ts->Ends[1].Joint);
     PlacemForward(R);
