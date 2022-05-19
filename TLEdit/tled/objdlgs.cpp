@@ -175,7 +175,12 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                                   "TLEDIT Joint properties");
                             return TRUE;
                         }
-                        if (TSA[0]->Circuit != TSA[1]->Circuit) {
+                        if (TSCount == 1 && TSA[0]->Circuit) {
+                            uerr(hDlg, "Cannot uninsulate a track-end whose adjoining track circuit has been set. Why do you want to do this? Unset the track-circuit or delete the segment if that is what you want.",
+                                 "TLEDIT Joint properties");
+                            return TRUE;
+                        }
+                        if (TSCount == 2 && TSA[0]->Circuit != TSA[1]->Circuit) {
                             uerr (hDlg, "Cannot remove insulation between differing track circuits. Set them to be the same and try again.", "TLEDIT Joint properties");
                             return TRUE;
                         }

@@ -1,6 +1,7 @@
 # Undo TBDs
 
 Mod status in titlebar (*)
+CMD /Ctrl I to insulate/uninsulate joint; prohibit if cct at end.
   
 Change wildfire to accumulate list first, iterate it second.  
 Dialog to display count.

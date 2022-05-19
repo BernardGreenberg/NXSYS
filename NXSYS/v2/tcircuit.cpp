@@ -6,6 +6,7 @@
 #include "xtgtrack.h"
 #include "math.h"
 #include <unordered_set>
+#include <cassert>
 
 #include <vector>   // Vectorized for global array and local segs 9/27/2019
 
@@ -28,6 +29,7 @@
 static std::vector<TrackCircuit*> AllTrackCircuits;
 
 TrackCircuit::TrackCircuit (long sno) {
+    assert(sno && "Attempt to create track circuit 0");
     Occupied = Routed = Coding = FALSE;
     TrackRelay = NULL;
     StationNo = sno;
@@ -66,6 +68,7 @@ TrackCircuit* FindTrackCircuit (long sno) {
 }
 
 TrackCircuit* GetTrackCircuit (long sno) {
+    assert(sno && "GetTrackCircuit called on 0");
     TrackCircuit * tc = FindTrackCircuit (sno);
     return tc ? tc : CreateNewTrackCircuit(sno);
 }
@@ -107,24 +110,54 @@ void TrackSeg::SetTrackCircuit0 (TrackCircuit * tc) {
 	    Circuit->DeleteSeg(this);
 	if (tc)
 	    tc->AddSeg(this);
+        else
+            Circuit = nullptr;
+        Invalidate();
+        
     }
 }
 
 void TrackSeg::SetTrackCircuitWildfire(long tcid) {
-#if TLEDIT
-    long orig_tcid = Circuit ? Circuit->StationNo : 0;
     WildfireLog.clear();
-#endif
-    auto tc = GetTrackCircuit(tcid);
-    SetTrackCircuitWildfireRecurse (tc);
 
+    long orig_tcid = Circuit ? Circuit->StationNo : 0;
+    CollectContacteesRecurse();
+
+    TrackCircuit* tc = tcid ? GetTrackCircuit(tcid) : NULL;
+    for (auto seg : WildfireLog)
+        seg->SetTrackCircuit0(tc);
 #if TLEDIT
     Undo::RecordWildfireTCSpread(WildfireLog, (int)orig_tcid, (int)tcid);
-    WildfireLog.clear();
-    tc->SetRouted(tcid != 0);
-    Circuit->Invalidate();
 #endif
+    WildfireLog.clear();
+    if (tc)
+        tc->SetRouted(tcid != 0);
 };
+
+void TrackSeg::CollectContacteesRecurse () {
+    if (WildfireLog.count(this))
+        return;
+    WildfireLog.insert(this);
+    
+    for (int ex = 0; ex < 2; ex++) {
+        TrackSegEnd* ep = &Ends[ex];
+        TrackJoint* tj = ep->Joint;
+        assert(tj);
+        if (!tj->Insulated) {
+#if TLEDIT
+            for (int i = 0; i < tj->TSCount; i++) {
+                if (tj->TSA[i] != this)
+                    tj->TSA[i]->CollectContacteesRecurse();
+            }
+#else
+            if (ep->Next)
+                ep->Next->CollectContacteesRecurse ();
+            if (ep->NextIfSwitchThrown)
+                ep->NextIfSwitchThrown->CollectContacteesRecurse ();
+#endif
+        }
+    }
+}
 
 void TrackSeg::SetTrackCircuitWildfireRecurse (TrackCircuit * tc) {
     /* tc == NULL is ok and possible */

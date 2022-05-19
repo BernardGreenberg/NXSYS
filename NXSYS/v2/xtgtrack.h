@@ -246,6 +246,8 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
         TSEX FindEndIndex (TrackJoint * tj);
         TrackSegEnd& GetEnd(TSEX ex);
         TrackSegEnd& GetOtherEnd(TSEX ex);
+        void CollectContacteesRecurse();
+    
 #ifdef TLEDIT
         class PropCell : public PropCellPCRTP<PropCell, TrackSeg>
         {
