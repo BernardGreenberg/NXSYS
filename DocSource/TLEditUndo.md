@@ -1,6 +1,6 @@
 # TLEdit undo
 
-The TLEdit undo system (new with version 2.6.4) adds the long-needed ability to undo erroneous or unintended keystrokes and other "bad moves", as in all other mature interactive applications. It is supposed to work the expectable way, as in such; nevertheless, here is a more detailed discussion. 
+The TLEdit undo system (new with version 2.7) adds the long-needed ability to undo erroneous or unintended keystrokes and other "bad moves", as in all other mature interactive applications. It is supposed to work the expectable way, as in such; nevertheless, here is a more detailed discussion. 
 
 Note that unlike some other applications (on the Mac in particular), **TLEdit does not (currently) auto-save**.  **You must/should still save your work** regularly. When you do save, you may no longer undo any changes made previously.
 

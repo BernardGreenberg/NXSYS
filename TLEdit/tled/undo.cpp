@@ -67,6 +67,7 @@ struct WildfireRecord {
 
 
 struct Coords {
+    Coords() {}
     Coords(WP_cord x, WP_cord y) {
         wp_x = x;
         wp_y = y;
@@ -75,6 +76,10 @@ struct Coords {
         WPPOINT wpp = g->WPPoint();
         wp_x = wpp.x;
         wp_y = wpp.y;
+    }
+    Coords(WPPOINT wp) {
+        wp_x = wp.x;
+        wp_y = wp.y;
     }
     bool operator == (const Coords& other) const {
         return wp_x == other.wp_x && wp_y == other.wp_y;
@@ -316,12 +321,24 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         }
 
         case RecType::CreateJoint:
+            ((TrackJoint*)FindObjByLoc(R.obj_type, R.coords))->Cut();
+            break;
+            
+        case RecType::DeleteJoint:
         {
-            auto tj = (TrackJoint*)FindObjByLoc(R.obj_type, R.coords);
-            tj->Cut_();
+            auto tj = (TrackJoint*)ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            Coords dest_loc(tj);
+            int tscount = (R.coords == R.coords_old) ? 1 : 2;
+            if (tscount == 2) {
+                Coords midpoint((R.coords.wp_x + R.coords_old.wp_x)/2, (R.coords.wp_y + R.coords_old.wp_y)/2);
+                auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG, midpoint);
+                seg->Split(midpoint.wp_x, midpoint.wp_y, tj);
+                
+            }
+            tj->MoveToNewWPpos(dest_loc.wp_x, dest_loc.wp_y);
             break;
         }
-
+            
         case RecType::MoveGO:
         {
             GOptr g = FindObjByLoc(R.obj_type, R.coords);
@@ -496,6 +513,62 @@ void Redo() {
     compute_menu_state();
 }
 
+struct JointCutSnapInfo {
+    string RecreateInfo;
+    int TSCount;
+    Coords OthersLoc[2];
+};
+
+
+/* Joint cut system very hairy */
+JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj) {
+    auto J = new JointCutSnapInfo;
+    J->RecreateInfo = StringImageObject(tj);
+    J->TSCount = tj->TSCount;
+    TSEX myx0 = tj->TSA[0]->FindEndIndex(tj);
+    assert (myx0 != TSEX::NOTFOUND);
+    TrackJoint * tj_other_0 = tj->TSA[0]->GetOtherEnd(myx0).Joint;
+    J->OthersLoc[0] = Coords(tj_other_0);
+    if (tj->TSCount == 1)
+        J->OthersLoc[1] = J->OthersLoc[0];
+    else {
+        TSEX myx1 = tj->TSA[1]->FindEndIndex(tj);
+        assert (myx1 != TSEX::NOTFOUND);
+        TrackJoint * tj_other_1 = tj->TSA[1]->GetOtherEnd(myx1).Joint;
+        J->OthersLoc[1] = Coords(tj_other_1);
+    }
+    return J;
+}
+
+void RecordJointCutComplete(JointCutSnapInfo* J) {
+    UndoRecord R(RecType::DeleteJoint);
+    R.image = J->RecreateInfo;
+    R.obj_type = TypeId::JOINT;
+    R.coords_old = J->OthersLoc[0];
+    if (J->TSCount == 1)
+        R.coords = R.coords_old;
+    else
+        R.coords = J->OthersLoc[1];
+    delete J;
+    PlacemForward(R);
+}
+
+
 
 
 }
+
+
+int TrackJoint::Dump(ObjectWriter &W) {
+    W.puts("(JOINT ");
+    W.putf("%6ld      %4d %4d", Nomenclature, wp_x, wp_y);
+    if (Insulated)
+        W.puts(" INSULATED");
+    if (NumFlip)
+        W.puts(" NUMFLIP");
+    W.putc(')');
+    
+    return -1;  /* sort prio not meaningful in undo-sys call */
+}
+
+

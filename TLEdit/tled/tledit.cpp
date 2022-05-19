@@ -691,8 +691,9 @@ void TrackJoint::Cut () {
         return;
     }
     
-    Undo::RecordGOCut(this); // gotta do it while we still exist!
+    auto info = Undo::SnapshotJointPreCut(this); // gotta do it while we still exist!
     Cut_();
+    Undo::RecordJointCutComplete(info);
 }
 
 void TrackJoint::Cut_() {

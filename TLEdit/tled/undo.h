@@ -32,6 +32,8 @@ void RecordSegmentCut(TrackSeg* ts);
 void RecordSegmentCreation(TrackSeg* ts);
 void RecordShiftLayout(int deltax, int deltay);
 void RecordSetViewOrigin(WPPOINT old, WPPOINT nieuw);
+struct JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj);
+void RecordJointCutComplete(struct JointCutSnapInfo* jcsip);
 
 bool IsUndoPossible();
 bool IsRedoPossible();

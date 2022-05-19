@@ -137,6 +137,7 @@ class TrackJoint
 	virtual BOOL ClickToSelectP();
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
 	void	SwallowOtherJoint (TrackJoint * tj);
+        int     Dump(ObjectWriter& W);  /* for undo system */
         void	TDump (FILE * F, TSAX branch);
         void    Cut_();  //Multics convention...
 	void	EnsureID();
