@@ -320,7 +320,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         }
 
         case RecType::CreateJoint:
-            ((TrackJoint*)R.Find())->Cut();
+            ((TrackJoint*)R.Find())->Cut_();
             break;
             
         case RecType::CutJoint:
