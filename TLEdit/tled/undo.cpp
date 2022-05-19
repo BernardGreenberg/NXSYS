@@ -92,7 +92,7 @@ struct UndoRecord {
     /* ye nieuww movector ... */
     UndoRecord(UndoRecord&& other) {
         rec_type = other.rec_type;
-        image = other.image;
+        recreate_form = other.recreate_form;
         obj_type = other.obj_type;
         coords = other.coords;
         coords_old = other.coords_old;
@@ -104,7 +104,7 @@ struct UndoRecord {
     }
 
     RecType rec_type;
-    string image; /* generally Lisp form to recreate */
+    string recreate_form; /* Lisp form to recreate */
     TypeId obj_type = TypeId::NONE;
     
     Coords coords {0,0};
@@ -126,7 +126,7 @@ struct UndoRecord {
 
     string DescribeAction(string tag) {
         if (rec_type == RecType::IrreversibleAct)
-            return "Can't " + tag + ": " + image;
+            return "Can't " + tag + ": " + recreate_form;
         else if (OpLessOps.count(rec_type))
             return tag + " " + RecTypeNames[rec_type];
         else
@@ -216,7 +216,7 @@ static void PlacemForward(UndoRecord& ur) {
 void RecordGOCreation(GraphicObject* g){
     UndoRecord R (RecType::CreateGO);
     R.TypeCoords(g);
-    R.image = StringImageObject(g);
+    R.recreate_form = StringImageObject(g);
     if (g->TypeID() == TypeId::JOINT)
         R.rec_type = RecType::CreateJoint;
     PlacemForward(R);
@@ -224,7 +224,7 @@ void RecordGOCreation(GraphicObject* g){
 
 void RecordGOCut(GraphicObject* g) {
     UndoRecord R(RecType::CutGO);
-    R.image = StringImageObject(g);
+    R.recreate_form = StringImageObject(g);
     R.TypeCoords(g);
     PlacemForward(R);
 }
@@ -291,14 +291,14 @@ void RecordShiftLayout (int delta_x, int delta_y) {
 
 void RecordIrreversibleAct(const char * description) {
     UndoRecord R(RecType::IrreversibleAct);
-    R.image = description;
+    R.recreate_form = description;
     PlacemForward(R);
 }
 
 void RecordSetViewOrigin(WPPOINT old, WPPOINT nieuw) {
     UndoRecord R(RecType::SetViewOrigin);
-    R.coords = Coords(nieuw.x, nieuw.y);
-    R.coords_old = Coords(old.x, old.y);
+    R.coords = nieuw;
+    R.coords_old = old;
     PlacemForward(R);
 }
 
@@ -313,7 +313,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             
         case RecType::CutGO:
         {
-            GOptr obj = ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            GOptr obj = ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
             obj->MakeSelfVisible();
             obj->Select();
             break;
@@ -325,7 +325,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             
         case RecType::CutJoint:
         {
-            auto tj = (TrackJoint*)ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            auto tj = (TrackJoint*)ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
             Coords dest_loc(tj);
             auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG, R.coords_old);
             seg->Split(R.coords_old.wp_x, R.coords_old.wp_y, tj);
@@ -414,7 +414,7 @@ void Undo() {
         case RecType::IrreversibleAct:
         {
             usererr("Currently irreversible act (%s) may not be undone, nor any earlier acts.",
-                    R.image.c_str());
+                    R.recreate_form.c_str());
             return;  // Don't pop
         }
         default:
@@ -433,7 +433,7 @@ void Redo() {
     switch(rt) {
         case RecType::CreateGO:
         {
-            GOptr g = ProcessNonGraphObjectCreateFormString(R.image.c_str());
+            GOptr g = ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
             g->MakeSelfVisible();
             g->Select();
             break;
@@ -542,7 +542,7 @@ JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj) {
 void RecordJointCutComplete(JointCutSnapInfo* J) {
     UndoRecord R(RecType::CutJoint);
     R.obj_type = TypeId::JOINT;
-    R.image = J->RecreateInfo;
+    R.recreate_form = J->RecreateInfo;
     R.coords = J->OriginalLoc;
     R.coords_old = J->OthersAverage();
     delete J;

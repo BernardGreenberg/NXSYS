@@ -1,10 +1,8 @@
 # Undo TBDs
 
-Joint Cut Redo
-
-Circuit ID dialog to display count of transitive set.
-
-Cut of joints, overall. jdr (joint del record)
+  
+Change wildfire to accumulate list first, iterate it second.  
+Dialog to display count.
 
 Cut segment should stash and restore circuit.  
 Strategy for cutting tagged end-joint

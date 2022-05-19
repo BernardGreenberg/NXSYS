@@ -1,6 +1,6 @@
 # TLEdit undo
 
-The TLEdit undo system (new with version 2.7) adds the long-needed ability to undo erroneous or unintended keystrokes and other "bad moves", as in all other mature interactive applications. It is supposed to work the expectable way, as in such; nevertheless, here is a more detailed discussion. 
+The TLEdit undo system (new with version 2.7) adds the long-needed ability to undo erroneous or unintended keystrokes and other "bad moves", as in other mature interactive applications. It is supposed to work similarly in the expectable way; nevertheless, here is a more detailed discussion. 
 
 Note that unlike some other applications (on the Mac in particular), **TLEdit does not (currently) auto-save**.  **You must/should still save your work** regularly. When you do save, you may no longer undo any changes made previously.
 
@@ -17,13 +17,13 @@ For purposes of this discussion, we will divide all TLEdit user actions into **f
 
 **Presentation actions** are all the rest, i.e., those commands and mouse gestures that affect what you see, but ***do not*** affect the content of the interlocking, and are not reflected in NXSYS. Examples:
 
-* Scrolling or zooming the display or reshaping the screen
+* Scrolling, zooming, or reshaping the display window
 * Selecting objects
 * Setting the geometrical size of the layout at creation time
 * Making exit lights visible or invisible
 * Showing track circuits
 
-The "undo system" records forward actions in a *Stack*, that is, a list kept like a stack of papers, such that only the last one placed on it ("pushed onto it") is accessible, i.e., *LIFO*, "last in, first out".  When the last one pushed is removed, the previous one is exposed, and so on.  This stack is called the *Undo Stack*.  When the interlocking is successfully written out to a file, the undo stack is cleared, i.e., all its records discarded.
+The "undo system" records all forward actions in a *Stack*, that is, a list kept like a stack of papers, such that only the last one placed on it ("pushed onto it") is accessible, i.e., *LIFO*, "last in, first out".  When the last one pushed is removed, the previous one is exposed, and so on.  This stack is called the *Undo Stack*.  When the interlocking is successfully written out to a file, the undo stack is cleared, i.e., all its records discarded.
 
 If the undo stack has records in it, the file needs to be written out.  If it has none, the file which would be written out is identical to the last file read in, i.e., the "document" has effectively "not been modified".
 
