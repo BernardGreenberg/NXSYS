@@ -60,12 +60,12 @@ PropCellBase::~PropCellBase () {
 }
 
 struct WildfireRecord {
-    WildfireRecord (const WPVEC& wpvec, int oldtc, int newtc) :
+    WildfireRecord (const WPVEC& wpvec, long oldtc, long newtc) :
     Segvec(wpvec), old_tcid(oldtc), new_tcid(newtc) {};
 
     WPVEC Segvec;
-    int old_tcid;
-    int new_tcid;
+    long old_tcid;
+    long new_tcid;
 };
 
 
@@ -265,7 +265,7 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
 }
 
 void RecordWildfireTCSpread(std::unordered_set<TrackSeg *>& segs,
-                            int old_tcid, int new_tcid) {
+                            long old_tcid, long new_tcid) {
     WPVEC seg_points;
     for (auto seg : segs)
         seg_points.push_back(seg->WPPoint());

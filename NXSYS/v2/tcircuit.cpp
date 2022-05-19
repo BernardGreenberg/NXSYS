@@ -118,16 +118,18 @@ void TrackSeg::SetTrackCircuit0 (TrackCircuit * tc) {
 }
 
 void TrackSeg::SetTrackCircuitWildfire(long tcid) {
-    WildfireLog.clear();
+
 
     long orig_tcid = Circuit ? Circuit->StationNo : 0;
+    TrackCircuit* tc = tcid ? GetTrackCircuit(tcid) : NULL;
+
+    WildfireLog.clear();
     CollectContacteesRecurse();
 
-    TrackCircuit* tc = tcid ? GetTrackCircuit(tcid) : NULL;
     for (auto seg : WildfireLog)
         seg->SetTrackCircuit0(tc);
 #if TLEDIT
-    Undo::RecordWildfireTCSpread(WildfireLog, (int)orig_tcid, (int)tcid);
+    Undo::RecordWildfireTCSpread(WildfireLog, orig_tcid, tcid);
 #endif
     WildfireLog.clear();
     if (tc)
