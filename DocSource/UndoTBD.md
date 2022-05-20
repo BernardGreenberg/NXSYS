@@ -1,14 +1,12 @@
 # Undo TBDs
 
 Modification status in titlebar (*)  
-
-- Change toolbar icon.x	  
+ 
 Mac reshape message box if long string.
 
 Crossover joint coincidence threatens whole undo system.  
 Proposal: never return 10*** #'s; search for joints using them.
-
-Cut segment should cache and restore circuit.  
+ 
 Wildfire record must save possibly inconsistent tc members.  
 Strategy for cutting tagged end-joint  
   Current theory is (SEG)(JOINT)(JOINT) in recreate_form.

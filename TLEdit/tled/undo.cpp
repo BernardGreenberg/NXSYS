@@ -98,6 +98,8 @@ struct UndoRecord {
      After a lot of thinking about the fact that no forward actions escape the stack,
      you will conclude that these locations remain valid if you ever reach them by
      undoing (the only way), no matter what else has been done. */
+    
+    /* That works like a charm, except when IJ's in the middle of a double-crossover coincide. */
 
     UndoRecord() {}
     UndoRecord(RecType rtype) : rec_type(rtype) {}
@@ -110,20 +112,25 @@ struct UndoRecord {
         coords = other.coords;
         coords_old = other.coords_old;
         seg_id = other.seg_id;
+        Nomenclature = other.Nomenclature;
 
         orig_props = std::move(other.orig_props);
         changed_props = std::move(other.changed_props);
         wf_objptr = std::move(other.wf_objptr);
     }
 
+    /* POD (plain old data) */
     RecType rec_type;
     string recreate_form; /* Lisp form to recreate */
     TypeId obj_type = TypeId::NONE;
-    
+    long Nomenclature = 0;   // only used sometimes.
+
+    /* Little structures. */
     Coords coords {0,0};
     Coords coords_old {-1,-1};
     WPPOINT seg_id{0,0};
 
+    /* Self-important pointers */
     std::unique_ptr<PropCellBase> orig_props;
     std::unique_ptr<PropCellBase> changed_props;
     std::unique_ptr<WildfireRecord> wf_objptr;
@@ -279,6 +286,7 @@ void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id) {
     UndoRecord R(RecType::CreateJoint);
     R.TypeCoords(tj);
     R.seg_id = seg_id;
+    R.Nomenclature = tj->Nomenclature;
     PlacemForward(R);
 }
 
@@ -287,6 +295,10 @@ void RecordSegmentCut (TrackSeg* ts) {
     R.obj_type = TypeId::TRACKSEG;
     R.coords_old = Coords(ts->Ends[0].Joint);
     R.coords     = Coords(ts->Ends[1].Joint);
+    if (ts->Circuit)
+        R.Nomenclature = ts->Circuit->StationNo;
+    else
+        R.Nomenclature = 0;
     PlacemForward(R);
 }
 
@@ -358,6 +370,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             
         case RecType::PropChange:
         {
+            StatusMessage("");  //clear left-over object descriptions.
             GOptr g = R.Find();
             R.orig_props->Restore(g);
             g->Invalidate();
@@ -382,6 +395,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             if (tj2 == nullptr)
                 tj2 = new TrackJoint(R.coords_old);
             auto seg = new TrackSeg(R.coords, R.coords_old);
+            seg->SetTrackCircuit(R.Nomenclature);
             tj1->AddBranch(seg);
             tj2->AddBranch(seg);
             seg->Ends[0].Joint = tj1;
