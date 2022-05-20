@@ -8,11 +8,11 @@ Crossover joint coincidence threatens whole undo system.
 Proposal: never return 10*** #'s; search for joints using them.
  
 Wildfire record must save possibly inconsistent tc members.  
+Must execute even if tc doesn't change for this seg.  
 Strategy for cutting tagged end-joint  
   Current theory is (SEG)(JOINT)(JOINT) in recreate_form.
 
-Switch branch undo/redo  
-Move joint via properties dlg (doesn't undo/redo)
+Switch branch undo/redo, other switch props  
 
 Joint merge (very difficult)  
 - Prohibit when either is insulated or movee has station #.  
@@ -23,8 +23,6 @@ Undo stack before save (document how to use).  Save-point size() stack.
 - may need tick-counter.
 
 New trackage inherits circuit (better NOT)
-
-Crossover creation between extant assigned sections is a mess. Perhaps split it automatically?   (add +1 or -1 depending on actual angle?) Describe editing technique.
 
 Windows implementation  
 - Menu management function 

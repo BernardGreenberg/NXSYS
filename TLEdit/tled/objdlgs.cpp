@@ -278,7 +278,7 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 			    return TRUE;
 			}
 		    }
-		    long oldid = Circuit ? Circuit->StationNo : 0L;
+                    long oldid = TCNO();
 		    if (oldid != newid)
                     {
                         if (/* DISABLES CODE */ (true))

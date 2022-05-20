@@ -372,7 +372,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 		if (fx == TSEX::NOTFOUND)
             throw TLEditSaveException("Estranged track segment found.");
 
-		long id = ts->Circuit ? ts->Circuit->StationNo : 0;
+        long id = ts->TCNO();
 
 		/* dump seg attributes if appropriate*/
         if (f)

@@ -13,6 +13,7 @@ namespace Undo {
 class PropCellBase {
 public:
     WP_cord wp_x, wp_y;
+    WPPOINT WpPoint() {return WPPOINT(wp_x, wp_y);}
     virtual ~PropCellBase() = 0;
     virtual void Snapshot (GraphicObject* g) = 0;
     virtual void Restore(GraphicObject* g) = 0;

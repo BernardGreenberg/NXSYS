@@ -143,6 +143,9 @@ struct UndoRecord {
     GOptr Find() {
         return FindObjByLoc(obj_type, coords);
     }
+    GOptr FindOld() {
+        return FindObjByLoc(obj_type, coords_old);
+    }
 
     string DescribeAction(string tag) {
         if (rec_type == RecType::IrreversibleAct)
@@ -266,6 +269,7 @@ void RecordGOMoveComplete(GraphicObject* g) {
 void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
     UndoRecord R(RecType::PropChange);
     R.TypeCoords(g);
+    R.coords_old =  pre_change_props->WpPoint();
     R.orig_props.reset(pre_change_props);
     R.changed_props.reset(pre_change_props->SnapshotNow(g));
     PlacemForward(R);
@@ -495,7 +499,7 @@ void Redo() {
             
         case RecType::PropChange:
         {
-            GOptr g = R.Find();
+            GOptr g = R.FindOld();
             R.changed_props->Restore(g);
             g->Invalidate();
             break;

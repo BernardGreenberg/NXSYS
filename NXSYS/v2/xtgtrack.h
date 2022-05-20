@@ -135,6 +135,8 @@ class TrackJoint
                     tj->NumFlip = NumFlip;
                     tj->PositionLabel();
                 }
+                if (wp_x != tj->wp_x || wp_y != tj->wp_y)
+                    tj->MoveToNewWPpos(wp_x, wp_y);
             }
         };
 
@@ -216,18 +218,19 @@ class TrackSegEnd {			//NOT a graphic object
 
 
 class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
-    public:
-	TrackSegEnd Ends[2];
-	TrackCircuit * Circuit;
-	float   Length ;  // pythagoric, useful for drawing.
-	float   CosTheta, SinTheta;
-	BOOL    Routed;// this means "not the deselectd end of a trailing pt"
+public:
+    TrackSegEnd Ends[2];
+    TrackCircuit * Circuit;
+    long    TCNO () {return Circuit ? Circuit->StationNo : 0;}
+    float   Length ;  // pythagoric, useful for drawing.
+    float   CosTheta, SinTheta;
+    BOOL    Routed;// this means "not the deselectd end of a trailing pt"
                       //sw, i.e., to be lit red/white in curr. sw. pos.
 #ifdef TLEDIT
-	BOOL    Marked;
+    BOOL    Marked;
 #else
-	Turnout *OwningTurnout;
-	float   RWLength;  /* real-world length for train sys */
+    Turnout *OwningTurnout;
+    float   RWLength;  /* real-world length for train sys */
 #endif
 	short TrainCount;
 	short GraphicBlips;
@@ -262,12 +265,10 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
         class PropCell : public PropCellPCRTP<PropCell, TrackSeg>
         {
             long tcid;
+            WPPOINT loc;
         public:
             void Snapshot_(TrackSeg * ts) {
-                if (ts->Circuit)
-                    tcid = ts->Circuit->StationNo;
-                else
-                    tcid = 0;
+                tcid = ts->TCNO();
             }
             void Restore_(TrackSeg* ts) {
                 ts->SetTrackCircuit(tcid);
