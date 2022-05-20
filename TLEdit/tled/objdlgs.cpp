@@ -170,18 +170,8 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                     }
                     decltype(Insulated) new_ins = GetDlgItemCheckState (hDlg, IDC_JOINT_INSULATED);
                     if (!new_ins) {   /* Attempting to merge segments  */
-                        if (SignalExlightCount() > 0) {
-                            uerr (hDlg, "Can't make non-insulated as signals or exit lights are at this joint. Remove them and try again.",
-                                  "TLEDIT Joint properties");
-                            return TRUE;
-                        }
-                        if (TSCount == 1 && TSA[0]->Circuit) {
-                            uerr(hDlg, "Cannot uninsulate a track-end whose adjoining track circuit has been set. Why do you want to do this? Unset the track-circuit or delete the segment if that is what you want.",
-                                 "TLEDIT Joint properties");
-                            return TRUE;
-                        }
-                        if (TSCount == 2 && TSA[0]->Circuit != TSA[1]->Circuit) {
-                            uerr (hDlg, "Cannot remove insulation between differing track circuits. Set them to be the same and try again.", "TLEDIT Joint properties");
+                        if (auto excuse = PrecludeUninsulation("uninsulate")) {
+                            uerr(hDlg, excuse.value.c_str(), "TLEDIT Joint properties");
                             return TRUE;
                         }
                     }

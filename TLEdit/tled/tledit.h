@@ -19,7 +19,7 @@ class ExitLight;
 #endif
 
 void TrackLayoutRodentate (HWND hWnd, UINT message, int x, int y);
-void InsulateJoint (TrackJoint * joint);
+void ToggleInsulation (TrackJoint * joint);
 
 void DoHelpDialog ();
 void DoAboutDialog ();

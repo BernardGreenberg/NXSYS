@@ -61,7 +61,7 @@ void TLEditCreateSignal (TrackJoint * tj, bool upright) {
     }
 
     if (!tj->Insulated) {
-        tj->Insulate();            /* ensure insulated  ************ NEEDS UNDO HAIR ********/
+        tj->Insulate(true);            /* ensure insulated  ************ NEEDS UNDO HAIR ********/
     }
 
     /* Commit to create the signal */

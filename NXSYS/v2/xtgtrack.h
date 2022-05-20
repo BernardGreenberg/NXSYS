@@ -22,6 +22,7 @@ class Turnout;
 #endif
 #ifdef TLEDIT
 #include "TLDlgProc.h"
+#include "ValidatingValue.h"
 #endif
 
 #include "propedit.h"
@@ -143,13 +144,14 @@ class TrackJoint
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual UINT DlgId();
 	virtual BOOL ClickToSelectP();
+        ValidatingValue<std::string> PrecludeUninsulation(const char* action);
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
 	void	SwallowOtherJoint (TrackJoint * tj);
         int     Dump(ObjectWriter& W);  /* for undo system */
         void	TDump (FILE * F, TSAX branch);
         void    Cut_();  //Multics convention...
 	void	EnsureID();
-	void	Insulate();
+	void	Insulate(bool insulate);
 	void	FlipNum();
 	int	SignalExlightCount();
 	BOOL_DLG_PROC_QUAL SwitchDlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);

@@ -317,7 +317,7 @@ void AppCommand(UINT command) {
 		break;
 	case CmIJ:
 		if (SelectedObject && SelectedObject->TypeID() == TypeId::JOINT) {
-			InsulateJoint((TrackJoint *)SelectedObject);
+			ToggleInsulation((TrackJoint *)SelectedObject);
 			//			    SelectedObject->Deselect();
 		}
 		break;

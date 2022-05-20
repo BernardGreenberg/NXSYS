@@ -26,7 +26,6 @@ bool SaveItForReal(const char * path);
 void ClearItOut();
 void SetMainWindowTitle(const char * text);
 
-
 static NSString * LastPathnameKey = @"LastInterlockingEditPathname";
 static NSArray *allowedTypes = [NSArray arrayWithObject:@"trk"];
 #define APDTRACE(x)
@@ -293,10 +292,13 @@ TLEditAppDelegate* getTLEDelegate() {
 {
     [[[CanvasExtentDialogController alloc] init] showModal:NO];
 }
-
--(void)setTheWporg:(NSPoint)p
+-(IBAction)toggleInsulate:(id)sender
 {
-    _wporg = p;
+    AppCommand(CmIJ);
+}
+-(void)setTheWporg:(NSPoint)point
+{
+    _wporg = point;
     _wporg_set = true;
 }
 -(NSPoint)getTheWporg:(bool)really_get_it_from_window

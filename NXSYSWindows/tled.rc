@@ -98,6 +98,7 @@ BEGIN
     VK_F1,          CmHelp,                 VIRTKEY, NOINVERT
     VK_F4,          CmQuit,                 VIRTKEY, NOINVERT
     "^O",           CmOpen,                 ASCII,  NOINVERT
+    "^I",           CmIJ,                   ASCII,  NOINVERT
     "^P",           CmEditProperties,       ASCII,  NOINVERT
     "^R",           CmRdis,                 ASCII,  NOINVERT
     "^S",           CmSave,                 ASCII,  NOINVERT

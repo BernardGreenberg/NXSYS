@@ -590,16 +590,32 @@ void TrackLayoutRodentate (HWND hWnd, UINT message, int x, int y) {
     }
 }
 
+ValidatingValue<std::string> TrackJoint::PrecludeUninsulation(const char* action) {
+    std::string pfx = "Can't " + std::string(action) + " joint: ";
+    if (SignalExlightCount() > 0)
+        return pfx + "Signals or exit lights are at this joint. Remove them and try again.";
+    if (TSCount == 1 && TSA[0]->Circuit)
+        return pfx + "A track-end whose adjoining track circuit has been set. Why do you want to do this? Unset the track-circuit or delete the segment if that is what you want.";
+    if (TSCount == 2 && TSA[0]->Circuit != TSA[1]->Circuit)
+        return pfx + "Adjoins differing track circuits. Set them to be the same and try again.";
+    return {};
+}
 
-void InsulateJoint (TrackJoint * tj) {
+void ToggleInsulation (TrackJoint * tj) {
     if (tj->TSCount != 1 && tj->TSCount != 2) {
 	usererr ("Only inline or terminal joints may be insulated.");
 	return;
     }
-    if (!tj->Insulated) {
-	tj->Insulate();
-	StatusMessage ("IJ %ld is now insulated.", tj->Nomenclature);
+    if (tj->Insulated) {
+        if (auto excuse = tj->PrecludeUninsulation("uninsulate")) {
+            usererr(excuse.value.c_str());
+            return;
+        }
+        tj->Insulate(false);
     }
+    else
+        tj->Insulate(true);
+    StatusMessage ("IJ %ld is now %sinsulated.", tj->Nomenclature, tj->Insulated ? "" : "un");
 }
 
 static bool triangle_collapse_condition(TrackJoint * tj){
@@ -651,15 +667,16 @@ void TrackJoint::Cut () {
         usererr ("BUG: Null segment pointer in alleged 2-branch IJ.");
         return;
     }
-    
-    TrackSeg& ts0 = *TSA[0];
-    TrackSeg& ts1 = *TSA[1];
 
-    if (ts0.Circuit != ts1.Circuit) { // 5-18-2022
-        usererr ("Cannot delete an insulated joint between track sections with differing circuits.  Set one or the other to 0 or the other.");
-        return;
+    if (Insulated) {
+        if (auto excuse = PrecludeUninsulation("delete")) {
+            usererr(excuse.value.c_str());
+            return;
+        }
     }
 
+    TrackSeg& ts0 = *TSA[0];
+    TrackSeg& ts1 = *TSA[1];
     TSEX endxs[2];
     /* These are the indexes in the end-arrays of our rays for this joint. */
     endxs[0] = ts0.FindEndIndex(this);
@@ -933,11 +950,12 @@ void TrackJoint::FlipNum() {
     }
 }
 
-void TrackJoint::Insulate() {
-    if (!Insulated) {
-	Insulated = TRUE;
+void TrackJoint::Insulate(bool insulate) {
+    BOOL Bb = insulate ? TRUE : FALSE;
+    if (Insulated != Bb) {
         CacheInitSnapshot();
-	EnsureID();
+        Insulated = insulate ? TRUE : FALSE;
+        EnsureID();
         Undo::RecordChangedProps(this, StealPropCache());
 	Invalidate();
     }

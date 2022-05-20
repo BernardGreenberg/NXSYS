@@ -229,6 +229,11 @@ CA
                                     <action selector="Properties:" target="Voe-Tx-rLC" id="LWl-lU-IeY"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Insulate/Unins" hidden="YES" keyEquivalent="i" allowsKeyEquivalentWhenHidden="YES" id="unE-ry-GF3">
+                                <connections>
+                                    <action selector="toggleInsulate:" target="Voe-Tx-rLC" id="qmf-x8-i25"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
