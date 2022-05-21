@@ -132,19 +132,35 @@ class TrackJoint
 #ifdef TLEDIT
         class PropCell : public PropCellPCRTP<PropCell, TrackJoint> {
         public:
+            IJID Nomenclature;
             bool Insulated;
             bool NumFlip;
+            int AB0;
             void Snapshot_(TrackJoint* tj) {
                 SnapWPpos(tj);
                 Insulated = tj->Insulated;
                 NumFlip = tj->NumFlip;
+                Nomenclature = tj->Nomenclature;
+                AB0 = tj->SwitchAB0;
             }
             void Restore_(TrackJoint* tj) {
+                bool rplbl = false;
                 tj->Insulated = Insulated;
+                if (Nomenclature != tj->Nomenclature) {
+                    tj->Nomenclature = Nomenclature;
+                    rplbl = true;
+                }
+                if (AB0 != tj->SwitchAB0) {
+                    tj->SwitchAB0 = AB0;
+                    rplbl = true;
+                }
+                tj->SwitchAB0 = AB0;
                 if (tj->NumFlip != NumFlip) {
                     tj->NumFlip = NumFlip;
-                    tj->PositionLabel();
+                    rplbl = true;
                 }
+                if (rplbl)
+                    tj->PositionLabel();
                 if (wp_x != tj->wp_x || wp_y != tj->wp_y)
                     tj->MoveToNewWPpos(wp_x, wp_y);
             }

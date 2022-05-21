@@ -67,6 +67,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 	case WM_INITDIALOG:
 	    SetDlgItemInt (hDlg, IDC_SWITCH_EDIT, (int)Nomenclature, FALSE);
 	    SetDlgItemCheckState (hDlg, SwitchIsIDs[SwitchAB0], TRUE);
+            CacheInitSnapshot();
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
@@ -97,8 +98,12 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 			nchange = 1;
 		    }	
 		    SwitchAB0 = AB0;
-		    if (nchange)
+                    if (nchange) {
 			PositionLabel();
+                        Undo::RecordChangedProps(this, StealPropCache());
+                    }
+                    else
+                        DiscardPropCache();
 		    EndDialog (hDlg, TRUE);
 		    return TRUE;
 		}
@@ -116,6 +121,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 		    TSA[(int)TSAX::NORMAL]->Select();
 		    break;
 		case IDCANCEL:
+                    DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;
 		case IDC_SWITCH_EDIT_JOINT_ATTRIBUTES:
