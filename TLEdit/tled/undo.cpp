@@ -70,6 +70,11 @@ struct WildfireRecord {
     IJID new_tcid;
 };
 
+struct JointMergeRecord {
+    vector<JointSignature> signatures;
+
+};
+
 
 struct Coords {
     Coords() {}
@@ -119,6 +124,7 @@ struct UndoRecord {
         orig_props = std::move(other.orig_props);
         changed_props = std::move(other.changed_props);
         wf_objptr = std::move(other.wf_objptr);
+        jm_objptr = std::move(other.jm_objptr);
     }
 
     /* POD (plain old data) */
@@ -136,6 +142,7 @@ struct UndoRecord {
     std::unique_ptr<PropCellBase> orig_props;
     std::unique_ptr<PropCellBase> changed_props;
     std::unique_ptr<WildfireRecord> wf_objptr;
+    std::unique_ptr<JointMergeRecord> jm_objptr;
 
     void TypeCoords(GOptr g) {
         coords = Coords(g);
@@ -341,6 +348,10 @@ void RecordJointMerge(TrackJoint* consumer, TrackJoint* movee, std::vector<Track
     R.TypeCoords(consumer);
     R.coords_old = GOMovCoords; //Boy, is this useful!
     R.Nomenclature = movee->Nomenclature;
+    JointMergeRecord JMR;
+    for (auto tj : opposing_joints)
+        JMR.signatures.push_back(tj->Signature());
+    R.jm_objptr.reset(new JointMergeRecord(JMR));
     PlacemForward(R);
 }
 
@@ -439,6 +450,31 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         case RecType::SetViewOrigin:
             AssignFixOrigin(R.coords_old);
             break;
+            
+        case RecType::MergeJoints:
+        {
+            /* Wheeeeee!  5-21-2022 */
+            auto receiver = (TrackJoint*)R.Find();
+            auto movee = new TrackJoint(R.coords_old);
+            movee->Nomenclature = R.Nomenclature;
+            for (auto opposer : R.jm_objptr->signatures) {
+                auto tj = (TrackJoint*) FindObjByLoc(TypeId::JOINT, opposer.Location);
+                for (int oxi = 0; oxi < tj->TSCount; oxi++) {
+                    TrackSeg * seg = tj->TSA[oxi];
+                    for (TSEX tsx : {TSEX::E0, TSEX::E1}) {
+                        TrackSegEnd& E = seg->GetEnd(tsx);
+                        if (E.Joint == receiver) {
+                            receiver->DelBranch(seg);
+                            assert(movee->AddBranch(seg));
+                            E.Joint = movee;
+                            seg->Invalidate();
+                        }
+                    }
+                }
+            }
+            movee->MoveToNewWPpos(movee->wp_x, movee->wp_y);
+            break;
+        }
 
         default:
             break;
@@ -541,6 +577,16 @@ void Redo() {
         case RecType::SetViewOrigin:
             AssignFixOrigin(R.coords);
             break;
+            
+        case RecType::MergeJoints:
+        {
+            auto receiver = (TrackJoint*)R.Find();
+            auto movee = (TrackJoint*)R.FindOld();
+            receiver->SwallowOtherJoint(movee, false);
+            for (int i = 0; i < receiver->TSCount; i++)
+                receiver->TSA[i]->Align();
+            break;
+        }
     
         default:
             break;

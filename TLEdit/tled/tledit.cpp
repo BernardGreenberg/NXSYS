@@ -865,11 +865,12 @@ void TrackJoint::SwallowOtherJoint (TrackJoint * movee, bool make_undo_record) {
             //Insulated = FALSE; // 3-12-2022
             // Organized = FALSE; // 3-14-2022 //defeats the Undo system. To hell with organization.
     }
-    /* This looks nilpotent, but it actually causes the newly-moved segment(s) to be relocated and
-     displayed properly.*/
+   
     if (make_undo_record)
         Undo::RecordJointMerge(this, movee, opposing_joints);
 
+    /* This looks nilpotent, but it actually causes the newly-moved segment(s) to be relocated and
+     displayed properly.*/
     MoveToNewWPpos(wp_x, wp_y);
     delete movee;
 }

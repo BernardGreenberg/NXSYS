@@ -15,9 +15,7 @@ Strategy for cutting tagged end-joint
   Current theory is (SEG)(JOINT)(JOINT) in recreate_form.
 
 Switch branch undo/redo, other switch props  
-
-Joint merge (very difficult)  
-- Prohibit when either is insulated or movee has station #.  
+ 
 - Disallow setting station # on uninsulated joints.
 - Prohibit circuit-setting when end is not insulated.  
 
