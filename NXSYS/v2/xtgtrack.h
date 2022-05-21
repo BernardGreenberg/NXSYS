@@ -33,7 +33,7 @@ class Turnout;
 class TrackSeg;
 using WildfireSet = std::unordered_set<TrackSeg*>;
 
-using IJID = long;
+#include "ijid.h"
 
 /* Track section (branch) array index(es)*/
 enum class TSAX {

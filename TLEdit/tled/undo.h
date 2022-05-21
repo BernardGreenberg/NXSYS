@@ -14,6 +14,7 @@
 
 #include "PropCell.h"
 #include <unordered_set>
+#include "ijid.h"
 
 class TrackSeg;
 using TSSet = std::unordered_set<TrackSeg *>;
