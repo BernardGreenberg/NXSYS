@@ -488,7 +488,7 @@ void Redo() {
             
         case RecType::MoveGO:
         {
-            GOptr g = FindObjByLoc(R.obj_type, R.coords_old);
+            GOptr g = R.FindOld();
             auto [x, y] = R.coords;
             if (R.obj_type == TypeId::JOINT)
                 ((TrackJoint*)g)->MoveToNewWPpos(x, y);
