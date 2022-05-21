@@ -35,6 +35,13 @@ using WildfireSet = std::unordered_set<TrackSeg*>;
 
 #include "ijid.h"
 
+struct JointSignature {
+    JointSignature(WPPOINT point, IJID nomenclature) : Location(point), Nomenclature(nomenclature) {}
+    WPPOINT Location;
+    IJID Nomenclature;
+};
+
+
 /* Track section (branch) array index(es)*/
 enum class TSAX {
 
@@ -42,7 +49,6 @@ enum class TSAX {
     STEM   = 0,
     NORMAL = 1,
     REVERSE = 2,
-
 
     /* if TSCount = 2 (nonterminal IJ/kink) */
     IJR0 = 0,
@@ -116,6 +122,9 @@ class TrackJoint
 	void	PositionLabel();
 	TSAX	FindBranchIndex (TrackSeg * ts);
         TrackSeg* GetBranch(TSAX brx);
+        JointSignature Signature() {
+            return JointSignature(WPPoint(), Nomenclature);
+        };
     
 	virtual void Display (HDC dc);
 	virtual TypeId TypeID ();
@@ -149,7 +158,8 @@ class TrackJoint
 	virtual BOOL ClickToSelectP();
         ValidatingValue<std::string> PrecludeUninsulation(const char* action);
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
-	void	SwallowOtherJoint (TrackJoint * tj);
+        const char * ValidateAndSwallowOtherJoint(TrackJoint*tj);
+	void	SwallowOtherJoint (TrackJoint * tj, bool make_undo_record);
         int     Dump(ObjectWriter& W);  /* for undo system */
         void	TDump (FILE * F, TSAX branch);
         void    Cut_();  //Multics convention...

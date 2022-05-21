@@ -406,30 +406,37 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
     if (tj == MovTrackJoint)
         tj = nullptr;  // fall into "just move" 3-26-2022
     
-    if (tj) {	/* Try to merge nodes */
-        if (OneOfRaysOfStart(MovTrackJoint, tj)) {// disallow drop on current neighbor node 3-18-2022
-            StatusMessage("Cannot drop joint on end of ray from itself; cut segment instead.");
-            return;
-        }
-        if (set_intersects(all_far_nodes(tj), all_far_nodes(MovTrackJoint))) {
-            usererr("A joint being moved may not be dropped on a joint at the end of a colocated segment.  Delete the segment if that is what you want.");
-            return;
-        }
-
-	if (tj->TSCount + MovTrackJoint->TSCount > 3)
-	    return;
-	wpx = tj->wp_x;
-	wpy = tj->wp_y;
-	MovTrackJoint->SwallowOtherJoint (tj);
+    if (tj) {
+        if (auto plaint = MovTrackJoint->ValidateAndSwallowOtherJoint(tj))
+            usererr(plaint);
+        else tj->SwallowOtherJoint(MovTrackJoint, true);
     }
-    
-
-    MovTrackJoint->MoveToNewWPpos (wpx, wpy);
-
-    if (!tj) {
+    else {  // simple move.
+        MovTrackJoint->MoveToNewWPpos (wpx, wpy);
         Undo::RecordGOMoveComplete(MovTrackJoint);
     }
+}
 
+/* The preconditions on joint-merging are non-trivial.  At very least, the Undo system
+   is not prepared to undo stupid gestures. */
+const char * TrackJoint::ValidateAndSwallowOtherJoint(TrackJoint* target) {
+    /* current instance ("this") was MovTrackJoint, i.e., the one being moved which will
+       be swallowed by "target" */
+    if (OneOfRaysOfStart(this, target))// disallow drop on current neighbor node 3-18-2022
+        return "Cannot drop joint on end of ray from itself; cut segment instead.";
+    if (set_intersects(all_far_nodes(target), all_far_nodes(this)))
+        return "A joint being moved may not be dropped on a joint at the end of a colocated segment.  Delete the segment if that is what you want.";
+    if (target->TSCount == 3)
+        return "You may not drop a joint on a switch.";
+    if (target->TSCount == 2 && target->Insulated)
+        return "You may not drop a joint on an insulated joint. If you want to make it be "
+        "a switch, remove the insulation first.";
+    if (Insulated)
+        return "You may not drop an insulated joint on any other joint. If you want to "
+        "merge them, remove the insulation from this joint first.";
+    if (target->TSCount + TSCount > 3)
+        return "Attempted merge would produce more than three rays emanating from a joint, ∴no.";
+    return nullptr;
 }
 
 
@@ -837,23 +844,34 @@ void TrackJoint::MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1) {
 }
 
 
-void TrackJoint::SwallowOtherJoint (TrackJoint * other_tj) {
-    for (int j = 0; j < other_tj->TSCount; j++) {
-        TrackSeg& S = *(other_tj->TSA[j]);
-        TSEX his_end_in_this_ts = S.FindEndIndex(other_tj);
-        assert(his_end_in_this_ts != TSEX::NOTFOUND);
-        Insulated = FALSE; //otherwisem AddBranch will fail silently....
-	AddBranch(&S);
-        S.GetEnd(his_end_in_this_ts).Joint = this;
-        
-        if (TSCount > 2) {  // français pour "3"
-	    EnsureID();
-            Insulated = FALSE; // 3-12-2022
-            Organized = FALSE; // 3-14-2022
+void TrackJoint::SwallowOtherJoint (TrackJoint * movee, bool make_undo_record) {
+    /* current instance ("this") is the CONSUMER.  We will consume the movee
+       (in spite of the pandemic--no "theetre" needed).*/
+    std::vector<TrackJoint*> opposing_joints;
+
+    assert(TSCount < 3);
+    assert(!Insulated); // 5-21-2022 c'est illegale
+    for (int j = 0; j < movee->TSCount; j++) {
+        TrackSeg& S = *(movee->TSA[j]);
+        assert(AddBranch(&S));
+        TSEX endx = S.FindEndIndex(movee);
+        assert(endx != TSEX::NOTFOUND);
+        TrackSegEnd& E = S.GetEnd(endx);
+        if (make_undo_record){
+            TrackSegEnd& Other = S.GetOtherEnd(endx);
+            opposing_joints.push_back(Other.Joint);
+            E.Joint = this;
         }
+            //Insulated = FALSE; // 3-12-2022
+            // Organized = FALSE; // 3-14-2022 //defeats the Undo system. To hell with organization.
     }
-    delete other_tj;
-    Undo::RecordIrreversibleAct("merge track joints");
+    /* This looks nilpotent, but it actually causes the newly-moved segment(s) to be relocated and
+     displayed properly.*/
+    if (make_undo_record)
+        Undo::RecordJointMerge(this, movee, opposing_joints);
+
+    MoveToNewWPpos(wp_x, wp_y);
+    delete movee;
 }
 
 void TrackJoint::Organize () {

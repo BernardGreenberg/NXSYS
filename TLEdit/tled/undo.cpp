@@ -31,7 +31,7 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 namespace Undo {
 
 enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateSegment, CutSegment, CreateJoint,
-    CutJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire
+    CutJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire, MergeJoints
 };
 
 static std::unordered_map<RecType, string> RecTypeNames {
@@ -46,6 +46,7 @@ static std::unordered_map<RecType, string> RecTypeNames {
     {RecType::Wildfire, "wildfire spread track circuit"},
     {RecType::ShiftLayout, "shift layout"},
     {RecType::SetViewOrigin, "set view origin"},
+    {RecType::MergeJoints, "merge joints"},
     {RecType::IrreversibleAct, "currently irreversible act"}
 };
 
@@ -53,6 +54,7 @@ static std::unordered_set<RecType> OpLessOps {
     RecType::ShiftLayout,
     RecType::SetViewOrigin,
     RecType::IrreversibleAct,
+    RecType::MergeJoints,
     RecType::Wildfire};
 
 PropCellBase::~PropCellBase () {
@@ -330,6 +332,15 @@ void RecordSetViewOrigin(WPPOINT old, WPPOINT nieuw) {
     UndoRecord R(RecType::SetViewOrigin);
     R.coords = nieuw;
     R.coords_old = old;
+    PlacemForward(R);
+}
+
+void RecordJointMerge(TrackJoint* consumer, TrackJoint* movee, std::vector<TrackJoint*>& opposing_joints) {
+    /* Dog help us 5-21-2022 */
+    UndoRecord R(RecType::MergeJoints);
+    R.TypeCoords(consumer);
+    R.coords_old = GOMovCoords; //Boy, is this useful!
+    R.Nomenclature = movee->Nomenclature;
     PlacemForward(R);
 }
 

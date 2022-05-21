@@ -14,6 +14,7 @@
 
 #include "PropCell.h"
 #include <unordered_set>
+#include <vector>
 #include "ijid.h"
 
 class TrackSeg;
@@ -35,6 +36,7 @@ void RecordShiftLayout(int deltax, int deltay);
 void RecordSetViewOrigin(WPPOINT old, WPPOINT nieuw);
 struct JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj);
 void RecordJointCutComplete(struct JointCutSnapInfo* jcsip);
+void RecordJointMerge(TrackJoint* consumer, TrackJoint* movee, std::vector<TrackJoint*>& opposing_joints);
 
 bool IsUndoPossible();
 bool IsRedoPossible();
