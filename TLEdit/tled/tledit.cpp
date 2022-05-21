@@ -83,7 +83,7 @@ static BOOL DefButtonDown (int& x, int &y) {
     DefCreatedTrackJoint = (DefStartTrackJoint == NULL);
     DefStartTrackSeg = NULL;
     DefStartDelay = FALSE;
-    StatusMessage("");
+//    StatusMessage("");
 
     if (DefCreatedTrackJoint) {
 	WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
@@ -168,8 +168,9 @@ static void DefButtonUp2 (int x, int y) {
             tj = new TrackJoint(wpx, wpy);
     }
     else if (!valid_drop_target(tj)) {
-        if (tj == DefStartTrackJoint)
-            StatusMessage("");
+        if (tj == DefStartTrackJoint) {
+   //         StatusMessage(""); // goes too far.
+        }
         else
             StatusMessage ("Invalid joint for drop target");
         if (DefCreatedTrackJoint)
