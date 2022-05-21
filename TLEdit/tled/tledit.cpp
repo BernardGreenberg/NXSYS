@@ -857,11 +857,10 @@ void TrackJoint::SwallowOtherJoint (TrackJoint * movee, bool make_undo_record) {
         TSEX endx = S.FindEndIndex(movee);
         assert(endx != TSEX::NOTFOUND);
         TrackSegEnd& E = S.GetEnd(endx);
-        if (make_undo_record){
-            TrackSegEnd& Other = S.GetOtherEnd(endx);
+        TrackSegEnd& Other = S.GetOtherEnd(endx);
+        if (make_undo_record)
             opposing_joints.push_back(Other.Joint);
-            E.Joint = this;
-        }
+        E.Joint = this;
             //Insulated = FALSE; // 3-12-2022
             // Organized = FALSE; // 3-14-2022 //defeats the Undo system. To hell with organization.
     }

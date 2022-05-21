@@ -583,8 +583,6 @@ void Redo() {
             auto receiver = (TrackJoint*)R.Find();
             auto movee = (TrackJoint*)R.FindOld();
             receiver->SwallowOtherJoint(movee, false);
-            for (int i = 0; i < receiver->TSCount; i++)
-                receiver->TSA[i]->Align();
             break;
         }
     
