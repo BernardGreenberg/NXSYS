@@ -60,12 +60,12 @@ PropCellBase::~PropCellBase () {
 }
 
 struct WildfireRecord {
-    WildfireRecord (const WPVEC& wpvec, long oldtc, long newtc) :
+    WildfireRecord (const WPVEC& wpvec, IJID oldtc, IJID newtc) :
     Segvec(wpvec), old_tcid(oldtc), new_tcid(newtc) {};
 
     WPVEC Segvec;
-    long old_tcid;
-    long new_tcid;
+    IJID old_tcid;
+    IJID new_tcid;
 };
 
 
@@ -123,7 +123,7 @@ struct UndoRecord {
     RecType rec_type;
     string recreate_form; /* Lisp form to recreate */
     TypeId obj_type = TypeId::NONE;
-    long Nomenclature = 0;   // only used sometimes.
+    IJID Nomenclature = 0;   // only used sometimes.
 
     /* Little structures. */
     Coords coords {0,0};
@@ -276,7 +276,7 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
 }
 
 void RecordWildfireTCSpread(std::unordered_set<TrackSeg *>& segs,
-                            long old_tcid, long new_tcid) {
+                            IJID old_tcid, IJID new_tcid) {
     WPVEC seg_points;
     for (auto seg : segs)
         seg_points.push_back(seg->WPPoint());

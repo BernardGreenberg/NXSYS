@@ -111,7 +111,7 @@ static std::unordered_map<TRKPET, const char *> KeyStrings {
 static void SaveTheLayout(FILE * f), DumpRemainingObjects(FILE * f);
 static void DumpTheActualGraph(FILE * f);
 static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj);
-static char CharizeAB0(long nomen, short AB0);
+static char CharizeAB0(IJID nomen, short AB0);
 void ValidateTrackGraph();
 
 typedef
@@ -361,7 +361,7 @@ static int ChaseUnmarkedSwitchBranches(GraphicObject * g, void * vfp) {
    marking as it goes, so we can search for unmarked ones. */
 static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
-	long LastTCID = 0;
+	IJID LastTCID = 0;
 
 	while (true) {
         if (ts->Marked)
@@ -372,7 +372,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 		if (fx == TSEX::NOTFOUND)
             throw TLEditSaveException("Estranged track segment found.");
 
-        long id = ts->TCNO();
+        IJID id = ts->TCNO();
 
 		/* dump seg attributes if appropriate*/
         if (f)
@@ -381,7 +381,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
 		ts->Marked = TRUE;
         TrackJoint& J = *(ts->GetOtherEnd(fx).Joint);
-        long jnom = J.Nomenclature;
+        IJID jnom = J.Nomenclature;
 		if (J.Marked) {
             if (J.TSCount != 3) {
                 J.Select();
@@ -495,7 +495,7 @@ static void DumpTheActualGraph(FILE* f) {
         fprintf(f, "\n");
 }
 
-static char CharizeAB0(long nomen, short AB0) {
+static char CharizeAB0(IJID nomen, short AB0) {
     if (nomen == 0)
         throw TLEditSaveException("Dumper found switch with no nomenclature number.");
     switch (AB0) {

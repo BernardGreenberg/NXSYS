@@ -77,7 +77,7 @@ static bool DecodeBranchType (Sexpr s, TSAX* brtype) {
     return true;
 }
 
-static TrackJoint * FindSwitchJoint (long id, int ab0) {
+static TrackJoint * FindSwitchJoint (IJID id, int ab0) {
     for (auto tj : SwitchJoints)
 	if (tj->Nomenclature == id && tj->SwitchAB0 == ab0)
 	    return tj;
@@ -275,7 +275,7 @@ BOOL ppf_coords::Collect (Sexpr s, Sexpr f) {
     return TRUE;
 }
 
-static void SetTCID (TrackSeg * ts, long id) {
+static void SetTCID (TrackSeg * ts, IJID id) {
     if (id)
 #if TLEDIT
 	ts->SetTrackCircuit(id)->Routed = TRUE;
@@ -306,11 +306,11 @@ static int ProcessPathForm (Sexpr f) {
     TrackSeg * ts;
     TrackSeg * last_ts = NULL;
     TrackJoint * tj;
-    long last_tcid = 0;
+    IJID last_tcid = 0;
     for (; f.type == Lisp::tCONS; f = CDR(f)) {
 	Sexpr s = CAR(f);
 	Sexpr whole_path_element = s;
-	long Nomen = 0;
+	IJID Nomen = 0;
 	BOOL insulated = FALSE;
 	Sexpr key;
 	if (s.type == Lisp::NUM) {
@@ -564,7 +564,7 @@ static TrackSeg * FindBranchFromOrientation (TrackJoint * tj, char orient, TSEX&
 }
 
 
-static TrackJoint * FindTrackJoint (long nn) {
+static TrackJoint * FindTrackJoint (IJID nn) {
 #if TLEDIT
     return (TrackJoint *) FindHitObject (nn, TypeId::JOINT);
 #else
@@ -585,7 +585,7 @@ static GOptr ProcessExitlightForm (Sexpr s) {
 	LispBarf ("EXITLIGHT form missing lever number.");
 	return 0;
     }
-    long xno = CAR(s);
+    IJID xno = CAR(s);
     SPop(s);
     if (s == NIL) {
 	PanelSignal * ps = (PanelSignal*) FindHitObject (xno, TypeId::SIGNAL);
@@ -608,7 +608,7 @@ static GOptr ProcessExitlightForm (Sexpr s) {
 	}
 	orient = e.u.s[0];
 	SPop(s);
-	long nn = CAR(s);
+	IJID nn = CAR(s);
 	TrackJoint * tj = FindTrackJoint (nn);
 	if (!tj) {
 	    LispBarf ("Cannot find Joint for EXITLIGHT", CAR(s));
@@ -630,7 +630,7 @@ static GOptr ProcessExitlightForm (Sexpr s) {
 
 static GOptr ProcessSignalForm (Sexpr s) {
     Sexpr ss = s;
-    long ijid = 0;
+    IJID ijid = 0;
     Sexpr Heads = NIL;
     int xlno = 0;
     char orient = ' ';
@@ -661,7 +661,7 @@ static GOptr ProcessSignalForm (Sexpr s) {
 	return 0;
     }
     Heads = CAR(s);
-    long StaNo = 0L;
+    IJID StaNo = 0L;
     TrackJoint * tj = FindTrackJoint (ijid);
     if (tj == NULL) {
 	LispBarf ("Cannot find Insulated Joint", ss);

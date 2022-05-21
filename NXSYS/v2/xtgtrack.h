@@ -33,6 +33,7 @@ class Turnout;
 class TrackSeg;
 using WildfireSet = std::unordered_set<TrackSeg*>;
 
+using IJID = long;
 
 /* Track section (branch) array index(es)*/
 enum class TSAX {
@@ -88,7 +89,7 @@ class TrackJoint
         return GetBranch(branch_index);
     };
 
-	long	Nomenclature;
+	IJID	Nomenclature;
 	BOOL	Insulated;
 	BOOL	NumFlip;
 #ifdef TLEDIT
@@ -118,7 +119,7 @@ class TrackJoint
     
 	virtual void Display (HDC dc);
 	virtual TypeId TypeID ();
-	virtual bool IsNomenclature(long);
+	virtual bool IsNomenclature(IJID);
 #ifdef TLEDIT
         class PropCell : public PropCellPCRTP<PropCell, TrackJoint> {
         public:
@@ -170,7 +171,7 @@ class TrackCircuit {		// no longer graphic object
 	BOOL  Occupied, Routed, Coding;
 	Relay* TrackRelay;
         std::vector<TrackSeg*>Segments;
-	long StationNo;
+	IJID StationNo;
 	void AddSeg (TrackSeg*);
 	void DeleteSeg (TrackSeg*);
 	void SetOccupied (BOOL sta, BOOL force=0);
@@ -178,7 +179,7 @@ class TrackCircuit {		// no longer graphic object
 	void Invalidate();
 	void ProcessLoadComplete();
 
-	TrackCircuit(long sno);
+	TrackCircuit(IJID ijid);
 	~TrackCircuit();
 	
 #ifdef REALLY_NXSYS
@@ -221,7 +222,7 @@ class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
 public:
     TrackSegEnd Ends[2];
     TrackCircuit * Circuit;
-    long    TCNO () {return Circuit ? Circuit->StationNo : 0;}
+    IJID    TCNO () {return Circuit ? Circuit->StationNo : 0;}
     float   Length ;  // pythagoric, useful for drawing.
     float   CosTheta, SinTheta;
     BOOL    Routed;// this means "not the deselectd end of a trailing pt"
@@ -246,10 +247,10 @@ public:
 
 	virtual void Display (HDC dc);
 	virtual TypeId TypeID ();
-	virtual bool IsNomenclature(long);
-	TrackCircuit* SetTrackCircuit (long ID);
+	virtual bool IsNomenclature(IJID);
+	TrackCircuit* SetTrackCircuit (IJID ID);
 	void SetTrackCircuit0 (TrackCircuit * tc);
-        void SetTrackCircuitWildfire (long ID);
+        void SetTrackCircuitWildfire (IJID ID);
         void SetTrackCircuitWildfireRecurse (TrackCircuit * tc);
         void CollectContacteesRecurse(WildfireSet&);
 	void GetGraphicsCoords (int ex, int& x, int& y);
@@ -264,7 +265,7 @@ public:
 #ifdef TLEDIT
         class PropCell : public PropCellPCRTP<PropCell, TrackSeg>
         {
-            long tcid;
+            IJID tcid;
             WPPOINT loc;
         public:
             void Snapshot_(TrackSeg * ts) {
@@ -343,7 +344,7 @@ class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
 	virtual void Display (HDC dc);
 	void Reposition();
 	virtual TypeId TypeID ();
-	virtual bool IsNomenclature(long);
+	virtual bool IsNomenclature(IJID);
 	virtual void ComputeWPRect();
 #ifdef TLEDIT
 	virtual void Select();
@@ -398,7 +399,7 @@ public:
 
     virtual void Display (HDC dc) override;
     virtual TypeId TypeID() override;
-    virtual bool IsNomenclature(long) override;
+    virtual bool IsNomenclature(IJID) override;
     virtual BOOL HitP(long, long) override;
 #if REALLY_NXSYS   // if really nxsys, override with "false"; default is true.
     virtual bool MouseSensitive() override;
@@ -434,7 +435,7 @@ public:
     virtual void Display (HDC hdc);
     virtual BOOL HitP (long x, long y);
     virtual TypeId TypeID();
-    virtual bool IsNomenclature(long);
+    virtual bool IsNomenclature(IJID);
 #ifdef TLEDIT
     /* This is already so tricky that I can barely understand what I have created, but
      the goal here is minimal duplicated code */
@@ -472,7 +473,7 @@ extern BOOL ShowNonselectedJoints;
 #ifdef REALLY_NXSYS
 void TrackCircuitSystemLoadTimeComplete();
 void TrackCircuitSystemReInit();
-void DecodeDigitated (long input, int &trackno, int &sno);
+void DecodeDigitated (IJID input, int &trackno, int &sno);
 TrackCircuit * FindTrackCircuit (long sno);
 void TrackCircuitSystemReInit();
 #endif

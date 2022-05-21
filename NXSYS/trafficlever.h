@@ -43,7 +43,7 @@ class TrafficLever : public GraphicObject, public PropEditor<TrafficLever> {
     void SetXlkgNo(int xno);
     virtual void Display (HDC hdc);
     virtual TypeId TypeID();
-    virtual bool IsNomenclature(long);
+    virtual bool IsNomenclature(IJID);
     void InitState();
 #ifndef TLEDIT
     BOOL Throw (BOOL reverse_wanted);

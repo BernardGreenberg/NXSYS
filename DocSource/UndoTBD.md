@@ -4,6 +4,8 @@ Modification status in titlebar (*)
  
 Mac reshape message box if long string.
 
+No more 0 ID joints. std::set id system.  Using IJID = long.
+
 Crossover joint coincidence threatens whole undo system.  
 Proposal: never return 10*** #'s; search for joints using them.
  

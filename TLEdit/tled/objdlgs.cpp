@@ -79,7 +79,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 			    AB0 = i;
 		    if (AB0 != SwitchAB0)
 			nchange = 1;
-		    long newnom = GetDlgItemInt (hDlg, IDC_SWITCH_EDIT, &es, FALSE);
+		    IJID newnom = GetDlgItemInt (hDlg, IDC_SWITCH_EDIT, &es, FALSE);
 		    if (!es) {
 			uerr (hDlg, "Bad number in Switch ID.");
 			return TRUE;
@@ -267,7 +267,7 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 		    return TRUE;
 		case IDOK:
 		{
-		    long newid;
+		    IJID newid;
                     std::string text = GetDlgItemText (hDlg, IDC_EDIT_SEG_TC);
                     if (text.empty())
 			newid = 0;
@@ -278,7 +278,7 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 			    return TRUE;
 			}
 		    }
-                    long oldid = TCNO();
+                    IJID oldid = TCNO();
 		    if (oldid != newid)
                     {
                         if (/* DISABLES CODE */ (true))
