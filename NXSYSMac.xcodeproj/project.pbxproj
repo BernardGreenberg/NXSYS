@@ -156,6 +156,7 @@
 		5BAECC9B19DDA55F00B949EA /* NXMessageBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA92A7319DD72690098DBEC /* NXMessageBox.mm */; };
 		5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA92A7419DD72690098DBEC /* NXMessageBox.xib */; };
 		5BAFFBAE19BA4C4900AEE791 /* TrainDlg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */; };
+		5BB30A8E283A686000788BEC /* Limbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB30A8D283A686000788BEC /* Limbo.cpp */; };
 		5BB322512668062E00F4A611 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B47F34819AFAFE800CBB80A /* WebKit.framework */; };
 		5BB5802427C3D00400FB0ED5 /* InterlockingLibrary.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5802327C3CFFD00FB0ED5 /* InterlockingLibrary.xml */; };
 		5BB5802927C3D36D00FB0ED5 /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5802827C3D36D00FB0ED5 /* pugixml.cpp */; };
@@ -512,6 +513,8 @@
 		5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrainDlg.xib; sourceTree = "<group>"; };
 		5BB30A8B283699DB00788BEC /* LayoutModified.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutModified.h; sourceTree = "<group>"; };
 		5BB30A8C283927DE00788BEC /* ijid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ijid.h; sourceTree = "<group>"; };
+		5BB30A8D283A686000788BEC /* Limbo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Limbo.cpp; sourceTree = "<group>"; };
+		5BB30A8F283A687400788BEC /* Limbo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Limbo.h; sourceTree = "<group>"; };
 		5BB5801A27C072B600FB0ED5 /* ParseCommandLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseCommandLine.h; sourceTree = "<group>"; };
 		5BB5801B27C072B600FB0ED5 /* ParseCommandLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseCommandLine.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BB5801D27C1DB1500FB0ED5 /* RecentFileMan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecentFileMan.cpp; sourceTree = "<group>"; tabWidth = 4; };
@@ -913,6 +916,7 @@
 				5B556417282B095B00FB2CF6 /* undo.h */,
 				5B985F12282E851C0036648F /* PropCell.h */,
 				5BB30A8B283699DB00788BEC /* LayoutModified.h */,
+				5BB30A8F283A687400788BEC /* Limbo.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -1134,6 +1138,7 @@
 				5BAC936A19C8FFAA00673BDC /* tledit.cpp */,
 				5B556416282B095B00FB2CF6 /* undo.cpp */,
 				5B5AE6652311BF4E00348612 /* Headers */,
+				5BB30A8D283A686000788BEC /* Limbo.cpp */,
 			);
 			name = TLEdit;
 			path = TLEdit/tled;
@@ -1747,6 +1752,7 @@
 				5BAC937319C9B66C00673BDC /* objreg.cpp in Sources */,
 				5BAC934A19C8FECC00673BDC /* readsexp.cpp in Sources */,
 				5BA7E72F19D3681F006F9A04 /* MacObjDlgs.mm in Sources */,
+				5BB30A8E283A686000788BEC /* Limbo.cpp in Sources */,
 				5B6705BD19D0C25F002B6E28 /* ToolbarController.mm in Sources */,
 				5BAC934F19C8FECC00673BDC /* swkey.cpp in Sources */,
 				5BD6200E19CD9E6E00DB8A8F /* TrackSegDialog.mm in Sources */,

@@ -41,6 +41,21 @@ struct JointSignature {
     IJID Nomenclature;
 };
 
+struct OrientationSignature {
+    WPPOINT SegSignatures[2];
+    OrientationSignature (WPPOINT normal, WPPOINT reverse) {
+        SegSignatures[0] = normal;
+        SegSignatures[1] = reverse;
+    }
+    bool operator == (const OrientationSignature& o) {
+        return false;
+//        return (o.SegSignatures[0] == SegSignatures[0] && o.SegSignatures[1] == SegSignatures[1]);
+    }
+    bool operator != (const OrientationSignature& o) {
+        return !(*this == o);
+    }
+};
+
 
 /* Track section (branch) array index(es)*/
 enum class TSAX {
@@ -122,14 +137,15 @@ class TrackJoint
 	void	PositionLabel();
 	TSAX	FindBranchIndex (TrackSeg * ts);
         TrackSeg* GetBranch(TSAX brx);
-        JointSignature Signature() {
-            return JointSignature(WPPoint(), Nomenclature);
-        };
     
 	virtual void Display (HDC dc);
 	virtual TypeId TypeID ();
 	virtual bool IsNomenclature(IJID);
 #ifdef TLEDIT
+        JointSignature Signature() {
+            return JointSignature(WPPoint(), Nomenclature);
+        };
+
         class PropCell : public PropCellPCRTP<PropCell, TrackJoint> {
         public:
             IJID Nomenclature;

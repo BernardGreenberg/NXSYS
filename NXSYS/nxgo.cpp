@@ -362,6 +362,14 @@ void GraphicObject::MoveSC (SC_cord scx, SC_cord scy) {
 void GraphicObject::ComputeWPRect() {
 }
 
+void GraphicObject::AfterResurrection() {
+#if TLEDIT
+    AllObjects.insert(this);
+#else
+    AllObjects.push_back(this);
+#endif
+}
+
 static void Deselect0() {
     SelectedObject = NULL;
     if (SelectHook)
@@ -369,6 +377,11 @@ static void Deselect0() {
 }
 
 GraphicObject::~GraphicObject() {
+    BeforeInterment();
+}
+
+/* Needed in TLEdit, but no harm in using it as a dtor stage in NXSYS */
+void GraphicObject::BeforeInterment() {
 
     if (this == SelectedObject)
 	Deselect0();

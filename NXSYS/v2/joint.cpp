@@ -158,7 +158,7 @@ void TrackJoint::DelBranch (TrackSeg * ts) {
 }
 
 TypeId TrackJoint::TypeID () {return TypeId::JOINT;}
-bool TrackJoint::IsNomenclature(long x) {return Nomenclature == x;}
+bool TrackJoint::IsNomenclature(IJID x) {return Nomenclature == x;}
 
 
 
@@ -183,7 +183,7 @@ void TrackJoint::PositionLabel() {
 #endif
     else (Lab->Hide());
 
-    sprintf (buf, "%ld", (long)Nomenclature);
+    sprintf (buf, "%ld", (IJID)Nomenclature);
     if (TSCount == 3 && SwitchAB0 != 0) 
 	strcat (buf, (SwitchAB0 == 1) ? "A" : "B");
     Lab->SetText (buf); 

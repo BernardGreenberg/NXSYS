@@ -99,8 +99,11 @@ static GOptr
     ProcessSwitchkeyForm (Sexpr),
     ProcessTrafficleverForm (Sexpr),
     ProcessPanelLightForm (Sexpr),
-    ProcessPanelSwitchForm (Sexpr),
-ProcessJointForm(Sexpr);
+#if TLEDIT
+    ProcessJointForm(Sexpr),
+#endif
+    ProcessPanelSwitchForm (Sexpr);
+
 
 static std::unordered_map< void*, tFormLoader*>  FormLoaderMap;
 static std::string AllowedNames {"PATH, VIEW-ORIGIN"};

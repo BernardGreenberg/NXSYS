@@ -773,8 +773,8 @@ void TrackJoint::Cut_() {
     ts0.Select();
     ts0.Invalidate();
     // Salvager will fail if we salvage here.  ... Message box will make redisplay crash, too
-    delete &ts1;
-    delete this;
+    ts1.ConsignToLimbo();
+    ConsignToLimbo();       // No more "delete"....
     SALVAGER("TrackJoint::Cut final");
 }
 
@@ -818,7 +818,13 @@ void TrackSeg::Cut_() {
 	j0->Select();
     else if (j1->TSCount == 3)
 	j1->Select();
-    delete this;
+    j0->DelBranch(this);
+    j1->DelBranch(this);
+    if (j0->TSCount == 0)
+        j0->ConsignToLimbo();
+    if (j1->TSCount == 0)
+        j1->ConsignToLimbo();
+    ConsignToLimbo();
     SALVAGER("TrackSeg::Cut final");
 }
 
@@ -871,7 +877,7 @@ void TrackJoint::SwallowOtherJoint (TrackJoint * movee, bool make_undo_record) {
     /* This looks nilpotent, but it actually causes the newly-moved segment(s) to be relocated and
      displayed properly.*/
     MoveToNewWPpos(wp_x, wp_y);
-    delete movee;
+    movee->ConsignToLimbo();
 }
 
 void TrackJoint::Organize () {
@@ -1031,6 +1037,7 @@ void ShiftLayout_ (int x, int y) {
 
 Virtual void	GraphicObject:: Cut() {
     Undo::RecordGOCut(this);
+    assert(TypeID() != TypeId::JOINT);  //for debugging -- must remove
     delete this;
     StatusMessage ("  ");
 }

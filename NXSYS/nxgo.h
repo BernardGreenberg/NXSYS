@@ -59,6 +59,8 @@ public:
     virtual void    Select();
     virtual void    Deselect();
     virtual         ~GraphicObject();
+    virtual void    BeforeInterment();
+    virtual void    AfterResurrection();
     virtual void    ComputeWPRect();
     virtual WPPOINT WPPoint();
 
@@ -68,6 +70,7 @@ public:
 
 #ifdef TLEDIT
 #include "tlengovf.h"
+    void            ConsignToLimbo();
 #else
     int		    RunContextMenu(int resource_id);
     virtual void    EditContextMenu(HMENU m);

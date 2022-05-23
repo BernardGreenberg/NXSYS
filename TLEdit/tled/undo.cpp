@@ -10,6 +10,7 @@
 #include "tledit.h"
 #include "objreg.h"
 #include "undo.h"
+#include "Limbo.h"
 #include "xtgtrack.h"
 #include "LayoutModified.h"
 #include <vector>
@@ -120,7 +121,10 @@ struct UndoRecord {
         coords_old = other.coords_old;
         seg_id = other.seg_id;
         Nomenclature = other.Nomenclature;
-
+        g = other.g;
+        g1 = other.g1;
+        g2 = other.g2;
+    
         orig_props = std::move(other.orig_props);
         changed_props = std::move(other.changed_props);
         wf_objptr = std::move(other.wf_objptr);
@@ -132,6 +136,8 @@ struct UndoRecord {
     string recreate_form; /* Lisp form to recreate */
     TypeId obj_type = TypeId::NONE;
     IJID Nomenclature = 0;   // only used sometimes.
+
+    GOptr g = nullptr, g1 = nullptr, g2 = nullptr;  /* Are we not drawn onward to new era? */
 
     /* Little structures. */
     Coords coords {0,0};
@@ -305,6 +311,9 @@ void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id) {
 
 void RecordSegmentCut (TrackSeg* ts) {
     UndoRecord R(RecType::CutSegment);
+    R.g = ts;
+    R.g1 = ts->Ends[0].Joint;
+    R.g2 = ts->Ends[1].Joint;
     R.obj_type = TypeId::TRACKSEG;
     R.coords_old = Coords(ts->Ends[0].Joint);
     R.coords     = Coords(ts->Ends[1].Joint);
@@ -317,6 +326,7 @@ void RecordSegmentCut (TrackSeg* ts) {
 
 void RecordSegmentCreation (TrackSeg* ts) {
     UndoRecord R(RecType::CreateSegment);
+    R.g = ts;
     R.obj_type = TypeId::TRACKSEG;
     R.coords_old = Coords(ts->Ends[0].Joint);
     R.coords     = Coords(ts->Ends[1].Joint);
@@ -361,7 +371,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             delete R.Find();
             break;
             
-        case RecType::CutGO:
+        case RecType::CutGO:  /* UNDO */
         {
             GOptr obj = ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
             obj->MakeSelfVisible();
@@ -369,13 +379,17 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             break;
         }
 
-        case RecType::CreateJoint:
+        case RecType::CreateJoint:  /* UNDO */
             ((TrackJoint*)R.Find())->Cut_();
             break;
             
-        case RecType::CutJoint:
+        case RecType::CutJoint:  /* UNDO */
         {
+            auto tj = (TrackJoint*)ResurrectFromLimbo(R.g);
+            tj->TSCount = 0;
+            /*
             auto tj = (TrackJoint*)ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
+             */
             Coords dest_loc(tj);
             auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG, R.coords_old);
             seg->Split(R.coords_old.wp_x, R.coords_old.wp_y, tj);
@@ -383,7 +397,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             break;
         }
             
-        case RecType::MoveGO:
+        case RecType::MoveGO:  /* UNDO */
         {
             GOptr g = R.Find();
             auto [x,y] = R.coords_old;
@@ -394,7 +408,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             break;
         }
             
-        case RecType::PropChange:
+        case RecType::PropChange:  /* UNDO */
         {
             StatusMessage("");  //clear left-over object descriptions.
             GOptr g = R.Find();
@@ -403,7 +417,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             break;
         }
 
-        case RecType::Wildfire:
+        case RecType::Wildfire:  /* UNDO */
             for (auto [x,y] : R.wf_objptr->Segvec) {
                 auto seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
                 assert(seg);
@@ -412,14 +426,16 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             StatusMessage("");  //Clear out remains of wildfire's message
             break;
             
-        case RecType::CutSegment:
+        case RecType::CutSegment:  /* UNDO */
         {
-            auto tj1 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords, true);
-            auto tj2 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords_old, true);
-            if (tj1 == nullptr)
+            
+            auto tj1 = (TrackJoint*)R.g1;
+            auto tj2 = (TrackJoint*)R.g2;
+            if (tj1->TSCount == 0)
+                ResurrectFromLimbo(tj1);
                 tj1 = new TrackJoint(R.coords);
-            if (tj2 == nullptr)
-                tj2 = new TrackJoint(R.coords_old);
+            if (tj2->TSCount == 0)
+                ResurrectFromLimbo(tj2);
             auto seg = new TrackSeg(R.coords, R.coords_old);
             seg->SetTrackCircuit(R.Nomenclature);
             tj1->AddBranch(seg);
@@ -430,8 +446,9 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             break;
         }
             
-        case RecType::CreateSegment:
+        case RecType::CreateSegment:  /* UNDO */
         {
+/*
             auto tj1 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords);
             auto tj2 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords_old);
             auto [x1, y1] = tj1->WPPoint();
@@ -439,19 +456,21 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG,
                                     Coords((x1 + x2)/2, (y1 + y2)/2));
             tj1->Select(); // tj1 may vanish!
+*/
+            auto seg = (TrackSeg*)R.g;
             seg->Cut_();
             break;
         }
             
-        case RecType::ShiftLayout:
+        case RecType::ShiftLayout:  /* UNDO */
             ShiftLayout_(-(int)R.coords.wp_x, -(int)R.coords.wp_y);
             break;
             
-        case RecType::SetViewOrigin:
+        case RecType::SetViewOrigin:  /* UNDO */
             AssignFixOrigin(R.coords_old);
             break;
             
-        case RecType::MergeJoints:
+        case RecType::MergeJoints:  /* UNDO */
         {
             /* Wheeeeee!  5-21-2022 */
             auto receiver = (TrackJoint*)R.Find();
@@ -508,7 +527,7 @@ void Redo() {
     RecType rt = R.rec_type;
     bool already_emplaced = false;
     switch(rt) {
-        case RecType::CreateGO:
+        case RecType::CreateGO:    /* REDO */
         {
             GOptr g = ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
             g->MakeSelfVisible();
@@ -516,7 +535,7 @@ void Redo() {
             break;
         }
 
-        case RecType::CreateJoint:
+        case RecType::CreateJoint:    /* REDO */
         {
             auto seg = (TrackSeg*) FindObjByLoc(TypeId::TRACKSEG, R.seg_id);
             auto tj = new TrackJoint(R.coords);
@@ -525,15 +544,15 @@ void Redo() {
             break;
         }
         
-        case RecType::CutJoint:
-            ((TrackJoint*)R.Find())->Cut_();
+        case RecType::CutJoint:    /* REDO */
+            ((TrackJoint*)R.g)->Cut_();
              break;
 
-        case RecType::CutGO:
+        case RecType::CutGO:    /* REDO */
             delete R.Find();
             break;
             
-        case RecType::MoveGO:
+        case RecType::MoveGO:    /* REDO */
         {
             GOptr g = R.FindOld();
             auto [x, y] = R.coords;
@@ -544,7 +563,7 @@ void Redo() {
             break;
         }
             
-        case RecType::PropChange:
+        case RecType::PropChange:    /* REDO */
         {
             GOptr g = R.FindOld();
             R.changed_props->Restore(g);
@@ -552,7 +571,7 @@ void Redo() {
             break;
         }
 
-        case RecType::Wildfire:
+        case RecType::Wildfire:    /* REDO */
             for (auto [x, y] : R.wf_objptr->Segvec) {
                 auto seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
                 assert(seg);
@@ -560,25 +579,25 @@ void Redo() {
             }
             break;
             
-        case RecType::ShiftLayout:
+        case RecType::ShiftLayout:    /* REDO */
             ShiftLayout_((int)R.coords.wp_x, (int)R.coords.wp_y);
             break;
             
-        case RecType::CutSegment:
+        case RecType::CutSegment:    /* REDO */
             undo_guts(UndoStack, RecType::CreateSegment, R);
             already_emplaced = true;
             break;
             
-        case RecType::CreateSegment:
+        case RecType::CreateSegment:    /* REDO */
             undo_guts(UndoStack, RecType::CutSegment, R);
             already_emplaced = true;
             break;
 
-        case RecType::SetViewOrigin:
+        case RecType::SetViewOrigin:    /* REDO */
             AssignFixOrigin(R.coords);
             break;
             
-        case RecType::MergeJoints:
+        case RecType::MergeJoints:    /* REDO */
         {
             auto receiver = (TrackJoint*)R.Find();
             auto movee = (TrackJoint*)R.FindOld();
@@ -586,7 +605,7 @@ void Redo() {
             break;
         }
     
-        default:
+        default:    /* REDO */
             break;
     }
     if (!already_emplaced)
@@ -596,6 +615,7 @@ void Redo() {
 }
 
 struct JointCutSnapInfo {
+    GraphicObject* g;
     string RecreateInfo;
     Coords OthersLoc[2];
     Coords OriginalLoc;
@@ -608,6 +628,7 @@ struct JointCutSnapInfo {
 /* Joint cut system very hairy */
 JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj) {
     auto J = new JointCutSnapInfo;
+    J->g = tj;  /* new era */
     J->RecreateInfo = StringImageObject(tj);
     J->OriginalLoc = Coords(tj);
     TSEX myx0 = tj->TSA[0]->FindEndIndex(tj);
@@ -625,6 +646,7 @@ JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj) {
 
 void RecordJointCutComplete(JointCutSnapInfo* J) {
     UndoRecord R(RecType::CutJoint);
+    R.g = J->g;
     R.obj_type = TypeId::JOINT;
     R.recreate_form = J->RecreateInfo;
     R.coords = J->OriginalLoc;

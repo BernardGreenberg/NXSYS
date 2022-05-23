@@ -2,6 +2,7 @@
 #define _NX_TRAFFICLEVER_H__
 
 #include <string>
+#include "ijid.h"
 
 #include "propedit.h"
 

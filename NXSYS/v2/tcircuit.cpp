@@ -115,7 +115,9 @@ void TrackSeg::SetTrackCircuit0 (TrackCircuit * tc) {
 
 void TrackSeg::SetTrackCircuitWildfire(long tcid) {
 
-    long orig_tcid = TCNO();
+#if TLEDIT
+    IJID orig_tcid = TCNO();
+#endif
     TrackCircuit* tc = tcid ? GetTrackCircuit(tcid) : NULL;
 
     WildfireSet S;
