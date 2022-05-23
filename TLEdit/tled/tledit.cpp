@@ -601,9 +601,11 @@ void TrackLayoutRodentate (HWND hWnd, UINT message, int x, int y) {
 ValidatingValue<std::string> TrackJoint::PrecludeUninsulation(const char* action) {
     std::string pfx = "Can't " + std::string(action) + " joint: ";
     if (SignalExlightCount() > 0)
-        return pfx + "Signals or exit lights are at this joint. Remove them and try again.";
+        return pfx + "Signals and/or exit lights are at this joint. Remove them and try again.";
+/*  Maybe this is ok...
     if (TSCount == 1 && TSA[0]->Circuit)
         return pfx + "A track-end whose adjoining track circuit has been set. Why do you want to do this? Unset the track-circuit or delete the segment if that is what you want.";
+*/
     if (TSCount == 2 && TSA[0]->Circuit != TSA[1]->Circuit)
         return pfx + "Adjoins differing track circuits. Set them to be the same and try again.";
     return {};
