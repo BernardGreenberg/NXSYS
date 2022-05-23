@@ -38,6 +38,27 @@ class Turnout;
    will require a construct-joint-insulate-construct sequence) this will still work.
    */
 using SegmentGroupMap = std::unordered_map<TrackSeg*, IJID>;
+
+struct SwitchBranchSnapshot {
+    TrackSeg* A[3];
+    bool operator == (const SwitchBranchSnapshot&B) const {
+        return A[0] == B.A[0] && A[1] == B.A[1] && A[2] == B.A[2];
+    }
+    bool operator != (const SwitchBranchSnapshot&B) const {
+        return !((*this) == B);
+    }
+    void Init (TrackSeg*C[3]) {
+        A[0] = C[0]; A[1] = C[1]; A[2] = C[2];
+    }
+    SwitchBranchSnapshot () {
+        A[0] = A[1] = A[2] = nullptr;
+    }
+    SwitchBranchSnapshot (TrackSeg* C[3]) {
+        Init(C);
+    }
+};
+
+
 #endif
 
 
@@ -129,21 +150,18 @@ class TrackJoint
  
         class PropCell : public PropCellPCRTP<PropCell, TrackJoint> {
         public:
-            bool modf = false;
             IJID Nomenclature;
             bool Insulated;
             bool NumFlip;
             int AB0;
-            TrackSeg* SaveNormRev[2];
+            SwitchBranchSnapshot SBS;
             void Snapshot_(TrackJoint* tj) {
                 SnapWPpos(tj);
                 Insulated = tj->Insulated;
                 NumFlip = tj->NumFlip;
                 Nomenclature = tj->Nomenclature;
                 AB0 = tj->SwitchAB0;
-                SaveNormRev[0] = (*tj)[TSAX::NORMAL];
-                SaveNormRev[1] = (*tj)[TSAX::REVERSE];
-                modf = false;
+                SBS.Init(tj->TSA);
             }
             void Restore_(TrackJoint* tj) {
                 bool rplbl = false;
@@ -165,12 +183,11 @@ class TrackJoint
                     tj->PositionLabel();
                 if (wp_x != tj->wp_x || wp_y != tj->wp_y)
                     tj->MoveToNewWPpos(wp_x, wp_y);
-                if (modf || (tj->TSA[(int)TSAX::NORMAL] != SaveNormRev[0])
-                    || (tj->TSA[(int)TSAX::REVERSE] != SaveNormRev[1])) {
-                    tj->TSA[(int)TSAX::NORMAL] = SaveNormRev[0];
-                    tj->TSA[(int)TSAX::REVERSE] = SaveNormRev[1];
+                if (SBS != SwitchBranchSnapshot(tj->TSA)) {
+                    tj->TSA[(int)TSAX::NORMAL] = SBS.A[(int)TSAX::NORMAL];
+                    tj->TSA[(int)TSAX::REVERSE] = SBS.A[(int)TSAX::REVERSE];
                     // Forward ref to TrackSeg no good
-                    ((GraphicObject*)(tj->TSA[(int)TSAX::NORMAL]))->Select();
+                    ((GraphicObject*)((*tj)[TSAX::NORMAL]))->Select();
                 }
             }
         };

@@ -35,9 +35,14 @@ public:
 
 template <typename Derived>  /* CRTP "Curiously Recurring Template Pattern", from ATLanta, apparently */
 class PropEditor {
-public:
+private:
     std::unique_ptr<Undo::PropCellBase> PropCellCache;
 public:
+
+    /* Needed in BranchSwap cancel q.v. */
+    void RestorePropCache() {
+        PropCellCache->Restore(static_cast<Derived*>(this));
+    }
 
     void CacheInitSnapshot() {
         PropCellCache.reset(SnapshotNow(static_cast<Derived*>(this)));

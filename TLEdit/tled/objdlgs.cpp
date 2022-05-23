@@ -62,12 +62,14 @@ BOOL GetDlgItemCheckState (HWND hDlg, UINT id) {
 BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 
     BOOL es;
-
+    /* This really needs a dialog-instance object, as in both MFC and Cocoa, but ...*/
+    static SwitchBranchSnapshot SSBS;
     switch (message) {
 	case WM_INITDIALOG:
 	    SetDlgItemInt (hDlg, IDC_SWITCH_EDIT, (int)Nomenclature, FALSE);
 	    SetDlgItemCheckState (hDlg, SwitchIsIDs[SwitchAB0], TRUE);
             CacheInitSnapshot();
+            SSBS.Init(TSA);  /* snapshot the branches */
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
@@ -98,7 +100,8 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 			nchange = 1;
 		    }	
 		    SwitchAB0 = AB0;
-                    if (nchange || ((PropCell*)PropCellCache.get())->modf) {
+                    
+                    if (nchange || SSBS != SwitchBranchSnapshot (TSA)) {
 			PositionLabel();
                         Undo::RecordChangedProps(this, StealPropCache());
                     }
@@ -116,12 +119,11 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 		case IDC_SWITCH_SWAP_NORMAL:
 		    if (!Organized)
 			Organize();
-                    ((PropCell*)PropCellCache.get())->modf = true;
 		    std::swap (TSA[(int)TSAX::NORMAL], TSA[(int)TSAX::REVERSE]);
 		    TSA[(int)TSAX::NORMAL]->Select();
 		    break;
 		case IDCANCEL:
-                    PropCellCache->Restore(this);
+                    RestorePropCache();
                     DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;
