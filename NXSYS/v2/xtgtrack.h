@@ -41,14 +41,6 @@ using SegmentGroupMap = std::unordered_map<TrackSeg*, IJID>;
 #endif
 
 
-
-struct JointSignature {
-    JointSignature(WPPOINT point, IJID nomenclature) : Location(point), Nomenclature(nomenclature) {}
-    WPPOINT Location;
-    IJID Nomenclature;
-};
-
-
 /* Track section (branch) array index(es)*/
 enum class TSAX {
 
@@ -134,10 +126,7 @@ class TrackJoint
 	virtual TypeId TypeID ();
 	virtual bool IsNomenclature(IJID);
 #ifdef TLEDIT
-        JointSignature Signature() {
-            return JointSignature(WPPoint(), Nomenclature);
-        };
-
+ 
         class PropCell : public PropCellPCRTP<PropCell, TrackJoint> {
         public:
             IJID Nomenclature;
@@ -400,8 +389,8 @@ class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
         int StationNo;
         char Orientation;
         std::string HeadsString;
-        WPPOINT SegSignature{0,0};
         TSEX SegTSEX;
+        TrackSeg* Seg;
         /* These are heavily dependent on the real "Signal".  Can't inline them.*/
         void Snapshot_(PanelSignal * p);
         void Restore_(PanelSignal * p);

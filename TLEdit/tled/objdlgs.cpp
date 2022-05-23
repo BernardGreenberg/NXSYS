@@ -117,7 +117,6 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 			Organize();
 
 		    std::swap (TSA[(int)TSAX::NORMAL], TSA[(int)TSAX::REVERSE]);
-                    Undo::RecordIrreversibleAct("swap switch branch tags");
 		    TSA[(int)TSAX::NORMAL]->Select();
 		    break;
 		case IDCANCEL:

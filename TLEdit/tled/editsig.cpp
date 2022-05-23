@@ -324,9 +324,8 @@ void PanelSignal::PropCell::Snapshot_(PanelSignal * p) {
     Orientation = p->Orientation();
     StationNo = S->StationNo;
     HeadsString = S->HeadsString;
-    TrackSeg* seg = p->Seg;
-    SegSignature = seg->WPPoint();
-    SegTSEX = (seg->Ends[0].SignalProtectingEntrance == S) ? TSEX::E0 : TSEX::E1;
+    Seg = p->Seg;
+    SegTSEX = (Seg->Ends[0].SignalProtectingEntrance == S) ? TSEX::E0 : TSEX::E1;
 }
 
 void PanelSignal::PropCell::Restore_(PanelSignal * p) {
@@ -336,10 +335,9 @@ void PanelSignal::PropCell::Restore_(PanelSignal * p) {
     S->HeadsString = HeadsString;
     p->SetStoppiness(HasStop);
     TrackSeg* seg = p->Seg;
-    WPPOINT cur_sig = seg->WPPoint();
-    TSEX cur_segtsex = (seg->Ends[0].SignalProtectingEntrance == S) ? TSEX::E0 : TSEX::E1;
-    if (cur_sig != SegSignature || cur_segtsex != SegTSEX)
+    if (seg != Seg)
         usererr("Signal Prot Entrance Seg changed.");
+
 }
 
 
