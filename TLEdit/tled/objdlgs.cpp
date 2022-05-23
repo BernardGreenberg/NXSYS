@@ -284,8 +284,17 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 			    return TRUE;
 			}
 		    }
+                    SegmentGroupMap SGM;
+                    CollectContacteesRecurse(SGM);
+                    auto [real, imaginary] = TrackSeg::AnalyzeSegmentGroup(SGM);
+                    if (real > 1) {
+                        uerr(hDlg, "The group of segments reachable by non-insulated joints includes "
+                             "more than one assigned track circuit. Create and/or insulate some "
+                             "joints and try again.");
+                        EndDialog(hDlg, FALSE);
+                        return TRUE;
+                    }
                     SetTrackCircuitWildfire(newid);
-                    Invalidate();
 		    SelectMsg();
 		    EndDialog (hDlg, TRUE);
 		    return TRUE;

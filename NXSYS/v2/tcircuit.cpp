@@ -152,6 +152,19 @@ void TrackSeg::CollectContacteesRecurse (SegmentGroupMap& SGM) {
     }
 }
 
+std::pair<int,int> TrackSeg::AnalyzeSegmentGroup(const SegmentGroupMap &M){
+    std::unordered_set<IJID> circuits;
+    int unassigned = 0;
+    for (auto [seg, tcid] : M)
+        if (tcid == 0)
+            unassigned ++;
+        else
+            circuits.insert(tcid);
+    return {circuits.size(), unassigned};
+}
+
+
+
 #endif
 
 void TrackCircuit::SetOccupied (BOOL sta, BOOL force) {

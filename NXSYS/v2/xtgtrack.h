@@ -287,7 +287,6 @@ public:
 	TrackCircuit* SetTrackCircuit (IJID ID);
 	void SetTrackCircuit0 (TrackCircuit * tc);
         void SetTrackCircuitWildfire (IJID ID);
-        //void SetTrackCircuitWildfireRecurse (TrackCircuit * tc);
         void CollectContacteesRecurse(SegmentGroupMap&);
 	void GetGraphicsCoords (int ex, int& x, int& y);
 	virtual BOOL HitP (long x, long y);
@@ -319,6 +318,8 @@ public:
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual UINT DlgId();
 	virtual BOOL ClickToSelectP();
+
+    static std::pair<int, int> AnalyzeSegmentGroup(const SegmentGroupMap&M);
 #else
 	void SpreadSwitchRoutingState(BOOL p_routed);
 	void SpreadRWFactor (double rwf);
