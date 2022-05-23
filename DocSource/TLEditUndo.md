@@ -67,5 +67,6 @@ The joint being moved will be called the *movend*, and the joint onto which you 
 
 - You may not drop a joint not a track-end on any other joint not a track-end; that would cause 4 segments to emanate from the joint (slip switches and grade-crossings are not done that way).
 
+- You may not merge joints unless all of the adjoining segments of the movee and the receiver have the same track circuit status, that is, either all unassigned or all assigned to the same circuit.
 `
  

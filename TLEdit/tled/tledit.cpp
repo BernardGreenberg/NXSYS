@@ -417,6 +417,22 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
     }
 }
 
+template <typename T>
+std::unordered_set<T> getUnion(const std::unordered_set<T>& a, const std::unordered_set<T>& b)
+{
+  std::unordered_set<T> result = a;
+  result.insert(b.begin(), b.end());
+  return result;
+}
+static std::unordered_set<TrackCircuit*> CircuitsOfJoint(TrackJoint* tj) {
+    std::unordered_set<TrackCircuit*> S;
+    for (int i = 0; i < tj->TSCount; i++) {
+        if (tj->TSA[i])
+            S.insert(tj->TSA[i]->Circuit); //null is ok!
+    }
+    return S;
+}
+
 /* The preconditions on joint-merging are non-trivial.  At very least, the Undo system
    is not prepared to undo stupid gestures. */
 const char * TrackJoint::ValidateAndSwallowOtherJoint(TrackJoint* target) {
@@ -436,6 +452,9 @@ const char * TrackJoint::ValidateAndSwallowOtherJoint(TrackJoint* target) {
         "merge them, remove the insulation from this joint first.";
     if (target->TSCount + TSCount > 3)
         return "Attempted merge would produce more than three rays emanating from a joint, ∴no.";
+    if (getUnion(CircuitsOfJoint(this), CircuitsOfJoint(target)).size() > 1)
+        return "The track circuits, or lack thereof, adjoining these joints are not all identical. "
+        "Make them so before merging.";
     return nullptr;
 }
 
