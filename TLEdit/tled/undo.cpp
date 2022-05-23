@@ -659,7 +659,7 @@ void RecordJointCutComplete(JointCutSnapInfo* J) {
 }
 
 
-}
+}  /* End namespace "Undo" */
 
 
 int TrackJoint::Dump(ObjectWriter &W) {
@@ -673,7 +673,11 @@ int TrackJoint::Dump(ObjectWriter &W) {
     
     return -1;  /* sort prio not meaningful in undo-sys call */
 }
+
 /* Global functions */
+/* These currently implement clearing the undo stack when writeout is done.  Being able to
+   undo deeper than that (GIMP does it) is useful, but requires more design and explanation. */
+
 void ClearLayoutModified() {
     Undo::RedoStack.clear();
     Undo::UndoStack.clear();

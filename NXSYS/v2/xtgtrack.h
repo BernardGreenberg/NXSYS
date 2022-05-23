@@ -186,6 +186,7 @@ class TrackJoint
 	virtual void ShiftLayout2();
 	virtual void Cut();
         virtual void BeforeInterment();
+        virtual void AfterResurrection();
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual UINT DlgId();
 	virtual BOOL ClickToSelectP();

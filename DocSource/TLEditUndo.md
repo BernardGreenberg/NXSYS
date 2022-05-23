@@ -67,7 +67,5 @@ The joint being moved will be called the *movend*, and the joint onto which you 
 
 - You may not drop a joint not a track-end on any other joint not a track-end; that would cause 4 segments to emanate from the joint (slip switches and grade-crossings are not done that way).
 
-## Deleting track ends
-
-You may not delete the segment at the end of a track while the joint ending the track is insulated.  There is little reason to do this; if  you want to simplify the track circuit, delete an internal joint after reconciling the track circuits. `
+`
  

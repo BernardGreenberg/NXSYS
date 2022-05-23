@@ -40,4 +40,14 @@ void TrackJoint::BeforeInterment() {
     TSA[0] = TSA[1] = TSA[2] = nullptr;
     TSCount = 0;
     GraphicObject::BeforeInterment();
+    if (Lab)
+        Lab->BeforeInterment();
+}
+
+void TrackJoint::AfterResurrection() {
+    GraphicObject::AfterResurrection();
+    if (Lab) {
+        Lab->AfterResurrection();
+        Lab->MakeSelfVisible();
+    }
 }
