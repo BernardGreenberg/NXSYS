@@ -13,13 +13,13 @@
 #include "nxgo.h"
 
 #include "PropCell.h"
-#include <unordered_set>
+#include <unordered_map>
 #include <vector>
 #include "ijid.h"
 
 class TrackSeg;
-using TSSet = std::unordered_set<TrackSeg *>;
-using IJID = long;
+using SegmentGroupMap = std::unordered_map<TrackSeg*, IJID>; // pretty ugly duplication
+
 namespace Undo {
 
 void RecordGOCreation(GraphicObject* g);
@@ -28,7 +28,7 @@ void RecordGOMoveStart(GraphicObject* g);
 void RecordGOMoveComplete(GraphicObject* g);
 void RecordChangedProps(GraphicObject* g, PropCellBase* pcp);
 void RecordIrreversibleAct(const char * description);
-void RecordWildfireTCSpread(TSSet&, IJID old_tcid, IJID new_tcid);
+void RecordWildfireTCSpread(SegmentGroupMap& SGM, IJID new_tcid);
 void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id);
 void RecordSegmentCut(TrackSeg* ts);
 void RecordSegmentCreation(TrackSeg* ts);

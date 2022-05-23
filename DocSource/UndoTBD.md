@@ -1,9 +1,6 @@
 # Undo TBDs
 
-Modification status in titlebar (*)  
-
-Wildfire record must save possibly inconsistent tc members.  
-Must execute even if tc doesn't change for this seg.  
+Modification status in titlebar (*)    
 
 Switch branch undo/redo
  

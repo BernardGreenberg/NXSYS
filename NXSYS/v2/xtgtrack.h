@@ -23,37 +23,29 @@ class Turnout;
 #ifdef TLEDIT
 #include "TLDlgProc.h"
 #include "ValidatingValue.h"
+#include <unordered_map>
 #endif
 
 #include "propedit.h"
-
-
-#include <unordered_set>
-
-class TrackSeg;
-using WildfireSet = std::unordered_set<TrackSeg*>;
-
 #include "ijid.h"
+
+#ifdef TLEDIT
+/* Theoretically, a segment group should never have more than one IJID, but such
+   can be created by joining two, and there's a chicken-and-egg problem with
+   splitting the crossover,so can't disallow it, 'cause you have to be able
+   to undo it consistently.  This is a bit crazy.  But if it's ever disallowed
+   in the future (when constructing a crossover between two track circuits
+   will require a construct-joint-insulate-construct sequence) this will still work.
+   */
+using SegmentGroupMap = std::unordered_map<TrackSeg*, IJID>;
+#endif
+
+
 
 struct JointSignature {
     JointSignature(WPPOINT point, IJID nomenclature) : Location(point), Nomenclature(nomenclature) {}
     WPPOINT Location;
     IJID Nomenclature;
-};
-
-struct OrientationSignature {
-    WPPOINT SegSignatures[2];
-    OrientationSignature (WPPOINT normal, WPPOINT reverse) {
-        SegSignatures[0] = normal;
-        SegSignatures[1] = reverse;
-    }
-    bool operator == (const OrientationSignature& o) {
-        return false;
-//        return (o.SegSignatures[0] == SegSignatures[0] && o.SegSignatures[1] == SegSignatures[1]);
-    }
-    bool operator != (const OrientationSignature& o) {
-        return !(*this == o);
-    }
 };
 
 
@@ -295,8 +287,8 @@ public:
 	TrackCircuit* SetTrackCircuit (IJID ID);
 	void SetTrackCircuit0 (TrackCircuit * tc);
         void SetTrackCircuitWildfire (IJID ID);
-        void SetTrackCircuitWildfireRecurse (TrackCircuit * tc);
-        void CollectContacteesRecurse(WildfireSet&);
+        //void SetTrackCircuitWildfireRecurse (TrackCircuit * tc);
+        void CollectContacteesRecurse(SegmentGroupMap&);
 	void GetGraphicsCoords (int ex, int& x, int& y);
 	virtual BOOL HitP (long x, long y);
         virtual WPPOINT WPPoint();

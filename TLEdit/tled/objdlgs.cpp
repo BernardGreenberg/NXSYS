@@ -245,9 +245,9 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 		SetDlgItemInt (hDlg, IDC_EDIT_SEG_TC, (int)(Circuit->StationNo), FALSE);
 	    else
 		SetDlgItemText (hDlg, IDC_EDIT_SEG_TC, "");
-            WildfireSet S;
-            CollectContacteesRecurse(S);
-            int brethren = (int)S.size();
+            SegmentGroupMap SGM;
+            CollectContacteesRecurse(SGM);
+            int brethren = (int)SGM.size();
             if (brethren == 1)
                 SetDlgItemText(hDlg, IDC_EDIT_SEG_NSEGS, "One track segment");
             else

@@ -63,11 +63,10 @@ PropCellBase::~PropCellBase () {
 }
 
 struct WildfireRecord {
-    WildfireRecord (const WPVEC& wpvec, IJID oldtc, IJID newtc) :
-    Segvec(wpvec), old_tcid(oldtc), new_tcid(newtc) {};
+    WildfireRecord (SegmentGroupMap&segmap, IJID newtc) :
+    Segmap(segmap),  new_tcid(newtc) {};
 
-    WPVEC Segvec;
-    IJID old_tcid;
+    SegmentGroupMap Segmap;
     IJID new_tcid;
 };
 
@@ -290,13 +289,10 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
     PlacemForward(R);
 }
 
-void RecordWildfireTCSpread(std::unordered_set<TrackSeg *>& segs,
-                            IJID old_tcid, IJID new_tcid) {
+void RecordWildfireTCSpread(SegmentGroupMap& SGM, IJID new_tcid) {
     WPVEC seg_points;
-    for (auto seg : segs)
-        seg_points.push_back(seg->WPPoint());
     UndoRecord R(RecType::Wildfire);
-    R.wf_objptr.reset(new WildfireRecord(seg_points, old_tcid, new_tcid));
+    R.wf_objptr.reset(new WildfireRecord(SGM, new_tcid));
     R.obj_type = TypeId::NONE;
     PlacemForward(R);
 }
@@ -421,11 +417,8 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         }
 
         case RecType::Wildfire:  /* UNDO */
-            for (auto [x,y] : R.wf_objptr->Segvec) {
-                auto seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
-                assert(seg);
-                seg->SetTrackCircuit(R.wf_objptr->old_tcid);
-            }
+            for (auto [seg,ijid] : R.wf_objptr->Segmap)
+                seg->SetTrackCircuit(ijid);
             StatusMessage("");  //Clear out remains of wildfire's message
             break;
             
@@ -575,13 +568,10 @@ void Redo() {
         }
 
         case RecType::Wildfire:    /* REDO */
-            for (auto [x, y] : R.wf_objptr->Segvec) {
-                auto seg = static_cast<TrackSeg*>(FindObjectByTypeAndWPpos(TypeId::TRACKSEG, x, y));
-                assert(seg);
+            for (auto [seg, ijid] : R.wf_objptr->Segmap)
                 seg->SetTrackCircuit(R.wf_objptr->new_tcid);
-            }
             break;
-            
+
         case RecType::ShiftLayout:    /* REDO */
             ShiftLayout_((int)R.coords.wp_x, (int)R.coords.wp_y);
             break;

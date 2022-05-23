@@ -28,7 +28,7 @@
 
 static std::vector<TrackCircuit*> AllTrackCircuits;
 
-TrackCircuit::TrackCircuit (long sno) {
+TrackCircuit::TrackCircuit (IJID sno) {
     assert(sno && "Attempt to create track circuit 0");
     Occupied = Routed = Coding = FALSE;
     TrackRelay = NULL;
@@ -54,20 +54,20 @@ TrackCircuit::~TrackCircuit () {
 }
 
 
-static TrackCircuit* CreateNewTrackCircuit (long sno) {
+static TrackCircuit* CreateNewTrackCircuit (IJID sno) {
     TrackCircuit* new_circuit = new TrackCircuit(sno);
     AllTrackCircuits.push_back(new_circuit);
     return new_circuit;
 }
 
-TrackCircuit* FindTrackCircuit (long sno) {
+TrackCircuit* FindTrackCircuit (IJID sno) {
     for (TrackCircuit * tc : AllTrackCircuits)
 	if (tc->StationNo == sno)
             return tc;
     return NULL;
 }
 
-TrackCircuit* GetTrackCircuit (long sno) {
+TrackCircuit* GetTrackCircuit (IJID sno) {
     assert(sno && "GetTrackCircuit called on 0");
     TrackCircuit * tc = FindTrackCircuit (sno);
     return tc ? tc : CreateNewTrackCircuit(sno);
@@ -85,7 +85,7 @@ void TrackCircuit::AddSeg (TrackSeg * ts) {
     Segments.push_back(ts);
 }
 
-TrackCircuit * TrackSeg::SetTrackCircuit (long tcid) {
+TrackCircuit * TrackSeg::SetTrackCircuit (IJID tcid) {
     if (tcid == 0) {
         if (Circuit) {
             Circuit->DeleteSeg(this);
@@ -115,27 +115,29 @@ void TrackSeg::SetTrackCircuit0 (TrackCircuit * tc) {
 
 #ifdef TLEDIT
 
-void TrackSeg::SetTrackCircuitWildfire(long tcid) {
+void TrackSeg::SetTrackCircuitWildfire(IJID tcid) {
 
-    IJID orig_tcid = TCNO();
     TrackCircuit* tc = tcid ? GetTrackCircuit(tcid) : NULL;
 
-    WildfireSet S;
+    SegmentGroupMap SGM;
     
-    CollectContacteesRecurse(S);
+    CollectContacteesRecurse(SGM);
 
-    for (auto seg : S)
+    for (auto [seg, cct] : SGM)
         seg->SetTrackCircuit0(tc);
-    Undo::RecordWildfireTCSpread(S, orig_tcid, tcid);
+
+    Undo::RecordWildfireTCSpread(SGM, tcid);
 
     if (tc)
         tc->SetRouted(tcid != 0);
 };
 
-void TrackSeg::CollectContacteesRecurse (WildfireSet& S) {
-    if (S.count(this))
+void TrackSeg::CollectContacteesRecurse (SegmentGroupMap& SGM) {
+    /* this is all that keeps us from infinite recursion */
+    if (SGM.count(this))
         return;
-    S.insert(this);
+
+    SGM[this] = TCNO();
     
     for (int ex = 0; ex < 2; ex++) {
         TrackSegEnd* ep = &Ends[ex];
@@ -144,7 +146,7 @@ void TrackSeg::CollectContacteesRecurse (WildfireSet& S) {
         if (!tj->Insulated) {
             for (int i = 0; i < tj->TSCount; i++) {
                 if (tj->TSA[i] != this)
-                    tj->TSA[i]->CollectContacteesRecurse(S);
+                    tj->TSA[i]->CollectContacteesRecurse(SGM);
             }
         }
     }
