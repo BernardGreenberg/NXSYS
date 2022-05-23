@@ -35,7 +35,7 @@ public:
 
 template <typename Derived>  /* CRTP "Curiously Recurring Template Pattern", from ATLanta, apparently */
 class PropEditor {
-private:
+public:
     std::unique_ptr<Undo::PropCellBase> PropCellCache;
 public:
 

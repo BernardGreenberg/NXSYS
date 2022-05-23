@@ -2,8 +2,6 @@
 
 Modification status in titlebar (*)    
 
-Switch branch undo/redo
- 
 Undo stack before save (document how to use).  Save-point size() stack.
 - may need tick-counter.  
 

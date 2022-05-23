@@ -129,16 +129,21 @@ class TrackJoint
  
         class PropCell : public PropCellPCRTP<PropCell, TrackJoint> {
         public:
+            bool modf = false;
             IJID Nomenclature;
             bool Insulated;
             bool NumFlip;
             int AB0;
+            TrackSeg* SaveNormRev[2];
             void Snapshot_(TrackJoint* tj) {
                 SnapWPpos(tj);
                 Insulated = tj->Insulated;
                 NumFlip = tj->NumFlip;
                 Nomenclature = tj->Nomenclature;
                 AB0 = tj->SwitchAB0;
+                SaveNormRev[0] = (*tj)[TSAX::NORMAL];
+                SaveNormRev[1] = (*tj)[TSAX::REVERSE];
+                modf = false;
             }
             void Restore_(TrackJoint* tj) {
                 bool rplbl = false;
@@ -160,6 +165,13 @@ class TrackJoint
                     tj->PositionLabel();
                 if (wp_x != tj->wp_x || wp_y != tj->wp_y)
                     tj->MoveToNewWPpos(wp_x, wp_y);
+                if (modf || (tj->TSA[(int)TSAX::NORMAL] != SaveNormRev[0])
+                    || (tj->TSA[(int)TSAX::REVERSE] != SaveNormRev[1])) {
+                    tj->TSA[(int)TSAX::NORMAL] = SaveNormRev[0];
+                    tj->TSA[(int)TSAX::REVERSE] = SaveNormRev[1];
+                    // Forward ref to TrackSeg no good
+                    ((GraphicObject*)(tj->TSA[(int)TSAX::NORMAL]))->Select();
+                }
             }
         };
 

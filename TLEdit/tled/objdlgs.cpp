@@ -98,12 +98,13 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 			nchange = 1;
 		    }	
 		    SwitchAB0 = AB0;
-                    if (nchange) {
+                    if (nchange || ((PropCell*)PropCellCache.get())->modf) {
 			PositionLabel();
                         Undo::RecordChangedProps(this, StealPropCache());
                     }
-                    else
+                    else {
                         DiscardPropCache();
+                    }
 		    EndDialog (hDlg, TRUE);
 		    return TRUE;
 		}
@@ -115,11 +116,12 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 		case IDC_SWITCH_SWAP_NORMAL:
 		    if (!Organized)
 			Organize();
-
+                    ((PropCell*)PropCellCache.get())->modf = true;
 		    std::swap (TSA[(int)TSAX::NORMAL], TSA[(int)TSAX::REVERSE]);
 		    TSA[(int)TSAX::NORMAL]->Select();
 		    break;
 		case IDCANCEL:
+                    PropCellCache->Restore(this);
                     DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;
