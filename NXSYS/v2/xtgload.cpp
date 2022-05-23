@@ -99,9 +99,6 @@ static GOptr
     ProcessSwitchkeyForm (Sexpr),
     ProcessTrafficleverForm (Sexpr),
     ProcessPanelLightForm (Sexpr),
-#if TLEDIT
-    ProcessJointForm(Sexpr),
-#endif
     ProcessPanelSwitchForm (Sexpr);
 
 
@@ -117,9 +114,6 @@ void XTGLoadInit() {
         {"PANELLIGHT", ProcessPanelLightForm},
         {"PANELSWITCH", ProcessPanelSwitchForm},
         {"SWITCHKEY", ProcessSwitchkeyForm},
-#if TLEDIT
-        {"JOINT", ProcessJointForm},
-#endif
         {"TEXT", ProcessTextForm}
     };
     for (auto p : data) {
@@ -852,52 +846,5 @@ void AuxKeysLoadComplete () {
 		sk->AssociateTurnout (turnout);
 	}
     }
-}
-#endif
-
-#if TLEDIT
-static GOptr ProcessJointForm(Sexpr s) {
-    /* (JOINT  stationno  wp_x  wp_y {INSULATED NUMFLIP}) */
-    if (ListLen (s) < 3) { // 3 car train, minimum..
-        LispBarf ("Not enough stuff in JOINT form:", s);
-        return nullptr;
-    }
-
-    if (CAR(s).type != Lisp::NUM){
-        LispBarf ("JOINT form station id not num:", CAR(s));
-        return nullptr;
-    }
-    int nomen = SPopCar(s);
-
-    if (CAR(s).type != Lisp::NUM){
-        LispBarf ("JOINT form wp_x not num:", CAR(s));
-        return nullptr;
-    }
-    WP_cord x = SPopCar(s);
-
-    if (CAR(s).type != Lisp::NUM){
-        LispBarf ("JOINT form wp_y not num:", CAR(s));
-        return nullptr;
-    }
-    WP_cord y = (SPopCar(s));
-
-    bool ins = false, flip = false;
-    while (s.type == Lisp::tCONS) {
-        Sexpr car =SPopCar(s);
-        if (car == aINSULATED)
-            ins = true;
-        else if (car == aNUMFLIP)
-            flip = true;
-        else {
-            LispBarf ("JOINT form unknown kwd:", car);
-            return nullptr;
-        }
-    }
-    TrackJoint* tj = new TrackJoint(x, y);
-    tj->Insulated = (BOOL)ins;
-    tj->NumFlip = (BOOL) flip;
-    tj->Nomenclature = nomen;
-    return tj;
-
 }
 #endif

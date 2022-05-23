@@ -70,11 +70,7 @@ struct WildfireRecord {
     IJID new_tcid;
 };
 
-struct JointMergeRecord {
-    vector<JointSignature> signatures;
-
-};
-
+using JointVector = vector<TrackJoint*>;
 
 struct Coords {
     Coords() {}
@@ -127,7 +123,8 @@ struct UndoRecord {
         orig_props = std::move(other.orig_props);
         changed_props = std::move(other.changed_props);
         wf_objptr = std::move(other.wf_objptr);
-        jm_objptr = std::move(other.jm_objptr);
+        JV = std::move(other.JV);
+        
     }
 
     /* POD (plain old data) */
@@ -147,7 +144,9 @@ struct UndoRecord {
     std::unique_ptr<PropCellBase> orig_props;
     std::unique_ptr<PropCellBase> changed_props;
     std::unique_ptr<WildfireRecord> wf_objptr;
-    std::unique_ptr<JointMergeRecord> jm_objptr;
+
+    /* movable feast */
+    JointVector JV;
 
     void TypeCoords(GOptr g) {
         coords = Coords(g);
@@ -357,10 +356,9 @@ void RecordJointMerge(TrackJoint* consumer, TrackJoint* movee, std::vector<Track
     R.TypeCoords(consumer);
     R.coords_old = GOMovCoords; //Boy, is this useful!
     R.Nomenclature = movee->Nomenclature;
-    JointMergeRecord JMR;
-    for (auto tj : opposing_joints)
-        JMR.signatures.push_back(tj->Signature());
-    R.jm_objptr.reset(new JointMergeRecord(JMR));
+    R.g = consumer;
+    R.g1 = movee;
+    R.JV = std::move(opposing_joints);
     PlacemForward(R);
 }
 
@@ -444,15 +442,6 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             
         case RecType::CreateSegment:  /* UNDO */
         {
-/*
-            auto tj1 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords);
-            auto tj2 = (TrackJoint*)FindObjByLoc(TypeId::JOINT, R.coords_old);
-            auto [x1, y1] = tj1->WPPoint();
-            auto [x2, y2] = tj2->WPPoint();
-            auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG,
-                                    Coords((x1 + x2)/2, (y1 + y2)/2));
-            tj1->Select(); // tj1 may vanish!
-*/
             auto seg = (TrackSeg*)R.g;
             seg->Cut_();  /* will consign to limbo */
             break;
@@ -469,11 +458,10 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         case RecType::MergeJoints:  /* UNDO */
         {
             /* Wheeeeee!  5-21-2022 */
-            auto receiver = (TrackJoint*)R.Find();
-            auto movee = new TrackJoint(R.coords_old);
+            auto receiver = (TrackJoint*)R.g;
+            auto movee = (TrackJoint*)ResurrectFromLimbo(R.g1);
             movee->Nomenclature = R.Nomenclature;
-            for (auto opposer : R.jm_objptr->signatures) {
-                auto tj = (TrackJoint*) FindObjByLoc(TypeId::JOINT, opposer.Location);
+            for (auto tj : R.JV) {
                 for (int oxi = 0; oxi < tj->TSCount; oxi++) {
                     TrackSeg * seg = tj->TSA[oxi];
                     for (TSEX tsx : {TSEX::E0, TSEX::E1}) {
@@ -488,6 +476,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
                 }
             }
             movee->MoveToNewWPpos(movee->wp_x, movee->wp_y);
+            movee->Select();
             break;
         }
 
@@ -592,8 +581,8 @@ void Redo() {
             
         case RecType::MergeJoints:    /* REDO */
         {
-            auto receiver = (TrackJoint*)R.Find();
-            auto movee = (TrackJoint*)R.FindOld();
+            auto receiver = (TrackJoint*)R.g;
+            auto movee = (TrackJoint*)R.g1;
             receiver->SwallowOtherJoint(movee, false);
             break;
         }
