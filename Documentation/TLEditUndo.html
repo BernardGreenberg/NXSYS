@@ -203,6 +203,7 @@ pre > code {
 <style>
  body {max-width:800px;font-size:14px}
  p {font-size:14px}
+ p b {font-family:times;font-weight:bold}
 </style>
 
 <h1 id="toc_0">TLEdit undo</h1>
@@ -264,7 +265,7 @@ pre > code {
 
 <ul>
 <li><p>You may not drop a joint on the other end of either segment emanating from it, i.e., try to reduce a segment to zero length that way. Cut the segment or the joint as appropriate instead, if that is what you are trying to do. That is, in the above, <em>J1</em> may not be dragged onto <em>J2</em>.</p></li>
-<li><p>You may not drop the movend on a joint at the end of a colocated segment, that is, a segment <em>S1</em> one of whose ends is the receiver, and whose other end is a third joint, which latter is connected by another segment, <em>S2</em>, to the movend itself.</p>
+<li><p>You may not drop the movend on a joint at the end of a colocated segment, that is, a segment <em>S1</em> one of whose ends is the receiver, and whose other end is a third joint, <em>J</em>, which latter is connected by another segment, <em>S2</em>, to the movend itself.</p>
 
 <p>That is, if there is a path from the movee to the receiver through exactly two existing segments, the merge is disallowed.  Were it to be permitted, <em>S1</em> and <em>S2</em> would coincide, connecting <em>J</em> to the merged receiver, which is impermissible.  That is, in the above, <em>J4</em> may not be dragged onto <em>J2</em>, as segments S1 and S2 both “go to” joint <em>J3</em>.</p></li>
 <li><p>You may not drop a switch on any other joint, nor drop any joint on a switch.</p></li>

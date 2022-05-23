@@ -330,6 +330,9 @@ void RecordSegmentCreation (TrackSeg* ts) {
     R.obj_type = TypeId::TRACKSEG;
     R.coords_old = Coords(ts->Ends[0].Joint);
     R.coords     = Coords(ts->Ends[1].Joint);
+    
+    R.g1 = ts->Ends[0].Joint;
+    R.g2 = ts->Ends[1].Joint;
     PlacemForward(R);
 }
 
@@ -429,14 +432,14 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         case RecType::CutSegment:  /* UNDO */
         {
             
+            auto seg = (TrackSeg*)ResurrectFromLimbo(R.g);
             auto tj1 = (TrackJoint*)R.g1;
             auto tj2 = (TrackJoint*)R.g2;
             if (tj1->TSCount == 0)
                 ResurrectFromLimbo(tj1);
-                tj1 = new TrackJoint(R.coords);
             if (tj2->TSCount == 0)
                 ResurrectFromLimbo(tj2);
-            auto seg = new TrackSeg(R.coords, R.coords_old);
+
             seg->SetTrackCircuit(R.Nomenclature);
             tj1->AddBranch(seg);
             tj2->AddBranch(seg);
@@ -458,7 +461,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             tj1->Select(); // tj1 may vanish!
 */
             auto seg = (TrackSeg*)R.g;
-            seg->Cut_();
+            seg->Cut_();  /* will consign to limbo */
             break;
         }
             

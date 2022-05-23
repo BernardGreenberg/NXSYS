@@ -55,7 +55,7 @@ The joint being moved will be called the *movend*, and the joint onto which you 
 
 -  You may not drop a joint on the other end of either segment emanating from it, i.e., try to reduce a segment to zero length that way. Cut the segment or the joint as appropriate instead, if that is what you are trying to do. That is, in the above, *J1* may not be dragged onto *J2*.
 
-- You may not drop the movend on a joint at the end of a colocated segment, that is, a segment *S1* one of whose ends is the receiver, and whose other end is a third joint, which latter is connected by another segment, *S2*, to the movend itself.
+- You may not drop the movend on a joint at the end of a colocated segment, that is, a segment *S1* one of whose ends is the receiver, and whose other end is a third joint, *J*, which latter is connected by another segment, *S2*, to the movend itself.
 
   That is, if there is a path from the movee to the receiver through exactly two existing segments, the merge is disallowed.  Were it to be permitted, *S1* and *S2* would coincide, connecting *J* to the merged receiver, which is impermissible.  That is, in the above, *J4* may not be dragged onto *J2*, as segments S1 and S2 both “go to” joint *J3*.
 
