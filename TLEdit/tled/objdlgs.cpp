@@ -284,22 +284,8 @@ BOOL_DLG_PROC_QUAL TrackSeg::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, L
 			    return TRUE;
 			}
 		    }
-                    IJID oldid = TCNO();
-		    if (oldid != newid)
-                    {
-                        if (/* DISABLES CODE */ (true))
-                            SetTrackCircuitWildfire(newid);
-                        else {
-                            CacheInitSnapshot();
-                            TrackCircuit* tc = SetTrackCircuit (newid);
-                            if (tc) {
-                                assert(newid);
-                                tc->SetRouted(TRUE);
-                            }
-                            Undo::RecordChangedProps(this, StealPropCache());
-                            Invalidate();
-                        }
-                    }
+                    SetTrackCircuitWildfire(newid);
+                    Invalidate();
 		    SelectMsg();
 		    EndDialog (hDlg, TRUE);
 		    return TRUE;

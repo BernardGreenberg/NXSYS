@@ -113,11 +113,11 @@ void TrackSeg::SetTrackCircuit0 (TrackCircuit * tc) {
     }
 }
 
+#ifdef TLEDIT
+
 void TrackSeg::SetTrackCircuitWildfire(long tcid) {
 
-#if TLEDIT
     IJID orig_tcid = TCNO();
-#endif
     TrackCircuit* tc = tcid ? GetTrackCircuit(tcid) : NULL;
 
     WildfireSet S;
@@ -126,9 +126,7 @@ void TrackSeg::SetTrackCircuitWildfire(long tcid) {
 
     for (auto seg : S)
         seg->SetTrackCircuit0(tc);
-#if TLEDIT
     Undo::RecordWildfireTCSpread(S, orig_tcid, tcid);
-#endif
 
     if (tc)
         tc->SetRouted(tcid != 0);
@@ -144,20 +142,15 @@ void TrackSeg::CollectContacteesRecurse (WildfireSet& S) {
         TrackJoint* tj = ep->Joint;
         assert(tj);
         if (!tj->Insulated) {
-#if TLEDIT
             for (int i = 0; i < tj->TSCount; i++) {
                 if (tj->TSA[i] != this)
                     tj->TSA[i]->CollectContacteesRecurse(S);
             }
-#else
-            if (ep->Next)
-                ep->Next->CollectContacteesRecurse (S);
-            if (ep->NextIfSwitchThrown)
-                ep->NextIfSwitchThrown->CollectContacteesRecurse (S);
-#endif
         }
     }
 }
+
+#endif
 
 void TrackCircuit::SetOccupied (BOOL sta, BOOL force) {
     if ((Occupied != sta) || force) {
