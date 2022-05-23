@@ -103,7 +103,9 @@ BEGIN
     "^R",           CmRdis,                 ASCII,  NOINVERT
     "^S",           CmSave,                 ASCII,  NOINVERT
     "^W",           CmClear,                ASCII,  NOINVERT
-    "^X",           CmCut,                  ASCII,  NOINVERT
+    "^X",           CmCut,                  ASCII,  NOINVER
+    "^Y",           CmRedo,                 ASCII,  NOINVERT
+    "^Z",           CmUndo,                 ASCII,  NOINVERT
     VK_BACK,        CmCut,                  VIRTKEY, NOINVERT
 END
 
