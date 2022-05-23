@@ -192,7 +192,7 @@ class TrackJoint
 	virtual BOOL ClickToSelectP();
         ValidatingValue<std::string> PrecludeUninsulation(const char* action);
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
-        const char * ValidateAndSwallowOtherJoint(TrackJoint*tj);
+        const char * ValidateMergeConditions(TrackJoint*tj);
 	void	SwallowOtherJoint (TrackJoint * tj, bool make_undo_record);
         int     Dump(ObjectWriter& W);  /* for undo system */
         void	TDump (FILE * F, TSAX branch);

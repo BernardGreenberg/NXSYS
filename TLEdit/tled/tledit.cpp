@@ -407,7 +407,7 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
         tj = nullptr;  // fall into "just move" 3-26-2022
     
     if (tj) {
-        if (auto plaint = MovTrackJoint->ValidateAndSwallowOtherJoint(tj))
+        if (auto plaint = MovTrackJoint->ValidateMergeConditions(tj))
             usererr(plaint);
         else tj->SwallowOtherJoint(MovTrackJoint, true);
     }
@@ -435,7 +435,7 @@ static std::unordered_set<TrackCircuit*> CircuitsOfJoint(TrackJoint* tj) {
 
 /* The preconditions on joint-merging are non-trivial.  At very least, the Undo system
    is not prepared to undo stupid gestures. */
-const char * TrackJoint::ValidateAndSwallowOtherJoint(TrackJoint* target) {
+const char * TrackJoint::ValidateMergeConditions(TrackJoint* target) {
     /* current instance ("this") was MovTrackJoint, i.e., the one being moved which will
        be swallowed by "target" */
     if (OneOfRaysOfStart(this, target))// disallow drop on current neighbor node 3-18-2022
