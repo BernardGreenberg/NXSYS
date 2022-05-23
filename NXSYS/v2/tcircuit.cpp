@@ -160,7 +160,7 @@ std::pair<int,int> TrackSeg::AnalyzeSegmentGroup(const SegmentGroupMap &M){
             unassigned ++;
         else
             circuits.insert(tcid);
-    return {circuits.size(), unassigned};
+    return {(int)circuits.size(), unassigned};
 }
 
 

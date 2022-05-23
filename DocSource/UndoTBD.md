@@ -5,7 +5,11 @@ Modification status in titlebar (*)
 Switch branch undo/redo
  
 Undo stack before save (document how to use).  Save-point size() stack.
-- may need tick-counter.
+- may need tick-counter.  
+
+Clear out Limbo at appropriate times; delete contained objects.
+
+QA produce!
 
 Windows implementation  
 - Menu management function 
