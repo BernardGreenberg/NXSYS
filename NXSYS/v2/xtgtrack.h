@@ -251,7 +251,6 @@ class TrackCircuit {		// no longer graphic object
 
 class TrackSegEnd {			//NOT a graphic object
     public:
-	RW_cord rwx, rwy;      //meaning of y not so clear
 	WP_cord wpx, wpy;      //Windows (all-scrolled-out) Panel coord
 #ifdef REALLY_NXSYS
 	TrackSeg *Next;   //if there is a switch, "normal" next
@@ -305,7 +304,6 @@ public:
 	TrackCircuit* SetTrackCircuit (IJID ID);
 	void SetTrackCircuit0 (TrackCircuit * tc);
         void SetTrackCircuitWildfire (IJID ID);
-        void CollectContacteesRecurse(SegmentGroupMap&);
 	void GetGraphicsCoords (int ex, int& x, int& y);
 	virtual BOOL HitP (long x, long y);
         virtual WPPOINT WPPoint();
@@ -337,6 +335,7 @@ public:
 	virtual UINT DlgId();
 	virtual BOOL ClickToSelectP();
 
+        void CollectContacteesRecurse(SegmentGroupMap&);
     static std::pair<int, int> AnalyzeSegmentGroup(const SegmentGroupMap&M);
 #else
 	void SpreadSwitchRoutingState(BOOL p_routed);
