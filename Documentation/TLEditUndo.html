@@ -245,7 +245,7 @@ pre > code {
 
 <ul>
 <li>You can type the undo keystroke again, and undo the next older forward action, moving it to the Redo stack.  Doing this repeatedly, you undo entire substantive stretches of modification.</li>
-<li>You can type the <strong>redo keystroke</strong> (<strong>CTRL+SHIFT+Z</strong>, Mac <strong>Cmd-Shift-Z</strong>), which causes the last action undone to be <em>redone</em>. It also removes it from the <strong>Redo</strong> stack, but also pushes it back onto the <strong>Undo</strong> stack (so you can undo it again, and perhaps repeat this loop many times). Or you can issue the redo keystroke repeatedly, and so restore entire lengthy stretches of undone actions.</li>
+<li>You can type the <strong>redo keystroke</strong> (<strong>CTRL+Y</strong>, Mac <strong>Cmd-Shift-Z</strong>), which causes the last action undone to be <em>redone</em>. It also removes it from the <strong>Redo</strong> stack, but also pushes it back onto the <strong>Undo</strong> stack (so you can undo it again, and perhaps repeat this loop many times). Or you can issue the redo keystroke repeatedly, and so restore entire lengthy stretches of undone actions.</li>
 <li>You can perform some <strong>new forward action</strong>, which will, as all, be pushed on the Undo stack, <strong>but the <em>Redo stack</em> will be cleared, i.e., the redoable state will be terminated</strong>. You can still undo that action, and earlier not-undone actions, but you cannot redo undone (but not redone) actions recorded on the Redo stack before the new forward action; they will be gone.  Every forward action (actually issued, not just restored via undo) clears the Redo stack.</li>
 </ul>
 
@@ -272,11 +272,9 @@ pre > code {
 <li><p>You may not drop a joint on an insulated joint. If you want to make the receiver be a switch, remove the receiver&#39;s insulation first.</p></li>
 <li><p>You may not drop an insulated joint on any other joint. If you want to merge them, remove the insulation from the movend first.</p></li>
 <li><p>You may not drop a joint not a track-end on any other joint not a track-end; that would cause 4 segments to emanate from the joint (slip switches and grade-crossings are not done that way).</p></li>
+<li><p>You may not merge joints unless all of the adjoining segments of the movee and the receiver have the same track circuit status, that is, either all unassigned or all assigned to the same circuit.
+`</p></li>
 </ul>
-
-<h2 id="toc_2">Deleting track ends</h2>
-
-<p>You may not delete the segment at the end of a track while the joint ending the track is insulated.  There is little reason to do this; if  you want to simplify the track circuit, delete an internal joint after reconciling the track circuits. `</p>
 
 </body>
 </html>

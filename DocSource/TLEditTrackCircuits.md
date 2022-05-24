@@ -1,6 +1,6 @@
-<style>
+<style scoped>
  body {max-width:800px;font-size:14px}
- p {font-size:14px}
+ p {font-size:15px}
 </style>
 
 # Track circuit and segment management
@@ -24,14 +24,12 @@ Forbidden, end of discussion. You must remove the insulation from both.
 One can and does create crossovers with the greatest of ease by clicking on one track and dragging to another. As in real life, crossovers have to have an insulated joint in their middle to enable trains to pass from the track circuit of the first track to that of the second track.  In TLEdit, of course, you must create the crossover first, and install, then insulate, the joint, subsequently.
 
 It is best if you do this *before* you assign any track circuits.  Then everything will work properly and the crossover halves each belong to the correct track circuit.  But should you fail to create the insulated joint before assigning a track circuit, the following situation would arise:
-
+ 
 <img src="CrossoverAnomaly.png" width="400">
 
 Assume that the upper track, between the two yellow insulated joints, is track circuit 125, and the lower 225.  When you create the crossover, which will be green as is always the case in TLEdit, it connects the two track circuits; the situation is inconsistent. If you attempt to change the single track circuit of the crossover, *it and both circuits at its ends form a single segment group, and* ***all will be changed***.  TLEdit will notice this, and refuse, with the following message:
 
-<p style="margin-left:50px;width:400px">The group of segments reachable by non-insulated joints includes more than one assigned track circuit. Create and/or insulate some joints and try again.</p>
-
-
+>The group of segments reachable by non-insulated joints includes more than one assigned track circuit. Create and/or insulate some joints and try again.
 
 
 

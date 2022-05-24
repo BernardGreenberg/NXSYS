@@ -123,7 +123,7 @@ struct UndoRecord {
         orig_props = std::move(other.orig_props);
         changed_props = std::move(other.changed_props);
         wf_objptr = std::move(other.wf_objptr);
-        JV = std::move(other.JV);
+        OppJoints = std::move(other.OppJoints);
         
     }
 
@@ -146,7 +146,7 @@ struct UndoRecord {
     std::unique_ptr<WildfireRecord> wf_objptr;
 
     /* movable feast */
-    JointVector JV;
+    JointVector OppJoints;
 
     void TypeCoords(GOptr g) {
         coords = Coords(g);
@@ -358,7 +358,7 @@ void RecordJointMerge(TrackJoint* consumer, TrackJoint* movee, std::vector<Track
     R.Nomenclature = movee->Nomenclature;
     R.g = consumer;
     R.g1 = movee;
-    R.JV = std::move(opposing_joints);
+    R.OppJoints = std::move(opposing_joints);
     PlacemForward(R);
 }
 
@@ -461,7 +461,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             auto receiver = (TrackJoint*)R.g;
             auto movee = (TrackJoint*)ResurrectFromLimbo(R.g1);
             movee->Nomenclature = R.Nomenclature;
-            for (auto tj : R.JV) {
+            for (auto tj : R.OppJoints) {
                 for (int oxi = 0; oxi < tj->TSCount; oxi++) {
                     TrackSeg * seg = tj->TSA[oxi];
                     for (TSEX tsx : {TSEX::E0, TSEX::E1}) {
@@ -660,6 +660,7 @@ int TrackJoint::Dump(ObjectWriter &W) {
 void ClearLayoutModified() {
     Undo::RedoStack.clear();
     Undo::UndoStack.clear();
+    ClearLimbo();
 }
 
 bool IsLayoutModified() {

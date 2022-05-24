@@ -17,6 +17,8 @@ using GOptr = GraphicObject*;
 std::unordered_set<GOptr> Limbo;
 
 void ClearLimbo() {
+    for (auto g : Limbo)
+        delete g;  // finally, really destroy these objects; cannot be in more than once!
     Limbo.clear();
 }
 void GraphicObject::ConsignToLimbo() {
