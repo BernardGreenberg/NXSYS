@@ -142,11 +142,15 @@ void TrackJoint::DelBranch (TrackSeg * ts) {
                 PositionLabel();
             }
 #endif
+/* In new "Limbo" regime, nulling these pointers is a bad idea.  They can be resurrected.
+    Final destruction (layout unload/shutdown) does not come through here. This can only be
+    the result of editing or Redo */
+#if 0
             if (ts->Ends[0].Joint == this)
                 ts->Ends[0].Joint = nullptr;
             if (ts->Ends[1].Joint == this)
                 ts->Ends[1].Joint = nullptr;
-
+#endif
             TSCount--;
 
 	    for (int j = i; j < TSCount; j++)

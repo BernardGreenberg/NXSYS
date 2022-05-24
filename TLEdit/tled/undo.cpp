@@ -422,7 +422,6 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             
         case RecType::CutSegment:  /* UNDO */
         {
-            
             auto seg = (TrackSeg*)ResurrectFromLimbo(R.g);
             auto tj1 = (TrackJoint*)R.g1;
             auto tj2 = (TrackJoint*)R.g2;
@@ -434,8 +433,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             seg->SetTrackCircuit(R.Nomenclature);
             tj1->AddBranch(seg);
             tj2->AddBranch(seg);
-            seg->Ends[0].Joint = tj1;
-            seg->Ends[1].Joint = tj2;
+            /* Ends[*].joint should already be right (1 or 2 of them), from Limbo */
             seg->Select();
             break;
         }

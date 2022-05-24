@@ -71,6 +71,7 @@ public:
 #ifdef TLEDIT
 #include "tlengovf.h"
     void            ConsignToLimbo();
+    virtual void    PurgeFromLimbo();
 #else
     int		    RunContextMenu(int resource_id);
     virtual void    EditContextMenu(HMENU m);

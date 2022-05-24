@@ -337,6 +337,7 @@ public:
 
         void CollectContacteesRecurse(SegmentGroupMap&);
     static std::pair<int, int> AnalyzeSegmentGroup(const SegmentGroupMap&M);
+        void PurgeFromLimbo();
 #else
 	void SpreadSwitchRoutingState(BOOL p_routed);
 	void SpreadRWFactor (double rwf);

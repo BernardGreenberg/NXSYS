@@ -18,9 +18,20 @@ std::unordered_set<GOptr> Limbo;
 
 void ClearLimbo() {
     for (auto g : Limbo)
-        delete g;  // finally, really destroy these objects; cannot be in more than once!
+        g->PurgeFromLimbo();
     Limbo.clear();
 }
+
+void GraphicObject::PurgeFromLimbo() {
+    delete this;
+}
+
+void TrackSeg::PurgeFromLimbo() {
+    Ends[0].Joint = nullptr;  // The joints are going to get purged independently
+    Ends[1].Joint = nullptr;
+    GraphicObject::PurgeFromLimbo();
+}
+
 void GraphicObject::ConsignToLimbo() {
     assert (Limbo.count(this) == 0 && "Object already in Limbo");
     assert (TypeID() == TypeId::TRACKSEG || TypeID() == TypeId::JOINT);
