@@ -156,7 +156,8 @@ static void DefButtonUp2 (int x, int y) {
 	TrackSeg* ts = SnapToTrackSeg (wpx, wpy);
         if (ts) {
             if (DropOnRayFromStart(ts)) {// 3-17-2022
-                StatusMessage("Cannot drop on emanation from same joint");
+                usererr("You may not drop a joint on a segment already emanating from the other end "
+                        "of the one being created.");
                 return;
             }
             WPPOINT seg_id = ts->WPPoint();
@@ -172,7 +173,7 @@ static void DefButtonUp2 (int x, int y) {
    //         StatusMessage(""); // goes too far.
         }
         else
-            StatusMessage ("Invalid joint for drop target");
+            usererr("You may not drop this joint on that one; it is an invalid target in this state.");
         if (DefCreatedTrackJoint)
             delete DefStartTrackJoint;
         return;
