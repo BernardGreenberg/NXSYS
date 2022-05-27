@@ -27,6 +27,7 @@ void RecordGOCut(GraphicObject* g);
 void RecordGOMoveStart(GraphicObject* g);
 void RecordGOMoveComplete(GraphicObject* g);
 void RecordChangedProps(GraphicObject* g, PropCellBase* pcp);
+void RecordChangedJointProps(TrackJoint* tj, PropCellBase* pcp);
 void RecordIrreversibleAct(const char * description);
 void RecordWildfireTCSpread(SegmentGroupMap& SGM, IJID new_tcid);
 void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id);

@@ -1003,7 +1003,7 @@ void TrackJoint::Insulate(bool insulate) {
         CacheInitSnapshot();
         Insulated = insulate ? TRUE : FALSE;
         EnsureID();
-        Undo::RecordChangedProps(this, StealPropCache());
+        Undo::RecordChangedJointProps(this, StealPropCache());
 	Invalidate();
     }
 }

@@ -32,7 +32,7 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 namespace Undo {
 
 enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateSegment, CutSegment, CreateJoint,
-    CutJoint, MoveJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire, MergeJoints
+    CutJoint, MoveJoint, PropChangeJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire, MergeJoints
 };
 
 static std::unordered_map<RecType, const char*> RecTypeNames {
@@ -45,6 +45,7 @@ static std::unordered_map<RecType, const char*> RecTypeNames {
     {RecType::CutSegment, "cut"},
     {RecType::CutJoint, "cut"},
     {RecType::MoveJoint, "move"},
+    {RecType::PropChangeJoint, "property change"},
     {RecType::Wildfire, "wildfire spread track circuit"},
     {RecType::ShiftLayout, "shift layout"},
     {RecType::SetViewOrigin, "set view origin"},
@@ -294,11 +295,23 @@ void RecordJointMoveComplete(TrackJoint* tj) {
 void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
     UndoRecord R(RecType::PropChange);
     R.TypeCoords(g);
+    assert(R.obj_type != TypeId::JOINT);
     R.coords_old =  pre_change_props->WpPoint();
     R.orig_props.reset(pre_change_props);
     R.changed_props.reset(pre_change_props->SnapshotNow(g));
     PlacemForward(R);
 }
+
+void RecordChangedJointProps(TrackJoint* tj, PropCellBase* pre_change_props) {
+    UndoRecord R(RecType::PropChangeJoint);
+    R.TypeCoords(tj);
+    R.g = tj;
+    R.coords_old =  pre_change_props->WpPoint();
+    R.orig_props.reset(pre_change_props);
+    R.changed_props.reset(pre_change_props->SnapshotNow(tj));
+    PlacemForward(R);
+}
+
 
 void RecordWildfireTCSpread(SegmentGroupMap& SGM, IJID new_tcid) {
     WPVEC seg_points;
@@ -421,11 +434,22 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         case RecType::PropChange:  /* UNDO */
         {
             StatusMessage("");  //clear left-over object descriptions.
+            assert(R.obj_type != TypeId::JOINT);
             GOptr g = R.Find();
             R.orig_props->Restore(g);
             g->Invalidate();
             break;
         }
+            
+        case RecType::PropChangeJoint:  /* UNDO */
+        {
+            StatusMessage("");  //clear left-over object descriptions.
+            assert(R.obj_type == TypeId::JOINT);
+            R.orig_props->Restore(R.g);
+            R.g->Invalidate();
+            break;
+        }
+
 
         case RecType::Wildfire:  /* UNDO */
             for (auto [seg,ijid] : R.wf_objptr->Segmap)
@@ -567,9 +591,18 @@ void Redo() {
             
         case RecType::PropChange:    /* REDO */
         {
+            assert(R.obj_type != TypeId::JOINT);
             GOptr g = R.FindOld();
             R.changed_props->Restore(g);
             g->Invalidate();
+            break;
+        }
+            
+        case RecType::PropChangeJoint:    /* REDO */
+        {
+            assert(R.g->TypeID() == TypeId::JOINT);
+            R.changed_props->Restore(R.g);
+            R.g->Invalidate();
             break;
         }
 

@@ -38,12 +38,12 @@ struct SalvInstance {
 };
 
 static string DescribeJoint (TrackJoint* tj) {
-    return FormatString("Joint %d (AB0 %d) at %ldx%ld (%p)",
+    return FormatString("{Joint %d (AB0 %d) at %ldx%ld (%p)}",
                         (int)tj->Nomenclature, tj->SwitchAB0, tj->wp_x, tj->wp_y, tj);
 }
 
 static string DescribeSegment (TrackSeg* ts) {
-    return FormatString("Segment at %ldx%ld  %ldx%ld (%p)",
+    return FormatString("{Segment at %ldx%ld  %ldx%ld (%p)}",
                         ts->Ends[0].wpx, ts->Ends[0].wpy, ts->Ends[1].wpx, ts->Ends[1].wpy, ts);
 }
 
@@ -110,7 +110,7 @@ void SalvInstance::SalvageJoint(TrackJoint* tj) {
             Error(tj, "Claims %d branches, but TSA[%d] is null.", tj->TSCount, brx);
         else {
             if (AllObjects.count((GraphicObject*)ts) == 0) {
-                Error(ts, "found in joint %s at %d, not in global listing.",
+                Error(ts, "(found in %s #[%d]), is not in the global listing.",
                       DescribeJoint(tj).c_str(), brx);
             }
             else if (tj == ts->Ends[0].Joint) {
@@ -119,7 +119,7 @@ void SalvInstance::SalvageJoint(TrackJoint* tj) {
             else if (tj == ts->Ends[1].Joint) {
                 continue;
             } else {
-                Error(ts, "found in [%s] at %d, is not Ends.Joint of either of its ends.",
+                Error(ts, "(found in %s #[%d]) is not the Ends.Joint of either of its ends.",
                       DescribeJoint(tj).c_str(), brx);
             }
 
@@ -138,7 +138,7 @@ void SalvInstance::SalvageSeg(TrackSeg* ts) {
                 Error(ts, "Probable garbage pointer at Ends[%d].Joint", ex);
             else
                 if (AllObjects.count((GraphicObject*)(&J)) == 0) {
-                    Error(ts, "Joint ptr %s in End[%d] not in global object table.",
+                    Error(ts, "Joint ptr %s in End[%d] is not in the global listing.",
                           DescribeJoint(&J).c_str(), ex);
                 } else {
                     bool found = false;
@@ -147,7 +147,7 @@ void SalvInstance::SalvageSeg(TrackSeg* ts) {
                             found = true;
                     }
                     if (!found)
-                        Error (ts, "has %s as [%d], which does not know it as a branch.",   DescribeJoint(&J).c_str(), ex);
+                        Error (ts, "has %s as #[%d], which does not know it as a branch.",   DescribeJoint(&J).c_str(), ex);
                 }
         }
         if (ts->Ends[0].Joint == ts->Ends[1].Joint) {

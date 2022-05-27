@@ -103,7 +103,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
                     
                     if (nchange || SSBS != SwitchBranchSnapshot (TSA)) {
 			PositionLabel();
-                        Undo::RecordChangedProps(this, StealPropCache());
+                        Undo::RecordChangedJointProps(this, StealPropCache());
                     }
                     else {
                         DiscardPropCache();
@@ -220,7 +220,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 
                     Insulated = new_ins;
                     if (!EditAsJointInProgress)
-                        Undo::RecordChangedProps(this, StealPropCache());
+                        Undo::RecordChangedJointProps(this, StealPropCache());
                     EndDialog (hDlg, TRUE);
                 }
 		return TRUE;

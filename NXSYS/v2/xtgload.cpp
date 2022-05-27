@@ -661,7 +661,7 @@ static GOptr ProcessSignalForm (Sexpr s) {
     IJID StaNo = 0L;
     TrackJoint * tj = FindTrackJoint (ijid);
     if (tj == NULL) {
-	LispBarf ("Cannot find Insulated Joint", ss);
+	LispBarf ("Signal creation cannot find Insulated Joint", ss);
 	return 0;
     }
     while (s.type == Lisp::tCONS) {
