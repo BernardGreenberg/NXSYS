@@ -36,6 +36,7 @@ void RecordShiftLayout(int deltax, int deltay);
 void RecordSetViewOrigin(WPPOINT old, WPPOINT nieuw);
 struct JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj);
 void RecordJointCutComplete(struct JointCutSnapInfo* jcsip);
+void RecordJointMoveComplete(TrackJoint* tj);
 void RecordJointMerge(TrackJoint* consumer, TrackJoint* movee, std::vector<TrackJoint*>& opposing_joints);
 
 bool IsUndoPossible();

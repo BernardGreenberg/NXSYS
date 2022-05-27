@@ -414,7 +414,7 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
     }
     else {  // simple move.
         MovTrackJoint->MoveToNewWPpos (wpx, wpy);
-        Undo::RecordGOMoveComplete(MovTrackJoint);
+        Undo::RecordJointMoveComplete(MovTrackJoint);
     }
 }
 

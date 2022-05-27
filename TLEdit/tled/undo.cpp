@@ -32,10 +32,10 @@ void SetUndoRedoMenu(const char * undo, const char * redo);
 namespace Undo {
 
 enum class RecType {CreateGO, CutGO, MoveGO, PropChange, CreateSegment, CutSegment, CreateJoint,
-    CutJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire, MergeJoints
+    CutJoint, MoveJoint, ShiftLayout, SetViewOrigin, IrreversibleAct, Wildfire, MergeJoints
 };
 
-static std::unordered_map<RecType, string> RecTypeNames {
+static std::unordered_map<RecType, const char*> RecTypeNames {
     {RecType::CreateGO, "create"},
     {RecType::CutGO, "cut"},
     {RecType::PropChange, "property change"},
@@ -44,6 +44,7 @@ static std::unordered_map<RecType, string> RecTypeNames {
     {RecType::CreateSegment, "create"},
     {RecType::CutSegment, "cut"},
     {RecType::CutJoint, "cut"},
+    {RecType::MoveJoint, "move"},
     {RecType::Wildfire, "wildfire spread track circuit"},
     {RecType::ShiftLayout, "shift layout"},
     {RecType::SetViewOrigin, "set view origin"},
@@ -279,6 +280,17 @@ void RecordGOMoveComplete(GraphicObject* g) {
     }
 }
 
+void RecordJointMoveComplete(TrackJoint* tj) {
+    Coords uploc(tj);
+    if (uploc != GOMovCoords) {
+        UndoRecord R(RecType::MoveJoint);
+        R.TypeCoords(tj);
+        R.g = tj;
+        R.coords_old = GOMovCoords;
+        PlacemForward(R);
+    }
+}
+
 void RecordChangedProps(GraphicObject* g, PropCellBase* pre_change_props) {
     UndoRecord R(RecType::PropChange);
     R.TypeCoords(g);
@@ -395,13 +407,14 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         }
             
         case RecType::MoveGO:  /* UNDO */
+            MoveGO(R.Find(), R.coords_old);
+            break;
+            
+        case RecType::MoveJoint:  /* UNDO */
         {
-            GOptr g = R.Find();
+            assert(R.g->TypeID() == TypeId::JOINT);
             auto [x,y] = R.coords_old;
-            if (R.obj_type == TypeId::JOINT)
-                ((TrackJoint*)g)->MoveToNewWPpos(x, y);
-            else
-                MoveGO(g, R.coords_old);
+            ((TrackJoint*)R.g)->MoveToNewWPpos(x, y);
             break;
         }
             
@@ -538,13 +551,19 @@ void Redo() {
         case RecType::MoveGO:    /* REDO */
         {
             GOptr g = R.FindOld();
-            auto [x, y] = R.coords;
-            if (R.obj_type == TypeId::JOINT)
-                ((TrackJoint*)g)->MoveToNewWPpos(x, y);
-            else
-                MoveGO(g, R.coords);
+            assert(R.g->TypeID() != TypeId::JOINT);
+            MoveGO(g, R.coords);
             break;
         }
+            
+        case RecType::MoveJoint:    /* REDO */
+        {
+            assert(R.g->TypeID() == TypeId::JOINT);
+            auto [x, y] = R.coords;
+            ((TrackJoint*)R.g)->MoveToNewWPpos(x, y);
+            break;
+        }
+
             
         case RecType::PropChange:    /* REDO */
         {
