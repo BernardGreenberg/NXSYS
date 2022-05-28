@@ -12,7 +12,7 @@
 #include "nxgo.h"
 
 void ConsignToLimbo(GraphicObject* g);
-GraphicObject* ResurrectFromLimbo(GraphicObject * g);
+GraphicObject* ResurrectFromLimbo(GraphicObject * g, TypeId expected_type);
 void ClearLimbo();
 
 #endif /* Limbo_h */

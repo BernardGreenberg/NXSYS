@@ -179,8 +179,6 @@ class TrackJoint
                     tj->NumFlip = NumFlip;
                     rplbl = true;
                 }
-                if (rplbl)
-                    tj->PositionLabel();
                 if (wp_x != tj->wp_x || wp_y != tj->wp_y)
                     tj->MoveToNewWPpos(wp_x, wp_y);
                 if (SBS != SwitchBranchSnapshot(tj->TSA)) {
@@ -189,6 +187,10 @@ class TrackJoint
                     // Forward ref to TrackSeg no good
                     ((GraphicObject*)((*tj)[TSAX::NORMAL]))->Select();
                 }
+                // does a "get organization", must be done last.
+                if (rplbl)
+                    tj->PositionLabel();
+
             }
         };
 

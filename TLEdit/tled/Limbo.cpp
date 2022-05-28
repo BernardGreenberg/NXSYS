@@ -40,9 +40,10 @@ void GraphicObject::ConsignToLimbo() {
 }
 
 
-GOptr ResurrectFromLimbo(GOptr g) {
+GOptr ResurrectFromLimbo(GOptr g, TypeId expected_type) {
     assert(g && "Null passed into Resurrect");
     assert(Limbo.count(g) && "Object not found in Limbo");
+    assert(g->TypeID() == expected_type);
     Limbo.erase(g);
     g->AfterResurrection();
     g->MakeSelfVisible();

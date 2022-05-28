@@ -992,7 +992,7 @@ void TrackJoint::FlipNum() {
     if (TSCount > 1) {
         CacheInitSnapshot();
 	NumFlip = !NumFlip;
-        Undo::RecordChangedProps(this, StealPropCache());
+        Undo::RecordChangedJointProps(this, StealPropCache());
 	PositionLabel();
     }
 }

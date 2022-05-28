@@ -324,6 +324,7 @@ void RecordWildfireTCSpread(SegmentGroupMap& SGM, IJID new_tcid) {
 void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id) {
     UndoRecord R(RecType::CreateJoint);
     R.TypeCoords(tj);
+    R.g = tj;
     R.seg_id = seg_id;
     R.Nomenclature = tj->Nomenclature;
     PlacemForward(R);
@@ -337,10 +338,7 @@ void RecordSegmentCut (TrackSeg* ts) {
     R.obj_type = TypeId::TRACKSEG;
     R.coords_old = Coords(ts->Ends[0].Joint);
     R.coords     = Coords(ts->Ends[1].Joint);
-    if (ts->Circuit)
-        R.Nomenclature = ts->Circuit->StationNo;
-    else
-        R.Nomenclature = 0;
+    R.Nomenclature = ts->TCNO();
     PlacemForward(R);
 }
 
@@ -395,6 +393,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             
         case RecType::CutGO:  /* UNDO */
         {
+            assert(R.obj_type != TypeId::JOINT);
             GOptr obj = ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
             obj->MakeSelfVisible();
             obj->Select();
@@ -402,12 +401,13 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         }
 
         case RecType::CreateJoint:  /* UNDO */
-            ((TrackJoint*)R.Find())->Cut_();
+            assert(R.g && R.g->TypeID() == TypeId::JOINT);
+            ((TrackJoint*)R.g)->Cut_();
             break;
             
         case RecType::CutJoint:  /* UNDO */
         {
-            auto tj = (TrackJoint*)ResurrectFromLimbo(R.g);
+            auto tj = (TrackJoint*)ResurrectFromLimbo(R.g, TypeId::JOINT);
             tj->TSCount = 0;
             /*
             auto tj = (TrackJoint*)ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
@@ -418,11 +418,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             tj->MoveToNewWPpos(dest_loc.wp_x, dest_loc.wp_y);
             break;
         }
-            
-        case RecType::MoveGO:  /* UNDO */
-            MoveGO(R.Find(), R.coords_old);
-            break;
-            
+
         case RecType::MoveJoint:  /* UNDO */
         {
             assert(R.g->TypeID() == TypeId::JOINT);
@@ -431,6 +427,12 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             break;
         }
             
+        case RecType::MoveGO:  /* UNDO */
+            assert(R.obj_type != TypeId::JOINT);
+            MoveGO(R.Find(), R.coords_old);
+            break;
+            
+     
         case RecType::PropChange:  /* UNDO */
         {
             StatusMessage("");  //clear left-over object descriptions.
@@ -459,13 +461,13 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             
         case RecType::CutSegment:  /* UNDO */
         {
-            auto seg = (TrackSeg*)ResurrectFromLimbo(R.g);
+            auto seg = (TrackSeg*)ResurrectFromLimbo(R.g, TypeId::TRACKSEG);
             auto tj1 = (TrackJoint*)R.g1;
             auto tj2 = (TrackJoint*)R.g2;
             if (tj1->TSCount == 0)
-                ResurrectFromLimbo(tj1);
+                ResurrectFromLimbo(tj1, TypeId::JOINT);
             if (tj2->TSCount == 0)
-                ResurrectFromLimbo(tj2);
+                ResurrectFromLimbo(tj2, TypeId::JOINT);
 
             seg->SetTrackCircuit(R.Nomenclature);
             tj1->AddBranch(seg);
@@ -494,7 +496,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         {
             /* Wheeeeee!  5-21-2022 */
             auto receiver = (TrackJoint*)R.g;
-            auto movee = (TrackJoint*)ResurrectFromLimbo(R.g1);
+            auto movee = (TrackJoint*)ResurrectFromLimbo(R.g1, TypeId::JOINT);
             movee->Nomenclature = R.Nomenclature;
             for (auto tj : R.OppJoints) {
                 for (int oxi = 0; oxi < tj->TSCount; oxi++) {
@@ -558,7 +560,7 @@ void Redo() {
         case RecType::CreateJoint:    /* REDO */
         {
             auto seg = (TrackSeg*) FindObjByLoc(TypeId::TRACKSEG, R.seg_id);
-            auto tj = new TrackJoint(R.coords);
+            auto tj = (TrackJoint*)ResurrectFromLimbo(R.g, TypeId::JOINT);
             seg->Split(R.coords.wp_x, R.coords.wp_y, tj);
             tj->Select();
             break;
