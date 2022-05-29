@@ -13,6 +13,7 @@
 #include "Limbo.h"
 #include "xtgtrack.h"
 #include "LayoutModified.h"
+#include "salvager.hpp"
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -116,7 +117,6 @@ struct UndoRecord {
         obj_type = other.obj_type;
         coords = other.coords;
         coords_old = other.coords_old;
-        seg_id = other.seg_id;
         Nomenclature = other.Nomenclature;
         g = other.g;
         g1 = other.g1;
@@ -140,7 +140,6 @@ struct UndoRecord {
     /* Little structures. */
     Coords coords {0,0};
     Coords coords_old {-1,-1};
-    WPPOINT seg_id{0,0};
 
     /* Self-important pointers */
     std::unique_ptr<PropCellBase> orig_props;
@@ -230,9 +229,6 @@ static GOptr FindObjByLoc(TypeId type, const Coords& C, bool nf_ok) {
     return g;
 }
 
-static GOptr FindObjByLoc(TypeId type, const WPPOINT& wp) {
-    return FindObjByLoc(type, Coords(wp));
-}
 
 static Coords GOMovCoords {0, 0};
 
@@ -321,11 +317,12 @@ void RecordWildfireTCSpread(SegmentGroupMap& SGM, IJID new_tcid) {
     PlacemForward(R);
 }
 
-void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id) {
+void RecordJointCreation(TrackJoint* tj, TrackSeg* splitee, TrackSeg* new_seg) {
     UndoRecord R(RecType::CreateJoint);
     R.TypeCoords(tj);
     R.g = tj;
-    R.seg_id = seg_id;
+    R.g1 = splitee;
+    R.g2 = new_seg;
     R.Nomenclature = tj->Nomenclature;
     PlacemForward(R);
 }
@@ -409,12 +406,16 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         {
             auto tj = (TrackJoint*)ResurrectFromLimbo(R.g, TypeId::JOINT);
             tj->TSCount = 0;
-            /*
-            auto tj = (TrackJoint*)ProcessNonGraphObjectCreateFormString(R.recreate_form.c_str());
-             */
+
             Coords dest_loc(tj);
             auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG, R.coords_old);
-            seg->Split(R.coords_old.wp_x, R.coords_old.wp_y, tj);
+            TrackSeg* seg2=nullptr;
+            if (seg == tj->TSA[0]) //might be a better way
+                seg2 = tj->TSA[1];
+            else if (seg == tj->TSA[1])
+                seg2 =tj->TSA[0];
+            assert(seg2);
+            seg->Split(R.coords_old.wp_x, R.coords_old.wp_y, tj, seg2);
             tj->MoveToNewWPpos(dest_loc.wp_x, dest_loc.wp_y);
             break;
         }
@@ -473,6 +474,10 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             tj1->AddBranch(seg);
             tj2->AddBranch(seg);
             /* Ends[*].joint should already be right (1 or 2 of them), from Limbo */
+            assert (!(seg->Ends[0].Joint != tj1 && seg->Ends[1].Joint != tj1 &&
+                      seg->Ends[0].Joint != tj2 && seg->Ends[1].Joint != tj2));
+            SALVAGER("Recreate segment");
+
             seg->Select();
             break;
         }
@@ -526,6 +531,7 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
 void Undo() {
     if (!IsUndoPossible())
         return;
+    SALVAGER("Top of undo");
     UndoRecord& R = UndoStack.back();
     RecType rt = R.rec_type;
     switch(rt) {
@@ -540,11 +546,13 @@ void Undo() {
     }
     UndoStack.pop_back();
     compute_menu_state();
+    SALVAGER("After Undo");
 }
 
 void Redo() {
     if (!IsRedoPossible())
         return;
+    SALVAGER("Top of redo");
     UndoRecord& R = RedoStack.back();
     RecType rt = R.rec_type;
     bool already_emplaced = false;
@@ -559,9 +567,12 @@ void Redo() {
 
         case RecType::CreateJoint:    /* REDO */
         {
-            auto seg = (TrackSeg*) FindObjByLoc(TypeId::TRACKSEG, R.seg_id);
+            assert(R.g1->TypeID() == TypeId::TRACKSEG);
+            //assert not in limbo
+            auto seg = (TrackSeg*) R.g1;
             auto tj = (TrackJoint*)ResurrectFromLimbo(R.g, TypeId::JOINT);
-            seg->Split(R.coords.wp_x, R.coords.wp_y, tj);
+            auto newseg = (TrackSeg*)ResurrectFromLimbo(R.g2, TypeId::TRACKSEG);
+            seg->Split(R.coords.wp_x, R.coords.wp_y, tj, newseg);
             tj->Select();
             break;
         }
@@ -646,6 +657,7 @@ void Redo() {
         UndoStack.emplace_back(std::move(R));
     RedoStack.pop_back();
     compute_menu_state();
+    SALVAGER("After Redo");
 }
 
 struct JointCutSnapInfo {

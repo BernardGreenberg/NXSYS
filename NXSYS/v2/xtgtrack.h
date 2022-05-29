@@ -28,6 +28,7 @@ class Turnout;
 
 #include "propedit.h"
 #include "ijid.h"
+#include "salvager.hpp"
 
 #ifdef TLEDIT
 /* Theoretically, a segment group should never have more than one IJID, but such
@@ -190,7 +191,6 @@ class TrackJoint
                 // does a "get organization", must be done last.
                 if (rplbl)
                     tj->PositionLabel();
-
             }
         };
 
@@ -297,7 +297,7 @@ public:
 	TrackJoint * FindOtherJoint (TrackJoint * tj);
 	void Align(WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2);
 	void Align();
-	void Split(WP_cord wpx1, WP_cord wpy1, TrackJoint* tj);
+	void Split(WP_cord wpx1, WP_cord wpy1, TrackJoint* tj, TrackSeg* new_seg=nullptr);
 	~TrackSeg();
 
 	virtual void Display (HDC dc);

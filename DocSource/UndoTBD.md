@@ -1,9 +1,16 @@
 # Undo TBDs
 
 Close main window while dialogs up crashes; should not be allowed.
+(can't repro)
 
-Switches do not restore with attributes properly.  Fully conf. diamond  
-xover asserts in Joint::Cut_ during complete undo (attempt)	
+Free-store console tracing  
+transaction records unique-ptr'd in undo-record.  
+Undo/action console tracing
+
+________
+FUTURES
+
+Allow "5B" ID to switch props.
 
 Modification status in titlebar (*)    
 

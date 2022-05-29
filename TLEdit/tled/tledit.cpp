@@ -160,13 +160,12 @@ static void DefButtonUp2 (int x, int y) {
                         "of the one being created.");
                 return;
             }
-            WPPOINT seg_id = ts->WPPoint();
-            tj = new TrackJoint(wpx, wpy);
-            ts->Split (wpx, wpy, tj);
-            Undo::RecordJointCreation(tj, seg_id);
         }
-        else
-            tj = new TrackJoint(wpx, wpy);
+
+        tj = new TrackJoint(wpx, wpy);
+
+        if (ts)
+            ts->Split (wpx, wpy, tj); // will record for undo
     }
     else if (!valid_drop_target(tj)) {
         if (tj == DefStartTrackJoint) {
@@ -182,14 +181,11 @@ static void DefButtonUp2 (int x, int y) {
 
     /* This is the COMMIT point */
 
-    if (DefStartTrackSeg) {
-        WPPOINT seg_id = DefStartTrackSeg->WPPoint();
+    if (DefStartTrackSeg)
+        // will record to Undo
 	DefStartTrackSeg->Split (DefStartTrackJoint->wp_x,
                                            DefStartTrackJoint->wp_y,
                                            DefStartTrackJoint);
-        Undo::RecordJointCreation(DefStartTrackJoint, seg_id);
-    }
-
     if (tj) {
 	TrackSeg * ts = new TrackSeg (DefStartTrackJoint->wp_x,
                                       DefStartTrackJoint->wp_y,
@@ -345,9 +341,7 @@ static void MovButtonDown (HWND hWnd, int x, int y) {
 	TrackSeg * ts = SnapToTrackSeg (wpx, wpy);
 	if (ts) {
 	    MovTrackJoint = new TrackJoint (wpx, wpy);
-            WPPOINT unsplit_wp = ts->WPPoint();
 	    ts->Split (wpx, wpy, MovTrackJoint);
-            Undo::RecordJointCreation(MovTrackJoint, unsplit_wp);
 	}
 	else
 	    return;
@@ -797,7 +791,7 @@ void TrackJoint::Cut_() {
     // Salvager will fail if we salvage here.  ... Message box will make redisplay crash, too
     ts1.ConsignToLimbo();
     ConsignToLimbo();       // No more "delete"....
-    SALVAGER("TrackJoint::Cut final");
+    SALVAGER("TrackJoint::Cut_ final");
 }
 
 
@@ -847,7 +841,7 @@ void TrackSeg::Cut_() {
     if (j1->TSCount == 0)
         j1->ConsignToLimbo();
     ConsignToLimbo();
-    SALVAGER("TrackSeg::Cut final");
+    SALVAGER("TrackSeg::Cut_ final");
 }
 
 

@@ -66,6 +66,7 @@ void SalvInstance::ErrorCommon(const string& description, const char* ctlstring,
     MessageBox(nullptr, message.c_str(), "Structure Salvager Diagnostic", MB_OK);
 #ifdef DEBUG
     (void)ctlstring;
+    __builtin_trap();
 #endif
 }
 

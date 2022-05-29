@@ -11,6 +11,8 @@
 #include "xtgtrack.h"
 #include "typeid.h"
 #include "brushpen.h"
+#include "salvager.hpp"
+#include "undo.h"
 
 #include "pival.h"
 #include "NXSYSMinMax.h"
@@ -241,13 +243,14 @@ void TrackSeg::DisplayInState (HDC dc, int control) {
 }
 
 
-void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
+void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj, TrackSeg* new_seg) {
  
     /*  Ends[0]            this                       Ends[1] */
     /*  Ends[0]  this      Ends[1] TJ [ENDS[0]  nts   Ends[1]] */
 
-    TrackSeg* nts = new TrackSeg
-		    (Ends[0].wpx, Ends[0].wpy, Ends[1].wpx, Ends[1].wpy);
+    TrackSeg * nts = new_seg;
+    if (!nts)
+        nts = new TrackSeg(Ends[0].wpx, Ends[0].wpy, Ends[1].wpx, Ends[1].wpy);
     nts->Align (wpx1, wpy1, Ends[1].wpx, Ends[1].wpy);
     nts->Ends[1] = Ends[1];
     if (Ends[1].SignalProtectingEntrance) {
@@ -277,6 +280,9 @@ void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
     nts->Invalidate();
     tj->AddBranch(this);
     tj->AddBranch(nts);
+    if (!new_seg)
+        Undo::RecordJointCreation(tj, this, nts);
+    SALVAGER("End of Split()");
 }
 
 

@@ -30,7 +30,7 @@ void RecordChangedProps(GraphicObject* g, PropCellBase* pcp);
 void RecordChangedJointProps(TrackJoint* tj, PropCellBase* pcp);
 void RecordIrreversibleAct(const char * description);
 void RecordWildfireTCSpread(SegmentGroupMap& SGM, IJID new_tcid);
-void RecordJointCreation(TrackJoint* tj, WPPOINT seg_id);
+void RecordJointCreation(TrackJoint* tj, TrackSeg* splitee, TrackSeg* new_seg);
 void RecordSegmentCut(TrackSeg* ts);
 void RecordSegmentCreation(TrackSeg* ts);
 void RecordShiftLayout(int deltax, int deltay);

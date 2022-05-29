@@ -12,6 +12,7 @@
 #include "typeid.h"
 #include "brushpen.h"
 #include "SwitchConsistency.h"
+#include "salvager.hpp"
 
 #include "pival.h"
 
@@ -236,7 +237,6 @@ static int OrgDataCompare (const void * e1p, const void * e2p) {
 }
 
 void TrackJoint::GetOrganization (JointOrganizationData *jod) {
-
     int i;
 //    assert(TSCount == 3); not so
     /* Compute positive, clockwise angles from positive X origin */
