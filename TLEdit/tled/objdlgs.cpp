@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <regex>
 
 #include "compat32.h"
 #include "nxgo.h"
@@ -20,6 +21,7 @@
 #include <utility>
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
+#include "ValidatingValue.h"
 
 #include "SwitchConsistency.h"
 
@@ -59,9 +61,21 @@ BOOL GetDlgItemCheckState (HWND hDlg, UINT id) {
 
 #endif
 
+static std::regex SwLeverPat("^(\\d{1,5})(A|B)?$", std::regex_constants::icase);
+static ValidatingValue<std::pair<int, int>> ParseSwitchLeverField(const std::string s) {
+    std::smatch sm;
+    if (regex_match(s, sm, SwLeverPat)) {
+        int swno = std::stoi(sm[1].str());
+        if (sm[2].length()== 0)
+            return std::pair<int,int>(swno, 0);
+        else
+            return std::pair<int, int>(swno, stoupper(sm[2].str()).c_str()[0] - 'A' + 1);
+    }
+    return {};
+}
+
 BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 
-    BOOL es;
     /* This really needs a dialog-instance object, as in both MFC and Cocoa, but ...*/
     static SwitchBranchSnapshot SSBS;
     switch (message) {
@@ -72,7 +86,7 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
             SSBS.Init(TSA);  /* snapshot the branches */
 	    return TRUE;
 	case WM_COMMAND:
-	    switch (wParam) {
+	    switch (LOWORD(wParam)) {
 		case IDOK:
 		{
 		    int AB0 = 0;
@@ -82,11 +96,15 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
 			    AB0 = i;
 		    if (AB0 != SwitchAB0)
 			nchange = 1;
-		    IJID newnom = GetDlgItemInt (hDlg, IDC_SWITCH_EDIT, &es, FALSE);
-		    if (!es) {
-			uerr (hDlg, "Bad number in Switch ID.");
-			return TRUE;
-		    }
+                    IJID newnom;
+                    {
+                        if (auto vv = ParseSwitchLeverField(GetDlgItemText(hDlg, IDC_SWITCH_EDIT)))
+                            newnom = vv.value.first;
+                        else {
+                            uerr (hDlg, "Bad number in Switch ID.");
+                            return TRUE;
+                        }
+                    }
 		    if (newnom != Nomenclature) {
                         std::string complaint;
                         if (!SwitchConsistencyDefineCheck(newnom, AB0, complaint)) {
@@ -132,6 +150,13 @@ BOOL_DLG_PROC_QUAL TrackJoint::SwitchDlgProc  (HWND hDlg, UINT message, WPARAM w
                     EditProperties();  /* quel crocque ...*/
                     EditAsJointInProgress = false;
                     return TRUE;
+                case IDC_SWITCH_EDIT:  /* poorly-named "lever number" */
+                    if (auto vv = ParseSwitchLeverField(GetDlgItemText(hDlg, IDC_SWITCH_EDIT))) {
+                        for (int i = 0; i < 3; i++)
+                            SetDlgItemCheckState (hDlg, SwitchIsIDs[i], i == vv.value.second);
+                    }
+                    return TRUE;
+
 		default:
 		    return FALSE;
 	    }

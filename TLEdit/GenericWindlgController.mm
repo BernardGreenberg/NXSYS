@@ -339,6 +339,14 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
     NSControl* control = (NSControl*)view;
     [control setEnabled: yesNo ? YES : NO];
 }
+
+/* 5/29/2022 that worked well! */
+-(void)controlTextDidChange:(NSNotification *)notification {
+    NSTextField *textField = [notification object];
+    auto tag = [textField tag];                  /* Guten tag! */
+    int wparam = (int) tag; /* really want EN_CHANGE in upper word */
+    callWndProcGeneralCommandParam(hDlg, self.NXGObject, wparam, 0);
+}
 @end
 
 /* Can't use static STL -- load time initializes it at unpredictable time compared to our registrees */

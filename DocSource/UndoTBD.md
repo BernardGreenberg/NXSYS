@@ -4,13 +4,11 @@ Close main window while dialogs up crashes; should not be allowed.
 (can't repro)
 
 Free-store console tracing  
-transaction records unique-ptr'd in undo-record.  
+Free-store transaction records unique-ptr'd in undo-record.  
 Undo/action console tracing
 
 ________
 FUTURES
-
-Allow "5B" ID to switch props.
 
 Modification status in titlebar (*)    
 
@@ -23,4 +21,5 @@ Windows implementation
 - Menu management function 
 - Package new document; clip old one.
 - Segment dialog changes, no wildfire ctl
+- Test "15B" feature.
 
