@@ -552,6 +552,7 @@
 		5BD064DE19CEE9E300564BD5 /* TLEditMainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TLEditMainView.mm; sourceTree = "<group>"; };
 		5BD6200B19CD997C00DB8A8F /* TrackSegProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrackSegProperties.xib; sourceTree = "<group>"; };
 		5BD6200D19CD9E6E00DB8A8F /* TrackSegDialog.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TrackSegDialog.mm; sourceTree = "<group>"; };
+		5BD7ADA828454CE6000A1CF5 /* DocSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DocSource; sourceTree = "<group>"; };
 		5BE487CC199D0A5C007BD6BF /* NXSYSMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NXSYSMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE487CF199D0A5C007BD6BF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5BE487D2199D0A5C007BD6BF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -1213,6 +1214,7 @@
 		5BE487C3199D0A5C007BD6BF = {
 			isa = PBXGroup;
 			children = (
+				5BD7ADA828454CE6000A1CF5 /* DocSource */,
 				5BB5803C27C5586000FB0ED5 /* Help.xml */,
 				5BB5803A27C44EE100FB0ED5 /* TLEDocumentation */,
 				5BB5803027C40E2400FB0ED5 /* Interlockings */,

@@ -14,7 +14,8 @@ Undo/action console tracing
 ________
 FUTURES
 
-Modification status in titlebar (*)    
+Modification status in titlebar (*)  
+Maybe undo, redo, save (open?) icons, on Mac.    
 
 Undo stack before save (document how to use).  Save-point size() stack.
 - may need tick-counter.  

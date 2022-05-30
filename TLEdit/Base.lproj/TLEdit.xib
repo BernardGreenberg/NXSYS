@@ -559,7 +559,7 @@ CA
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                         <items>
-                            <menuItem title="TLEdit / Mac Help" id="4Ph-e6-2JE">
+                            <menuItem title="TLEdit / Mac Help" hidden="YES" enabled="NO" id="4Ph-e6-2JE">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="MacHelp:" target="Voe-Tx-rLC" id="KPh-PF-czO"/>
