@@ -268,11 +268,6 @@ void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj, TrackSeg* new
 	if (Ends[1].Joint->TSA[j] == this)
 	    Ends[1].Joint->TSA[j] = nts;
     Ends[1].Joint = nts->Ends[0].Joint = tj;
-#ifdef REALLY_NXSYS
-    assert(!"wtf why should this ever be doing this in real_nxsys!?!?!");
-    Ends[1].Next = nts;
-    nts->Ends[0].Next = this;
-#endif
     if (Circuit)
 	Circuit->AddSeg(nts);
     nts->GetVisible();
@@ -280,9 +275,11 @@ void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj, TrackSeg* new
     nts->Invalidate();
     tj->AddBranch(this);
     tj->AddBranch(nts);
+#if TLEDIT
     if (!new_seg)
         Undo::RecordJointCreation(tj, this, nts);
     SALVAGER("End of Split()");
+#endif
 }
 
 
