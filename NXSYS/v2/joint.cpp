@@ -64,6 +64,15 @@ TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
 #endif
 }
 
+#ifdef TLEDIT
+bool TrackJoint::HasManagedID() {
+    return true;
+}
+
+int TrackJoint::ManagedID() {
+    return (int)Nomenclature;
+}
+#endif
 
 TrackJoint::~TrackJoint () {
 #if TLEDIT

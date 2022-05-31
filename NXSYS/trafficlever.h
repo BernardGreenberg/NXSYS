@@ -71,6 +71,8 @@ class TrafficLever : public GraphicObject, public PropEditor<TrafficLever> {
         }
     };
 
+    virtual bool HasManagedID();
+    virtual int ManagedID();
     virtual void EditClick(int x, int y);
     virtual ~TrafficLever();
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);

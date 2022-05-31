@@ -151,11 +151,9 @@ static void GraphicsWindow_Rodentate
 }
 
 
-static int MapAssignIDs(GraphicObject * g) {
+static int MapJoints(GraphicObject * g) {
 	TrackJoint * tj = (TrackJoint*)g;
-	if (tj->Nomenclature)
-		MarkIDAssign((int)(tj->Nomenclature));
-	else
+	if (!tj->Nomenclature)
 		if (tj->Insulated || tj->TSCount != 2)
 			tj->Nomenclature = AssignID(1);
 	if ((tj->Insulated || tj->TSCount != 2)
@@ -164,11 +162,9 @@ static int MapAssignIDs(GraphicObject * g) {
 	return 0;
 }
 
-static int MapAssignSigNos(GraphicObject * g) {
+static int MapNormSigHeads(GraphicObject * g) {
 	PanelSignal * ps = (PanelSignal *)g;
 	Signal * s = ps->Sig;
-	if (s->XlkgNo)
-		MarkIDAssign(s->XlkgNo);
 	if (s->HeadsString.empty())
         s->HeadsString = "GYR";
 	return 0;
@@ -218,14 +214,22 @@ static BOOL ReadIt() {
 	}
 	ClearItOut();
 	if (XTGLoad(f)) {
+        fclose(f);
+
 		InitAssignID();
-		MapGraphicObjectsOfType(TypeId::JOINT, MapAssignIDs);
-		MapGraphicObjectsOfType(TypeId::SIGNAL, MapAssignSigNos);
+        MapAllGraphicObjects([](GraphicObject* g, void*) {
+            if (g->HasManagedID())
+                if (int id = g->ManagedID())
+                    MarkIDAssign(id);
+            return 0;
+        }, nullptr);
+		MapGraphicObjectsOfType(TypeId::JOINT, MapJoints);
+		MapGraphicObjectsOfType(TypeId::SIGNAL, MapNormSigHeads);
         SetMainWindowTitle(FileName.c_str());
 		ComputeVisibleObjectsLast();
 		FullRedisplay();
 		FixOrigin(false, true);
-		fclose(f);
+
 		return TRUE;
 	}
 	fclose(f);

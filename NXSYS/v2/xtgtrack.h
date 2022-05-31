@@ -194,6 +194,8 @@ class TrackJoint
             }
         };
 
+        virtual bool HasManagedID();
+        virtual int  ManagedID();
 	virtual void Select();
 	virtual void ShiftLayout2();
 	virtual void Cut();
@@ -404,6 +406,8 @@ class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
 	virtual bool IsNomenclature(IJID);
 	virtual void ComputeWPRect();
 #ifdef TLEDIT
+        virtual bool HasManagedID();
+        virtual int  ManagedID();
 	virtual void Select();
 	virtual int Dump (ObjectWriter& W);
 #else

@@ -5,6 +5,7 @@
 #include "nxgo.h"
 #include "xtgtrack.h"
 #include "tledit.h"
+#include "assignid.h"
 #include "trafficlever.h"
 #include "resource.h"
 #include "tlpropdlg.h"
@@ -16,12 +17,36 @@
 
 static Dragger Dragon;
 
-TrafficLever::~TrafficLever() {}
+TrafficLever::~TrafficLever() {
+    if (XlkgNo)
+        DeAssignID(XlkgNo);
+    XlkgNo = 0; /* ihr Kleinglaubigen... */
+}
+
+/* There is a different version of this methodfor NXSYS proper in trafficlever.cpp */
+void TrafficLever::SetXlkgNo (int xno) {
+    if (XlkgNo != xno) {
+        if (XlkgNo)
+            DeAssignID(XlkgNo);
+        XlkgNo = xno;
+        NumString = std::to_string(XlkgNo);
+        if (XlkgNo)
+            MarkIDAssign(XlkgNo);
+    }
+}
 
 static GraphicObject* CreateTrafficLever (int wpx, int wpy) {
     if (Dragon.Movingp())
 	return NULL;
     return Dragon.StartMoving (new TrafficLever (0, wpx, wpy, 0), "New Traffic Lever", G_mainwindow);
+}
+
+bool TrafficLever::HasManagedID() {
+    return true;
+}
+
+int TrafficLever::ManagedID() {
+    return (int)XlkgNo;
 }
 
 REGISTER_NXTYPE(TypeId::TRAFFICLEVER, CmTrafficLever, IDD_TRAFFICLEVER, CreateTrafficLever, InitTrafficLeverData);
@@ -66,16 +91,24 @@ BOOL_DLG_PROC_QUAL TrafficLever::DlgProc  (HWND hDlg, UINT message, WPARAM wPara
                         uerr (hDlg, "Bad number in Panel Y coordinate.");
                         return TRUE;
                     }
-                    long newnom = GetDlgItemInt (hDlg, IDC_TRAFFICLEVER_LEVER, &es, FALSE);
+                    int newnom = (int)GetDlgItemInt (hDlg, IDC_TRAFFICLEVER_LEVER, &es, FALSE);
 		    if (!es) {
 			uerr (hDlg, "Bad lever number.");
 			return TRUE;
 		    }
+                    if (newnom != XlkgNo && !CheckID(newnom)) {
+                        uerr(hDlg, "Lever number %d is already in use.", newnom);
+                        return TRUE;
+                    }
+
                     /* commit; change stuff.*/
                     bool changed = false;
 		    if (newnom != XlkgNo) {
-			SetXlkgNo((int)newnom);
-			StatusMessage ("Traffic Lever %ld", newnom);
+                        if (XlkgNo)
+                            DeAssignID(XlkgNo);
+                        MarkIDAssign(newnom);
+			SetXlkgNo(newnom);  /* assigns # */
+			StatusMessage ("Traffic Lever %d", newnom);
                         changed = true;
 		    }
 		    int new_right_normal = GetDlgItemCheckState

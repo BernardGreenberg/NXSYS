@@ -5,7 +5,6 @@ Close main window while dialogs up crashes; should not be allowed.
 
 ID re-use doesn't work at all.  
 Document the policy, once found   
-Traffic Lev # management.
 
 Free-store console tracing  
 Free-store transaction records unique-ptr'd in undo-record.  

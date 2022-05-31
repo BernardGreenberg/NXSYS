@@ -16,6 +16,8 @@ virtual void    EditClick (int x, int y); /* accpted left click */
 virtual void    ShiftLayout (int delta_x, int delta_y);
 virtual void    ShiftLayout2();		/* used only for track/joints */
 virtual UINT    DlgId();		/* resource ID */
+virtual bool    HasManagedID();
+virtual int     ManagedID();
 virtual BOOL_DLG_PROC_QUAL DlgProc			/* properties edit dialog proc */
                    (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 void            EditProperties();

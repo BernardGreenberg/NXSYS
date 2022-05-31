@@ -317,6 +317,14 @@ int PanelSignal::Dump (ObjectWriter& W) {
     return SIGNAL_DUMP_ORDER;
 }
 
+bool PanelSignal::HasManagedID() {
+    return true;
+}
+
+int PanelSignal::ManagedID() {
+    return (int)(Sig->XlkgNo);
+}
+
 void PanelSignal::PropCell::Snapshot_(PanelSignal * p) {
     SnapWPpos(p);  /* dlg can't move it, but undo system needs it */
     Signal * S = p->Sig;

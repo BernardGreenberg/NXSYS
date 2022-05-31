@@ -506,7 +506,11 @@ void NXGOMouseMove (WORD x, WORD y) {
 	NXGOMouseUp();
 }
 
-
+#if TLEDIT
+/* Defaults for virtuals */
+bool GraphicObject::HasManagedID() {return false;}
+int  GraphicObject::ManagedID() {return -1;}
+#endif
 
 
 void NXGO_SetViewportDims (int width, int height) {
