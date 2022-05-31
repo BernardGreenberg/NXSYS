@@ -318,6 +318,7 @@ int PanelSignal::Dump (ObjectWriter& W) {
 }
 
 void PanelSignal::PropCell::Snapshot_(PanelSignal * p) {
+    SnapWPpos(p);  /* dlg can't move it, but undo system needs it */
     Signal * S = p->Sig;
     XlkgNo = S->XlkgNo;
     HasStop = S->TStop != nullptr;
