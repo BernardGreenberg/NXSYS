@@ -198,6 +198,7 @@ static void DefButtonUp2 (int x, int y) {
                          dumper and undoer to err/crash */
 	tj->EnsureID();
 	DefStartTrackJoint->AddBranch(ts);
+        DefStartTrackJoint->Organize(); /* see above cmt */
 	DefStartTrackJoint->EnsureID();
 	ts->Select();
         assert(DefStartTrackJoint->TSCount < 4);
