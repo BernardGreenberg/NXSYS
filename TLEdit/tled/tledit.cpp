@@ -194,7 +194,8 @@ static void DefButtonUp2 (int x, int y) {
 	ts->Ends[0].Joint = DefStartTrackJoint;
 	ts->Ends[1].Joint = tj;
 	tj->AddBranch(ts);
-
+        tj->Organize(); /* might have made a switch; failure to organize would cause
+                         dumper and undoer to err/crash */
 	tj->EnsureID();
 	DefStartTrackJoint->AddBranch(ts);
 	DefStartTrackJoint->EnsureID();
