@@ -26,7 +26,7 @@ using std::vector, std::string;
 using GOptr = GraphicObject*;
 using WPVEC = vector<WPPOINT>;
 GOptr ProcessNonGraphObjectCreateFormString(const char * s);
-
+void AssignFixOrigin(WPPOINT origin);
 
 void SetUndoRedoMenu(const char * undo, const char * redo);
 

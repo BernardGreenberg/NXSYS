@@ -7,6 +7,7 @@
 //
 
 #include <unordered_set>
+#include <cassert>
 #include "nxgo.h"
 #include "xtgtrack.h"
 #include "Limbo.h"

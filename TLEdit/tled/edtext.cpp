@@ -225,9 +225,8 @@ static void GetDlgElementsToLogfont (HWND hDlg) {
 
 
 BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
-#ifdef NXSYSMac
     BOOL es;
-#else
+#ifndef NXSYSMac
     static CHOOSEFONT Cf{};	/* says should be static, beats me */
 #endif
     WP_cord new_wp_x, new_wp_y; /* must be outside "switch" stmt */
@@ -249,7 +248,6 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
-#ifdef NXSYSMac
                     new_wp_x = GetDlgItemInt (hDlg, IDC_ETEXT_WPX, &es, FALSE);
                     if (!es) {
                         uerr (hDlg, "Bad number in Panel X coordinate.");
@@ -260,7 +258,6 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         uerr (hDlg, "Bad number in Panel Y coordinate.");
                         return TRUE;
                     }
-#endif
 		    Invalidate();
 		    
                     S.String = GetDlgItemText (hDlg, IDC_TEXT_TEXT);

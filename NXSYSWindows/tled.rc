@@ -103,7 +103,7 @@ BEGIN
     "^R",           CmRdis,                 ASCII,  NOINVERT
     "^S",           CmSave,                 ASCII,  NOINVERT
     "^W",           CmClear,                ASCII,  NOINVERT
-    "^X",           CmCut,                  ASCII,  NOINVER
+    "^X",           CmCut,                  ASCII,  NOINVERT
     "^Y",           CmRedo,                 ASCII,  NOINVERT
     "^Z",           CmUndo,                 ASCII,  NOINVERT
     VK_BACK,        CmCut,                  VIRTKEY, NOINVERT
@@ -171,7 +171,6 @@ BEGIN
     GROUPBOX        "Track Circuit",IDC_STATIC,161,64,124,52
     EDITTEXT        IDC_EDIT_SEG_TC,225,78,51,14,ES_UPPERCASE | ES_AUTOHSCROLL
     LTEXT           "Relay &ID",IDC_STATIC,170,80,49,10
-    CONTROL         "&Wildfire spread by contact",IDC_EDIT_SEG_SPREAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,169,101,107,10
     PUSHBUTTON      "&Show Track Circuit",IDC_EDIT_SEG_SHOW_TC,177,124,85,14,BS_NOTIFY
     DEFPUSHBUTTON   "OK",IDOK,232,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,232,24,50,14
