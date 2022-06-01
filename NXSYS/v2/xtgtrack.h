@@ -152,7 +152,7 @@ class TrackJoint
         public:
             IJID Nomenclature;
             bool Insulated;
-            bool NumFlip;
+            BOOL NumFlip;  /* BOOL, not bool - it matters! */
             int AB0;
             SwitchBranchSnapshot SBS;
             void Snapshot_(TrackJoint* tj) {

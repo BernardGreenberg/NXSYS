@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <cassert>
 
 #include "compat32.h"
 #include "nxgo.h"

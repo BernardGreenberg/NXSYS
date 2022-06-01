@@ -5,6 +5,7 @@
 #include <math.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <cassert>
 
 #include "compat32.h"
 #include "nxgo.h"
