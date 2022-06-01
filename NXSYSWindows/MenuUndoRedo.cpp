@@ -2,8 +2,7 @@
 #include <string>
 #include "tledit.h"
 #include "tlecmds.h"
-
-extern HWND AppWindow;
+#include "NXSYSWinApp.h"
 
 static void HackMenu(UINT item, const char* text, const char* basic, const char* accel) {
 	std::string S;

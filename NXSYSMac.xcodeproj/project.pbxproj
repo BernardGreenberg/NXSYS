@@ -553,6 +553,7 @@
 		5BD6200B19CD997C00DB8A8F /* TrackSegProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrackSegProperties.xib; sourceTree = "<group>"; };
 		5BD6200D19CD9E6E00DB8A8F /* TrackSegDialog.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TrackSegDialog.mm; sourceTree = "<group>"; };
 		5BD7ADA828454CE6000A1CF5 /* DocSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DocSource; sourceTree = "<group>"; };
+		5BD7ADA928481FFE000A1CF5 /* MenuUndoRedo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MenuUndoRedo.cpp; sourceTree = "<group>"; };
 		5BE487CC199D0A5C007BD6BF /* NXSYSMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NXSYSMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE487CF199D0A5C007BD6BF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5BE487D2199D0A5C007BD6BF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -1022,6 +1023,7 @@
 				5B30B10527E16383000D59C8 /* Setup32 */,
 				5BB5802227C3329900FB0ED5 /* Installer */,
 				5BB5802027C32E7900FB0ED5 /* NXSYSWinApp.h */,
+				5BD7ADA928481FFE000A1CF5 /* MenuUndoRedo.cpp */,
 				5BB5801F27C32E7900FB0ED5 /* WinApp.cpp */,
 				5BB5801D27C1DB1500FB0ED5 /* RecentFileMan.cpp */,
 				5BB5801E27C1DB1500FB0ED5 /* RecentFileMan.h */,
