@@ -22,8 +22,5 @@ Undo stack before save (document how to use).  Save-point size() stack.
 QA produced layouts!
 
 Windows implementation  
-- Menu management function 
 - Package new document; clip old one.
-- Segment dialog changes, no wildfire ctl
-- Test "15B" feature.
-
+- Segment dialog changes

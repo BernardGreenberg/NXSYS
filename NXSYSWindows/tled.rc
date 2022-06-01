@@ -67,6 +67,9 @@ BEGIN
     END
     POPUP "&Edit"
     BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               CmUndo
+        MENUITEM "&Redo\tCtrl+Y",               CmRedo
+        MENUITEM SEPARATOR
         MENUITEM "&Wipe clear\tCtrl+w",         CmClear
         MENUITEM "&Cut\tCtrl+x",                CmCut
         MENUITEM SEPARATOR
@@ -129,7 +132,7 @@ BEGIN
     CTEXT           "Bernard Greenberg",IDC_STATIC,15,83,149,8
     CTEXT           "TLEdit for MS Windows",IDC_STATIC,51,5,77,8
     CTEXT           "NXSYS Version 2 Track Layout Editor",IDC_STATIC,4,16,170,8
-    LTEXT           "Version 2.6.3",IDC_STATIC,66,44,44,8
+    LTEXT           "Version 2.7.0",IDC_STATIC,66,44,44,8
 END
 
 IDD_TLEDIT_HELP DIALOG 100, 100, 329, 258
@@ -152,7 +155,7 @@ BEGIN
     LTEXT           "Error:  the selected switch has no number!",IDC_SWITCH_WARN,7,7,197,8,NOT WS_VISIBLE
     LTEXT           "Edit or assign attributes for the selected switch.  The switch must have a unique number before this plan can be saved in a file.",IDC_STATIC,7,30,215,24
     LTEXT           "Switch &Number",IDC_STATIC,19,60,58,8
-    EDITTEXT        IDC_SWITCH_EDIT,82,58,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_SWITCH_EDIT,82,58,40,14,ES_AUTOHSCROLL
     PUSHBUTTON      "He&uristicate Orientation",IDC_SWITCH_HEURISTICATE,7,97,128,14
     PUSHBUTTON      "S&wap && highlight ""normal""",IDC_SWITCH_SWAP_NORMAL,7,118,128,14
     PUSHBUTTON      "&Highlight normal",IDC_SWITCH_HILITE_NORMAL,7,139,81,14
