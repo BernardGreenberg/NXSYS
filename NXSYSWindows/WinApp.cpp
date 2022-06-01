@@ -366,7 +366,7 @@ WNDPROC_DCL MainWindow_WndProc
 		if (ChooseTrackActive) {
 			EndChooseTrack();
 			GraphicObject* g = FindHitObjectOfType
-			(ID_TRACKSEG, LOWORD(lParam), HIWORD(lParam));
+			(TypeId::TRACKSEG, LOWORD(lParam), HIWORD(lParam));
 			if (g != NULL) {
 				TrainDialog(g, TrainType);
 				break;

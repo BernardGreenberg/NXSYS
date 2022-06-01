@@ -28,7 +28,6 @@ class Turnout;
 
 #include "propedit.h"
 #include "ijid.h"
-#include "salvager.hpp"
 
 #ifdef TLEDIT
 /* Theoretically, a segment group should never have more than one IJID, but such

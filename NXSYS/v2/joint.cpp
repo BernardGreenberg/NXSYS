@@ -12,7 +12,6 @@
 #include "typeid.h"
 #include "brushpen.h"
 #include "SwitchConsistency.h"
-#include "salvager.hpp"
 
 #include "pival.h"
 
