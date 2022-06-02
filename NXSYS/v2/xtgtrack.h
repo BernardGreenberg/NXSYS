@@ -214,6 +214,7 @@ class TrackJoint
 	void	Insulate(bool insulate);
 	void	FlipNum();
 	int	SignalExlightCount();
+        TrackSeg* FindOtherSegOfTwo (TrackSeg * seg);
 	BOOL_DLG_PROC_QUAL SwitchDlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 #endif
 

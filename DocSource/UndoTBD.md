@@ -3,7 +3,7 @@
 Close main window while dialogs up crashes; should not be allowed.
 (can't repro)
 
-Draw a letter A. Midstroke from inserted joint. Undo=>crashes
+	⁃	Draw a letter A. Midstroke from inserted joint. Undo=>crashes
 
 ID re-use doesn't work at all.  
 Document the policy, once found   

@@ -797,12 +797,16 @@ void TrackJoint::Cut_() {
 }
 
 
-TrackSeg* FindOtherSegOfTwo (TrackJoint * tj, TrackSeg * ts) {
-    if (ts == tj->TSA[0])
-	return tj->TSA[1];
-    else if (ts == tj->TSA[1])
-	return tj->TSA[0];
-    else return NULL;
+TrackSeg* TrackJoint::FindOtherSegOfTwo (TrackSeg * seg) {
+    assert(TSCount == 2);
+    if (seg == TSA[0])
+	return TSA[1];
+    else if (seg == TSA[1])
+	return TSA[0];
+    else {
+        assert(!"Can't find alleged seg in joint.");
+        return NULL;
+    }
 }
 
 void TrackSeg::Cut () {
@@ -829,9 +833,9 @@ void TrackSeg::Cut_() {
     TrackJoint * j0 = Ends[0].Joint;
     TrackJoint * j1 = Ends[1].Joint;
     if (j0->TSCount == 2)
-	FindOtherSegOfTwo (j0, this)->Select();
+	j0->FindOtherSegOfTwo (this)->Select();
     else if (j1->TSCount == 2)
-	FindOtherSegOfTwo (j1, this)->Select();
+	j1->FindOtherSegOfTwo (this)->Select();
     else if (j0->TSCount == 3)
 	j0->Select();
     else if (j1->TSCount == 3)
