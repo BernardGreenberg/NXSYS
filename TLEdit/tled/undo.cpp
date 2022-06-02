@@ -243,6 +243,9 @@ static void MarkForwardAction() {
     
 
 static void PlacemForward(UndoRecord& ur) {
+#ifdef DEBUG
+    printf("%s %p\n", ur.DescribeAction("Act").c_str(), ur.g);
+#endif
     UndoStack.emplace_back(std::move(ur));
     MarkForwardAction();
 }
@@ -405,16 +408,10 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
         case RecType::CutJoint:  /* UNDO */
         {
             auto tj = (TrackJoint*)ResurrectFromLimbo(R.g, TypeId::JOINT);
-            tj->TSCount = 0;
 
             Coords dest_loc(tj);
             auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG, R.coords_old);
-            TrackSeg* seg2=nullptr;
-            if (seg == tj->TSA[0]) //might be a better way
-                seg2 = tj->TSA[1];
-            else if (seg == tj->TSA[1])
-                seg2 =tj->TSA[0];
-            assert(seg2);
+            auto seg2 = tj->FindOtherSegOfTwo(seg);
             seg->Split(R.coords_old.wp_x, R.coords_old.wp_y, tj, seg2);
             tj->MoveToNewWPpos(dest_loc.wp_x, dest_loc.wp_y);
             break;

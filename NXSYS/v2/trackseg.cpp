@@ -59,6 +59,9 @@ TrackSeg::TrackSeg (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2){
 #ifdef REALLY_NXSYS
     OwningTurnout = NULL;
     RWLength = -1.0f;			/* "not computed" */
+#else
+    static int TrackSegClock = 1;
+    Clock = TrackSegClock++;
 #endif
 
     Align (wpx1, wpy1, wpx2, wpy2);

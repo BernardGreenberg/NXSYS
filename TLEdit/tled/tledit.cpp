@@ -11,6 +11,7 @@
 #include "brushpen.h"
 #include "xtgtrack.h"
 #include "tletoolb.h"
+#include "STLExtensions.h"
 #ifndef NXSYSMac
 #include "rubberbd.h"
 #endif
@@ -740,6 +741,20 @@ void TrackJoint::Cut () {
 }
 
 void TrackJoint::Cut_() {
+    /* You can't Cut a 1 or a 3, you must "disarm" the 3 and Cut the seg off ofthe 1. */
+    assert(TSCount == 2);
+    
+    /*  2 June 2022
+
+     This fixes a pretty complex bug.  We have to choose the right TS0. It may not be the seg
+     originally put there, because this joint may have had life as a switch, and was "Organized"
+     according to "Radang" etc.  That could have swapped the [0] and [1]. But we can be sure that
+     the older one, by "Clock", which is what it was invented for, was originally [0], and Split
+     takes care to preserve that assumption.  Otherwise, crossovers cannot be undone without error.
+
+     */
+    if (TSA[0]->Clock > TSA[1]->Clock)
+        std::swap(TSA[0], TSA[1]);
 
     TrackSeg& ts0 = *TSA[0];
     TrackSeg& ts1 = *TSA[1];
@@ -829,7 +844,17 @@ void TrackSeg::Cut () {
     Cut_();
 }
 
+static GraphicObject* is_in_list(GraphicObject* argg) {
+    return
+    MapAllGraphicObjects(
+      [](GraphicObject*g, void* argg) {
+          return (int)(g == argg);
+      }, argg);
+}
+
 void TrackSeg::Cut_() {
+    SALVAGER("TrackSeg::Cut_ initial");
+    assert(is_in_list(this));
     TrackJoint * j0 = Ends[0].Joint;
     TrackJoint * j1 = Ends[1].Joint;
     if (j0->TSCount == 2)
@@ -942,8 +967,6 @@ void TrackSeg::Select () {
 }
 
 void TrackSeg::SelectMsg() {
-    char circuit_description [40];
-
     WP_cord delty = Ends[1].wpy - Ends[0].wpy;
     WP_cord deltx = Ends[1].wpx - Ends[0].wpx;
     double angle = atan2((double)delty, (double)deltx) * 180.0 / CONST_PI;
@@ -952,16 +975,20 @@ void TrackSeg::SelectMsg() {
     else if (angle > 90.0)
 	angle -= 180.00;
 
+    std::string addendum;
     if (Circuit == NULL)
-	strcpy (circuit_description, "(no TC assigned)");
-    else 
-	sprintf (circuit_description,
-		  "TC %ld", Circuit->StationNo);
+        addendum = "(no TC assigned)";
+    else
+        addendum = "TC " + std::to_string(Circuit->StationNo);
+#if DEBUG
+    addendum += FormatString(" %p", this);
+#endif
+
     StatusMessage ("Segment: (%d,%d)->(%d,%d), length %.1f direction %.1f  %s",
 		   Ends[0].wpx, Ends[0].wpy,
 		   Ends[1].wpx, Ends[1].wpy,
 		   Length, -angle,
-		   circuit_description);
+                   addendum.c_str());
 }
 
 void TrackJoint::Select () {

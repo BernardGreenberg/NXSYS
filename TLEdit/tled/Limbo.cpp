@@ -11,6 +11,7 @@
 #include "nxgo.h"
 #include "xtgtrack.h"
 #include "Limbo.h"
+#include "objreg.h"
 
 
 using GOptr = GraphicObject*;
@@ -32,8 +33,16 @@ void TrackSeg::PurgeFromLimbo() {
     Ends[1].Joint = nullptr;
     GraphicObject::PurgeFromLimbo();
 }
+#if DEBUG
+static const char * nxtypename(GOptr g) {
+    return NXObjectTypeName(g->TypeID());
+}
+#endif
 
 void GraphicObject::ConsignToLimbo() {
+#if DEBUG
+    printf ("Consign   %s %p\n", nxtypename(this), this);
+#endif
     assert (Limbo.count(this) == 0 && "Object already in Limbo");
     assert (TypeID() == TypeId::TRACKSEG || TypeID() == TypeId::JOINT);
     BeforeInterment();
@@ -43,6 +52,9 @@ void GraphicObject::ConsignToLimbo() {
 
 GOptr ResurrectFromLimbo(GOptr g, TypeId expected_type) {
     assert(g && "Null passed into Resurrect");
+#if DEBUG
+    printf ("Resurrect %s %p\n", nxtypename(g), g);
+#endif
     assert(Limbo.count(g) && "Object not found in Limbo");
     assert(g->TypeID() == expected_type);
     Limbo.erase(g);

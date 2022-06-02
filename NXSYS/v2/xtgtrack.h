@@ -277,6 +277,9 @@ class TrackSegEnd {			//NOT a graphic object
 
 class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
 public:
+    TrackSeg (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2);
+    TrackSeg (WPPOINT p1, WPPOINT p2) : TrackSeg(p1.x, p1.y, p2.x, p2.y) {}
+
     TrackSegEnd Ends[2];
     TrackCircuit * Circuit;
     IJID    TCNO () {return Circuit ? Circuit->StationNo : 0;}
@@ -286,14 +289,13 @@ public:
                       //sw, i.e., to be lit red/white in curr. sw. pos.
 #ifdef TLEDIT
     BOOL    Marked;
+    int     Clock;
 #else
     Turnout *OwningTurnout;
     float   RWLength;  /* real-world length for train sys */
 #endif
 	short TrainCount;
 	short GraphicBlips;
-	TrackSeg (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2);
-        TrackSeg (WPPOINT p1, WPPOINT p2) : TrackSeg(p1.x, p1.y, p2.x, p2.y) {}
 	void DisplayInState (HDC dc, int state);
 	BOOL SnapIntoLine (WP_cord& wpx, WP_cord& wpy);
 	TrackJoint * FindOtherJoint (TrackJoint * tj);
