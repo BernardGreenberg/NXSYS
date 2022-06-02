@@ -61,6 +61,18 @@ BOOL GetDlgItemCheckState (HWND hDlg, UINT id) {
 
 #endif
 
+bool GraphicObject::CheckGONumberReuse(HWND hDlg, long nomenclature) {
+    GraphicObject* g = FindObjectByNomAndType(nomenclature, TypeID());
+    if (!g)
+        return true;   /* not yet established */
+    if (g == this)
+        return true;
+    uerr(hDlg, "Lever number %ld is already in use by another %s.",
+         nomenclature,
+         NXObjectTypeName(TypeID()));
+    return false;
+}
+
 static std::regex SwLeverPat("^(\\d{1,5})(A|B)?$", std::regex_constants::icase);
 static ValidatingValue<std::pair<int, int>> ParseSwitchLeverField(const std::string s) {
     std::smatch sm;

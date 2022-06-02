@@ -96,6 +96,9 @@ BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 			uerr (hDlg, "Bad ExitLight lever number.");
 			return TRUE;
 		    }
+                    if (!CheckGONumberReuse(hDlg, newno))
+                        return TRUE;
+                    
 		    if (newno != XlkgNo) {
 			XlkgNo = newno;
 			Select();	/* cause new status line */

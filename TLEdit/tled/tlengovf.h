@@ -18,6 +18,7 @@ virtual void    ShiftLayout2();		/* used only for track/joints */
 virtual UINT    DlgId();		/* resource ID */
 virtual bool    HasManagedID();
 virtual int     ManagedID();
+virtual bool    CheckGONumberReuse(HWND hDlg, long nomenclature);
 virtual BOOL_DLG_PROC_QUAL DlgProc			/* properties edit dialog proc */
                    (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 void            EditProperties();

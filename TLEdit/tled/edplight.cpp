@@ -127,7 +127,10 @@ BOOL_DLG_PROC_QUAL PanelLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         uerr (hDlg, "Bad lever number.");
                         return TRUE;
                     }
-                    
+
+                    if (!CheckGONumberReuse(hDlg, newnom))
+                        return TRUE;
+
                     int newrad  = GetDlgItemInt (hDlg, IDC_PANELLIGHT_RADIUS, &es, FALSE);
                     if (!es || newrad <= 3) {
                         uerr (hDlg, "Bad radius.");

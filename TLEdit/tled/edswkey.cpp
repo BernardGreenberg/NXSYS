@@ -63,6 +63,9 @@ BOOL_DLG_PROC_QUAL SwitchKey::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 			uerr (hDlg, "Bad lever number.");
 			return TRUE;
 		    }
+
+                    if (!CheckGONumberReuse(hDlg, newnom))
+                        return TRUE;
                     
                     bool mod = false;
 		    if (newnom != XlkgNo) {
