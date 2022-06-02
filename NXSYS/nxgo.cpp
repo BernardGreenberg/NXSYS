@@ -424,7 +424,7 @@ GraphicObject * FindObjectByTypeAndWPpos(TypeId type, WP_cord wp_x, WP_cord wp_y
     return NULL;
 }
 
-GraphicObject * FindHitObject (long nomenclature, TypeId type) {
+GraphicObject * FindObjectByNomAndType (long nomenclature, TypeId type) {
     for (GraphicObject * g : AllObjects) {
 	if (g->TypeID() == type)
 	    if (g->IsNomenclature (nomenclature))

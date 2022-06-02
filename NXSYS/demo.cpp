@@ -85,7 +85,7 @@ static  GraphicObject *  FindDemoObjectByID (long nomen, TypeId type) {
         case TypeId::EXITLIGHT:
         case TypeId::PLATFORM:
         case TypeId::TRAFFICLEVER:
-	    return FindHitObject (nomen, type);
+	    return FindObjectByNomAndType (nomen, type);
         case TypeId::TURNOUT:
 	    return FindDemoHitTurnout (nomen);
         case TypeId::TRACKSEC:

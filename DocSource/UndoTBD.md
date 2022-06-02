@@ -3,17 +3,14 @@
 Close main window while dialogs up crashes; should not be allowed.
 (can't repro)
 
-	⁃	Draw a letter A. Midstroke from inserted joint. Undo=>crashes
-
-ID re-use doesn't work at all.  
-Document the policy, once found   
-
 Free-store console tracing  
 Free-store transaction records unique-ptr'd in undo-record.  
 Undo/action console tracing
 
 ________
 FUTURES
+
+random object number checking.
 
 Modification status in titlebar (*)  
 Maybe undo, redo, save (open?) icons, on Mac.    
