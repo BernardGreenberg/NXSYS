@@ -55,6 +55,17 @@
                             <action selector="ToolbarButton:" target="-2" id="jcV-3O-f3Q"/>
                         </connections>
                     </button>
+                    <button toolTip="Quit TLEdit" fixedFrame="YES" tag="4114" translatesAutoresizingMaskIntoConstraints="NO" id="P7e-S3-gWi">
+                        <rect key="frame" x="97" y="302" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="QuitIcon" imagePosition="overlaps" alignment="center" borderStyle="border" tag="4213" imageScaling="proportionallyDown" inset="2" id="RD5-e1-ysZ">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="ToolbarButton:" target="-2" id="MGA-E6-pbB"/>
+                        </connections>
+                    </button>
                     <button toolTip="Redo" fixedFrame="YES" tag="4142" translatesAutoresizingMaskIntoConstraints="NO" id="D4L-Pq-e1d">
                         <rect key="frame" x="174" y="371" width="64" height="64"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -120,17 +131,6 @@
                         <connections>
                             <action selector="ToolbarButton:" target="-2" id="Ucg-fv-3fe"/>
                         </connections>
-                    </button>
-                    <button toolTip="Create traffic lever" fixedFrame="YES" tag="4220" translatesAutoresizingMaskIntoConstraints="NO" id="4co-Ei-hUi">
-                        <rect key="frame" x="97" y="88" width="64" height="64"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="traffic" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iyM-s5-MF6">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
-                            <connections>
-                                <action selector="ToolbarButton:" target="-2" id="Qh8-PN-aKT"/>
-                            </connections>
-                        </buttonCell>
                     </button>
                     <button toolTip="Create text (must edit props)" fixedFrame="YES" tag="4219" translatesAutoresizingMaskIntoConstraints="NO" id="tM4-bm-ea1">
                         <rect key="frame" x="97" y="16" width="64" height="64"/>
@@ -199,7 +199,7 @@
                         </buttonCell>
                     </button>
                     <button toolTip="Edit selected object's properties" fixedFrame="YES" tag="4211" translatesAutoresizingMaskIntoConstraints="NO" id="ZCu-6j-t9g">
-                        <rect key="frame" x="15" y="16" width="64" height="64"/>
+                        <rect key="frame" x="15" y="17" width="64" height="64"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="document_properties" imagePosition="overlaps" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="LjS-v7-lzW">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -209,16 +209,16 @@
                             </connections>
                         </buttonCell>
                     </button>
-                    <button toolTip="Quit TLEdit" fixedFrame="YES" tag="4114" translatesAutoresizingMaskIntoConstraints="NO" id="P7e-S3-gWi">
-                        <rect key="frame" x="97" y="302" width="64" height="64"/>
+                    <button toolTip="Create traffic lever" fixedFrame="YES" tag="4220" translatesAutoresizingMaskIntoConstraints="NO" id="4co-Ei-hUi">
+                        <rect key="frame" x="95" y="88" width="64" height="64"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="QuitIcon" imagePosition="overlaps" alignment="center" borderStyle="border" tag="4213" imageScaling="proportionallyDown" inset="2" id="RD5-e1-ysZ">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="traffic" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iyM-s5-MF6">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="system" size="10"/>
+                            <connections>
+                                <action selector="ToolbarButton:" target="-2" id="Qh8-PN-aKT"/>
+                            </connections>
                         </buttonCell>
-                        <connections>
-                            <action selector="ToolbarButton:" target="-2" id="MGA-E6-pbB"/>
-                        </connections>
                     </button>
                 </subviews>
             </view>

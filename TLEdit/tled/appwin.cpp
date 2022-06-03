@@ -56,6 +56,8 @@ static HWND S_Toolbar = NULL;
 void Mac_GetDisplayWPOrg(int[2], bool really_get_it_from_window);
 void DisplayStatusString(const char * s);
 void EnableCommand(UINT, bool);
+void QuitMacApp();
+void ExtSaveDocumentMac();
 #endif
 
 #define TXWINSTYLE SS_SIMPLE | WS_CHILD | WS_VISIBLE
@@ -287,7 +289,16 @@ static BOOL CheckBufferModified() {
 #endif
 void AppCommand(UINT command) {
 	switch (command) {
-#ifndef NXSYSMac
+
+#ifdef NXSYSMac
+    case CmQuit:
+        QuitMacApp();
+        break;
+            
+    case CmSave:
+        ExtSaveDocumentMac();
+        break;
+#else
 	case CmQuit:
 		if (CheckBufferModified())
 			PostQuitMessage(0);

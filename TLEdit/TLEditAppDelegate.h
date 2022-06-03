@@ -23,6 +23,7 @@
 @property NSPoint wporg;
 - (BOOL)validateMenuItem:(NSMenuItem *)item;
 -(void)setUndoMenu:(const char*)undo Redo:(const char *)redo;
+-(IBAction)saveDocument:(id)sender;
 @end
 
 TLEditAppDelegate* getTLEDelegate();

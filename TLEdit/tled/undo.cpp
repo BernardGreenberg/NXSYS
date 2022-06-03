@@ -27,6 +27,7 @@ using GOptr = GraphicObject*;
 using WPVEC = vector<WPPOINT>;
 GOptr ProcessNonGraphObjectCreateFormString(const char * s);
 void AssignFixOrigin(WPPOINT origin);
+void EnableCommand(UINT cmd, BOOL whichway);
 
 void SetUndoRedoMenu(const char * undo, const char * redo);
 
@@ -201,6 +202,8 @@ bool IsRedoPossible() {
     return !RedoStack.empty();
 }
 
+#define bool2BOOL(x) (x ? TRUE : FALSE)
+
 static void compute_menu_state() {
     static string undo_str, redo_str;
     undo_str = redo_str = "";
@@ -215,6 +218,9 @@ static void compute_menu_state() {
         redo_avl = redo_str.c_str();
     }
     SetUndoRedoMenu(undo_avl, redo_avl);
+    EnableCommand(CmSave, bool2BOOL(IsUndoPossible()));
+    EnableCommand(CmUndo, bool2BOOL(IsUndoPossible()));
+    EnableCommand(CmRedo, bool2BOOL(IsRedoPossible()));
 }
 
 static string StringImageObject(GOptr o) {
@@ -722,6 +728,7 @@ void ClearLayoutModified() {
     Undo::RedoStack.clear();
     Undo::UndoStack.clear();
     ClearLimbo();
+    Undo::compute_menu_state();
 }
 
 bool IsLayoutModified() {

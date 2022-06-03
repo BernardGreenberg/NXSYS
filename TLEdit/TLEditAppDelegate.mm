@@ -366,3 +366,13 @@ void Mac_GetDisplayWPOrg(int coords[2], bool really_get_it_from_window) {
     coords[0] = (int)p.x;
     coords[1] = (int)p.y;
 }
+
+void QuitMacApp() {
+    NSApplication* app =  [NSApplication sharedApplication];
+    [app terminate:nil];
+}
+
+void ExtSaveDocumentMac() {
+    TLEditAppDelegate* delegate = getTLEDelegate();
+    [delegate saveDocument:nil];
+}
