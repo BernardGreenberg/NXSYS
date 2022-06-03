@@ -155,42 +155,8 @@ class TrackJoint
             BOOL NumFlip;  /* BOOL, not bool - it matters! */
             int AB0;
             SwitchBranchSnapshot SBS;
-            void Snapshot_(TrackJoint* tj) {
-                SnapWPpos(tj);
-                Insulated = tj->Insulated;
-                NumFlip = tj->NumFlip;
-                Nomenclature = tj->Nomenclature;
-                AB0 = tj->SwitchAB0;
-                SBS.Init(tj->TSA);
-            }
-            void Restore_(TrackJoint* tj) {
-                bool rplbl = false;
-                tj->Insulated = Insulated;
-                if (Nomenclature != tj->Nomenclature) {
-                    tj->Nomenclature = Nomenclature;
-                    rplbl = true;
-                }
-                if (AB0 != tj->SwitchAB0) {
-                    tj->SwitchAB0 = AB0;
-                    rplbl = true;
-                }
-                tj->SwitchAB0 = AB0;
-                if (tj->NumFlip != NumFlip) {
-                    tj->NumFlip = NumFlip;
-                    rplbl = true;
-                }
-                if (wp_x != tj->wp_x || wp_y != tj->wp_y)
-                    tj->MoveToNewWPpos(wp_x, wp_y);
-                if (SBS != SwitchBranchSnapshot(tj->TSA)) {
-                    tj->TSA[(int)TSAX::NORMAL] = SBS.A[(int)TSAX::NORMAL];
-                    tj->TSA[(int)TSAX::REVERSE] = SBS.A[(int)TSAX::REVERSE];
-                    // Forward ref to TrackSeg no good
-                    ((GraphicObject*)((*tj)[TSAX::NORMAL]))->Select();
-                }
-                // does a "get organization", must be done last.
-                if (rplbl)
-                    tj->PositionLabel();
-            }
+            void Snapshot_(TrackJoint* tj);
+            void Restore_(TrackJoint* tj);
         };
 
         virtual bool HasManagedID();
