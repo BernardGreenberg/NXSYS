@@ -82,6 +82,14 @@
 		5B7B02AD2314D8C9000747A0 /* wrttko32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B7B02AC2314D8C9000747A0 /* wrttko32.cpp */; };
 		5B823887231FD6A4008EAF27 /* NXGOLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B823886231FD6A4008EAF27 /* NXGOLabel.cpp */; };
 		5B823888231FD6A4008EAF27 /* NXGOLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B823886231FD6A4008EAF27 /* NXGOLabel.cpp */; };
+		5B87B310284A58560002AB18 /* SaveIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B30D284A58560002AB18 /* SaveIcon.png */; };
+		5B87B311284A58560002AB18 /* UndoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B30E284A58560002AB18 /* UndoIcon.png */; };
+		5B87B312284A58560002AB18 /* RedoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B30F284A58560002AB18 /* RedoIcon.png */; };
+		5B87B314284A5D4F0002AB18 /* QuitIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B313284A5D4F0002AB18 /* QuitIcon.png */; };
+		5B87B319284A5DB40002AB18 /* SaveIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B315284A5DB40002AB18 /* SaveIcon.pxd */; };
+		5B87B31A284A5DB40002AB18 /* UndoIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B316284A5DB40002AB18 /* UndoIcon.pxd */; };
+		5B87B31B284A5DB40002AB18 /* RedoIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B317284A5DB40002AB18 /* RedoIcon.pxd */; };
+		5B87B31C284A5DB40002AB18 /* QuitIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B318284A5DB40002AB18 /* QuitIcon.pxd */; };
 		5B88FEA11DF71C0D00D8F8E0 /* SwitchConsistency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
 		5BA6F72919CC61DD002551F7 /* HelpController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B47F34519AE717500CBB80A /* HelpController.mm */; };
@@ -413,6 +421,14 @@
 		5B7B02AC2314D8C9000747A0 /* wrttko32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wrttko32.cpp; sourceTree = "<group>"; };
 		5B7B02AE2314DCCD000747A0 /* opsintel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opsintel.h; sourceTree = "<group>"; };
 		5B823886231FD6A4008EAF27 /* NXGOLabel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NXGOLabel.cpp; sourceTree = "<group>"; };
+		5B87B30D284A58560002AB18 /* SaveIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SaveIcon.png; sourceTree = "<group>"; };
+		5B87B30E284A58560002AB18 /* UndoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UndoIcon.png; sourceTree = "<group>"; };
+		5B87B30F284A58560002AB18 /* RedoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RedoIcon.png; sourceTree = "<group>"; };
+		5B87B313284A5D4F0002AB18 /* QuitIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QuitIcon.png; sourceTree = "<group>"; };
+		5B87B315284A5DB40002AB18 /* SaveIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SaveIcon.pxd; sourceTree = "<group>"; };
+		5B87B316284A5DB40002AB18 /* UndoIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = UndoIcon.pxd; sourceTree = "<group>"; };
+		5B87B317284A5DB40002AB18 /* RedoIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = RedoIcon.pxd; sourceTree = "<group>"; };
+		5B87B318284A5DB40002AB18 /* QuitIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = QuitIcon.pxd; sourceTree = "<group>"; };
 		5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = SwitchConsistency.cpp; sourceTree = "<group>"; };
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -936,6 +952,7 @@
 		5B67045819D0B2DF002B6E28 /* Toolbar */ = {
 			isa = PBXGroup;
 			children = (
+				5B87B30C284A54A60002AB18 /* PXDs */,
 				5B6705C619D0F2E4002B6E28 /* icons */,
 				5B67045619D0A4B0002B6E28 /* Toolbar.xib */,
 				5B6705BB19D0C25F002B6E28 /* ToolbarController.h */,
@@ -947,6 +964,10 @@
 		5B6705C619D0F2E4002B6E28 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				5B87B313284A5D4F0002AB18 /* QuitIcon.png */,
+				5B87B30F284A58560002AB18 /* RedoIcon.png */,
+				5B87B30D284A58560002AB18 /* SaveIcon.png */,
+				5B87B30E284A58560002AB18 /* UndoIcon.png */,
 				5BA7E73F19D56426006F9A04 /* joints.png */,
 				5BA7E73419D42589006F9A04 /* flipno.png */,
 				5BA7E73219D39DC0006F9A04 /* insulate.png */,
@@ -977,6 +998,17 @@
 			name = "Mac Support";
 			path = TLEdit;
 			sourceTree = SOURCE_ROOT;
+		};
+		5B87B30C284A54A60002AB18 /* PXDs */ = {
+			isa = PBXGroup;
+			children = (
+				5B87B318284A5DB40002AB18 /* QuitIcon.pxd */,
+				5B87B317284A5DB40002AB18 /* RedoIcon.pxd */,
+				5B87B315284A5DB40002AB18 /* SaveIcon.pxd */,
+				5B87B316284A5DB40002AB18 /* UndoIcon.pxd */,
+			);
+			path = PXDs;
+			sourceTree = "<group>";
 		};
 		5BA6F72D19CCA335002551F7 /* Dialogs */ = {
 			isa = PBXGroup;
@@ -1591,6 +1623,8 @@
 				5BED456319D1BC4E00A22DE8 /* PanelSwitchProperties.xib in Resources */,
 				5BD064D419CDCC3700564BD5 /* JointProperties.xib in Resources */,
 				5BD6200C19CD997C00DB8A8F /* TrackSegProperties.xib in Resources */,
+				5B87B311284A58560002AB18 /* UndoIcon.png in Resources */,
+				5B87B310284A58560002AB18 /* SaveIcon.png in Resources */,
 				5BED456919D1E14100A22DE8 /* traffic.png in Resources */,
 				5BF4F08019CB79A50089B3E4 /* TLEdit.xib in Resources */,
 				5BA6F73119CCA375002551F7 /* SignalProperties.xib in Resources */,
@@ -1602,7 +1636,12 @@
 				5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */,
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
 				5BA7E74719D962A5006F9A04 /* CanvasExtentDialog.xib in Resources */,
+				5B87B31B284A5DB40002AB18 /* RedoIcon.pxd in Resources */,
+				5B87B314284A5D4F0002AB18 /* QuitIcon.png in Resources */,
+				5B87B319284A5DB40002AB18 /* SaveIcon.pxd in Resources */,
+				5B87B31C284A5DB40002AB18 /* QuitIcon.pxd in Resources */,
 				5BED456119D1B5EA00A22DE8 /* Pswitch.png in Resources */,
+				5B87B312284A58560002AB18 /* RedoIcon.png in Resources */,
 				5BA7E74019D56426006F9A04 /* joints.png in Resources */,
 				5BED456C19D1E19300A22DE8 /* TrafficLeverProperties.xib in Resources */,
 				5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */,
@@ -1613,6 +1652,7 @@
 				5B6705C119D0EC70002B6E28 /* document_properties.png in Resources */,
 				5B6705BA19D0B31A002B6E28 /* SignalNE.png in Resources */,
 				5B6705DA19D1A148002B6E28 /* PanelLightProperties.xib in Resources */,
+				5B87B31A284A5DB40002AB18 /* UndoIcon.pxd in Resources */,
 				5BAC932019C8FE7200673BDC /* Images.xcassets in Resources */,
 				5BB5803E27C5586000FB0ED5 /* Help.xml in Resources */,
 				5B6705D319D19BA7002B6E28 /* ExitLightProperties.xib in Resources */,
