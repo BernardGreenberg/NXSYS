@@ -85,7 +85,6 @@
 		5B88FEA11DF71C0D00D8F8E0 /* SwitchConsistency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
 		5BA6F72919CC61DD002551F7 /* HelpController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B47F34519AE717500CBB80A /* HelpController.mm */; };
-		5BA6F72C19CC65A8002551F7 /* tlehlptx.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */; };
 		5BA6F73119CCA375002551F7 /* SignalProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA6F72F19CCA375002551F7 /* SignalProperties.xib */; };
 		5BA6F73719CCBB1A002551F7 /* GenericWindlgController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA6F73619CCBB1A002551F7 /* GenericWindlgController.mm */; };
 		5BA6F73A19CCF58E002551F7 /* TLWindowsSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BA6F73819CCF58E002551F7 /* TLWindowsSide.cpp */; };
@@ -419,7 +418,6 @@
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
 		5B985F12282E851C0036648F /* PropCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropCell.h; sourceTree = "<group>"; };
 		5BA5385227DF75DB00D39B28 /* ValidatingValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValidatingValue.h; sourceTree = "<group>"; };
-		5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tlehlptx.txt; sourceTree = "<group>"; };
 		5BA6F73019CCA375002551F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SignalProperties.xib; sourceTree = "<group>"; };
 		5BA6F73519CCBB1A002551F7 /* GenericWindlgController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericWindlgController.h; sourceTree = "<group>"; };
 		5BA6F73619CCBB1A002551F7 /* GenericWindlgController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GenericWindlgController.mm; sourceTree = "<group>"; };
@@ -1098,7 +1096,6 @@
 			isa = PBXGroup;
 			children = (
 				5B67045819D0B2DF002B6E28 /* Toolbar */,
-				5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */,
 				5BF7CEBB19CB525100DF6ECE /* Mac Progs */,
 				5BAC931F19C8FE7200673BDC /* Images.xcassets */,
 				5BAC930E19C8FE7200673BDC /* Supporting Files */,
@@ -1606,7 +1603,6 @@
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
 				5BA7E74719D962A5006F9A04 /* CanvasExtentDialog.xib in Resources */,
 				5BED456119D1B5EA00A22DE8 /* Pswitch.png in Resources */,
-				5BA6F72C19CC65A8002551F7 /* tlehlptx.txt in Resources */,
 				5BA7E74019D56426006F9A04 /* joints.png in Resources */,
 				5BED456C19D1E19300A22DE8 /* TrafficLeverProperties.xib in Resources */,
 				5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */,
