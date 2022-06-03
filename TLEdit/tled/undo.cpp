@@ -416,8 +416,8 @@ static void undo_guts (vector<UndoRecord>& Stack, RecType rt, UndoRecord& R) {
             auto tj = (TrackJoint*)ResurrectFromLimbo(R.g, TypeId::JOINT);
 
             Coords dest_loc(tj);
-            auto seg = (TrackSeg*)FindObjByLoc(TypeId::TRACKSEG, R.coords_old);
-            auto seg2 = tj->FindOtherSegOfTwo(seg);
+            auto seg = (TrackSeg*)R.g1;
+            auto seg2 = (TrackSeg*)ResurrectFromLimbo(R.g2, TypeId::TRACKSEG);
             seg->Split(R.coords_old.wp_x, R.coords_old.wp_y, tj, seg2);
             tj->MoveToNewWPpos(dest_loc.wp_x, dest_loc.wp_y);
             break;
@@ -668,6 +668,8 @@ struct JointCutSnapInfo {
     string RecreateInfo;
     Coords OthersLoc[2];
     Coords OriginalLoc;
+    TrackSeg* Ts0;
+    TrackSeg* Ts1;
     Coords OthersAverage() {
         return Coords((OthersLoc[0].wp_x + OthersLoc[1].wp_x)/2, (OthersLoc[0].wp_y + OthersLoc[1].wp_y)/2);
     }
@@ -682,10 +684,13 @@ JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj) {
     J->OriginalLoc = Coords(tj);
     TSEX myx0 = tj->TSA[0]->FindEndIndex(tj);
     assert (myx0 != TSEX::NOTFOUND);
+    J->Ts0 = tj->TSA[0];
     J->OthersLoc[0] = Coords(tj->TSA[0]->GetOtherEnd(myx0).Joint);
     if (tj->TSCount == 1)
         J->OthersLoc[1] = J->OthersLoc[0];
     else {
+        assert(tj->TSCount == 2);
+        J->Ts1 = tj->TSA[1];
         TSEX myx1 = tj->TSA[1]->FindEndIndex(tj);
         assert (myx1 != TSEX::NOTFOUND);
         J->OthersLoc[1] = Coords(tj->TSA[1]->GetOtherEnd(myx1).Joint);
@@ -693,9 +698,16 @@ JointCutSnapInfo* SnapshotJointPreCut(TrackJoint* tj) {
     return J;
 }
 
-void RecordJointCutComplete(JointCutSnapInfo* J) {
+void RecordJointCutComplete(JointCutSnapInfo* J, TrackSeg* survivor) {
     UndoRecord R(RecType::CutJoint);
     R.g = J->g;
+    R.g1 = survivor;
+    if (survivor == J->Ts0)
+        R.g2 = J->Ts1;
+    else if (survivor == J->Ts1)
+        R.g2 = J->Ts0;
+    else
+        assert(!"Can't find joint cut opposing seg.");
     R.obj_type = TypeId::JOINT;
     R.recreate_form = J->RecreateInfo;
     R.coords = J->OriginalLoc;

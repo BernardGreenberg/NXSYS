@@ -5,9 +5,6 @@ Close main window while dialogs up crashes; should not be allowed.
 
 Free-store console tracing  
 Free-store transaction records unique-ptr'd in undo-record.  
-Undo/action console tracing
-
-upgrade doc tb image
 ________
 FUTURES
 

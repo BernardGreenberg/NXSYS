@@ -175,7 +175,7 @@ class TrackJoint
 	void	SwallowOtherJoint (TrackJoint * tj, bool make_undo_record);
         int     Dump(ObjectWriter& W);  /* for undo system */
         void	TDump (FILE * F, TSAX branch);
-        void    Cut_();  //Multics convention...
+        TrackSeg* Cut_();  //Multics convention...
 	void	EnsureID();
 	void	Insulate(bool insulate);
 	void	FlipNum();

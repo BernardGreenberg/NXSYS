@@ -737,11 +737,11 @@ void TrackJoint::Cut () {
     }
     
     auto info = Undo::SnapshotJointPreCut(this); // gotta do it while we still exist!
-    Cut_();
-    Undo::RecordJointCutComplete(info);
+    auto survivor = Cut_();
+    Undo::RecordJointCutComplete(info, survivor);
 }
 
-void TrackJoint::Cut_() {
+TrackSeg* TrackJoint::Cut_() {
     /* You can't Cut a 1 or a 3, you must "disarm" the 3 and Cut the seg off ofthe 1. */
     assert(TSCount == 2);
     
@@ -809,6 +809,7 @@ void TrackJoint::Cut_() {
     // Salvager will fail if we salvage here.  ... Message box will make redisplay crash, too
     ts1.ConsignToLimbo();
     ConsignToLimbo();       // No more "delete"....
+    return &ts0;
     SALVAGER("TrackJoint::Cut_ final");
 }
 
