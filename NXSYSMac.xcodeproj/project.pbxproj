@@ -1086,6 +1086,7 @@
 				5BABBE1627B7143100AED491 /* getmodtm.h */,
 				5BABBE1727B7143100AED491 /* dialogs.cpp */,
 				5BABBE5D27B7143200AED491 /* tled.rc */,
+				5B87B31D284A707F0002AB18 /* tletoolb.cpp */,
 				5BABBE5E27B7143200AED491 /* timers.cpp */,
 				5BABBE5F27B7143200AED491 /* rtracwin.cpp */,
 				5BABBE6027B7143200AED491 /* getmodtm.c */,
@@ -1154,7 +1155,6 @@
 		5BAC936919C8FF5200673BDC /* TLEdit */ = {
 			isa = PBXGroup;
 			children = (
-				5B87B31D284A707F0002AB18 /* tletoolb.cpp */,
 				5BF7CEB619CA2AFD00DF6ECE /* dragger.cpp */,
 				5BF7CEB419CA2A4200DF6ECE /* edswkey.cpp */,
 				5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */,
