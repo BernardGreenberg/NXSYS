@@ -429,6 +429,7 @@
 		5B87B316284A5DB40002AB18 /* UndoIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = UndoIcon.pxd; sourceTree = "<group>"; };
 		5B87B317284A5DB40002AB18 /* RedoIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = RedoIcon.pxd; sourceTree = "<group>"; };
 		5B87B318284A5DB40002AB18 /* QuitIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = QuitIcon.pxd; sourceTree = "<group>"; };
+		5B87B31D284A707F0002AB18 /* tletoolb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tletoolb.cpp; sourceTree = "<group>"; };
 		5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = SwitchConsistency.cpp; sourceTree = "<group>"; };
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -1153,6 +1154,7 @@
 		5BAC936919C8FF5200673BDC /* TLEdit */ = {
 			isa = PBXGroup;
 			children = (
+				5B87B31D284A707F0002AB18 /* tletoolb.cpp */,
 				5BF7CEB619CA2AFD00DF6ECE /* dragger.cpp */,
 				5BF7CEB419CA2A4200DF6ECE /* edswkey.cpp */,
 				5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */,

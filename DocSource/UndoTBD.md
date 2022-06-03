@@ -7,15 +7,9 @@ Free-store console tracing
 Free-store transaction records unique-ptr'd in undo-record.  
 Undo/action console tracing
 
-Better save/save as enable
-
+Undo/Redo toolbar buttons on Windows.
 ________
 FUTURES
-
-random object number checking.
-
-Modification status in titlebar (*)  
-Maybe undo, redo, save (open?) icons, on Mac.    
 
 Undo stack before save (document how to use).  Save-point size() stack.
 - may need tick-counter.  
