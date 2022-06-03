@@ -7,6 +7,7 @@ Free-store console tracing
 Free-store transaction records unique-ptr'd in undo-record.  
 Undo/action console tracing
 
+Possible problems saving (empty layout).
 ________
 FUTURES
 
@@ -22,4 +23,3 @@ QA produced layouts!
 
 Windows implementation  
 - Package new document; clip old one.
-- Segment dialog changes

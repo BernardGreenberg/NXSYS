@@ -179,15 +179,7 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,232,24,50,14
     PUSHBUTTON      "&Help",IDC_HELP1,232,41,50,14
     LTEXT           "Edit or assign attributes for the selected track segment",IDC_STATIC,7,15,200,12
-    GROUPBOX        "Not operative yet stuf",IDC_STATIC,7,38,147,88,NOT WS_VISIBLE
-    CONTROL         "Counts for track distance",IDC_EDIT_SEG_COUNTS_DISTANCE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,56,112,10
-    CONTROL         "Shows route and occupancy  lights",IDC_EDIT_SEG_LIGHTS,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,74,131,10
-    CONTROL         "Visible at all (not a ""zig"")",IDC_EDIT_SEG_VISIBLE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,91,92,10
-    CONTROL         "Auto Subdivide between siblings",IDC_EDIT_SEG_SUBDIVIDE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,108,118,10
+    LTEXT           "0 segments in circuit.",IDC_EDIT_SEG_NSEGS,7,38,147,88
 END
 
 IDD_JOINT DIALOG 0, 0, 183, 222
