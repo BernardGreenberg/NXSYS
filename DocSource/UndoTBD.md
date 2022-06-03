@@ -7,7 +7,7 @@ Free-store console tracing
 Free-store transaction records unique-ptr'd in undo-record.  
 Undo/action console tracing
 
-Undo/Redo toolbar buttons on Windows.
+upgrade doc tb image
 ________
 FUTURES
 

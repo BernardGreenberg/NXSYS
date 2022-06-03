@@ -16,8 +16,8 @@ struct _ButtonData {
     {0,TBSTYLE_BUTTON, CmQuit, "Exit Layout editor"},
     {13,TBSTYLE_BUTTON,CmOpen, "Open a layout file"},
     {12,TBSTYLE_BUTTON,CmSave, "Save layout to file"},
-    {26,TBSTYLE_BUTTON,CmUndo, "Undo"},
-    {27,TBSTYLE_BUTTON,CmRedo, "Redo"},
+    {27,TBSTYLE_BUTTON,CmUndo, "Undo"},
+    {28,TBSTYLE_BUTTON,CmRedo, "Redo"},
 
     {0,TBSTYLE_SEP, 0, NULL},
 
