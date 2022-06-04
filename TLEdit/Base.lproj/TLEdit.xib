@@ -16,6 +16,7 @@
         <customObject id="Voe-Tx-rLC" customClass="TLEditAppDelegate">
             <connections>
                 <outlet property="RedoMenuItem" destination="6dh-zS-Vam" id="Pjg-Wc-Vv4"/>
+                <outlet property="SaveMenuItem" destination="pxx-59-PXV" id="6Ol-gQ-ZC4"/>
                 <outlet property="StatusBar" destination="25e-gx-hC0" id="D8f-Q2-PT0"/>
                 <outlet property="UndoMenuItem" destination="dRJ-4n-Yzg" id="CkJ-SE-lD1"/>
                 <outlet property="theScrollView" destination="cq3-Ui-K8w" id="ty0-iK-zpg"/>

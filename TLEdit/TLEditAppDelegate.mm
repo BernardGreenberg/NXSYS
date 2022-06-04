@@ -188,7 +188,10 @@ TLEditAppDelegate* getTLEDelegate() {
 }
 -(IBAction)saveDocument:(id)sender
 {
-    if (currentFileName == nil) {
+    if (!IsLayoutModified()) {
+        MessageBox(NULL, "The layout has not been modified since last save (or read-in). Will not save.", "TLEdit Application", MB_OK | MB_ICONEXCLAMATION);
+    }
+    else if (currentFileName == nil) {
         [self saveDocumentAs:self];
     } else {
         [self heartOfSave:currentFileName];
@@ -317,6 +320,7 @@ TLEditAppDelegate* getTLEDelegate() {
 {
     [self setUrMenu: _UndoMenuItem str:undo dft:@"Undo"];
     [self setUrMenu: _RedoMenuItem str:redo dft:@"Redo"];
+    [_SaveMenuItem setEnabled: (undo == nullptr) ? NO : YES];
 }
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     return [menuItem isEnabled];

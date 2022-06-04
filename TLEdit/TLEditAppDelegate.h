@@ -17,6 +17,7 @@
 @property (weak) IBOutlet NSTextField *StatusBar;
 @property (weak) IBOutlet NSMenuItem *UndoMenuItem;
 @property (weak) IBOutlet NSMenuItem *RedoMenuItem;
+@property (weak) IBOutlet NSMenuItem *SaveMenuItem;
 @property (strong) ToolbarController * toolbar;
 @property (assign) IBOutlet NSWindow *window;
 @property bool wporg_set;
