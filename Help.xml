@@ -2,8 +2,8 @@
 <help>
     <!-- 2/22/22  -->
     <item title="NXSYS Usage, Help, and concepts" url="file://Documentation/NXSYS.html"/>
-    <item title="Release notes" url="file://Documentation/CommonReleaseNotes.html"/>
-    <item title="Mac release notes" url="file://Documentation/ReleaseNotes.html" include="Mac"/>
+    <item title="Release notes" url="file://Documentation/ReleaseNotes.html"/>
+    <item title="Mac release notes" url="file://Documentation/MacReleaseNotes.html" include="Mac"/>
     <item title="NXSYS download page" url="https://BernardGreenberg.com/Subway"/>
     <item title="NXSYS GitHub repository" url="https://GitHub.com/BernardGreenberg/NXSYS"/>
     <item title="Nycsubway.org signalling section" url="https://www.nycsubway.org/wiki/Subway_Signals:_A_Complete_Guide"/>

@@ -376,3 +376,8 @@ void MacFileOpen() {
     TLEditAppDelegate* delegate = getTLEDelegate();
     [delegate HandleFileOpen:nil];
 }
+
+void MacTLEditHelp() {
+    TLEditAppDelegate* delegate = getTLEDelegate();
+    [delegate Help:nil];
+}

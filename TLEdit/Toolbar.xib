@@ -231,6 +231,17 @@
                             </connections>
                         </buttonCell>
                     </button>
+                    <button toolTip="Help" fixedFrame="YES" tag="4139" translatesAutoresizingMaskIntoConstraints="NO" id="2FK-KW-B7u">
+                        <rect key="frame" x="328" y="16" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="HelpIcon" imagePosition="overlaps" alignment="center" borderStyle="border" tag="4218" imageScaling="proportionallyUpOrDown" inset="2" id="Bvf-YL-XoH">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="10"/>
+                            <connections>
+                                <action selector="ToolbarButton:" target="-2" id="i9m-4L-252"/>
+                            </connections>
+                        </buttonCell>
+                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="240.5" y="321.5"/>
@@ -238,6 +249,7 @@
     </objects>
     <resources>
         <image name="Cut-icon" width="256" height="256"/>
+        <image name="HelpIcon" width="128" height="128"/>
         <image name="OpenIcon" width="128" height="128"/>
         <image name="Plights" width="40.599117279052734" height="40.599117279052734"/>
         <image name="Pswitch" width="10.466959953308105" height="19.665197372436523"/>

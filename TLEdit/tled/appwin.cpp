@@ -299,6 +299,10 @@ void AppCommand(UINT command) {
         MacFileOpen();
         break;
 
+    case CmHelp:
+        MacTLEditHelp();
+        break;
+
 #else
 	case CmQuit:
 		if (CheckBufferModified())

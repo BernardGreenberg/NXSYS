@@ -15,6 +15,7 @@ void EnableCommand(unsigned int, bool);
 void QuitMacApp();
 void ExtSaveDocumentMac();
 void MacFileOpen();
+void MacTLEditHelp();
 
 void AppCommand(unsigned int);
 void InitTLEditApp(int w, int h);
