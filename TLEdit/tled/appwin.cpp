@@ -53,11 +53,7 @@ static HWND S_Statusbar = NULL;
 static HWND S_Toolbar = NULL;
 
 #ifdef NXSYSMac
-void Mac_GetDisplayWPOrg(int[2], bool really_get_it_from_window);
-void DisplayStatusString(const char * s);
-void EnableCommand(UINT, bool);
-void QuitMacApp();
-void ExtSaveDocumentMac();
+#include "MacAppwinAPIs.h"
 #endif
 
 #define TXWINSTYLE SS_SIMPLE | WS_CHILD | WS_VISIBLE
@@ -298,6 +294,11 @@ void AppCommand(UINT command) {
     case CmSave:
         ExtSaveDocumentMac();
         break;
+            
+    case CmOpen:
+        MacFileOpen();
+        break;
+
 #else
 	case CmQuit:
 		if (CheckBufferModified())

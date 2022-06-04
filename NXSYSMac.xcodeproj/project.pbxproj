@@ -39,6 +39,8 @@
 		5B4DF3A92314C625001FDE00 /* STLfnsplit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */; };
 		5B4DF3AE2314C958001FDE00 /* fasdump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B4DF3AD2314C957001FDE00 /* fasdump.cpp */; };
 		5B4E1810222AC4AF00DED5AE /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5B4E180F222AC4AF00DED5AE /* Credits.rtf */; };
+		5B4E62B2284AEA6A002A6C7E /* OpenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4E62B1284AEA6A002A6C7E /* OpenIcon.png */; };
+		5B4E62B4284AF17C002A6C7E /* OpenIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B4E62B3284AF17C002A6C7E /* OpenIcon.pxd */; };
 		5B50EE4719BA549B004CAABE /* TrainDlgController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B50EE4619BA549B004CAABE /* TrainDlgController.mm */; };
 		5B50EE4919BA9455004CAABE /* ChooseTrack.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B50EE4819BA9455004CAABE /* ChooseTrack.xib */; };
 		5B50EE4D19BA95A7004CAABE /* ChooseTrackController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B50EE4B19BA95A7004CAABE /* ChooseTrackController.mm */; };
@@ -324,6 +326,9 @@
 		5B4DF3AC2314C872001FDE00 /* tkov2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tkov2.h; sourceTree = "<group>"; };
 		5B4DF3AD2314C957001FDE00 /* fasdump.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fasdump.cpp; sourceTree = "<group>"; };
 		5B4E180F222AC4AF00DED5AE /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Credits.rtf; path = ../NXSYSMac/en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		5B4E62B1284AEA6A002A6C7E /* OpenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenIcon.png; sourceTree = "<group>"; };
+		5B4E62B3284AF17C002A6C7E /* OpenIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = OpenIcon.pxd; sourceTree = "<group>"; };
+		5B4E62B5284AF19B002A6C7E /* MacAppwinAPIs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacAppwinAPIs.h; sourceTree = "<group>"; };
 		5B50EE4519BA549B004CAABE /* TrainDlgController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrainDlgController.h; sourceTree = "<group>"; };
 		5B50EE4619BA549B004CAABE /* TrainDlgController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TrainDlgController.mm; sourceTree = "<group>"; };
 		5B50EE4819BA9455004CAABE /* ChooseTrack.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseTrack.xib; sourceTree = "<group>"; };
@@ -965,6 +970,7 @@
 		5B6705C619D0F2E4002B6E28 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				5B4E62B1284AEA6A002A6C7E /* OpenIcon.png */,
 				5B87B313284A5D4F0002AB18 /* QuitIcon.png */,
 				5B87B30F284A58560002AB18 /* RedoIcon.png */,
 				5B87B30D284A58560002AB18 /* SaveIcon.png */,
@@ -1003,6 +1009,7 @@
 		5B87B30C284A54A60002AB18 /* PXDs */ = {
 			isa = PBXGroup;
 			children = (
+				5B4E62B3284AF17C002A6C7E /* OpenIcon.pxd */,
 				5B87B318284A5DB40002AB18 /* QuitIcon.pxd */,
 				5B87B317284A5DB40002AB18 /* RedoIcon.pxd */,
 				5B87B315284A5DB40002AB18 /* SaveIcon.pxd */,
@@ -1476,6 +1483,7 @@
 				5BA7E74B19DAA31C006F9A04 /* ShiftLayoutDialog.h */,
 				5BA7E74C19DAA31C006F9A04 /* ShiftLayoutDialog.mm */,
 				5BA7E74D19DAA31C006F9A04 /* ShiftLayoutDialog.xib */,
+				5B4E62B5284AF19B002A6C7E /* MacAppwinAPIs.h */,
 			);
 			name = "Mac Progs";
 			sourceTree = "<group>";
@@ -1636,6 +1644,7 @@
 				5B6705C819D0F8C9002B6E28 /* showex.png in Resources */,
 				5BD064DB19CE44A600564BD5 /* SwitchProperties.xib in Resources */,
 				5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */,
+				5B4E62B2284AEA6A002A6C7E /* OpenIcon.png in Resources */,
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
 				5BA7E74719D962A5006F9A04 /* CanvasExtentDialog.xib in Resources */,
 				5B87B31B284A5DB40002AB18 /* RedoIcon.pxd in Resources */,
@@ -1645,6 +1654,7 @@
 				5BED456119D1B5EA00A22DE8 /* Pswitch.png in Resources */,
 				5B87B312284A58560002AB18 /* RedoIcon.png in Resources */,
 				5BA7E74019D56426006F9A04 /* joints.png in Resources */,
+				5B4E62B4284AF17C002A6C7E /* OpenIcon.pxd in Resources */,
 				5BED456C19D1E19300A22DE8 /* TrafficLeverProperties.xib in Resources */,
 				5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */,
 				5BA7E73719D4B592006F9A04 /* TextStringProperties.xib in Resources */,

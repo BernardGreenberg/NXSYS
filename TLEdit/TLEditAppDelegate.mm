@@ -18,13 +18,8 @@
 #include "ShiftLayoutDialog.h"
 #include "HelpController.h"
 #include "LayoutModified.h"
+#include "MacAppwinAPIs.h"
 
-void AppCommand(unsigned int);
-void InitTLEditApp(int w, int h);
-BOOL ReadItKludge(const char *);
-bool SaveItForReal(const char * path);
-void ClearItOut();
-void SetMainWindowTitle(const char * text);
 
 static NSString * LastPathnameKey = @"LastInterlockingEditPathname";
 static NSArray *allowedTypes = [NSArray arrayWithObject:@"trk"];
@@ -375,4 +370,9 @@ void QuitMacApp() {
 void ExtSaveDocumentMac() {
     TLEditAppDelegate* delegate = getTLEDelegate();
     [delegate saveDocument:nil];
+}
+
+void MacFileOpen() {
+    TLEditAppDelegate* delegate = getTLEDelegate();
+    [delegate HandleFileOpen:nil];
 }

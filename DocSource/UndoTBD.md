@@ -3,8 +3,7 @@
 Close main window while dialogs up crashes; should not be allowed.
 (can't repro)
 
-Free-store console tracing  
-Free-store transaction records unique-ptr'd in undo-record.  
+Disable "Save" properly (menu and keystroke).
 ________
 FUTURES
 
