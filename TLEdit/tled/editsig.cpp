@@ -29,6 +29,8 @@ using FUTresult = std::pair<TSAX, TSEX>;
 static FUTresult FindUprightTSAX(TrackJoint * tj, bool upright) {
     for (TSAX tsax : {TSAX::IJR0, TSAX::IJR1}) {
         TrackSeg * ts = tj->GetBranch(tsax);
+        if (ts == nullptr)
+            continue;
         TSEX endx = ts->FindEndIndex(tj);
         double angle = atan2(ts->SinTheta, ts->CosTheta);
         if (endx == TSEX::E1)
@@ -41,8 +43,7 @@ static FUTresult FindUprightTSAX(TrackJoint * tj, bool upright) {
         if (upright == orient_upright)
             return FUTresult(tsax,endx);
     }
-    /* this ought not happen*/
-    assert (!"Can't find an upright TSAX");
+    /* This will happen looking out over track-end */
     return FUTresult(TSAX::NOTFOUND, TSEX::NOTFOUND);
 }
 
@@ -53,6 +54,10 @@ void TLEditCreateSignal (TrackJoint * tj, bool upright) {
     }
 
     auto [tsax, endx] = FindUprightTSAX(tj, upright);
+    if (tsax == TSAX::NOTFOUND)  {
+        usererr ("You may not create a signal looking out off a track end.");
+        return;
+    }
     TrackSeg * ts = tj->GetBranch(tsax);
     TrackSegEnd * ep = &ts->GetEnd(endx);
 

@@ -5,6 +5,8 @@ Close main window while dialogs up crashes; should not be allowed.
 
 FUTURES
 
+Whole system cannot represent stationing #'s >= 1000 (e.g., 34th St)
+
 Undo stack before save (document how to use).  Save-point size() stack.
 - may need tick-counter.  
 
