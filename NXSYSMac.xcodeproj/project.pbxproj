@@ -1555,6 +1555,7 @@
 				5BAC930719C8FE7100673BDC /* Sources */,
 				5BAC930819C8FE7100673BDC /* Frameworks */,
 				5BAC930919C8FE7100673BDC /* Resources */,
+				5B8FCBEC2850030400855897 /* Record Build Data */,
 			);
 			buildRules = (
 			);
@@ -1742,6 +1743,24 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# older: date \"+%-m/%-d/%y %H:%M\" > $PROJECT_DIR/$TARGET_NAME/build_timestamp.txt\nbuddy=/usr/libexec/PlistBuddy\npl_path=${PROJECT_DIR}/${INFOPLIST_FILE}\nadate=$(date \"+%a %b %d %T %Z %Y\")\n$buddy \"$pl_path\" -c \"set BundleBuildDate \\\"$adate\\\"\"\n\nbuildNumber=$($buddy -c \"Print CFBundleVersion\" \"$pl_path\")\nbuildNumber=$(($buildNumber + 1))\n$buddy -c \"Set :CFBundleVersion $buildNumber\" \"$pl_path\"\n\nverstr=$($buddy -c \"Print CFBundleShortVersionString\" \"$pl_path\")\n\necho $buildNumber $adate $verstr ${CONFIGURATION}>>${PROJECT_DIR}/NXSYSMac.build_log.txt\n";
 			showEnvVarsInLog = 0;
+		};
+		5B8FCBEC2850030400855897 /* Record Build Data */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Record Build Data";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buddy=/usr/libexec/PlistBuddy\npl_path=${PROJECT_DIR}/${INFOPLIST_FILE}\nadate=$(date \"+%a %b %d %T %Z %Y\")\n$buddy \"$pl_path\" -c \"set BundleBuildDate \\\"$adate\\\"\"\n\nbuildNumber=$($buddy -c \"Print CFBundleVersion\" \"$pl_path\")\nbuildNumber=$(($buildNumber + 1))\n$buddy -c \"Set :CFBundleVersion $buildNumber\" \"$pl_path\"\n\nverstr=$($buddy -c \"Print CFBundleShortVersionString\" \"$pl_path\")\n\necho $buildNumber $adate $verstr ${CONFIGURATION}>>${PROJECT_DIR}/TLEdit.build_log.txt\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
