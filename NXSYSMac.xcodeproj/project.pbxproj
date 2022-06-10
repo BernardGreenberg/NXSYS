@@ -592,6 +592,9 @@
 		5BE487E7199D0A5C007BD6BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5BE49431199D0B2D007BD6BF /* readsexp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = readsexp.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BE49436199D1A14007BD6BF /* lisp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lisp.h; sourceTree = "<group>"; tabWidth = 8; };
+		5BE940FB2853941A00B3FD4A /* relay.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = relay.ico; sourceTree = "<group>"; };
+		5BE940FC2853941A00B3FD4A /* WinReadResText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinReadResText.h; sourceTree = "<group>"; };
+		5BE940FD2853941A00B3FD4A /* nx2.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = nx2.ico; sourceTree = "<group>"; };
 		5BED455D19D1ADD300A22DE8 /* Plights.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plights.png; sourceTree = "<group>"; };
 		5BED456019D1B5EA00A22DE8 /* Pswitch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pswitch.png; sourceTree = "<group>"; };
 		5BED456219D1BC4E00A22DE8 /* PanelSwitchProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PanelSwitchProperties.xib; sourceTree = "<group>"; };
@@ -1064,6 +1067,9 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5BE940FD2853941A00B3FD4A /* nx2.ico */,
+				5BE940FB2853941A00B3FD4A /* relay.ico */,
+				5BE940FC2853941A00B3FD4A /* WinReadResText.h */,
 				5B30B10527E16383000D59C8 /* Setup32 */,
 				5BB5802227C3329900FB0ED5 /* Installer */,
 				5BB5802027C32E7900FB0ED5 /* NXSYSWinApp.h */,
