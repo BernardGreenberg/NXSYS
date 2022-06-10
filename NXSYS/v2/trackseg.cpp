@@ -11,7 +11,6 @@
 #include "xtgtrack.h"
 #include "typeid.h"
 #include "brushpen.h"
-#include "undo.h"
 
 #include "pival.h"
 #include "NXSYSMinMax.h"
@@ -20,6 +19,7 @@
 #include "assignid.h"
 #include "tledit.h"
 #include "salvager.hpp"
+#include "undo.h"
 #define SNAP_DELTA (2*Track_Width_Delta)
 #else
 #include "nxsysapp.h"
