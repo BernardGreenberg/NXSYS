@@ -27,7 +27,6 @@
 #include <unordered_map>
 
 #ifdef WIN32
-#include <getmodtm.h>
 #include <io.h>
 #endif
 
