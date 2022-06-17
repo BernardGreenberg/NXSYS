@@ -19,7 +19,7 @@ struct WPRECT {
 };
 
 struct WPPOINT {
-    WPPOINT() {}
+    WPPOINT() : x(0), y(0) {}
     WP_cord x, y;
 
     WPPOINT(WP_cord _x, WP_cord _y) : x(_x), y(_y) {};

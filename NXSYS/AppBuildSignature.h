@@ -13,8 +13,8 @@
 #include <time.h>
 
 struct AppBuildSignature {
-    time_t BuildTime;
-    int VersionComponents [4];
+    time_t BuildTime = 0;
+    int VersionComponents [4]{0, 0, 0, 0};
     std::string ApplicationName;
 
     void Populate ();
@@ -30,7 +30,9 @@ struct AppBuildSignature {
     
     std::string BuildString() {
         std::string desc;
-        if (Build() != 0)
+        if (Build() == 0)
+            desc = "Build ";
+        else
             desc += "build " + std::to_string(Build()) + " ";
     #if DEBUG
         desc += "(DEBUG) ";
