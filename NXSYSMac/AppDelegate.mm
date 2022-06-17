@@ -32,6 +32,7 @@ typedef void *HINSTANCE;
 #include "HelpDirectory.hpp"
 #include "GetResourceDirectoryPathname.h"
 #include <regex>
+#include "AppBuildSignature.h"
 
 namespace fs = std::filesystem;
 
@@ -133,8 +134,9 @@ static HelpDirectory helpDirectory;
     did_finish_launching = false;
     eventMonitor = nil;
     haveSetScenarioHelpItem = false;
-    buildDateString = [self ComputeBuildDateString];
-    buildSignature = [self ComputeBuildSignature];
+    AppBuildSignature ABS;
+    ABS.Populate();
+    buildSignature = [NSString stringWithUTF8String: ABS.TotalBuildString().c_str()];
     return self;
 }
 
@@ -178,29 +180,7 @@ static HelpDirectory helpDirectory;
     return signature;
 }
 
--(NSString*)ComputeBuildDateString
-{
-    /* Computed at object init time -- doesn't change with layout */
-    /*
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSString *path = [bundle pathForResource:(NSString *)@"build_timestamp"
-                                      ofType:(NSString *)@"txt"];
-    std::ifstream file([path UTF8String]); // close at exit subr
-    if (!file.is_open())
-        return @"";
-    std::string date;
-    std::getline(file, date);
-    date.erase(date.find_last_not_of(" \n\r\t")+1);
-    return [NSString stringWithFormat: @" of %s", date.c_str()];
-     */
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSDictionary *main_infoDict = [bundle infoDictionary];
-    NSDate * date = [main_infoDict objectForKey:@"BundleBuildDate"];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"M/d/yy HH:mm"];
-    NSString *formattedDateString = [formatter stringFromDate:date];
-    return [NSString stringWithFormat: @" of %@", formattedDateString];
-}
+
 -(void)LibEntryClicked:(NSEvent*)event
 {
     NSMenuItem* item = (NSMenuItem*)event;
@@ -277,7 +257,7 @@ static HelpDirectory helpDirectory;
     [self SaveDefaultPath:url];
     pathForReload = fileName;
     
-    NSString* title = [NSString stringWithFormat:@"%s - NXSYS %@", InterlockingName.c_str(), buildSignature];
+    NSString* title = [NSString stringWithFormat:@"%s - %@", InterlockingName.c_str(), buildSignature];
     [_window setTitle: title];
 
     if (!haveSetScenarioHelpItem) {
@@ -610,10 +590,6 @@ static HelpDirectory helpDirectory;
 - (IBAction)NewAbout:(id)sender {
     if (_aboutController == nil)
         _aboutController = [[CustomAboutController alloc] init];
-    NSDictionary * dict = [[NSBundle mainBundle] infoDictionary];
-    NSString* version = [dict objectForKey:@"CFBundleShortVersionString"];
-    NSString* build_number = [dict objectForKey:@"CFBundleVersion"];
-    [_aboutController SetVersionData:version date:buildDateString build_number:build_number];
     [_aboutController Show];
 }
 

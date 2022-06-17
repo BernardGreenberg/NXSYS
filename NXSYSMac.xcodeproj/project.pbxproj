@@ -178,6 +178,8 @@
 		5BB5803D27C5586000FB0ED5 /* Help.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803C27C5586000FB0ED5 /* Help.xml */; };
 		5BB5803E27C5586000FB0ED5 /* Help.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803C27C5586000FB0ED5 /* Help.xml */; };
 		5BB5804127C55CF400FB0ED5 /* HelpDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */; };
+		5BC13705285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */; };
+		5BC13706285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */; };
 		5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
 		5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AC19DDA738006C590E /* dialog_warning.png */; };
 		5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
@@ -560,6 +562,8 @@
 		5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelpDirectory.cpp; sourceTree = "<group>"; };
 		5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HelpDirectory.hpp; sourceTree = "<group>"; };
 		5BB5804327C6B2E300FB0ED5 /* TLDlgProc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLDlgProc.h; path = TLEdit/TLDlgProc.h; sourceTree = SOURCE_ROOT; };
+		5BC13700285CC12A007D52E1 /* AppBuildSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppBuildSignature.h; sourceTree = "<group>"; };
+		5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MacAppBuildSignature.mm; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -1230,6 +1234,7 @@
 				5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */,
 				5BA5385227DF75DB00D39B28 /* ValidatingValue.h */,
 				5BAC2DA828025C8D000B43CF /* LoadFiascoMaps.h */,
+				5BC13700285CC12A007D52E1 /* AppBuildSignature.h */,
 			);
 			name = NewShared;
 			sourceTree = "<group>";
@@ -1345,6 +1350,7 @@
 				5BF062C6199D60BF008CDCA0 /* MainView.mm */,
 				5BE487E7199D0A5C007BD6BF /* Images.xcassets */,
 				5B46BA0219AAA21A0041C4FE /* WinViewUtils.h */,
+				5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */,
 			);
 			name = "App Windows";
 			path = NXSYSMac;
@@ -1848,6 +1854,7 @@
 				5B5AE630230D74D000348612 /* WinApiSTL.cpp in Sources */,
 				5BAD55FD1A011A2F006AEEAB /* WinDialogProtocol.mm in Sources */,
 				5B556418282B095B00FB2CF6 /* undo.cpp in Sources */,
+				5BC13706285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */,
 				5BAC935219C8FECC00673BDC /* trkgdi.cpp in Sources */,
 				5BAECC9B19DDA55F00B949EA /* NXMessageBox.mm in Sources */,
 				5BAC935319C8FECC00673BDC /* txlayout.cpp in Sources */,
@@ -1894,6 +1901,7 @@
 				5B50EE4D19BA95A7004CAABE /* ChooseTrackController.mm in Sources */,
 				5BF062E3199EEBE4008CDCA0 /* joint.cpp in Sources */,
 				5B46B9FF19A9188F0041C4FE /* FullSignalView.mm in Sources */,
+				5BC13705285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */,
 				5BF062FE199FB6AA008CDCA0 /* txlayout.cpp in Sources */,
 				5BF06F4319A0CF9F008CDCA0 /* trafficlever.cpp in Sources */,
 				5BF062EC199F774D008CDCA0 /* traincmn.cpp in Sources */,

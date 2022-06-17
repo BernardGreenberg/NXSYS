@@ -19,6 +19,7 @@
 #include "HelpController.h"
 #include "LayoutModified.h"
 #include "MacAppwinAPIs.h"
+#include "AppBuildSignature.h"
 
 
 static NSString * LastPathnameKey = @"LastInterlockingEditPathname";
@@ -347,8 +348,10 @@ void DisplayStatusString (const char * s) {
 
 /* Is called from above, too. */
 void SetMainWindowTitle(const char * text) {
+    AppBuildSignature ABS;
+    ABS.Populate();
     std::string temp = text;
-    temp += "  -  TLEdit  NXSYS layout editor";
+    temp += " — " + ABS.TotalBuildString();
     NSString* title = [[NSString alloc] initWithUTF8String:temp.c_str()];
     [getMainWindow() setTitle:title];
 }

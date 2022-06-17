@@ -8,10 +8,10 @@
 
 #import "CustomAboutController.h"
 #import "AppDelegate.h"
+#include "AppBuildSignature.h"
 
 @implementation CustomAboutController
-static NSString* label1String;
-static NSString* label2String;
+static AppBuildSignature ABS;
 
 - (id) init {
     if ( ! (self = [super initWithWindowNibName: @"CustomAbout"]) )
@@ -26,22 +26,15 @@ static NSString* label2String;
 - (id)initWithWindow:(NSWindow *)window
 {
     self = [super initWithWindow:window];
+    ABS.Populate();
     return self;
-}
--(void)SetVersionData:(NSString *)version date:(NSString *)date build_number:(NSString*)build_number {
-    label1String = version;
-#if DEBUG
-    label2String = [NSString stringWithFormat:@"Debug build %@ %@", build_number, date];
-#else
-    label2String = [NSString stringWithFormat:@"Build %@ %@", build_number, date];
-#endif
 }
 - (void)windowDidLoad
 {
     [super windowDidLoad];
 
-    [_labelLine1 setStringValue:label1String];
-    [_labelLine2 setStringValue:label2String];
+    [_labelLine1 setStringValue:[NSString stringWithUTF8String:ABS.VersionString().c_str()]];
+     [_labelLine2 setStringValue:[NSString stringWithUTF8String:ABS.BuildString().c_str()]];
     NSURL * url = [[NSBundle mainBundle] URLForResource:@"About" withExtension:@".html"];
     auto urlrq = [NSURLRequest requestWithURL:url];
     [self.theWebView loadRequest:urlrq];

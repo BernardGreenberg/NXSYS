@@ -2,8 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BundleBuildDate</key>
+	<date>2022-06-17T16:30:16Z</date>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>TLEdit</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -32,17 +36,17 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.7.0/Mac</string>
+	<string>2.7.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>17</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.graphics-design</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014, 2022 Bernard Greenberg. All rights reserved.</string>
+	<string>Copyright © 2014, 2022 Bernard Greenberg. License GPL3.</string>
 	<key>NSMainNibFile</key>
 	<string>TLEdit</string>
 	<key>NSPrincipalClass</key>
