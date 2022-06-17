@@ -19,6 +19,7 @@
 #include "STLfnsplit.h"
 #include "SwitchConsistency.h"
 #include "STLExtensions.h"
+#include "AppBuildSignature.h"
 #include <cassert>
 #include <cerrno>
 #include <exception>
@@ -284,10 +285,9 @@ static void SaveTheLayout(FILE * f) {
     time_t the_time;
     time(&the_time);
     fprintf(f, ";; TLEdit output of %s", ctime(&the_time));
-#ifdef WIN32
-    the_time = GetModuleTime(NULL);
-    fprintf(f, ";;   by TLEdit of %s", ctime(&the_time));
-#endif
+    AppBuildSignature ABS;
+    ABS.Populate();
+    fprintf(f, ";;   by %s\n", ABS.TotalBuildString(true).c_str());
     fprintf(f, ";;      TLEdit Copyright (c) Bernard Greenberg 2013, 2022\n");
 
     fprintf(f, ";;   Do not edit by hand.\n\n");

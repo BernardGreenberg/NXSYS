@@ -31,20 +31,20 @@ struct AppBuildSignature {
     std::string BuildString() {
         std::string desc;
         if (Build() != 0)
-            desc += " build " + std::to_string(Build()) + " ";
+            desc += "build " + std::to_string(Build()) + " ";
     #if DEBUG
         desc += "(DEBUG) ";
     #endif
         char out_time[100];
-        strftime(out_time, sizeof(out_time)/sizeof(out_time[0]), " of %m/%d/%y %H:%M", localtime(&BuildTime));
+        strftime(out_time, sizeof(out_time)/sizeof(out_time[0]), "of %m/%d/%y %H:%M", localtime(&BuildTime));
         return desc + out_time;
     }
     
     std::string TotalBuildString(bool with_os = false) {
         std::string desc = ApplicationName + " "  + VersionString();
         if (with_os)
-            desc += "/" + OSBase() + " ";
-        return desc + BuildString();
+            desc += "/" + OSBase();
+        return desc  + " " + BuildString();
     }
 };
 
