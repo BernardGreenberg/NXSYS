@@ -565,6 +565,7 @@
 		5BC13700285CC12A007D52E1 /* AppBuildSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppBuildSignature.h; sourceTree = "<group>"; };
 		5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MacAppBuildSignature.mm; sourceTree = "<group>"; };
 		5BC13707285D31A5007D52E1 /* WinAppBuildSignature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinAppBuildSignature.cpp; sourceTree = "<group>"; };
+		5BC1370A285D3AE6007D52E1 /* tlehelp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tlehelp.cpp; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -1073,6 +1074,7 @@
 			isa = PBXGroup;
 			children = (
 				5BC13707285D31A5007D52E1 /* WinAppBuildSignature.cpp */,
+				5BC1370A285D3AE6007D52E1 /* tlehelp.cpp */,
 				5BE940FD2853941A00B3FD4A /* nx2.ico */,
 				5BE940FB2853941A00B3FD4A /* relay.ico */,
 				5BE940FC2853941A00B3FD4A /* WinReadResText.h */,
