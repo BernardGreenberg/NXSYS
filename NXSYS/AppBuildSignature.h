@@ -34,7 +34,7 @@ struct AppBuildSignature {
             desc = "Build ";
         else
             desc += "build " + std::to_string(Build()) + " ";
-    #if DEBUG
+    #if defined(DEBUG) || defined(_DEBUG)
         desc += "(DEBUG) ";
     #endif
         char out_time[100];

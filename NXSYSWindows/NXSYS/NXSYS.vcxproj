@@ -246,6 +246,7 @@ copy $(SolutionDir)..\Help.xml $(OutDir)\ /Y</Command>
     <ClCompile Include="..\rtracwin.cpp" />
     <ClCompile Include="..\timers.cpp" />
     <ClCompile Include="..\WinApp.cpp" />
+    <ClCompile Include="..\WinAppBuildSignature.cpp" />
     <ClCompile Include="..\WinReadResText.cpp" />
   </ItemGroup>
   <ItemGroup>
