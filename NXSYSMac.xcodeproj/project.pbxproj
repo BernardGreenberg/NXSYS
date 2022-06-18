@@ -180,6 +180,7 @@
 		5BB5804127C55CF400FB0ED5 /* HelpDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */; };
 		5BC13705285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */; };
 		5BC13706285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */; };
+		5BC1370D285E1288007D52E1 /* TLEdit256x256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC1370B285E1288007D52E1 /* TLEdit256x256.png */; };
 		5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
 		5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AC19DDA738006C590E /* dialog_warning.png */; };
 		5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
@@ -566,6 +567,7 @@
 		5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MacAppBuildSignature.mm; sourceTree = "<group>"; };
 		5BC13707285D31A5007D52E1 /* WinAppBuildSignature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinAppBuildSignature.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BC1370A285D3AE6007D52E1 /* tlehelp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tlehelp.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		5BC1370B285E1288007D52E1 /* TLEdit256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TLEdit256x256.png; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -959,6 +961,7 @@
 		5B6567E325C3096400411B8F /* Custom About */ = {
 			isa = PBXGroup;
 			children = (
+				5BC1370B285E1288007D52E1 /* TLEdit256x256.png */,
 				5B65680E25C331D000411B8F /* NXSYS256x256.png */,
 				5B6567ED25C30EA800411B8F /* CustomAboutController.h */,
 				5B6567EE25C30EA800411B8F /* CustomAboutController.mm */,
@@ -1671,6 +1674,7 @@
 				5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */,
 				5B4E62B2284AEA6A002A6C7E /* OpenIcon.png in Resources */,
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
+				5BC1370D285E1288007D52E1 /* TLEdit256x256.png in Resources */,
 				5BA7E74719D962A5006F9A04 /* CanvasExtentDialog.xib in Resources */,
 				5B87B31B284A5DB40002AB18 /* RedoIcon.pxd in Resources */,
 				5B87B314284A5D4F0002AB18 /* QuitIcon.png in Resources */,
