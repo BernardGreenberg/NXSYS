@@ -44,6 +44,8 @@ static AppBuildSignature ABS;
     auto nssImageURL = [NSString stringWithUTF8String:compose_icon_name.c_str()];
     auto urlimg =  [[NSBundle mainBundle] URLForResource:nssImageURL withExtension:@".png"];
     [_theImageView setImage:[[NSImage alloc] initByReferencingURL: urlimg]];
+    std::string title = "About " + ABS.ApplicationName;
+    self.window.title = [NSString stringWithUTF8String:title.c_str()];
 }
 - (bool)isWindowVisible
 {

@@ -20,6 +20,7 @@
 #include "LayoutModified.h"
 #include "MacAppwinAPIs.h"
 #include "AppBuildSignature.h"
+#include "CustomAboutController.h"
 
 
 static NSString * LastPathnameKey = @"LastInterlockingEditPathname";
@@ -294,6 +295,11 @@ TLEditAppDelegate* getTLEDelegate() {
 -(IBAction)toggleInsulate:(id)sender
 {
     AppCommand(CmIJ);
+}
+-(IBAction)About:(id)sender {
+    if (_about_dialog == nil)
+        _about_dialog = [[CustomAboutController alloc] init];
+    [_about_dialog Show:_window];
 }
 -(void)setTheWporg:(NSPoint)point
 {

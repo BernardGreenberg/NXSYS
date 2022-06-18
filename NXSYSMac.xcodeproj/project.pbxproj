@@ -124,7 +124,6 @@
 		5BABB8A119A8EB9900ECA09A /* MacFullSignals.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BABB8A019A8EB9900ECA09A /* MacFullSignals.mm */; };
 		5BAC930C19C8FE7200673BDC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE487CF199D0A5C007BD6BF /* Cocoa.framework */; };
 		5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC931019C8FE7200673BDC /* InfoPlist.strings */; };
-		5BAC931819C8FE7200673BDC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC931619C8FE7200673BDC /* Credits.rtf */; };
 		5BAC931B19C8FE7200673BDC /* TLEditAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC931A19C8FE7200673BDC /* TLEditAppDelegate.mm */; };
 		5BAC932019C8FE7200673BDC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC931F19C8FE7200673BDC /* Images.xcassets */; };
 		5BAC933919C8FECC00673BDC /* Winapi.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062E7199F72C3008CDCA0 /* Winapi.mm */; };
@@ -181,6 +180,9 @@
 		5BC13705285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */; };
 		5BC13706285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */; };
 		5BC1370D285E1288007D52E1 /* TLEdit256x256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC1370B285E1288007D52E1 /* TLEdit256x256.png */; };
+		5BC1370E285E132B007D52E1 /* CustomAbout.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B65680525C3144B00411B8F /* CustomAbout.xib */; };
+		5BC1370F285E1331007D52E1 /* CustomAboutController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B6567EE25C30EA800411B8F /* CustomAboutController.mm */; };
+		5BC13711285E219D007D52E1 /* AboutTLEdit.html in Resources */ = {isa = PBXBuildFile; fileRef = 5BC13710285E219D007D52E1 /* AboutTLEdit.html */; };
 		5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
 		5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AC19DDA738006C590E /* dialog_warning.png */; };
 		5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
@@ -517,7 +519,6 @@
 		5BAC931119C8FE7200673BDC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5BAC931319C8FE7200673BDC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5BAC931519C8FE7200673BDC /* TLEdit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TLEdit-Prefix.pch"; sourceTree = "<group>"; };
-		5BAC931719C8FE7200673BDC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		5BAC931919C8FE7200673BDC /* TLEditAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TLEditAppDelegate.h; sourceTree = "<group>"; };
 		5BAC931A19C8FE7200673BDC /* TLEditAppDelegate.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = TLEditAppDelegate.mm; sourceTree = "<group>"; };
 		5BAC931D19C8FE7200673BDC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TLEdit.xib; sourceTree = "<group>"; };
@@ -568,6 +569,7 @@
 		5BC13707285D31A5007D52E1 /* WinAppBuildSignature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinAppBuildSignature.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BC1370A285D3AE6007D52E1 /* tlehelp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tlehelp.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BC1370B285E1288007D52E1 /* TLEdit256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TLEdit256x256.png; sourceTree = "<group>"; };
+		5BC13710285E219D007D52E1 /* AboutTLEdit.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AboutTLEdit.html; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -967,6 +969,7 @@
 				5B6567EE25C30EA800411B8F /* CustomAboutController.mm */,
 				5B65680525C3144B00411B8F /* CustomAbout.xib */,
 				5B65681725C3388700411B8F /* AboutNXSYS.html */,
+				5BC13710285E219D007D52E1 /* AboutTLEdit.html */,
 			);
 			name = "Custom About";
 			sourceTree = "<group>";
@@ -1177,7 +1180,6 @@
 				5BAC931019C8FE7200673BDC /* InfoPlist.strings */,
 				5BAC931319C8FE7200673BDC /* main.m */,
 				5BAC931519C8FE7200673BDC /* TLEdit-Prefix.pch */,
-				5BAC931619C8FE7200673BDC /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1673,6 +1675,7 @@
 				5BD064DB19CE44A600564BD5 /* SwitchProperties.xib in Resources */,
 				5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */,
 				5B4E62B2284AEA6A002A6C7E /* OpenIcon.png in Resources */,
+				5BC13711285E219D007D52E1 /* AboutTLEdit.html in Resources */,
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
 				5BC1370D285E1288007D52E1 /* TLEdit256x256.png in Resources */,
 				5BA7E74719D962A5006F9A04 /* CanvasExtentDialog.xib in Resources */,
@@ -1691,6 +1694,7 @@
 				5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */,
 				5BC911B019DDB294006C590E /* dialog_warning.png in Resources */,
 				5B6705C119D0EC70002B6E28 /* document_properties.png in Resources */,
+				5BC1370E285E132B007D52E1 /* CustomAbout.xib in Resources */,
 				5B6705BA19D0B31A002B6E28 /* SignalNE.png in Resources */,
 				5B6705DA19D1A148002B6E28 /* PanelLightProperties.xib in Resources */,
 				5B87B31A284A5DB40002AB18 /* UndoIcon.pxd in Resources */,
@@ -1699,7 +1703,6 @@
 				5B6705D319D19BA7002B6E28 /* ExitLightProperties.xib in Resources */,
 				5BA7E73319D39DC0006F9A04 /* insulate.png in Resources */,
 				5B67045719D0A4B0002B6E28 /* Toolbar.xib in Resources */,
-				5BAC931819C8FE7200673BDC /* Credits.rtf in Resources */,
 				5BA7E74F19DAA31C006F9A04 /* ShiftLayoutDialog.xib in Resources */,
 				5B6705CC19D1942A002B6E28 /* SwitchKeyProperties.xib in Resources */,
 			);
@@ -1872,6 +1875,7 @@
 				5BAC935519C8FECC00673BDC /* tcircuit.cpp in Sources */,
 				5BAC935619C8FECC00673BDC /* trackseg.cpp in Sources */,
 				5B5AE639230DDBEA00348612 /* main.mm in Sources */,
+				5BC1370F285E1331007D52E1 /* CustomAboutController.mm in Sources */,
 				5BAC935719C8FECC00673BDC /* xexlight.cpp in Sources */,
 				5B30B10827E4FDCC000D59C8 /* salvager.cpp in Sources */,
 				5BAC935819C8FECC00673BDC /* xsignal.cpp in Sources */,
@@ -2010,14 +2014,6 @@
 				5BAC931119C8FE7200673BDC /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		5BAC931619C8FE7200673BDC /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5BAC931719C8FE7200673BDC /* en */,
-			);
-			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
 		5BAC931C19C8FE7200673BDC /* TLEdit.xib */ = {
