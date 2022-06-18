@@ -121,7 +121,6 @@ NSWindow * getNXWindow() {
 
 
 @implementation AppDelegate
-static NSString* buildDateString;
 static NSString* buildSignature;
 static InterlockingLibrary interlockingLibrary;
 static HelpDirectory helpDirectory;
