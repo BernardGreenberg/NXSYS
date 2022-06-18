@@ -1,12 +1,11 @@
 //
-//  MacAppBuildSignature.cpp
+//  MacAppBuildSignature.mm
 //  NXSYSMac
 //
 //  Created by Bernard Greenberg on 6/17/22.
 //  Copyright © 2022 BernardGreenberg. All rights reserved.
 //
 
-#include <stdio.h>
 #include "AppBuildSignature.h"
 #include <string>
 #include <regex>
