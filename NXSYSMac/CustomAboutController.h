@@ -13,6 +13,7 @@
 -(void)Show: (NSWindow*)parent;
 -(bool)isWindowVisible;
 @property (weak) IBOutlet WKWebView *theWebView;
+@property (weak) IBOutlet NSImageView *theImageView;
 @property (weak) IBOutlet NSTextField *labelAppName;
 @property (weak) IBOutlet NSTextField *labelLine1;
 @property (weak) IBOutlet NSTextField *labelLine2;

@@ -12,6 +12,7 @@
                 <outlet property="labelAppName" destination="Wq2-hI-0o8" id="6YQ-YB-mJF"/>
                 <outlet property="labelLine1" destination="odg-P3-Nnv" id="v0E-fL-AvK"/>
                 <outlet property="labelLine2" destination="gI8-dD-O1m" id="9C8-EZ-n5z"/>
+                <outlet property="theImageView" destination="J5M-f3-rhc" id="ZUc-Md-aw8"/>
                 <outlet property="theWebView" destination="fbl-jG-YkP" id="HHe-Kq-mPE"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="0bk-iH-KFr"/>
             </connections>

@@ -40,6 +40,9 @@ static AppBuildSignature ABS;
     NSURL * url = [[NSBundle mainBundle] URLForResource:nssAboutURL withExtension:@".html"];
     auto urlrq = [NSURLRequest requestWithURL:url];
     [self.theWebView loadRequest:urlrq];
+    auto nssImageURL = [NSString stringWithUTF8String:"icon_256x256"];
+    auto urlimg =  [[NSBundle mainBundle] URLForResource:nssImageURL withExtension:@".png"];
+    [_theImageView setImage:[[NSImage alloc] initByReferencingURL: urlimg]];
 }
 - (bool)isWindowVisible
 {
