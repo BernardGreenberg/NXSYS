@@ -8,22 +8,10 @@
 #include <string>
 #include "WinReadResText.h"
 #include "TlDlgProc.h"
+#include "AppBuildSignature.h"
 
 COLORREF HelpColor = RGB(0, 228, 228);
 HBRUSH HelpBrush = NULL;
-
-static const char* BuildType =
-#ifdef _DEBUG
-"Debug"
-#else
-"Release"
-#endif
-#ifdef _WIN64
-" (64-bit)"
-#else
-" (32-bit)"
-#endif
-" build";
 
 static WNDPROC wpOrigEditProc;
 static WNDPROC wpOrigDlgWndProc;
@@ -42,8 +30,8 @@ void ResourceScat(UINT id, std::string& B) {
 
 static void
 InterpretDocCmd(const char * p, int len, std::string& B) {
-	char b[50];
-	char cmd[33];
+	char b[50] = "";
+	char cmd[33] = "";
 	if (len == 0 || len > sizeof(cmd) - 1) {
 	fail:
 		B += '%';
@@ -187,11 +175,11 @@ AboutDlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 	case WM_INITDIALOG:
 	{
-		char atime[40];
-		time_t modtime = GetModuleTime(app_instance);
-		strftime(atime, sizeof(atime), DATE_FORMAT, localtime(&modtime));
-		SetDlgItemText(dialog, ABOUT_VSN, atime);
-		SetDlgItemText(dialog, IDC_BUILD_TYPE, BuildType);
+		AppBuildSignature ABS;
+		ABS.Populate();
+		std::string ver = "Version " + ABS.VersionString() + " / " + ABS.OSBase();
+		SetDlgItemText(dialog, IDC_BUILD_TYPE, ver.c_str());
+		SetDlgItemText(dialog, ABOUT_VSN, ABS.BuildString().c_str());
 		return TRUE;
 	}
 	case WM_COMMAND:

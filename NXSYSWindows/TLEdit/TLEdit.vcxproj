@@ -89,7 +89,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TLEDIT;_CRT_SECURE_NO_WARNINGS;NXV2;XTG;WIN32;_WIN32;WINDOWS;_DEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\TLEdit;$(SolutionDir)..\TLEdit\tled;$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled;$(SolutionDir);$(SolutionDir)..\TLEdit;$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -118,7 +118,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled</AdditionalIncludeDirectories>
@@ -132,12 +132,12 @@
       <ConformanceMode>true</ConformanceMode>
       <UndefinePreprocessorDefinitions>UNICODE;_UNICODE;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;$(SolutionDir)..\TLEdit\tled;$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled;$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;$(SolutionDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled</AdditionalIncludeDirectories>
@@ -162,7 +162,7 @@ exit 0</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;NXV2;TLEDIT;XTG;WINDOWS;WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\TLEdit\tled;$(SolutionDir)..\NXSYS;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled;$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <UndefinePreprocessorDefinitions>_UNICODE;UNICODE;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -172,7 +172,7 @@ exit 0</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled</AdditionalIncludeDirectories>
@@ -221,12 +221,13 @@ exit 0</Command>
     <ClCompile Include="..\..\TLEdit\tled\salvager.cpp" />
     <ClCompile Include="..\..\TLEdit\tled\save.cpp" />
     <ClCompile Include="..\..\TLEdit\tled\tledit.cpp" />
-    <ClCompile Include="..\..\TLEdit\tled\tlehelp.cpp" />
     <ClCompile Include="..\MenuUndoRedo.cpp" />
+    <ClCompile Include="..\tlehelp.cpp" />
     <ClCompile Include="..\tletoolb.cpp" />
     <ClCompile Include="..\..\TLEdit\tled\undo.cpp" />
     <ClCompile Include="..\getmodtm.c" />
     <ClCompile Include="..\ParseCommandLine.cpp" />
+    <ClCompile Include="..\WinAppBuildSignature.cpp" />
     <ClCompile Include="..\WinReadResText.cpp" />
   </ItemGroup>
   <ItemGroup>

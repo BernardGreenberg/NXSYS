@@ -18,9 +18,6 @@
     <ClCompile Include="..\tletoolb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TLEdit\tled\tlehelp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TLEdit\tled\tledit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -160,6 +157,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\MenuUndoRedo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WinAppBuildSignature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tlehelp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
