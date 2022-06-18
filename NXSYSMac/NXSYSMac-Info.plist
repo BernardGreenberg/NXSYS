@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BundleBuildDate</key>
-	<date>2022-06-18T12:29:36Z</date>
+	<date>2022-06-18T13:11:07Z</date>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -42,7 +42,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1522</string>
+	<string>1530</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.education</string>
 	<key>LSMinimumSystemVersion</key>

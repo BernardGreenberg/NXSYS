@@ -32,9 +32,12 @@ static AppBuildSignature ABS;
 {
     [super windowDidLoad];
 
+    [_labelAppName setStringValue:[NSString stringWithUTF8String:ABS.ApplicationName.c_str()]];
     [_labelLine1 setStringValue:[NSString stringWithUTF8String:ABS.VersionString().c_str()]];
-     [_labelLine2 setStringValue:[NSString stringWithUTF8String:ABS.BuildString().c_str()]];
-    NSURL * url = [[NSBundle mainBundle] URLForResource:@"About" withExtension:@".html"];
+    [_labelLine2 setStringValue:[NSString stringWithUTF8String:ABS.BuildString().c_str()]];
+    std::string AboutURL = "About" + ABS.ApplicationName;
+    NSString* nssAboutURL = [NSString stringWithUTF8String:AboutURL.c_str()];
+    NSURL * url = [[NSBundle mainBundle] URLForResource:nssAboutURL withExtension:@".html"];
     auto urlrq = [NSURLRequest requestWithURL:url];
     [self.theWebView loadRequest:urlrq];
 }

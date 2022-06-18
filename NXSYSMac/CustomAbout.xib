@@ -9,9 +9,10 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CustomAboutController">
             <connections>
+                <outlet property="labelAppName" destination="Wq2-hI-0o8" id="6YQ-YB-mJF"/>
                 <outlet property="labelLine1" destination="odg-P3-Nnv" id="v0E-fL-AvK"/>
                 <outlet property="labelLine2" destination="gI8-dD-O1m" id="9C8-EZ-n5z"/>
-                <outlet property="theWebView" destination="fbl-jG-YkP" id="Kg1-ln-4FQ"/>
+                <outlet property="theWebView" destination="fbl-jG-YkP" id="HHe-Kq-mPE"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="0bk-iH-KFr"/>
             </connections>
         </customObject>
@@ -40,7 +41,7 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon_256x256" id="0jG-FS-xPO"/>
                     </imageView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wq2-hI-0o8">
-                        <rect key="frame" x="129" y="240" width="75" height="25"/>
+                        <rect key="frame" x="122" y="240" width="98" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="NXSYS" id="MHO-4t-LGY">
                             <font key="font" metaFont="system" size="21"/>
