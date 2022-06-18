@@ -24,8 +24,7 @@ void AppBuildSignature::Populate() {
     NSDictionary * dict = [[NSBundle mainBundle] infoDictionary];
 
     std::smatch matchv;
-    NSString* nss_build_number = [dict objectForKey:@"CFBundleVersion"];  // "1478"
-    if (nss_build_number != nil) {
+    if (NSString* nss_build_number = [dict objectForKey:@"CFBundleVersion"]) { // "1478"
         string sbuild_number = [nss_build_number UTF8String];
         if (regex_match(sbuild_number, matchv, SIMPLE_DIGITS)) {
             VersionComponents[3] = std::stoi(sbuild_number);
@@ -33,21 +32,19 @@ void AppBuildSignature::Populate() {
         }
     }
 
-    NSString* nss_version = [dict objectForKey:@"CFBundleShortVersionString"]; // "2.7.0"
-    if (nss_version != nil) {
+    if (NSString* nss_version = [dict objectForKey:@"CFBundleShortVersionString"]) {// "2.7.0"
         string sversion = [nss_version UTF8String];
         if (regex_match(sversion, matchv, TRIPARTITE_VERSION)) {
             for (int i = 1; i < 4; i++)
                 VersionComponents[i-1] = std::stoi(matchv[i].str());
         }
     }
-    NSString* nss_app_name = [dict objectForKey:@"CFBundleDisplayName"];  // "NXSYS" or "TLEdit"
-    if (nss_app_name != nil)
+    
+    if (NSString* nss_app_name = [dict objectForKey:@"CFBundleDisplayName"])  // "NXSYS" or "TLEdit"
         ApplicationName = [nss_app_name UTF8String];
 
     BuildTime = 0;
-    NSDate * nsd_date = [dict objectForKey:@"BundleBuildDate"];
-    if (nsd_date != nil)
+    if (NSDate * nsd_date = [dict objectForKey:@"BundleBuildDate"])
         BuildTime = (time_t)[nsd_date timeIntervalSince1970];
 }
 
