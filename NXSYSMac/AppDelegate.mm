@@ -165,21 +165,6 @@ static HelpDirectory helpDirectory;
     haveSetScenarioHelpItem = NO;
     ClearHelpMenu(); // not really menu; array of old strings.
 }
--(NSString*)ComputeBuildSignature
-{
-    /* Computed at object init time -- doesn't change with layout */
-    NSMutableString * signature = [[NSMutableString alloc] init];
-    NSDictionary * dict = [[NSBundle mainBundle] infoDictionary];
-    [signature appendString: [dict objectForKey:@"CFBundleShortVersionString"]];
-    [signature appendString: @" "];
-    [signature appendString: [dict objectForKey:@"CFBundleVersion"]];
-#if DEBUG
-    [signature appendString: @" (DEBUG)"];
-#endif
-    [signature appendString: buildDateString]; // might be @"", else starts with space
-    return signature;
-}
-
 
 -(void)LibEntryClicked:(NSEvent*)event
 {
