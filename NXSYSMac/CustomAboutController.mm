@@ -40,7 +40,8 @@ static AppBuildSignature ABS;
     NSURL * url = [[NSBundle mainBundle] URLForResource:nssAboutURL withExtension:@".html"];
     auto urlrq = [NSURLRequest requestWithURL:url];
     [self.theWebView loadRequest:urlrq];
-    auto nssImageURL = [NSString stringWithUTF8String:"icon_256x256"];
+    std::string compose_icon_name = ABS.ApplicationName + "256x256";
+    auto nssImageURL = [NSString stringWithUTF8String:compose_icon_name.c_str()];
     auto urlimg =  [[NSBundle mainBundle] URLForResource:nssImageURL withExtension:@".png"];
     [_theImageView setImage:[[NSImage alloc] initByReferencingURL: urlimg]];
 }

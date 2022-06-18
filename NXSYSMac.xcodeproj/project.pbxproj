@@ -66,7 +66,7 @@
 		5B5CB8551A0B949500010B8B /* MiscApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B5CB8531A0B949300010B8B /* MiscApi.mm */; };
 		5B6567EF25C30EA800411B8F /* CustomAboutController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B6567EE25C30EA800411B8F /* CustomAboutController.mm */; };
 		5B65680625C3144B00411B8F /* CustomAbout.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B65680525C3144B00411B8F /* CustomAbout.xib */; };
-		5B65680F25C331D100411B8F /* icon_256x256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B65680E25C331D000411B8F /* icon_256x256.png */; };
+		5B65680F25C331D100411B8F /* NXSYS256x256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B65680E25C331D000411B8F /* NXSYS256x256.png */; };
 		5B65681825C3388700411B8F /* AboutNXSYS.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B65681725C3388700411B8F /* AboutNXSYS.html */; };
 		5B67045419CF90DF002B6E28 /* RubberBandView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B67045319CF90DF002B6E28 /* RubberBandView.mm */; };
 		5B67045719D0A4B0002B6E28 /* Toolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B67045619D0A4B0002B6E28 /* Toolbar.xib */; };
@@ -409,7 +409,7 @@
 		5B6567ED25C30EA800411B8F /* CustomAboutController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomAboutController.h; sourceTree = "<group>"; };
 		5B6567EE25C30EA800411B8F /* CustomAboutController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CustomAboutController.mm; sourceTree = "<group>"; };
 		5B65680525C3144B00411B8F /* CustomAbout.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomAbout.xib; sourceTree = "<group>"; };
-		5B65680E25C331D000411B8F /* icon_256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_256x256.png; sourceTree = "<group>"; };
+		5B65680E25C331D000411B8F /* NXSYS256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NXSYS256x256.png; sourceTree = "<group>"; };
 		5B65681725C3388700411B8F /* AboutNXSYS.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = AboutNXSYS.html; sourceTree = "<group>"; };
 		5B67045219CF90DF002B6E28 /* RubberBandView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubberBandView.h; sourceTree = "<group>"; };
 		5B67045319CF90DF002B6E28 /* RubberBandView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RubberBandView.mm; sourceTree = "<group>"; };
@@ -959,7 +959,7 @@
 		5B6567E325C3096400411B8F /* Custom About */ = {
 			isa = PBXGroup;
 			children = (
-				5B65680E25C331D000411B8F /* icon_256x256.png */,
+				5B65680E25C331D000411B8F /* NXSYS256x256.png */,
 				5B6567ED25C30EA800411B8F /* CustomAboutController.h */,
 				5B6567EE25C30EA800411B8F /* CustomAboutController.mm */,
 				5B65680525C3144B00411B8F /* CustomAbout.xib */,
@@ -1705,7 +1705,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B65680F25C331D100411B8F /* icon_256x256.png in Resources */,
+				5B65680F25C331D100411B8F /* NXSYS256x256.png in Resources */,
 				5B4E1810222AC4AF00DED5AE /* Credits.rtf in Resources */,
 				5BB5802F27C40D9400FB0ED5 /* Documentation in Resources */,
 				5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */,
