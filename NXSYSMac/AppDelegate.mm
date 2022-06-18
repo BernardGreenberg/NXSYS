@@ -574,7 +574,7 @@ static HelpDirectory helpDirectory;
 - (IBAction)NewAbout:(id)sender {
     if (_aboutController == nil)
         _aboutController = [[CustomAboutController alloc] init];
-    [_aboutController Show];
+    [_aboutController Show:_window];
 }
 
 @end

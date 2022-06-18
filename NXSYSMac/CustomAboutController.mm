@@ -7,7 +7,6 @@
 //
 
 #import "CustomAboutController.h"
-#import "AppDelegate.h"
 #include "AppBuildSignature.h"
 
 @implementation CustomAboutController
@@ -44,11 +43,11 @@ static AppBuildSignature ABS;
     return [self.window isVisible];
 }
 
--(void)Show
+-(void)Show: (NSWindow*)parent
 {
     [self showWindow:nil];
     [self.window makeKeyAndOrderFront:nil];
-    [getNXWindow() addChildWindow:self.window ordered:NSWindowAbove];
+    [parent addChildWindow:self.window ordered:NSWindowAbove];
 }
 
 

@@ -10,7 +10,7 @@
 #import <WebKit/WebKit.h>
 
 @interface CustomAboutController : NSWindowController
--(void)Show;
+-(void)Show: (NSWindow*)parent;
 -(bool)isWindowVisible;
 @property (weak) IBOutlet WKWebView *theWebView;
 @property (weak) IBOutlet NSTextField *labelLine1;

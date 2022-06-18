@@ -40,7 +40,7 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon_256x256" id="0jG-FS-xPO"/>
                     </imageView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wq2-hI-0o8">
-                        <rect key="frame" x="105" y="243" width="123" height="27"/>
+                        <rect key="frame" x="129" y="240" width="75" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="NXSYS" id="MHO-4t-LGY">
                             <font key="font" metaFont="system" size="21"/>
@@ -58,7 +58,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="odg-P3-Nnv">
-                        <rect key="frame" x="61" y="225" width="211" height="17"/>
+                        <rect key="frame" x="109" y="218" width="121" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Version 0.0.0.0" id="GYz-jO-hvT">
                             <font key="font" metaFont="system" size="17"/>
