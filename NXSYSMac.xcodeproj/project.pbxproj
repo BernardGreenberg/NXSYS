@@ -568,8 +568,8 @@
 		5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MacAppBuildSignature.mm; sourceTree = "<group>"; };
 		5BC13707285D31A5007D52E1 /* WinAppBuildSignature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinAppBuildSignature.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BC1370A285D3AE6007D52E1 /* tlehelp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tlehelp.cpp; sourceTree = "<group>"; tabWidth = 4; };
-		5BC1370B285E1288007D52E1 /* TLEdit256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TLEdit256x256.png; sourceTree = "<group>"; };
-		5BC13710285E219D007D52E1 /* AboutTLEdit.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AboutTLEdit.html; sourceTree = "<group>"; };
+		5BC1370B285E1288007D52E1 /* TLEdit256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TLEdit256x256.png; path = ../NXSYSMac/TLEdit256x256.png; sourceTree = "<group>"; };
+		5BC13710285E219D007D52E1 /* AboutTLEdit.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = AboutTLEdit.html; path = ../NXSYSMac/AboutTLEdit.html; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -963,13 +963,11 @@
 		5B6567E325C3096400411B8F /* Custom About */ = {
 			isa = PBXGroup;
 			children = (
-				5BC1370B285E1288007D52E1 /* TLEdit256x256.png */,
 				5B65680E25C331D000411B8F /* NXSYS256x256.png */,
 				5B6567ED25C30EA800411B8F /* CustomAboutController.h */,
 				5B6567EE25C30EA800411B8F /* CustomAboutController.mm */,
 				5B65680525C3144B00411B8F /* CustomAbout.xib */,
 				5B65681725C3388700411B8F /* AboutNXSYS.html */,
-				5BC13710285E219D007D52E1 /* AboutTLEdit.html */,
 			);
 			name = "Custom About";
 			sourceTree = "<group>";
@@ -1500,6 +1498,8 @@
 			children = (
 				5BAC931919C8FE7200673BDC /* TLEditAppDelegate.h */,
 				5BAC931A19C8FE7200673BDC /* TLEditAppDelegate.mm */,
+				5BC1370B285E1288007D52E1 /* TLEdit256x256.png */,
+				5BC13710285E219D007D52E1 /* AboutTLEdit.html */,
 				5BAC931C19C8FE7200673BDC /* TLEdit.xib */,
 				5BD064DE19CEE9E300564BD5 /* TLEditMainView.mm */,
 				5B67045219CF90DF002B6E28 /* RubberBandView.h */,
