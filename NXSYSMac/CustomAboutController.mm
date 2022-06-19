@@ -7,7 +7,11 @@
 //
 
 #import "CustomAboutController.h"
-#include "AppBuildSignature.h"
+#import "AppBuildSignature.h"
+
+static NSString* stdNS(const std::string s) {
+    return [NSString stringWithUTF8String:(s.c_str())];
+}
 
 @implementation CustomAboutController
 static AppBuildSignature ABS;
@@ -32,20 +36,18 @@ static AppBuildSignature ABS;
 {
     [super windowDidLoad];
 
-    [_labelAppName setStringValue:[NSString stringWithUTF8String:ABS.ApplicationName.c_str()]];
-    [_labelLine1 setStringValue:[NSString stringWithUTF8String:ABS.VersionString().c_str()]];
-    [_labelLine2 setStringValue:[NSString stringWithUTF8String:ABS.BuildString().c_str()]];
-    std::string AboutURL = "About" + ABS.ApplicationName;
-    NSString* nssAboutURL = [NSString stringWithUTF8String:AboutURL.c_str()];
+    [_labelAppName setStringValue:stdNS(ABS.ApplicationName)];
+    [_labelLine1 setStringValue:stdNS(ABS.VersionString())];
+    [_labelLine2 setStringValue:stdNS(ABS.BuildString())];
+    self.window.title = stdNS("About " + ABS.ApplicationName);
+
+    NSString* nssAboutURL = stdNS("About" + ABS.ApplicationName);
     NSURL * url = [[NSBundle mainBundle] URLForResource:nssAboutURL withExtension:@".html"];
-    auto urlrq = [NSURLRequest requestWithURL:url];
-    [self.theWebView loadRequest:urlrq];
-    std::string compose_icon_name = ABS.ApplicationName + "256x256";
-    auto nssImageURL = [NSString stringWithUTF8String:compose_icon_name.c_str()];
+    [self.theWebView loadRequest:[NSURLRequest requestWithURL:url]];
+
+    auto nssImageURL = stdNS(ABS.ApplicationName + "256x256");
     auto urlimg =  [[NSBundle mainBundle] URLForResource:nssImageURL withExtension:@".png"];
     [_theImageView setImage:[[NSImage alloc] initByReferencingURL: urlimg]];
-    std::string title = "About " + ABS.ApplicationName;
-    self.window.title = [NSString stringWithUTF8String:title.c_str()];
 }
 - (bool)isWindowVisible
 {
