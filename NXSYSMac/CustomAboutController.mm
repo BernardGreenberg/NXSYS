@@ -36,18 +36,20 @@ static AppBuildSignature ABS;
 {
     [super windowDidLoad];
 
-    [_labelAppName setStringValue:stdNS(ABS.ApplicationName)];
-    [_labelLine1 setStringValue:stdNS(ABS.VersionString())];
-    [_labelLine2 setStringValue:stdNS(ABS.BuildString())];
+    self.labelAppName.stringValue = stdNS(ABS.ApplicationName);
+    self.labelVersion.stringValue = stdNS("Version " + ABS.VersionString());
+    self.labelBuild.stringValue = stdNS(ABS.BuildString());
     self.window.title = stdNS("About " + ABS.ApplicationName);
 
-    NSString* nssAboutURL = stdNS("About" + ABS.ApplicationName);
-    NSURL * url = [[NSBundle mainBundle] URLForResource:nssAboutURL withExtension:@".html"];
-    [self.theWebView loadRequest:[NSURLRequest requestWithURL:url]];
+    auto AboutTextURL = [[NSBundle mainBundle]
+                         URLForResource: stdNS("About" + ABS.ApplicationName)
+                         withExtension: @".html"];
+    [self.theWebView loadRequest:[NSURLRequest requestWithURL:AboutTextURL]];
 
-    auto nssImageURL = stdNS(ABS.ApplicationName + "256x256");
-    auto urlimg =  [[NSBundle mainBundle] URLForResource:nssImageURL withExtension:@".png"];
-    [_theImageView setImage:[[NSImage alloc] initByReferencingURL: urlimg]];
+    auto ImageURL =  [[NSBundle mainBundle]
+                      URLForResource: stdNS(ABS.ApplicationName + "256x256")
+                      withExtension: @".png"];
+    self.theImageView.image = [[NSImage alloc] initByReferencingURL: ImageURL];
 }
 - (bool)isWindowVisible
 {
