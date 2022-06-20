@@ -199,6 +199,8 @@ static HelpDirectory helpDirectory;
     
     NSMenuItem* help_item = [topLevelMenu itemWithTitle:@"Help"];
     NSMenu* help_menu = help_item.submenu;
+    NSMenuItem* __strong shi = _ScenarioHelpItem;
+    [help_menu removeItem:shi]; // pointer in delegate is WEAK.
     int ix = 0;
     for (auto& helpe : helpDirectory) {
         NSMenuItem *item = [[NSMenuItem alloc]
@@ -208,6 +210,9 @@ static HelpDirectory helpDirectory;
         item.tag = ix++;
         [help_menu addItem:item];
     }
+/* Get it to the bottom */
+    _ScenarioHelpItem = shi;
+    [help_menu addItem:shi];
 }
 
 -(void)PopulateLibraryMenu
