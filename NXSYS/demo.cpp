@@ -67,7 +67,7 @@ public:
         return read_sexp(File);
     }
     std::string ExpandPath(const char* path) {
-        return STLincexppath(RawPath, path);
+        return replace_filename(RawPath, path);
     }
 };
 

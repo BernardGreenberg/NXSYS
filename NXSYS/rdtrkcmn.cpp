@@ -287,7 +287,7 @@ forms:
                 (STLincexppath(fname, CADR(s).u.s).c_str());
 #endif
     else if (symcmp (fn, "INCLUDE"))
-        return LoadExprcodeFile (STLincexppath(fname, CADR(s).u.s).c_str());
+        return LoadExprcodeFile (replace_filename(fname, CADR(s).u.s).c_str());
     else if (symcmp (fn, "RELAY"))
 	return (DefineRelayFromLisp (rest) != NULL);
     else if (symcmp (fn, "TIMER"))
@@ -573,7 +573,7 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
             else {
                 helpMenuText = s2.u.s;
                 if (helpMenuText.length() && helpMenuText[0] == '@') {
-                    if (auto retr = LassieGetHelp(STLincexppath(fname, helpMenuText.substr(1))))
+                    if (auto retr = LassieGetHelp(replace_filename(fname, helpMenuText.substr(1))))
                         helpMenuText = retr.value;
                     else
                         LERROR("Cannot open referenced text help file", s2); // macro returns 0.
