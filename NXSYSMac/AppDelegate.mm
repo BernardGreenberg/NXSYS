@@ -99,7 +99,8 @@ void Demo(const char * DemoFileName);
 @interface AppDelegate ()  //supplementary declaration.
 {
     __strong NSString * pathForReload;
-    __strong RelayDrafterController * RelayDrafter; BOOL haveSetScenarioHelpItem;
+    __strong RelayDrafterController * RelayDrafter;
+    BOOL haveSetScenarioHelpItem;
     id eventMonitor;
     NSPoint wporg;
     BOOL wporg_set;
