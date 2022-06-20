@@ -30,7 +30,6 @@
 #include "trafficlever.h"
 #include "plight.h"
 #include "helpdlg.h"
-#include "STLfnsplit.h"
 #include "STLExtensions.h"
 #include "ValidatingValue.h"
 
