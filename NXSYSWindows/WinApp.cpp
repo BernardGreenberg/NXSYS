@@ -33,7 +33,6 @@
 #include "incexppt.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
-#include "STLfnsplit.h"
 #include "AppAbortRestart.h"
 #include "MessageBox.h"
 #include "NXRegistry.h"

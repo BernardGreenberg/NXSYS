@@ -16,7 +16,7 @@
 #include "assignid.h"
 #include "tledit.h"
 #include <string>
-#include "STLfnsplit.h"
+#include <filesystem>
 #include "SwitchConsistency.h"
 #include "STLExtensions.h"
 #include "AppBuildSignature.h"
@@ -25,6 +25,8 @@
 #include <exception>
 #include <unordered_set>
 #include <unordered_map>
+
+namespace fs = std::filesystem;
 
 #ifdef WIN32
 #include <io.h>
@@ -154,9 +156,8 @@ public:
 static BOOL MakeBackupCopy(const char * path) {
     /* This is a hedge against USER error, not app error. */
 
-	std::string drive, dir, fname, ext;
-	STLfnsplit(path, drive, dir, fname, ext);
-	std::string bkpath = STLfnmerge(drive, dir, fname, ".bak");
+    std::string bkpath = fs::path(path).replace_extension(".bak");
+    auto bkpathc = bkpath.c_str();
 
 	if (access(path, 0) != 0)	/* if .trk no exist, no prob. */
 		return TRUE;
@@ -165,13 +166,13 @@ static BOOL MakeBackupCopy(const char * path) {
 	if (access(path, 6) != 0) /* if can't write it, we're in trouble. */
 		return FALSE;
 	/* .trk exists and we can write it. */
-    if (access(bkpath.c_str(), 0) == 0) {		/* if bk path exists */
+    if (access(bkpathc, 0) == 0) {		/* if bk path exists */
         /* try to delete it */
-		if (remove(bkpath.c_str()) != 0)	/* if we can't delete it */
+		if (remove(bkpathc) != 0)	/* if we can't delete it */
 			return FALSE;		/* report trouble. */
     }
 		/* try to rename real path to bkpath */
-	if (rename(path, bkpath.c_str()) != 0)
+	if (rename(path, bkpathc) != 0)
 		return FALSE;
 
 	return TRUE;

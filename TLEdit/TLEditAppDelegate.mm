@@ -10,9 +10,9 @@
 #import "ToolbarController.h"
 #import "CanvasExtentDialogController.h"
 #include <string>
+#include <filesystem>
 #include "tlecmds.h"
 #include <string>
-#include "STLfnsplit.h"
 #include "resource.h"
 #include "MessageBox.h"
 #include "ShiftLayoutDialog.h"
@@ -22,6 +22,7 @@
 #include "AppBuildSignature.h"
 #include "CustomAboutController.h"
 
+namespace fs = std::filesystem;
 
 static NSString * LastPathnameKey = @"LastInterlockingEditPathname";
 static NSArray *allowedTypes = [NSArray arrayWithObject:@"trk"];
@@ -220,9 +221,9 @@ TLEditAppDelegate* getTLEDelegate() {
 
     NSSavePanel * savePanel = [NSSavePanel savePanel];
     if (currentFileName != nil) {
-        std::string drive,dir,name,ext;
-        STLfnsplit(currentFileName.UTF8String, drive, dir, name, ext);
-        name += ext;
+        auto cfnfs = fs::path([currentFileName UTF8String]);
+        std::string name = cfnfs.filename().string();
+        std::string dir = cfnfs.parent_path().string();
         [savePanel setNameFieldStringValue:[NSString stringWithUTF8String:name.c_str()]];
         [savePanel setDirectoryURL:[NSURL fileURLWithPath:[NSString stringWithUTF8String:dir.c_str()]]];
     }
@@ -231,7 +232,7 @@ TLEditAppDelegate* getTLEDelegate() {
     [savePanel setCanCreateDirectories:FALSE];
     [savePanel setCanSelectHiddenExtension:FALSE];
     NSInteger result = [savePanel runModal];
-    if (result == NSFileHandlingPanelOKButton) {
+    if (result == NSModalResponseOK) {
         [self heartOfSave: savePanel.URL.path];
     }
 }
