@@ -26,12 +26,14 @@
 #endif
 #include <string>
 #include <vector>
+#include <filesystem>
 #include <limits>
 #include <unordered_map>
 #include <unordered_set>
 #include "STLExtensions.h"
-#include "STLfnsplit.h"
 #include "incexppt.h"
+
+namespace fs = std::filesystem;
 
 /* To be done -- 8 June 1994
    upd 28 October 1996
@@ -1163,11 +1165,10 @@ void CompileLayout (FILE* f, const char * fname) {
 }
 
 std::string merge_ext(const char * input, const char* new_ext, bool force) {
-    std::string dir, drive, file, ext;
-    STLfnsplit (input, drive, dir, file, ext);
-    if (force || ext.empty())
-        ext = new_ext;
-    return STLfnmerge (drive, dir, file, ext);
+    auto fspath = fs::path(input);
+    if (force || !fspath.has_extension())
+        fspath.replace_extension(new_ext);
+    return fspath.string();
 }
 
 void CallWtko (const char * path, const char * opath, time_t timer,
@@ -1242,12 +1243,10 @@ int main (int argc, char ** argv) {
     fprintf(stdout, "Macintosh MacOS clang++ implementation\n");
 #endif
 
-    std::string xdrive,xdir,xfname,xext;
-    STLfnsplit (argv[0], xdrive, xdir, xfname, xext);
-
     if (argc < 2) {
 usage:
-	fprintf (stderr, "Usage: %s source{.trk} {args}\nArgs:\n", xfname.c_str());
+        auto execpath = fs::path(argv[0]);
+        fprintf (stderr, "Usage: %s source{.trk} {args}\nArgs:\n", execpath.string().c_str());
 	fprintf (stderr,
 		 "  -L    Make listing to source.lst\n"
 		 "  -32   Produce 32-bit object file%s\n"
