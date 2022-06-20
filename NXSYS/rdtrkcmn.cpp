@@ -193,10 +193,7 @@ const char * ReadLayout (const char* fname) {
     InitSwitchKeyData();
     InitTrafficLeverData();
 
-    std::string drive,dir,ename,ext;
-    STLfnsplit (fname, drive, dir, ename, ext);
-
-    if (stoupper(ext) == ".TKO") {
+    if (stoupper(fs::path(fname).extension().string()) == ".TKO") {
 #if NXSYSMac
         std::string em;
         em += fname;
