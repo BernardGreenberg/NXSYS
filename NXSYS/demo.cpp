@@ -17,7 +17,7 @@
 #include "brushpen.h"
 #include "demoapi.h"
 #include "nxsysapp.h"
-#include "incexppt.h"
+#include "replace_filename.h"
 #include "usermsg.h"
 #include "ssdlg.h"
 #include <string>

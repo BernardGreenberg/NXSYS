@@ -11,7 +11,6 @@
 		5B25510D25B87C6500A68D73 /* rlycomp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B4DF3A02314AC24001FDE00 /* rlycomp.cpp */; };
 		5B25511B25B87D2B00A68D73 /* RelayIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B25511A25B87D2B00A68D73 /* RelayIndex.cpp */; };
 		5B25512E25B87D6100A68D73 /* readsexp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BE49431199D0B2D007BD6BF /* readsexp.cpp */; };
-		5B25513625B87D6900A68D73 /* incexppt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */; };
 		5B25513E25B87D6E00A68D73 /* lspmacro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062C8199E73F1008CDCA0 /* lspmacro.cpp */; };
 		5B25515D25B87FAE00A68D73 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B25516525B87FB800A68D73 /* RelayLispSubstrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */; };
@@ -30,7 +29,6 @@
 		5B46BA0E19AC069C0041C4FE /* RelayDrafterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B46BA0D19AC069C0041C4FE /* RelayDrafterController.mm */; };
 		5B47F34419AE70AB00CBB80A /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
 		5B47F34719AE717500CBB80A /* HelpController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B47F34519AE717500CBB80A /* HelpController.mm */; };
-		5B4DF3A42314C011001FDE00 /* incexppt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */; };
 		5B4DF3A52314C41E001FDE00 /* readsexp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BE49431199D0B2D007BD6BF /* readsexp.cpp */; };
 		5B4DF3A62314C50A001FDE00 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B4DF3A72314C538001FDE00 /* lspmacro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062C8199E73F1008CDCA0 /* lspmacro.cpp */; };
@@ -124,7 +122,6 @@
 		5BAC932019C8FE7200673BDC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC931F19C8FE7200673BDC /* Images.xcassets */; };
 		5BAC933919C8FECC00673BDC /* Winapi.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062E7199F72C3008CDCA0 /* Winapi.mm */; };
 		5BAC934219C8FECC00673BDC /* lispmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4419A0D171008CDCA0 /* lispmath.cpp */; };
-		5BAC934319C8FECC00673BDC /* incexppt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */; };
 		5BAC934619C8FECC00673BDC /* nxgo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062DA199EE3E7008CDCA0 /* nxgo.cpp */; };
 		5BAC934819C8FECC00673BDC /* plight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4819A0D5D7008CDCA0 /* plight.cpp */; };
 		5BAC934919C8FECC00673BDC /* pswitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */; };
@@ -235,7 +232,6 @@
 		5BF06F4119A0C727008CDCA0 /* ldgut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4019A0C727008CDCA0 /* ldgut.cpp */; };
 		5BF06F4319A0CF9F008CDCA0 /* trafficlever.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4219A0CF9F008CDCA0 /* trafficlever.cpp */; };
 		5BF06F4519A0D171008CDCA0 /* lispmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4419A0D171008CDCA0 /* lispmath.cpp */; };
-		5BF06F4719A0D2AE008CDCA0 /* incexppt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */; };
 		5BF06F4919A0D5D7008CDCA0 /* plight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4819A0D5D7008CDCA0 /* plight.cpp */; };
 		5BF06F4B19A0D6BC008CDCA0 /* pswitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */; };
 		5BF06F5119A0E5B4008CDCA0 /* rlyindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F5019A0E5B4008CDCA0 /* rlyindex.cpp */; };
@@ -386,7 +382,7 @@
 		5B5AE6572311593700348612 /* nxldapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxldapi.h; sourceTree = "<group>"; };
 		5B5AE6582311595800348612 /* nxldwin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxldwin.h; sourceTree = "<group>"; };
 		5B5AE65923115D2000348612 /* resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resource.h; sourceTree = "<group>"; };
-		5B5AE65A23115DB700348612 /* incexppt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = incexppt.h; sourceTree = "<group>"; };
+		5B5AE65A23115DB700348612 /* replace_filename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = replace_filename.h; sourceTree = "<group>"; };
 		5B5AE65B2311648700348612 /* text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = text.h; sourceTree = "<group>"; };
 		5B5AE65C231168E500348612 /* cccint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cccint.h; sourceTree = "<group>"; };
 		5B5AE65D2311692F00348612 /* PolyKludge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyKludge.h; sourceTree = "<group>"; };
@@ -636,7 +632,6 @@
 		5BF06F4019A0C727008CDCA0 /* ldgut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ldgut.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F4219A0CF9F008CDCA0 /* trafficlever.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trafficlever.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F4419A0D171008CDCA0 /* lispmath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lispmath.cpp; sourceTree = "<group>"; tabWidth = 8; };
-		5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = incexppt.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F4819A0D5D7008CDCA0 /* plight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = plight.cpp; path = ../plight.cpp; sourceTree = "<group>"; };
 		5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pswitch.cpp; path = ../pswitch.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F5019A0E5B4008CDCA0 /* rlyindex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rlyindex.cpp; sourceTree = "<group>"; tabWidth = 8; };
@@ -863,7 +858,7 @@
 				5B5AE6562311590B00348612 /* dialogs.h */,
 				5B5AE64C231154CC00348612 /* fsigctl.h */,
 				5B5AE6532311585400348612 /* helpdlg.h */,
-				5B5AE65A23115DB700348612 /* incexppt.h */,
+				5B5AE65A23115DB700348612 /* replace_filename.h */,
 				5B5AE65F23116E4D00348612 /* ldraw.h */,
 				5B5AE6422310B21600348612 /* lispmath.h */,
 				5B5AE64D2311556900348612 /* loaddcls.h */,
@@ -1425,7 +1420,6 @@
 				5BF062EE199FA8A4008CDCA0 /* V1V2Compat */,
 				5BF0630319A028A8008CDCA0 /* fullsig.cpp */,
 				5BF06F4019A0C727008CDCA0 /* ldgut.cpp */,
-				5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */,
 				5BF062C8199E73F1008CDCA0 /* lspmacro.cpp */,
 				5BF06F4419A0D171008CDCA0 /* lispmath.cpp */,
 				5BF062DA199EE3E7008CDCA0 /* nxgo.cpp */,
@@ -1784,7 +1778,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B25513625B87D6900A68D73 /* incexppt.cpp in Sources */,
 				5B25516525B87FB800A68D73 /* RelayLispSubstrate.cpp in Sources */,
 				5BFB49E827AC7682006BE311 /* argparse.cpp in Sources */,
 				5B25513E25B87D6E00A68D73 /* lspmacro.cpp in Sources */,
@@ -1799,7 +1792,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B4DF3A42314C011001FDE00 /* incexppt.cpp in Sources */,
 				5B4DF3A82314C575001FDE00 /* RelayLispSubstrate.cpp in Sources */,
 				5B25510D25B87C6500A68D73 /* rlycomp.cpp in Sources */,
 				5B7B02AB2314CB62000747A0 /* writetko.cpp in Sources */,
@@ -1834,7 +1826,6 @@
 				5BACF5EC19CA187B007F59A0 /* edplight.cpp in Sources */,
 				5BAD56001A011ECA006AEEAB /* DeviceContext.mm in Sources */,
 				5BAC934219C8FECC00673BDC /* lispmath.cpp in Sources */,
-				5BAC934319C8FECC00673BDC /* incexppt.cpp in Sources */,
 				5BF7CEB719CA2AFD00DF6ECE /* dragger.cpp in Sources */,
 				5BA7E73D19D4C0C1006F9A04 /* TextStringProperties.mm in Sources */,
 				5BAC934619C8FECC00673BDC /* nxgo.cpp in Sources */,
@@ -1949,7 +1940,6 @@
 				5BCEA76619C24A8C003BA3A7 /* NXTimers.mm in Sources */,
 				5BAD56021A014B09006AEEAB /* DumbStubs.cpp in Sources */,
 				5B43834E19C4C38A00BEECDC /* BigYellowXView.mm in Sources */,
-				5BF06F4719A0D2AE008CDCA0 /* incexppt.cpp in Sources */,
 				5BF062F6199FAE4E008CDCA0 /* xstop.cpp in Sources */,
 				5BF062EA199F75B7008CDCA0 /* turncomn.cpp in Sources */,
 				5BF062D9199EDFE0008CDCA0 /* xsignal.cpp in Sources */,

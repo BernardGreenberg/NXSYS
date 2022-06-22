@@ -21,7 +21,7 @@
 #include "lispmath.h"
 #include "typeid.h"
 #include "traincfg.h"
-#include "incexppt.h"
+#include "replace_filename.h"
 #include "nxglapi.h"
 #include "nxsysapp.h"
 #include "timers.h"
