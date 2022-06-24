@@ -461,9 +461,8 @@ int DefineMenuFromLisp (Sexpr s) {
         if (!CONSP(button_items))
             throw DynMenuCreateException("Button list in MENU not a list");
 
-        // Creates std::unique_ptr in place; compiler doesn't like push_back(std::unique_ptr....)
-        // std::make_unique is in C++14, but not 11, we do it in header file. Don't say std::move, either.
-        Menus.emplace_back(make_unique<DynMenu>(rlysym, title, button_items));  //can throw, too)
+        // Creates std::unique_ptr in place; C++14 now.
+        Menus.emplace_back(std::make_unique<DynMenu>(rlysym, title, button_items));  //can throw, too)
 
     } catch (DynMenuCreateException e) {
         std::string message = "Error in dynamic MENU definition:\n";
@@ -515,6 +514,7 @@ void TrySignalIDBox (long nomenclature) {
 
     
 /* MS Windows version may never see the light of day again -- Aug 2019
+ 2022 -- "never" was too long --
  */
         
 #if !(NXSYSMac)
