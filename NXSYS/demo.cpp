@@ -186,6 +186,8 @@ public:
 
 class SHolder {  // This allows Sexpr to be deallocated unconditionally.
     Sexpr S;
+    SHolder(const SHolder&) = delete;
+    SHolder(SHolder&&) = delete;
 public:
     SHolder (Sexpr s_) : S(s_) {}
     operator Sexpr() {
@@ -380,10 +382,7 @@ static void DemoImpulse (void*) {
         return;
 
     try {
-        for (bool exitf = false; !exitf;) {
-            SHolder form(State->read());    /* forces proper dealloc */
-            exitf = ProcessForm(form);
-        }
+        while (!ProcessForm(SHolder(State->read()))) {}
     }
     /* Exit without error throw means "return to cmd level to wait" */
     catch (DemoErr err) {
