@@ -89,6 +89,7 @@
 		5B87B31B284A5DB40002AB18 /* RedoIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B317284A5DB40002AB18 /* RedoIcon.pxd */; };
 		5B87B31C284A5DB40002AB18 /* QuitIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B318284A5DB40002AB18 /* QuitIcon.pxd */; };
 		5B88FEA11DF71C0D00D8F8E0 /* SwitchConsistency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */; };
+		5B8E51D0286741290019B12F /* lispmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4419A0D171008CDCA0 /* lispmath.cpp */; };
 		5B8FCBE9284B6D6100855897 /* HelpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBE8284B6D6100855897 /* HelpIcon.png */; };
 		5B8FCBEB284B6D9E00855897 /* HelpIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
@@ -1808,6 +1809,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B5AE622230C784200348612 /* readsexp.cpp in Sources */,
+				5B8E51D0286741290019B12F /* lispmath.cpp in Sources */,
 				5B5AE625230C823600348612 /* lspmacro.cpp in Sources */,
 				5B5AE6712312BE7500348612 /* STLExtensions.cpp in Sources */,
 				5B5AE626230C834A00348612 /* RelayLispSubstrate.cpp in Sources */,
@@ -2128,6 +2130,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"BLISP=1",
 					"NXSYSMac=1",
+					"REDUCED_RATIONALS=1",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -2150,7 +2153,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "REDUCED_RATIONALS=1";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
