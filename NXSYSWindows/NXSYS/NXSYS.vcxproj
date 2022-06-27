@@ -190,7 +190,6 @@ copy $(SolutionDir)..\Help.xml $(OutDir)\ /Y</Command>
     <ClCompile Include="..\..\NXSYS\demo.cpp" />
     <ClCompile Include="..\..\NXSYS\fullsig.cpp" />
     <ClCompile Include="..\..\NXSYS\HelpDirectory.cpp" />
-    <ClCompile Include="..\..\NXSYS\incexppt.cpp" />
     <ClCompile Include="..\..\NXSYS\InterlockingLibrary.cpp" />
     <ClCompile Include="..\..\NXSYS\ldgut.cpp" />
     <ClCompile Include="..\..\NXSYS\lispmath.cpp" />
@@ -209,7 +208,6 @@ copy $(SolutionDir)..\Help.xml $(OutDir)\ /Y</Command>
     <ClCompile Include="..\..\NXSYS\rlyindex.cpp" />
     <ClCompile Include="..\..\NXSYS\signal.cpp" />
     <ClCompile Include="..\..\NXSYS\STLExtensions.cpp" />
-    <ClCompile Include="..\..\NXSYS\STLfnsplit.cpp" />
     <ClCompile Include="..\..\NXSYS\stop.cpp" />
     <ClCompile Include="..\..\NXSYS\swkey.cpp" />
     <ClCompile Include="..\..\NXSYS\text.cpp" />

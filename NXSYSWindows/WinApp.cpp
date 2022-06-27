@@ -30,7 +30,6 @@
 #include "trainapi.h"
 #include "resource.h"
 #include <string>
-#include "incexppt.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
 #include "AppAbortRestart.h"

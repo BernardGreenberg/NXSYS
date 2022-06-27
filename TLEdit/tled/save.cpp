@@ -156,7 +156,7 @@ public:
 static BOOL MakeBackupCopy(const char * path) {
     /* This is a hedge against USER error, not app error. */
 
-    std::string bkpath = fs::path(path).replace_extension(".bak");
+    std::string bkpath = fs::path(path).replace_extension(".bak").string();
     auto bkpathc = bkpath.c_str();
 
 	if (access(path, 0) != 0)	/* if .trk no exist, no prob. */
