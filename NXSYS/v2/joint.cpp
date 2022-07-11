@@ -33,11 +33,6 @@ static int JointGlyphRadius;
 TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
     Nomenclature = 0L;
     SwitchAB0 = 0;
-#if NXSYSMac
-    JointGlyphRadius = (int)(1.5*GU2);
-#else
-    JointGlyphRadius = (int) (2*GU2);
-#endif
     Insulated = FALSE;
     Lab = NULL;
     TSCount = 0;
@@ -47,6 +42,11 @@ TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
     wp_y = wpy1;
 
 #if TLEDIT
+#if NXSYSMac
+    JointGlyphRadius = (int)(1.7*GU2);
+#else
+    JointGlyphRadius = (int) (2*GU2);
+#endif
     Organized = FALSE;
     Selected = FALSE;
     Marked = FALSE;

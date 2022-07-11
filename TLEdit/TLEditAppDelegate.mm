@@ -12,6 +12,7 @@
 #include <string>
 #include <filesystem>
 #include "tlecmds.h"
+#include "DesignWindowDims.h"
 #include <string>
 #include "resource.h"
 #include "MessageBox.h"
@@ -117,7 +118,8 @@ TLEditAppDelegate* getTLEDelegate() {
     [self.window setDelegate:self];
     [_theScrollView setBackgroundColor:[NSColor blackColor]];
 
-    InitTLEditApp(1280,960);
+    InitTLEditApp(NXSYS_INIT_WINDOW_DIMS::WIDTH, NXSYS_INIT_WINDOW_DIMS::HEIGHT);
+// was    InitTLEditApp(1280,960); -- "horsey" objects easier to edit, but aux key spacing looks wrong.
     did_finish_launching = true;
     APDTRACE(("willFinish Launching entered.\n"));
     currentFileName = nil;
