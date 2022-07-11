@@ -117,8 +117,9 @@ TLEditAppDelegate* getTLEDelegate() {
 {
     [self.window setDelegate:self];
     [_theScrollView setBackgroundColor:[NSColor blackColor]];
+    _theView.theScrollView = _theScrollView;
 
-    InitTLEditApp(NXSYS_INIT_WINDOW_DIMS::WIDTH, NXSYS_INIT_WINDOW_DIMS::HEIGHT);
+    InitTLEditApp(NXSYS_DESIGN_WINDOW_DIMS::WIDTH, NXSYS_DESIGN_WINDOW_DIMS::HEIGHT);
 // was    InitTLEditApp(1280,960); -- "horsey" objects easier to edit, but aux key spacing looks wrong.
     did_finish_launching = true;
     APDTRACE(("willFinish Launching entered.\n"));
@@ -262,7 +263,12 @@ TLEditAppDelegate* getTLEDelegate() {
 }
 
 /* Actions from App Menu */
-
+- (IBAction)ZoomOut:(id)sender {
+    [_theView ZoomOut:sender];
+}
+- (IBAction)ZoomIn:(id)sender {
+    [_theView ZoomIn:sender];
+}
 - (IBAction)Help:(id)sender {
     [self ensureHelp];
     [_helpController PDFHelp:@"TLEDocumentation/TLEdit" tag:nil];

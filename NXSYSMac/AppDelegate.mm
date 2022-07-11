@@ -505,11 +505,10 @@ static HelpDirectory helpDirectory;
 }
 
 - (IBAction)ZoomOut:(id)sender {
-    //It should be obvious that .909090...*1.1 = .9999999 = 1.
-    [_theView magnifyWithRatio:0.90909090909];
+    [_theView ZoomOut:sender];
 }
 - (IBAction)ZoomIn:(id)sender {
-    [_theView magnifyWithRatio:1.1];
+    [_theView ZoomIn:sender];
 }
 - (IBAction)Train:(id)sender {
     OfferChooseTrackDlg(true);

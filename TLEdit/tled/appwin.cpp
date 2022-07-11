@@ -10,6 +10,7 @@
 #include <stdarg.h>
 #include "WinReadResText.h"
 #include "ParseCommandLine.h"
+#include "DesignWindowDims.h"
 #endif
 
 #include "compat32.h"
@@ -687,13 +688,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 	int real_dtw = rc.right - rc.left;
 	int real_dth = rc.bottom - rc.top;
 
-	/* 13 December 2000 -- setting the same metrics as those under which
-	   NXSYS was designed gives better results all-around -you
-	   get more track instead of thick tracks, and it seems to look better
-	   all around -- if you don't like it, scale. */
-
-	int dtw = 800;
-	int dth = 640;
+	int dtw = NXSYS_DESIGN_WINDOW_DIMS::WIDTH;
+	int dth = NXSYS_DESIGN_WINDOW_DINS::HEIGHT;
 
 	int winx = (int)(dtw * (1.0 - MAIN_FRAME_SCREEN_X_FRACTION) / 2.0);
 	int winy = (int)(dth * (1.0 - MAIN_FRAME_SCREEN_Y_FRACTION) / 2.0);

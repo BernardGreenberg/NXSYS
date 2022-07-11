@@ -373,8 +373,8 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
    get more track instead of thick tracks, and it seems to look better
    all around -- if you don't like it, scale. */
 
-  int dtw = NXSYS_INIT_WINDOW_DIMS::WIDTH;
-  int dth = NXSYS_INIT_WINDOW_DIMS::HEIGHT;
+  int dtw = NXSYS_DESIGN_WINDOW_DIMS::WIDTH;
+  int dth = NXSYS_DESIGN_WINDOW_DIMS::HEIGHT;
 
 #ifdef WIN32
   int winy = dth / 16;

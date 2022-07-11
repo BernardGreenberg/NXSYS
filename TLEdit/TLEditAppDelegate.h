@@ -28,6 +28,8 @@
 -(void)setUndoMenu:(const char*)undo Redo:(const char *)redo;
 -(IBAction)saveDocument:(id)sender;
 -(IBAction)About:(id)sender;
+-(IBAction)ZoomOut:(id)sender;
+-(IBAction)ZoomIn:(id)sender;
 @end
 
 TLEditAppDelegate* getTLEDelegate();
