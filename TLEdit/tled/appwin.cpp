@@ -453,6 +453,11 @@ void AppCommand(UINT command) {
 	}
 }
 
+void DragonAbortOnChar() {   // Either platform, called from AppDelegate, too...
+    if (MouseupDragon)
+        MouseupDragon->Abort();
+}
+
 #ifndef NXSYSMac
 
 static WNDPROC_DCL MainWindow_WndProc
@@ -501,12 +506,11 @@ static WNDPROC_DCL MainWindow_WndProc
 #ifndef NXSYSMac
 	case WM_CLOSE:
 		if (CheckBufferModified())
-			PostQuitMessage(0);
+            PostQuitMessage(0);
 		break;
 
 	case WM_CHAR:
-		if (MouseupDragon)
-			MouseupDragon->Abort();
+        DragonAbortOnChar();
 		break;
 
 	default:
@@ -577,8 +581,7 @@ static WNDPROC_DCL GraphicsWindow_WndProc
 		break;
 
 	case WM_CHAR:
-		if (MouseupDragon)
-			MouseupDragon->Abort();
+        DragonAbortOnChar();
 		break;
 
 	default:

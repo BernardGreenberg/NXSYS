@@ -38,10 +38,17 @@ TLEditAppDelegate* getTLEDelegate() {
 {
     NSString * currentFileName;
     bool did_finish_launching;
+    id eventMonitor;
 }
 @end
 
 @implementation TLEditAppDelegate
+
+-(id)init {
+    self = [super init];
+    eventMonitor = nil;
+    return self;
+}
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
     return YES;
@@ -102,10 +109,22 @@ TLEditAppDelegate* getTLEDelegate() {
    // printf("change font sent to app delegate\n");
     
 }
+-(void)setUpEventMonitor
+{
+//http://www.ideawu.com/blog/2013/04/how-to-capture-esc-key-in-a-cocoa-application.html
+    //block funarg closure magic
+    NSEvent* (^handler)(NSEvent*) = ^(NSEvent *theEvent) {
+        DragonAbortOnChar();
+        return theEvent;
+    };
+    eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskKeyDown handler:handler];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     APDTRACE(("Entering didFinishLaunching\n"));
     [self createTLEToolbar];
+    [self setUpEventMonitor];
 }
 - (void) createTLEToolbar
 {
@@ -210,6 +229,9 @@ TLEditAppDelegate* getTLEDelegate() {
     } else {
         return NSTerminateCancel;
     }
+}
+-(void)applicationWillTerminate:(NSNotification*) notification {
+    [NSEvent removeMonitor:eventMonitor];
 }
 -(BOOL)windowShouldClose:(id)Sender
 {

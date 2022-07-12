@@ -23,5 +23,6 @@ BOOL ReadItKludge(const char *);
 bool SaveItForReal(const char * path);
 void ClearItOut();
 void SetMainWindowTitle(const char * text);
+void DragonAbortOnChar();
 
 #endif /* MacAppwinAPIs_h */
