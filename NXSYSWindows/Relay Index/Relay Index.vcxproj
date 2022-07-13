@@ -19,13 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\NXSYS\incexppt.cpp" />
     <ClCompile Include="..\..\NXSYS\lispmath.cpp" />
     <ClCompile Include="..\..\NXSYS\lspmacro.cpp" />
     <ClCompile Include="..\..\NXSYS\readsexp.cpp" />
     <ClCompile Include="..\..\NXSYS\RelayLispSubstrate.cpp" />
     <ClCompile Include="..\..\NXSYS\STLExtensions.cpp" />
-    <ClCompile Include="..\..\NXSYS\STLfnsplit.cpp" />
     <ClCompile Include="..\..\Relay Index\argparse.cpp" />
     <ClCompile Include="..\..\Relay Index\RelayIndex.cpp" />
     <ClCompile Include="..\..\Relay Index\SourceLoc.cpp" />

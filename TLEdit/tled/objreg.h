@@ -1,14 +1,13 @@
 #ifndef _TLEDIT_OBJECT_REGISTRY_H__
 #define _TLEDIT_OBJECT_REGISTRY_H__
 
-#include "objid.h"
-#include "resource.h"
+#include "typeid.h"
 #include "tlecmds.h"
 
 typedef GraphicObject* (*ObjCreateFn)(int wp_x, int wp_y);
 typedef void           (*ObjClassInitFn)(void);
 
-void RegisterNXObjectType (int objid,	/* object type */
+void RegisterNXObjectType (TypeId type,	/* object type */
 			   UINT command, /* creation command */
 			   UINT dlg_id, /* dialog id */
 			   ObjCreateFn obfn, /* function to create 'em */
@@ -17,15 +16,16 @@ void RegisterNXObjectType (int objid,	/* object type */
 
 class NXObTypeRegistrar {
     public:
-	NXObTypeRegistrar(int objid, int command, UINT dlg_id, ObjCreateFn, ObjClassInitFn);
+	NXObTypeRegistrar(TypeId type, int command, UINT dlg_id, ObjCreateFn, ObjClassInitFn);
 };
 
-#define REGISTER_NXTYPE(objid,command,did,obfn,cifn) \
-static NXObTypeRegistrar Registrar##objid (objid,command,did,obfn,cifn);
+#define REGISTER_NXTYPE(typeid,command,did,obfn,cifn) \
+static NXObTypeRegistrar Registrar##did (typeid,command,did,obfn,cifn);
 
 
 GraphicObject * CreateObjectFromCommand (HWND hWnd, int command, int x, int y);
-UINT FindDialogIdFromObjClassRegistry (int objid);
+UINT FindDialogIdFromObjClassRegistry (TypeId type);
+const char * NXObjectTypeName(TypeId);
 
 void InitializeRegisteredObjectClasses();
 

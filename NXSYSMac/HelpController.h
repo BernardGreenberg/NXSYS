@@ -21,6 +21,7 @@
 @property (weak) IBOutlet NSTextField *URLBarContainer;
 -(void)log:(NSString*)nsstring;
 -(void)HTMLHelp:(NSString*)resource_name tag:(NSString*)tag;
+-(void)PDFHelp:(NSString*)resource_name tag:(NSString*)tag;
 -(void)TextHelp:(NSString*)resource_name;
 -(void)HelpSystemDisplay:(const char *)text;
 -(void)HTMLView:(NSURL*)URL;

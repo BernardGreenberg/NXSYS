@@ -2,6 +2,7 @@
 #define _NX_GRAPHOBJ_H__
 
 #include "windows.h"
+#include "typeid.h"
 
 #define Virtual
 
@@ -17,9 +18,19 @@ struct WPRECT {
     WP_cord top, bottom, left, right;
 };
 
-#ifdef TLEDIT				/* must be at top level */
-#include <stdio.h>
-#endif
+struct WPPOINT {
+    WPPOINT() : x(0), y(0) {}
+    WP_cord x, y;
+
+    WPPOINT(WP_cord _x, WP_cord _y) : x(_x), y(_y) {};
+
+    bool operator ==(const WPPOINT& other) {
+        return x == other.x && y == other.y;
+    }
+    bool operator !=(const WPPOINT& other) {
+        return !(*this == other);
+    }
+};
 
 class GraphicObject {
 public:
@@ -39,8 +50,8 @@ public:
     virtual void    Display(HDC dc) = 0;
     virtual void    ComputeWP();
     virtual BOOL    ComputeVisible (WPRECT& v);
-    virtual int     TypeID();  // not pure - defaiult is -1, no.
-    virtual int     ObjIDp(long);
+    virtual TypeId     TypeID();  // not pure - defaiult is -1, no.
+    virtual bool    IsNomenclature(long);
 
     virtual void    Hit (int mh);
     virtual void    UnHit();
@@ -48,7 +59,10 @@ public:
     virtual void    Select();
     virtual void    Deselect();
     virtual         ~GraphicObject();
+    virtual void    BeforeInterment();
+    virtual void    AfterResurrection();
     virtual void    ComputeWPRect();
+    virtual WPPOINT WPPoint();
 
     int     FindHitGo (SC_cord& x, SC_cord& y, int mb);
     void        Invalidate();
@@ -56,6 +70,8 @@ public:
 
 #ifdef TLEDIT
 #include "tlengovf.h"
+    void            ConsignToLimbo();
+    virtual void    PurgeFromLimbo();
 #else
     int		    RunContextMenu(int resource_id);
     virtual void    EditContextMenu(HMENU m);
@@ -100,14 +116,15 @@ void DisplayVisibleObjectsRect (HDC dc, RECT& ur);
 void FreeGraphicObjects();
 int GraphicObjectCount();
 extern GraphicObject * SelectedObject;
-GraphicObject * FindHitObject (long id, short key);
-GraphicObject * FindHitObjectOfType (short key, WORD x, WORD y);
-GraphicObject * FindHitObjectOfTypes (short *keys, int nkeys, WORD x, WORD y);
+GraphicObject * FindObjectByNomAndType (long nomenclature, TypeId type);
+GraphicObject * FindHitObjectOfType (TypeId type, WORD x, WORD y);
+GraphicObject * FindHitObjectOfTypes (TypeId *types, int nkeys, WORD x, WORD y);
+GraphicObject * FindObjectByTypeAndWPpos(TypeId type, WP_cord wp_x, WP_cord wp_y);
 typedef int (*GOMapperFcn) (GraphicObject*);
 typedef int (*GOGOMapperFcn) (GraphicObject*, void*);
 
-int MapGraphicObjectsOfType (short key, GOMapperFcn fn);
-GraphicObject* MapFindGraphicObjectsOfType (short key, GOGOMapperFcn, void*);
+int MapGraphicObjectsOfType (TypeId, GOMapperFcn fn);
+GraphicObject* MapFindGraphicObjectsOfType (TypeId type, GOGOMapperFcn, void*);
 GraphicObject* GetMouseHitObject (WORD x, WORD y);
 GraphicObject* MapAllGraphicObjects (GOGOMapperFcn fn, void * arg);
 GraphicObject* MapAllVisibleGraphicObjects (GOGOMapperFcn fn, void * arg);

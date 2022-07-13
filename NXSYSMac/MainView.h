@@ -15,6 +15,8 @@
 @interface MainView : NSView
 @property (weak) NSScrollView *theScrollView;
 -(void)magnifyWithRatio:(CGFloat)r;
+-(void)ZoomOut:(id)sender;
+-(void)ZoomIn:(id)sender;
 #ifndef TLEDIT
 @property (strong) BigYellowXView* YellowX;
 #endif

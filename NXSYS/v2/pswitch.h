@@ -1,17 +1,10 @@
 #ifndef _NX_PANEL_SWITCH_H__
 #define _NX_PANEL_SWITCH_H__
 
-#ifdef TLEDIT
-class Relay;
-#ifndef _FILE_DEFINED
-#include <stdio.h>
-#define _FILE_DEFINED
-#endif
-#endif
-
+#include "propedit.h"
 #include <string>
 
-class PanelSwitch : public GraphicObject {
+class PanelSwitch : public GraphicObject, public PropEditor<PanelSwitch> {
   public:
     char NumStr[8];
     int NumStrLen;
@@ -21,18 +14,34 @@ class PanelSwitch : public GraphicObject {
     PanelSwitch (int xlkg_no, WP_cord p_wpx, WP_cord p_wpy, const char * relay_nom);
     void SetXlkgNo(int xno);
 
-
     virtual void Display (HDC hdc);
-    virtual int TypeID(), ObjIDp(long);
+    virtual TypeId TypeID();
+    virtual bool IsNomenclature(long);
 #ifndef TLEDIT
-    Relay * Rly;
+    class Relay * Rly;
     virtual void Hit (int mb);
 #else
+    class PropCell : public PropCellPCRTP<PropCell, PanelSwitch> {
+        int XlkgNo;
+        std::string RelayNomenclature;
+    public:
+        void Snapshot_(PanelSwitch* p) {
+            SnapWPpos(p);
+            XlkgNo = p->XlkgNo;
+            RelayNomenclature = p->RelayNomenclature;
+        }
+        void Restore_(PanelSwitch* p) {
+            RestoreWPpos(p);
+            p->SetXlkgNo(XlkgNo);
+            p->RelayNomenclature = RelayNomenclature;
+        }
+    };
+    
     std::string RelayNomenclature;
     virtual void EditClick(int x, int y);
     virtual ~PanelSwitch();
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
-    virtual int Dump (FILE * f);
+    virtual int Dump (ObjectWriter& W);
 #endif
 };
 void InitPanelSwitchData();

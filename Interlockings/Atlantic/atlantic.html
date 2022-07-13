@@ -1,0 +1,124 @@
+<html>
+<head>
+    <title>Atlantic Avenue Interlocking</title>
+    <meta charset="utf-8"/>
+        <style>
+            hr {border-top: 3px solid black;}
+        </style>
+</head>
+<body style="max-width:900px;font-size:120%">
+<h2>Scenario-Specific Help and Info on Atlantic Avenue Interlocking</h2>
+
+<p><b>Document Status:</b>   8 July 2022 (minor revision from May 2001)</p>
+
+<p>Welcome to the NXSYS implementation of the Atlantic Avenue portion of the Nevins St. Master Control Panel on the IRT Brooklyn Line.  This simulated relay interlocking, which was designed from current 1999 official track/control-line prints of the real property (henceforth, &ldquo;the spec&rdquo;), simulates the full function of the portion of this large panel controlling the local plant. The panel must be scrolled to access it all.  The auxiliary switch keys are right below the track display: extend the window bottom if necessary.</p>
+
+<p><b>Please read this help text</b>, which addresses major and subtle issues you will doubtless encounter that will otherwise derail your exploration of this complex interlocking.</p>
+
+<p>[(Sept. 2014) The current version arises from the Summer of 2014, accompanying the Mac version of NXSYS.  It had been dormant since August, 2001.  The real Nevins St. Master Control Panel dates from the early 1960s.]</p>
+
+<p>This implementation is thought to be complete at this time, including insidious networks of crosslocks, traffic locking on the outer tracks, approach locking as per the tables in the spec, overlapped distants, extensive lock flashing, facing-point pushes, and ST/GT with conditional switch locking.  Nonetheless <i>there are likely bugs, mistakes, and oversights,</i> so please report any you find.  [(Sept 2014] When I said this in 2001, I thought it was finished. It wasn&rsquo;t.]</p>
+
+<p>In the following text, we will use the signal-plate number system of track designation.  The uppermost track, the southbound &ldquo;local&rdquo;, is track 4/E; successive tracks from window top to bottom are <b>4/E</b>, <b>2/E</b>, <b>9/E</b> (or <b>M</b>), <b>1/E</b>, and <b>3/E</b>.</p>
+
+<hr/>
+
+<h2>Differences from the actual Nevins St Panel/Interlocking</h2>
+
+<p>This implementation differs from the real panel and interlocking in the following ways (other than the generic differences of NXSYS panels, such as no emergency switch release, graphics differences, etc.)</p>
+<ol>
+    
+ <li>The real panel controls a much larger region.</li>
+ <li>The real panel is West (Route North)-is-left, East-is-right.  The NXSYS panel follows the layout of the spec drawing, i.e., East-is-left, West (North)-is-right.</li>
+ <li>The traffic levers on the local (7th Avenue) tracks northward are &ldquo;singletons&rdquo;, i.e., they do not require cooperation of the &dlquo;other end&rdquo; (Wall St.), and can change direction immediately (click on center knob or desired arrow) if necessary conditions are met (i.e., no trains in controlled section and no routes cleared into or on it).</li>
+ <li>The Track M bumper has been restationed from 150/E to 149/E in order to permit 500'trains to fit on track M; simulated trains (which work well) are set at 450' to accommodate apparent 500' station lengths (as deduced solely from insulated joint stationing).</li>
+ <li>The at-grade crossing of crossover 241 over Track 1/E past signal 234 is represented as
+    two track circuits, one for each crossing track. In reality, they are one track circuit, 1601/E.
+    While NXSYS can certainly handle the implications of the shared circuit, it cannot
+    adequately compute the segment lighting in this case; NXSYS segment lighting
+    is computed by the simulator, not the relay logic, and has no means to handle this case.
+    The IJ IDs 1580 and 1599 are made up; they are not named in the spec.</li>
+ <li>Some apparent errors in the drawing (non-overlapped overlapped distants, and to
+    or from nonexistent signals, no lower green aspect on 212 but non-call-on route to
+    4/E explictly indicated) have been &ldquo;corrected&rdquo;.</li>
+ <li>The apparent requirement of the spec that 238 ST-time-lock 221 normal has been ignored.
+    Were that the case, there would be no reason for it not to be part of 236. 238&rsquo;s control
+    line, including time, falls 400' short of 221A points, and two approach signals and a home
+    signal intervene in the 1200' between the signal and switch.</li>
+ <li>ST speeds of 22 MPH have been reduced to 20 (only signal aspect available).</li>
+</ol>
+<hr/>
+<h2>CRITICAL notes about Atlantic Ave. Interlocking</h2>
+
+<p>Traffic lever 219 &ldquo;means business&rdquo;. Unless it is reversed (set northward), northbound moves exiting at 202, which are some of the most exciting, cannot be lined. Note that 219 reversed prevents approach 200 from being cleared, and 219 cannot be reversed if 200 is called/clear.  Traffic lever 239, although fully implemented, is less important, as in its default position (northward) it precludes no moves on this panel.</p>
+
+<p>The spec stipulates (explicitly) that switch 233 must be reversed for any move over crossover 241 reversed; one clear rationale is the avoidance of a direct collision over the at-grade crossing in case of a stop overrun at 234; another reason might be inferred from the need of the real interlocking panel to accurately compute segment lighting of the aforementioned shared track circuit.  While this interlocking fully implements this constraint, it does not require 233 reverse for overlap control lines (e.g., approach 200/204/220, as opposed to actual lined moves) over 241 reverse, in keeping with the NYCTA guideline of not designing for double overruns.</p>
+
+<p>Some track circuits not logically involved in routes will slot their signals off: for instance, occupation of 1593 or 1583 will slot off 244 even if that signal is called over 241 reverse.  In that condition, these sections cannot possibly be occupied legitimately, i.e., if trains, interlocking, and stops are functioning correctly (although it can certainly occur with &ldquo;mouse train droppings&rdquo;), so it is appropriate that the signals fail to clear should this somehow occur.</p>
+
+<p>The marker signals (&ldquo;red-blank-red&rdquo;) 1655/E and 1657/E at the South end of the platform on 1/E and 3/E tracks maintain their stops in tripping position unless their opposing &ldquo;holdout&rdquo; home signals, 240 and 250 respectively, be called.  The first of the paired approach signals 236/246 sharing insulated joints with these markers will call, but not clear, unless and until the marker stops are so driven by the holdouts.</p>
+
+<p>The home signals 210, 214, and 232 are of the &ldquo;entrance and exit in same direction&rdquo; variety, which may be clicked on to end a route or initiate one, depending upon the presence of an incomplete route for which they could serve as an exit.  Note that they will not clear unless a route or train be present (and not diverted over a facing-point switch) in their respective approach circuits;  the same is true of the back-to-back pair 224/228 (see &ldquo;Back-To-Back Signals&rdquo; in the main NXSYS helpfile).  Note furthermore that trains beyond these signals continue to lock the switches behind them&mdash;the home signal protects the rear of the train, but not the switches it leaves behind.  This is likely to be extremely confusing at first.</p>
+
+<p>The northbound home signals 212/216/234/244, as required by the spec, clear a &ldquo;three yellow&rdquo; (yard) aspect to Track M, no distant and no call-on to track 4/E, and no moves at all to track 2/E (which, like 1/E, is not traffic-controlled).  The southbound home signals 202/206/222/224 offer three yellows, and home 230 offers only call-on, to track 3/E.</p>
+
+<P>The approach signals, particularly the southbound 200, 204, 220, set up complex overlap conditions which cause &ldquo;crosslocks&rdquo; (see the main NXSYS helpfile) forcing switches to be moved in careful sequence so as to not “kick them off” in transit (as it were).  Switches will move faster (with more parallelism) if approach signals are called after the main route is set up.  In particular, approach signals 233 and 220, if both called with 233 reverse, create a unique &ldquo;deadlock crosslock&rdquo; which NO sequence of switch moves can clear (one or the other signal must be cancelled).  Also, calling 220 with no route set up at 222 forces a decision between track 1/E and 2/E; 220&rsquo;s control line must route into and intercept one or the other.  Unless 233 and 241 are set up to clear this control line onto 1/E (northbound express), the interlocking will choose 2/E in all cases, moving 207 reverse if necessary.</p>
+
+<p>Note that northbound approach signals 246 on 3/E lock 229 normal (on ST condition), even if 244 is reversed, and 236 similarly conditionally locks 221 normal on time.  200 locks and requires 215 normal, unconditionally.  In all three cases, it can be shown that no legitimate moves are precluded by these seemingly overbroad constraints.</p>
+
+<p>Note also that occupation of 1582/1584 can lock 221 normal or 205 reverse, if 226/230 or 200, respectively, are cleared with overlap routed elsewhere (see &ldquo;facing-point overlap&rdquo; in the main helpfile). [(Sept 2014) Note also the effect of the double overlap of 226/230 upon switch 213, and 213&rsquo;s effect upon 221 and 207 when 226/230 are nonreset (called, or approach locking at &ldquo;unsafe&rdquo;) through 228 and 224 is normal (at stop, approach locking reset)].</p>
+
+<p>Only signals governing normal passenger traffic have been equipped with fleeting.  A/B approach signals (236, 246, 250 etc.) only respond to fleeting clicks on the B signal.  Automatic signal 1652 is of the newly new (actually historically old for the IRT) &ldquo;no key-by&rdquo; variety.</p>
+
+<p>All ST & GT timings are accurate to the second (which is not really fine enough).</p>
+
+<p>It is helpful to think of the double-slip switch 241B/209A as two distinct switches on track M, the ends of their respective crossovers, 241B to the south, points facing north, and 209B to the north, points facing south, i.e., two sets of points facing each other.  Although the double-slip really has four, not two, points per switch, and they overlap, it can be seen that this vastly simpler model is fully equivalent with respect to train motion.</p>
+
+<hr/>
+
+<h2>The Subway System&rsquo;s Use of this Interlocking</h2>
+
+<p>Atlantic Avenue is the first interlocking in Brooklyn on the express tracks of the Lexington Avenue and Seventh Avenue IRT mainlines after they have crossed southward under the East River from Manhattan and joined to form the four-track &ldquo;Brooklyn Line&rdquo;.  The outside (&ldquo;local&rdquo;) tracks (4/E, 3/E) at Atlantic Avenue coming in from the north (right) are the 7th Avenue line, the inside (&ldquo;express&rdquo;) tracks are the Lexington.  Thus, the two diamond crossovers allow trains of either line to run as local or express for the rest of the Brooklyn Line.  Most of the time, trains just run straight through on all four tracks.</p>
+
+<p>While the Lexington Ave. line includes a diamond crossover at Borough Hall, between Atlantic Avenue and the river, there is no such on the 7th Ave. Line, so Atlantic Avenue must also function as the Brooklyn-end interlocking to manage single-tracking of the Clark St. (&ldquo;7th Ave.&rdquo;) tunnel; therefore, both &ldquo;local&rdquo; tracks are traffic controlled, in the real property with Wall St. on the 7th Avenue line in Manhattan.  Thus, 7th Avenue trains can appear on 3/E or exit over 4/E in such situations.  This is neither necessary nor possible on the center tracks (1/E, 2/E) because of the Borough Hall diamond crossover.</p>
+
+<p>Thirdly, Atlantic Avenue has served at times, often during mid-day as the southern terminus of (some) (usually) Lexington Avenue trains/services  During those times, the center tracks (1/E, 2/E) at Atlantic Avenue are used as terminal tracks, turning around trains in them to the North.   The huge extended double-crossover with three slip switches (two single, one double), allows all combinations of turnarounds, including on the outside tracks.  The layup track allows a terminated train to be stored and recalled later.</p>
+
+<p>The entire interlocking, which is quite compact and includes no &ldquo;alternate routes&rdquo; (there is one and only one route between any entrance and any exit), is as flexible as complex.  The Nevins St. UR panel (US&S/&ldquo;Electropneumatic equipment&rdquo; style) dates from the early 1960s.</p>
+
+<hr/>
+
+<h2>Use as a terminal under NXSYS</h2>
+
+<p>When terminating southbound trains on the northbound tracks, all the northbound &ldquo;holdout&rdquo; signals in and south of the station, including those south of the marker signals (242, 240, 238, 236 for the express track, 250, 248, 246 for the local track), must be cancelled and their approach locking reset, or exits will not be offered at 234/244 (as on the actual property).</p>
+
+<p>The southbound express track can be made into a terminal by occupying (with the mouse) the very short piece of track at automatic signal 1752 at the extreme left end of the (scrolled) panel.  This will cause automatic 1652 to go red and hold &ldquo;train system&rdquo; trains in the station without affecting any signals north of that.</p>
+
+<p>Be aware of the 15 MPH southbound GT signal 1645/E on the northbound express track.
+
+<hr/>
+
+<h2>A Personal Note</h2>
+
+After having just received from the Transit Authority and studied for a month the 1958 NX/UR design prototype documents, the author first attempted to implement Atlantic Avenue Interlocking as a teenager in the 1960s, using only paper, pencil, and hand drafting tools, producing, after a month of all-day long work, a hundred pages of frighteningly complex circuitry.  While the exercise was edifying and instructive in many ways, the end product, not having been tested, debugged, or even critiqued, was essentially useless.  NXSYS has allowed this interlocking to achieve a state of demonstrable operability in four days, and a first pass of &ldquo;finished&ldquo; in nine&mdash;the paradigm of active, incremental, debugging loops, the child of the Age of Invention and the Digital Era, makes all the difference.  Also of greatest significance is that which I have learned from the signal engineers and Transit Authority personnel whose attention NXSYS has earned me.
+
+<hr/>
+<h2>Credits And Disclaimer</h2>
+
+<p>The simulated relay logic implementing these interlockings was designed by, and is copyrighted by, Bernard Greenberg, in May 2001.  The track graphics were done by the same using TLEdit, the NXSYS Track Layout editor. Fixes and improvements were added in following years.</p>
+
+<p>The circuits are by and large designed according to the 1994 revision of the NYCTA standards 733-33; an original circuit technique has been used to implement the switch selection for the general case (more complex than Myrtle Avenue) of single-slip switches.</p>
+
+<p>NXSYS/NXSYS Version 2 Copyright (c) 1994-2001, 2014, 2022 Bernard Greenberg.</p>
+<p>Atlantic Avenue Interlocking in NXSYS V2 (c) May 2001, 2022 Bernard Greenberg.</p>
+
+<p>The author of this work is not affiliated with or supported or endorsed by any transit provider or signalling concern.  This system is intended for and licensed exclusively for personal educational and recreational use.  The author assumes no liability for any use, specifically assuming no liability for harm, damage, loss, or injury resulting from attempted use in controlling real vehicles or other real systems, or for inaccuracies in application or representation of signalling standards or representations of railroad properties and equipment.  The author assumes no liability for damage or harm to computer systems or files caused by bugs, program errors, or corruption.  No warranty, assurance of merchantability nor suitability for any purpose is given or implied. </p>
+
+<p>The author may be contacted via GitHub; you&rsquo;ll find me. See the <b>Help</b> menu.</p>
+
+<p>Reference/tutorial information on NYC Subway signalling may be found in the <b>Help</b> menu.</p>
+
+<p>GPL3 license (do as you wish, do not sell it or incorporate it in a product, but keep notice of my authorship.)</p>
+
+</body>
+</html>

@@ -7,11 +7,14 @@
 //
 
 #import "CustomAboutController.h"
-#import "AppDelegate.h"
+#import "AppBuildSignature.h"
+
+static NSString* stdNS(const std::string s) {
+    return [NSString stringWithUTF8String:(s.c_str())];
+}
 
 @implementation CustomAboutController
-static NSString* label1String;
-static NSString* label2String;
+static AppBuildSignature ABS;
 
 - (id) init {
     if ( ! (self = [super initWithWindowNibName: @"CustomAbout"]) )
@@ -26,36 +29,38 @@ static NSString* label2String;
 - (id)initWithWindow:(NSWindow *)window
 {
     self = [super initWithWindow:window];
+    ABS.Populate();
     return self;
-}
--(void)SetVersionData:(NSString *)version date:(NSString *)date build_number:(NSString*)build_number {
-    label1String = version;
-#if DEBUG
-    label2String = [NSString stringWithFormat:@"Debug build %@ %@", build_number, date];
-#else
-    label2String = [NSString stringWithFormat:@"Build %@ %@", build_number, date];
-#endif
 }
 - (void)windowDidLoad
 {
     [super windowDidLoad];
 
-    [_labelLine1 setStringValue:label1String];
-    [_labelLine2 setStringValue:label2String];
-    NSURL * url = [[NSBundle mainBundle] URLForResource:@"About" withExtension:@".html"];
-    auto urlrq = [NSURLRequest requestWithURL:url];
-    [self.theWebView loadRequest:urlrq];
+    self.labelAppName.stringValue = stdNS(ABS.ApplicationName);
+    self.labelVersion.stringValue = stdNS("Version " + ABS.VersionString());
+    self.labelBuild.stringValue = stdNS(ABS.BuildString());
+    self.window.title = stdNS("About " + ABS.ApplicationName);
+
+    auto AboutTextURL = [[NSBundle mainBundle]
+                         URLForResource: stdNS("About" + ABS.ApplicationName)
+                         withExtension: @".html"];
+    [self.theWebView loadRequest:[NSURLRequest requestWithURL:AboutTextURL]];
+
+    auto ImageURL =  [[NSBundle mainBundle]
+                      URLForResource: stdNS(ABS.ApplicationName + "256x256")
+                      withExtension: @".png"];
+    self.theImageView.image = [[NSImage alloc] initByReferencingURL: ImageURL];
 }
 - (bool)isWindowVisible
 {
     return [self.window isVisible];
 }
 
--(void)Show
+-(void)Show: (NSWindow*)parent
 {
     [self showWindow:nil];
     [self.window makeKeyAndOrderFront:nil];
-    [getNXWindow() addChildWindow:self.window ordered:NSWindowAbove];
+    [parent addChildWindow:self.window ordered:NSWindowAbove];
 }
 
 

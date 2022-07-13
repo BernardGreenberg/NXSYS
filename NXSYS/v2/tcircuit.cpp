@@ -5,8 +5,14 @@
 #include "nxgo.h"
 #include "xtgtrack.h"
 #include "math.h"
+#include <unordered_set>
+#include <cassert>
 
 #include <vector>   // Vectorized for global array and local segs 9/27/2019
+
+#if TLEDIT
+#include "undo.h"
+#endif
 
 #ifdef REALLY_NXSYS
 #include "relays.h"
@@ -15,8 +21,6 @@
 #include "rlyapi.h"
 #endif
 
-#include <unordered_set>
-
 /* Track circuits are not GraphicObjects and need explicit tracking.
    Track seg(ment)s, on the other hand, are GO's and are tracked by the
    GO system.
@@ -24,7 +28,8 @@
 
 static std::vector<TrackCircuit*> AllTrackCircuits;
 
-TrackCircuit::TrackCircuit (long sno) {
+TrackCircuit::TrackCircuit (IJID sno) {
+    assert(sno && "Attempt to create track circuit 0");
     Occupied = Routed = Coding = FALSE;
     TrackRelay = NULL;
     StationNo = sno;
@@ -49,20 +54,21 @@ TrackCircuit::~TrackCircuit () {
 }
 
 
-static TrackCircuit* CreateNewTrackCircuit (long sno) {
+static TrackCircuit* CreateNewTrackCircuit (IJID sno) {
     TrackCircuit* new_circuit = new TrackCircuit(sno);
     AllTrackCircuits.push_back(new_circuit);
     return new_circuit;
 }
 
-TrackCircuit* FindTrackCircuit (long sno) {
+TrackCircuit* FindTrackCircuit (IJID sno) {
     for (TrackCircuit * tc : AllTrackCircuits)
 	if (tc->StationNo == sno)
             return tc;
     return NULL;
 }
 
-TrackCircuit* GetTrackCircuit (long sno) {
+TrackCircuit* GetTrackCircuit (IJID sno) {
+    assert(sno && "GetTrackCircuit called on 0");
     TrackCircuit * tc = FindTrackCircuit (sno);
     return tc ? tc : CreateNewTrackCircuit(sno);
 }
@@ -79,13 +85,18 @@ void TrackCircuit::AddSeg (TrackSeg * ts) {
     Segments.push_back(ts);
 }
 
-
-TrackCircuit * TrackSeg::SetTrackCircuit (long tcid, BOOL wildfire) {
+TrackCircuit * TrackSeg::SetTrackCircuit (IJID tcid) {
+    if (tcid == 0) {
+        if (Circuit) {
+            Circuit->DeleteSeg(this);
+            Circuit = NULL;
+            Invalidate();
+        }
+        return NULL;
+    }
     TrackCircuit * tc = GetTrackCircuit (tcid);
-    if (wildfire)
-	SetTrackCircuitWildfire (tc);
-    else
-	SetTrackCircuit0 (tc);
+    SetTrackCircuit0 (tc);
+    Invalidate();
     return tc;
 }
 
@@ -95,32 +106,66 @@ void TrackSeg::SetTrackCircuit0 (TrackCircuit * tc) {
 	    Circuit->DeleteSeg(this);
 	if (tc)
 	    tc->AddSeg(this);
+        else
+            Circuit = nullptr;
+        Invalidate();
+        
     }
 }
 
-void TrackSeg::SetTrackCircuitWildfire (TrackCircuit * tc) {
-    if (Circuit == tc)
-	return;
-    SetTrackCircuit0 (tc);
-    for (int ex = 0; ex < 2; ex++) {
-	TrackSegEnd* ep = &Ends[ex];
-	if (ep->Joint && ep->Joint->Insulated)
-	    continue;
 #ifdef TLEDIT
-        if (TrackJoint * tj = ep->Joint) {
+
+void TrackSeg::SetTrackCircuitWildfire(IJID tcid) {
+
+    TrackCircuit* tc = tcid ? GetTrackCircuit(tcid) : NULL;
+
+    SegmentGroupMap SGM;
+    
+    CollectContacteesRecurse(SGM);
+
+    for (auto [seg, cct] : SGM)
+        seg->SetTrackCircuit0(tc);
+
+    Undo::RecordWildfireTCSpread(SGM, tcid);
+
+    if (tc)
+        tc->SetRouted(tcid != 0);
+};
+
+void TrackSeg::CollectContacteesRecurse (SegmentGroupMap& SGM) {
+    /* this is all that keeps us from infinite recursion */
+    if (SGM.count(this))
+        return;
+
+    SGM[this] = TCNO();
+    
+    for (int ex = 0; ex < 2; ex++) {
+        TrackSegEnd* ep = &Ends[ex];
+        TrackJoint* tj = ep->Joint;
+        assert(tj);
+        if (!tj->Insulated) {
             for (int i = 0; i < tj->TSCount; i++) {
                 if (tj->TSA[i] != this)
-                    tj->TSA[i]->SetTrackCircuitWildfire(tc);
+                    tj->TSA[i]->CollectContacteesRecurse(SGM);
             }
         }
-#else
-	if (ep->Next)
-	    ep->Next->SetTrackCircuitWildfire (tc);
-	if (ep->NextIfSwitchThrown)
-	    ep->NextIfSwitchThrown->SetTrackCircuitWildfire (tc);
-#endif
     }
 }
+
+std::pair<int,int> TrackSeg::AnalyzeSegmentGroup(const SegmentGroupMap &M){
+    std::unordered_set<IJID> circuits;
+    int unassigned = 0;
+    for (auto [seg, tcid] : M)
+        if (tcid == 0)
+            unassigned ++;
+        else
+            circuits.insert(tcid);
+    return {(int)circuits.size(), unassigned};
+}
+
+
+
+#endif
 
 void TrackCircuit::SetOccupied (BOOL sta, BOOL force) {
     if ((Occupied != sta) || force) {

@@ -14,7 +14,7 @@
 #include "compat32.h"
 #include "traincfg.h"
 #include "trainaut.h"
-#include "objid.h"
+#include "typeid.h"
 #include "xturnout.h"
 
 #include "nxproduct.h"
@@ -74,8 +74,8 @@ static int SULTMMapper2 (GraphicObject * g) {
 
 /* delay until first train ?  */
 void SetUpLayoutTrainMetrics () {
-    MapGraphicObjectsOfType (ID_TRACKSEG, SULTMMapper1);
-    MapGraphicObjectsOfType (ID_TRACKSEG, SULTMMapper2);
+    MapGraphicObjectsOfType (TypeId::TRACKSEG, SULTMMapper1);
+    MapGraphicObjectsOfType (TypeId::TRACKSEG, SULTMMapper2);
 }
 
 
@@ -235,5 +235,5 @@ static int FTETSBNMapper (GraphicObject * g, void * v) {
 TrackUnit *  FindTrainEntryTrackSectionByNomenclature (long id_no) {
 
     return (TrackUnit *)
-	    MapFindGraphicObjectsOfType (ID_TRACKSEG, FTETSBNMapper, &id_no);
+	    MapFindGraphicObjectsOfType (TypeId::TRACKSEG, FTETSBNMapper, &id_no);
 }

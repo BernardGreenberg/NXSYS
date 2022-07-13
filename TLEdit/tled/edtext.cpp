@@ -16,6 +16,7 @@
 #include "objreg.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
+#include "undo.h"
 
 #define TEXT_DUMP_PRIORITY 1000
 #ifdef NXSYSMac
@@ -37,7 +38,7 @@ static GraphicObject* CreateTextString (int wpx, int wpy) {
     return Dragon.StartMoving (txs, "New text string", G_mainwindow);
 }
 
-REGISTER_NXTYPE(ID_TEXT, CmText, IDD_EDIT_TEXT, CreateTextString, NULL);
+REGISTER_NXTYPE(TypeId::TEXT, CmText, IDD_EDIT_TEXT, CreateTextString, NULL);
 
 void TextString::EditClick (int x, int y) {
     Dragon.ClickOn (G_mainwindow, this, "Text string", x, y);
@@ -45,49 +46,47 @@ void TextString::EditClick (int x, int y) {
 
 /* ------------------------------------------------------------*/
 
-static void DumpString (const char * s, FILE * f) {
-    putc ('"', f);
+static void DumpString (const char * s, GraphicObject::ObjectWriter& W) {
+    W.putc ('"');
     for (const char * p = s; *p != '\0'; p++) {
 	char c = *p;
-	if (c == '\r') fprintf (f, "\\r");
-	else if (c == '\n') fprintf (f, "\\n");
-	else if (c == '\t') fprintf (f, "\\t");
+	if (c == '\r') W.puts("\\r");
+	else if (c == '\n') W.puts("\\n");
+	else if (c == '\t') W.puts("\\t");
 	else if (strchr ("\\\"", c))
-	    fprintf (f, "\\%c",c);
-	else putc (c, f);
+	    W.putf("\\%c",c);
+        else W.putc(c);
     }
-    putc ('"', f);
+    W.putc ('"');
 }
 
-int TextString::Dump (FILE * f) {
-    if (f == NULL)
-	return TEXT_DUMP_PRIORITY;
-    fprintf (f, "  (TEXT\t");
-    DumpString (String.c_str(), f);
-    fprintf (f,"\n\t\t%4ld\t%4ld", wp_x, wp_y);
+int TextString::Dump (ObjectWriter& W) {
+    W.puts("  (TEXT\t");
+    DumpString(S.String.c_str(), W);
+    W.putf("\n\t\t%4ld\t%4ld", wp_x, wp_y);
     LOGFONT& lf = RedeemLogfont();
     if (lf.lfFaceName[0] != '\0')
-	fprintf (f, "\n\tFACE\t\"%s\"", lf.lfFaceName);
+	W.putf("\n\tFACE\t\"%s\"", lf.lfFaceName);
     if (lf.lfHeight != 0)
-	fprintf (f, "\n\tHEIGHT\t%d", lf.lfHeight);
+	W.putf("\n\tHEIGHT\t%d", lf.lfHeight);
     if (lf.lfWidth != 0)
-	fprintf (f, "\n\tWIDTH\t%d\n", lf.lfWidth);
+	W.putf("\n\tWIDTH\t%d\n", lf.lfWidth);
     if (lf.lfWeight != 0) {
 	if  (lf.lfWeight == FW_NORMAL)
-	    fprintf (f, "\n\tWEIGHT\tNORMAL");
+	    W.puts("\n\tWEIGHT\tNORMAL");
 	else if (lf.lfWeight == FW_BOLD)
-	    fprintf (f, "\n\tWEIGHT\tBOLD");
+	    W.puts("\n\tWEIGHT\tBOLD");
         else if (lf.lfWeight == FW_BOLD)
-	    fprintf (f, "\n\tWEIGHT\t%d", lf.lfWeight);
+	    W.putf("\n\tWEIGHT\t%d", lf.lfWeight);
     }
     if (lf.lfItalic)
-	fprintf (f, "\n\tITALIC\tT");
+	W.puts("\n\tITALIC\tT");
 
-    if (ColorGiven)
-	fprintf (f, "\n\tCOLOR\t(%d %d %d)",
-		 GetRValue (Color), GetGValue (Color), GetBValue (Color));
+    if (S.ColorGiven)
+        W.putf("\n\tCOLOR\t(%d %d %d)",
+               GetRValue (S.Color), GetGValue (S.Color), GetBValue (S.Color));
 
-    fprintf (f, ")\n");
+    W.puts(")\n");
     return TEXT_DUMP_PRIORITY;
 }
 /* ------------------------------------------------------------*/
@@ -226,30 +225,29 @@ static void GetDlgElementsToLogfont (HWND hDlg) {
 
 
 BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
-#ifdef NXSYSMac
     BOOL es;
-#else
+#ifndef NXSYSMac
     static CHOOSEFONT Cf{};	/* says should be static, beats me */
 #endif
     WP_cord new_wp_x, new_wp_y; /* must be outside "switch" stmt */
 
     switch (message) {
 	case WM_INITDIALOG:
-            SetDlgItemTextS (hDlg, IDC_TEXT_TEXT, String);
+            SetDlgItemTextS (hDlg, IDC_TEXT_TEXT, S.String);
 #ifdef NXSYSMac
-            SetDlgItemTextS (hDlg, IDC_ETEXT_SAMPLE, String);
+            SetDlgItemTextS (hDlg, IDC_ETEXT_SAMPLE, S.String);
             SetDlgItemInt(hDlg, IDC_ETEXT_WPX, (int)wp_x, TRUE); // upd win dlg some day
             SetDlgItemInt(hDlg, IDC_ETEXT_WPY, (int)wp_y, TRUE);
 #endif
 	    memcpy (&TempLogfont, &RedeemLogfont(), sizeof(LOGFONT));
-	    TempColorGiven = ColorGiven;
-	    TempColor = ColorGiven ? Color : TrackDftCol;
+	    TempColorGiven = S.ColorGiven;
+	    TempColor = S.ColorGiven ? S.Color : TrackDftCol;
 	    SetTSDlgState (hDlg);
+            CacheInitSnapshot();
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
-#ifdef NXSYSMac
                     new_wp_x = GetDlgItemInt (hDlg, IDC_ETEXT_WPX, &es, FALSE);
                     if (!es) {
                         uerr (hDlg, "Bad number in Panel X coordinate.");
@@ -260,10 +258,9 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         uerr (hDlg, "Bad number in Panel Y coordinate.");
                         return TRUE;
                     }
-#endif
 		    Invalidate();
 		    
-                    String = GetDlgItemText (hDlg, IDC_TEXT_TEXT);
+                    S.String = GetDlgItemText (hDlg, IDC_TEXT_TEXT);
 
 		    GetDlgElementsToLogfont(hDlg);
 #ifdef NXSYSMac
@@ -279,8 +276,8 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 
                     ComputeVisibleLast();
 
-		    Color = TempColor;
-		    ColorGiven = TempColorGiven;
+		    S.Color = TempColor;
+		    S.ColorGiven = TempColorGiven;
                     Invalidate();
 
                     if (wp_x != new_wp_x || wp_y != new_wp_y) {
@@ -288,11 +285,12 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         Invalidate();
                     }
 
-		    BufferModified = TRUE;
+                    Undo::RecordChangedProps(this, StealPropCache());
 		    EndDialog (hDlg, TRUE);
 		    return TRUE;
 
 		case IDCANCEL:
+                    DiscardPropCache();
 		    EndDialog (hDlg, FALSE);
 		    return TRUE;
 

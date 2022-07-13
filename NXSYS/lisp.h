@@ -179,8 +179,8 @@ inline void LispBarf(const char* cstr, Sexpr s1, Sexpr s2) {
 }
 
 void SetLispBarfString (const char * s);
-Sexpr read_sexp_from_string (LispTChar * s, int*where_left);
-Sexpr read_sexp_from_char_string (char * s, int*where_left);
+Sexpr read_sexp_from_string (const LispTChar * s, int*where_left);
+Sexpr read_sexp_from_char_string (const char * s, int*where_left);
 Sexpr read_sexp(FILE* f);
 char skip_lisp_file_whitespace(FILE * f);
 

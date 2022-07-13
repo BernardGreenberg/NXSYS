@@ -10,7 +10,7 @@
 #include "commands.h"
 #include "nxgo.h"
 #include "timers.h"
-#include "objid.h"
+#include "typeid.h"
 #include "compat32.h"
 #include "lyglobal.h"
 #include "loaddcls.h"
@@ -30,10 +30,8 @@
 #include "trainapi.h"
 #include "resource.h"
 #include <string>
-#include "incexppt.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
-#include "STLfnsplit.h"
 #include "AppAbortRestart.h"
 #include "MessageBox.h"
 #include "NXRegistry.h"
@@ -366,7 +364,7 @@ WNDPROC_DCL MainWindow_WndProc
 		if (ChooseTrackActive) {
 			EndChooseTrack();
 			GraphicObject* g = FindHitObjectOfType
-			(ID_TRACKSEG, LOWORD(lParam), HIWORD(lParam));
+			(TypeId::TRACKSEG, LOWORD(lParam), HIWORD(lParam));
 			if (g != NULL) {
 				TrainDialog(g, TrainType);
 				break;

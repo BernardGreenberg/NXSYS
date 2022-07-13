@@ -46,6 +46,13 @@ bool REDISPLAYING = false;
     CGFloat m = rawmag + 1.0;
     [self magnifyWithRatio:m];
 }
+- (IBAction)ZoomOut:(id)sender {
+    //It should be obvious that .909090...*1.1 = .9999999 = 1.
+    [self magnifyWithRatio:0.90909090909];
+}
+- (IBAction)ZoomIn:(id)sender {
+    [self magnifyWithRatio:1.1];
+}
 - (void)rodaCommon:(NSEvent*) theEvent Message:(int)message
 {
     if (message == WM_LBUTTONDOWN) {

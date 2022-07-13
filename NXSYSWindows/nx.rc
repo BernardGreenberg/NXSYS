@@ -8,7 +8,7 @@
 #define VER_PRIVATEBUILD 0
 #define VER_COMPANYNAME_STR "Bernard Greenberg"
 #define VER_FILEDESCRIPTION_STR "NXSYS Signalling and Interlocking Simulator"
-#define VER_INTERNALNAME_STR "NXSYS V2 main app"
+#define VER_INTERNALNAME_STR "NXSYS"
 #define VER_LEGALCOPYRIGHT_STR "Copyright (c) 1994-2022 Bernard Greenberg"
 #define VER_PRERELEASE 0
 #define VER_LEGALTRADEMARKS1_STR ""
@@ -144,12 +144,11 @@ BEGIN
 	CTEXT "in MSVC++  20", -1, 12, 30, 160, 8
 
 	DEFPUSHBUTTON "OK", IDOK, 76, 86, 24, 14
-	CONTROL "Built:", ABOUT_BUILD, "STATIC", WS_CHILD | WS_VISIBLE | WS_GROUP, 30, 51, 58, 8
+	CONTROL "Built:", ABOUT_BUILD, "STATIC", WS_CHILD | WS_VISIBLE | WS_GROUP, 30, 51, 158, 8
 	CTEXT "Copyright (c) 1994-2022 B. Greenberg", -1, 8, 64, 160, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
 	CONTROL, "Version 2.6.3 (MS Windows)", ABOUT_NUM_VSN, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 25, 42, 136, 8
-	CTEXT "All Rights Reserved", -1, 40, 74, 96, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
+	CTEXT "Licensed GPL3", -1, 40, 74, 96, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
 	ICON "NXICON", -1, 12, 82, 16, 16
-	CONTROL "27 June 12:24:02 1994", ABOUT_VSN, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 88, 51, 83, 8
 END
 
 
@@ -258,11 +257,11 @@ END
 
 // 1 Dec 2016 copied from MS Web posting
 
-#define VER_FILEVERSION             2,6,3,0
-#define VER_FILEVERSION_STR         "2.6.3.0\0"
+#define VER_FILEVERSION             2,7,0,0
+#define VER_FILEVERSION_STR         "2.7.0.0\0"
 
-#define VER_PRODUCTVERSION          2,6,3,0
-#define VER_PRODUCTVERSION_STR      "2.6.3"
+#define VER_PRODUCTVERSION          2,7,0,0
+#define VER_PRODUCTVERSION_STR      "2.7.0"
 
 #ifndef DEBUG
 #define VER_DEBUG                   0

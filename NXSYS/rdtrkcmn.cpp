@@ -19,9 +19,9 @@
 #include <ctype.h>
 #include "compat32.h"
 #include "lispmath.h"
-#include "objid.h"
+#include "typeid.h"
 #include "traincfg.h"
-#include "incexppt.h"
+#include "replace_filename.h"
 #include "nxglapi.h"
 #include "nxsysapp.h"
 #include "timers.h"
@@ -30,7 +30,6 @@
 #include "trafficlever.h"
 #include "plight.h"
 #include "helpdlg.h"
-#include "STLfnsplit.h"
 #include "STLExtensions.h"
 #include "ValidatingValue.h"
 
@@ -193,10 +192,7 @@ const char * ReadLayout (const char* fname) {
     InitSwitchKeyData();
     InitTrafficLeverData();
 
-    std::string drive,dir,ename,ext;
-    STLfnsplit (fname, drive, dir, ename, ext);
-
-    if (stoupper(ext) == ".TKO") {
+    if (stoupper(fs::path(fname).extension().string()) == ".TKO") {
 #if NXSYSMac
         std::string em;
         em += fname;
@@ -291,7 +287,7 @@ forms:
                 (STLincexppath(fname, CADR(s).u.s).c_str());
 #endif
     else if (symcmp (fn, "INCLUDE"))
-        return LoadExprcodeFile (STLincexppath(fname, CADR(s).u.s).c_str());
+        return LoadExprcodeFile (replace_filename(fname, CADR(s).u.s).c_str());
     else if (symcmp (fn, "RELAY"))
 	return (DefineRelayFromLisp (rest) != NULL);
     else if (symcmp (fn, "TIMER"))
@@ -577,7 +573,7 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
             else {
                 helpMenuText = s2.u.s;
                 if (helpMenuText.length() && helpMenuText[0] == '@') {
-                    if (auto retr = LassieGetHelp(STLincexppath(fname, helpMenuText.substr(1))))
+                    if (auto retr = LassieGetHelp(replace_filename(fname, helpMenuText.substr(1))))
                         helpMenuText = retr.value;
                     else
                         LERROR("Cannot open referenced text help file", s2); // macro returns 0.
@@ -616,7 +612,7 @@ int ProcessRouteForm (Sexpr s, const char* fname) {
 
 
 // A good old Lisp Macro
-template <class T, int item_type>
+template <class T, TypeId item_type>
 static inline void ProcessLoadCompleteMacro(){
     MapGraphicObjectsOfType(item_type, [](GraphicObject* g) {
         ((T *)g)->ProcessLoadComplete();
@@ -629,17 +625,17 @@ static inline void ProcessLoadCompleteMacro(){
 /*Version 2 process load complete */
 void ProcessLoadComplete () {
     TrackCircuitSystemLoadTimeComplete ();
-    ProcessLoadCompleteMacro<PanelSignal, ID_SIGNAL>();
-    ProcessLoadCompleteMacro<Turnout, ID_TURNOUT>();
-    ProcessLoadCompleteMacro<ExitLight, ID_EXITLIGHT>();
-    ProcessLoadCompleteMacro<Stop, ID_STOP>();
-    ProcessLoadCompleteMacro<TrafficLever, ID_TRAFFICLEVER>();
-    ProcessLoadCompleteMacro<PanelLight, ID_PANELLIGHT>();
+    ProcessLoadCompleteMacro<PanelSignal, TypeId::SIGNAL>();
+    ProcessLoadCompleteMacro<Turnout, TypeId::TURNOUT>();
+    ProcessLoadCompleteMacro<ExitLight, TypeId::EXITLIGHT>();
+    ProcessLoadCompleteMacro<Stop, TypeId::STOP>();
+    ProcessLoadCompleteMacro<TrafficLever, TypeId::TRAFFICLEVER>();
+    ProcessLoadCompleteMacro<PanelLight, TypeId::PANELLIGHT>();
     SwitchesLoadComplete();
 }
 
 void ReportAllTrafficLeversNormal () {
-    MapGraphicObjectsOfType (ID_TRAFFICLEVER, [](GraphicObject*g) {
+    MapGraphicObjectsOfType (TypeId::TRAFFICLEVER, [](GraphicObject*g) {
         ((TrafficLever *)g)->InitState();
         return 0;
     });

@@ -1,7 +1,7 @@
 #include "windows.h"
 #include "xtgtrack.h"
 #include "signal.h"
-#include "objid.h"
+#include "typeid.h"
 #include "ssdlg.h"
 #include "brushpen.h"
 #include "timers.h"
@@ -148,7 +148,7 @@ static int SSMapper (GraphicObject * go) {
 void ImplementShowStopPolicy (int policy){
     if (policy > 0) {
 	if (policy != ShowStopPolicy)
-	    MapGraphicObjectsOfType (ID_STOP, SSMapper);
+	    MapGraphicObjectsOfType (TypeId::STOP, SSMapper);
 	ShowStopPolicy = policy;
 	StopsChanging = 1;
 	UpdateWindow (G_mainwindow);

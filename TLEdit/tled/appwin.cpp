@@ -10,6 +10,7 @@
 #include <stdarg.h>
 #include "WinReadResText.h"
 #include "ParseCommandLine.h"
+#include "DesignWindowDims.h"
 #endif
 
 #include "compat32.h"
@@ -22,7 +23,7 @@
 #endif
 #include "xtgtrack.h"
 #include "tledit.h"
-#include "objid.h"
+#include "typeid.h"
 #include "xtgload.h"
 #include "lisp.h"
 #include "dialogs.h"
@@ -31,6 +32,8 @@
 #include "dragger.h"
 #include "objreg.h"
 #include "signal.h"
+#include "undo.h"
+#include "LayoutModified.h"
 #include <stdarg.h>
 #include <string>
 #include "STLExtensions.h"
@@ -41,7 +44,6 @@ HFONT Fnt = NULL;
 int FixOriginWPX = 0, FixOriginWPY = 0;
 HWND G_mainwindow = NULL, AppWindow = NULL;
 HINSTANCE app_instance;
-BOOL BufferModified = FALSE;
 BOOL ExitLightsShowing = FALSE;
 const char app_name[] = PRODUCT_NAME " Track Layout Editor";
 
@@ -52,9 +54,7 @@ static HWND S_Statusbar = NULL;
 static HWND S_Toolbar = NULL;
 
 #ifdef NXSYSMac
-void Mac_GetDisplayWPOrg(int[2], bool really_get_it_from_window);
-void DisplayStatusString(const char * s);
-void EnableCommand(UINT, bool);
+#include "MacAppwinAPIs.h"
 #endif
 
 #define TXWINSTYLE SS_SIMPLE | WS_CHILD | WS_VISIBLE
@@ -111,7 +111,7 @@ static int MapShowExitLight(GraphicObject * g) {
 
 static void ShowExitLights(BOOL whichway) {
 	ExitLightsShowing = whichway;
-	MapGraphicObjectsOfType(ID_EXITLIGHT, MapShowExitLight);
+	MapGraphicObjectsOfType(TypeId::EXITLIGHT, MapShowExitLight);
 }
 
 static void GraphicsWindow_Rodentate
@@ -150,11 +150,9 @@ static void GraphicsWindow_Rodentate
 }
 
 
-static int MapAssignIDs(GraphicObject * g) {
+static int MapJoints(GraphicObject * g) {
 	TrackJoint * tj = (TrackJoint*)g;
-	if (tj->Nomenclature)
-		MarkIDAssign((int)(tj->Nomenclature));
-	else
+	if (!tj->Nomenclature)
 		if (tj->Insulated || tj->TSCount != 2)
 			tj->Nomenclature = AssignID(1);
 	if ((tj->Insulated || tj->TSCount != 2)
@@ -163,11 +161,9 @@ static int MapAssignIDs(GraphicObject * g) {
 	return 0;
 }
 
-static int MapAssignSigNos(GraphicObject * g) {
+static int MapNormSigHeads(GraphicObject * g) {
 	PanelSignal * ps = (PanelSignal *)g;
 	Signal * s = ps->Sig;
-	if (s->XlkgNo)
-		MarkIDAssign(s->XlkgNo);
 	if (s->HeadsString.empty())
         s->HeadsString = "GYR";
 	return 0;
@@ -177,25 +173,38 @@ static void FullRedisplay() {
 	InvalidateRect(G_mainwindow, NULL, TRUE);
 }
 
-void FixOrigin(bool really_get_it_from_window) {
+void AssignFixOrigin(WPPOINT nieuw) {
+    FixOriginWPX = (int)nieuw.x;
+    FixOriginWPY = (int)nieuw.y;
+    StatusMessage("Viewpoint origin changed to %d, %d", FixOriginWPX, FixOriginWPY);
+}
+
+void FixOrigin(bool really_get_it_from_window, bool noui = false) {
+    WPPOINT old{FixOriginWPX, FixOriginWPY};
 #ifdef NXSYSMac // gee, SCXtoWP ain't gonna work with NSScrollWindow . . .
 	int coords[2];
 	Mac_GetDisplayWPOrg(coords, really_get_it_from_window);
 	FixOriginWPX = coords[0];
 	FixOriginWPY = coords[1];
 #else
-	really_get_it_from_window;
+	(void)really_get_it_from_window;
 	FixOriginWPX = (int)SCXtoWP(0);
 	FixOriginWPY = (int)SCYtoWP(0);
 #endif
+    if (!noui) {
+        WPPOINT nieuw{FixOriginWPX, FixOriginWPY};
+        StatusMessage("Viewpoint origin changed to %d, %d", FixOriginWPX, FixOriginWPY);
+        Undo::RecordSetViewOrigin(old, nieuw);
+    }
 }
 
 void ClearItOut() {
 	FreeGraphicObjects();
     FileName.clear();
 	InitAssignID();
-	BufferModified = FALSE;
+	ClearLayoutModified();
 }
+
 static BOOL ReadIt() {
 	FILE * f = fopen(FileName.c_str(), "r");
 	if (f == NULL) {
@@ -204,14 +213,22 @@ static BOOL ReadIt() {
 	}
 	ClearItOut();
 	if (XTGLoad(f)) {
+        fclose(f);
+
 		InitAssignID();
-		MapGraphicObjectsOfType(ID_JOINT, MapAssignIDs);
-		MapGraphicObjectsOfType(ID_SIGNAL, MapAssignSigNos);
+        MapAllGraphicObjects([](GraphicObject* g, void*) {
+            if (g->HasManagedID())
+                if (int id = g->ManagedID())
+                    MarkIDAssign(id);
+            return 0;
+        }, nullptr);
+		MapGraphicObjectsOfType(TypeId::JOINT, MapJoints);
+		MapGraphicObjectsOfType(TypeId::SIGNAL, MapNormSigHeads);
         SetMainWindowTitle(FileName.c_str());
 		ComputeVisibleObjectsLast();
 		FullRedisplay();
-		FixOrigin(false);
-		fclose(f);
+		FixOrigin(false, true);
+
 		return TRUE;
 	}
 	fclose(f);
@@ -221,7 +238,7 @@ static BOOL ReadIt() {
 BOOL SaveItForReal(const char * path) {
 	if (SaveLayout(path)) {
         FileName = path;
-		BufferModified = FALSE;
+        ClearLayoutModified();
 		SetMainWindowTitle(FileName.c_str());
 		StatusMessage("Wrote %s.", FileName.c_str());
 		return TRUE;
@@ -250,7 +267,7 @@ static BOOL SaveIt(BOOL force_query) {
 }
 
 static BOOL CheckBufferModified() {
-	if (!BufferModified)
+	if (!IsLayoutModified())
 		return TRUE;
 	switch (MessageBox(AppWindow,
 		"Layout has been modified.  Save it out?\r\n"
@@ -269,7 +286,25 @@ static BOOL CheckBufferModified() {
 #endif
 void AppCommand(UINT command) {
 	switch (command) {
-#ifndef NXSYSMac
+
+#ifdef NXSYSMac
+    case CmQuit:
+        QuitMacApp();
+        break;
+            
+    case CmSave:
+        ExtSaveDocumentMac();
+        break;
+            
+    case CmOpen:
+        MacFileOpen();
+        break;
+
+    case CmHelp:
+        MacTLEditHelp();
+        break;
+
+#else
 	case CmQuit:
 		if (CheckBufferModified())
 			PostQuitMessage(0);
@@ -282,7 +317,7 @@ void AppCommand(UINT command) {
 			FullRedisplay();
 		}
 		InitAssignID();
-		BufferModified = FALSE;
+        ClearLayoutModified();
 		if (command == CmClear)
 			SetMainWindowTitle(NULL);
 		break;
@@ -292,7 +327,7 @@ void AppCommand(UINT command) {
 		break;
 	case CmToggleExitLights:
 		ExitLightsShowing = GetToolbarCheckState(S_Toolbar, command);
-		if (SelectedObject && SelectedObject->TypeID() == ID_EXITLIGHT)
+		if (SelectedObject && SelectedObject->TypeID() == TypeId::EXITLIGHT)
 			SelectedObject->Deselect();
 		ShowExitLights(ExitLightsShowing);
 		break;
@@ -302,8 +337,8 @@ void AppCommand(UINT command) {
 		FullRedisplay();
 		break;
 	case CmIJ:
-		if (SelectedObject && SelectedObject->TypeID() == ID_JOINT) {
-			InsulateJoint((TrackJoint *)SelectedObject);
+		if (SelectedObject && SelectedObject->TypeID() == TypeId::JOINT) {
+			ToggleInsulation((TrackJoint *)SelectedObject);
 			//			    SelectedObject->Deselect();
 		}
 		break;
@@ -313,20 +348,28 @@ void AppCommand(UINT command) {
 		break;
 	case CmFlipSignal:
 		if (SelectedObject)
-			if (SelectedObject->TypeID() == ID_SIGNAL)
+			if (SelectedObject->TypeID() == TypeId::SIGNAL)
 				FlipSignal((PanelSignal *)SelectedObject);
 		break;
 	case CmFlipNum:
 		if (SelectedObject)
-			if (SelectedObject->TypeID() == ID_JOINT)
+			if (SelectedObject->TypeID() == TypeId::JOINT)
 				((TrackJoint *)SelectedObject)->FlipNum();
 		break;
+            
+        case CmUndo:
+            Undo::Undo();
+            break;
+            
+        case CmRedo:
+            Undo::Redo();
+            break;
+            
 
 #ifndef NXSYSMac  // hic non est auxilium
 	case CmHelp:
-	//	DoHelpDialog(); //no HAY ayudo aquí -- Español mejor que la latina aquí...
-		WinBrowseResource("TLEDocumentation\\TLEdit.html");
-
+	//	DoHelpDialog(); //no HAY ayudo aqu’ -- Espa–ol mejor que la latina aqu’...
+		WinBrowseResource("TLEDocumentation\\TLEdit.pdf");
 		break;
 
 	case CmAbout:
@@ -335,11 +378,11 @@ void AppCommand(UINT command) {
 #endif 
 	case CmSignalUpRight:
 	case CmSignalDownLeft:
-		if (SelectedObject && SelectedObject->TypeID() == ID_JOINT)
+		if (SelectedObject && SelectedObject->TypeID() == TypeId::JOINT)
 			TLEditCreateSignal
 			((TrackJoint *)SelectedObject,
 				command == CmSignalUpRight);
-		else if (SelectedObject && SelectedObject->TypeID() == ID_SIGNAL)
+		else if (SelectedObject && SelectedObject->TypeID() == TypeId::SIGNAL)
 			TLEditCreateSignalFromSignal
 			((PanelSignal *)SelectedObject,
 				command == CmSignalUpRight);
@@ -347,7 +390,7 @@ void AppCommand(UINT command) {
 			usererr("An insulated joint must be selected to define a signal.");
 		break;
 	case CmCreateExitLight:
-		if (SelectedObject && SelectedObject->TypeID() == ID_SIGNAL)
+		if (SelectedObject && SelectedObject->TypeID() == TypeId::SIGNAL)
 			TLEditCreateExitLightFromSignal
 			((PanelSignal *)SelectedObject, TRUE);
 		break;
@@ -371,8 +414,8 @@ void AppCommand(UINT command) {
 		break;
 #endif
 	case CmRevertToSaved:
-		if (!BufferModified)
-			usererr("Drawing has not been modified, nothing to revert.");
+		if (!IsLayoutModified())
+			usererr("Layout has not been modified, nothing to revert.");
 		else if (IDOK == MessageBox
 		(AppWindow, "Really discard this image and revert to saved?",
 			app_name, MB_OKCANCEL | MB_ICONEXCLAMATION))
@@ -401,14 +444,18 @@ void AppCommand(UINT command) {
 			"Do you really want to set the display origin"
 			" as currently shown?",
 			app_name, MB_YESNOCANCEL)) {
-			FixOrigin(true);
-			BufferModified = TRUE;
+			FixOrigin(true, false);
 		}
 		break;
 	default:
 		CreateObjectFromCommand(G_mainwindow, command, MouseLastX, 0);
 		break;
 	}
+}
+
+void DragonAbortOnChar() {   // Either platform, called from AppDelegate, too...
+    if (MouseupDragon)
+        MouseupDragon->Abort();
 }
 
 #ifndef NXSYSMac
@@ -459,12 +506,11 @@ static WNDPROC_DCL MainWindow_WndProc
 #ifndef NXSYSMac
 	case WM_CLOSE:
 		if (CheckBufferModified())
-			PostQuitMessage(0);
+            PostQuitMessage(0);
 		break;
 
 	case WM_CHAR:
-		if (MouseupDragon)
-			MouseupDragon->Abort();
+        DragonAbortOnChar();
 		break;
 
 	default:
@@ -535,8 +581,7 @@ static WNDPROC_DCL GraphicsWindow_WndProc
 		break;
 
 	case WM_CHAR:
-		if (MouseupDragon)
-			MouseupDragon->Abort();
+        DragonAbortOnChar();
 		break;
 
 	default:
@@ -554,27 +599,28 @@ static long WindowsMessageLoop(HWND window, HACCEL hAccel) {
 		//	if (IsViewerDlgMsg (&message))
 		//	    continue;
 
-		BOOL was_mod = BufferModified;
+		bool was_mod = IsLayoutModified();
 		if (hAccel == NULL || !TranslateAccelerator(window, hAccel, &message)) {
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}
-		if (BufferModified != was_mod)
-			EnableCommand(CmSave, BufferModified);
+        bool now_mod = IsLayoutModified();
+		if (was_mod != now_mod)
+			EnableCommand(CmSave, now_mod ? TRUE : FALSE);
 	}
 	return (long)message.wParam;
 }
 #endif
 
 static void SelectHook(GraphicObject * go) {
-	int objid = go ? go->TypeID() : -1;
-	EnableCommand(CmCut, objid > 0);
-	EnableCommand(CmEditProperties, objid > 0);
-	EnableCommand(CmFlipNum, objid == ID_JOINT);
-	EnableCommand(CmIJ, objid == ID_JOINT);
-	EnableCommand(CmSignalUpRight, objid == ID_JOINT || objid == ID_SIGNAL);
-	EnableCommand(CmSignalDownLeft, objid == ID_JOINT || objid == ID_SIGNAL);
-	EnableCommand(CmCreateExitLight, objid == ID_JOINT || objid == ID_SIGNAL);
+    TypeId type = go ? go->TypeID() : TypeId::NONE;
+	EnableCommand(CmCut, type != TypeId::NONE);
+	EnableCommand(CmEditProperties, type != TypeId::NONE);
+	EnableCommand(CmFlipNum, type == TypeId::JOINT);
+	EnableCommand(CmIJ, type == TypeId::JOINT);
+	EnableCommand(CmSignalUpRight, type == TypeId::JOINT || type == TypeId::SIGNAL);
+	EnableCommand(CmSignalDownLeft, type == TypeId::JOINT || type == TypeId::SIGNAL);
+	EnableCommand(CmCreateExitLight, type == TypeId::JOINT || type == TypeId::SIGNAL);
 }
 
 void InitTLEditApp(int dtw, int dth) {
@@ -645,13 +691,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 	int real_dtw = rc.right - rc.left;
 	int real_dth = rc.bottom - rc.top;
 
-	/* 13 December 2000 -- setting the same metrics as those under which
-	   NXSYS was designed gives better results all-around -you
-	   get more track instead of thick tracks, and it seems to look better
-	   all around -- if you don't like it, scale. */
-
-	int dtw = 800;
-	int dth = 640;
+	int dtw = NXSYS_DESIGN_WINDOW_DIMS::WIDTH;
+	int dth = NXSYS_DESIGN_WINDOW_DINS::HEIGHT;
 
 	int winx = (int)(dtw * (1.0 - MAIN_FRAME_SCREEN_X_FRACTION) / 2.0);
 	int winy = (int)(dth * (1.0 - MAIN_FRAME_SCREEN_Y_FRACTION) / 2.0);

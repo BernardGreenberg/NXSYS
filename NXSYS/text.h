@@ -2,51 +2,67 @@
 #define _NXSYS_TEXT_STRING_H__
 
 /* 14 January 1998 */
-
+#include "typeid.h"
 #include "nxgo.h"
-#ifdef TLEDIT
-#include <stdio.h>
-#endif
-
 
 #define NXSYS_DEFAULT_TEXT_HEIGHT 20
 #define NXSYS_DEFAULT_TEXT_WEIGHT FW_BOLD
 
-#include<string>
+#include <string>
+#include "propedit.h"
 
-class TextString : public GraphicObject {
+GraphicObject*  LayoutTextString (const char * string,     LOGFONT * lftemplate,
+                                  long x, long y, COLORREF color, BOOL colorgiven);
 
-    public:   
-	TextString (const char * string,  LOGFONT * lftemplate, RW_cord x, long y,
-		   COLORREF color, BOOL colorgiven);
+class TextString : public GraphicObject, public PropEditor<TextString>{
 
-	void SetNewLogfont (LOGFONT *);
-        LOGFONT& RedeemLogfont();
-	double AssumedScale;
+public:
+    TextString (const char * string,  LOGFONT * lftemplate, RW_cord x, long y,
+                COLORREF color, BOOL colorgiven);
+
+    /* funciones */
+    void SetNewLogfont (LOGFONT *);
+    LOGFONT& RedeemLogfont();
+
+    struct TextState {
+        /* variables de estato */
+        double AssumedScale;
         std::string String;
         int  OriginalLogfontIndex;
-	HFONT HFont;
-	COLORREF Color;
-	BOOL ColorGiven;
+        HFONT HFont;
+        COLORREF Color;
+        BOOL ColorGiven;
+    } S;
 
-	virtual void    Display(HDC dc) ;
-	virtual int     TypeID();
-	virtual BOOL    HitP (long x, long y);
-        virtual bool    MouseSensitive();
+    /* funciones virtuales de GraphicObject */
+    virtual void    Display(HDC dc) ;
+    virtual TypeId  TypeID();
+    virtual BOOL    HitP (long x, long y);
+    virtual bool    MouseSensitive();
+
 #ifdef TLEDIT
-	virtual void EditClick(int x, int y);
-	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
-	virtual ~TextString();
-	virtual int Dump (FILE * f);
+    class PropCell : public PropCellPCRTP<PropCell, TextString> {
+        TextState S;
+    public:
+        void Snapshot_ (TextString* t) {
+            SnapWPpos(t);
+            S = t->S;
+        }
+        void Restore_ (TextString* t) {
+            RestoreWPpos(t);
+            t->S = S;
+        }
+    };
+    
+    virtual void EditClick(int x, int y);
+    virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
+    virtual ~TextString();
+    virtual int Dump (ObjectWriter& f);
 
 #endif
-    private:
-	void ScaleSelf();
+private:
+    void ScaleSelf();
 };
-
-
-void  LayoutTextString (const char * string, 	LOGFONT * lftemplate,
-			long x, long y, COLORREF color, BOOL colorgiven);
 
 
 #endif

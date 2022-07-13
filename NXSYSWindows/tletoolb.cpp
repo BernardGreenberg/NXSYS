@@ -16,6 +16,8 @@ struct _ButtonData {
     {0,TBSTYLE_BUTTON, CmQuit, "Exit Layout editor"},
     {13,TBSTYLE_BUTTON,CmOpen, "Open a layout file"},
     {12,TBSTYLE_BUTTON,CmSave, "Save layout to file"},
+    {27,TBSTYLE_BUTTON,CmUndo, "Undo"},
+    {28,TBSTYLE_BUTTON,CmRedo, "Redo"},
 
     {0,TBSTYLE_SEP, 0, NULL},
 
@@ -29,7 +31,6 @@ struct _ButtonData {
     {0,TBSTYLE_SEP, 0, NULL},
     {3,TBSTYLE_BUTTON, CmIJ, "Insulate selected joint"},
     {18, TBSTYLE_BUTTON, CmFlipNum, "Flip position of switch/joint ##"},
-//    {5,TBSTYLE_BUTTON, CmSwitch, "Create a switch or crossover"},
     {16, TBSTYLE_BUTTON, CmSignalUpRight, "Create a signal facing up/right"},
     {17, TBSTYLE_BUTTON, CmSignalDownLeft, "Create a signal facing down/left"},
     {20, TBSTYLE_BUTTON, CmCreateExitLight, "Create or select exit light at this signal"},
@@ -37,13 +38,15 @@ struct _ButtonData {
     {0,TBSTYLE_SEP, 0, NULL},
 
     {21, TBSTYLE_BUTTON, CmAuxKey, "Create an auxiliary switch key."},
-#ifndef NOTRAFLEV
+
     {23, TBSTYLE_BUTTON, CmTrafficLever, "Create a traffic lever."},
     {24, TBSTYLE_BUTTON, CmPanelLight, "Create a general panel light."},
     {25, TBSTYLE_BUTTON, CmPanelSwitch, "Create a general panel switch."},
-#endif
+
     {0,TBSTYLE_SEP, 0, NULL},
+
     {22, TBSTYLE_BUTTON, CmText, "Create a text item."},
+
     {0,TBSTYLE_SEP, 0, NULL},
 
     {7,TBSTYLE_BUTTON, CmHelp, "Pop up a help text"},

@@ -15,6 +15,7 @@ extern std::string LayoutFileName;
 extern BOOL EnableAutoOperation;
 extern BOOL GotLayout;
 extern const char* MainWindow_Class;
+extern HWND AppWindow;
 
 BOOL IsMenuDlgMessage(MSG* m); /*rightly win-only dynmenu */
 void EnableAutomaticOperation(BOOL);

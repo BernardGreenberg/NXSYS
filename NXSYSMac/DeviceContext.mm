@@ -252,14 +252,6 @@ HDC ReleaseDC(HWND hWnd, HDC hDC) {
     return ReleaseDC_(hWnd, hDC);
 }
 
-static NSRect getTextBr(NSString *theString, NSDictionary *attributes) {
-    NSSize size = NSMakeSize(300,300);
-    NSRect r = [theString boundingRectWithSize:size
-                                       options:0
-                                    attributes:attributes];
-    return r;
-}
-
 int DrawText(__DC_* hDC, char const*s, unsigned long limit, RECT* pr, int flags) {
     std::string tempbuf;
     size_t ll = strlen(s);  /* not really safe */
@@ -314,9 +306,9 @@ int DrawText(__DC_* hDC, char const*s, unsigned long limit, RECT* pr, int flags)
     if (flags & DT_CALCRECT) {
         pr->top = 0;
         pr->left = 0;
-        NSRect br = getTextBr(theString, attributes);
-        pr->right = br.size.width;
-        pr->bottom = br.size.height;
+        NSSize size = [theString sizeWithAttributes: attributes];
+        pr->right = size.width;
+        pr->bottom = size.height;
         return pr->bottom;
     }
     
@@ -329,10 +321,8 @@ int DrawText(__DC_* hDC, char const*s, unsigned long limit, RECT* pr, int flags)
     }
     if (flags & DT_CENTER) {
         double boxw = pr->right - pr->left;
-        
-        NSRect br = getTextBr(theString, attributes);
-        x += boxw/2 - br.size.width/2;
-        
+        NSSize size = [theString sizeWithAttributes:attributes];
+        x += boxw/2 - size.width/2;
     }
     
     [currentText drawAtPoint:NSMakePoint(x, y)];

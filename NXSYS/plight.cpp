@@ -4,7 +4,7 @@
 
 #include "plight.h"
 #include "brushpen.h"
-#include "objid.h"
+#include "typeid.h"
 
 /* Common stuff to main app and TLEdit   -- 13 Aug 2019 */
 void PanelLight::SetRadius (int r) {
@@ -33,11 +33,11 @@ void PanelLight::Paint(HDC hdc, HBRUSH brush) {
 }
 
 
-int PanelLight::TypeID() {
-    return ID_PANELLIGHT;
+TypeId PanelLight::TypeID() {
+    return TypeId::PANELLIGHT;
 }
 
-int PanelLight::ObjIDp(long id) {
+bool PanelLight::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 

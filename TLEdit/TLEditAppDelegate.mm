@@ -10,22 +10,20 @@
 #import "ToolbarController.h"
 #import "CanvasExtentDialogController.h"
 #include <string>
+#include <filesystem>
 #include "tlecmds.h"
+#include "DesignWindowDims.h"
 #include <string>
-#include "STLfnsplit.h"
 #include "resource.h"
 #include "MessageBox.h"
 #include "ShiftLayoutDialog.h"
 #include "HelpController.h"
+#include "LayoutModified.h"
+#include "MacAppwinAPIs.h"
+#include "AppBuildSignature.h"
+#include "CustomAboutController.h"
 
-void AppCommand(unsigned int);
-void InitTLEditApp(int w, int h);
-BOOL ReadItKludge(const char *);
-bool SaveItForReal(const char * path);
-void ClearItOut();
-void SetMainWindowTitle(const char * text);
-extern bool BufferModified;
-
+namespace fs = std::filesystem;
 
 static NSString * LastPathnameKey = @"LastInterlockingEditPathname";
 static NSArray *allowedTypes = [NSArray arrayWithObject:@"trk"];
@@ -40,17 +38,24 @@ TLEditAppDelegate* getTLEDelegate() {
 {
     NSString * currentFileName;
     bool did_finish_launching;
+    id eventMonitor;
 }
 @end
 
 @implementation TLEditAppDelegate
+
+-(id)init {
+    self = [super init];
+    eventMonitor = nil;
+    return self;
+}
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
     return YES;
 }
 -(BOOL)modCheck:(const char *) activity
 {
-    if (!BufferModified)
+    if (!IsLayoutModified())
       return TRUE;
     
     char buf[256];
@@ -104,10 +109,22 @@ TLEditAppDelegate* getTLEDelegate() {
    // printf("change font sent to app delegate\n");
     
 }
+-(void)setUpEventMonitor
+{
+//http://www.ideawu.com/blog/2013/04/how-to-capture-esc-key-in-a-cocoa-application.html
+    //block funarg closure magic
+    NSEvent* (^handler)(NSEvent*) = ^(NSEvent *theEvent) {
+        DragonAbortOnChar();
+        return theEvent;
+    };
+    eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskKeyDown handler:handler];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     APDTRACE(("Entering didFinishLaunching\n"));
     [self createTLEToolbar];
+    [self setUpEventMonitor];
 }
 - (void) createTLEToolbar
 {
@@ -119,8 +136,10 @@ TLEditAppDelegate* getTLEDelegate() {
 {
     [self.window setDelegate:self];
     [_theScrollView setBackgroundColor:[NSColor blackColor]];
+    _theView.theScrollView = _theScrollView;
 
-    InitTLEditApp(1280,960);
+    InitTLEditApp(NXSYS_DESIGN_WINDOW_DIMS::WIDTH, NXSYS_DESIGN_WINDOW_DIMS::HEIGHT);
+// was    InitTLEditApp(1280,960); -- "horsey" objects easier to edit, but aux key spacing looks wrong.
     did_finish_launching = true;
     APDTRACE(("willFinish Launching entered.\n"));
     currentFileName = nil;
@@ -194,7 +213,10 @@ TLEditAppDelegate* getTLEDelegate() {
 }
 -(IBAction)saveDocument:(id)sender
 {
-    if (currentFileName == nil) {
+    if (!IsLayoutModified()) {
+        MessageBox(NULL, "The layout has not been modified since last save (or read-in). Will not save.", "TLEdit Application", MB_OK | MB_ICONEXCLAMATION);
+    }
+    else if (currentFileName == nil) {
         [self saveDocumentAs:self];
     } else {
         [self heartOfSave:currentFileName];
@@ -208,10 +230,13 @@ TLEditAppDelegate* getTLEDelegate() {
         return NSTerminateCancel;
     }
 }
+-(void)applicationWillTerminate:(NSNotification*) notification {
+    [NSEvent removeMonitor:eventMonitor];
+}
 -(BOOL)windowShouldClose:(id)Sender
 {
     if ([self modCheck:"close this window"]) {
-        BufferModified = false;  // don't complain a second time.
+        ClearLayoutModified();  // don't complain a second time.
         return TRUE;
     }
     return FALSE;
@@ -221,9 +246,9 @@ TLEditAppDelegate* getTLEDelegate() {
 
     NSSavePanel * savePanel = [NSSavePanel savePanel];
     if (currentFileName != nil) {
-        std::string drive,dir,name,ext;
-        STLfnsplit(currentFileName.UTF8String, drive, dir, name, ext);
-        name += ext;
+        auto cfnfs = fs::path([currentFileName UTF8String]);
+        std::string name = cfnfs.filename().string();
+        std::string dir = cfnfs.parent_path().string();
         [savePanel setNameFieldStringValue:[NSString stringWithUTF8String:name.c_str()]];
         [savePanel setDirectoryURL:[NSURL fileURLWithPath:[NSString stringWithUTF8String:dir.c_str()]]];
     }
@@ -232,7 +257,7 @@ TLEditAppDelegate* getTLEDelegate() {
     [savePanel setCanCreateDirectories:FALSE];
     [savePanel setCanSelectHiddenExtension:FALSE];
     NSInteger result = [savePanel runModal];
-    if (result == NSFileHandlingPanelOKButton) {
+    if (result == NSModalResponseOK) {
         [self heartOfSave: savePanel.URL.path];
     }
 }
@@ -260,10 +285,15 @@ TLEditAppDelegate* getTLEDelegate() {
 }
 
 /* Actions from App Menu */
-
+- (IBAction)ZoomOut:(id)sender {
+    [_theView ZoomOut:sender];
+}
+- (IBAction)ZoomIn:(id)sender {
+    [_theView ZoomIn:sender];
+}
 - (IBAction)Help:(id)sender {
     [self ensureHelp];
-    [_helpController HTMLHelp:@"TLEDocumentation/TLEdit" tag:nil];
+    [_helpController PDFHelp:@"TLEDocumentation/TLEdit" tag:nil];
 }
 - (IBAction)MacHelp:(id)sender
 {
@@ -280,6 +310,12 @@ TLEditAppDelegate* getTLEDelegate() {
 - (IBAction)Properties:(id)sender {
     AppCommand(CmEditProperties);
 }
+- (IBAction)Undo:(id)sender {
+    AppCommand(CmUndo);
+}
+- (IBAction)Redo:(id)sender {
+    AppCommand(CmRedo);
+}
 -(IBAction)ShiftLayout:(id)sender {
     [[[ShiftLayoutDialog alloc] init] showModal];
 }
@@ -287,10 +323,18 @@ TLEditAppDelegate* getTLEDelegate() {
 {
     [[[CanvasExtentDialogController alloc] init] showModal:NO];
 }
-
--(void)setTheWporg:(NSPoint)p
+-(IBAction)toggleInsulate:(id)sender
 {
-    _wporg = p;
+    AppCommand(CmIJ);
+}
+-(IBAction)About:(id)sender {
+    if (_about_dialog == nil)
+        _about_dialog = [[CustomAboutController alloc] init];
+    [_about_dialog Show:_window];
+}
+-(void)setTheWporg:(NSPoint)point
+{
+    _wporg = point;
     _wporg_set = true;
 }
 -(NSPoint)getTheWporg:(bool)really_get_it_from_window
@@ -299,6 +343,25 @@ TLEditAppDelegate* getTLEDelegate() {
         return [_theScrollView documentVisibleRect].origin;
     else
         return _wporg;
+}
+-(void)setUrMenu:(NSMenuItem*) item str:(const char *)sp dft:(NSString*)deft
+{
+    if (sp == nullptr) {
+        [item setTitle: deft];
+        [item setEnabled: NO];
+    } else {
+        [item setTitle: [NSString stringWithUTF8String:sp]];
+        [item setEnabled: YES];
+    }
+}
+-(void)setUndoMenu:(const char*)undo Redo:(const char *)redo
+{
+    [self setUrMenu: _UndoMenuItem str:undo dft:@"Undo"];
+    [self setUrMenu: _RedoMenuItem str:redo dft:@"Redo"];
+    [_SaveMenuItem setEnabled: (undo == nullptr) ? NO : YES];
+}
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+    return [menuItem isEnabled];
 }
 @end
 
@@ -322,10 +385,16 @@ void DisplayStatusString (const char * s) {
 
 /* Is called from above, too. */
 void SetMainWindowTitle(const char * text) {
+    AppBuildSignature ABS;
+    ABS.Populate();
     std::string temp = text;
-    temp += "  -  TLEdit  NXSYS layout editor";
+    temp += " — " + ABS.TotalBuildString();
     NSString* title = [[NSString alloc] initWithUTF8String:temp.c_str()];
     [getMainWindow() setTitle:title];
+}
+
+void SetUndoRedoMenu(const char * undo, const char* redo) {
+    [getTLEDelegate() setUndoMenu:undo Redo:redo];
 }
 
 void Mac_SetDisplayWPOrg(long x, long y) {
@@ -335,4 +404,24 @@ void Mac_GetDisplayWPOrg(int coords[2], bool really_get_it_from_window) {
     NSPoint p = [getTLEDelegate() getTheWporg:really_get_it_from_window];
     coords[0] = (int)p.x;
     coords[1] = (int)p.y;
+}
+
+void QuitMacApp() {
+    NSApplication* app =  [NSApplication sharedApplication];
+    [app terminate:nil];
+}
+
+void ExtSaveDocumentMac() {
+    TLEditAppDelegate* delegate = getTLEDelegate();
+    [delegate saveDocument:nil];
+}
+
+void MacFileOpen() {
+    TLEditAppDelegate* delegate = getTLEDelegate();
+    [delegate HandleFileOpen:nil];
+}
+
+void MacTLEditHelp() {
+    TLEditAppDelegate* delegate = getTLEDelegate();
+    [delegate Help:nil];
 }

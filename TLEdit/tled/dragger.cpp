@@ -1,8 +1,8 @@
 #include "windows.h"
 
-#include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <cassert>
 
 #include "compat32.h"
 #include "nxgo.h"
@@ -11,6 +11,7 @@
 #include "tledit.h"
 #include "dragger.h"
 #include "resource.h"
+#include "undo.h"
 
 Dragger * RodentatingDragon = NULL;
 Dragger * MouseupDragon = NULL;
@@ -21,7 +22,7 @@ void MacDragonOn(), MacDragonOff();
 
 Dragger::Dragger () {
     Object = NULL;
-    MovingState = MOVSTATE_NOT;
+    MovingState = MoveStates::NOT;
 }
 
 void Dragger::TruncMouse (HWND hWnd, int x, int y, WP_cord & wpx, WP_cord & wpy) {
@@ -37,8 +38,8 @@ void Dragger::TruncMouse (HWND hWnd, int x, int y, WP_cord & wpx, WP_cord & wpy)
 
 
 GraphicObject* Dragger::StartMoving (GraphicObject * g, const char * description, HWND hWnd) {
-    strcpy(Descrip, description);
-    MovingState = MOVSTATE_FROM_MOUSEUP;
+    Description = description;
+    MovingState = MoveStates::FROM_MOUSEUP;
     MouseupDragon = RodentatingDragon = this;
     Xoff = 0;
     Yoff = 0;
@@ -58,9 +59,9 @@ void Dragger::Rodentate (HWND hWnd, int x, int y, UINT message, WPARAM wParam) {
 
     UINT endbutton = 0;
     switch (MovingState) {
-	case MOVSTATE_NOT:
+        case MoveStates::NOT:
 	    return;
-	case MOVSTATE_FROM_MOUSEUP:
+        case MoveStates::FROM_MOUSEUP:
 	    endbutton = WM_LBUTTONDOWN;
 	    if (message == WM_RBUTTONDOWN) {
 		Abort();
@@ -68,7 +69,7 @@ void Dragger::Rodentate (HWND hWnd, int x, int y, UINT message, WPARAM wParam) {
 	    }
 	    remark = "Click left to drop, right to abort";
 	    break;
-	case MOVSTATE_FROM_MOUSEDOWN:
+        case MoveStates::FROM_MOUSEDOWN:
 	    endbutton = WM_LBUTTONUP;
 	    remark ="Release mouse button to drop in place";
 	    break;
@@ -88,17 +89,25 @@ void Dragger::Rodentate (HWND hWnd, int x, int y, UINT message, WPARAM wParam) {
 	    remark = "Click right on it to edit lever #, drag left to move";
 	    break;
 	case WM_LBUTTONDOWN:
+            Undo::RecordGOMoveStart(Object);
 	    remark = "Drag to move, release mouse to drop.";
 	    break;
     }
 
-    StatusMessage ("%s at (%d, %d) %s", Descrip, wpx, wpy, remark);
+    StatusMessage ("%s at (%d, %d) %s", Description.c_str(), wpx, wpy, remark);
     if (message == endbutton) {
-	MovingState = MOVSTATE_NOT;
+        if (MovingState == MoveStates::FROM_MOUSEUP) // Creation
+            Undo::RecordGOCreation(Object);
+        else if (MovingState == MoveStates::FROM_MOUSEDOWN)  //Movation
+            Undo::RecordGOMoveComplete(Object);
+        else {
+            assert (!"Dragon unclear");
+        }
+            
+	MovingState = MoveStates::NOT;
 	MouseupDragon = RodentatingDragon = NULL;
 	Object->Select();
 	Object = NULL;
-	BufferModified = TRUE;
 #ifdef NXSYSMac
         MacDragonOff();
 #endif
@@ -116,8 +125,8 @@ void Dragger::ClickOn (HWND hWnd, GraphicObject * g,
 		       g->wp_x, g->wp_y);
 	return;
     }
-    strcpy(Descrip, description);
-    MovingState = MOVSTATE_FROM_MOUSEDOWN;
+    Description = description;
+    MovingState = MoveStates::FROM_MOUSEDOWN;
     RodentatingDragon = this;
     Object = g;
     Xoff = 0;
@@ -133,10 +142,10 @@ void Dragger::ClickOn (HWND hWnd, GraphicObject * g,
 }
 
 void Dragger::Abort () {
-    if (MovingState != MOVSTATE_FROM_MOUSEUP)
+    if (MovingState != MoveStates::FROM_MOUSEUP)
 	return;
     delete Object;			/* needs virtual or callback */
-    MovingState = MOVSTATE_NOT;
+    MovingState = MoveStates::NOT;
     StatusMessage ("  ");
 #ifdef NXSYSMac
     MacDragonOff();

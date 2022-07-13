@@ -2,6 +2,8 @@
 
 //---dam: add include of prototypes
 #include "lispmath.h"
+#include <algorithm>
+#include <cstdlib>
 
 int LpZerop (Sexpr x) {
     switch (x.type) {
@@ -58,13 +60,10 @@ Sexpr LCoerceToFix   (Sexpr x) {
 
 
 long GCD (long x, long y) {
-    if (x < 0.0) x = -x;
-    if (y < 0.0) y = -y;
-    if (y > x) {
-	long t = x;
-	x = y;
-	y = t;
-    }
+    x = abs(x);
+    y = abs(y);
+    if (y > x)
+        std::swap(x, y);
     while (y != 0) {
 	long t = x % y;
 	x = y;
@@ -82,7 +81,7 @@ Sexpr CreateReducedRational (long num, long den) {
 	sign = -1;
 	num = -num;
     }
-    int gcd = (int)GCD (num, den);
+    long gcd = GCD (num, den);
     if (gcd == den)
 	return Sexpr ((long)(sign*num/den));
     else return CreateRational ((int)(sign*num/gcd), int(den/gcd));

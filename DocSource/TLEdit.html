@@ -8,13 +8,15 @@
 <h1>TLEdit&mdash;NXSYS Track Layout Editor </h1>
 
 <p>&copy;Bernard S. Greenberg 1997&ndash;2022<br/>
-Updated 25 March 2022</p>
+Updated 20 May 2022 (version <b>4.7</b>)</p>
 
 <p>This is the documentation for TLEdit, the NXSYS track layout editor. It is used to create and edit layouts as seen on the interlocking panel. It does not create or edit logic in any way.</p>
 
 <p>Layouts consist of straight line <b>track segments</b> which connect <b>joints</b>, which latter appear in TLEdit as red dots (but do not appear at all in NXSYS).  Tracks can only bend or join at joints. A joint can sport one, two, or three segments (“branches”) emanating from it &mdash; one is the end of a track, two is an insulated joint, or a (non-insulated) “kink” in a track, and three is a switch.</p>
 
-<p>By (left) click-and-drag, you can create segments between any two points or extant joints (making them into switches, or extending a track end), or to or from arbitrary points on extant segments, turning them into switches. You cannot draw a segment to or from a switch (joint already having three branches) or an insulated joint which is not the end of a track.  Joints of one or two branches can be insulated or de-insulated from their <b>Properties</b> dialog; you cannot de-insulate a joint which has a signal or exit light, or insulate a switch.  Saving the layout insulates all track-ends.</p>
+<p>By (left) click-and-drag, you can create segments between any two points or extant joints (making them into switches, or extending a track end), or to or from arbitrary points on extant segments, turning them into switches. You cannot draw a segment to or from a switch (joint already having three branches) or an insulated joint which is not the end of a track.</p>
+
+<p>Joints of one or two branches can be insulated or de-insulated from their <b>Properties</b> dialog, the <b>Insulate</b> tool of the toolbar, or the keystroke <b>Ctrl-I</b> (Mac <b>⌘I</b>). You cannot insulate a switch. You cannot de-insulate a joint which hosts a signal or an exit light, or separates differing, assigned track circuits.  Saving the layout insulates all track-ends.</p>
 
 <h2>TLEdit three-line summary!</h2>
 <ul style="font-size:135%">
@@ -37,7 +39,7 @@ Updated 25 March 2022</p>
 5. <b>Show Exit Lights</b>
 6. <b>Cut</b>
 7. <b>Properties dialog</b>
-8. <b>Insulate joint</b>
+8. <b>Insulate or de-insulate joint</b> (toggle)
 9. <b>Flip switch or IJ number side</b>
 
 </td>
@@ -56,9 +58,9 @@ Updated 25 March 2022</p>
 
 <p>Click and drag mouse left (Windows, or Mac trackpad, single finger) to create a new track segment.  Click left on either an extant joint which is not already “full” (i.e., has less than  3 branches), some other point on an extant segment, or elsewhere, and drag the mouse, left button held.  You will be dragging the end of a &ldquo;rubber band&rdquo;, whose other end is where you started.  Drop the mouse on either an extant joint which is <b>not full</b>, some other point on an extant segment, or elsewhere &mdash; a new segment will be created. An insulated joint with two branches (as normal) is considered &ldquo;full&rdquo;.  To cancel, i.e., change your mind and create no new segment, drop the mouse end of the rubber band back on the stationary end.  Slopes of less than 4% from the vertical or horizontal are assumed to be vertical or horizontal, and “snapped” into place.</p>
 
-<p>To <b>move an extant joint</b>, click and drag it with mouse right (on Windows; control-mouse on the Mac). Clicking and dragging mouse right in the middle of an extant segment creates a joint and moves it &mdash; you can insert a “kink” this way. If you drag a joint to another joint, and there are no more than three branches among the two of them, the joints will merge into one.  The rubber band lines will “click” onto a detente (and show as red) if TLEdit thinks it knows what you are trying to do.</p>
+<p>To <b>move an extant joint</b>, click and drag it with mouse right (on Windows; control-mouse on the Mac). Clicking and dragging mouse right in the middle of an extant segment creates a joint and moves it &mdash; you can insert a “kink” this way. If you drag a joint to another joint, and there are no more than three branches among the two of them, the joints will merge into one.  The rubber band lines will “click” onto a detente (and show as red) if TLEdit thinks it knows what you are trying to do. You cannot merge insulated joints.</p>
 
-<p>Placing a new joint in the middle of an extant segment via either tool splits the segment in two at that point.  For mouse left, the new joint will not come into existence until you actually drag the mouse.  For mouse right, a new joint will come into existence immediately.</p>
+<p>Placing a new joint in the middle of an extant segment via either tool splits the segment in two at that point.  For mouse left, the new joint will not come into existence until you actually drag the mouse.  For mouse right, a new joint will come into existence immediately.  If a segment with a track circuit is split, the new segments share that track circuit. Change only after insulating.</p>
 
 <p>Any object (joint, segment, signal, exit light, or switch key) may be selected, which turns it green, by clicking left on it. A newly-created object, or a joint just moved, is automatically selected.  Pressing the <b>Edit Properties</b> tool (or typing <b>Ctrl+P</b>, both Windows and Mac) when an object is selected brings up its <b>Properties dialog</b>, which is different for each type of object, allowing detailed control of its properties.  On the Mac, &ldquo;secondary gesture&rdquo; (right-click replacement) on any object calls up its properties dialog, too.</p>
 
@@ -91,7 +93,7 @@ Updated 25 March 2022</p>
 
 <h2>Assigning Track Circuit Identifiers</h2>
 
-<p>Track segments assemble into track <b>sections</b> (<b>track circuits</b>); NXSYS generates and manages T relays and &ldquo;line-o-lite&rdquo;s on a per-circuit basis.  Select and <b>property edit</b> a track segment to assign a numeric track circuit relay ID.  If <b>Wildfire spread by contact</b> is selected, all track segments reachable from the one being edited without passing an insulated joint will have their Circuit ID's changed as well.  NXSYS will not equip a track segment with the default ID (0). As IRL (in real life, or &ldquo;Interborough Rapid Life&rdquo;, if you prefer) <i>be careful with &ldquo;wildfire&rdquo;</i>, especially in incomplete layouts where not all joints are insulated as they should be, as there is no &ldquo;undo&rdquo;.
+<p>Track segments assemble into track <b>track circuits</b>; NXSYS generates and manages T relays and &ldquo;line-o-lite&rdquo;s on a per-circuit basis.  Select and <b>Property Edit</b> a track segment to assign a numeric track circuit relay ID.  All track segments reachable from the one being edited without passing an insulated joint will have their Circuit IDs changed as well.  You can assign the default ID (0), which means “not yet assigned” (the initial state of all). As IRL (in real life, or &ldquo;Interborough Rapid Life&rdquo;, if you prefer). Track circuits thus spread by “wildfire”.  If you make a mistake with this, many unintended segments may acquire the wrong circuit: simply type the <b>Undo</b> keystroke to revert to the previous state.
 
 <p>Track segments with circuits assigned light with white "line-o-lites" in TLEdit. The algorithm for managing the lighting of segments dependent on switch position, within one circuit, is a complex heuristic built into NXSYS (which occasionally fails).  Individual segments are not &ldquo;programmable&rdquo; as they are in real life.
 
@@ -112,6 +114,6 @@ Updated 25 March 2022</p>
 
 <p>You can save and restore your creations.  The app will accept a file name as a command argument.</p>
 
-<p>You can <tt>(include "foo.trk")</tt> in an NXSYS <tt>.trk</tt> file.  The outer file should contain, or co-include, all the relay definitions and the TLEdit-generated file, which latter should not be hand-edited; there is no provision for layouts made unloadable or uneditable by corruption introduced by hand-editing.  (There is no need to understand the layout/path graph-representation language.)</p>
+<p>You can <tt>(include "foo.trk")</tt> in an NXSYS <tt>.trk</tt> file.  The outer file should contain, or co-include, all the relay definitions and the TLEdit-generated file, which latter <b><i>should not be hand-edited</i></b>; there is no provision for layouts made unloadable or uneditable by corruption introduced by hand-editing.  (There is no need to understand the layout/path graph-representation language.)</p>
 </body>
 </html>

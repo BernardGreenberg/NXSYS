@@ -1,13 +1,10 @@
 #ifndef _NX_TRAFFICLEVER_H__
 #define _NX_TRAFFICLEVER_H__
 
-#ifdef TLEDIT
-#ifndef _FILE_DEFINED
-#include <stdio.h>
-#define _FILE_DEFINED
-#endif
-#endif
 #include <string>
+#include "ijid.h"
+
+#include "propedit.h"
 
 class TrafficLever;
 
@@ -37,7 +34,7 @@ public:
 #endif
 };
 
-class TrafficLever : public GraphicObject {
+class TrafficLever : public GraphicObject, public PropEditor<TrafficLever> {
   public:
     int XlkgNo;
 
@@ -46,7 +43,8 @@ class TrafficLever : public GraphicObject {
     void NormalizeTrafficLever();
     void SetXlkgNo(int xno);
     virtual void Display (HDC hdc);
-    virtual int TypeID(), ObjIDp(long);
+    virtual TypeId TypeID();
+    virtual bool IsNomenclature(IJID);
     void InitState();
 #ifndef TLEDIT
     BOOL Throw (BOOL reverse_wanted);
@@ -55,11 +53,30 @@ class TrafficLever : public GraphicObject {
     void ProcessLoadComplete();
 
 #else
+    class PropCell : public PropCellPCRTP<PropCell, TrafficLever> {
+        int XlkgNo;
+        int NormalIndex, ReverseIndex;
+    public:
+        void Snapshot_(TrafficLever* t) {
+            SnapWPpos(t);
+            XlkgNo = t->XlkgNo;
+            NormalIndex = t->NormalIndex;
+            ReverseIndex = t->ReverseIndex;
+        }
+        void Restore_(TrafficLever* t) {
+            RestoreWPpos(t);
+            t->SetXlkgNo(XlkgNo);
+            t->NormalIndex = NormalIndex;
+            t->ReverseIndex = ReverseIndex;
+        }
+    };
 
+    virtual bool HasManagedID();
+    virtual int ManagedID();
     virtual void EditClick(int x, int y);
     virtual ~TrafficLever();
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
-    virtual int Dump (FILE * f);
+    virtual int Dump (ObjectWriter& W);
 #endif
 private:
     void DrawKnob(HDC hdc);

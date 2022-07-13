@@ -2,7 +2,7 @@
 #include <string>
 #include <stdlib.h>
 #include <windows.h>
-#include "incexppt.h"
+#include "replace_filename.h"
 #include "WinReadResText.h"
 
 using std::string, std::vector;
@@ -24,7 +24,7 @@ bool WinBrowseResource(const char* ename) {
 		target = target.substr(7);
 	}
 	else {
-	  target = STLincexppath(GMFN(), ename);
+	  target = replace_filename(GMFN(), ename);
 	}
 	ShellExecute(NULL, "open", target.c_str(), NULL, NULL, SW_SHOW);
 	return true;
@@ -32,7 +32,7 @@ bool WinBrowseResource(const char* ename) {
 
 bool WinReadResText(const char * ename, std::string& result) {
 
-	auto path = STLincexppath(GMFN(), ename);
+	auto path = replace_filename(GMFN(), ename);
 	FILE* f = fopen(path.c_str(), "r");
 	if (!f) {
 		string error{ "Can't open text resource: " + path };

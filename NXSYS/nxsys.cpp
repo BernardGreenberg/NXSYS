@@ -12,7 +12,7 @@
 #include "commands.h"
 #include "nxgo.h"
 #include "timers.h"
-#include "objid.h"
+#include "typeid.h"
 #include "compat32.h"
 #include "lyglobal.h"
 #include "loaddcls.h"
@@ -32,12 +32,12 @@
 #include "helpdlg.h"
 #include "resource.h"
 #include <string>
-#include "incexppt.h"
+#include "replace_filename.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
-#include "STLfnsplit.h"
 #include "AppAbortRestart.h"
 #include "MessageBox.h"
+#include "DesignWindowDims.h"
 
 #include <filesystem>
 
@@ -373,8 +373,8 @@ int StartUpNXSYS (HINSTANCE hInstance, HWND window, const char * initial_layout_
    get more track instead of thick tracks, and it seems to look better
    all around -- if you don't like it, scale. */
 
-  int dtw = 800;
-  int dth = 640;
+  int dtw = NXSYS_DESIGN_WINDOW_DIMS::WIDTH;
+  int dth = NXSYS_DESIGN_WINDOW_DIMS::HEIGHT;
 
 #ifdef WIN32
   int winy = dth / 16;

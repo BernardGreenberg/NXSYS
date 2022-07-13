@@ -23,9 +23,6 @@
 
 #define XTG 1   //"extended track graphics"
 #define NXV2 1  //this is an implementation of NXSYS, Version 2
-#ifndef TLEDIT
-#define _FILE_DEFINED
-#endif
 
 #ifdef TLEDIT
 #define PRODUCT_NAME "TLEdit"

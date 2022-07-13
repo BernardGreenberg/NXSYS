@@ -6,7 +6,7 @@
 #include "xtgtrack.h"
 #include "xturnout.h"
 #include "swkey.h"
-#include "objid.h"
+#include "typeid.h"
 #include "ssdlg.h"
 #include "brushpen.h"
 #include "compat32.h"
@@ -190,11 +190,11 @@ Virtual void SwitchKey::Display (HDC hdc) {
     Ellipse(hdc, xcen - rad, ycen - rad, xcen + rad, ycen + rad);
 }
 
-Virtual int SwitchKey::TypeID() {
-    return ID_SWITCHKEY;
+Virtual TypeId SwitchKey::TypeID() {
+    return TypeId::SWITCHKEY;
 }
 
-Virtual int SwitchKey::ObjIDp(long id) {
+Virtual bool SwitchKey::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 
@@ -312,7 +312,7 @@ static int ClearAllFunarg (GraphicObject * g) {
 }
 
 void ClearAllAuxLevers () {
-    MapGraphicObjectsOfType (ID_SWITCHKEY, ClearAllFunarg);
+    MapGraphicObjectsOfType (TypeId::SWITCHKEY, ClearAllFunarg);
 }
 
 #endif

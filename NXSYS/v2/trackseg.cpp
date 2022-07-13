@@ -9,7 +9,7 @@
 #include "compat32.h"
 #include "nxgo.h"
 #include "xtgtrack.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 
 #include "pival.h"
@@ -18,6 +18,8 @@
 #ifdef TLEDIT
 #include "assignid.h"
 #include "tledit.h"
+#include "salvager.hpp"
+#include "undo.h"
 #define SNAP_DELTA (2*Track_Width_Delta)
 #else
 #include "nxsysapp.h"
@@ -57,6 +59,9 @@ TrackSeg::TrackSeg (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2){
 #ifdef REALLY_NXSYS
     OwningTurnout = NULL;
     RWLength = -1.0f;			/* "not computed" */
+#else
+    static int TrackSegClock = 1;
+    Clock = TrackSegClock++;
 #endif
 
     Align (wpx1, wpy1, wpx2, wpy2);
@@ -139,6 +144,10 @@ void TrackSegEnd::Reposition () {
 
 void TrackSeg::Align () {
     Align (Ends[0].wpx, Ends[0].wpy, Ends[1].wpx, Ends[1].wpy);
+}
+
+WPPOINT TrackSeg::WPPoint() {
+    return WPPOINT((Ends[0].wpx + Ends[1].wpx)/2, (Ends[0].wpy + Ends[1].wpy)/2);
 }
 
 Virtual void TrackSeg::Display (HDC dc) {
@@ -237,10 +246,14 @@ void TrackSeg::DisplayInState (HDC dc, int control) {
 }
 
 
-void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
+void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj, TrackSeg* new_seg) {
+ 
+    /*  Ends[0]            this                       Ends[1] */
+    /*  Ends[0]  this      Ends[1] TJ [ENDS[0]  nts   Ends[1]] */
 
-    TrackSeg* nts = new TrackSeg
-		    (Ends[0].wpx, Ends[0].wpy, Ends[1].wpx, Ends[1].wpy);
+    TrackSeg * nts = new_seg;
+    if (!nts)
+        nts = new TrackSeg(Ends[0].wpx, Ends[0].wpy, Ends[1].wpx, Ends[1].wpy);
     nts->Align (wpx1, wpy1, Ends[1].wpx, Ends[1].wpy);
     nts->Ends[1] = Ends[1];
     if (Ends[1].SignalProtectingEntrance) {
@@ -248,16 +261,16 @@ void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
 	nts->Ends[1].SignalProtectingEntrance->PSignal->Seg = nts;
 	nts->Ends[1].SignalProtectingEntrance->PSignal->Reposition();
     }
+    if (Ends[1].ExLight) {  // 5-16-2022 bug found, fixed by this {}.
+        Ends[1].ExLight->Seg = nts;
+        Ends[1].ExLight = NULL;
+    }
     Align (Ends[0].wpx, Ends[0].wpy, wpx1, wpy1);
     nts->Ends[1].Joint = Ends[1].Joint;
     for (int j = 0; j < Ends[1].Joint->TSCount; j++)
 	if (Ends[1].Joint->TSA[j] == this)
 	    Ends[1].Joint->TSA[j] = nts;
     Ends[1].Joint = nts->Ends[0].Joint = tj;
-#ifdef REALLY_NXSYS
-    Ends[1].Next = nts;
-    nts->Ends[0].Next = this;
-#endif
     if (Circuit)
 	Circuit->AddSeg(nts);
     nts->GetVisible();
@@ -265,6 +278,11 @@ void TrackSeg::Split (WP_cord wpx1, WP_cord wpy1, TrackJoint * tj) {
     nts->Invalidate();
     tj->AddBranch(this);
     tj->AddBranch(nts);
+#if TLEDIT
+    if (!new_seg)
+        Undo::RecordJointCreation(tj, this, nts);
+    SALVAGER("End of Split()");
+#endif
 }
 
 
@@ -396,7 +414,7 @@ TrackSeg * SnapToTrackSeg (WP_cord& wpx, WP_cord& wpy) {
     S_ts = NULL;
     S_wpx = wpx;
     S_wpy = wpy;
-    if (MapGraphicObjectsOfType  (ID_TRACKSEG, SnapMapper)) {
+    if (MapGraphicObjectsOfType  (TypeId::TRACKSEG, SnapMapper)) {
 	wpx = S_wpx;
 	wpy = S_wpy;
 	return S_ts;
@@ -447,11 +465,11 @@ TrackSeg::~TrackSeg () {
 	Circuit->DeleteSeg(this);
 }
 
-int TrackSeg::	TypeID () { return ID_TRACKSEG;};
+TypeId TrackSeg::TypeID () { return TypeId::TRACKSEG;};
 
 
-int TrackSeg::ObjIDp(long x) {
-    return 0;
+bool TrackSeg::IsNomenclature(long x) {
+    return false;
 }
 
 

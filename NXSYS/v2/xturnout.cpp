@@ -7,7 +7,7 @@
 #include <math.h>
 #include <cassert>
 
-#include "objid.h"
+#include "typeid.h"
 
 #include "xtgtrack.h"
 #include "xturnout.h"
