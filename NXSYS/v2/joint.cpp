@@ -28,7 +28,9 @@
 
 BOOL ShowNonselectedJoints = TRUE;
 
+#ifdef TLEDIT
 static int JointGlyphRadius;
+#endif
 
 TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
     Nomenclature = 0L;
