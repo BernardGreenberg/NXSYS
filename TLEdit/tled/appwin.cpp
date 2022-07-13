@@ -692,7 +692,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR command_l
 	int real_dth = rc.bottom - rc.top;
 
 	int dtw = NXSYS_DESIGN_WINDOW_DIMS::WIDTH;
-	int dth = NXSYS_DESIGN_WINDOW_DINS::HEIGHT;
+	int dth = NXSYS_DESIGN_WINDOW_DIMS::HEIGHT;
 
 	int winx = (int)(dtw * (1.0 - MAIN_FRAME_SCREEN_X_FRACTION) / 2.0);
 	int winy = (int)(dth * (1.0 - MAIN_FRAME_SCREEN_Y_FRACTION) / 2.0);
