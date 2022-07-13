@@ -32,6 +32,7 @@ typedef void *HINSTANCE;
 #include "HelpDirectory.hpp"
 #include "GetResourceDirectoryPathname.h"
 #include <regex>
+#include "AppBuildSignature.h"
 
 namespace fs = std::filesystem;
 
@@ -98,7 +99,8 @@ void Demo(const char * DemoFileName);
 @interface AppDelegate ()  //supplementary declaration.
 {
     __strong NSString * pathForReload;
-    __strong RelayDrafterController * RelayDrafter; BOOL haveSetScenarioHelpItem;
+    __strong RelayDrafterController * RelayDrafter;
+    BOOL haveSetScenarioHelpItem;
     id eventMonitor;
     NSPoint wporg;
     BOOL wporg_set;
@@ -120,7 +122,6 @@ NSWindow * getNXWindow() {
 
 
 @implementation AppDelegate
-static NSString* buildDateString;
 static NSString* buildSignature;
 static InterlockingLibrary interlockingLibrary;
 static HelpDirectory helpDirectory;
@@ -133,8 +134,9 @@ static HelpDirectory helpDirectory;
     did_finish_launching = false;
     eventMonitor = nil;
     haveSetScenarioHelpItem = false;
-    buildDateString = [self ComputeBuildDateString];
-    buildSignature = [self ComputeBuildSignature];
+    AppBuildSignature ABS;
+    ABS.Populate();
+    buildSignature = [NSString stringWithUTF8String: ABS.TotalBuildString().c_str()];
     return self;
 }
 
@@ -163,44 +165,7 @@ static HelpDirectory helpDirectory;
     haveSetScenarioHelpItem = NO;
     ClearHelpMenu(); // not really menu; array of old strings.
 }
--(NSString*)ComputeBuildSignature
-{
-    /* Computed at object init time -- doesn't change with layout */
-    NSMutableString * signature = [[NSMutableString alloc] init];
-    NSDictionary * dict = [[NSBundle mainBundle] infoDictionary];
-    [signature appendString: [dict objectForKey:@"CFBundleShortVersionString"]];
-    [signature appendString: @" "];
-    [signature appendString: [dict objectForKey:@"CFBundleVersion"]];
-#if DEBUG
-    [signature appendString: @" (DEBUG)"];
-#endif
-    [signature appendString: buildDateString]; // might be @"", else starts with space
-    return signature;
-}
 
--(NSString*)ComputeBuildDateString
-{
-    /* Computed at object init time -- doesn't change with layout */
-    /*
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSString *path = [bundle pathForResource:(NSString *)@"build_timestamp"
-                                      ofType:(NSString *)@"txt"];
-    std::ifstream file([path UTF8String]); // close at exit subr
-    if (!file.is_open())
-        return @"";
-    std::string date;
-    std::getline(file, date);
-    date.erase(date.find_last_not_of(" \n\r\t")+1);
-    return [NSString stringWithFormat: @" of %s", date.c_str()];
-     */
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSDictionary *main_infoDict = [bundle infoDictionary];
-    NSDate * date = [main_infoDict objectForKey:@"BundleBuildDate"];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"M/d/yy HH:mm"];
-    NSString *formattedDateString = [formatter stringFromDate:date];
-    return [NSString stringWithFormat: @" of %@", formattedDateString];
-}
 -(void)LibEntryClicked:(NSEvent*)event
 {
     NSMenuItem* item = (NSMenuItem*)event;
@@ -234,6 +199,8 @@ static HelpDirectory helpDirectory;
     
     NSMenuItem* help_item = [topLevelMenu itemWithTitle:@"Help"];
     NSMenu* help_menu = help_item.submenu;
+    NSMenuItem* __strong shi = _ScenarioHelpItem;
+    [help_menu removeItem:shi]; // pointer in delegate is WEAK.
     int ix = 0;
     for (auto& helpe : helpDirectory) {
         NSMenuItem *item = [[NSMenuItem alloc]
@@ -243,6 +210,9 @@ static HelpDirectory helpDirectory;
         item.tag = ix++;
         [help_menu addItem:item];
     }
+/* Get it to the bottom */
+    _ScenarioHelpItem = shi;
+    [help_menu addItem:shi];
 }
 
 -(void)PopulateLibraryMenu
@@ -277,7 +247,7 @@ static HelpDirectory helpDirectory;
     [self SaveDefaultPath:url];
     pathForReload = fileName;
     
-    NSString* title = [NSString stringWithFormat:@"%s - NXSYS %@", InterlockingName.c_str(), buildSignature];
+    NSString* title = [NSString stringWithFormat:@"%s - %@", InterlockingName.c_str(), buildSignature];
     [_window setTitle: title];
 
     if (!haveSetScenarioHelpItem) {
@@ -535,11 +505,10 @@ static HelpDirectory helpDirectory;
 }
 
 - (IBAction)ZoomOut:(id)sender {
-    //It should be obvious that .909090...*1.1 = .9999999 = 1.
-    [_theView magnifyWithRatio:0.90909090909];
+    [_theView ZoomOut:sender];
 }
 - (IBAction)ZoomIn:(id)sender {
-    [_theView magnifyWithRatio:1.1];
+    [_theView ZoomIn:sender];
 }
 - (IBAction)Train:(id)sender {
     OfferChooseTrackDlg(true);
@@ -610,11 +579,7 @@ static HelpDirectory helpDirectory;
 - (IBAction)NewAbout:(id)sender {
     if (_aboutController == nil)
         _aboutController = [[CustomAboutController alloc] init];
-    NSDictionary * dict = [[NSBundle mainBundle] infoDictionary];
-    NSString* version = [dict objectForKey:@"CFBundleShortVersionString"];
-    NSString* build_number = [dict objectForKey:@"CFBundleVersion"];
-    [_aboutController SetVersionData:version date:buildDateString build_number:build_number];
-    [_aboutController Show];
+    [_aboutController Show:_window];
 }
 
 @end

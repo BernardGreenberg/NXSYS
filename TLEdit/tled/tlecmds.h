@@ -8,6 +8,8 @@
 
 #define CmHelp          4139
 #define CmAbout		4140
+#define CmUndo          4141
+#define CmRedo          4142
 
 #define CmPoint		4200
 #define CmNewTrackOrigin 4201

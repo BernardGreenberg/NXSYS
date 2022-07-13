@@ -12,21 +12,23 @@
 #include "text.h"
 #include "swkey.h"
 #include "trafficlever.h"
-#include "objid.h"
+#include "typeid.h"
 #include "assignid.h"
 #include "tledit.h"
 #include <string>
-#include "STLfnsplit.h"
+#include <filesystem>
 #include "SwitchConsistency.h"
 #include "STLExtensions.h"
+#include "AppBuildSignature.h"
 #include <cassert>
 #include <cerrno>
 #include <exception>
 #include <unordered_set>
 #include <unordered_map>
 
+namespace fs = std::filesystem;
+
 #ifdef WIN32
-#include <getmodtm.h>
 #include <io.h>
 #endif
 
@@ -111,7 +113,7 @@ static std::unordered_map<TRKPET, const char *> KeyStrings {
 static void SaveTheLayout(FILE * f), DumpRemainingObjects(FILE * f);
 static void DumpTheActualGraph(FILE * f);
 static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj);
-static char CharizeAB0(long nomen, short AB0);
+static char CharizeAB0(IJID nomen, short AB0);
 void ValidateTrackGraph();
 
 typedef
@@ -128,12 +130,34 @@ struct SaveState {
 	SvEP Table;
 } SvS, *SvSP;
 
+class NullObjectWriter : public GraphicObject:: ObjectWriter {
+    FILE* file;
+public:
+    NullObjectWriter() {};
+    void puts(const char * s) {(void)s;}
+    void putf(const char * s, ...){(void)s;}
+    void putc(char c) {(void)c;}
+};
+
+class FileObjectWriter : public GraphicObject:: ObjectWriter {
+    FILE* file;
+public:
+    FileObjectWriter (FILE * f) : file(f) {}
+    void puts(const char * s) {fputs(s, file);};
+    void putc(char c) {fputc(c, file);}
+    void putf(const char * s, ...){
+        va_list list;
+        va_start(list, s);
+        vfprintf(file, s, list);
+    }
+};
+
+
 static BOOL MakeBackupCopy(const char * path) {
     /* This is a hedge against USER error, not app error. */
 
-	std::string drive, dir, fname, ext;
-	STLfnsplit(path, drive, dir, fname, ext);
-	std::string bkpath = STLfnmerge(drive, dir, fname, ".bak");
+    std::string bkpath = fs::path(path).replace_extension(".bak").string();
+    auto bkpathc = bkpath.c_str();
 
 	if (access(path, 0) != 0)	/* if .trk no exist, no prob. */
 		return TRUE;
@@ -142,13 +166,13 @@ static BOOL MakeBackupCopy(const char * path) {
 	if (access(path, 6) != 0) /* if can't write it, we're in trouble. */
 		return FALSE;
 	/* .trk exists and we can write it. */
-    if (access(bkpath.c_str(), 0) == 0) {		/* if bk path exists */
+    if (access(bkpathc, 0) == 0) {		/* if bk path exists */
         /* try to delete it */
-		if (remove(bkpath.c_str()) != 0)	/* if we can't delete it */
+		if (remove(bkpathc) != 0)	/* if we can't delete it */
 			return FALSE;		/* report trouble. */
     }
 		/* try to rename real path to bkpath */
-	if (rename(path, bkpath.c_str()) != 0)
+	if (rename(path, bkpathc) != 0)
 		return FALSE;
 
 	return TRUE;
@@ -191,7 +215,7 @@ BOOL SaveLayout(const char * path) {
         MessageBox(G_mainwindow, (r.value +  NOSAVE_MSG).c_str(), app_name, MB_ICONEXCLAMATION);
         return FALSE;
     }
-    if (MapGraphicObjectsOfType(ID_JOINT, ReportCorruptedJoints)) {
+    if (MapGraphicObjectsOfType(TypeId::JOINT, ReportCorruptedJoints)) {
    /*     Message already displayed */
         return FALSE;
     }
@@ -209,7 +233,7 @@ BOOL SaveLayout(const char * path) {
     try {
         ValidateTrackGraph();
         
-        if (MapGraphicObjectsOfType(ID_TRACKSEG, ReportUnreachableSegments))
+        if (MapGraphicObjectsOfType(TypeId::TRACKSEG, ReportUnreachableSegments))
             return FALSE;
 
     } catch (TLEditSaveException e) {
@@ -261,10 +285,9 @@ static void SaveTheLayout(FILE * f) {
     time_t the_time;
     time(&the_time);
     fprintf(f, ";; TLEdit output of %s", ctime(&the_time));
-#ifdef WIN32
-    the_time = GetModuleTime(NULL);
-    fprintf(f, ";;   by TLEdit of %s", ctime(&the_time));
-#endif
+    AppBuildSignature ABS;
+    ABS.Populate();
+    fprintf(f, ";;   by %s\n", ABS.TotalBuildString(true).c_str());
     fprintf(f, ";;      TLEdit Copyright (c) Bernard Greenberg 2013, 2022\n");
 
     fprintf(f, ";;   Do not edit by hand.\n\n");
@@ -338,7 +361,7 @@ static int ChaseUnmarkedSwitchBranches(GraphicObject * g, void * vfp) {
    marking as it goes, so we can search for unmarked ones. */
 static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
-	long LastTCID = 0;
+	IJID LastTCID = 0;
 
 	while (true) {
         if (ts->Marked)
@@ -349,7 +372,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 		if (fx == TSEX::NOTFOUND)
             throw TLEditSaveException("Estranged track segment found.");
 
-		long id = ts->Circuit ? ts->Circuit->StationNo : 0;
+        IJID id = ts->TCNO();
 
 		/* dump seg attributes if appropriate*/
         if (f)
@@ -358,7 +381,7 @@ static void DumpPath(FILE * f, TrackSeg * ts, TrackJoint * tj) {
 
 		ts->Marked = TRUE;
         TrackJoint& J = *(ts->GetOtherEnd(fx).Joint);
-        long jnom = J.Nomenclature;
+        IJID jnom = J.Nomenclature;
 		if (J.Marked) {
             if (J.TSCount != 3) {
                 J.Select();
@@ -431,7 +454,7 @@ static void DumpTheActualGraph(FILE* f) {
     /* Register all known IJ and Switch numbers with the generator maps */
     SwitchNumbers.Clear();
     IJNumbers.Clear();
-    MapGraphicObjectsOfType(ID_JOINT, [](GraphicObject *g) {
+    MapGraphicObjectsOfType(TypeId::JOINT, [](GraphicObject *g) {
         TrackJoint & J = *(TrackJoint*)g;
         if (J.Nomenclature) {
             if (J.TSCount == 3)
@@ -443,7 +466,7 @@ static void DumpTheActualGraph(FILE* f) {
     });
 
     /* Assign currently unused numbers to unassigned joints and switches */
-    MapGraphicObjectsOfType(ID_JOINT, [](GraphicObject *g) {
+    MapGraphicObjectsOfType(TypeId::JOINT, [](GraphicObject *g) {
         TrackJoint& J = *(TrackJoint*)g;
         if (J.Nomenclature == 0) {
             if (J.TSCount == 3)
@@ -457,22 +480,22 @@ static void DumpTheActualGraph(FILE* f) {
     });
 
     /* Clear Marked bits of track sections */
-    MapGraphicObjectsOfType(ID_TRACKSEG, [](GraphicObject *g) {
+    MapGraphicObjectsOfType(TypeId::TRACKSEG, [](GraphicObject *g) {
         ((TrackSeg*)g)->Marked = FALSE;
         return 0;
     });
     
     /* Unmark joints/switches, insulate loose ends, "organize" switches */
-	MapGraphicObjectsOfType(ID_JOINT, FinalCleanUp);
+	MapGraphicObjectsOfType(TypeId::JOINT, FinalCleanUp);
 
     /* These produce the actual output, must use 3 arg form and pass file */
-    MapFindGraphicObjectsOfType (ID_JOINT, ChaseLooseTrackEnds, f);
-    MapFindGraphicObjectsOfType (ID_JOINT, ChaseUnmarkedSwitchBranches, f);
+    MapFindGraphicObjectsOfType (TypeId::JOINT, ChaseLooseTrackEnds, f);
+    MapFindGraphicObjectsOfType (TypeId::JOINT, ChaseUnmarkedSwitchBranches, f);
     if (f)
         fprintf(f, "\n");
 }
 
-static char CharizeAB0(long nomen, short AB0) {
+static char CharizeAB0(IJID nomen, short AB0) {
     if (nomen == 0)
         throw TLEditSaveException("Dumper found switch with no nomenclature number.");
     switch (AB0) {
@@ -557,13 +580,16 @@ char TrackSeg::EndOrientationKey(TSEX end_index) {
 }
 
 
-int GraphicObject::Dump(FILE * f) {
+int GraphicObject::Dump(ObjectWriter& w) {
 	return 0;
 }
 
+
+
 static int DROMapper(GraphicObject * g, void * v) {
 	SvSP sv = (SvSP)v;
-	int priority = g->Dump(NULL);
+    NullObjectWriter N;
+	int priority = g->Dump(N);
 	if (priority > 0) {
 		int index = sv->Index++;
 		if (!sv->Counting) {
@@ -590,7 +616,9 @@ static int DROComparer(const void * v1, const void * v2) {
 	return 0;
 }
 
+
 static void DumpRemainingObjects(FILE * f) {
+    FileObjectWriter W(f);
     SaveState SS{};
 	SS.Index = 0;
 	SS.Counting = TRUE;
@@ -610,7 +638,7 @@ static void DumpRemainingObjects(FILE * f) {
 			last_prio = prio;
 			fprintf(f, "\n");
 		}
-		SS.Table[i].Object->Dump(f);
+		SS.Table[i].Object->Dump(W);
 	}
 	delete SS.Table;
 }

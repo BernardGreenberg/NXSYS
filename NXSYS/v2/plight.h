@@ -1,6 +1,9 @@
 #ifndef _NX_PANEL_LIGHT_H__
 #define _NX_PANEL_LIGHT_H__
 
+#include "typeid.h"
+#include "propedit.h"
+
 #if !TLEDIT
 #include "relays.h"
 #endif
@@ -41,7 +44,7 @@ class PanelLightAspect
 #endif
 };
 
-class PanelLight : public GraphicObject {
+class PanelLight : public GraphicObject, public PropEditor<PanelLight> {
 
   public:
     int XlkgNo;
@@ -56,19 +59,39 @@ class PanelLight : public GraphicObject {
     void SetRadius(int rad);
     void Paint(HDC hdc, HBRUSH brush);
     virtual void Display (HDC hdc);
-    virtual int TypeID(), ObjIDp(long);
+    virtual TypeId TypeID();
+    bool IsNomenclature(long);
 #ifdef TLEDIT
     BOOL InstallDlgLights (HWND hDlg);
     bool InstallCheckCorrespondence(HWND hDlg);
     virtual void EditClick(int x, int y);
     virtual ~PanelLight();
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
-    virtual int Dump (FILE * f);
+    virtual int Dump (ObjectWriter& W);
 #else
     void ClearAllActives();
     void ProcessLoadComplete();
 #endif
 
+#ifdef TLEDIT
+    class PropCell : public PropCellPCRTP<PropCell, PanelLight> {
+        int XlkgNo, Radius;
+        std::vector<PanelLightAspect> Aspects; /* con manu grave*/
+    public:
+        void Snapshot_(PanelLight* p) {
+            SnapWPpos(p);
+            Radius = p->Radius;
+            XlkgNo = p->XlkgNo;
+            Aspects = p->Aspects;
+        }
+        void Restore_(PanelLight* p) {
+            RestoreWPpos(p);
+            p->SetRadius(Radius);
+            p->XlkgNo = XlkgNo;
+            p->Aspects = Aspects;
+        }
+    };
+#endif
 };
 
 void InitPanelLightData();

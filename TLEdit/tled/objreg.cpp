@@ -5,6 +5,7 @@
 #include "tledit.h"
 #include "objreg.h"
 #include "LoadFiascoMaps.h"
+#include <unordered_map>
 
 /* Rewritten for dyn-create STL 4/9/2022 */
 
@@ -13,20 +14,33 @@ struct NXObjectRegistryEntry {
     ObjClassInitFn ObjectClassInitFunction;
 };
 
+static std::unordered_map<TypeId, std::string> TypeIdNames {
+    {TypeId::TRACKSEG, "track segment"},
+    {TypeId::SIGNAL, "signal"},
+    {TypeId::JOINT, "joint"},
+    {TypeId::STOP, "stop"},
+    {TypeId::EXITLIGHT, "exit light"},
+    {TypeId::PANELLIGHT, "panel light"},
+    {TypeId::PANELSWITCH, "panel switch"},
+    {TypeId::TRAFFICLEVER, "traffic lever"},
+    {TypeId::SWITCHKEY, "switch key"},
+    {TypeId::TEXT, "text string"},
+    {TypeId::NONE, "?NONE?"}
+};
 
-static LoadFiascoProtectedUnorderedMap<int, UINT> DlgIdByObjid;
+static LoadFiascoProtectedUnorderedMap<TypeId, UINT> DlgByTypeid;
 static LoadFiascoProtectedUnorderedMap<int, NXObjectRegistryEntry>FnsByCommand;
 
 /* this can be called from toplevels in other files even before this file's STL (would have been)
  initialized */
-NXObTypeRegistrar::NXObTypeRegistrar (int objid, int command, UINT dlg_id, ObjCreateFn ocf, ObjClassInitFn ocif) {
+NXObTypeRegistrar::NXObTypeRegistrar (TypeId type, int command, UINT dlg_id, ObjCreateFn ocf, ObjClassInitFn ocif) {
 
     FnsByCommand[command] = NXObjectRegistryEntry{ocf, ocif};
-    DlgIdByObjid[objid] = dlg_id;
+    DlgByTypeid[type] = dlg_id;
 }
 
-UINT FindDialogIdFromObjClassRegistry (int objid) {
-    return DlgIdByObjid.count(objid) ? DlgIdByObjid[objid] : 0;
+UINT FindDialogIdFromObjClassRegistry (TypeId type) {
+    return DlgByTypeid.count(type) ? DlgByTypeid[type] : 0;
 }
 
 GraphicObject * CreateObjectFromCommand (HWND hWnd, int command, int x, int y) {
@@ -50,4 +64,11 @@ void InitializeRegisteredObjectClasses() {
         if (E.ObjectClassInitFunction != NULL)
             E.ObjectClassInitFunction();
     }
+}
+
+const char * NXObjectTypeName(TypeId type) {
+    if (TypeIdNames.count(type))
+        return TypeIdNames[type].c_str();
+    else
+        return "??type??";
 }

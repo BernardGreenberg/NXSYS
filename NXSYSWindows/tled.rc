@@ -22,6 +22,17 @@
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 
+#define VER_PRIVATEBUILD 0
+#define VER_COMPANYNAME_STR "Bernard Greenberg"
+#define VER_FILEDESCRIPTION_STR "TLEdit - NXSYS Signalling and Interlocking Simulator Layout Editor"
+#define VER_INTERNALNAME_STR "TLEdit"
+#define VER_LEGALCOPYRIGHT_STR "Copyright (c) 1994-2022 Bernard Greenberg"
+#define VER_PRERELEASE 0
+#define VER_LEGALTRADEMARKS1_STR ""
+#define VER_LEGALTRADEMARKS2_STR ""
+#define VER_ORIGINALFILENAME_STR "tledit.exe"
+#define VER_PRODUCTNAME_STR VER_FILEDESCRIPTION_STR
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Icon
@@ -67,6 +78,9 @@ BEGIN
     END
     POPUP "&Edit"
     BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               CmUndo
+        MENUITEM "&Redo\tCtrl+Y",               CmRedo
+        MENUITEM SEPARATOR
         MENUITEM "&Wipe clear\tCtrl+w",         CmClear
         MENUITEM "&Cut\tCtrl+x",                CmCut
         MENUITEM SEPARATOR
@@ -98,11 +112,14 @@ BEGIN
     VK_F1,          CmHelp,                 VIRTKEY, NOINVERT
     VK_F4,          CmQuit,                 VIRTKEY, NOINVERT
     "^O",           CmOpen,                 ASCII,  NOINVERT
+    "^I",           CmIJ,                   ASCII,  NOINVERT
     "^P",           CmEditProperties,       ASCII,  NOINVERT
     "^R",           CmRdis,                 ASCII,  NOINVERT
     "^S",           CmSave,                 ASCII,  NOINVERT
     "^W",           CmClear,                ASCII,  NOINVERT
     "^X",           CmCut,                  ASCII,  NOINVERT
+    "^Y",           CmRedo,                 ASCII,  NOINVERT
+    "^Z",           CmUndo,                 ASCII,  NOINVERT
     VK_BACK,        CmCut,                  VIRTKEY, NOINVERT
 END
 
@@ -118,15 +135,13 @@ FONT 8, "System", 0, 0, 0x0
 BEGIN
     CTEXT           "Release build",IDC_BUILD_TYPE,12,30,154,8
     DEFPUSHBUTTON   "OK",IDOK,145,108,24,14
-    LTEXT           "Executable of:",IDC_STATIC,30,56,58,8
     CTEXT           "Copyright (c) 1997-2001, 2014, 2016, 2022",IDC_STATIC,7,72,160,8
     CTEXT           "GPL 3 License",IDC_STATIC,41,111,96,8
     ICON            "NXICON",IDC_STATIC,7,104,20,20
-    LTEXT           "27 June 12:24:02 1994",ABOUT_VSN,82,56,83,8
+    LTEXT           "27 June 12:24:02 1994",ABOUT_VSN,30,46,150,8
     CTEXT           "Bernard Greenberg",IDC_STATIC,15,83,149,8
     CTEXT           "TLEdit for MS Windows",IDC_STATIC,51,5,77,8
     CTEXT           "NXSYS Version 2 Track Layout Editor",IDC_STATIC,4,16,170,8
-    LTEXT           "Version 2.6.3",IDC_STATIC,66,44,44,8
 END
 
 IDD_TLEDIT_HELP DIALOG 100, 100, 329, 258
@@ -149,7 +164,7 @@ BEGIN
     LTEXT           "Error:  the selected switch has no number!",IDC_SWITCH_WARN,7,7,197,8,NOT WS_VISIBLE
     LTEXT           "Edit or assign attributes for the selected switch.  The switch must have a unique number before this plan can be saved in a file.",IDC_STATIC,7,30,215,24
     LTEXT           "Switch &Number",IDC_STATIC,19,60,58,8
-    EDITTEXT        IDC_SWITCH_EDIT,82,58,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_SWITCH_EDIT,82,58,40,14,ES_AUTOHSCROLL
     PUSHBUTTON      "He&uristicate Orientation",IDC_SWITCH_HEURISTICATE,7,97,128,14
     PUSHBUTTON      "S&wap && highlight ""normal""",IDC_SWITCH_SWAP_NORMAL,7,118,128,14
     PUSHBUTTON      "&Highlight normal",IDC_SWITCH_HILITE_NORMAL,7,139,81,14
@@ -168,21 +183,12 @@ BEGIN
     GROUPBOX        "Track Circuit",IDC_STATIC,161,64,124,52
     EDITTEXT        IDC_EDIT_SEG_TC,225,78,51,14,ES_UPPERCASE | ES_AUTOHSCROLL
     LTEXT           "Relay &ID",IDC_STATIC,170,80,49,10
-    CONTROL         "&Wildfire spread by contact",IDC_EDIT_SEG_SPREAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,169,101,107,10
     PUSHBUTTON      "&Show Track Circuit",IDC_EDIT_SEG_SHOW_TC,177,124,85,14,BS_NOTIFY
     DEFPUSHBUTTON   "OK",IDOK,232,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,232,24,50,14
     PUSHBUTTON      "&Help",IDC_HELP1,232,41,50,14
     LTEXT           "Edit or assign attributes for the selected track segment",IDC_STATIC,7,15,200,12
-    GROUPBOX        "Not operative yet stuf",IDC_STATIC,7,38,147,88,NOT WS_VISIBLE
-    CONTROL         "Counts for track distance",IDC_EDIT_SEG_COUNTS_DISTANCE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,56,112,10
-    CONTROL         "Shows route and occupancy  lights",IDC_EDIT_SEG_LIGHTS,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,74,131,10
-    CONTROL         "Visible at all (not a ""zig"")",IDC_EDIT_SEG_VISIBLE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,91,92,10
-    CONTROL         "Auto Subdivide between siblings",IDC_EDIT_SEG_SUBDIVIDE,
-                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,15,108,118,10
+    LTEXT           "0 segments in circuit.",IDC_EDIT_SEG_NSEGS,7,38,147,88
 END
 
 IDD_JOINT DIALOG 0, 0, 183, 222
@@ -407,6 +413,61 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,126,24,50,14
     PUSHBUTTON      "&Help",IDC_HELP1,126,41,50,14
 END
+
+
+
+#define VER_FILEVERSION             2,7,0,0
+#define VER_FILEVERSION_STR         "2.7.0.0\0"
+
+#define VER_PRODUCTVERSION          2,7,0,0
+#define VER_PRODUCTVERSION_STR      "2.7.0"
+
+#ifndef DEBUG
+#define VER_DEBUG                   0
+#else
+#define VER_DEBUG                   VS_FF_DEBUG
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    	VER_FILEVERSION
+PRODUCTVERSION 	VER_PRODUCTVERSION
+FILEFLAGSMASK  	VS_FFI_FILEFLAGSMASK
+FILEFLAGS      	(VER_PRIVATEBUILD|VER_PRERELEASE|VER_DEBUG)
+FILEOS         	VOS__WINDOWS32
+FILETYPE       	VFT_APP
+FILESUBTYPE    	VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      VER_COMPANYNAME_STR
+            VALUE "FileDescription",  VER_FILEDESCRIPTION_STR
+            VALUE "FileVersion",      VER_FILEVERSION_STR
+            VALUE "InternalName",     VER_INTERNALNAME_STR
+            VALUE "LegalCopyright",   VER_LEGALCOPYRIGHT_STR
+            VALUE "LegalTrademarks1", VER_LEGALTRADEMARKS1_STR
+            VALUE "LegalTrademarks2", VER_LEGALTRADEMARKS2_STR
+            VALUE "OriginalFilename", VER_ORIGINALFILENAME_STR
+            VALUE "ProductName",      VER_PRODUCTNAME_STR
+            VALUE "ProductVersion",   VER_PRODUCTVERSION_STR
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        /* The following line should only be modified for localized versions.     */
+        /* It consists of any number of WORD,WORD pairs, with each pair           */
+        /* describing a language,codepage combination supported by the file.      */
+        /*                                                                        */
+        /* For example, a file might have values "0x409,1252" indicating that it  */
+        /* supports English language (0x409) in the Windows ANSI codepage (1252). */
+
+        VALUE "Translation", 0x409, 1252
+
+    END
+END
+
 
 
 #ifdef APSTUDIO_INVOKED

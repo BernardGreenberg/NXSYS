@@ -5,7 +5,7 @@
 #include "compat32.h"
 #include "nxgo.h"
 #include "xtgtrack.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "math.h"
 #include "ssdlg.h"
@@ -69,11 +69,11 @@ Stop::Stop (Signal * s) {
 }
 
 
-/*   virtual */ int Stop::TypeID() {
-    return ID_STOP;
+/*   virtual */ TypeId Stop::TypeID() {
+    return TypeId::STOP;
 }
 
-/*   virtual */ int Stop::ObjIDp(long) {
+/*   virtual */ bool Stop::IsNomenclature(long) {
     return 0;
 }
 

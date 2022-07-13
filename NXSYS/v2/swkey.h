@@ -1,14 +1,14 @@
 #ifndef _NX_SWITCH_KEY_H__
 #define _NX_SWITCH_KEY_H__
 
-#ifdef TLEDIT
-#include <stdio.h>
-#endif
-
 #include "RelayMovingPointer.h"
 
+
+
 #ifdef TLEDIT
-class SwitchKey : public GraphicObject {
+#include "PropCell.h"
+
+class SwitchKey : public GraphicObject, public PropEditor<SwitchKey> {
 #else
 class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
 #endif
@@ -33,7 +33,8 @@ class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
     BOOL Press (BOOL reverse, BOOL lock);
 
     virtual void Display (HDC hdc);
-    virtual int TypeID(), ObjIDp(long);
+    virtual TypeId TypeID();
+    virtual bool IsNomenclature(long);
 #ifndef TLEDIT
     virtual void Hit (int mb);
     virtual void UnHit();
@@ -41,10 +42,22 @@ class SwitchKey : public RelayMovingPointer<SwitchKey>, public GraphicObject {
 #endif
 
 #ifdef TLEDIT
+    class PropCell : public PropCellPCRTP<PropCell, SwitchKey> {
+        int XlkgNo;
+    public:
+        void Snapshot_(SwitchKey*k) {
+            SnapWPpos (k);
+            XlkgNo = k->XlkgNo;
+        }
+        void Restore_(SwitchKey*k) {
+            k->SetXlkgNo(XlkgNo);
+            RestoreWPpos(k);
+        }
+    };
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
     virtual void EditClick(int x, int y);
     virtual ~SwitchKey();
-    virtual int Dump (FILE * f);
+    virtual int Dump (ObjectWriter& W);
 #else
     virtual void EditContextMenu (HMENU m);
 #endif

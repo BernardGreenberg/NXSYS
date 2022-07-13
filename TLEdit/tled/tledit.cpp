@@ -11,15 +11,18 @@
 #include "brushpen.h"
 #include "xtgtrack.h"
 #include "tletoolb.h"
+#include "STLExtensions.h"
 #ifndef NXSYSMac
 #include "rubberbd.h"
 #endif
-#include "objid.h"
+#include "typeid.h"
 #include "tledit.h"
 #include "resource.h"
 #include "assignid.h"
 #include "signal.h"
 #include "salvager.hpp"
+#include "undo.h"
+#include "SwitchConsistency.h"
 
 #ifdef NXSYSMac
 void StartRubberBand(int index, long x, long y);
@@ -78,11 +81,11 @@ static void ReportCoordsSC (SC_cord x, SC_cord y) {
 
 static BOOL DefButtonDown (int& x, int &y) {
 
-    DefStartTrackJoint = (TrackJoint *)FindHitObjectOfType(ID_JOINT, x, y);
+    DefStartTrackJoint = (TrackJoint *)FindHitObjectOfType(TypeId::JOINT, x, y);
     DefCreatedTrackJoint = (DefStartTrackJoint == NULL);
     DefStartTrackSeg = NULL;
     DefStartDelay = FALSE;
-    StatusMessage("");
+//    StatusMessage("");
 
     if (DefCreatedTrackJoint) {
 	WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
@@ -148,27 +151,30 @@ static bool valid_drop_target(TrackJoint* tj){
 
 static void DefButtonUp2 (int x, int y) {
     
-    TrackJoint * tj = (TrackJoint *) FindHitObjectOfType (ID_JOINT, x, y);
+    TrackJoint * tj = (TrackJoint *) FindHitObjectOfType (TypeId::JOINT, x, y);
 
     if (tj == NULL) {
         WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
 	TrackSeg* ts = SnapToTrackSeg (wpx, wpy);
         if (ts) {
             if (DropOnRayFromStart(ts)) {// 3-17-2022
-                StatusMessage("Cannot drop on emanation from same joint");
+                usererr("You may not drop a joint on a segment already emanating from the other end "
+                        "of the one being created.");
                 return;
             }
-            tj = new TrackJoint(wpx, wpy);
-            ts->Split (wpx, wpy, tj);
         }
-        else
-            tj = new TrackJoint(wpx, wpy);
+
+        tj = new TrackJoint(wpx, wpy);
+
+        if (ts)
+            ts->Split (wpx, wpy, tj); // will record for undo
     }
     else if (!valid_drop_target(tj)) {
-        if (tj == DefStartTrackJoint)
-            StatusMessage("");
+        if (tj == DefStartTrackJoint) {
+   //         StatusMessage(""); // goes too far.
+        }
         else
-            StatusMessage ("Invalid joint for drop target");
+            usererr("You may not drop this joint on that one; it is an invalid target in this state.");
         if (DefCreatedTrackJoint)
             delete DefStartTrackJoint;
         return;
@@ -176,13 +182,12 @@ static void DefButtonUp2 (int x, int y) {
     /* else drop into new space or tj */
 
     /* This is the COMMIT point */
-    BufferModified = TRUE;
 
     if (DefStartTrackSeg)
+        // will record to Undo
 	DefStartTrackSeg->Split (DefStartTrackJoint->wp_x,
-				 DefStartTrackJoint->wp_y,
-				 DefStartTrackJoint);
-
+                                           DefStartTrackJoint->wp_y,
+                                           DefStartTrackJoint);
     if (tj) {
 	TrackSeg * ts = new TrackSeg (DefStartTrackJoint->wp_x,
                                       DefStartTrackJoint->wp_y,
@@ -191,13 +196,19 @@ static void DefButtonUp2 (int x, int y) {
 	ts->Ends[0].Joint = DefStartTrackJoint;
 	ts->Ends[1].Joint = tj;
 	tj->AddBranch(ts);
-
+        tj->Organize(); /* might have made a switch; failure to organize would cause
+                         dumper and undoer to err/crash */
 	tj->EnsureID();
 	DefStartTrackJoint->AddBranch(ts);
+        DefStartTrackJoint->Organize(); /* see above cmt */
 	DefStartTrackJoint->EnsureID();
 	ts->Select();
+        assert(DefStartTrackJoint->TSCount < 4);
+        assert(tj->TSCount < 4);
         SALVAGER("After DefButtonUp2");
+        Undo::RecordSegmentCreation(ts);
     }
+
 
 }
 
@@ -328,7 +339,7 @@ store_cvt:
 }
 
 static void MovButtonDown (HWND hWnd, int x, int y) {
-    MovTrackJoint = (TrackJoint *)FindHitObjectOfType(ID_JOINT, x, y);
+    MovTrackJoint = (TrackJoint *)FindHitObjectOfType(TypeId::JOINT, x, y);
     WP_cord wpx = SCXtoWP (x), wpy = SCYtoWP(y);
     if (MovTrackJoint == NULL) {
 	TrackSeg * ts = SnapToTrackSeg (wpx, wpy);
@@ -341,6 +352,7 @@ static void MovButtonDown (HWND hWnd, int x, int y) {
     }
     MovTrackJoint->Select();
     ReportCoordsWP (MovTrackJoint->wp_x, MovTrackJoint->wp_y);
+    Undo::RecordGOMoveStart(MovTrackJoint);
     for (int j = 0; j < MovTrackJoint->TSCount; j++) {
 	TrackSeg * ts = MovTrackJoint->TSA[j];
 	TSEX fx = ts->FindEndIndex(MovTrackJoint);
@@ -377,10 +389,10 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
 
     WP_cord wpx = SCXtoWP(x), wpy = SCYtoWP(y);
 
-    TrackJoint * tj = (TrackJoint *)FindHitObjectOfType(ID_JOINT, x, y);
+    TrackJoint * tj = (TrackJoint *)FindHitObjectOfType(TypeId::JOINT, x, y);
 
     if (!tj) {
-        TrackSeg* ts = (TrackSeg*)FindHitObjectOfType(ID_TRACKSEG, x, y);
+        TrackSeg* ts = (TrackSeg*)FindHitObjectOfType(TypeId::TRACKSEG, x, y);
         if (ts && MovTrackJoint->FindBranchIndex(ts) == TSAX::NOTFOUND) {
             usererr("A joint being moved may not be directly dropped onto a track segment. "
                     "You can only drop into empty space or onto extant joints. "
@@ -393,25 +405,56 @@ static void MovButtonUp (HWND hWnd, int x, int y) {
     if (tj == MovTrackJoint)
         tj = nullptr;  // fall into "just move" 3-26-2022
     
-    if (tj) {	/* Try to merge nodes */
-        if (OneOfRaysOfStart(MovTrackJoint, tj)) {// disallow drop on current neighbor node 3-18-2022
-            StatusMessage("Cannot drop joint on end of ray from itself; cut segment instead.");
-            return;
-        }
-        if (set_intersects(all_far_nodes(tj), all_far_nodes(MovTrackJoint))) {
-            usererr("A joint being moved may not be dropped on a joint at the end of a colocated segment.  Delete the segment if that is what you want.");
-            return;
-        }
-
-	if (tj->TSCount + MovTrackJoint->TSCount > 3)
-	    return;
-	wpx = tj->wp_x;
-	wpy = tj->wp_y;
-	MovTrackJoint->SwallowOtherJoint (tj);
+    if (tj) {
+        if (auto plaint = MovTrackJoint->ValidateMergeConditions(tj))
+            usererr(plaint);
+        else tj->SwallowOtherJoint(MovTrackJoint, true);
     }
+    else {  // simple move.
+        MovTrackJoint->MoveToNewWPpos (wpx, wpy);
+        Undo::RecordJointMoveComplete(MovTrackJoint);
+    }
+}
 
-    BufferModified = TRUE;
-    MovTrackJoint->MoveToNewWPpos (wpx, wpy);
+template <typename T>
+std::unordered_set<T> getUnion(const std::unordered_set<T>& a, const std::unordered_set<T>& b)
+{
+  std::unordered_set<T> result = a;
+  result.insert(b.begin(), b.end());
+  return result;
+}
+static std::unordered_set<TrackCircuit*> CircuitsOfJoint(TrackJoint* tj) {
+    std::unordered_set<TrackCircuit*> S;
+    for (int i = 0; i < tj->TSCount; i++) {
+        if (tj->TSA[i])
+            S.insert(tj->TSA[i]->Circuit); //null is ok!
+    }
+    return S;
+}
+
+/* The preconditions on joint-merging are non-trivial.  At very least, the Undo system
+   is not prepared to undo stupid gestures. */
+const char * TrackJoint::ValidateMergeConditions(TrackJoint* target) {
+    /* current instance ("this") was MovTrackJoint, i.e., the one being moved which will
+       be swallowed by "target" */
+    if (OneOfRaysOfStart(this, target))// disallow drop on current neighbor node 3-18-2022
+        return "Cannot drop joint on end of ray from itself; cut segment instead.";
+    if (set_intersects(all_far_nodes(target), all_far_nodes(this)))
+        return "A joint being moved may not be dropped on a joint at the end of a colocated segment.  Delete the segment if that is what you want.";
+    if (target->TSCount == 3)
+        return "You may not drop a joint on a switch.";
+    if (target->TSCount == 2 && target->Insulated)
+        return "You may not drop a joint on an insulated joint. If you want to make it be "
+        "a switch, remove the insulation first.";
+    if (Insulated)
+        return "You may not drop an insulated joint on any other joint. If you want to "
+        "merge them, remove the insulation from this joint first.";
+    if (target->TSCount + TSCount > 3)
+        return "Attempted merge would produce more than three rays emanating from a joint, ∴no.";
+    if (getUnion(CircuitsOfJoint(this), CircuitsOfJoint(target)).size() > 1)
+        return "The track circuits, or lack thereof, adjoining these joints are not all identical. "
+        "Make them so before merging.";
+    return nullptr;
 }
 
 
@@ -431,8 +474,9 @@ static BOOL MovButtonFirst = TRUE;
 #endif
 	    if (!MovButtonFirst)
 		MovButtonUp (hWnd, x , y);
-	    else
-		BufferModified = TRUE;
+            else {
+                // MovButton was first.   All set reported ok.
+            }
 	    MovTrackJoint = NULL;
 	    for (int j = 0; j < 3; j++) {
 #ifdef NXSYSMac
@@ -572,16 +616,34 @@ void TrackLayoutRodentate (HWND hWnd, UINT message, int x, int y) {
     }
 }
 
+ValidatingValue<std::string> TrackJoint::PrecludeUninsulation(const char* action) {
+    std::string pfx = "Can't " + std::string(action) + " joint: ";
+    if (SignalExlightCount() > 0)
+        return pfx + "Signals and/or exit lights are at this joint. Remove them and try again.";
+/*  Maybe this is ok...
+    if (TSCount == 1 && TSA[0]->Circuit)
+        return pfx + "A track-end whose adjoining track circuit has been set. Why do you want to do this? Unset the track-circuit or delete the segment if that is what you want.";
+*/
+    if (TSCount == 2 && TSA[0]->Circuit != TSA[1]->Circuit)
+        return pfx + "Adjoins differing track circuits. Set them to be the same and try again.";
+    return {};
+}
 
-void InsulateJoint (TrackJoint * tj) {
+void ToggleInsulation (TrackJoint * tj) {
     if (tj->TSCount != 1 && tj->TSCount != 2) {
 	usererr ("Only inline or terminal joints may be insulated.");
 	return;
     }
-    if (!tj->Insulated) {
-	tj->Insulate();
-	StatusMessage ("IJ %ld is now insulated.", tj->Nomenclature);
+    if (tj->Insulated) {
+        if (auto excuse = tj->PrecludeUninsulation("uninsulate")) {
+            usererr(excuse.value.c_str());
+            return;
+        }
+        tj->Insulate(false);
     }
+    else
+        tj->Insulate(true);
+    StatusMessage ("IJ %ld is now %sinsulated.", tj->Nomenclature, tj->Insulated ? "" : "un");
 }
 
 static bool triangle_collapse_condition(TrackJoint * tj){
@@ -634,9 +696,15 @@ void TrackJoint::Cut () {
         return;
     }
 
+    if (Insulated) {
+        if (auto excuse = PrecludeUninsulation("delete")) {
+            usererr(excuse.value.c_str());
+            return;
+        }
+    }
+
     TrackSeg& ts0 = *TSA[0];
     TrackSeg& ts1 = *TSA[1];
-
     TSEX endxs[2];
     /* These are the indexes in the end-arrays of our rays for this joint. */
     endxs[0] = ts0.FindEndIndex(this);
@@ -667,6 +735,34 @@ void TrackJoint::Cut () {
                 "Delete the branches emanating from it if that is what you mean.");
         return;
     }
+    
+    auto info = Undo::SnapshotJointPreCut(this); // gotta do it while we still exist!
+    auto survivor = Cut_();
+    Undo::RecordJointCutComplete(info, survivor);
+}
+
+TrackSeg* TrackJoint::Cut_() {
+    /* You can't Cut a 1 or a 3, you must "disarm" the 3 and Cut the seg off ofthe 1. */
+    assert(TSCount == 2);
+    
+    /*  2 June 2022
+
+     This fixes a pretty complex bug.  We have to choose the right TS0. It may not be the seg
+     originally put there, because this joint may have had life as a switch, and was "Organized"
+     according to "Radang" etc.  That could have swapped the [0] and [1]. But we can be sure that
+     the older one, by "Clock", which is what it was invented for, was originally [0], and Split
+     takes care to preserve that assumption.  Otherwise, crossovers cannot be undone without error.
+
+     */
+    if (TSA[0]->Clock > TSA[1]->Clock)
+        std::swap(TSA[0], TSA[1]);
+
+    TrackSeg& ts0 = *TSA[0];
+    TrackSeg& ts1 = *TSA[1];
+    TSEX endxs[2];
+    /* These are the indexes in the end-arrays of our rays for this joint. */
+    endxs[0] = ts0.FindEndIndex(this);
+    endxs[1] = ts1.FindEndIndex(this);
 
     ts0.Invalidate();
     ts1.Invalidate();
@@ -711,19 +807,23 @@ void TrackJoint::Cut () {
     ts0.Select();
     ts0.Invalidate();
     // Salvager will fail if we salvage here.  ... Message box will make redisplay crash, too
-    delete &ts1;
-    delete this;
-    SALVAGER("TrackJoint::Cut final");
-    BufferModified = TRUE;  // I'll say ...
+    ts1.ConsignToLimbo();
+    ConsignToLimbo();       // No more "delete"....
+    return &ts0;
+    SALVAGER("TrackJoint::Cut_ final");
 }
 
 
-TrackSeg* FindOtherSegOfTwo (TrackJoint * tj, TrackSeg * ts) {
-    if (ts == tj->TSA[0])
-	return tj->TSA[1];
-    else if (ts == tj->TSA[1])
-	return tj->TSA[0];
-    else return NULL;
+TrackSeg* TrackJoint::FindOtherSegOfTwo (TrackSeg * seg) {
+    assert(TSCount == 2);
+    if (seg == TSA[0])
+	return TSA[1];
+    else if (seg == TSA[1])
+	return TSA[0];
+    else {
+        assert(!"Can't find alleged seg in joint.");
+        return NULL;
+    }
 }
 
 void TrackSeg::Cut () {
@@ -742,20 +842,39 @@ void TrackSeg::Cut () {
 	    return;
 	}
     }
+    Undo::RecordSegmentCut(this);
+    Cut_();
+}
 
+static GraphicObject* is_in_list(GraphicObject* argg) {
+    return
+    MapAllGraphicObjects(
+      [](GraphicObject*g, void* argg) {
+          return (int)(g == argg);
+      }, argg);
+}
+
+void TrackSeg::Cut_() {
+    SALVAGER("TrackSeg::Cut_ initial");
+    assert(is_in_list(this));
     TrackJoint * j0 = Ends[0].Joint;
     TrackJoint * j1 = Ends[1].Joint;
     if (j0->TSCount == 2)
-	FindOtherSegOfTwo (j0, this)->Select();
+	j0->FindOtherSegOfTwo (this)->Select();
     else if (j1->TSCount == 2)
-	FindOtherSegOfTwo (j1, this)->Select();
+	j1->FindOtherSegOfTwo (this)->Select();
     else if (j0->TSCount == 3)
 	j0->Select();
     else if (j1->TSCount == 3)
 	j1->Select();
-    delete this;
-    SALVAGER("TrackSeg::Cut final");
-    BufferModified = TRUE;
+    j0->DelBranch(this);
+    j1->DelBranch(this);
+    if (j0->TSCount == 0)
+        j0->ConsignToLimbo();
+    if (j1->TSCount == 0)
+        j1->ConsignToLimbo();
+    ConsignToLimbo();
+    SALVAGER("TrackSeg::Cut_ final");
 }
 
 
@@ -780,22 +899,34 @@ void TrackJoint::MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1) {
 }
 
 
-void TrackJoint::SwallowOtherJoint (TrackJoint * other_tj) {
-    for (int j = 0; j < other_tj->TSCount; j++) {
-        TrackSeg& S = *(other_tj->TSA[j]);
-        TSEX his_end_in_this_ts = S.FindEndIndex(other_tj);
-        assert(his_end_in_this_ts != TSEX::NOTFOUND);
-        Insulated = FALSE; //otherwisem AddBranch will fail silently....
-	AddBranch(&S);
-        S.GetEnd(his_end_in_this_ts).Joint = this;
-        
-        if (TSCount > 2) {  // français pour "3"
-	    EnsureID();
-            Insulated = FALSE; // 3-12-2022
-            Organized = FALSE; // 3-14-2022
-        }
+void TrackJoint::SwallowOtherJoint (TrackJoint * movee, bool make_undo_record) {
+    /* current instance ("this") is the CONSUMER.  We will consume the movee
+       (in spite of the pandemic--no "theetre" needed).*/
+    std::vector<TrackJoint*> opposing_joints;
+
+    assert(TSCount < 3);
+    assert(!Insulated); // 5-21-2022 c'est illegale
+    for (int j = 0; j < movee->TSCount; j++) {
+        TrackSeg& S = *(movee->TSA[j]);
+        assert(AddBranch(&S));
+        TSEX endx = S.FindEndIndex(movee);
+        assert(endx != TSEX::NOTFOUND);
+        TrackSegEnd& E = S.GetEnd(endx);
+        TrackSegEnd& Other = S.GetOtherEnd(endx);
+        if (make_undo_record)
+            opposing_joints.push_back(Other.Joint);
+        E.Joint = this;
+            //Insulated = FALSE; // 3-12-2022
+            // Organized = FALSE; // 3-14-2022 //defeats the Undo system. To hell with organization.
     }
-    delete other_tj;
+   
+    if (make_undo_record)
+        Undo::RecordJointMerge(this, movee, opposing_joints);
+
+    /* This looks nilpotent, but it actually causes the newly-moved segment(s) to be relocated and
+     displayed properly.*/
+    MoveToNewWPpos(wp_x, wp_y);
+    movee->ConsignToLimbo();
 }
 
 void TrackJoint::Organize () {
@@ -838,8 +969,6 @@ void TrackSeg::Select () {
 }
 
 void TrackSeg::SelectMsg() {
-    char circuit_description [40];
-
     WP_cord delty = Ends[1].wpy - Ends[0].wpy;
     WP_cord deltx = Ends[1].wpx - Ends[0].wpx;
     double angle = atan2((double)delty, (double)deltx) * 180.0 / CONST_PI;
@@ -848,16 +977,20 @@ void TrackSeg::SelectMsg() {
     else if (angle > 90.0)
 	angle -= 180.00;
 
+    std::string addendum;
     if (Circuit == NULL)
-	strcpy (circuit_description, "(no TC assigned)");
-    else 
-	sprintf (circuit_description,
-		  "TC %ld", Circuit->StationNo);
+        addendum = "(no TC assigned)";
+    else
+        addendum = "TC " + std::to_string(Circuit->StationNo);
+#if DEBUG
+    addendum += FormatString(" %p", this);
+#endif
+
     StatusMessage ("Segment: (%d,%d)->(%d,%d), length %.1f direction %.1f  %s",
 		   Ends[0].wpx, Ends[0].wpy,
 		   Ends[1].wpx, Ends[1].wpy,
 		   Length, -angle,
-		   circuit_description);
+                   addendum.c_str());
 }
 
 void TrackJoint::Select () {
@@ -879,39 +1012,43 @@ void TrackJoint::Select () {
 void TrackJoint::EnsureID() {
     if (Nomenclature == 0) {
 	Nomenclature = AssignID(1);
-	BufferModified = TRUE;
+        // don't think we have to undo/redo this
     }
     PositionLabel();
 }
 
 void TrackJoint::FlipNum() {
     if (TSCount > 1) {
+        CacheInitSnapshot();
 	NumFlip = !NumFlip;
-	BufferModified = TRUE;
+        Undo::RecordChangedJointProps(this, StealPropCache());
 	PositionLabel();
     }
 }
 
-void TrackJoint::Insulate() {
-    if (!Insulated) {
-	Insulated = TRUE;
-	EnsureID();
-	BufferModified = TRUE;
+void TrackJoint::Insulate(bool insulate) {
+    BOOL Bb = insulate ? TRUE : FALSE;
+    if (Insulated != Bb) {
+        CacheInitSnapshot();
+        Insulated = insulate ? TRUE : FALSE;
+        EnsureID();
+        Undo::RecordChangedJointProps(this, StealPropCache());
 	Invalidate();
     }
 }
 
-int TrackJoint::SignalCount () {
+int TrackJoint::SignalExlightCount () {
     int s = 0;
     for (int i = 0; i < TSCount; i++) {
 	TrackSeg * ts = TSA[i];
         TSEX endx = ts->FindEndIndex(this);
 	if (ts->GetEnd(endx).SignalProtectingEntrance)
 	    s++;
+        if (ts->GetEnd(endx).ExLight)
+            s++;
     }
     return s;
 }
-
 
 BOOL TrackSegEnd::InsulatedP() {
     return Joint->Insulated;
@@ -934,19 +1071,24 @@ int ShiftMapper2 (GraphicObject * g, void *) {
 }   
 
 
-void ShiftLayout (int x, int y) {
+void ShiftLayout(int x, int y) {
+    ShiftLayout_(x, y);
+    Undo::RecordShiftLayout(x, y);
+}
+
+void ShiftLayout_ (int x, int y) {
     _sm_xy xy = {x, y};
     HCURSOR old_cursor = SetCursor (LoadCursor (NULL, IDC_WAIT));
     MapAllGraphicObjects (ShiftMapper1, &xy);
     MapAllGraphicObjects (ShiftMapper2, &xy);
     SetCursor (old_cursor);
     ComputeVisibleObjectsLast();
-    BufferModified = TRUE;		/* to put it mildly */
 }
 
 
 Virtual void	GraphicObject:: Cut() {
-    BufferModified = TRUE;
+    Undo::RecordGOCut(this);
+    assert(TypeID() != TypeId::JOINT);  //for debugging -- must remove
     delete this;
     StatusMessage ("  ");
 }
@@ -973,4 +1115,49 @@ Virtual BOOL    TrackJoint::ClickToSelectP() {
 }
 Virtual BOOL    TrackSeg::ClickToSelectP() {
     return FALSE;
+}
+
+void TrackJoint::PropCell::Snapshot_(TrackJoint* tj) {
+    SnapWPpos(tj);
+    Insulated = tj->Insulated;
+    NumFlip = tj->NumFlip;
+    Nomenclature = tj->Nomenclature;
+    AB0 = tj->SwitchAB0;
+    SBS.Init(tj->TSA);
+}
+
+void TrackJoint::PropCell::Restore_(TrackJoint* tj) {
+    bool rplbl = false;
+    tj->Insulated = Insulated;
+    if (tj->TSCount == 3 && (Nomenclature != tj->Nomenclature || AB0 != tj->SwitchAB0)) {
+        if (tj->Nomenclature)
+            SwitchConsistencyUndefine(tj->Nomenclature, tj->SwitchAB0);
+        if (Nomenclature)
+            SwitchConsistencyDefine(Nomenclature, AB0);
+    }
+
+    if (Nomenclature != tj->Nomenclature) {
+        tj->Nomenclature = Nomenclature;
+        rplbl = true;
+    }
+    if (AB0 != tj->SwitchAB0) {
+        tj->SwitchAB0 = AB0;
+        rplbl = true;
+    }
+    tj->SwitchAB0 = AB0;
+    if (tj->NumFlip != NumFlip) {
+        tj->NumFlip = NumFlip;
+        rplbl = true;
+    }
+    if (wp_x != tj->wp_x || wp_y != tj->wp_y)
+        tj->MoveToNewWPpos(wp_x, wp_y);
+    if (SBS != SwitchBranchSnapshot(tj->TSA)) {
+        tj->TSA[(int)TSAX::NORMAL] = SBS.A[(int)TSAX::NORMAL];
+        tj->TSA[(int)TSAX::REVERSE] = SBS.A[(int)TSAX::REVERSE];
+        // Forward ref to TrackSeg no good
+        ((GraphicObject*)((*tj)[TSAX::NORMAL]))->Select();
+    }
+    // does a "get organization", must be done last.
+    if (rplbl)
+        tj->PositionLabel();
 }

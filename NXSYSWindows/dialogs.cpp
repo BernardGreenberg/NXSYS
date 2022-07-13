@@ -17,13 +17,13 @@
 #include <winver.h>
 #include <regex>
 #include <cassert>
-#include "getmodtm.h"
 #include "StatusReport.h"
 #include "Resources2022.h"
 #include "nxgo.h"
 #include "WinApiSTL.h"
 #include "STLExtensions.h"
 #include "MessageBox.h"
+#include "AppBuildSignature.h"
 
 #define TIME_FORMAT_STR "%#d %b %Y %H:%M"
 //#include <getmodtm.h>
@@ -156,59 +156,16 @@ void StatusReportDialog (HWND win, HINSTANCE instance) {
 
 DLGPROC_DCL about_box_DlgProc(HWND dialog, unsigned message, WPARAM wParam, LPARAM lParam)
 {
-	char atime[40];
 	switch (message) {
 	case WM_INITDIALOG:
 	{
-		time_t modtime = GetModuleTime(NULL);
-		strftime(atime, COUNTOF(atime), TIME_FORMAT_STR, localtime(&modtime));
-		SetDlgItemText(dialog, ABOUT_VSN, atime);
-		char Path[_MAX_PATH]{};
-		GetModuleFileName(NULL, Path, COUNTOF(Path));
-	
-		size_t version_data_len = GetFileVersionInfoSize(Path, NULL);
-		std::vector<char> infov(version_data_len);
-
-		LPVOID vdp = &infov[0];
-		GetFileVersionInfo(Path, NULL, (DWORD)version_data_len, vdp);
-		VS_FIXEDFILEINFO    *pFileInfo = NULL;
-		UINT                puLenFileInfo = 0;
-		VerQueryValue(vdp, TEXT("\\"),(LPVOID*)&pFileInfo, &puLenFileInfo);
-		WORD fv1 = HIWORD(pFileInfo->dwFileVersionMS);
-		WORD fv2 = LOWORD(pFileInfo->dwFileVersionMS);
-		WORD fv3 = HIWORD(pFileInfo->dwFileVersionLS);
-		WORD fv4 = LOWORD(pFileInfo->dwFileVersionLS);
-		char sversion[128];
-		sprintf_s<COUNTOF(sversion)>
-			(sversion, "Version %d.%d.%d.%d (MS Windows 10, %d bit)", fv1, fv2, fv3, fv4,
-#ifdef _WIN64
-			64);
-#else
-			32);
-#endif
-		SetDlgItemText(dialog, ABOUT_NUM_VSN, sversion);
-		const char * build_type = 
-#if defined(_DEBUG) || defined(DEBUG)
-			"Debug"
-#else
-			"Release"
-#endif
-			;
-
-		sprintf_s <COUNTOF(sversion)>(sversion, "Built (%s)", build_type);
-		SetDlgItemText(dialog, ABOUT_BUILD, sversion);
-		UINT cbLang{};
-		WORD* langInfo = nullptr;;
-
-		VerQueryValue(vdp, "\\VarFileInfo\\Translation", (LPVOID*)&langInfo, &cbLang);
-		//Prepare the label -- default lang is bytes 0 & 1 of langInfo
-		sprintf_s<COUNTOF(sversion)>(sversion, "\\StringFileInfo\\%04x%04x\\%s",
-			langInfo[0], langInfo[1], "ProductName");
-		//Get the string from the resource data
-		LPTSTR lpProdName = nullptr;
-		UINT cbBufSize{};
-		if (VerQueryValue(vdp, sversion, (LPVOID*)&lpProdName, &cbBufSize))	
-		    SetDlgItemText(dialog, ABOUT_PRODUCT_NAME, lpProdName);
+		AppBuildSignature ABS;
+		ABS.Populate();
+		string name = ABS.ApplicationName + " " + ABS.VersionString() + "/" + ABS.OSBase();
+		SetDlgItemText(dialog, ABOUT_NUM_VSN, name.c_str());
+		string build = ABS.BuildString();
+		SetDlgItemText(dialog, ABOUT_BUILD, build.c_str());	
+	    SetDlgItemText(dialog, ABOUT_PRODUCT_NAME, ABS.ApplicationName.c_str());
 		return TRUE;
 	}
 

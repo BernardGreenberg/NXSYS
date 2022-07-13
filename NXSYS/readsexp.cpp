@@ -140,9 +140,9 @@ class LispStringInputSource : public LispInputSource {
 
 class LispNarrowStringInputSource : public LispStringInputSource {
     private:
-	char * s;
+	const char * s;
     public:
-	LispNarrowStringInputSource (char  * s_) : s(s_) {};
+	LispNarrowStringInputSource (const char  * s_) : s(s_) {};
 	int virtual Getc();
 };
 
@@ -749,7 +749,7 @@ Sexpr read_sexp_from_string (LispTChar * s, int *leftp) {
 }
 
 
-Sexpr read_sexp_from_char_string (char * s, int *leftp) {
+Sexpr read_sexp_from_char_string (const char * s, int *leftp) {
     Stack_count = 0;
     LispNarrowStringInputSource F(s);
     Sexpr v = read_sexp_i (F, 0);

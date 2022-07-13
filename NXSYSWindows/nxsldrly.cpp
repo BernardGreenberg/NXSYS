@@ -8,7 +8,7 @@
 #include "ldraw.h"
 #include "nxldapi.h"
 #include "compat32.h"
-#include "incexppt.h"
+#include "replace_filename.h"
 
 static int Initsw = 0;
 extern char app_name[];
@@ -178,8 +178,8 @@ int HackTopLevelForm (Sexpr s, const char * fname) {
 		    return 0;
 	}
 	else if (CAR(s) == INCLUDE) {
-		std::string BUF;
-	    const char * ffname = include_expand_path (fname, CADR(s).u.s, BUF);
+            std::string sfname = replace_filename(fname, CADR(s).u.s);
+            const char * ffname = sfname.c_str();
 	    FILE* ff = fopen (ffname, "r");
 	    if (ff == NULL) {
 		char buf [MAXPATH+50];

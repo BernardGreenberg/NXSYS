@@ -241,12 +241,12 @@ void GraphicObject::Hit (int /*mh*/) {
 void GraphicObject::UnHit () {
 }
 
-int GraphicObject::ObjIDp(long) {
+bool GraphicObject::IsNomenclature(long) {
     return 0;
 }
 
-int GraphicObject::TypeID() {
-    return -1;
+TypeId GraphicObject::TypeID() {
+    return TypeId::NONE;
 }
 
 GraphicObject * GetMouseHitObject (WORD x, WORD y) {
@@ -295,17 +295,17 @@ GraphicObject * MapAllVisibleGraphicObjects (GOGOMapperFcn fn, void * arg) {
     return NULL;
 }
 
-int MapGraphicObjectsOfType (short key, GOMapperFcn fn) {
+int MapGraphicObjectsOfType (TypeId type, GOMapperFcn fn) {
     for (GraphicObject * g : AllObjects)
-        if (g->TypeID() == key)
+        if (g->TypeID() == type)
 	    if (fn (g))
 		return 1;
     return 0;
 }
 
-GraphicObject* MapFindGraphicObjectsOfType (short key, GOGOMapperFcn fn, void* arg) {
+GraphicObject* MapFindGraphicObjectsOfType (TypeId type, GOGOMapperFcn fn, void* arg) {
        for (GraphicObject * g : AllObjects)
-           if (g->TypeID() == key)
+           if (g->TypeID() == type)
                if (fn (g, arg))
                    return g;
     return NULL;
@@ -338,6 +338,10 @@ void GraphicObject::GetVisible () {
 
 
 void GraphicObject::MoveWP (WP_cord x, WP_cord y) {
+    /* 5/13/2022 - very important for null property changes in new TLEdit undo system*/
+    if (x == wp_x && y == wp_y)
+        return;
+
     BOOL wasv = Visible;
     if (wasv)
 	Hide();
@@ -358,6 +362,14 @@ void GraphicObject::MoveSC (SC_cord scx, SC_cord scy) {
 void GraphicObject::ComputeWPRect() {
 }
 
+void GraphicObject::AfterResurrection() {
+#if TLEDIT
+    AllObjects.insert(this);
+#else
+    AllObjects.push_back(this);
+#endif
+}
+
 static void Deselect0() {
     SelectedObject = NULL;
     if (SelectHook)
@@ -365,6 +377,11 @@ static void Deselect0() {
 }
 
 GraphicObject::~GraphicObject() {
+    BeforeInterment();
+}
+
+/* Needed in TLEdit, but no harm in using it as a dtor stage in NXSYS */
+void GraphicObject::BeforeInterment() {
 
     if (this == SelectedObject)
 	Deselect0();
@@ -393,30 +410,43 @@ void FreeGraphicObjects () {
     VisibleObjects.clear();
 }
 
+WPPOINT GraphicObject::WPPoint() {
+    return WPPOINT(wp_x, wp_y);
+}
 
-GraphicObject * FindHitObject (long id, short key) {
+GraphicObject * FindObjectByTypeAndWPpos(TypeId type, WP_cord wp_x, WP_cord wp_y) {
+    WPPOINT P(wp_x, wp_y);
     for (GraphicObject * g : AllObjects) {
-	if (g->TypeID() == key)
-	    if (g->ObjIDp (id))
+        if (g->TypeID() == type)
+            if (P == g->WPPoint())
+                return g;
+    }
+    return NULL;
+}
+
+GraphicObject * FindObjectByNomAndType (long nomenclature, TypeId type) {
+    for (GraphicObject * g : AllObjects) {
+	if (g->TypeID() == type)
+	    if (g->IsNomenclature (nomenclature))
 		return g;
     }
     return NULL;
 }
 
 
-GraphicObject * FindHitObjectOfType (short key, WORD x, WORD y) {
+GraphicObject * FindHitObjectOfType (TypeId type, WORD x, WORD y) {
     for (GraphicObject *g : VisibleObjects)
-	if (g->TypeID () == key)
+	if (g->TypeID () == type)
 	    if (g->HitP((long)x, (long)y))
 		return g;
     return NULL;
 }
 
-GraphicObject * FindHitObjectOfTypes (short *keys, int nkeys, WORD x, WORD y){
+GraphicObject * FindHitObjectOfTypes (TypeId *keys, int nkeys, WORD x, WORD y){
     long lx = (long) x;
     long ly = (long) y;
     for (GraphicObject *g : VisibleObjects) {
-	int type = g->TypeID();
+	TypeId type = g->TypeID();
 	for (int j = 0; j < nkeys; j++)
 	    if (keys[j] == type)
 		if (g->HitP(lx, ly))
@@ -476,7 +506,11 @@ void NXGOMouseMove (WORD x, WORD y) {
 	NXGOMouseUp();
 }
 
-
+#if TLEDIT
+/* Defaults for virtuals */
+bool GraphicObject::HasManagedID() {return false;}
+int  GraphicObject::ManagedID() {return -1;}
+#endif
 
 
 void NXGO_SetViewportDims (int width, int height) {

@@ -8,7 +8,7 @@
 #include "xturnout.h"
 
 #include "trafficlever.h"
-#include "objid.h"
+#include "typeid.h"
 #include "ssdlg.h"
 #include "brushpen.h"
 #include "compat32.h"
@@ -62,6 +62,7 @@ TrafficLever::TrafficLever (int xno, WP_cord p_wpx, WP_cord p_wpy,
     Normal = !TriState;
     Reverse = FALSE;
     NL = RL = NULL;
+    XlkgNo = 0;  /* in TLEdit, prevent SetXlkgNo from deallocating garbage */
     SetXlkgNo (xno);
     KnobLeft = KnobRight = false;
 }
@@ -81,10 +82,12 @@ void TrafficLever::SetNormalReverseStatus (int right_normal) {
     ReverseIndex = 1 - NormalIndex;
 }
 
+#ifndef TLEDIT
 void TrafficLever::SetXlkgNo (int xno) {
     XlkgNo = xno;
     NumString = std::to_string(xno);
 }
+#endif
 
 void InitTrafficLeverData () {
     int gu = GU2;			/* expected to be about 3 */
@@ -223,11 +226,11 @@ void TrafficLever::DrawKnob(HDC hdc) {
     LineTo(hdc, tpx, tpy);
 }
 
-Virtual int TrafficLever::TypeID() {
-    return ID_TRAFFICLEVER;
+Virtual TypeId TrafficLever::TypeID() {
+    return TypeId::TRAFFICLEVER;
 }
 
-Virtual int TrafficLever::ObjIDp(long id) {
+Virtual bool TrafficLever::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 

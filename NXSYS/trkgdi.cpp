@@ -4,7 +4,7 @@
 
 #include "windows.h"
 #include "nxgo.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 
 #include "lyglobal.h"

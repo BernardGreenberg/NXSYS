@@ -11,9 +11,7 @@
 		5B25510D25B87C6500A68D73 /* rlycomp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B4DF3A02314AC24001FDE00 /* rlycomp.cpp */; };
 		5B25511B25B87D2B00A68D73 /* RelayIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B25511A25B87D2B00A68D73 /* RelayIndex.cpp */; };
 		5B25512E25B87D6100A68D73 /* readsexp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BE49431199D0B2D007BD6BF /* readsexp.cpp */; };
-		5B25513625B87D6900A68D73 /* incexppt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */; };
 		5B25513E25B87D6E00A68D73 /* lspmacro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062C8199E73F1008CDCA0 /* lspmacro.cpp */; };
-		5B25514625B87DF400A68D73 /* STLfnsplit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */; };
 		5B25515D25B87FAE00A68D73 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B25516525B87FB800A68D73 /* RelayLispSubstrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */; };
 		5B2551A225B8FC4400A68D73 /* RelayIndex in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B25511825B87D2B00A68D73 /* RelayIndex */; };
@@ -31,14 +29,14 @@
 		5B46BA0E19AC069C0041C4FE /* RelayDrafterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B46BA0D19AC069C0041C4FE /* RelayDrafterController.mm */; };
 		5B47F34419AE70AB00CBB80A /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
 		5B47F34719AE717500CBB80A /* HelpController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B47F34519AE717500CBB80A /* HelpController.mm */; };
-		5B4DF3A42314C011001FDE00 /* incexppt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */; };
 		5B4DF3A52314C41E001FDE00 /* readsexp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BE49431199D0B2D007BD6BF /* readsexp.cpp */; };
 		5B4DF3A62314C50A001FDE00 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B4DF3A72314C538001FDE00 /* lspmacro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062C8199E73F1008CDCA0 /* lspmacro.cpp */; };
 		5B4DF3A82314C575001FDE00 /* RelayLispSubstrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */; };
-		5B4DF3A92314C625001FDE00 /* STLfnsplit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */; };
 		5B4DF3AE2314C958001FDE00 /* fasdump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B4DF3AD2314C957001FDE00 /* fasdump.cpp */; };
 		5B4E1810222AC4AF00DED5AE /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5B4E180F222AC4AF00DED5AE /* Credits.rtf */; };
+		5B4E62B2284AEA6A002A6C7E /* OpenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4E62B1284AEA6A002A6C7E /* OpenIcon.png */; };
+		5B4E62B4284AF17C002A6C7E /* OpenIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B4E62B3284AF17C002A6C7E /* OpenIcon.pxd */; };
 		5B50EE4719BA549B004CAABE /* TrainDlgController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B50EE4619BA549B004CAABE /* TrainDlgController.mm */; };
 		5B50EE4919BA9455004CAABE /* ChooseTrack.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B50EE4819BA9455004CAABE /* ChooseTrack.xib */; };
 		5B50EE4D19BA95A7004CAABE /* ChooseTrackController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B50EE4B19BA95A7004CAABE /* ChooseTrackController.mm */; };
@@ -49,6 +47,7 @@
 		5B54429519B0F00F00FB5537 /* RelaySelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B54429419B0F00F00FB5537 /* RelaySelector.xib */; };
 		5B54429819B0F1F500FB5537 /* RelayListView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429719B0F1F500FB5537 /* RelayListView.mm */; };
 		5B54429E19B148D300FB5537 /* RelaySelectorController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B54429D19B148D300FB5537 /* RelaySelectorController.mm */; };
+		5B556418282B095B00FB2CF6 /* undo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B556416282B095B00FB2CF6 /* undo.cpp */; };
 		5B5AE614230C4C5400348612 /* RelayLispSubstrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */; };
 		5B5AE615230C505000348612 /* RelayLispSubstrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */; };
 		5B5AE622230C784200348612 /* readsexp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BE49431199D0B2D007BD6BF /* readsexp.cpp */; };
@@ -63,8 +62,8 @@
 		5B5CB8551A0B949500010B8B /* MiscApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B5CB8531A0B949300010B8B /* MiscApi.mm */; };
 		5B6567EF25C30EA800411B8F /* CustomAboutController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B6567EE25C30EA800411B8F /* CustomAboutController.mm */; };
 		5B65680625C3144B00411B8F /* CustomAbout.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B65680525C3144B00411B8F /* CustomAbout.xib */; };
-		5B65680F25C331D100411B8F /* icon_256x256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B65680E25C331D000411B8F /* icon_256x256.png */; };
-		5B65681825C3388700411B8F /* About.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B65681725C3388700411B8F /* About.html */; };
+		5B65680F25C331D100411B8F /* NXSYS256x256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B65680E25C331D000411B8F /* NXSYS256x256.png */; };
+		5B65681825C3388700411B8F /* AboutNXSYS.html in Resources */ = {isa = PBXBuildFile; fileRef = 5B65681725C3388700411B8F /* AboutNXSYS.html */; };
 		5B67045419CF90DF002B6E28 /* RubberBandView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B67045319CF90DF002B6E28 /* RubberBandView.mm */; };
 		5B67045719D0A4B0002B6E28 /* Toolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B67045619D0A4B0002B6E28 /* Toolbar.xib */; };
 		5B6705BA19D0B31A002B6E28 /* SignalNE.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B6705B919D0B31A002B6E28 /* SignalNE.png */; };
@@ -81,10 +80,20 @@
 		5B7B02AD2314D8C9000747A0 /* wrttko32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B7B02AC2314D8C9000747A0 /* wrttko32.cpp */; };
 		5B823887231FD6A4008EAF27 /* NXGOLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B823886231FD6A4008EAF27 /* NXGOLabel.cpp */; };
 		5B823888231FD6A4008EAF27 /* NXGOLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B823886231FD6A4008EAF27 /* NXGOLabel.cpp */; };
+		5B87B310284A58560002AB18 /* SaveIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B30D284A58560002AB18 /* SaveIcon.png */; };
+		5B87B311284A58560002AB18 /* UndoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B30E284A58560002AB18 /* UndoIcon.png */; };
+		5B87B312284A58560002AB18 /* RedoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B30F284A58560002AB18 /* RedoIcon.png */; };
+		5B87B314284A5D4F0002AB18 /* QuitIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B313284A5D4F0002AB18 /* QuitIcon.png */; };
+		5B87B319284A5DB40002AB18 /* SaveIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B315284A5DB40002AB18 /* SaveIcon.pxd */; };
+		5B87B31A284A5DB40002AB18 /* UndoIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B316284A5DB40002AB18 /* UndoIcon.pxd */; };
+		5B87B31B284A5DB40002AB18 /* RedoIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B317284A5DB40002AB18 /* RedoIcon.pxd */; };
+		5B87B31C284A5DB40002AB18 /* QuitIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B318284A5DB40002AB18 /* QuitIcon.pxd */; };
 		5B88FEA11DF71C0D00D8F8E0 /* SwitchConsistency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */; };
+		5B8E51D0286741290019B12F /* lispmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4419A0D171008CDCA0 /* lispmath.cpp */; };
+		5B8FCBE9284B6D6100855897 /* HelpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBE8284B6D6100855897 /* HelpIcon.png */; };
+		5B8FCBEB284B6D9E00855897 /* HelpIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
 		5BA6F72919CC61DD002551F7 /* HelpController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B47F34519AE717500CBB80A /* HelpController.mm */; };
-		5BA6F72C19CC65A8002551F7 /* tlehlptx.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */; };
 		5BA6F73119CCA375002551F7 /* SignalProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA6F72F19CCA375002551F7 /* SignalProperties.xib */; };
 		5BA6F73719CCBB1A002551F7 /* GenericWindlgController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA6F73619CCBB1A002551F7 /* GenericWindlgController.mm */; };
 		5BA6F73A19CCF58E002551F7 /* TLWindowsSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BA6F73819CCF58E002551F7 /* TLWindowsSide.cpp */; };
@@ -95,8 +104,6 @@
 		5BA7E73719D4B592006F9A04 /* TextStringProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA7E73619D4B592006F9A04 /* TextStringProperties.xib */; };
 		5BA7E73D19D4C0C1006F9A04 /* TextStringProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E73B19D4C0C1006F9A04 /* TextStringProperties.mm */; };
 		5BA7E74019D56426006F9A04 /* joints.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BA7E73F19D56426006F9A04 /* joints.png */; };
-		5BA7E74319D57EDB006F9A04 /* STLfnsplit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */; };
-		5BA7E74419D589CD006F9A04 /* STLfnsplit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */; };
 		5BA7E74719D962A5006F9A04 /* CanvasExtentDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA7E74519D962A5006F9A04 /* CanvasExtentDialog.xib */; };
 		5BA7E74A19D9652E006F9A04 /* CanvasExtentDialogController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E74919D9652E006F9A04 /* CanvasExtentDialogController.mm */; };
 		5BA7E74E19DAA31C006F9A04 /* ShiftLayoutDialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA7E74C19DAA31C006F9A04 /* ShiftLayoutDialog.mm */; };
@@ -112,12 +119,10 @@
 		5BABB8A119A8EB9900ECA09A /* MacFullSignals.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BABB8A019A8EB9900ECA09A /* MacFullSignals.mm */; };
 		5BAC930C19C8FE7200673BDC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE487CF199D0A5C007BD6BF /* Cocoa.framework */; };
 		5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC931019C8FE7200673BDC /* InfoPlist.strings */; };
-		5BAC931819C8FE7200673BDC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC931619C8FE7200673BDC /* Credits.rtf */; };
 		5BAC931B19C8FE7200673BDC /* TLEditAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC931A19C8FE7200673BDC /* TLEditAppDelegate.mm */; };
 		5BAC932019C8FE7200673BDC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC931F19C8FE7200673BDC /* Images.xcassets */; };
 		5BAC933919C8FECC00673BDC /* Winapi.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062E7199F72C3008CDCA0 /* Winapi.mm */; };
 		5BAC934219C8FECC00673BDC /* lispmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4419A0D171008CDCA0 /* lispmath.cpp */; };
-		5BAC934319C8FECC00673BDC /* incexppt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */; };
 		5BAC934619C8FECC00673BDC /* nxgo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062DA199EE3E7008CDCA0 /* nxgo.cpp */; };
 		5BAC934819C8FECC00673BDC /* plight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4819A0D5D7008CDCA0 /* plight.cpp */; };
 		5BAC934919C8FECC00673BDC /* pswitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */; };
@@ -155,6 +160,7 @@
 		5BAECC9B19DDA55F00B949EA /* NXMessageBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BA92A7319DD72690098DBEC /* NXMessageBox.mm */; };
 		5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA92A7419DD72690098DBEC /* NXMessageBox.xib */; };
 		5BAFFBAE19BA4C4900AEE791 /* TrainDlg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */; };
+		5BB30A8E283A686000788BEC /* Limbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB30A8D283A686000788BEC /* Limbo.cpp */; };
 		5BB322512668062E00F4A611 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B47F34819AFAFE800CBB80A /* WebKit.framework */; };
 		5BB5802427C3D00400FB0ED5 /* InterlockingLibrary.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5802327C3CFFD00FB0ED5 /* InterlockingLibrary.xml */; };
 		5BB5802927C3D36D00FB0ED5 /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5802827C3D36D00FB0ED5 /* pugixml.cpp */; };
@@ -165,6 +171,12 @@
 		5BB5803D27C5586000FB0ED5 /* Help.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803C27C5586000FB0ED5 /* Help.xml */; };
 		5BB5803E27C5586000FB0ED5 /* Help.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5BB5803C27C5586000FB0ED5 /* Help.xml */; };
 		5BB5804127C55CF400FB0ED5 /* HelpDirectory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */; };
+		5BC13705285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */; };
+		5BC13706285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */; };
+		5BC1370D285E1288007D52E1 /* TLEdit256x256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC1370B285E1288007D52E1 /* TLEdit256x256.png */; };
+		5BC1370E285E132B007D52E1 /* CustomAbout.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B65680525C3144B00411B8F /* CustomAbout.xib */; };
+		5BC1370F285E1331007D52E1 /* CustomAboutController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B6567EE25C30EA800411B8F /* CustomAboutController.mm */; };
+		5BC13711285E219D007D52E1 /* AboutTLEdit.html in Resources */ = {isa = PBXBuildFile; fileRef = 5BC13710285E219D007D52E1 /* AboutTLEdit.html */; };
 		5BC911AD19DDA738006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
 		5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AC19DDA738006C590E /* dialog_warning.png */; };
 		5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BC911AB19DDA738006C590E /* agt_stop_256.png */; };
@@ -221,7 +233,6 @@
 		5BF06F4119A0C727008CDCA0 /* ldgut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4019A0C727008CDCA0 /* ldgut.cpp */; };
 		5BF06F4319A0CF9F008CDCA0 /* trafficlever.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4219A0CF9F008CDCA0 /* trafficlever.cpp */; };
 		5BF06F4519A0D171008CDCA0 /* lispmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4419A0D171008CDCA0 /* lispmath.cpp */; };
-		5BF06F4719A0D2AE008CDCA0 /* incexppt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */; };
 		5BF06F4919A0D5D7008CDCA0 /* plight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4819A0D5D7008CDCA0 /* plight.cpp */; };
 		5BF06F4B19A0D6BC008CDCA0 /* pswitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */; };
 		5BF06F5119A0E5B4008CDCA0 /* rlyindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F5019A0E5B4008CDCA0 /* rlyindex.cpp */; };
@@ -273,6 +284,7 @@
 
 /* Begin PBXFileReference section */
 		5B133A572649F5B800120B10 /* TrainWreck256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrainWreck256.png; sourceTree = "<group>"; };
+		5B1BE71728317E560015F847 /* propedit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = propedit.h; sourceTree = "<group>"; };
 		5B25511825B87D2B00A68D73 /* RelayIndex */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RelayIndex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B25511A25B87D2B00A68D73 /* RelayIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayIndex.cpp; sourceTree = "<group>"; };
 		5B256F4819B52B6D00F41527 /* StopPolicy.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StopPolicy.xib; sourceTree = "<group>"; };
@@ -296,6 +308,7 @@
 		5B30B10627E4FDCC000D59C8 /* salvager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = salvager.cpp; sourceTree = "<group>"; };
 		5B30B10727E4FDCC000D59C8 /* salvager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = salvager.hpp; sourceTree = "<group>"; };
 		5B30B10927E929C5000D59C8 /* nxproduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxproduct.h; sourceTree = "<group>"; };
+		5B3754A8286D344E00A35C97 /* MacPackagingTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MacPackagingTool; sourceTree = "<group>"; };
 		5B43834B19C4B47600BEECDC /* AppDelegateGlobals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegateGlobals.h; sourceTree = "<group>"; };
 		5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BigYellowXView.mm; sourceTree = "<group>"; };
 		5B46B9FD19A9188F0041C4FE /* FullSignalView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FullSignalView.h; sourceTree = "<group>"; };
@@ -314,6 +327,9 @@
 		5B4DF3AC2314C872001FDE00 /* tkov2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tkov2.h; sourceTree = "<group>"; };
 		5B4DF3AD2314C957001FDE00 /* fasdump.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fasdump.cpp; sourceTree = "<group>"; };
 		5B4E180F222AC4AF00DED5AE /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Credits.rtf; path = ../NXSYSMac/en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		5B4E62B1284AEA6A002A6C7E /* OpenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenIcon.png; sourceTree = "<group>"; };
+		5B4E62B3284AF17C002A6C7E /* OpenIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = OpenIcon.pxd; sourceTree = "<group>"; };
+		5B4E62B5284AF19B002A6C7E /* MacAppwinAPIs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacAppwinAPIs.h; sourceTree = "<group>"; };
 		5B50EE4519BA549B004CAABE /* TrainDlgController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrainDlgController.h; sourceTree = "<group>"; };
 		5B50EE4619BA549B004CAABE /* TrainDlgController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TrainDlgController.mm; sourceTree = "<group>"; };
 		5B50EE4819BA9455004CAABE /* ChooseTrack.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseTrack.xib; sourceTree = "<group>"; };
@@ -335,6 +351,8 @@
 		5B54429619B0F1F500FB5537 /* RelayListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelayListView.h; sourceTree = "<group>"; };
 		5B54429719B0F1F500FB5537 /* RelayListView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayListView.mm; sourceTree = "<group>"; };
 		5B54429D19B148D300FB5537 /* RelaySelectorController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelaySelectorController.mm; sourceTree = "<group>"; };
+		5B556416282B095B00FB2CF6 /* undo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = undo.cpp; sourceTree = "<group>"; };
+		5B556417282B095B00FB2CF6 /* undo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = undo.h; sourceTree = "<group>"; };
 		5B5AE60E230B2C3200348612 /* MapperThunker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapperThunker.h; sourceTree = "<group>"; };
 		5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RelayLispSubstrate.cpp; sourceTree = "<group>"; };
 		5B5AE616230C57B300348612 /* RelayLispSubstrate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RelayLispSubstrate.h; sourceTree = "<group>"; };
@@ -347,7 +365,7 @@
 		5B5AE6412310908100348612 /* brushpen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brushpen.h; sourceTree = "<group>"; };
 		5B5AE6422310B21600348612 /* lispmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lispmath.h; sourceTree = "<group>"; };
 		5B5AE6442310D6CC00348612 /* nxsysapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxsysapp.h; sourceTree = "<group>"; };
-		5B5AE6472311531700348612 /* objid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objid.h; sourceTree = "<group>"; };
+		5B5AE6472311531700348612 /* typeid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typeid.h; sourceTree = "<group>"; };
 		5B5AE648231153AB00348612 /* trainaut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trainaut.h; sourceTree = "<group>"; };
 		5B5AE649231153C900348612 /* trainapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trainapi.h; sourceTree = "<group>"; };
 		5B5AE64A2311542F00348612 /* ssdlg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssdlg.h; sourceTree = "<group>"; };
@@ -366,7 +384,7 @@
 		5B5AE6572311593700348612 /* nxldapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxldapi.h; sourceTree = "<group>"; };
 		5B5AE6582311595800348612 /* nxldwin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxldwin.h; sourceTree = "<group>"; };
 		5B5AE65923115D2000348612 /* resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resource.h; sourceTree = "<group>"; };
-		5B5AE65A23115DB700348612 /* incexppt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = incexppt.h; sourceTree = "<group>"; };
+		5B5AE65A23115DB700348612 /* replace_filename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = replace_filename.h; sourceTree = "<group>"; };
 		5B5AE65B2311648700348612 /* text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = text.h; sourceTree = "<group>"; };
 		5B5AE65C231168E500348612 /* cccint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cccint.h; sourceTree = "<group>"; };
 		5B5AE65D2311692F00348612 /* PolyKludge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyKludge.h; sourceTree = "<group>"; };
@@ -388,8 +406,8 @@
 		5B6567ED25C30EA800411B8F /* CustomAboutController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomAboutController.h; sourceTree = "<group>"; };
 		5B6567EE25C30EA800411B8F /* CustomAboutController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = CustomAboutController.mm; sourceTree = "<group>"; };
 		5B65680525C3144B00411B8F /* CustomAbout.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomAbout.xib; sourceTree = "<group>"; };
-		5B65680E25C331D000411B8F /* icon_256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_256x256.png; sourceTree = "<group>"; };
-		5B65681725C3388700411B8F /* About.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = About.html; sourceTree = "<group>"; };
+		5B65680E25C331D000411B8F /* NXSYS256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NXSYS256x256.png; sourceTree = "<group>"; };
+		5B65681725C3388700411B8F /* AboutNXSYS.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = AboutNXSYS.html; sourceTree = "<group>"; };
 		5B67045219CF90DF002B6E28 /* RubberBandView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubberBandView.h; sourceTree = "<group>"; };
 		5B67045319CF90DF002B6E28 /* RubberBandView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RubberBandView.mm; sourceTree = "<group>"; };
 		5B67045519D02F86002B6E28 /* WinMouseDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinMouseDefs.h; sourceTree = "<group>"; };
@@ -409,11 +427,22 @@
 		5B7B02AC2314D8C9000747A0 /* wrttko32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wrttko32.cpp; sourceTree = "<group>"; };
 		5B7B02AE2314DCCD000747A0 /* opsintel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opsintel.h; sourceTree = "<group>"; };
 		5B823886231FD6A4008EAF27 /* NXGOLabel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NXGOLabel.cpp; sourceTree = "<group>"; };
+		5B87B30D284A58560002AB18 /* SaveIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SaveIcon.png; sourceTree = "<group>"; };
+		5B87B30E284A58560002AB18 /* UndoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UndoIcon.png; sourceTree = "<group>"; };
+		5B87B30F284A58560002AB18 /* RedoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RedoIcon.png; sourceTree = "<group>"; };
+		5B87B313284A5D4F0002AB18 /* QuitIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = QuitIcon.png; sourceTree = "<group>"; };
+		5B87B315284A5DB40002AB18 /* SaveIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SaveIcon.pxd; sourceTree = "<group>"; };
+		5B87B316284A5DB40002AB18 /* UndoIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = UndoIcon.pxd; sourceTree = "<group>"; };
+		5B87B317284A5DB40002AB18 /* RedoIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = RedoIcon.pxd; sourceTree = "<group>"; };
+		5B87B318284A5DB40002AB18 /* QuitIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = QuitIcon.pxd; sourceTree = "<group>"; };
+		5B87B31D284A707F0002AB18 /* tletoolb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tletoolb.cpp; sourceTree = "<group>"; };
 		5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = SwitchConsistency.cpp; sourceTree = "<group>"; };
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
+		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
+		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
+		5B985F12282E851C0036648F /* PropCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropCell.h; sourceTree = "<group>"; };
 		5BA5385227DF75DB00D39B28 /* ValidatingValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValidatingValue.h; sourceTree = "<group>"; };
-		5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tlehlptx.txt; sourceTree = "<group>"; };
 		5BA6F73019CCA375002551F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SignalProperties.xib; sourceTree = "<group>"; };
 		5BA6F73519CCBB1A002551F7 /* GenericWindlgController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericWindlgController.h; sourceTree = "<group>"; };
 		5BA6F73619CCBB1A002551F7 /* GenericWindlgController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = GenericWindlgController.mm; sourceTree = "<group>"; };
@@ -426,8 +455,6 @@
 		5BA7E73619D4B592006F9A04 /* TextStringProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextStringProperties.xib; sourceTree = "<group>"; };
 		5BA7E73B19D4C0C1006F9A04 /* TextStringProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextStringProperties.mm; sourceTree = "<group>"; };
 		5BA7E73F19D56426006F9A04 /* joints.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = joints.png; sourceTree = "<group>"; };
-		5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STLfnsplit.cpp; sourceTree = "<group>"; };
-		5BA7E74219D57EDB006F9A04 /* STLfnsplit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STLfnsplit.h; sourceTree = "<group>"; };
 		5BA7E74619D962A5006F9A04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/CanvasExtentDialog.xib; sourceTree = "<group>"; };
 		5BA7E74819D9652E006F9A04 /* CanvasExtentDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasExtentDialogController.h; sourceTree = "<group>"; };
 		5BA7E74919D9652E006F9A04 /* CanvasExtentDialogController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CanvasExtentDialogController.mm; sourceTree = "<group>"; };
@@ -454,7 +481,7 @@
 		5BABBE1327B7143100AED491 /* NXSYSWindows.sln */ = {isa = PBXFileReference; lastKnownFileType = text; path = NXSYSWindows.sln; sourceTree = "<group>"; };
 		5BABBE1427B7143100AED491 /* helpdlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helpdlg.cpp; sourceTree = "<group>"; };
 		5BABBE1627B7143100AED491 /* getmodtm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = getmodtm.h; sourceTree = "<group>"; };
-		5BABBE1727B7143100AED491 /* dialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialogs.cpp; sourceTree = "<group>"; };
+		5BABBE1727B7143100AED491 /* dialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialogs.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BABBE5D27B7143200AED491 /* tled.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = tled.rc; sourceTree = "<group>"; };
 		5BABBE5E27B7143200AED491 /* timers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timers.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BABBE5F27B7143200AED491 /* rtracwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rtracwin.cpp; sourceTree = "<group>"; tabWidth = 8; };
@@ -484,7 +511,6 @@
 		5BAC931119C8FE7200673BDC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5BAC931319C8FE7200673BDC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5BAC931519C8FE7200673BDC /* TLEdit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TLEdit-Prefix.pch"; sourceTree = "<group>"; };
-		5BAC931719C8FE7200673BDC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		5BAC931919C8FE7200673BDC /* TLEditAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TLEditAppDelegate.h; sourceTree = "<group>"; };
 		5BAC931A19C8FE7200673BDC /* TLEditAppDelegate.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = TLEditAppDelegate.mm; sourceTree = "<group>"; };
 		5BAC931D19C8FE7200673BDC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TLEdit.xib; sourceTree = "<group>"; };
@@ -505,6 +531,10 @@
 		5BAD55FE1A011BE2006AEEAB /* DeviceContext.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = DeviceContext.mm; sourceTree = "<group>"; };
 		5BAD56011A014B09006AEEAB /* DumbStubs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DumbStubs.cpp; sourceTree = "<group>"; };
 		5BAFFBAD19BA4C4900AEE791 /* TrainDlg.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrainDlg.xib; sourceTree = "<group>"; };
+		5BB30A8B283699DB00788BEC /* LayoutModified.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutModified.h; sourceTree = "<group>"; };
+		5BB30A8C283927DE00788BEC /* ijid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ijid.h; sourceTree = "<group>"; };
+		5BB30A8D283A686000788BEC /* Limbo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Limbo.cpp; sourceTree = "<group>"; };
+		5BB30A8F283A687400788BEC /* Limbo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Limbo.h; sourceTree = "<group>"; };
 		5BB5801A27C072B600FB0ED5 /* ParseCommandLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseCommandLine.h; sourceTree = "<group>"; };
 		5BB5801B27C072B600FB0ED5 /* ParseCommandLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseCommandLine.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BB5801D27C1DB1500FB0ED5 /* RecentFileMan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecentFileMan.cpp; sourceTree = "<group>"; tabWidth = 4; };
@@ -526,6 +556,12 @@
 		5BB5803F27C55CF400FB0ED5 /* HelpDirectory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelpDirectory.cpp; sourceTree = "<group>"; };
 		5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HelpDirectory.hpp; sourceTree = "<group>"; };
 		5BB5804327C6B2E300FB0ED5 /* TLDlgProc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLDlgProc.h; path = TLEdit/TLDlgProc.h; sourceTree = SOURCE_ROOT; };
+		5BC13700285CC12A007D52E1 /* AppBuildSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppBuildSignature.h; sourceTree = "<group>"; };
+		5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MacAppBuildSignature.mm; sourceTree = "<group>"; };
+		5BC13707285D31A5007D52E1 /* WinAppBuildSignature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinAppBuildSignature.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		5BC1370A285D3AE6007D52E1 /* tlehelp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tlehelp.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		5BC1370B285E1288007D52E1 /* TLEdit256x256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TLEdit256x256.png; path = ../NXSYSMac/TLEdit256x256.png; sourceTree = "<group>"; };
+		5BC13710285E219D007D52E1 /* AboutTLEdit.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = AboutTLEdit.html; path = ../NXSYSMac/AboutTLEdit.html; sourceTree = "<group>"; };
 		5BC911AB19DDA738006C590E /* agt_stop_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = agt_stop_256.png; sourceTree = "<group>"; };
 		5BC911AC19DDA738006C590E /* dialog_warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dialog_warning.png; sourceTree = "<group>"; };
 		5BC911B319DED5DD006C590E /* RelayState.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = RelayState.mm; sourceTree = "<group>"; };
@@ -542,6 +578,8 @@
 		5BD064DE19CEE9E300564BD5 /* TLEditMainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TLEditMainView.mm; sourceTree = "<group>"; };
 		5BD6200B19CD997C00DB8A8F /* TrackSegProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrackSegProperties.xib; sourceTree = "<group>"; };
 		5BD6200D19CD9E6E00DB8A8F /* TrackSegDialog.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TrackSegDialog.mm; sourceTree = "<group>"; };
+		5BD7ADA828454CE6000A1CF5 /* DocSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DocSource; sourceTree = "<group>"; };
+		5BD7ADA928481FFE000A1CF5 /* MenuUndoRedo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MenuUndoRedo.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BE487CC199D0A5C007BD6BF /* NXSYSMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NXSYSMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE487CF199D0A5C007BD6BF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5BE487D2199D0A5C007BD6BF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -554,9 +592,11 @@
 		5BE487E2199D0A5C007BD6BF /* AppDelegate.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; tabWidth = 8; };
 		5BE487E5199D0A5C007BD6BF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5BE487E7199D0A5C007BD6BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		5BE487EE199D0A5C007BD6BF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		5BE49431199D0B2D007BD6BF /* readsexp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = readsexp.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BE49436199D1A14007BD6BF /* lisp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lisp.h; sourceTree = "<group>"; tabWidth = 8; };
+		5BE940FB2853941A00B3FD4A /* relay.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = relay.ico; sourceTree = "<group>"; };
+		5BE940FC2853941A00B3FD4A /* WinReadResText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinReadResText.h; sourceTree = "<group>"; };
+		5BE940FD2853941A00B3FD4A /* nx2.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = nx2.ico; sourceTree = "<group>"; };
 		5BED455D19D1ADD300A22DE8 /* Plights.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plights.png; sourceTree = "<group>"; };
 		5BED456019D1B5EA00A22DE8 /* Pswitch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pswitch.png; sourceTree = "<group>"; };
 		5BED456219D1BC4E00A22DE8 /* PanelSwitchProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PanelSwitchProperties.xib; sourceTree = "<group>"; };
@@ -594,7 +634,6 @@
 		5BF06F4019A0C727008CDCA0 /* ldgut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ldgut.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F4219A0CF9F008CDCA0 /* trafficlever.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trafficlever.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F4419A0D171008CDCA0 /* lispmath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lispmath.cpp; sourceTree = "<group>"; tabWidth = 8; };
-		5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = incexppt.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F4819A0D5D7008CDCA0 /* plight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = plight.cpp; path = ../plight.cpp; sourceTree = "<group>"; };
 		5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pswitch.cpp; path = ../pswitch.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F5019A0E5B4008CDCA0 /* rlyindex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rlyindex.cpp; sourceTree = "<group>"; tabWidth = 8; };
@@ -602,6 +641,7 @@
 		5BF06F5419A10D03008CDCA0 /* CompiledCodeInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompiledCodeInterface.cpp; path = NXSYSMac/CompiledCodeInterface.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacNxldwin.cpp; path = NXSYSMac/MacNxldwin.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacRelayGraphics.cpp; path = ../NXSYSMac/MacRelayGraphics.cpp; sourceTree = "<group>"; };
+		5BF4134028799C8700C002BC /* DesignWindowDims.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesignWindowDims.h; path = ../../../Music/DesignWindowDims.h; sourceTree = "<group>"; };
 		5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = edtraflev.cpp; sourceTree = "<group>"; };
 		5BF7CEB419CA2A4200DF6ECE /* edswkey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = edswkey.cpp; sourceTree = "<group>"; };
 		5BF7CEB619CA2AFD00DF6ECE /* dragger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dragger.cpp; sourceTree = "<group>"; };
@@ -821,7 +861,7 @@
 				5B5AE6562311590B00348612 /* dialogs.h */,
 				5B5AE64C231154CC00348612 /* fsigctl.h */,
 				5B5AE6532311585400348612 /* helpdlg.h */,
-				5B5AE65A23115DB700348612 /* incexppt.h */,
+				5B5AE65A23115DB700348612 /* replace_filename.h */,
 				5B5AE65F23116E4D00348612 /* ldraw.h */,
 				5B5AE6422310B21600348612 /* lispmath.h */,
 				5B5AE64D2311556900348612 /* loaddcls.h */,
@@ -830,7 +870,7 @@
 				5B5AE6572311593700348612 /* nxldapi.h */,
 				5B5AE6582311595800348612 /* nxldwin.h */,
 				5B5AE6442310D6CC00348612 /* nxsysapp.h */,
-				5B5AE6472311531700348612 /* objid.h */,
+				5B5AE6472311531700348612 /* typeid.h */,
 				5B5AE65D2311692F00348612 /* PolyKludge.h */,
 				5B5AE65923115D2000348612 /* resource.h */,
 				5B8A10CF25BF7DF8007857A8 /* rlymenu.h */,
@@ -841,6 +881,7 @@
 				5B5AE648231153AB00348612 /* trainaut.h */,
 				5B62AB5322FF06BB00169445 /* traindcl.h */,
 				5B5AE652231156C500348612 /* usermsg.h */,
+				5BF4134028799C8700C002BC /* DesignWindowDims.h */,
 			);
 			name = "Random Headers";
 			sourceTree = "<group>";
@@ -875,6 +916,8 @@
 				5B2B337523036808004007A9 /* swkey.h */,
 				5B2B336E23033412004007A9 /* xtgtrack.h */,
 				5B5AE65E23116A0C00348612 /* xturnout.h */,
+				5B1BE71728317E560015F847 /* propedit.h */,
+				5BB30A8C283927DE00788BEC /* ijid.h */,
 			);
 			name = "V2 Headers";
 			sourceTree = "<group>";
@@ -889,8 +932,8 @@
 		5B5AE6652311BF4E00348612 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				5BB5804327C6B2E300FB0ED5 /* TLDlgProc.h */,
 				5B5AE6702311C05800348612 /* assignid.h */,
+				5BB5804327C6B2E300FB0ED5 /* TLDlgProc.h */,
 				5B5AE6662311BF5F00348612 /* dialogs.h */,
 				5B5AE6672311BF6900348612 /* dragger.h */,
 				5B5AE66B2311BFB000348612 /* objreg.h */,
@@ -902,6 +945,10 @@
 				5B5AE66A2311BF9600348612 /* tletoolb.h */,
 				5B30B10727E4FDCC000D59C8 /* salvager.hpp */,
 				5B5AE6692311BF8600348612 /* tlpropdlg.h */,
+				5B556417282B095B00FB2CF6 /* undo.h */,
+				5B985F12282E851C0036648F /* PropCell.h */,
+				5BB30A8B283699DB00788BEC /* LayoutModified.h */,
+				5BB30A8F283A687400788BEC /* Limbo.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -909,11 +956,11 @@
 		5B6567E325C3096400411B8F /* Custom About */ = {
 			isa = PBXGroup;
 			children = (
-				5B65680E25C331D000411B8F /* icon_256x256.png */,
+				5B65680E25C331D000411B8F /* NXSYS256x256.png */,
 				5B6567ED25C30EA800411B8F /* CustomAboutController.h */,
 				5B6567EE25C30EA800411B8F /* CustomAboutController.mm */,
 				5B65680525C3144B00411B8F /* CustomAbout.xib */,
-				5B65681725C3388700411B8F /* About.html */,
+				5B65681725C3388700411B8F /* AboutNXSYS.html */,
 			);
 			name = "Custom About";
 			sourceTree = "<group>";
@@ -921,6 +968,7 @@
 		5B67045819D0B2DF002B6E28 /* Toolbar */ = {
 			isa = PBXGroup;
 			children = (
+				5B87B30C284A54A60002AB18 /* PXDs */,
 				5B6705C619D0F2E4002B6E28 /* icons */,
 				5B67045619D0A4B0002B6E28 /* Toolbar.xib */,
 				5B6705BB19D0C25F002B6E28 /* ToolbarController.h */,
@@ -932,6 +980,12 @@
 		5B6705C619D0F2E4002B6E28 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				5B8FCBE8284B6D6100855897 /* HelpIcon.png */,
+				5B4E62B1284AEA6A002A6C7E /* OpenIcon.png */,
+				5B87B313284A5D4F0002AB18 /* QuitIcon.png */,
+				5B87B30F284A58560002AB18 /* RedoIcon.png */,
+				5B87B30D284A58560002AB18 /* SaveIcon.png */,
+				5B87B30E284A58560002AB18 /* UndoIcon.png */,
 				5BA7E73F19D56426006F9A04 /* joints.png */,
 				5BA7E73419D42589006F9A04 /* flipno.png */,
 				5BA7E73219D39DC0006F9A04 /* insulate.png */,
@@ -962,6 +1016,19 @@
 			name = "Mac Support";
 			path = TLEdit;
 			sourceTree = SOURCE_ROOT;
+		};
+		5B87B30C284A54A60002AB18 /* PXDs */ = {
+			isa = PBXGroup;
+			children = (
+				5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */,
+				5B4E62B3284AF17C002A6C7E /* OpenIcon.pxd */,
+				5B87B318284A5DB40002AB18 /* QuitIcon.pxd */,
+				5B87B317284A5DB40002AB18 /* RedoIcon.pxd */,
+				5B87B315284A5DB40002AB18 /* SaveIcon.pxd */,
+				5B87B316284A5DB40002AB18 /* UndoIcon.pxd */,
+			);
+			path = PXDs;
+			sourceTree = "<group>";
 		};
 		5BA6F72D19CCA335002551F7 /* Dialogs */ = {
 			isa = PBXGroup;
@@ -1003,9 +1070,15 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5BC13707285D31A5007D52E1 /* WinAppBuildSignature.cpp */,
+				5BC1370A285D3AE6007D52E1 /* tlehelp.cpp */,
+				5BE940FD2853941A00B3FD4A /* nx2.ico */,
+				5BE940FB2853941A00B3FD4A /* relay.ico */,
+				5BE940FC2853941A00B3FD4A /* WinReadResText.h */,
 				5B30B10527E16383000D59C8 /* Setup32 */,
 				5BB5802227C3329900FB0ED5 /* Installer */,
 				5BB5802027C32E7900FB0ED5 /* NXSYSWinApp.h */,
+				5BD7ADA928481FFE000A1CF5 /* MenuUndoRedo.cpp */,
 				5BB5801F27C32E7900FB0ED5 /* WinApp.cpp */,
 				5BB5801D27C1DB1500FB0ED5 /* RecentFileMan.cpp */,
 				5BB5801E27C1DB1500FB0ED5 /* RecentFileMan.h */,
@@ -1037,6 +1110,7 @@
 				5BABBE1627B7143100AED491 /* getmodtm.h */,
 				5BABBE1727B7143100AED491 /* dialogs.cpp */,
 				5BABBE5D27B7143200AED491 /* tled.rc */,
+				5B87B31D284A707F0002AB18 /* tletoolb.cpp */,
 				5BABBE5E27B7143200AED491 /* timers.cpp */,
 				5BABBE5F27B7143200AED491 /* rtracwin.cpp */,
 				5BABBE6027B7143200AED491 /* getmodtm.c */,
@@ -1080,7 +1154,6 @@
 			isa = PBXGroup;
 			children = (
 				5B67045819D0B2DF002B6E28 /* Toolbar */,
-				5BA6F72B19CC65A8002551F7 /* tlehlptx.txt */,
 				5BF7CEBB19CB525100DF6ECE /* Mac Progs */,
 				5BAC931F19C8FE7200673BDC /* Images.xcassets */,
 				5BAC930E19C8FE7200673BDC /* Supporting Files */,
@@ -1098,7 +1171,6 @@
 				5BAC931019C8FE7200673BDC /* InfoPlist.strings */,
 				5BAC931319C8FE7200673BDC /* main.m */,
 				5BAC931519C8FE7200673BDC /* TLEdit-Prefix.pch */,
-				5BAC931619C8FE7200673BDC /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1106,22 +1178,24 @@
 		5BAC936919C8FF5200673BDC /* TLEdit */ = {
 			isa = PBXGroup;
 			children = (
+				5BAC936C19C8FFC600673BDC /* appwin.cpp */,
+				5BAC937019C9B63400673BDC /* assignid.cpp */,
 				5BF7CEB619CA2AFD00DF6ECE /* dragger.cpp */,
 				5BF7CEB419CA2A4200DF6ECE /* edswkey.cpp */,
-				5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */,
-				5BACF5EF19CA1F56007F59A0 /* edpswitch.cpp */,
 				5BACF5ED19CA1A31007F59A0 /* edexlt.cpp */,
-				5BACF5EB19CA187B007F59A0 /* edplight.cpp */,
-				5BAC937A19C9D0A900673BDC /* edtext.cpp */,
 				5BAC937619C9C95100673BDC /* editsig.cpp */,
+				5BACF5EB19CA187B007F59A0 /* edplight.cpp */,
+				5BACF5EF19CA1F56007F59A0 /* edpswitch.cpp */,
+				5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */,
+				5BAC937A19C9D0A900673BDC /* edtext.cpp */,
 				5BAC937819C9CCEB00673BDC /* objdlgs.cpp */,
-				5BAC937419C9BDA600673BDC /* save.cpp */,
 				5BAC937219C9B66C00673BDC /* objreg.cpp */,
-				5BAC937019C9B63400673BDC /* assignid.cpp */,
-				5BAC936C19C8FFC600673BDC /* appwin.cpp */,
+				5BAC937419C9BDA600673BDC /* save.cpp */,
 				5B30B10627E4FDCC000D59C8 /* salvager.cpp */,
 				5BAC936A19C8FFAA00673BDC /* tledit.cpp */,
+				5B556416282B095B00FB2CF6 /* undo.cpp */,
 				5B5AE6652311BF4E00348612 /* Headers */,
+				5BB30A8D283A686000788BEC /* Limbo.cpp */,
 			);
 			name = TLEdit;
 			path = TLEdit/tled;
@@ -1160,6 +1234,7 @@
 				5BB5804027C55CF400FB0ED5 /* HelpDirectory.hpp */,
 				5BA5385227DF75DB00D39B28 /* ValidatingValue.h */,
 				5BAC2DA828025C8D000B43CF /* LoadFiascoMaps.h */,
+				5BC13700285CC12A007D52E1 /* AppBuildSignature.h */,
 			);
 			name = NewShared;
 			sourceTree = "<group>";
@@ -1196,6 +1271,8 @@
 		5BE487C3199D0A5C007BD6BF = {
 			isa = PBXGroup;
 			children = (
+				5B3754A8286D344E00A35C97 /* MacPackagingTool */,
+				5BD7ADA828454CE6000A1CF5 /* DocSource */,
 				5BB5803C27C5586000FB0ED5 /* Help.xml */,
 				5BB5803A27C44EE100FB0ED5 /* TLEDocumentation */,
 				5BB5803027C40E2400FB0ED5 /* Interlockings */,
@@ -1234,7 +1311,6 @@
 				5B5AE627230C8B8B00348612 /* libc.tbd */,
 				5B47F34819AFAFE800CBB80A /* WebKit.framework */,
 				5BE487CF199D0A5C007BD6BF /* Cocoa.framework */,
-				5BE487EE199D0A5C007BD6BF /* XCTest.framework */,
 				5BE487D1199D0A5C007BD6BF /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -1275,6 +1351,7 @@
 				5BF062C6199D60BF008CDCA0 /* MainView.mm */,
 				5BE487E7199D0A5C007BD6BF /* Images.xcassets */,
 				5B46BA0219AAA21A0041C4FE /* WinViewUtils.h */,
+				5BC13704285CC532007D52E1 /* MacAppBuildSignature.mm */,
 			);
 			name = "App Windows";
 			path = NXSYSMac;
@@ -1309,8 +1386,6 @@
 				5B93AB8319B208D700F70DDB /* MacRlyDlg.h */,
 				5BCEA76519C24A8C003BA3A7 /* NXTimers.mm */,
 				5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */,
-				5BA7E74119D57EDB006F9A04 /* STLfnsplit.cpp */,
-				5BA7E74219D57EDB006F9A04 /* STLfnsplit.h */,
 			);
 			name = NXMac;
 			path = NXSYS;
@@ -1350,7 +1425,6 @@
 				5BF062EE199FA8A4008CDCA0 /* V1V2Compat */,
 				5BF0630319A028A8008CDCA0 /* fullsig.cpp */,
 				5BF06F4019A0C727008CDCA0 /* ldgut.cpp */,
-				5BF06F4619A0D2AE008CDCA0 /* incexppt.cpp */,
 				5BF062C8199E73F1008CDCA0 /* lspmacro.cpp */,
 				5BF06F4419A0D171008CDCA0 /* lispmath.cpp */,
 				5BF062DA199EE3E7008CDCA0 /* nxgo.cpp */,
@@ -1415,6 +1489,8 @@
 			children = (
 				5BAC931919C8FE7200673BDC /* TLEditAppDelegate.h */,
 				5BAC931A19C8FE7200673BDC /* TLEditAppDelegate.mm */,
+				5BC1370B285E1288007D52E1 /* TLEdit256x256.png */,
+				5BC13710285E219D007D52E1 /* AboutTLEdit.html */,
 				5BAC931C19C8FE7200673BDC /* TLEdit.xib */,
 				5BD064DE19CEE9E300564BD5 /* TLEditMainView.mm */,
 				5B67045219CF90DF002B6E28 /* RubberBandView.h */,
@@ -1425,6 +1501,7 @@
 				5BA7E74B19DAA31C006F9A04 /* ShiftLayoutDialog.h */,
 				5BA7E74C19DAA31C006F9A04 /* ShiftLayoutDialog.mm */,
 				5BA7E74D19DAA31C006F9A04 /* ShiftLayoutDialog.xib */,
+				5B4E62B5284AF19B002A6C7E /* MacAppwinAPIs.h */,
 			);
 			name = "Mac Progs";
 			sourceTree = "<group>";
@@ -1490,6 +1567,7 @@
 				5BAC930719C8FE7100673BDC /* Sources */,
 				5BAC930819C8FE7100673BDC /* Frameworks */,
 				5BAC930919C8FE7100673BDC /* Resources */,
+				5B8FCBEC2850030400855897 /* Record Build Data */,
 			);
 			buildRules = (
 			);
@@ -1571,9 +1649,13 @@
 				5B6705BF19D0EACC002B6E28 /* SignalSW.png in Resources */,
 				5BA7E73519D42589006F9A04 /* flipno.png in Resources */,
 				5B6705C519D0F2A3002B6E28 /* Cut-icon.png in Resources */,
+				5B8FCBE9284B6D6100855897 /* HelpIcon.png in Resources */,
 				5BED456319D1BC4E00A22DE8 /* PanelSwitchProperties.xib in Resources */,
 				5BD064D419CDCC3700564BD5 /* JointProperties.xib in Resources */,
 				5BD6200C19CD997C00DB8A8F /* TrackSegProperties.xib in Resources */,
+				5B87B311284A58560002AB18 /* UndoIcon.png in Resources */,
+				5B8FCBEB284B6D9E00855897 /* HelpIcon.pxd in Resources */,
+				5B87B310284A58560002AB18 /* SaveIcon.png in Resources */,
 				5BED456919D1E14100A22DE8 /* traffic.png in Resources */,
 				5BF4F08019CB79A50089B3E4 /* TLEdit.xib in Resources */,
 				5BA6F73119CCA375002551F7 /* SignalProperties.xib in Resources */,
@@ -1583,11 +1665,19 @@
 				5B6705C819D0F8C9002B6E28 /* showex.png in Resources */,
 				5BD064DB19CE44A600564BD5 /* SwitchProperties.xib in Resources */,
 				5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */,
+				5B4E62B2284AEA6A002A6C7E /* OpenIcon.png in Resources */,
+				5BC13711285E219D007D52E1 /* AboutTLEdit.html in Resources */,
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
+				5BC1370D285E1288007D52E1 /* TLEdit256x256.png in Resources */,
 				5BA7E74719D962A5006F9A04 /* CanvasExtentDialog.xib in Resources */,
+				5B87B31B284A5DB40002AB18 /* RedoIcon.pxd in Resources */,
+				5B87B314284A5D4F0002AB18 /* QuitIcon.png in Resources */,
+				5B87B319284A5DB40002AB18 /* SaveIcon.pxd in Resources */,
+				5B87B31C284A5DB40002AB18 /* QuitIcon.pxd in Resources */,
 				5BED456119D1B5EA00A22DE8 /* Pswitch.png in Resources */,
-				5BA6F72C19CC65A8002551F7 /* tlehlptx.txt in Resources */,
+				5B87B312284A58560002AB18 /* RedoIcon.png in Resources */,
 				5BA7E74019D56426006F9A04 /* joints.png in Resources */,
+				5B4E62B4284AF17C002A6C7E /* OpenIcon.pxd in Resources */,
 				5BED456C19D1E19300A22DE8 /* TrafficLeverProperties.xib in Resources */,
 				5BAECC9C19DDA56600B949EA /* NXMessageBox.xib in Resources */,
 				5BA7E73719D4B592006F9A04 /* TextStringProperties.xib in Resources */,
@@ -1595,14 +1685,15 @@
 				5BC911AF19DDB290006C590E /* agt_stop_256.png in Resources */,
 				5BC911B019DDB294006C590E /* dialog_warning.png in Resources */,
 				5B6705C119D0EC70002B6E28 /* document_properties.png in Resources */,
+				5BC1370E285E132B007D52E1 /* CustomAbout.xib in Resources */,
 				5B6705BA19D0B31A002B6E28 /* SignalNE.png in Resources */,
 				5B6705DA19D1A148002B6E28 /* PanelLightProperties.xib in Resources */,
+				5B87B31A284A5DB40002AB18 /* UndoIcon.pxd in Resources */,
 				5BAC932019C8FE7200673BDC /* Images.xcassets in Resources */,
 				5BB5803E27C5586000FB0ED5 /* Help.xml in Resources */,
 				5B6705D319D19BA7002B6E28 /* ExitLightProperties.xib in Resources */,
 				5BA7E73319D39DC0006F9A04 /* insulate.png in Resources */,
 				5B67045719D0A4B0002B6E28 /* Toolbar.xib in Resources */,
-				5BAC931819C8FE7200673BDC /* Credits.rtf in Resources */,
 				5BA7E74F19DAA31C006F9A04 /* ShiftLayoutDialog.xib in Resources */,
 				5B6705CC19D1942A002B6E28 /* SwitchKeyProperties.xib in Resources */,
 			);
@@ -1612,7 +1703,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B65680F25C331D100411B8F /* icon_256x256.png in Resources */,
+				5B65680F25C331D100411B8F /* NXSYS256x256.png in Resources */,
 				5B4E1810222AC4AF00DED5AE /* Credits.rtf in Resources */,
 				5BB5802F27C40D9400FB0ED5 /* Documentation in Resources */,
 				5BC911AE19DDA738006C590E /* dialog_warning.png in Resources */,
@@ -1620,7 +1711,7 @@
 				5BC911C119DEE5EA006C590E /* Preferences.xib in Resources */,
 				5BB5803127C40E2400FB0ED5 /* Interlockings in Resources */,
 				5B256F4919B52B6D00F41527 /* StopPolicy.xib in Resources */,
-				5B65681825C3388700411B8F /* About.html in Resources */,
+				5B65681825C3388700411B8F /* AboutNXSYS.html in Resources */,
 				5B54273E27BC76F9006EEDEF /* RelayIndex.md in Resources */,
 				5BB5802427C3D00400FB0ED5 /* InterlockingLibrary.xml in Resources */,
 				5B50EE4919BA9455004CAABE /* ChooseTrack.xib in Resources */,
@@ -1667,6 +1758,24 @@
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# older: date \"+%-m/%-d/%y %H:%M\" > $PROJECT_DIR/$TARGET_NAME/build_timestamp.txt\nbuddy=/usr/libexec/PlistBuddy\npl_path=${PROJECT_DIR}/${INFOPLIST_FILE}\nadate=$(date \"+%a %b %d %T %Z %Y\")\n$buddy \"$pl_path\" -c \"set BundleBuildDate \\\"$adate\\\"\"\n\nbuildNumber=$($buddy -c \"Print CFBundleVersion\" \"$pl_path\")\nbuildNumber=$(($buildNumber + 1))\n$buddy -c \"Set :CFBundleVersion $buildNumber\" \"$pl_path\"\n\nverstr=$($buddy -c \"Print CFBundleShortVersionString\" \"$pl_path\")\n\necho $buildNumber $adate $verstr ${CONFIGURATION}>>${PROJECT_DIR}/NXSYSMac.build_log.txt\n";
 			showEnvVarsInLog = 0;
 		};
+		5B8FCBEC2850030400855897 /* Record Build Data */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Record Build Data";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buddy=/usr/libexec/PlistBuddy\npl_path=${PROJECT_DIR}/${INFOPLIST_FILE}\nadate=$(date \"+%a %b %d %T %Z %Y\")\n$buddy \"$pl_path\" -c \"set BundleBuildDate \\\"$adate\\\"\"\n\nbuildNumber=$($buddy -c \"Print CFBundleVersion\" \"$pl_path\")\nbuildNumber=$(($buildNumber + 1))\n$buddy -c \"Set :CFBundleVersion $buildNumber\" \"$pl_path\"\n\nverstr=$($buddy -c \"Print CFBundleShortVersionString\" \"$pl_path\")\n\necho $buildNumber $adate $verstr ${CONFIGURATION}>>${PROJECT_DIR}/TLEdit.build_log.txt\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1674,11 +1783,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B25513625B87D6900A68D73 /* incexppt.cpp in Sources */,
 				5B25516525B87FB800A68D73 /* RelayLispSubstrate.cpp in Sources */,
 				5BFB49E827AC7682006BE311 /* argparse.cpp in Sources */,
 				5B25513E25B87D6E00A68D73 /* lspmacro.cpp in Sources */,
-				5B25514625B87DF400A68D73 /* STLfnsplit.cpp in Sources */,
 				5B25515D25B87FAE00A68D73 /* STLExtensions.cpp in Sources */,
 				5BFA498725BB4A7000886135 /* SourceLoc.cpp in Sources */,
 				5B25512E25B87D6100A68D73 /* readsexp.cpp in Sources */,
@@ -1690,12 +1797,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B4DF3A42314C011001FDE00 /* incexppt.cpp in Sources */,
 				5B4DF3A82314C575001FDE00 /* RelayLispSubstrate.cpp in Sources */,
 				5B25510D25B87C6500A68D73 /* rlycomp.cpp in Sources */,
 				5B7B02AB2314CB62000747A0 /* writetko.cpp in Sources */,
 				5B4DF3A72314C538001FDE00 /* lspmacro.cpp in Sources */,
-				5B4DF3A92314C625001FDE00 /* STLfnsplit.cpp in Sources */,
 				5B7B02AD2314D8C9000747A0 /* wrttko32.cpp in Sources */,
 				5B4DF3A62314C50A001FDE00 /* STLExtensions.cpp in Sources */,
 				5B4DF3A52314C41E001FDE00 /* readsexp.cpp in Sources */,
@@ -1708,6 +1813,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B5AE622230C784200348612 /* readsexp.cpp in Sources */,
+				5B8E51D0286741290019B12F /* lispmath.cpp in Sources */,
 				5B5AE625230C823600348612 /* lspmacro.cpp in Sources */,
 				5B5AE6712312BE7500348612 /* STLExtensions.cpp in Sources */,
 				5B5AE626230C834A00348612 /* RelayLispSubstrate.cpp in Sources */,
@@ -1720,14 +1826,12 @@
 			files = (
 				5BAC933919C8FECC00673BDC /* Winapi.mm in Sources */,
 				5BAC937919C9CCEB00673BDC /* objdlgs.cpp in Sources */,
-				5BA7E74319D57EDB006F9A04 /* STLfnsplit.cpp in Sources */,
 				5BF7CEB519CA2A4200DF6ECE /* edswkey.cpp in Sources */,
 				5BAC936D19C8FFC600673BDC /* appwin.cpp in Sources */,
 				5BAC937119C9B63400673BDC /* assignid.cpp in Sources */,
 				5BACF5EC19CA187B007F59A0 /* edplight.cpp in Sources */,
 				5BAD56001A011ECA006AEEAB /* DeviceContext.mm in Sources */,
 				5BAC934219C8FECC00673BDC /* lispmath.cpp in Sources */,
-				5BAC934319C8FECC00673BDC /* incexppt.cpp in Sources */,
 				5BF7CEB719CA2AFD00DF6ECE /* dragger.cpp in Sources */,
 				5BA7E73D19D4C0C1006F9A04 /* TextStringProperties.mm in Sources */,
 				5BAC934619C8FECC00673BDC /* nxgo.cpp in Sources */,
@@ -1736,6 +1840,7 @@
 				5BAC937319C9B66C00673BDC /* objreg.cpp in Sources */,
 				5BAC934A19C8FECC00673BDC /* readsexp.cpp in Sources */,
 				5BA7E72F19D3681F006F9A04 /* MacObjDlgs.mm in Sources */,
+				5BB30A8E283A686000788BEC /* Limbo.cpp in Sources */,
 				5B6705BD19D0C25F002B6E28 /* ToolbarController.mm in Sources */,
 				5BAC934F19C8FECC00673BDC /* swkey.cpp in Sources */,
 				5BD6200E19CD9E6E00DB8A8F /* TrackSegDialog.mm in Sources */,
@@ -1745,6 +1850,8 @@
 				5B67045419CF90DF002B6E28 /* RubberBandView.mm in Sources */,
 				5B5AE630230D74D000348612 /* WinApiSTL.cpp in Sources */,
 				5BAD55FD1A011A2F006AEEAB /* WinDialogProtocol.mm in Sources */,
+				5B556418282B095B00FB2CF6 /* undo.cpp in Sources */,
+				5BC13706285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */,
 				5BAC935219C8FECC00673BDC /* trkgdi.cpp in Sources */,
 				5BAECC9B19DDA55F00B949EA /* NXMessageBox.mm in Sources */,
 				5BAC935319C8FECC00673BDC /* txlayout.cpp in Sources */,
@@ -1754,6 +1861,7 @@
 				5BAC935519C8FECC00673BDC /* tcircuit.cpp in Sources */,
 				5BAC935619C8FECC00673BDC /* trackseg.cpp in Sources */,
 				5B5AE639230DDBEA00348612 /* main.mm in Sources */,
+				5BC1370F285E1331007D52E1 /* CustomAboutController.mm in Sources */,
 				5BAC935719C8FECC00673BDC /* xexlight.cpp in Sources */,
 				5B30B10827E4FDCC000D59C8 /* salvager.cpp in Sources */,
 				5BAC935819C8FECC00673BDC /* xsignal.cpp in Sources */,
@@ -1786,11 +1894,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BA7E74419D589CD006F9A04 /* STLfnsplit.cpp in Sources */,
 				5BC911B519DED5DD006C590E /* RelayState.mm in Sources */,
 				5B50EE4D19BA95A7004CAABE /* ChooseTrackController.mm in Sources */,
 				5BF062E3199EEBE4008CDCA0 /* joint.cpp in Sources */,
 				5B46B9FF19A9188F0041C4FE /* FullSignalView.mm in Sources */,
+				5BC13705285CC532007D52E1 /* MacAppBuildSignature.mm in Sources */,
 				5BF062FE199FB6AA008CDCA0 /* txlayout.cpp in Sources */,
 				5BF06F4319A0CF9F008CDCA0 /* trafficlever.cpp in Sources */,
 				5BF062EC199F774D008CDCA0 /* traincmn.cpp in Sources */,
@@ -1838,7 +1946,6 @@
 				5BCEA76619C24A8C003BA3A7 /* NXTimers.mm in Sources */,
 				5BAD56021A014B09006AEEAB /* DumbStubs.cpp in Sources */,
 				5B43834E19C4C38A00BEECDC /* BigYellowXView.mm in Sources */,
-				5BF06F4719A0D2AE008CDCA0 /* incexppt.cpp in Sources */,
 				5BF062F6199FAE4E008CDCA0 /* xstop.cpp in Sources */,
 				5BF062EA199F75B7008CDCA0 /* turncomn.cpp in Sources */,
 				5BF062D9199EDFE0008CDCA0 /* xsignal.cpp in Sources */,
@@ -1891,14 +1998,6 @@
 				5BAC931119C8FE7200673BDC /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		5BAC931619C8FE7200673BDC /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5BAC931719C8FE7200673BDC /* en */,
-			);
-			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
 		5BAC931C19C8FE7200673BDC /* TLEdit.xib */ = {
@@ -1991,7 +2090,7 @@
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = RelayCompiler;
@@ -2012,7 +2111,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				HEADER_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = RelayCompiler;
@@ -2035,6 +2134,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"BLISP=1",
 					"NXSYSMac=1",
+					"REDUCED_RATIONALS=1",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -2057,7 +2157,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "REDUCED_RATIONALS=1";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -2087,7 +2187,7 @@
 				);
 				INFOPLIST_FILE = "TLEdit/TLEdit-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "BernardGreenberg.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2122,7 +2222,7 @@
 				INFOPLIST_FILE = "TLEdit/TLEdit-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "$(inherited) ";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "BernardGreenberg.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";

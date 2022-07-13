@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "xtgtrack.h"
 #include "pswitch.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "compat32.h"
 #include "rlyapi.h"
@@ -77,11 +77,11 @@ Virtual void PanelSwitch::Display (HDC hdc) {
     return;
 }
 
-Virtual int PanelSwitch::TypeID() {
-    return ID_PANELSWITCH;
+Virtual TypeId PanelSwitch::TypeID() {
+    return TypeId::PANELSWITCH;
 }
 
-Virtual int PanelSwitch::ObjIDp(long id) {
+Virtual bool PanelSwitch::IsNomenclature(long id) {
     return XlkgNo == id;
 }
 

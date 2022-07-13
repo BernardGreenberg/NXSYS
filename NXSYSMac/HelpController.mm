@@ -111,19 +111,27 @@ NSDictionary* helpFontDictionary;
     [self log:helpString];
   
 }
--(void)HTMLHelp:(NSString*)rname  tag:(NSString*) tag
+-(void)WebishHelp:(NSString*)rname  extension:(NSString *) extension tag:(NSString*) tag
 {
     NSURL * url;
     std::string S = [rname UTF8String];
     if (S.length() > 5 && S.substr(0,5) == "file:")
         url = [NSURL URLWithString: rname];
     else
-        url = [[NSBundle mainBundle] URLForResource:rname withExtension:@".html"];
+        url = [[NSBundle mainBundle] URLForResource:rname withExtension:extension];
     if (tag) { // guten tag
         NSString * s = [NSString stringWithFormat:@"%@#%@", url.absoluteString, tag]; // watch that language!
         url = [NSURL URLWithString:s];
     }
     [self HTMLView:url];
+}
+-(void)HTMLHelp:(NSString*)rname tag:(NSString*) tag
+{
+    [self WebishHelp:rname extension:@".html" tag:tag];
+}
+-(void)PDFHelp:(NSString*)rname  tag:(NSString*) tag
+{
+    [self WebishHelp:rname extension:@".pdf" tag:tag];
 }
 -(void)HelpSystemDisplay:(const char *) text
 {

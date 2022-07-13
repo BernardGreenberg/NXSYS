@@ -8,7 +8,7 @@
 #include "nxgo.h"
 #include "commands.h"
 #include "lisp.h"
-#include "objid.h"
+#include "typeid.h"
 #include "rlyapi.h"
 #include "compat32.h"
 #include "trainapi.h"
@@ -17,7 +17,7 @@
 #include "brushpen.h"
 #include "demoapi.h"
 #include "nxsysapp.h"
-#include "incexppt.h"
+#include "replace_filename.h"
 #include "usermsg.h"
 #include "ssdlg.h"
 #include <string>
@@ -67,7 +67,7 @@ public:
         return read_sexp(File);
     }
     std::string ExpandPath(const char* path) {
-        return STLincexppath(RawPath, path);
+        return replace_filename(RawPath, path);
     }
 };
 
@@ -78,18 +78,18 @@ extern unsigned smeasure (HDC dc, char * str);
 GraphicObject * FindDemoHitTurnout (long id);
 GraphicObject * FindDemoHitCircuit (long id);
 
-static  GraphicObject *  FindDemoObjectByID (long id, int key) {
-    switch (key) {			/* as it were!!!!! */
-	case ID_SIGNAL:
-	case ID_SWITCHKEY:
-	case ID_EXITLIGHT:
-	case ID_PLATFORM:
-	case ID_TRAFFICLEVER:
-	    return FindHitObject (id, key);
-	case ID_TURNOUT:
-	    return FindDemoHitTurnout (id);
-	case ID_TRACKSEC:
-	    return FindDemoHitCircuit (id);
+static  GraphicObject *  FindDemoObjectByID (long nomen, TypeId type) {
+    switch (type) {
+        case TypeId::SIGNAL:
+        case TypeId::SWITCHKEY:
+        case TypeId::EXITLIGHT:
+        case TypeId::PLATFORM:
+        case TypeId::TRAFFICLEVER:
+	    return FindObjectByNomAndType (nomen, type);
+        case TypeId::TURNOUT:
+	    return FindDemoHitTurnout (nomen);
+        case TypeId::TRACKSEC:
+	    return FindDemoHitCircuit (nomen);
 	default:
 	    return NULL;
     }
@@ -186,6 +186,8 @@ public:
 
 class SHolder {  // This allows Sexpr to be deallocated unconditionally.
     Sexpr S;
+    SHolder(const SHolder&) = delete;
+    SHolder(SHolder&&) = delete;
 public:
     SHolder (Sexpr s_) : S(s_) {}
     operator Sexpr() {
@@ -212,7 +214,7 @@ bool DemoState::MakeBigX(GraphicObject* g, int mousecmd) {
     return false;
 }
 
-static bool ProcessGOForm(int key, Sexpr s, int mousecmd) {
+static bool ProcessGOForm(TypeId type, Sexpr s, int mousecmd) {
     if (CDR(s).type != Lisp::tCONS)
         throw DemoErr ("Mouse hit form too short in demo script.");
     if (CADR(s).type != Lisp::NUM)
@@ -223,7 +225,7 @@ static bool ProcessGOForm(int key, Sexpr s, int mousecmd) {
         DemoSay (CADR(CDR(s)).u.s);
     }
     else DemoSay("");
-    GraphicObject * g = FindDemoObjectByID (CADR(s).u.n, key);
+    GraphicObject * g = FindDemoObjectByID (CADR(s).u.n, type);
     if (g != NULL)
         if (State->MakeBigX(g, mousecmd))
             return true;
@@ -283,13 +285,13 @@ static bool ProcessForm (Sexpr s, int mousecmd = WM_LBUTTONDOWN) {
         return ProcessForm(CDR(s), WM_NXGO_LBUTTONSHIFT);
 
     else if (name == "SIGNAL")
-        return ProcessGOForm(ID_SIGNAL, s, mousecmd);
+        return ProcessGOForm(TypeId::SIGNAL, s, mousecmd);
     else if (name == "TRACK")
-        return ProcessGOForm(ID_TRACKSEC, s, mousecmd);
+        return ProcessGOForm(TypeId::TRACKSEC, s, mousecmd);
     else if (name == "EXITLIGHT")
-        return ProcessGOForm(ID_EXITLIGHT, s, mousecmd);
+        return ProcessGOForm(TypeId::EXITLIGHT, s, mousecmd);
     else if (name == "SWITCH")
-        return ProcessGOForm(ID_TURNOUT, s, mousecmd);
+        return ProcessGOForm(TypeId::TURNOUT, s, mousecmd);
 
 
     else if (name == "TRAIN")
@@ -380,10 +382,7 @@ static void DemoImpulse (void*) {
         return;
 
     try {
-        for (bool exitf = false; !exitf;) {
-            SHolder form(State->read());    /* forces proper dealloc */
-            exitf = ProcessForm(form);
-        }
+        while (!ProcessForm(SHolder(State->read()))) {}
     }
     /* Exit without error throw means "return to cmd level to wait" */
     catch (DemoErr err) {

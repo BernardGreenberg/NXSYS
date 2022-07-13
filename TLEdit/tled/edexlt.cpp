@@ -11,6 +11,7 @@
 #include "signal.h"
 #include "STLExtensions.h"
 #include "WinApiSTL.h"
+#include "undo.h"
 
 UINT ExitLight::DlgId () {return IDD_EDIT_EXLIGHT;}
 
@@ -22,9 +23,8 @@ void TLEditCreateExitLightFromSignal (PanelSignal* ps, bool upright) {
     ExitLight * xl = E.ExLight;
 
     if (!xl) {
-	BufferModified = TRUE;
-
 	xl = E.ExLight = new ExitLight (ps->Seg, ps->EndIndex, ps->Sig->XlkgNo);
+        Undo::RecordGOCreation(xl);
     }
 
     xl->GetVisible();
@@ -32,17 +32,16 @@ void TLEditCreateExitLightFromSignal (PanelSignal* ps, bool upright) {
     if (ExitLightsShowing)
 	xl->SetLit(TRUE);
     xl->Select();
-    
 }
 
 void ExitLight::Cut () {
     TrackSegEnd & E = Seg->GetEnd(EndIndex);
+    Undo::RecordGOCut(this);
     delete this;
     if (E.SignalProtectingEntrance)
 	E.SignalProtectingEntrance->PSignal->Select();
     else
 	E.Joint->Select();
-    BufferModified = TRUE;
 }
 
 void ExitLight::Select () {
@@ -51,20 +50,18 @@ void ExitLight::Select () {
 }
 
 
-int ExitLight::Dump (FILE * f) {
-    if (f) {
-	if (XlkgNo != 0L
-	    &&
-	    Seg->GetEnd(EndIndex).SignalProtectingEntrance
-	    &&
-	    Seg->GetEnd(EndIndex).SignalProtectingEntrance->XlkgNo == XlkgNo)
-	    fprintf (f, "  (EXITLIGHT\t%4d)\n", XlkgNo);
-	else
-	    fprintf (f, "  (EXITLIGHT\t%4d %c %5d)\n",
-		     XlkgNo,
-		     Seg->EndOrientationKey(EndIndex),
-		     (int)Seg->GetEnd(EndIndex).Joint->Nomenclature);
-    }
+int ExitLight::Dump (ObjectWriter& W) {
+    if (XlkgNo != 0L
+        &&
+        Seg->GetEnd(EndIndex).SignalProtectingEntrance
+        &&
+        Seg->GetEnd(EndIndex).SignalProtectingEntrance->XlkgNo == XlkgNo)
+        W.putf("  (EXITLIGHT\t%4d)\n", XlkgNo);
+    else
+        W.putf("  (EXITLIGHT\t%4d %c %5d)\n",
+               XlkgNo,
+               Seg->EndOrientationKey(EndIndex),
+               (int)Seg->GetEnd(EndIndex).Joint->Nomenclature);
     return 300;				/* dump order */
 }
 
@@ -83,11 +80,13 @@ BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 	    o = Seg->EndOrientationKey(EndIndex);
 	    SetDlgItemTextS (hDlg, IDC_EDIT_XLIGHT_ORIENT,
                             FormatString("Orientation: %c", o));
+            CacheInitSnapshot();
 	    return TRUE;
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDCANCEL:
 		    EndDialog (hDlg, FALSE);
+                    DiscardPropCache();
 		    return TRUE;
 		case IDOK:
 		{
@@ -97,12 +96,15 @@ BOOL_DLG_PROC_QUAL ExitLight::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, 
 			uerr (hDlg, "Bad ExitLight lever number.");
 			return TRUE;
 		    }
+                    if (!CheckGONumberReuse(hDlg, newno))
+                        return TRUE;
+                    
 		    if (newno != XlkgNo) {
 			XlkgNo = newno;
-			BufferModified = TRUE;
 			Select();	/* cause new status line */
 		    }
 		    EndDialog (hDlg, TRUE);
+                    Undo::RecordChangedProps(this, StealPropCache());
 		    return TRUE;
 		}
 	    }

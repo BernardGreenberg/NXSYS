@@ -92,9 +92,9 @@
 #define IDC_EDIT_SIG_HEADS              1038
 #define IDC_EDIT_XLIGHT_IJNO            1039
 #define IDC_EDIT_XLIGHT_ORIENT          1040
-#define IDC_EDIT_SEG_SPREAD             1041
+#define IDC_EDIT_SEG_NSEGS              1041 // A minor violin concerto
 #define IDC_SWKEY_WPX                   1042
-#define IDC_SWKEY_WPY                   1043
+#define IDC_SWKEY_WPY                   1043 // D minor double.
 #define IDC_SWKEY_LEVER                 1044
 #define IDC_ETEXT_FACE_DEFAULT          1045
 #define IDC_ETEXT_FACE_CUSTOM           1046
@@ -103,7 +103,7 @@
 #define IDC_ETEXT_COLOR_CUSTOM          1049
 #define IDC_ETEXT_COLOR_SELECT          1050
 #define IDC_ETEXT_SAMPLE                1051
-#define IDC_ETEXT_WIDTH_SPIN            1053
+#define IDC_ETEXT_WIDTH_SPIN            1053  //Durch viel Truebsal 1052 adest
 #define IDC_ETEXT_HEIGHT_SPIN           1054
 #define IDC_ETEXT_WEIGHT_SPIN           1055
 #define IDC_EXECUTABLE_EXPIRES          1056

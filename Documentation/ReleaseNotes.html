@@ -1,296 +1,136 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
     <link rel="stylesheet" type="text/css" href="nxdoc.css">
-<title>NXSYS / Mac Release notes</title>
+<title>NXSYS Common Release notes</title>
 <meta charset="UTF-8"/>
 </head>
 
-<body>
-<h1><span class=nxsys>NXSYS / Mac</span> Release notes</h1>
+<body style="max-width:800px">
+<h1><span class=nxsys>NXSYS Release notes — Mac &amp; Windows</h1>
 
-<p>Here are documented the content changes of all postings/releases
-since the initial release of <nxf>NXSYS / MAC 2.0M</nxf> on 2 Sept 2014.  All changes are integrated in <a href="MacNXSYS.html">the documentation</a> before release.<p>
-<p style='font-size:smaller'><span style='color:red;font-weight:bold'>In the unlikely event that any version of this program crashes,</span> please click “report” on the crash dialog, and instead of sending it to Apple, copy the contents of the report window, and send it to me, with a note about what you did to provoke it.  Thanks!</p>
+<h2>July 2022 &mdash; 2.7.0</h2>
 
-<p><span style="color:red">Note well:</span> In the most recent and future updates, the terom <b>Resources directory</b> refers to
+<p>Major improvements to <nxf>TLEdit</nxf>. Listed in order of significance, most to least.</p>
+
+<ol>
+    <li>There is now a lengthy, complete, integrated document (<b>TLEdit.pdf</b>). See the <b>Help</b> menu item in <nxf>TLEdit</nxf>, or recover it from the application directory.</li>
+    <li><b>Undo</b> and <b>Redo</b> are now supported. They manage the state of their <b>Edit</b> menu items and (new) tool buttons appropriately. More detail is presented in the aforementioned document.  The required changes were extensive, and there may be bugs (please report).</li>
+    <li><b>Backspace</b> (<b>delete</b> on the Mac) is now available as an additional shortcut/accelerator for <b>Cut</b>.</li>
+    <li><b>Ctrl-I</b> (<b>Cmd-I</b> on the Mac), as well as the <b>Insulate</b> toolbar icon, will now toggle a joint‘s insulation, although there are conditions placed on the removal of insulation (see below).</b></li>
+    <li>There are now <b>Quit</b>, <b>Save</b>, <b>Exit</b>, <b>Undo</b>, and <b>Redo</b> tools on both Windows and Mac toolbars. The Mac toolbar has been reshaped and reorganized.</li>
+    <li>The Mac version now comes up at a view scale equal to that used by the main app; that is, it will appear slightly smaller than it had.  But zooming is now available, both by the <b>View</b> menu and standard Mac trackpad pinch gestures.  The Windows version, where they had always come up at the same scale, is unchanged.</li>
+    <li>The ability to assign a single track segment&rsquo;s track circuit has been removed. What was formerly called “wildfire” track-circuit assignment is now the only kind; thus, that checkbox has been removed. If you accidentally spread a track circuit too far, simply <b>Undo</b> and insulate some joints.
+        <ul>
+            <li>Removal of the insulation from a joint, or removal of an insulated joint via <b>Cut</b>, is disallowed if the two track circuits abutting it are not either the same or both unassigned (0).  You must make them identical before you can remove insulation or <b>Cut</b> the joint. That is, after all, why insulated joints exist.</li>
+            <li>Assigning track circuit 0 (unassigned) to a connected track segment group is now allowed.</li>
+        </ul>
+    </li>
+    <li>You can now enter <b>15B</b> (or <b>15b</b>) as a lever number in the <b>Switch Properties</b> dialog, and do not have to click on <b>A/B/Singleton</b> explicitly; it will update automatically.</li>
+    <li>Traffic lever numbers are now &ldquo;managed&rdquo;, that is, prevented from accidental multiple use, including numbers of extant switches or signals. Other object numbers now enforce uniqueness within their class, e.g., you can&rsquo;t create two auxiliary keys numbered 243.</li>
+    <li>(Mac) Aborting a random-object creation (initiated from the toolbar) by typing any character now works as documented.</li>
+    <li>A bug corrupting layouts or crashing when a segment with an exit light was split by a new joint was fixed.</li>
+    <li><nxf>TLEdit</nxf> will write a header comment in its output file identifying the platform, version, and build number of the application in use.  The Mac version now tracks build numbers, as does <nxf>NXSYS</nxf> proper.  There are no build numbers for Windows (there should not be more than one released build per release).</li>
+</ol>
+<p>In <nxf>NXSYS</nxf> proper, the simulator, the <b>Set Locator Path</b> button was moved to remedy clipping. In both applications, a bug with the display of long strings (over 300 pixels) was fixed.</p>
+
+<h4>Futures &mdash; heads up!</h4>
+<p>A design deficiency has been identified that will require incompatible changes in the next (hopeful) version, although extant interlockings will continue to be supported.  To wit, signal stationing numbers equal to or greater than 1000 cannot be used.  Oddly, because of the history of subway construction contracts in New York City, that only occurs in interlockings North of West 4<sup>th</sup> St. on the former IND Division (including Queens), and none of those have ever been attempted with <nxf>NXSYS</nxf>! There will be a way of suppressing the incompatibility if it is not needed, although other incompatible changes could facilitate <nxf>TLEdit</nxf> auto-save and other boons if elected.</p>
+
+<p>A much greater incompatible change is needed to support the many interesting interlockings where rights-of-way merge and more than one system of signal stationing (&ldquo;route identifier letters&rdquo;) is in use in the same interlocking, e.g., where W (White Plains) and Y (Dyre) meet at E. 180<sup>th</sup> St., as well as in yards and yard-leads (already a problem at 240<sup>th</sup> St.).  Significantly more complex signal and relay numbers are required.  That will likely require a move to a Version 3 application pair.</p>
+
+<h2>3/31/2022 &mdash; 2.6.3</h2>
+
+<p><nxf>TLEdit</nxf>: The <b>Edit Joint &gt;&gt;&gt;</b> button in <b>Switch Properties</b> dialog has been implemented and enabled: it edits the switch location (may not insulate or change nomenclature).  <b>0</b> is now acceptable as in IJ designation (meaning &ldquo;revert to unassigned&rdquo;) in the <b>Joint Properties</b> dialog.  The latter dialog can be used to force coincidence of IJ&rsquo;s at a double crossover. Fixed a bug that sometimes lost adjacent switch nomenclature when a joint was removed.  &ldquo;Small moves&rdquo; of joints and switches (drag right (Mac control-drag)) are now possible (it was a bug/misdesign that they were heretofore prohibited).</p>
+
+<h2>3/18/22  &mdash; 2.6.2</h2>
+
+<p>Significant <nxf>TLEdit</nxf> fixes: cures bugs in node merging (drag-and-dropping switches, IJs or &ldquo;kinks&rdquo; on others to build higher-order nodes).  Prohibits drawing track branches out of inline (non-terminal) insulated joints, or (accidentally) overlaying two coincident segments (both of which cause confusion and misbehavior.)  Diagnoses unreachable loops (e.g., attempted station platforms). Implements a more conservative policy in the dumper, of pre-running it once &ldquo;in effigy&rdquo; not even renaming/creating the backup file if there are errors, and <i>even so</i> write to a temporary file fully before copying into the desired file. Improves other aspects of dumper error handling (there should not ever be errors detected by the dumper, but <i>c&rsquo;est la vie</i>). <nxf>TLEdit</nxf> documentation upgraded a bit. Modernizes and simplifies the dumper code greatly, too. Simulator protected against some corrupt layout issues.</p>
+
+<h2>3/12/22  &mdash; 2.6.1</h2>
+
+<p>Fixes an apparently longstanding bug in <nxf>TLEdit</nxf> that would, on certain rare occasions, write out corrupt layout descriptions which could not be read back in (to it or the simulator). It had not hit me or anyone until now.  Some documentation was corrected (links), too. No simulator functional changes.</p>
+
+<h2>2/22/22  &mdash; 2.6.0</h2>
+
+<p>Windows <nxf>NXSYS</nxf> has not been posted in over five years (November, 2016).  This release introduces significant systemic upgrades (how it is built, used, and distributed), and some technical (subway-related) upgrades, but nowhere near enough to declare a new major version.  Let&rsquo;s look at the largest changes <i>since then</i>.  All this is reflected in the <a href="NXSYS.html">main help file</a>. Other than an improved helpfile and rebuild (and one feature below), <nxf>TLEdit</nxf> has not changed.</p>
+
+<p>The term <b>Resource Directory</b> figures prominently in the new setup; both interlockings and documentation are contained within it.  It has two different meanings on Windows and macOS:
 <ul>
-    <li>On the Mac, the actual folder called <b>Resources</b> which is under <b>Contents</b> under the actual <b>.app</b> directory (it is secretly a directory) which is NXSYS on your system.</li>
-    <li>On Windows, the folder into which NXSYS <i>was</i> installed on your system.  That is usually, if installed from the supplied MS Installer (MSI) package,<br/>
-        <tt>C:\Program Files\Bernard Greenberg\NXSYS\</tt></li>
+    <li>On Windows, it means the directory into which the <nxf>NXSYS</nxf> and <nxf>TLEdit</nxf> executables are delivered.  Normally, this will be<br/>
+        <tt>C:\Program Files\Bernard Greenberg\NXSYS</tt></li>
+    <li>On macOS, it means the folder named <b>Resources</b> which is a child of the folder named <b>Contents</b>, which is a child of the folder which latter is <b>NXSYSMac.app</b> itself, i.e., the application itself (which is actually a folder with special markings). You need to click <b>Show Package Contents</b> in the finder to descend within it, but you should never have to.</li>
+</ul>
+<h3>New sharing status</h3>
+
+<ul>
+    <li><nxf>NXSYS</nxf> and its parts are now <b>open source, <a href="LICENSE">GPL 3 LICENSE</a></b></li>
+    <li>The source is <a href="https://Github.com/BernardGreenberg/NXSYS">here on Github.</a> It builds cleanly on Mac and Windows.  There are README&rsquo;s <b>.md</b> about its status and organization.</li>
+    <li>All interlockings and documents are contained in the installables.</li>
+    <li>Have a ball doing what you want with it, don&rsquo;t claim it as your own or redistribute without my authorship and GPL copyright notice.  Don&rsquo;t try to control real railroads, either.</li>
 </ul>
 
-<h2>Release 2.6.0 Mac — 21 February 2022</h2>
+<h3>Interlocking design no longer secret</h3>
+
+<p>After appropriate consultation with appropriate professionals, I have finally posted a 30 page tutorial on Interlocking Circuit design in this idiom and style, intended for those interested in either truly understanding the logic of the supplied interlockings, or constructing their own in this style.  This is possible partially because fixed-block wayside color-light relay-based signalling is ... obsolete and disrespected these hundred years later. The <a href="Interlocking Logic Design.pdf">document is here.</a></p>
+
+<h3>New Windows build and distribution</h3>
 
 <ul>
-    <li>First Windows release in six years, 64 bit at that. Massively revised documentation.</li>
-    <li>The documentation now includes <a href="Interlocking Logic Design.pdf">logic design documentation</a>.</li>
-    <li>There is a new help system, populating the <b>Help</b> menu from an XML file in the Resources directory, and pointing to many more resources, including a <a href="Interlocking Logic Design.pdf">new Logic Design tutorial</a>, as well as relevant online resources.</li>
-    <li>The Mac help browser has forward and backward buttons and a URL bar.</li>
-    <li>Includes a new command on the <b>File</b> menu, <b>Interlocking Library</b>, which offers a menu of the supplied interlockings in the Resources directory.  Windows now has a <b>Recent Files</b> menu item like the Mac&rsquo;s.</li>
-    <li>The <b>Relay Draftsperson</b> sports a new button, <b>Set Lctr Path</b> (Set Source Locator Script pathname), which allows you to choose a shell script (<b>.sh</b> on the Mac, <b>.BAT</b> on Windows) file to be used as the Source Locator script for right-click source location in the drawings.  This eliminates commerce with <b>PListBuddy</b> on the Mac, and the Registry on Windows (on which latter it is in the <b>Control</b> menu on the left of the Draftsperson window).  There is a <a href="RelayIndex.html">new document</a> on this feature, too.</li>
-    <li>Fixes a bug in the <b>Help</b> window .xib that made it impossible to resize the “Web view” of the actual help pages, in both the main application and <nxf>TLEdit</nxf>.</li>
-    <li>Fixes a longstanding bug in layout destruction which only manifested on Windows during invocation of a Demo.</li>
+    <li>Windows <nxf>NXSYS</nxf> and <nxf>TLEdit</nxf> are now 64 bit:  Windows 10 (or 11) is required.</li>
+    <li>The &ldquo;product&rdquo; is now distributed (for Windows) as a standard Microsoft Installer (MSI).  If you use Windows, you know them.  Admin access is needed to install, with the usual two-click uninstall and all the rest.</li>
+    <li>All the Mac-only features of the past 5+ years have been integrated.</li>
 </ul>
 
-<h2>Release 2.5.1 Mac – 11 May 2021</h2>
+<h3>New help system</h3>
+
+<p>Both Windows and Mac enjoy a new help system, which is driven by an XML file in the <b>Resources directory</b>, where all the documents now live.  The help menu now includes HTML and PDF files as well as web-sites, including the relevant Github and nycsubway.org resources, and the aforementioned logic document.  The Mac help viewer finally has &ldquo;Back&rdquo; and &ldquo;Forward&rdquo; buttons and URL bar.  The Windows application does not have a help viewer (or much of one), and relies on sending local files, as well as remote accesses, to your system&rsquo;s default browser, where they are considerably more readable and manageable.</p>
+
+<p>Interlockings can now have HTML scenario-specific help.  See <a href="RelayLanguage.html">RelayLanguage.html</a> for how to specify it.  Some now do.</p>
+
+<p>The <a href="NXSYS.html">main helpfile</a> has been upgraded to remove obsolete material, including references to Version 1 (officially &ldquo;gone&rdquo;) and the retired OLE/NXSCRIPT feature.  Product status has been revised, and references to new interlockings and the logic document added.</p>
+
+<p>There is now a <a href="RelayLanguage.html">usable, up-to-date document on the &ldquo;Relay language&rdquo;</a>, i.e., the specific things you must say to communicate a secenario you construct to the application, such as the top-level <tt>(ROUTE...)</tt> form.</p>
+
+<h3>Relay Index and Cross-reference TAGS generator</h3>
+
+<p>The nonsexistly-named <b>Relay Draftsperson</b> has acquired a new feature whereby you can direct Emacs or an Emacs-repackaging such as Aquamacs to the text (pseudo-Lisp) source for a given relay from the latter&rsquo;s context menu in the Draftsperson.  You can direct some other editor or program if you tell NXSYS how to tell it.  In order to use this with Emacs, at least, you have to generate a TAGS file for the interlocking concerned.</p>
+
+<p>We just happen to have a handy-dandy command line utility, the <b>Relay Indexer</b>, that does just that, and generates a cross-reference for an interlocking. See <a href="RelayIndex.html">this document</a> for more detail.</p>
+    
+<h3>New Interlockings</h3>
+
+<p>Two interlockings not available in 2016 are now available, including one never before available.</p>
+
 <ul>
-    <li>Reports a monotonically-increasing “build number” in both the main window title and the <b>About</b> dialog.  It is incremented not only for released versions, but all incremental debug versions.</li>
-    <li>A bug that caused <nxf>NXSYS</nxf> not to exit properly if the main window were closed with either the <b>About</b> or the <b>Help</b> dialog open was fixed.</li>
-    <li>The Train System overrun/trip dialog has been reworded, and supplied with a cute icon (from the web) of a cartoon train crash.  The stop arm and brake cock I added can’t be seen at 256x256, though ... </li>
+    <li><b>240<sup>th</sup> St. Broadway</b>, on the IRT Broadway-Seventh Avenue line, first written by myself and Henry Sundermayer in 2000 (but maintained since).  See the scenario help for more information. As usual, these are <b>not</b> the real-life circuits.</li>
+    <li><b>Duckburg Yard</b>, an imaginary interlockings whose implementation is presented in seven stages to help explain the circuit design and a model for incremental implementation and debugging not available to real-life engineers.</li>
 </ul>
-<h2>Release 2.5.0 Mac – 28 January 2021</h2>
+
+<h3>New way of distributing and accessing provided interlockings</h3>
+
+<p>The six provided interlockings, and any future ones, are now distributed in a directory (folder) called <b>Interlockings</b>, in the <b>Resources Folder</b> in both distributions.  But you don&rsquo;t have to know where that is, because there is a new menu item on the <b>File</b> menu, <b>Interlocking Library</b>, which gives you a menu of them by name, without need for knowing either their real pathnames or the name of the correct (top-level) file in their directories (you can always learn that from <b>File Info</b> on the <b>File</b> menu (which is now on Windows, too), if you want to). Of course, if you create your own interlockings, or versions, you will know their pathnames and top-level files.</p>
+
+<p>Countless bugs and missing features (that&rsquo;s why you should not use this to control real railroads) in all interlockings (mainly 240<sup>th</sup>, Myrtle, and Atlantic) have been found and fixed over the years.</p>
+
+<h3>New simulator features</h3>
+
 <ul>
-    <li>Upgrades the build to Xcode 12.3 Beta (12C5020f), built under Big Sur, tested against Big Sur (macOS 11.1).  Deployment target version/minimum remains macOS 10.12 (Sierra) (2016).</li>
-    <li>An enhancement was made to the Relay Draftsperson such that if a contact or a coil be clicked <b>right</b> on (say <b>246PBS</b>), an item like <b>Source 246PBS</b> will be conditionally added to the bottom of the context menu.  If selected, that string (the relay name) will be passed as an argument to the shell script (or executable) whose pathname is the value of the key <b>SourceLocatorScript</b> in the application&rsquo;s <b>plist</b> file in <b>~/Library/Preferences</b> (which must be added manually). If that key is not present, these new items will not be offered.  An expectable value is the (absolute) pathname of a shell script with content similar to<blockquote>/<tt>usr/local/bin/emacsclient -e "(find-tag \"$1\")"</tt></blockquote>
-        </li>
-    <li>A new command-line program, <b>RelayIndex</b>, is available. It digests an interlocking definition and produces a cross-reference (for each relay, which others include its contacts in their circuits), including file, line, and character-pos identification of the definitions of each.  It also produces an Emacs TAGS (Etags) table, which enables Emacs (and Aquamacs) tag commands to navigate interlocking sources, as well as the Draftsperson feature just described (you must change the syntax of <b>!</b> to be punctuation in Lisp-mode buffers for Meta-. to work on back-contact terms).</li>
     <li>Route identifiers of more than one letter (e.g., <span class="nxsys" style="size:smaller">MM</span> for downtown Lexington, <span class="nxsys" style="size:smaller">BB</span> for upper Broadway) are now supported. <tt>:EXTENDED-ROUTE-LETTER "BB"</tt> in the layout <tt>route</tt> form does it. The single-letter <tt>#/B</tt> is still needed to keep the interlocking files backward-compatible.</li>
     <li>Traffic levers have been reworked in appearance and function to be more like their real-life models. Traffic control circuitry at 240th St and Atlantic Avenue has been revised to take advantage of the changes (and yet work without them).  See <a href="TrafficLevers2_5.html">this help text</a> for details.</li>
-    <li>All of Atlantic Avenue,  Myrtle Avenue, and 240th St. interlockings were enhanced to add &ldquo;conflicting initiation protection&rdquo; as per standard.  Interestingly, Progman St. was already correct in this regard, and Myrtle and Atlantic had some, but not enough.  240th St was very heavily revised and bugs fixed.  Conflicting initiations happen when two or more entrances oppose the same set of exits. If both initiations could stand, it would be visually impossible to determine which is calling for the exits.  When correct, any of the potentially conflicting initiations locks out the others until cancelled or a non-conflicting route completed.</li>
-    </li>
-    <li>The <span class="menu">About</span> dialog was customized (away from Mac's default) in order to show Release/Debug status and the date-time (in my zone) the executable was created. The same info is now displayed in the application’s title bar as well.</li>
-</ul>
+    <li>The <span class="menu">About</span> dialog on both systems was improved to show Release/Debug status and the date-time (in my zone) the executable was created. The same info is now displayed in the application’s title bar as well (on the Mac).</li>
+    <li> On the Mac, the keystroke <b>&#8997;&#8984; B</b> (<b>Opt Cmd B</b>) is now <b>Bobble All Signal Repeaters</b> (simulate track line power failure).</li>
+    <li>There is now (has been for some time on the Mac) a diagnostic “switch coherency” feature, preventing (in <nxf>TLEdit</nxf>) the creation of scenarios in which there are unmatched crossover-ends (e.g., 217A but no 217B), as well as inconsistency between paired switches and singletons.  <nxf>NXSYS</nxf>, which would previously crash when loading such (no matter how they arose), now diagnoses such explicitly and refuses to load them. <nxf>TLEdit</nxf> lets you load them so you can fix them.</li>
+  </ul>
 
-<h2>Release 2.4.0 Mac – 29 November 2019</h2>
-<ul>
-    <li>Upgrades the build to XCode 11.1 (11A1027), built under Catalina, tested against Catalina (MacOS 10.15.1) and Mojave (10.14.6).  The applications are now Release builds instead of Debug.  <nxf>NXSYS</nxf> now shows its version in its window title. The <b>Help</b> dialog had stopped working in Catalina, and now works again.</li>
-    <li>Many portions of the code were upgraded to fully exploit C++11 language features and remove obsolete code artifacts; no functional change. Thanks to Scott Meyers&rsquo; book!</li>
-    <li><nxf>TLEdit</nxf> – The <b>Canvas Size</b> dialog had become unreadable in Dark Mode. Fixed.</li>
-    <li> The keystroke <b>&#8997;&#8984; B</b> (<b>Opt Cmd B</b>) is now <b>Bobble All Signal Repeaters</b> (simulate track line power failure).</li>
-    <li>The <b>Open</b> dialog of the <b>Demo</b> system now correctly defaults to <b>.trk</b> extensions.</li>
-    <li>Myrtle Avenue Interlocking fixes:
-        <ul>
-            <li>Cancel-when-passed under Automatic Operation of Signal 164 fixed.</li>
-            <li>Signal 180 was slotting off with the wrong track section (on another track). Fixed. </li>
-            <li>Flashing of switch locks involving Signals 194 and 202 correctly implemented. Test by initiating at 170 and calling 202.</li>
-            <li>Support for power bobble testing added.</li>
-       </ul>
-    </li>
-    <li>240th St. Interlocking (not distributed included) fixes: a problem with through-routing into the yard was fixed. Overlap lock of Signals 392 and 386 upon switch 391, with flashing, was implemented.
-        A check on switch 391 was correctly placed in Signal 386&rsquo;s control line over switch 387 reverse. The GT timer for Signal 4003 was looking at incorrect track circuit 3984 with
-        switch 417 normal; fixed.</li>
-</ul>
-
-<h2>Release 2.3.0 Mac – 1 March 2019</h2>
-<ul>
-    <li>Upgrades the system to XCode 10.1 (10B61) and Mojave dark-mode awareness. NXSYS/Mac 2.2 from dmg distribution operates properly in MacOS Mojave 10.14.3 without change, sustaining light-mode.</li>
-    <li>Fixes a bug with the choose-track dialoguette staying not dismissing properly.</li>
-    <li>Fixes a problem with OK/Cancel buttons in Preferences dialog.</li>
-    <li>Fixes a problem failing to auto-select input box in Relay Query dialog.</li>
-</ul>
-
-<h2>Release 2.2.1 Mac – 12 December 2016</h2>
-<p>This version incorporates some largely invisible changes:</p>
-<ul>
-    <li>Integrates source and documentation changes reflecting the arrival of Version 2.1 for Microsoft Windows (built from shared source).  The “Version 2 help text” has been retired. Major additions have been made to the now single HTML helpfile (e.g., <a href="NXSYS.html#traffic">traffic control</a>, <a href="NXSYS.html#autoop">automatic operation</a>, and <a href="NXSYS.html#vital">vital/nonvital relays</a>).</li>
-    <li>Incorporates a diagnostic “switch coherency” feature, preventing (in <nxf>TLEdit</nxf>) the creation of scenarios in which there are unmatched crossover-ends (e.g., 217A but no 217B), as well as inconsistency between paired switches and singletons.  <nxf>NXSYS</nxf>, which would previously crash when loading such (no matter how they arose), now diagnoses such explicitly and refuses to load them. <nxf>TLEdit</nxf> lets you load them so you can fix them.</li>
-    <li>A bug (in <nxf>NXSYS</nxf> proper) causing crashes loading scenarios with <i>no</i> switches was fixed.</li>
-    <li>A bug in <nxf>TLEdit</nxf> not crashing but corrupting storage (a classic old-unchecked-function buffer overrun, caught by Mac debugger traps) in the <b>Save</b> function was fixed.</li>
-    <li>The Mac applications were rebuilt with the “latest SDK” (OS X 10.11)in <b>XCode 7.3.1 (7D1014)</b>, and tested under OS X El Capitan 10.11.6.  They may or may not run on significantly older Mac OS/OS X versions. They have <i>not</i> been tested under Sierra, but the SDK claims to be compatible.</li>
-</ul>
-
-<h2>Release 2.2 Mac — 13 November 2014</h2>
-<p>We hope this to be the first official release of <nxf>NXSYS / Mac</nxf> on <a href="https://www.nycsubway.org">nycsubway.org</a>!</p>
-<ul>
-    <li>Moves the <b>stop graphic</b> to the left-hand side of the signal graphic of full signal windows (or views), as it would be in either IRT or BMT/IND reality.</li>
-    <li>Fixes a new problem in <b>closing route-selector dynamic menus</b>.</li>
-    <li>Fixes a conversion problem that could crash if <b>too many full signal windows</b> were created.</li>
-    <li>Removes the ugly <mf>Close</mf> button from old-style <b>full signal windows.</b>  You now have to know to double-click to close them, as with full-signal views.</li>
-    <li>Fixes a <b>TLEdit crash on OS/X Yosemite</b> (apparently modal dialog-closing requirements differ somewhat).</b>
-</ul>
-        
-<h2>Release 2.1.8 Mac — 31 Oct 2014</h2>
+<h3>Removed features (Windows)</h3>
 
 <ul>
-    <li>Incorporates <b>Toronto's Islington Interlocking</b>, originally dating from 1997, when <nxf>NXSYS</nxf> Version 2 was considered for use by the Toronto Transit Commission.  Recently converted to Version 2 (layout conversion and single-line plan by Dave Barraza), this
-        interlocking features <a href="NXSYS.html#islington">extensive extant documentation</a> in the <a href="NXSYS.html">Version 1 Helpfile</a>. As with the other interlockings, its folder is in the delivery <b>.dmg</b> top-level.  Adds and exploits a means for interlockings to provide HTML documentation.</li>
-    <li>Weeds out some <b>stale "nib" references</b> to obsolete "properties", which are now diagnosed under Mac OS/X "Yosemite" (10.10) (but are benign).</li>
-    <li>Fixes a recent bug that caused <b>Full Signal views</b> not to reappear after hidden by <mf>Flush Full Signal Displays</mf>.</li>
-    <li>Fixes bugs with <b>Signal 224 at Atlantic Avenue</b> with its Diverging Route indication and southbound selection over switch 221.</li>
-    <li>Includes a lot of gratuitous upgrade/revision to take advantage (always toward simplicity) of my better knowledge of Objective C, Cocoa, and C++11 since 2.0.</li>
-</ul>
-<h2>Release 2.1.7 Mac — 25 Oct 2014</h2>
-<ul>
-    <li>Changes context-menu <b>relay list</b> only to list nomenclature (e.g., <tt><b>PBS</b></tt>), not full relay name (e.g., <tt><b>244PBS</b></tt>) to facilitate navigation by typing.  All the artifact numbers in such a list are identical (and given above the list).</li>
-    <li>Fixes <b>relay trace</b> "more" problem that would hang the app if the relay trace windows was closed while in a "more" break.  A subtle Mac behavior here.</li>
-    </ul>
-<h2>Release 2.1.6 Mac — 19 Oct 2014</h2>
-<ul>
-    <li>Fixes "more" button constraint problem in 2.1.5</li>
-</ul>
-<h2>Release 2.1.5 Mac — 19 Oct 2014</h2>
-<ul>
-    <li><b>TheRelay Trace Window</b> now has <tt><b>More</b></tt> processing; there is a <span class=menu>MOREing</span> on-off pushbutton at the bottom that enables stopping every 40 traces.  When stopped, either click the <mf>MORE</mf> button which then appears, or press any key.</li>
-    <li><b>Train dialog</b> last signal aspect was not being maintained.</li>
-    <li><nxf>TLEdit</nxf>: Characters typed in the "String" input box on the <mf>Text String Properties</mf> dialog were not showing up in the <mf>Sample</mf> control; they now are.</li>
-</ul>
-<h2>Release 2.1.4 Mac — 7 Oct 2014</h2>
-<ul>
-    <li>A bug causing <b>off-transitions</b> of mouse-gestures not to be reflected in relay contact drawings (e.g., PB in a PBS circuit) was fixed.</li>
-    <li><b>TLEdit</b> (2.1.10) was improved to offer properties dialogs close to the object whose properties are being edited. Also, <b>track joint graphics</b> have been reduced to Windows-compatible size, resulting in greatly improved ability to select track segments on their periphery.</li>
-    <li>The <b>main window</b> was (actually, its content view) upgraded to  <b>acceptsFirstMouse</b>, a colorfully-named Mac attribute which means that clicking on objects in it works even when some other window is "key"("selected").</li>
-    <li>The <b>Relay Draftsperson</b> <span class=menu>Recede</span> toolbar button and right-click command were implemented; this action causes the Draftsperson to hide behind the main window with only a sliver peeking out; you can call him or her back by clicking on that sliver, but he or she will be "bashful" until a new relay is drawn, receding again when you click on the main window (which, if you don't want, don't do).</li>
-    <li>Fixes a panel lighting problem at <b>Atlantic Avenue</b> when southbound motion route-locks the northbound pockets on tracks 1/E and 3/E.</li>
-</ul>
-<h2>Release 2.1.3 Mac — 6 Oct 2014</h2>
-<ul>
-    <li>Fixes a new bug (as predicted) in <span class=menu>Flush Full Signal Displays</span> for view-type displays.</li>
-</ul>
-<h2>Release 2.1.2 Mac — 5 Oct 2014</h2>
-<ul>
-    <li>Fixes a bug where <b>train length</b> in train control dialogs was always displayed as 450' (although otherwise obeyed).</li>
-    <li>Eliminates all problems with temporary or <b>inadvertent selection</b> of Full-Signal (full) windows and the Toolbar in <span class=nxsys>TLEdit</span>.</li>
-    <li>Implements the useful <b>Relay Query result dialog</b> of the Windows version, although <b>1</b>'s and <b>0</b>'s for each dependent are not shown.</li>
-    <li>Replaces the <b>pointer retention strategies</b> for the Relay Draftsperson, Relay Trace Window, and Full Signal views and windows to much better comport with the Cocoa (Objective C OS/X runtime environment) model.  While the new code is simpler, cleaner, and better, be on guard for newness problems.</li>
-</ul>
-<h2>Release 2.1.1 Mac — 4 Oct 2014</h2>
-<ul>
-    <li>Implements a <span class=menu>Preferences</span> dialog, found under the <span class=menu>NXSYSMac</span> ("App") menu to the left of <span class=menu>File</span>, which subsumes the Stop Policy dialog and the erstwhile <span class=menu>View</span> menu item <span class=menu>Full Signals are views</span>, removing them from <span class=menu>View</span>. <b>&#8984;,</b> is the (standard) accelerator.</li>
-    <li><p>Implements a new option, <span class=menu>Right click on signal offers</span>, in the front tab of the new <span class=menu>Preferences</span> dialog, which controls whether single right-click on a signal calls up its context menu or its full signal display.</p>
-        <p style='font-size:smaller'>
-        This tracks a corresponding option in Windows <span class=nxsys>NXSYS</span> which (perhaps wrongly) affects other objects.  While the context menu is of little value on, say, auxiliary switches, it is of critical for signals. In deference to this option, <span class=menu>Full Signal Display</span> has been moved back to the top of the signal context menu, leaving <span class=menu>Draw Relay</span> (a close) second.  The subtlety of these choices suggests that the rodentation of the whole app, if not just signals, be user-configurable.  Not today, though...</p></li>
-    <li>Fixes missing 244 <b>overlap locks at Atlantic Avenue</b>, adds more lock flashing to almost all the home signals facing the central network.  Adds missing "menu AS reset" to <b>X172 at Myrtle Avenue.</b></li>
-    <li>Adds a new command, <span class=menu>File&nbsp;|&nbsp;File Info</span>, <b>&#8984;I</b>, which displays tallies (how many signals, file pathname, etc.) about the loaded interlocking.</li>
-    <li><b>Context menus</b> are now edited and by-item-enabled to real-time state, as on Windows. Also, the <span class=menu>Relay Query</span> items are now functional, although the "result" dialog still falls far short of its Windows model.  A bug displaying the track segment context menu for switch keys was fixed.</li>
-    <li>The <b>MessageBox</b> emulator was rewritten to a hand-coded dialog replacing the Mac <b>NSAlert</b> shortcut.</li>
-    <li>Fixes a serious <b>Cocoa Pointer Retention</b> mismanagement problem, both apps, whose effect was the indefinite retention of the bones of some expired dialogs, a minimal consequence in a 64-bit application.  Although it seems to be behaving properly, it
-        is not impossible that the new code may err in the other direction.  Please continue to report all misbehaviors and crashes.</li>
-    <li><b>TLEdit</b> — makes the toolbar a "Panel" so that clicks on it do not disturb the "key status" (indicated by shadow) of the main window, even temporarily.  Fixes a bug that stored bad font parameters in your layouts; more readin-checking installed (both apps).</li>
-
-</ul>
-<h2>Release 2.1.0 Mac — 30 Sept 2014</h2>
-<ul>
-    <li>Releases the Macintosh port of <b>TLEdit</b>, the <span class=nxsys>NXSYS</span> layout editor ("does not create working interlockings").  Start it up and read its own documentation.</li>
-    <li>Releases the Version 2 port of the venerable (fictitious) <a href="NXSYS.html#progman"><b>Progman St. Interlocking</b></a>, with all its didactic warts, enabling the Version 1 <a href="NXSYS.html">Introductory Documentation</a> to be usable.</li>
-    <li>Fixes the Mac-new problem where <span class=menu>(Clear) All the Above</span> didn't wait for stops to clear before normalling switches; it now uses the extant Version 2/Windows mechanism and strategy, i.e., a short real-time wait after all other resets before switch normalling.</li>
-    <li>Paints the <span class=menu>Draw</span> button on the <b>relay selector dialog</b> blue as it should be (as an "enter"-accelerated button, which it now is). Thanks, <a href="https://stackoverflow.com">stackoverflow.com</a>.</li>
+    <li>The OLE Scripting system (NXSCRIPT) and server have been removed.  No one, including myself, has ever used them to advantage.</li>
+    <li>Printing may or may not work. I have not officially removed it, but it is no longer supported.</li>
+    <li>The attractive Cab View primitive &ldquo;video game&rdquo; feature of Version 1 has never been in version 2, and never will be.</li>
 </ul>
 
-<h2>Release 2.0.16 Mac — 24 Sept 2014</h2>
-<ul>
-    <li>The <b>Relay Draftsperson</b> has his or her toolbar again, with <span class=menu>Clear</span> and <span class=menu>Draw New</span> buttons!  The right-click menu continues to function, although <span class=menu>Recede</span> remains unimplemented. <span class=menu>Clear Relay Draftsperson</span>, no longer needed, has been removed from the <span class=menu>View</span> menu.</li>
-    <li>The <b>Open File Dialog</b> will now restrict itself to showing <b>.trk</b> files.</li>
-</ul>
-<h2>Release 2.0.15 Mac — 21 Sept 2014</h2>
+<p>There is further, older change history, predating the 2016 32-bit Windows release, which is still available, in the <a href="MacReleaseNotes.html">Mac release notes</a> file.</p>
  
-<ul>
-    <li>This remediates <b>another finite table</b>, and a bogus warning message about one that was already fixed, in the track layout loader.</li>
- <li>The anti-climber of the D-Type Triplex in the <b>app icon</b> was hand-reconstructed after its continuing run-in with a platform railing at Brighton Beach.</li>
- <li><b>No more Mountain Lion.</b> Versions since 2.0.4 had been being built with the OS X 10.8 SDK, which means that they could be run on the "Mountain Lion" operating system version. This weekend I upgraded my development environment to XCode 6, which, without warning 24 hours later, told me I could no longer do that.  This and subsequent versions will only run on Mavericks (10.9) and (hopefully) Yosemite (10.10).  I will hold on to 2.0.14 indefinitely as the last Mountain Lion-compatible release.</i>
-</ul>
-<h2>Release 2.0.14 Mac — 18 Sept 2014</h2>
-
-<ul>
-    <li>The new bug whereby slow double-clicks were necessary to move an old-style full signal window has been fixed (there is a magic Mac window flag for this). Mouse-left drag moves them unconditionally, as with new-style full signals.</li>
-    <li>Yet further serious conceptual bugs in the storage management of the Label system were identified and fixed.  Hopefully this will cure all unload crashes.</li>
-</ul>
-<h2>Release 2.0.13 Mac — 16 Sept 2014</h2>
-<ul>
-    <li>There is a powerful new Mac-only <b>Full Signal Display</b> feature, <a href="MacNXSYS.html#ViewFsd">Full signals as views, not windows.</a> Rodentation of Full Signal Displays has also changed; see that link.</li>
-    <li>Full signal windows now dismiss correctly when an interlocking is unloaded/reloaded.</li>
-    <li>The <span style="font-family:Courier New;font-size=smaller">NUMFLIP</span> option on insulated joints was broken on Sunday; this caused some IJ numbers to clobber other graphics; it has been fixed.</li>
-    <li>The "dark matter" black band at the bottom of the window under interlockings not as deep as the window has been banished.</li>
-    <li>Fixes all manner of misplacement of full-signal windows and other "child windows" (e.g., relay lists).</li>
-    <li>Fixes placement of the mouse-simulating "X"'s of the Demo Feature.  The latter was also improved to abort demos if unrecognized forms are encountered (e.g., you clicked on a .trk file by accident).</li>
-    <li>Another wretched storage-management bug, involving deletion of nested logic labels (used at Myrtle Avenue), has been identified and fixed.</li>
-</ul>
-<h2>Release 2.0.12 Mac — 15 Sept 2014</h2>
-<ul>
-<li>A very major <b>bug troubling interlocking unloading</b>, which caused crashes during startup, loading, and unloading, was found and fixed.  The same bug exists in the Windows Version 2, but does not cause crashes because of differing runtime heap-management policies.</li>
-<li>The <b>Demo System </b> as in earlier versions is now up in <span class=nxsys>NXSYS / Mac</span>.   This allows some scripting via Lisp-like forms.  See the <a href="NXSYS.html#demos">Version 1 documentation</a> and the demo script file <b>Myrtle.xdo</b> in the Myrtle Avenue folder for repertoire and a runnable example, respectively.</li>
-<li>The internal timer system (used by panel flashing, stop and switch motion, and timer relays) was completely rewritten for  the Mac to fully exploit OS/X's automatic memory-management features, greatly improving the robustness, reliability, and cleanliness of this area of the application and comprising a marked departure from the overall strategy of the port (viz., Cocoa implementation of Windows APIs) in order to accrue these boons.</li>
-<li>All formatting and functionality problems in the <a href="NXSYS.html">Version 1 Document</a> have been fixed, and some markup for the Mac added.  While there may be further improvements, it now is up to par.</li>
-<li>A moderately serious bug in graphics scheduling (at least inhibiting GK-light coding ("flashing") at call-on) time was fixed.  Another bug that caused automatic reloading of incorrect files was fixed.</li>
-</ul>
-
-<h2>Release 2.0.11 Mac — 10 Sept 2014</h2>
-<ul>
-<li>A generic misfeature whereby you had to click the main window twice after a train dialog, full signal display, or other child window pops up, the first time to focus the main window and the second to achieve your desired purpose, has been fixed.  <span class=nxsys>NXSYS</span> will now refocus the main window for you automatically.  This does not include the Relay Draftsperson, because you might more want to click on it more than on the main window, and may or may not be right for train dialogs.  Use the mouse to choose windows to focus. Full signal windows even refocus the main window when you finish moving them.</li>
-<li>A new bug whereby the open Relay Draftsperson would block full shutdown was fixed.</li>
-<li>All the internal links in the <a href="NXSYS.html">Version 1 Document</a> have been resolved. Sections describing features not available on the Mac have been so marked in <b><span style="color:#D00">prominent type.</span></b></li>
-</ul>
-<h2>Release 2.0.10 Mac — 9 Sept 2014</h2>
-<ul>
-    <li>Allows for correctly-sized <b>train-operator pushbutton boxes</b> of any number of pushbuttons.</li>
-    <li>A recent (2 days?) bug causing <b>full-signal displays</b> to pile on top of each other instead of appearing near their GK light has been patched.</b>
-    <li>The Call-on button in <b>train system</b> dialogs now appears and hides and works as it should, completing the standard <span class=nxsys>NXSYS</span> train feature set.</li>
-    <li>The app declares the <b>.trk</b> file type to the Mac shell.  This means that you can open <b>.trk</b> interlocking-definition files from the Finder, provided that (1) the file you pick is the correct "top-level file" for that interlocking (as documented) and (2) that you choose <span class=menu>Open With...</span> from the Finder right-click menu, whereupon you will see the icon and name of the app.  If you keep the app in a consistent place, you can choose <span class=menu>Other...</span> and form a default association, so that double-click will then suffice.</li>
-</ul>
-<h2>Release 2.0.9 Mac — 9 Sept 2014</h2>
-
-<ul>
-    <li>A new command on the <span class=menu>View</span> menu, <span class=menu>Relay Draftsperson</span>, allows you to call up the Draftsperson (with all its previous content if any), or close it if it is open. A checkmark tells its current status, should you have any trouble seeing it otherwise.  It has the helpful keyboard accelerator <b>&#8984;D</b>.</li>
-    <li>The Draftsperson now clears all content when an interlocking is loaded; clearing when reloading the same interlocking is correct, because circuits may have changed, and what is drawn may be wrong.</li>
-    <li>Full-signal window titles are back, but have dropped the word "Signal" to make them fit on the Mac, and now look like "<span class=menu style="font-size:smaller">X 164</span>".</li>
-    <li>The setting of <span class=menu>Automatic Operation</span> is now preserved across reloads; the corresponding relay will "magically" get picked in this case.  Exposed pushbutton boxes have also been fixed to dismiss properly at layout shutdown.  The menu item will ergatively disable if the relay is not present (i.e., the loaded interlocking does not support automatic operation.)</li>
-    <li><span class=menu>Draw Relay</span> has been moved to the top of Switch and Track context menus.</li>
-    <li>The <span class=menu>Reverse</span> button in train dialogs is now enabled only when the train is halted, as it was/should be.</li>
-    <li>The application version is now shown in the main window title bar; this should be useful for bug reporting.</li>
-</ul>
-<h2>Release 2.0.8 Mac — 8 Sept 2014</h2>
-<ul>
-    <li>This release completes train-operator pushbuttons; since they newly resemble real boxes more than they do "radio buttons", there are separate buttons (left) and lamps (right).  The labels "Unidentified" and "Cancel" are specially recognized to suppress the appearance of the would-be corresponding button and lamp, respectively.  They are positioned in the right place now.</li>
-    <li>A change has been made to the management of all subordinate windows, in particular train-operator pushbuttons and train control dialogs, to always act as "children (dialogs)" when exposed, that is, always hovering above the main window and moving with it.  this should make them quite a bit more useful.  I don't recall if the relay draftsperson had that property properly, but it does now.</li>
-</ul>
-
-<h2>Release 2.0.7 Mac — 8 Sept 2014</h2>
-
-<ul>
-    <li>This release implements train-operator pushbuttons (manual route-request).  The Myrtle Avenue scenario has some of these; read the scenario-specific help for that interlocking to learn about it/try it.  The specification details are unchanged.  Today's implementation does not include the lamps which say which item is selected, and positions all menus at the same place on the screen.  Both situations will be improved shortly.</li>
-    <li><span class=menu>Automatic Operation</span> exploiting these controls has been added, with its check-mark, to the <span class=menu>Interlocking</span> menu.</li>
-</ul>
-
-<h2>Release 2.0.6 Mac — 7 Sept 2014</h2>
-    
-<ul>
-    <li>This release implements the train system.  There are a couple of very minor differences from Windows in the UI, including a "Mac" look of the dialog, but, otherwise, modulo unknown bugs, it's all there as documented and as it always had been. See <a href="MacNXSYS.html#TrainDifferences">the main document, changed features</a>, for a complete accounting of the current differences.  Please be on the lookout for problems.</li>
-</ul>
-<h2>Release 2.0.5 Mac — 6 Sept 2014 </h2>
-
-<ul>
-    <li>Fixes two problems whereby spurious artifacts were drawn upside-down on the bottom edge of the main window, visible only when white, viz., random switch points in motion, and lenses of full signal displays (a vestige of the real-time redraw capability of Windows not available on the Mac).</li>
-    <li>The background color of the main window has been set to black; this affects only the areas outside the interlocking, which were recently white.</li>
-    <li>Attempts to fix what may be a problem in relay-label reference management that may be the cause of some crashes experienced by a user, crashes that I cannot reproduce.  Please send stack-trace logs for any crashes you incur.  This fix is kludgey, and more info is needed (more traps can be set).</li>
-    <li>Has the first interaction of the train system (choose track) as work on the train system takes priority. No trains just yet.</li>
-</ul>
-<h2>Release 2.0.4 Mac — 5 Sept 2014</h2>
-<ul>
-    <li>This version is targeted for Mac OS/X 10.8 for a user running that, to see if it works.</li>
-</ul>
-
-<h2>Release 2.0.3 Mac — 5 Sept 2014</h2>
-<ul>
-    <li>A comprehensive revision of the window/view sizing strategy was put in place, which sizes the view to the actual size of the interlocking and lets the Mac Scroll View take it from there.  Significantly, the <span class=nxsys>NXSYS</span> graphics system native clipping is totally suppressed; all items are "always visible" to <span class=nxsys>NXSYS</span>, but not visible to you, but for scroll view whose job that is.  The only real effect of this should be that numerous anomalies disappearing outlying areas of interlockings should all be cured now.</li>
-    <li>Version 1 helpfile - <span style="color:#099">Definition links</span> now "work", popping up the text from a new well-formatted "terminology table." All the table-of-contents links now work.  But for very minor local problems (and its general obsolete parts), this document is now up to spec.</li>
-</ul>
-<h2>Release 2.0.2 Mac — 4 Sept 2014 </h2>
-
-<ul>
-    <li>Unchains four more erstwhile finite arrays: for timer relays, relay-subcircuit labels, Lisp symbols, and relay types. The sky is the new limit.  Giant interlockings have loaded.</li>
-    <li>The "end of Myrtle Avenue disappearing" problem seems to have been fixed by the serious rewrite of window size management in 2.0.1.</li>
-    <li>A great deal of work has gone towards getting the V1 helpfile operative.  "Definition" links now appear dark green, not underlined, but don't work yet. Almost all other internal links now work.</li>
-    <li>A bug (commented-out code with a side-effect) in the loading of "panel-switches", which are not yet documented (and don't appear in either of the sample interlockings), which crashed when loading them, was fixed.</li>
-    <li>A bug in the positioning and redisplay of text strings (such as the interlocking labels) was found and fixed.</li>
-    <li>The graphics of traffic lever arrows have been fixed.</li>
-    <li>Fixed a relay-symbol-interning bug in 2.0.1 which put <span class=menu>Query Relay</span> out of order.</li>
-</ul>
-
-<h2>Release 2.0.1 Mac  — 3 Sept 2014</h2>
-<ul>
-  <li>Fixes a bug whereby any Full-Signal window, when called up after
-  being closed, would be in a "non-child state", i.e., would duck
-  under the main frame when you returned to the interlocking after
-  exposing it.
-  </li>
-  <li>Adds this <b>Release Notes</b> item to the <span class=menu>Help</span> menu, and an official (outstanding!) bug list to the end of the main Mac document.</li>
-
-  <li>The guts of the app were upgraded to use portable STL (Standard Template Library) strings and vectors instead of my private 20+ -year-old "catbuf" system, source of endless feline jokes and memories.</li>
-  <li>The Relay Macro Table, too, has been converted to an STL vector, consigning the annoying "Macro Table Overflow" phenomenon to history.  Ditto "timer table overflow"."</li>
-  <li>The Horizontal and Vertical Scroll Bars have both been reinstated, as well as  the ability to scroll vertically over large interlockings.</li>
-  <li><b>&#8984&nbsp;-</b> and <b>&#8984&nbsp;+</b> are now <span class=menu>Zoom Out</span> and <span class=menu>Zoom In</span>, respectively. Note that the latter must be typed with &#8984;, shift, and =.
-      Haven't figured out how to get around that and have the menu text correct.</li>
-</ul>
-<hr>
-<address></address>
-<!— hhmts start —->Last modified: Wed Nov 12 06:35 EST 2014 <!-- hhmts end -->
-</body> </html>
+ </body>
+</html>

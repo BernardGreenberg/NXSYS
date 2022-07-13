@@ -22,7 +22,45 @@ class Turnout;
 #endif
 #ifdef TLEDIT
 #include "TLDlgProc.h"
+#include "ValidatingValue.h"
+#include <unordered_map>
 #endif
+
+#include "propedit.h"
+#include "ijid.h"
+
+#ifdef TLEDIT
+/* Theoretically, a segment group should never have more than one IJID, but such
+   can be created by joining two, and there's a chicken-and-egg problem with
+   splitting the crossover,so can't disallow it, 'cause you have to be able
+   to undo it consistently.  This is a bit crazy.  But if it's ever disallowed
+   in the future (when constructing a crossover between two track circuits
+   will require a construct-joint-insulate-construct sequence) this will still work.
+   */
+using SegmentGroupMap = std::unordered_map<TrackSeg*, IJID>;
+
+struct SwitchBranchSnapshot {
+    TrackSeg* A[3];
+    bool operator == (const SwitchBranchSnapshot&B) const {
+        return A[0] == B.A[0] && A[1] == B.A[1] && A[2] == B.A[2];
+    }
+    bool operator != (const SwitchBranchSnapshot&B) const {
+        return !((*this) == B);
+    }
+    void Init (TrackSeg*C[3]) {
+        A[0] = C[0]; A[1] = C[1]; A[2] = C[2];
+    }
+    SwitchBranchSnapshot () {
+        A[0] = A[1] = A[2] = nullptr;
+    }
+    SwitchBranchSnapshot (TrackSeg* C[3]) {
+        Init(C);
+    }
+};
+
+
+#endif
+
 
 /* Track section (branch) array index(es)*/
 enum class TSAX {
@@ -31,7 +69,6 @@ enum class TSAX {
     STEM   = 0,
     NORMAL = 1,
     REVERSE = 2,
-
 
     /* if TSCount = 2 (nonterminal IJ/kink) */
     IJR0 = 0,
@@ -66,18 +103,19 @@ struct JointOrganizationData {
 
 class TrackJoint
 #ifdef TLEDIT
-   : public GraphicObject
+   : public GraphicObject, public PropEditor<TrackJoint>
 #endif
 {
     public:
 	TrackJoint (WP_cord wpx1, WP_cord wpy1);
+        TrackJoint (WPPOINT wp) : TrackJoint(wp.x, wp.y) {}
 	~TrackJoint();
 
     TrackSeg* operator [](TSAX branch_index) {
         return GetBranch(branch_index);
     };
 
-	long	Nomenclature;
+	IJID	Nomenclature;
 	BOOL	Insulated;
 	BOOL	NumFlip;
 #ifdef TLEDIT
@@ -106,23 +144,43 @@ class TrackJoint
         TrackSeg* GetBranch(TSAX brx);
     
 	virtual void Display (HDC dc);
-	virtual int TypeID ();
-	virtual int ObjIDp(long);
+	virtual TypeId TypeID ();
+	virtual bool IsNomenclature(IJID);
 #ifdef TLEDIT
+ 
+        class PropCell : public PropCellPCRTP<PropCell, TrackJoint> {
+        public:
+            IJID Nomenclature;
+            bool Insulated;
+            BOOL NumFlip;  /* BOOL, not bool - it matters! */
+            int AB0;
+            SwitchBranchSnapshot SBS;
+            void Snapshot_(TrackJoint* tj);
+            void Restore_(TrackJoint* tj);
+        };
 
+        virtual bool HasManagedID();
+        virtual int  ManagedID();
 	virtual void Select();
 	virtual void ShiftLayout2();
 	virtual void Cut();
+        virtual void BeforeInterment();
+        virtual void AfterResurrection();
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual UINT DlgId();
 	virtual BOOL ClickToSelectP();
+        ValidatingValue<std::string> PrecludeUninsulation(const char* action);
 	void	MoveToNewWPpos (WP_cord wpx1, WP_cord wpy1);
-	void	SwallowOtherJoint (TrackJoint * tj);
+        const char * ValidateMergeConditions(TrackJoint*tj);
+	void	SwallowOtherJoint (TrackJoint * tj, bool make_undo_record);
+        int     Dump(ObjectWriter& W);  /* for undo system */
         void	TDump (FILE * F, TSAX branch);
+        TrackSeg* Cut_();  //Multics convention...
 	void	EnsureID();
-	void	Insulate();
+	void	Insulate(bool insulate);
 	void	FlipNum();
-	int	SignalCount();
+	int	SignalExlightCount();
+        TrackSeg* FindOtherSegOfTwo (TrackSeg * seg);
 	BOOL_DLG_PROC_QUAL SwitchDlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 #endif
 
@@ -137,7 +195,7 @@ class TrackCircuit {		// no longer graphic object
 	BOOL  Occupied, Routed, Coding;
 	Relay* TrackRelay;
         std::vector<TrackSeg*>Segments;
-	long StationNo;
+	IJID StationNo;
 	void AddSeg (TrackSeg*);
 	void DeleteSeg (TrackSeg*);
 	void SetOccupied (BOOL sta, BOOL force=0);
@@ -145,7 +203,7 @@ class TrackCircuit {		// no longer graphic object
 	void Invalidate();
 	void ProcessLoadComplete();
 
-	TrackCircuit(long sno);
+	TrackCircuit(IJID ijid);
 	~TrackCircuit();
 	
 #ifdef REALLY_NXSYS
@@ -163,7 +221,6 @@ class TrackCircuit {		// no longer graphic object
 
 class TrackSegEnd {			//NOT a graphic object
     public:
-	RW_cord rwx, rwy;      //meaning of y not so clear
 	WP_cord wpx, wpy;      //Windows (all-scrolled-out) Panel coord
 #ifdef REALLY_NXSYS
 	TrackSeg *Next;   //if there is a switch, "normal" next
@@ -184,51 +241,75 @@ class TrackSegEnd {			//NOT a graphic object
 };
 
 
-class TrackSeg : public GraphicObject {
-    public:
-	TrackSegEnd Ends[2];
-	TrackCircuit * Circuit;
-	float   Length ;  // pythagoric, useful for drawing.
-	float   CosTheta, SinTheta;
-	BOOL    Routed;// this means "not the deselectd end of a trailing pt"
+class TrackSeg : public GraphicObject, public PropEditor<TrackSeg> {
+public:
+    TrackSeg (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2);
+    TrackSeg (WPPOINT p1, WPPOINT p2) : TrackSeg(p1.x, p1.y, p2.x, p2.y) {}
+
+    TrackSegEnd Ends[2];
+    TrackCircuit * Circuit;
+    IJID    TCNO () {return Circuit ? Circuit->StationNo : 0;}
+    float   Length ;  // pythagoric, useful for drawing.
+    float   CosTheta, SinTheta;
+    BOOL    Routed;// this means "not the deselectd end of a trailing pt"
                       //sw, i.e., to be lit red/white in curr. sw. pos.
 #ifdef TLEDIT
-	BOOL    Marked;
+    BOOL    Marked;
+    int     Clock;
 #else
-	Turnout *OwningTurnout;
-	float   RWLength;  /* real-world length for train sys */
+    Turnout *OwningTurnout;
+    float   RWLength;  /* real-world length for train sys */
 #endif
 	short TrainCount;
 	short GraphicBlips;
-	TrackSeg (WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2);
 	void DisplayInState (HDC dc, int state);
 	BOOL SnapIntoLine (WP_cord& wpx, WP_cord& wpy);
 	TrackJoint * FindOtherJoint (TrackJoint * tj);
 	void Align(WP_cord wpx1, WP_cord wpy1, WP_cord wpx2, WP_cord wpy2);
 	void Align();
-	void Split(WP_cord wpx1, WP_cord wpy1, TrackJoint* tj);
+	void Split(WP_cord wpx1, WP_cord wpy1, TrackJoint* tj, TrackSeg* new_seg=nullptr);
 	~TrackSeg();
 
 	virtual void Display (HDC dc);
-	virtual int TypeID ();
-	virtual int ObjIDp(long);
-	TrackCircuit* SetTrackCircuit (long ID, BOOL wildfire);
+	virtual TypeId TypeID ();
+	virtual bool IsNomenclature(IJID);
+	TrackCircuit* SetTrackCircuit (IJID ID);
 	void SetTrackCircuit0 (TrackCircuit * tc);
-	void SetTrackCircuitWildfire (TrackCircuit * tc);
+        void SetTrackCircuitWildfire (IJID ID);
 	void GetGraphicsCoords (int ex, int& x, int& y);
 	virtual BOOL HitP (long x, long y);
+        virtual WPPOINT WPPoint();
 	BOOL HasCircuitBrothers();
         TSEX FindEndIndex (TrackJoint * tj);
         TrackSegEnd& GetEnd(TSEX ex);
         TrackSegEnd& GetOtherEnd(TSEX ex);
+
+    
 #ifdef TLEDIT
+        class PropCell : public PropCellPCRTP<PropCell, TrackSeg>
+        {
+            IJID tcid;
+            WPPOINT loc;
+        public:
+            void Snapshot_(TrackSeg * ts) {
+                tcid = ts->TCNO();
+            }
+            void Restore_(TrackSeg* ts) {
+                ts->SetTrackCircuit(tcid);
+            }
+        };
 	char         EndOrientationKey (TSEX whichend);
 	virtual void Select();
 	virtual void Cut();
+        void         Cut_();
 	void         SelectMsg();
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
 	virtual UINT DlgId();
 	virtual BOOL ClickToSelectP();
+
+        void CollectContacteesRecurse(SegmentGroupMap&);
+    static std::pair<int, int> AnalyzeSegmentGroup(const SegmentGroupMap&M);
+        void PurgeFromLimbo();
 #else
 	void SpreadSwitchRoutingState(BOOL p_routed);
 	void SpreadRWFactor (double rwf);
@@ -251,7 +332,7 @@ public:
 };
 
 
-class PanelSignal  : public GraphicObject {
+class PanelSignal  : public GraphicObject, public PropEditor<PanelSignal> {
     public:    
 	PanelSignal(TrackSeg * ts, TSEX endx, Signal * s, char * text);
 	~PanelSignal();
@@ -279,25 +360,45 @@ class PanelSignal  : public GraphicObject {
 
 	virtual void Cut();
 	virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
-    BOOL DlgOK(HWND hDlg);
+        BOOL DlgOK(HWND hDlg);
 	virtual UINT DlgId();
+        void SetStoppiness(bool has_stop);
+        void ChangeXlkgNo(int new_xlkg_no);
 #else
 	virtual void EditContextMenu(HMENU m);
 	void DrawFleeting(HDC dc, BOOL enabled);
 #endif
 	virtual void Display (HDC dc);
 	void Reposition();
-	virtual int TypeID ();
-	virtual int ObjIDp(long);
+	virtual TypeId TypeID ();
+	virtual bool IsNomenclature(IJID);
 	virtual void ComputeWPRect();
 #ifdef TLEDIT
+        virtual bool HasManagedID();
+        virtual int  ManagedID();
 	virtual void Select();
-	virtual int Dump (FILE * f);
+	virtual int Dump (ObjectWriter& W);
 #else
 	virtual void Hit (int mb);
 	virtual void UnHit();
 #endif
 
+#ifdef TLEDIT
+        virtual void MakeSelfVisible();
+    class PropCell : public PropCellPCRTP<PropCell, PanelSignal> {
+    public:
+        int XlkgNo;
+        bool HasStop;
+        int StationNo;
+        char Orientation;
+        std::string HeadsString;
+        TSEX SegTSEX;
+        TrackSeg* Seg;
+        /* These are heavily dependent on the real "Signal".  Can't inline them.*/
+        void Snapshot_(PanelSignal * p);
+        void Restore_(PanelSignal * p);
+    };
+#endif
 };
 
 
@@ -326,8 +427,8 @@ public:
     static  void  StopCoderReporter(void *v, BOOL state);
 
     virtual void Display (HDC dc) override;
-    virtual int TypeID() override;
-    virtual int ObjIDp(long) override;
+    virtual TypeId TypeID() override;
+    virtual bool IsNomenclature(IJID) override;
     virtual BOOL HitP(long, long) override;
 #if REALLY_NXSYS   // if really nxsys, override with "false"; default is true.
     virtual bool MouseSensitive() override;
@@ -341,7 +442,7 @@ public:
    some methods in common. */
 #define EXLIGHT_DEFINED 1
 
-class ExitLight : public GraphicObject {
+class ExitLight : public PropEditor<ExitLight>, public GraphicObject {
 public:
     TrackSeg * Seg;
     int  XlkgNo;
@@ -351,7 +452,6 @@ public:
     unsigned char Lit;
     unsigned char RedFlash;
     unsigned char Blacking;
-
 
 public:
 
@@ -363,9 +463,23 @@ public:
 
     virtual void Display (HDC hdc);
     virtual BOOL HitP (long x, long y);
-    virtual int TypeID(), ObjIDp(long);
+    virtual TypeId TypeID();
+    virtual bool IsNomenclature(IJID);
 #ifdef TLEDIT
-    virtual int Dump (FILE * f);
+    /* This is already so tricky that I can barely understand what I have created, but
+     the goal here is minimal duplicated code */
+    class PropCell : public PropCellPCRTP<PropCell, ExitLight> {
+        int LeverNumber;
+    public:
+        void Snapshot_(ExitLight* e) {
+            LeverNumber = e->XlkgNo;
+        }
+        void Restore_(ExitLight* e) {
+            e->XlkgNo = LeverNumber;
+        }
+    };
+
+    virtual int Dump (ObjectWriter& W);
     virtual void Select();
     virtual void Cut();
     virtual BOOL_DLG_PROC_QUAL DlgProc (HWND hDlg, UINT msg, WPARAM, LPARAM);
@@ -388,7 +502,7 @@ extern BOOL ShowNonselectedJoints;
 #ifdef REALLY_NXSYS
 void TrackCircuitSystemLoadTimeComplete();
 void TrackCircuitSystemReInit();
-void DecodeDigitated (long input, int &trackno, int &sno);
+void DecodeDigitated (IJID input, int &trackno, int &sno);
 TrackCircuit * FindTrackCircuit (long sno);
 void TrackCircuitSystemReInit();
 #endif

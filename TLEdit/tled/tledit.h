@@ -19,7 +19,7 @@ class ExitLight;
 #endif
 
 void TrackLayoutRodentate (HWND hWnd, UINT message, int x, int y);
-void InsulateJoint (TrackJoint * joint);
+void ToggleInsulation (TrackJoint * joint);
 
 void DoHelpDialog ();
 void DoAboutDialog ();
@@ -32,11 +32,11 @@ void TLEditCreateExitLightFromSignal(PanelSignal * ps, CBOOL upright);
 void FlipSignal (PanelSignal * ps);
 BOOL DoShiftLayoutDlg(int&x, int&y);
 void ShiftLayout(int delta_x, int delta_y);
+void ShiftLayout_(int delta_x, int delta_y);
 BOOL RegisterTextSampleClass(HINSTANCE hInstance);
 
 extern int FixOriginWPX, FixOriginWPY;
 extern HWND G_mainwindow;
-extern BOOL BufferModified;
 extern HINSTANCE app_instance;
 extern const char app_name[];
 extern BOOL ExitLightsShowing;

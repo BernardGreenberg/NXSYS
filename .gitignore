@@ -19,3 +19,8 @@ NXSYSMac.xcodeproj/project.xcworkspace/xcuserdata/bsg.xcuserdatad/UserInterfaceS
 *.odt#
 *.xcuserstate
 *.xcuserstate
+*.xcworkspacedata
+DocSource/.~lock.TLEdit1.oth\#
+DocSource/.~lock.TLEdit.oth\#
+TLEdit.build_log.txt
+DocSource/TLEdit.pdf

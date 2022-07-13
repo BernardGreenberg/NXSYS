@@ -10,12 +10,13 @@
 #import <WebKit/WebKit.h>
 
 @interface CustomAboutController : NSWindowController
--(void)Show;
--(void)SetVersionData:(NSString*)version date:(NSString*)date build_number:(NSString*)build_number;
+-(void)Show: (NSWindow*)parent;
 -(bool)isWindowVisible;
 @property (weak) IBOutlet WKWebView *theWebView;
-@property (weak) IBOutlet NSTextField *labelLine1;
-@property (weak) IBOutlet NSTextField *labelLine2;
+@property (weak) IBOutlet NSImageView *theImageView;
+@property (weak) IBOutlet NSTextField *labelAppName;
+@property (weak) IBOutlet NSTextField *labelVersion;
+@property (weak) IBOutlet NSTextField *labelBuild;
 
 @end
 

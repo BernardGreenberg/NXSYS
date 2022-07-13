@@ -5,7 +5,7 @@
 #include "compat32.h"
 #include "nxgo.h"
 #include "xtgtrack.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "math.h"
 #include "PolyKludge.h"
@@ -81,12 +81,12 @@ void PanelSignal:: Reposition() {
 	Sig->TStop->Reposition();
 }
 
-int PanelSignal::TypeID() {
-    return ID_SIGNAL;
+TypeId PanelSignal::TypeID() {
+    return TypeId::SIGNAL;
 }
 
-int PanelSignal::ObjIDp (long id) {
-    /* +++++ gonna need a lot of work with symbolic object names */
+bool PanelSignal::IsNomenclature (long id) {
+/* +++++ gonna need a lot of work with symbolic object names */
     return (Sig
 	    &&
 	    ((Sig->XlkgNo == id)

@@ -27,7 +27,7 @@ int CountRelaySyms();
 
 #include "windows.h"
 #include "nxgo.h"
-#include "objid.h"
+#include "typeid.h"
 #include "signal.h"
 #include "xtgtrack.h"
 #include <time.h>
@@ -47,7 +47,7 @@ void getFileTime(const char* filename, std::string& result) {
 
 int InterlockingFileStatus::contemplari (GraphicObject* g) {
     switch (g->TypeID()) {
-        case ID_SIGNAL:
+        case TypeId::SIGNAL:
         {
             PanelSignal * psp = (PanelSignal*)g;
             Signal * sp = psp->Sig;
@@ -57,15 +57,15 @@ int InterlockingFileStatus::contemplari (GraphicObject* g) {
             }
             break;
         }
-        case ID_EXITLIGHT:
+        case TypeId::EXITLIGHT:
             nExitLights += 1;
             break;
-        case ID_TURNOUT: // not in nxgo table in real NXSYS
+        case TypeId::TURNOUT: // not in nxgo table in real NXSYS
             break;
-        case ID_JOINT:
+        case TypeId::JOINT:
             nJoints += 1;
             break;
-        case ID_TRACKSEG:
+        case TypeId::TRACKSEG:
         {
             const TrackSeg* tsp = (const TrackSeg*) g;
             const TrackCircuit * tcp = (const TrackCircuit*) tsp->Circuit;

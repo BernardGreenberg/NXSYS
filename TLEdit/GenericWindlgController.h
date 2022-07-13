@@ -41,4 +41,5 @@ static int dlgRslt_ ## RESOURCE_ID = DefineWindlgWithClass([CLASS_NAME class], R
 -(void)reflectCommand:(NSInteger)command;
 -(void)reflectCommandParam:(NSInteger)command lParam:(NSInteger)param;
 -(void)didInitDialog;  /* "virtual" to be overriden */
+-(void)controlTextDidChange:(NSNotification *)notification;
 @end

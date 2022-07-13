@@ -9,7 +9,7 @@
 #include "nxgo.h"
 #include "xtgtrack.h"
 #include "lyglobal.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "SwitchConsistency.h"
 
@@ -33,11 +33,6 @@ static int JointGlyphRadius;
 TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
     Nomenclature = 0L;
     SwitchAB0 = 0;
-#if NXSYSMac
-    JointGlyphRadius = (int)(1.5*GU2);
-#else
-    JointGlyphRadius = (int) (2*GU2);
-#endif
     Insulated = FALSE;
     Lab = NULL;
     TSCount = 0;
@@ -47,6 +42,11 @@ TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
     wp_y = wpy1;
 
 #if TLEDIT
+#if NXSYSMac
+    JointGlyphRadius = (int)(1.7*GU2);
+#else
+    JointGlyphRadius = (int) (2*GU2);
+#endif
     Organized = FALSE;
     Selected = FALSE;
     Marked = FALSE;
@@ -63,6 +63,15 @@ TrackJoint::TrackJoint (WP_cord wpx1, WP_cord wpy1) {
 #endif
 }
 
+#ifdef TLEDIT
+bool TrackJoint::HasManagedID() {
+    return true;
+}
+
+int TrackJoint::ManagedID() {
+    return (int)Nomenclature;
+}
+#endif
 
 TrackJoint::~TrackJoint () {
 #if TLEDIT
@@ -142,11 +151,15 @@ void TrackJoint::DelBranch (TrackSeg * ts) {
                 PositionLabel();
             }
 #endif
+/* In new "Limbo" regime, nulling these pointers is a bad idea.  They can be resurrected.
+    Final destruction (layout unload/shutdown) does not come through here. This can only be
+    the result of editing or Redo */
+#if 0
             if (ts->Ends[0].Joint == this)
                 ts->Ends[0].Joint = nullptr;
             if (ts->Ends[1].Joint == this)
                 ts->Ends[1].Joint = nullptr;
-
+#endif
             TSCount--;
 
 	    for (int j = i; j < TSCount; j++)
@@ -157,8 +170,8 @@ void TrackJoint::DelBranch (TrackSeg * ts) {
         TSA[i] = nullptr;
 }
 
-int TrackJoint::TypeID () {return ID_JOINT;}
-int TrackJoint::ObjIDp(long x) {return Nomenclature == x;}
+TypeId TrackJoint::TypeID () {return TypeId::JOINT;}
+bool TrackJoint::IsNomenclature(IJID x) {return Nomenclature == x;}
 
 
 
@@ -183,7 +196,7 @@ void TrackJoint::PositionLabel() {
 #endif
     else (Lab->Hide());
 
-    sprintf (buf, "%ld", (long)Nomenclature);
+    sprintf (buf, "%ld", (IJID)Nomenclature);
     if (TSCount == 3 && SwitchAB0 != 0) 
 	strcat (buf, (SwitchAB0 == 1) ? "A" : "B");
     Lab->SetText (buf); 
@@ -232,7 +245,6 @@ static int OrgDataCompare (const void * e1p, const void * e2p) {
 }
 
 void TrackJoint::GetOrganization (JointOrganizationData *jod) {
-
     int i;
 //    assert(TSCount == 3); not so
     /* Compute positive, clockwise angles from positive X origin */

@@ -7,7 +7,7 @@
 #include "compat32.h"
 #include "nxgo.h"
 #include "xtgtrack.h"
-#include "objid.h"
+#include "typeid.h"
 #include "brushpen.h"
 #include "rlyapi.h"
 #include "nxsysapp.h"
@@ -152,11 +152,11 @@ Virtual BOOL ExitLight::HitP (long x, long y) {
     return (Lit || Selected) && GraphicObject::HitP (x, y);
 }
 
-int ExitLight::TypeID (){
-    return ID_EXITLIGHT;
+TypeId ExitLight::TypeID (){
+    return TypeId::EXITLIGHT;
 }
 
-int ExitLight::ObjIDp(long id) {
+bool ExitLight::IsNomenclature(long id) {
     return id == XlkgNo;
 }
 
