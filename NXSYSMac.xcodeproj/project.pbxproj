@@ -330,6 +330,7 @@
 		5B4E62B1284AEA6A002A6C7E /* OpenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OpenIcon.png; sourceTree = "<group>"; };
 		5B4E62B3284AF17C002A6C7E /* OpenIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = OpenIcon.pxd; sourceTree = "<group>"; };
 		5B4E62B5284AF19B002A6C7E /* MacAppwinAPIs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacAppwinAPIs.h; sourceTree = "<group>"; };
+		5B4F38EE287F54200038718B /* DesignWindowDims.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignWindowDims.h; sourceTree = "<group>"; };
 		5B50EE4519BA549B004CAABE /* TrainDlgController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrainDlgController.h; sourceTree = "<group>"; };
 		5B50EE4619BA549B004CAABE /* TrainDlgController.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TrainDlgController.mm; sourceTree = "<group>"; };
 		5B50EE4819BA9455004CAABE /* ChooseTrack.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseTrack.xib; sourceTree = "<group>"; };
@@ -641,7 +642,6 @@
 		5BF06F5419A10D03008CDCA0 /* CompiledCodeInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompiledCodeInterface.cpp; path = NXSYSMac/CompiledCodeInterface.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacNxldwin.cpp; path = NXSYSMac/MacNxldwin.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacRelayGraphics.cpp; path = ../NXSYSMac/MacRelayGraphics.cpp; sourceTree = "<group>"; };
-		5BF4134028799C8700C002BC /* DesignWindowDims.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DesignWindowDims.h; path = ../../../Music/DesignWindowDims.h; sourceTree = "<group>"; };
 		5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = edtraflev.cpp; sourceTree = "<group>"; };
 		5BF7CEB419CA2A4200DF6ECE /* edswkey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = edswkey.cpp; sourceTree = "<group>"; };
 		5BF7CEB619CA2AFD00DF6ECE /* dragger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dragger.cpp; sourceTree = "<group>"; };
@@ -847,6 +847,7 @@
 		5B5AE6462311529700348612 /* Random Headers */ = {
 			isa = PBXGroup;
 			children = (
+				5B4F38EE287F54200038718B /* DesignWindowDims.h */,
 				5B30B10927E929C5000D59C8 /* nxproduct.h */,
 				5BFB4A0027ADD720006BE311 /* StartShut.h */,
 				5BFB49E327AC626B006BE311 /* pival.h */,
@@ -881,7 +882,6 @@
 				5B5AE648231153AB00348612 /* trainaut.h */,
 				5B62AB5322FF06BB00169445 /* traindcl.h */,
 				5B5AE652231156C500348612 /* usermsg.h */,
-				5BF4134028799C8700C002BC /* DesignWindowDims.h */,
 			);
 			name = "Random Headers";
 			sourceTree = "<group>";
