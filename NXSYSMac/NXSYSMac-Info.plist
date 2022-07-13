@@ -3,7 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>BundleBuildDate</key>
+<<<<<<< Updated upstream
 	<date>2022-04-01T18:04:40Z</date>
+=======
+	<date>2022-07-11T19:03:39Z</date>
+>>>>>>> Stashed changes
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -42,7 +46,11 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
+<<<<<<< Updated upstream
 	<string>1413</string>
+=======
+	<string>1593</string>
+>>>>>>> Stashed changes
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.education</string>
 	<key>LSMinimumSystemVersion</key>
