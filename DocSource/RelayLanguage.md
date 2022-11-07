@@ -16,7 +16,7 @@ The [NXSYS web page](https://BernardGreenberg.com/Subway) on my [personal site](
 
 The relay language is a modified subset of [Lisp](https://en.wikipedia.org/wiki/Lisp_\(programming_language\)). In effect, this means little more than that parentheses define *forms* recursively and extant Lisp editing tools (e.g., Emacs) may be used to advantage.  All whitespace is equivalent, case is insignificant except in quoted strings, and semicolons start a rest-of-line comment.
 
-A **form** is either an **atom** or a **list**.  A **list** starts and ends with an open parenthesis a close parenthesis, and contains zero or more forms as its **elements**. Here are the known types of atoms in NXSYS Lisp, with examples
+A **form** is either an **atom** or a **list**.  A **list** starts and ends with an open parenthesis and a close parenthesis, and contains zero or more forms as its **elements**. Here are the known types of atoms in NXSYS Lisp, with examples
 
 
 |Example | Description|
