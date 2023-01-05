@@ -212,18 +212,17 @@ void PanelSignal::SetXlkgNo (int xlkgno, BOOL compvisible){
 	Label = NULL;
     }
     else {
-	char buf[10];
-	if (xlkgno >= 7000)
-	    sprintf (buf, //had been using wsprintf, no exist on mac
-		      "%c%d",
-		      'A' + ((xlkgno/1000) - 7),
-		      xlkgno % 1000);
+        std::string lab;
+        if (xlkgno >= 7000) {
+            lab += 'A' + ((xlkgno/1000) - 7);
+            lab += std::to_string(xlkgno % 1000);
+        }
 	else
-	    sprintf (buf, "%d", xlkgno);
+            lab = std::to_string(xlkgno);
 	if (Label == NULL)
-	    Label = new NXGOLabel (this, wp_x, wp_y, buf);
+	    Label = new NXGOLabel (this, wp_x, wp_y, lab.c_str());
 	else
-	    Label->SetText (buf);
+            Label->SetText (lab.c_str());
 	PositionLabel(compvisible);
     }
 }

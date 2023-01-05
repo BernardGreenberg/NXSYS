@@ -106,7 +106,7 @@ void SwitchKey::AssociateTurnout (Turnout * t) {
 
 void SwitchKey::SetXlkgNo (int xno) {
     XlkgNo = xno;
-    sprintf (NumStr, "%d", xno);
+    snprintf (NumStr, sizeof(NumStr), "%d", xno);
     NumStrLen = (int)strlen(NumStr);
 }
 

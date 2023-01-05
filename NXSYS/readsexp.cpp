@@ -400,8 +400,7 @@ colnum:
 		    rlyf = 1;
 		    goto more_lf;
 		}
-		sprintf (buf, "Junk after number in SEXP: %c", ch);
-		LispBarf (buf);
+		LispBarf (std::string("Junk after number in SEXP: ") + char(ch));
 	    }
 	}
 	v1.type = Lisp::NUM;
@@ -454,10 +453,8 @@ pdbareof:		LispBarf ("End of file in middle of #| ... |#");
 zz:
 	    ch = ' ';
 	}
-	else {
-	    sprintf (buf, "Non-known # escape: %c (0x%X)", ch, ch);
-	    LispBarf (buf);
-	}
+	else
+	    LispBarf (FormatString("Non-known # escape: %c (0x%X)", ch, ch));
     }
     else if (ch == ESC_CHAR) {
 	ch = f.Getc();
@@ -664,11 +661,8 @@ col_flonum_got_num:
 #if _UNICODE
 icd:
 #endif
-	    char bb [100];
-            // Actually putting the character in here, as before, causes Mac not to be able to UTF-8 it and you get nil.b
-	    sprintf (bb, "Incomprehensible data in Lisp;\nFile position = %ld\nHex char = (#x%x)",
-		     f.Tell(),  ch);
-	    LispBarf (bb);
+            LispBarf(FormatString("Incomprehensible data in Lisp;\nFile position = %ld\nHex char = (#x%x)",
+                                  f.Tell(),  ch));
 	}
 	goto reterr;
     }
@@ -888,15 +882,15 @@ void dealloc_lisp_sys() {
 #endif
 
 #if ! DONT_DEFINE_LISPBARF
-void LispBarf(int no, const char * cstr) {
+void LispBarf(int no, std::string cstr) {
     std::vector<Sexpr>v;
     LispBarfVariadic(no, cstr, v);
 }
-void LispBarf(int no, const char * cstr, Sexpr s1) {
+void LispBarf(int no, std::string cstr, Sexpr s1) {
     std::vector<Sexpr>v({s1});
     LispBarfVariadic(no, cstr, v);
 }
-void LispBarf(int no, const char * cstr, Sexpr s1, Sexpr s2) {
+void LispBarf(int no, std::string cstr, Sexpr s1, Sexpr s2) {
     std::vector<Sexpr>v({s1, s2});
     LispBarfVariadic(no, cstr, v);
 }

@@ -829,10 +829,8 @@ void CleanUpDrawing () {
 
 int DrawRelayFromName (const char * rnm) {
     Sexpr s = RlysymFromStringNocreate (rnm);
-    char buf[50];
     if (s == NIL){
-	sprintf (buf, "No such relay: %s", rnm);
-	MessageBox (0, buf, SSNAME, MB_OK|MB_ICONEXCLAMATION);
+	MessageBoxS (0, std::string("No such relay: ") + rnm, SSNAME, MB_OK|MB_ICONEXCLAMATION);
 	return 0;
     }
     Relay * r = s.u.r->rly;

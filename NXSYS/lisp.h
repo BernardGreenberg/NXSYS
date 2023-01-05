@@ -165,10 +165,10 @@ extern Sexpr NIL, DEFRMACRO, EOFOBJ, READ_ERROR_OBJ, FORMS, ARG, QUOTE,
 void LispBarfVariadic(int given_no, const std::string str, std::vector<Sexpr>& v);
 
 //void LispBarf (int nsexps, const char * msg, ...);
-void LispBarf(int no, const char * cstr);
-void LispBarf(int no, const char * cstr, Sexpr s1);
-void LispBarf(int no, const char * cstr, Sexpr s1, Sexpr s2);
-inline void LispBarf(const char * cstr) {
+void LispBarf(int no, std::string cstr);
+void LispBarf(int no, std::string cstr, Sexpr s1);
+void LispBarf(int no, std::string cstr, Sexpr s1, Sexpr s2);
+inline void LispBarf(std::string cstr) {
     LispBarf(0, cstr);
 }
 inline void LispBarf(const char* cstr, Sexpr s1) {

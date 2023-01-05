@@ -179,7 +179,6 @@ bool TrackJoint::IsNomenclature(IJID x) {return Nomenclature == x;}
 
 void TrackJoint::PositionLabel() {
 
-    char buf[10];
     JointOrganizationData jod[3];
     if (Lab && (Nomenclature > 10000)) {
         Lab->SetText("");
@@ -198,10 +197,10 @@ void TrackJoint::PositionLabel() {
 #endif
     else (Lab->Hide());
 
-    sprintf (buf, "%ld", (IJID)Nomenclature);
-    if (TSCount == 3 && SwitchAB0 != 0) 
-	strcat (buf, (SwitchAB0 == 1) ? "A" : "B");
-    Lab->SetText (buf); 
+    std::string label = std::to_string((IJID)Nomenclature);
+    if (TSCount == 3 && SwitchAB0 != 0)
+        label += (SwitchAB0 == 1) ? "A" : "B";
+    Lab->SetText (label.c_str());
 
     GetOrganization(jod);
     /* pointer to biggest interangle */

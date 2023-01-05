@@ -158,7 +158,6 @@ static void PrintRelayType (HDC dc, int X, int Y, int xc,
 
 static void PrintItemNumber (HDC dc, int X, int Y, int yc,
 			     int cellh, int cellw, int nids, long inum) {
-    char buf [10];
     RECT txr;
     txr.left = X- 1*cellw;
     txr.right = txr.left + cellw;
@@ -166,21 +165,20 @@ static void PrintItemNumber (HDC dc, int X, int Y, int yc,
     txr.bottom = txr.top + cellh;
     MoveTo (dc, X-1*cellw, txr.bottom);
     LineTo (dc, X+nids*cellw, txr.bottom);
-    sprintf (buf, "%ld", inum);
-    DrawText (dc, buf, (int)strlen(buf), &txr,
+    std::string num(std::to_string(inum));
+    DrawText (dc, num.c_str(), (int)num.length(), &txr,
 	      DT_VCENTER | DT_LEFT |DT_SINGLELINE| DT_NOCLIP);
 }
 
 static void PrintPageNum (HDC dc, int X, int Y, int x, int y,
 			  int cellh, int cellw, int page) {
-    char buf [10];
     RECT txr;
     txr.left = X + x*cellw;
     txr.right = txr.left + cellw;
     txr.top = Y + y*cellh;
     txr.bottom = txr.top + cellh;
-    sprintf (buf, "%d", page);
-    DrawText (dc, buf, (int)strlen(buf), &txr,
+    std::string num(std::to_string(page));
+    DrawText (dc, num.c_str(), (int)num.length(), &txr,
 	      DT_VCENTER | DT_CENTER |DT_SINGLELINE| DT_NOCLIP);
 }
 

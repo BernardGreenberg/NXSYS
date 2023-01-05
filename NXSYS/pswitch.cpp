@@ -88,7 +88,7 @@ Virtual bool PanelSwitch::IsNomenclature(long id) {
 
 void PanelSwitch::SetXlkgNo (int xno) {
     XlkgNo = xno;
-    sprintf (NumStr, "%d", xno);
+    snprintf (NumStr, sizeof(NumStr), "%d", xno);
     NumStrLen = (int)strlen(NumStr);
 }
 

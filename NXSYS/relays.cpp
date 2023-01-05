@@ -737,7 +737,7 @@ void validateErr(const char * fmt, ...) {
     va_list (ap);
     va_start (ap, fmt);
     char buf[1000];
-    vsprintf(buf, fmt, ap);
+    vsnprintf(buf, sizeof(buf), fmt, ap);
     printf("Validator error: %s: %s\n", contextBuf, buf);
     DebugBreak();
 }
@@ -828,11 +828,11 @@ bool validateRlysym1(const Rlysym* rsp, const char* name);
 
 void ValidateRelaySym(const Rlysym * rsp, int i) {
     int j = 0;
-    sprintf(contextBuf, "RObarray slot %d", i);
+    snprintf(contextBuf, sizeof(contextBuf), "RObarray slot %d", i);
     if (rsp == NULL){
         return;
     }
-    sprintf(contextBuf, "RObarray slot %d list item %d", i, j++);
+    snprintf(contextBuf, sizeof(contextBuf), "RObarray slot %d list item %d", i, j++);
     
     if (!validatePointer(rsp, "relay sym ptr"))
         return;

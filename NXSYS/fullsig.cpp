@@ -132,12 +132,12 @@ HWND MakeSigWin(Signal * s, int x, int y) {
     char plate[20];
     if (s->XlkgNo)
         if (s->XlkgNo >= 7000)
-            sprintf(plate,
+            snprintf(plate, sizeof(plate),
                     "X %c%d",
                     'A' + ((s->XlkgNo / 1000) - 7),
                     s->XlkgNo % 1000);
         else
-            sprintf(plate, "X %d", s->XlkgNo);
+            snprintf(plate, sizeof(plate), "X %d", s->XlkgNo);
     else
         strcpy(plate, s->CompactName().c_str());
     SetWindowText(window, plate);

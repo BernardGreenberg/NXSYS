@@ -142,9 +142,9 @@ void Pointpos::PassJoint (TrackJoint * tj) {
     int tno, sno;
     DecodeDigitated (tj->Nomenclature, tno, sno);
     if (Glb.IRTStyle)
-	sprintf (LastIJID, "%d/%s", sno*10+tno, Glb.RouteIdentifier.c_str());
+	snprintf (LastIJID, sizeof(LastIJID), "%d/%s", sno*10+tno, Glb.RouteIdentifier.c_str());
     else
-	sprintf (LastIJID, "%s%d-%d", Glb.RouteIdentifier.c_str(), tno, sno);
+	snprintf (LastIJID, sizeof(LastIJID), "%s%d-%d", Glb.RouteIdentifier.c_str(), tno, sno);
     FeetSinceLastIJ = FSLIJatSegStart = 0.0f;
 }
 
