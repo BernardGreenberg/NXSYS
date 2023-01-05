@@ -26,6 +26,10 @@ public:
     void ClickOn (HWND hWnd, GraphicObject * g,
                   const char * description,
                   int x, int y);
+    void ClickOnWNum (HWND hWnd, GraphicObject * g,
+                  const char * description,
+                  long ID,
+                  int x, int y);
     void Abort();
     
     virtual void DeleteObj();

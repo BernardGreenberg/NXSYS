@@ -58,10 +58,11 @@ TLEditAppDelegate* getTLEDelegate() {
     if (!IsLayoutModified())
       return TRUE;
     
-    char buf[256];
-    sprintf(buf, "This layout has been modified since it was last read in or written out.  "
-            "Do you really want to %s and discard your current modifications?", activity);
-    return (MessageBox(NULL, buf, "TLEdit application -- READ CAREFULLY!",
+    std::string msg =  "This layout has been modified since it was last read in or written out.  "
+    "Do you really want to ";
+    msg += activity;
+    msg += " and discard your current modifications?";
+    return (MessageBox(NULL, msg.c_str(), "TLEdit application -- READ CAREFULLY!",
                        MB_YESNOCANCEL | MB_ICONEXCLAMATION) == IDYES);
 }
 -(void)windowWillClose:(NSNotification*) note

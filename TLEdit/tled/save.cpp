@@ -520,7 +520,7 @@ void TrackJoint::TDump(FILE * f, TSAX branch_type) {
         return;
     }
 
-    char identifier [30] = "";   // Assumption = "vanilla kink",i.e., non-insulated joint
+    std::string identifier = "";   // Assumption = "vanilla kink",i.e., non-insulated joint
     TRKPET type;
 
     if (Insulated) {
@@ -528,22 +528,22 @@ void TrackJoint::TDump(FILE * f, TSAX branch_type) {
             throw TLEditSaveException("Insulated switch found: %ld", Nomenclature);
         /* 2 or 1 is right*/
         type = TRKPET::IJ;  // shouldn't really happen
-        sprintf(identifier, " %ld", Nomenclature);
+        identifier += " " + std::to_string(Nomenclature);
     }
     else
         type = TRKPET::KINK;
 
     if (TSCount == 3) {
         type = TRKPET::SWITCH;
-        sprintf(identifier, " %ld %c", Nomenclature, CharizeAB0(Nomenclature, SwitchAB0));
+        identifier = " " + std::to_string(Nomenclature) + " " + CharizeAB0(Nomenclature, SwitchAB0);
     }
 
     if (f) {  // !f = dumper running in effigy/pre-test mode
         char key_plus_id[64];
         if (type == TRKPET::SWITCH)
-            sprintf(key_plus_id, "SWITCH %-14s %s", SWKeys[branch_type], identifier);
+            snprintf(key_plus_id, sizeof(key_plus_id), "SWITCH %-14s %s", SWKeys[branch_type], identifier.c_str());
         else
-            sprintf(key_plus_id, "%-20s  %s", KeyStrings[type], identifier);
+            snprintf(key_plus_id, sizeof(key_plus_id), "%-20s  %s", KeyStrings[type], identifier.c_str());
 
         if (Marked && TSCount == 3)   // Marked switch, location already published.
             fprintf(f, "    (%s)\n", key_plus_id); //(SWITCH NORMAL 10089 0)

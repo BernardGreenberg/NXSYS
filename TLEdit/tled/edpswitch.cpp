@@ -28,9 +28,7 @@ static GraphicObject* CreatePanelSwitch (int wpx, int wpy) {
 REGISTER_NXTYPE(TypeId::PANELSWITCH, CmPanelSwitch, IDD_PANELSWITCH, CreatePanelSwitch, InitPanelSwitchData);
 
 void PanelSwitch::EditClick (int x, int y) {
-    char d[30];
-    sprintf (d, "Panel Switch %d", XlkgNo);
-    Dragon.ClickOn (G_mainwindow, this, d, x, y);
+    Dragon.ClickOnWNum (G_mainwindow, this, "Panel Switch", XlkgNo, x, y);
 }
 
 int PanelSwitch::Dump (ObjectWriter& W) {

@@ -24,7 +24,7 @@ REGISTER_NXTYPE(TypeId::SWITCHKEY, CmAuxKey, IDD_SWKEY, CreateSwKey, InitSwitchK
 
 void SwitchKey::EditClick (int x, int y) {
     char d[30];
-    sprintf (d, "Switch Key %d", XlkgNo);
+    snprintf (d, sizeof(d), "Switch Key %d", XlkgNo);
     Dragon.ClickOn (G_mainwindow, this, d, x, y);
 }
 

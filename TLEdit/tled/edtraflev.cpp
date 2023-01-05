@@ -52,9 +52,7 @@ int TrafficLever::ManagedID() {
 REGISTER_NXTYPE(TypeId::TRAFFICLEVER, CmTrafficLever, IDD_TRAFFICLEVER, CreateTrafficLever, InitTrafficLeverData);
 
 void TrafficLever::EditClick (int x, int y) {
-    char d[30];
-    sprintf (d, "Traffic Lever %d", XlkgNo);
-    Dragon.ClickOn (G_mainwindow, this, d, x, y);
+    Dragon.ClickOnWNum (G_mainwindow, this, "Traffic Lever", XlkgNo, x, y);
 }
 
 int TrafficLever::Dump (ObjectWriter& W) {

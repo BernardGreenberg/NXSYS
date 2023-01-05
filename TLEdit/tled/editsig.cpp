@@ -26,6 +26,9 @@ UINT PanelSignal::DlgId () {return IDD_EDIT_SIGNAL;}
 
 using FUTresult = std::pair<TSAX, TSEX>;
 
+using std::string;
+using std::to_string;
+
 static FUTresult FindUprightTSAX(TrackJoint * tj, bool upright) {
     for (TSAX tsax : {TSAX::IJR0, TSAX::IJR1}) {
         TrackSeg * ts = tj->GetBranch(tsax);
@@ -236,28 +239,25 @@ void PanelSignal::SetStoppiness(bool has_stop) {
 
 BOOL_DLG_PROC_QUAL PanelSignal::DlgProc  (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 
-    char buf[64];
-    char o;
-
     switch (message) {
 	case WM_INITDIALOG:
-	    sprintf (buf, "Signal at IJ %ld",
-		      Seg->GetEnd(EndIndex).Joint->Nomenclature);
-	    SetDlgItemText (hDlg, IDC_EDIT_SIG_IJID, buf);
-	    o = Orientation();
-	    if (o == ' ')
-		strcpy (buf, "");
-	    else
-		sprintf (buf, "Orientation: %c", o);
-	    SetDlgItemCheckState (hDlg, IDC_EDIT_SIG_STOP, Sig->TStop != NULL);
-	    SetDlgItemText (hDlg, IDC_EDIT_SIG_ORIENTATION, buf);
-	    if (Sig->StationNo)
-		SetDlgItemInt (hDlg, IDC_EDIT_SIG_STATION_NO,
-			       Sig->StationNo, FALSE);
-	    SetDlgItemInt (hDlg, IDC_EDIT_SIG_LEVER, Sig->XlkgNo, FALSE);
+        {
+            string plate ("Signal at IJ " + to_string(Seg->GetEnd(EndIndex).Joint->Nomenclature));
+            SetDlgItemText (hDlg, IDC_EDIT_SIG_IJID, plate.c_str());
+            char o = Orientation();
+            string orient;
+            if (o != ' ')
+                orient = string("Orientation: ") + o;
+            SetDlgItemCheckState (hDlg, IDC_EDIT_SIG_STOP, Sig->TStop != NULL);
+            SetDlgItemText (hDlg, IDC_EDIT_SIG_ORIENTATION, orient.c_str());
+            if (Sig->StationNo)
+                SetDlgItemInt (hDlg, IDC_EDIT_SIG_STATION_NO,
+                               Sig->StationNo, FALSE);
+            SetDlgItemInt (hDlg, IDC_EDIT_SIG_LEVER, Sig->XlkgNo, FALSE);
             SetDlgItemText (hDlg, IDC_EDIT_SIG_HEADS, Sig->HeadsString.c_str());
             CacheInitSnapshot();
-	    return TRUE;
+            return TRUE;
+        }
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
@@ -268,9 +268,10 @@ BOOL_DLG_PROC_QUAL PanelSignal::DlgProc  (HWND hDlg, UINT message, WPARAM wParam
 		    return TRUE;		    
 		case IDC_EDIT_SIGNAL_JOINT:
 		    Seg->GetEnd(EndIndex).Joint->EditProperties();
-		    sprintf (buf, "Signal at IJ %ld",
-			      Seg->GetEnd(EndIndex).Joint->Nomenclature);
-		    SetDlgItemText (hDlg, IDC_EDIT_SIG_IJID, buf);
+		    SetDlgItemText (hDlg,
+                                    IDC_EDIT_SIG_IJID,
+                                    (string("Signal at IJ ") +
+                                     to_string(Seg->GetEnd(EndIndex).Joint->Nomenclature)).c_str());
 		default:
 		    return FALSE;
 	    }
@@ -296,30 +297,25 @@ int PanelSignal::Dump (ObjectWriter& W) {
             IJ id opt  
       {PLATE "E2 415"} {MODEL HOME3} {NOSTOP}...}
     */
-    char xlbuf[6];
-    char extra [100];
-    char idbuf[15];
+    string xlbuf, extra, idbuf;
    // char orient = ' ';
     TrackJoint * tj = Seg->GetEnd(EndIndex).Joint;
 
-    if (Sig->XlkgNo == 0)
-	strcpy (xlbuf, "");
-    else
-	sprintf (xlbuf, "%5d", Sig->XlkgNo);
-
-    if (Sig->TStop)
-	strcpy (extra, "");
-    else
-	strcpy (extra, " NOSTOP");
-
-    if (Sig->StationNo != 0) {
-	sprintf (idbuf, " ID %d", Sig->StationNo);
-	strcat (extra, idbuf);
+    if (Sig->XlkgNo != 0) {
+        char buff[6];
+        snprintf(buff, sizeof(buff), "%5d", Sig->XlkgNo);
+        xlbuf += buff;
     }
 
+    if (!Sig->TStop)
+	extra = " NOSTOP";
+
+    if (Sig->StationNo != 0)
+        extra += string(" ID ") + to_string(Sig->StationNo);
+
     W.putf("  (SIGNAL %6ld %6s %c (%s)%s)\n",
-           tj->Nomenclature, xlbuf, Orientation(), Sig->HeadsString.c_str(),
-           extra);
+           tj->Nomenclature, xlbuf.c_str(), Orientation(), Sig->HeadsString.c_str(),
+           extra.c_str());
     return SIGNAL_DUMP_ORDER;
 }
 

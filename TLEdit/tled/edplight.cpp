@@ -52,9 +52,7 @@ static const std::string GetPLDlgString (HWND hDlg, UINT id) {
 
 
 void PanelLight::EditClick (int x, int y) {
-    char d[30];
-    sprintf (d, "Panel Light %d", XlkgNo);
-    Dragon.ClickOn (G_mainwindow, this, d, x, y);
+    Dragon.ClickOnWNum (G_mainwindow, this, "Panel Light", XlkgNo, x, y);
 }
 
 int PanelLight::Dump (ObjectWriter& W) {

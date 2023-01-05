@@ -114,8 +114,16 @@ void Dragger::Rodentate (HWND hWnd, int x, int y, UINT message, WPARAM wParam) {
     }
 }
 
+void Dragger::ClickOnWNum(HWND hWnd, GraphicObject * g,
+                          const char * description,
+                          long num, int x, int y) {
+    std::string text = description;
+    text += " " + std::to_string(num);
+    ClickOn(hWnd, g, text.c_str(), x, y);
+}
+
 void Dragger::ClickOn (HWND hWnd, GraphicObject * g,
-		       const char * description, int x, int y) {
+                       const char * description, int x, int y) {
     if (Movingp())
 	return;
     if (!g->Selected) {
