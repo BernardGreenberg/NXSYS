@@ -69,7 +69,7 @@ struct _TKO_INFO {
     const char * Architecture;
     int arch_characterization;
     int compiler_version;
-    char * compiler;
+    const char * compiler;
 };
 
 typedef struct _TKO_INFO TKO_INFO;

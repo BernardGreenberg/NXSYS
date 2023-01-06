@@ -33,6 +33,8 @@
 #include "STLExtensions.h"
 #include "replace_filename.h"
 
+using std::string;
+
 namespace fs = std::filesystem;
 
 /* To be done -- 8 June 1994
@@ -175,7 +177,7 @@ void ComputeLowestFix8Unresolved() {
 }
 
 void GensymTag(Jtag& tg) {
-    sprintf (tg.lab, "g%04d", GensymCtr++);
+    snprintf (tg.lab, sizeof(tg.lab), "g%04d", GensymCtr++);
 }
 
 static char Label_Pending[20] = {0};
@@ -399,12 +401,12 @@ int EncodeOpd (unsigned char * b, int opd, REG_X R1, REG_X R2, int immed) {
     return bc;
 }
 
-void DisasOpd (MACH_OP op, char *buf, unsigned char * b,
+void DisasOpd (MACH_OP op, std::string& buf, unsigned char * b,
 	       const char *opd, const char *prefix) {
     if (!ListOpt)
 	return;
 
-    char memopd[40];
+    std::string memopd;
 
     unsigned char rmbyte = *b++;
     int flags = Ops[op].flags;
@@ -422,20 +424,20 @@ void DisasOpd (MACH_OP op, char *buf, unsigned char * b,
 	case OPMOD_IMMED:
 	    if (op8bit)
 		r2name = REG_NAMES[2][R2];
-	    strcpy (memopd, r2name);
+            memopd = r2name;
 	    break;
 	case OPMOD_RPTR:
 	/* we dont do absolute number (looks like [ebp]/[esp]) yet. */
 	    if (!opd) {
-		sprintf (memopd, "[%s]", r2name);
+                memopd = std::string("[]") + r2name + "]";
 		break;
 	    }				/* fall thru if opd given*/
 	case OPMOD_RP_DISP8:
 	case OPMOD_RP_DISPLONG:
 	{
-	    char stropd[24];
+            std::string stropd;
 	    if (opd)
-		sprintf (stropd, "+%s%s", prefix ? prefix : "", opd);
+                stropd = std::string("+") + (prefix ? prefix : "") +  opd;
 	    else {
 		long disp;
 		if (mode == OPMOD_RP_DISP8)
@@ -445,15 +447,15 @@ void DisasOpd (MACH_OP op, char *buf, unsigned char * b,
 			disp = *((long *)b);	/* low-endian platform assumption! */
 		    else
 			disp = *((short *)b);/* low-endian platform assumption!*/
-		sprintf (stropd, "%c%ld", (disp < 0) ? '-' : '+', disp);
+                stropd = std::string((disp < 0) ? "-" : "+") + std::to_string(disp);
 	    }
-	    sprintf (memopd, "[%s%s]", r2name, stropd);
+            memopd = std::string("[") + r2name + stropd + "]";
 	    break;
 	}
     }
 
     if (flags & OPF_NOREGOP)
-	strcpy (buf, memopd);
+        buf = memopd;
     else {
 	int r1bp = B32p;
 	if (op8bit && op != MOP_MOVZX8)
@@ -461,9 +463,9 @@ void DisasOpd (MACH_OP op, char *buf, unsigned char * b,
 	const char * r1name = REG_NAMES[r1bp][R1];
 
 	if (flags & OPF_RVOPD)
-	    sprintf (buf, "%s,%s", memopd, r1name);
+            buf = memopd + "," + r1name;
 	else
-	    sprintf (buf, "%s,%s", r1name, memopd);
+            buf = std::string(r1name) + "," + memopd;
     }
 }
 
@@ -471,7 +473,7 @@ void DisasOpd (MACH_OP op, char *buf, unsigned char * b,
 void outinst_general (MACH_OP op, int immed,
 		      REG_X r_accum, REG_X r_base, int opd, const char * listopd) {
     unsigned char bytes[12];
-    char dbuf[50] = "";
+    std::string dbuf;
     int bc = 0;
     if (Ops[op].flags & OPF_0F)
 	bytes[bc++] = 0x0F;
@@ -480,13 +482,13 @@ void outinst_general (MACH_OP op, int immed,
     unsigned char * osave = bytes+bc;
     bc += EncodeOpd (bytes+bc, opd, r_accum, r_base, immed);
     DisasOpd (op, dbuf, osave, listopd, NULL);
-    outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf);
+    outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf.c_str());
 }
 
 
 void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
     unsigned char bytes[12];
-    char dbuf[50]= "";
+    std::string dbuf;
     int bc = 0;
     if (Ops[op].flags & OPF_0F)
 	bytes[bc++] = 0x0F;
@@ -506,34 +508,34 @@ void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
 	case MOP_JNZ:
 	case MOP_JMP:
 	    bytes[bc++] = (opd-Pctr-2) &0xFF;
-	    strcpy (dbuf, str);
+            dbuf = str;
 	    break;
 
 	case MOP_JMPL:
 	    bc += Outdata ((int) opd, FullWidth, bytes+bc);
-	    sprintf (dbuf, "long %s", str);
+            dbuf = "long " + std::string(str);
 	    break;
 
 	case MOP_XOR:
 	case MOP_CLZ:
 	case MOP_STZ:
 	    bytes[bc++] = opd;
-	    sprintf (dbuf, "al,%d", opd);
+            dbuf = "al," + std::to_string(opd);
 	    break;
 	case MOP_LDBLI8:
 	    bytes[bc++] = opd;
-	    sprintf (dbuf, "bl,%d", opd);
+            dbuf = "bl," + std::to_string(opd);
 	    break;
 
 	case MOP_RPUSH:
 	case MOP_RPOP:
 	    bytes[0] |=  opd;
-	    strcpy (dbuf, REG_NAMES[B32p][opd]);
+            dbuf = REG_NAMES[B32p][opd];
 	    break;
 
 	case MOP_RRET:
 	    bc += Outdata ((int) opd, 2, bytes+bc);
-	    sprintf (dbuf, "%d", (int) opd);
+            dbuf = std::to_string(opd);
 	    break;
 
 	case MOP_RETF:
@@ -542,7 +544,7 @@ void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
 	default:
 	    break;
     }
-    outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf);
+    outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf.c_str());
 }
 
 
@@ -936,7 +938,7 @@ void PushRelayDef (Sexpr rlysexpr) {
 void CompileRelayDef (Sexpr s) {
     Jtag t;
     Sexpr rlysexpr = CAR(s);
-    sprintf (t.lab, "c$%s", rlysexpr.u.r->PRep().c_str());
+    snprintf (t.lab, sizeof(t.lab), "c$%s", rlysexpr.u.r->PRep().c_str());
     PushRelayDef (rlysexpr);
     list ("\n%s\tpublic\t%s\n", Ltabs, t.lab);
     DefineTagPC(t);
@@ -1076,7 +1078,7 @@ void PrintRelayTable () {
 	    lastid = affector;
 	}
 	Rlysym* rsp1 = RelayDefTable[affected].sym;
-        std::string SARep = rsp1->PRep();
+        string SARep = rsp1->PRep();
         int l = (int)SARep.size();
 	if (col+l+1 > 72) {
 	    list ("\n\t");
@@ -1123,7 +1125,7 @@ forms:
 	else if (fn == TIMER)
 	    CompileTimerRelayDef (CDR(s));
 	else if (fn == INCLUDE) {
-            std::string path (replace_filename(fname, CADR(s).u.s));
+            string path (replace_filename(fname, CADR(s).u.s));
 	    FILE * ff = fopen (path.c_str(), "r");
 	    if (ff == NULL)
 		RC_error (1, "Cannot open include file %s", path.c_str());
@@ -1164,7 +1166,7 @@ void CompileLayout (FILE* f, const char * fname) {
     list ("%s  end	\n", Ltabs);
 }
 
-std::string merge_ext(const char * input, const char* new_ext, bool force) {
+string merge_ext(const char * input, const char* new_ext, bool force) {
     auto fspath = fs::path(input);
     if (force || !fspath.has_extension())
         fspath.replace_extension(new_ext);
@@ -1172,7 +1174,7 @@ std::string merge_ext(const char * input, const char* new_ext, bool force) {
 }
 
 void CallWtko (const char * path, const char * opath, time_t timer,
-	       int cversion, char * compdesc) {
+	       int cversion, const char * compdesc) {
     
     TKO_INFO tki;
     tki.Isd = RelayDefTable.data();
@@ -1195,7 +1197,7 @@ void CallWtko (const char * path, const char * opath, time_t timer,
     tki.arch_characterization = 0;
     tki.compiler = compdesc;
     tki.compiler_version = cversion;
-    std::string merged_path;
+    string merged_path;
     if (opath[0] != '\0')
 	merged_path = opath;
     else
@@ -1211,7 +1213,7 @@ void CallWtko (const char * path, const char * opath, time_t timer,
     printf ("%s written, %ld bytes.\n", merged_path.c_str(), get_file_size(merged_path.c_str()));
 }
 
-static bool OpenListing (const char * path, std::string& lpath) {
+static bool OpenListing (const char * path, string& lpath) {
     if (lpath.empty())
         lpath = merge_ext(path, ".lst", true);
     ListFile = fopen (lpath.c_str(), "w");
@@ -1230,13 +1232,11 @@ int main (int argc, char ** argv) {
 #endif
     B32p = (compiler_bits > 16);
 
-    std::string opath;
-    std::string lpath;
-    char compdesc[100];
-    sprintf (compdesc, "BSG Windows Relay Compiler Version 2 (%d-bit) of %s %s",
-	     compiler_bits, __DATE__, __TIME__);
-
-    fprintf (stdout, "%s\n", compdesc);
+    string opath;
+    string lpath;
+    string compdesc = "BSG Windows Relay Compiler Version 2 (";
+    compdesc += std::to_string(compiler_bits) + "-bit of " + __DATE__ + " " __TIME__;
+    fprintf (stdout, "%s\n", compdesc.c_str());
     fprintf (stdout, "Copyright (c) Bernard S. Greenberg 1994, 1996, 2019\n");
 
 #if NXSYSMac
@@ -1269,7 +1269,7 @@ usage:
             arg[0] == '/' ||
 #endif
             arg[0] == '-') {
-            std::string argval= stoupper(arg+1);
+            string argval= stoupper(arg+1);
 	    if (argval == "L")
 		ListOpt = 1;
 	    else if (argval == "T")
@@ -1321,7 +1321,7 @@ usage:
     FullWidth = Bits/8;
     Ahex = Bits/4;
 
-    std::string input_path = merge_ext(fpath, ".trk", false);
+    string input_path = merge_ext(fpath, ".trk", false);
 
     FILE* f = fopen (input_path.c_str(), "r");
     if (f == NULL) {
@@ -1338,7 +1338,7 @@ usage:
             return 2;
 
     list ("; %d-bit compilation of %s at %s", Bits, fpath, asctime(tblock));
-    list (";  by %s\n", compdesc);
+    list (";  by %s\n", compdesc.c_str());
     list (";  Copyright Bernard S. Greenberg (c) 1994, 1996\n\n");
     list ("%s\tideal\n%s\tsegment\tcode\n", Ltabs, Ltabs);
 
@@ -1361,7 +1361,7 @@ usage:
 	fclose(ListFile);
     }
     std::sort(DependentPairTable.begin(), DependentPairTable.end(), dep_sorter);
-    CallWtko (input_path.c_str(), opath.c_str(), timer, 2, compdesc);
+    CallWtko (input_path.c_str(), opath.c_str(), timer, 2, compdesc.c_str());
     return 0;
 };
 
