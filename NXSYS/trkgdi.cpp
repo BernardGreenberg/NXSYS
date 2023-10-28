@@ -1,6 +1,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <cassert>
 
 #include "windows.h"
 #include "nxgo.h"
