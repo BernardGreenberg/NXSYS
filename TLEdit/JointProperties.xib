@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -61,11 +61,11 @@
                     <box autoresizesSubviews="NO" borderType="line" title="Position on panel" translatesAutoresizingMaskIntoConstraints="NO" id="Lcw-ae-hvO">
                         <rect key="frame" x="58" y="49" width="207" height="100"/>
                         <view key="contentView" id="YNl-8N-PH2">
-                            <rect key="frame" x="3" y="3" width="201" height="82"/>
+                            <rect key="frame" x="4" y="5" width="199" height="80"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bA3-9k-vpR">
-                                    <rect key="frame" x="12" y="44" width="67" height="17"/>
+                                    <rect key="frame" x="12" y="42" width="67" height="17"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="17" id="JwW-WC-Ebe"/>
                                         <constraint firstAttribute="width" constant="63" id="Pik-vR-FiC"/>
@@ -80,7 +80,7 @@
                                     </connections>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bYl-v2-V1G">
-                                    <rect key="frame" x="12" y="10" width="67" height="17"/>
+                                    <rect key="frame" x="12" y="8" width="67" height="17"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="17" id="tSM-Gu-DYs"/>
                                     </constraints>
@@ -94,7 +94,7 @@
                                     </connections>
                                 </textField>
                                 <textField identifier="IDC_JOINT_WPX" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jdQ-Mc-1vJ">
-                                    <rect key="frame" x="111" y="41" width="79" height="22"/>
+                                    <rect key="frame" x="111" y="39" width="77" height="22"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="jtG-xk-FfY">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -105,7 +105,7 @@
                                     </connections>
                                 </textField>
                                 <textField identifier="IDC_JOINT_WPY" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3T9-iA-5ob">
-                                    <rect key="frame" x="111" y="7" width="79" height="22"/>
+                                    <rect key="frame" x="111" y="5" width="77" height="22"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="r1D-F4-Tl3">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
