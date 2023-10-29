@@ -7,10 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <vector>
 class Relay;
 
 @interface RelayListView : NSTableView<NSTableViewDataSource>
 @property BOOL nomenclatureOnly;
--(void)setRelayContent:(Relay**)theRelays count:(NSInteger)nRelays;
+-(void)setRelayContent:(std::vector<Relay*>)volatileRelayVector;
 -(Relay*)getSelectedRelay;
 @end

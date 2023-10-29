@@ -65,7 +65,7 @@ extern unsigned NXGOHitX, NXGOHitY;
     [self.window setFrameOrigin:p];
 }
 
--(Relay*)run:(Relay**)theRelays count:(int)nRelays
+-(Relay*)run: (std::vector<Relay*>)theRelays
  description:(NSString *)tag op:(NSString*)op
 {
     //By the first days of October, 2014, Bernie had discovered how to force
@@ -83,7 +83,7 @@ extern unsigned NXGOHitX, NXGOHitY;
     [self window]; // loads nib, makes these properties meaningful
 
     // 3. STUFF STUFF
-    [_theRelayListView setRelayContent:theRelays count:nRelays];
+    [_theRelayListView setRelayContent:theRelays];
     [_Label setStringValue:tag];
     chosenRelay = NULL;
     [self position];
@@ -100,7 +100,8 @@ Relay * RelayListDialog(int objNo, const char *typeName,
                         Relay**theRelays, int nRelays, const char * operation) {
     NSString * tag = [[NSString alloc] initWithFormat:@"%s %d", typeName, objNo];
     NSString * op = [[NSString alloc] initWithFormat:@"%s", operation];
-    return [[[RelaySelectorController alloc] init] run:theRelays count:nRelays
+    std::vector<Relay*>vecRelays(theRelays, theRelays+nRelays);
+    return [[[RelaySelectorController alloc] init] run:vecRelays
                                            description:tag
                                                     op:op];
 }

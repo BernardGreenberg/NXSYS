@@ -39,10 +39,7 @@
     relay = r;
 
     vectorizeDependents(r, dependents);
-    if (dependents.size() == 0)
-        [_listView setRelayContent:NULL count:0];
-    else
-        [_listView setRelayContent:&(dependents[0]) count:dependents.size()];
+    [_listView setRelayContent:dependents]; //WILL COPY IT!
 
     NSString* name = [[NSString alloc] initWithUTF8String:STLRelayName(r).c_str()];
     [_relayNameField setStringValue:name];
