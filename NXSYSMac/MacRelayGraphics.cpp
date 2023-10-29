@@ -101,7 +101,7 @@ void DrawRelaysForObject(int objNo, const char* objTypeName) {
         MessageBox(0, "Seemingly no relays for this object.", "Relay Dialog Manager", MB_OK);
     else
     {
-        Relay * r =   RelayListDialog (objNo, objTypeName, relays.data(), (int)relays.size(), "Draw");
+        Relay * r =   RelayListDialog (objNo, objTypeName, relays, "Draw");
         if (r != NULL)
             DrawRelayAPI(r);
     }
@@ -114,8 +114,7 @@ void ShowStateRelaysForObject(int object_number, const char * descrip) {
         MessageBox(0, "Seemingly no relays for this object.", "Relay Dialog Manager", MB_OK);
     else
     {
-        Relay * r = RelayListDialog (object_number, descrip, relays.data(),
-                                     (int)relays.size(), "Query");
+        Relay * r = RelayListDialog (object_number, descrip, relays, "Query");
         if (r != NULL)
             ShowStateRelay(r);
     }

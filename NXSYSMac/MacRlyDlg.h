@@ -14,15 +14,16 @@
 
 class Relay;
 
+typedef std::vector<Relay*>RelayVec;
+
 typedef void (*RelayListCallback)(Relay* theRelay, const char * tag);
 
 Relay* RelayListDialog(int objNo, const char* typeName,
-                     Relay** theRelays, int nRelays,
-                    const char* op);
+                     const RelayVec& relays, const char* op);
 
 void DrawRelayAPI(Relay *);
 
 std::string STLRelayName(Relay*);
-void vectorizeDependents(Relay * r, std::vector<Relay*>& relays);
+void vectorizeDependents(Relay * r, RelayVec& relays);
 bool boolRelayState(Relay* r);
 #endif

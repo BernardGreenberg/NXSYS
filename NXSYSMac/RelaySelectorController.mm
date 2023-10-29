@@ -65,7 +65,7 @@ extern unsigned NXGOHitX, NXGOHitY;
     [self.window setFrameOrigin:p];
 }
 
--(Relay*)run: (std::vector<Relay*>)theRelays
+-(Relay*)run: (const RelayVec)theRelays
  description:(NSString *)tag op:(NSString*)op
 {
     //By the first days of October, 2014, Bernie had discovered how to force
@@ -96,12 +96,10 @@ extern unsigned NXGOHitX, NXGOHitY;
 }
 @end
 
-Relay * RelayListDialog(int objNo, const char *typeName,
-                        Relay**theRelays, int nRelays, const char * operation) {
+Relay * RelayListDialog(int objNo, const char *typeName, const RelayVec& relays, const char * operation) {
     NSString * tag = [[NSString alloc] initWithFormat:@"%s %d", typeName, objNo];
     NSString * op = [[NSString alloc] initWithFormat:@"%s", operation];
-    std::vector<Relay*>vecRelays(theRelays, theRelays+nRelays);
-    return [[[RelaySelectorController alloc] init] run:vecRelays
-                                           description:tag
-                                                    op:op];
+    return [[[RelaySelectorController alloc] init] run: relays
+                                           description: tag
+                                                    op: op];
 }
