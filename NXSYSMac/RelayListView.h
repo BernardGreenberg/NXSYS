@@ -12,6 +12,6 @@ class Relay;
 
 @interface RelayListView : NSTableView<NSTableViewDataSource>
 @property BOOL nomenclatureOnly;
--(void)setRelayContent:(std::vector<Relay*>)volatileRelayVector;
+-(void)setRelayContent:(const std::vector<Relay*>&)volatileRelayVector;
 -(Relay*)getSelectedRelay;
 @end

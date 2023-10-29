@@ -45,17 +45,16 @@
 }
 @end
 
-//returns old strcmp-type comparisons; should never have =, anyway.
-static int relay_sorter(const Relay *r1, const Relay* r2) {
+static bool relay_cmp(const Relay *r1, const Relay* r2) { //STL-compliant bool result
     Sexpr s1 = r1->RelaySym;
     Sexpr s2 = r2->RelaySym;
     long n1 = s1.u.r->n;
     long n2 = s2.u.r->n;
-    if (n1 < n2) return -1;
-    if (n1 > n2) return +1;
+    if (n1 < n2) return true;
+    if (n1 > n2) return false;
     const char * nom1 = redeemRlsymId(s1.u.r->type);
     const char * nom2 = redeemRlsymId(s2.u.r->type);
-    return strcmp(nom1, nom2);
+    return strcmp(nom1, nom2) < 1;
 }
 
 static NSString* NSifyRelayString(const Relay* r, bool nomenclatureOnly) {
@@ -68,11 +67,7 @@ static NSString* NSifyRelayString(const Relay* r, bool nomenclatureOnly) {
 
 @implementation RelayListView
 @synthesize nomenclatureOnly;
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [super drawRect:dirtyRect];
-    //don't/shouldn't have any custom drawing code.
-}
+
 -(void)awakeFromNib
 {//https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CocoaViewsGuide/SubclassingNSView/SubclassingNSView.html
     [super awakeFromNib];
@@ -97,13 +92,13 @@ static NSString* NSifyRelayString(const Relay* r, bool nomenclatureOnly) {
         return NULL;
 }
 
--(void)setRelayContent:(std::vector<Relay*>)volatileRelayVector
+-(void)setRelayContent:(const std::vector<Relay*>&)volatileRelayVector
 {
     theRelays = volatileRelayVector;
-    theStrings.clear();  // does get reused.
     
-    std::sort(theRelays.begin(), theRelays.end(),
-              [] (Relay* const & a, Relay* const & b) {return relay_sorter(a, b) < 1;});
+    std::sort(theRelays.begin(), theRelays.end(), relay_cmp);
+
+    theStrings.clear();  // does get reused.
     for (auto r : theRelays)
         theStrings.push_back(NSifyRelayString(r, nomenclatureOnly));
 
@@ -118,9 +113,6 @@ static NSString* NSifyRelayString(const Relay* r, bool nomenclatureOnly) {
 
 -(Relay*)getSelectedRelay{
     NSInteger row = [self selectedRow];
-    int col = 0;
-    // NSInteger col = [self selectedColumn];
-    assert(col >= 0);
     if (row < 0)
         return NULL;
     else
