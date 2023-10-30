@@ -1,14 +1,16 @@
 #!/bin/sh
 
 # BASH Script to create NXSYS DMG including NXSYS, TLEdit, RelayIndex.
-# Just Run. Places temp file and output bz.dmg in the working dir and finds the
-# applications in the user Applications dir unless you change these:
+# Just run it. Places temp file and output bz.dmg in the working dir and finds
+# the applications in the user Applications dir unless you change these:
 
 temp_dmg_dir=.
 output_dir=.
 user_applications=$HOME/Applications
 
+#PListBuddy must be here (XCode build assumes it, too)
 buddy=/usr/libexec/PlistBuddy
+
 #See http://www.macdisk.com/dmgen.php
 
 nxsys_path=$user_applications/NXSYSMac.app
@@ -21,7 +23,6 @@ if [ -f $nxsys_path ]; then
     exit 6
 fi
 
-
 volname="NXSYSDelivery"
 vplace=/Volumes/$volname
 bz="BZ"
@@ -32,11 +33,10 @@ if [ -d $vplace ]; then
 fi
 
 pl_path="$nxsys_path"/Contents/Info.plist
-
 build_number=$($buddy -c "Print CFBundleVersion" "$pl_path")
-verstr=$($buddy -c "Print CFBundleShortVersionString" "$pl_path" | sed "s/\./_/g")
-version=${verstr}_$build_number
-echo $version
+verstr=$($buddy -c "Print CFBundleShortVersionString" "$pl_path")
+version=${verstr//./_}_$build_number
+echo Formatted version $version
 
 if [[ ! "$version" =~ $VERRE ]]; then
     echo "'release'" arg "$version" "isn't of pattern" $VERPAT
