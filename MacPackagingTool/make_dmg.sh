@@ -8,6 +8,7 @@ temp_dmg_dir=.
 output_dir=.
 user_applications=$HOME/Applications
 
+buddy=/usr/libexec/PlistBuddy
 #See http://www.macdisk.com/dmgen.php
 
 nxsys_path=$user_applications/NXSYSMac.app
@@ -30,11 +31,12 @@ if [ -d $vplace ]; then
     exit 1
 fi
 
-if [[ "$1" = "" ]]; then
-    version=$(python getversion.py "$nxsys_path"| sed "s/\./_/g")
-else
-    version="$1"
-fi
+pl_path="$nxsys_path"/Contents/Info.plist
+
+build_number=$($buddy -c "Print CFBundleVersion" "$pl_path")
+verstr=$($buddy -c "Print CFBundleShortVersionString" "$pl_path" | sed "s/\./_/g")
+version=${verstr}_$build_number
+echo $version
 
 if [[ ! "$version" =~ $VERRE ]]; then
     echo "'release'" arg "$version" "isn't of pattern" $VERPAT

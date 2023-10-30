@@ -1,3 +1,7 @@
+
+#Not used anymore -- PListBuddy now used -- ut not deleting from tree...
+#PlistBuddy is necessary for build, anyway.
+
 import os
 import re
 import sys
