@@ -26,12 +26,12 @@
  What it thinks it is doing by calling objectValueForTableColumn at DEALLOCATE time is not so clear,
  as this callback allocated string copies as NSStrings. Hopefully the previous ones would no longer
  be retained. But adding this copying does fix it.  Fixed harder by removing any reference through
- the array beyond init/reload time, other than to return the final value. NSStrings are computed
- at init/reload time now, and saved in a separate STL array (theStrings).
+ the array beyond init/reload time. The array is copied, anyway, for sorting. NSStrings are computed
+ at init/reload time now, and cached in a separate STL array (theStrings).
  
- That's a pretty serious needs-documentation state of affairs, that NSListViews supplied with
- temporarily constructed pointed networks are going to come back to haunt them after they have
- been deallocated. Maybe Apple should know about this.  NXSYSMac 2.7.1 .
+ That's a pretty serious needs-documentation state of affairs, that NSTableViews supplied with
+ temporarily constructed pointer networks are going to come back to haunt them after they have
+ been deallocated. Reported to Apple 10/28.  NXSYSMac 2.7.1 .
  */
 #import "RelayListView.h"
 #include "relays.h"
@@ -41,7 +41,6 @@
 {
     std::vector<Relay*>theRelays;
     std::vector<NSString*>theStrings;
-    NSInteger nColumns;
 }
 @end
 
@@ -57,14 +56,6 @@ static bool relay_cmp(const Relay *r1, const Relay* r2) { //STL-compliant bool r
     return strcmp(nom1, nom2) < 1;
 }
 
-static NSString* NSifyRelayString(const Relay* r, bool nomenclatureOnly) {
-    auto rsp = r->RelaySym.u.r;
-    if (nomenclatureOnly)
-        return [[NSString alloc] initWithUTF8String:redeemRlsymId(rsp->type)];
-    else
-        return [[NSString alloc] initWithUTF8String:rsp->PRep().c_str()];
-}
-
 @implementation RelayListView
 @synthesize nomenclatureOnly;
 
@@ -72,52 +63,44 @@ static NSString* NSifyRelayString(const Relay* r, bool nomenclatureOnly) {
 {//https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CocoaViewsGuide/SubclassingNSView/SubclassingNSView.html
     [super awakeFromNib];
     [self setDataSource:self];
-    nColumns = 1;  // get from nib, better.
-    // This all really gets called for both relay lists.
 }
 
 -(NSInteger) numberOfRowsInTableView:(NSTableView*) tv
 {
     return theRelays.size();
 }
-
+-(NSString*)getRelayString:(Relay*) relay
+{
+    auto rsp = relay->RelaySym.u.r;
+    if (nomenclatureOnly)
+        return [[NSString alloc] initWithUTF8String:redeemRlsymId(rsp->type)];
+    else
+        return [[NSString alloc] initWithUTF8String:rsp->PRep().c_str()];
+}
 -(id)tableView:(NSTableView *)tv objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     // This gets called very mysteriously at destruction time, which may be way after
     // the call to the dialog has exited. It'd better not allocate or use data that
     // might not be there.
-    if (row < theStrings.size())
-        return theStrings[row];
-    else
-        return NULL;
+    assert(row < theStrings.size());
+    return theStrings[row];
 }
 
 -(void)setRelayContent:(const std::vector<Relay*>&)volatileRelayVector
 {
-    theRelays = volatileRelayVector;
-    
-    std::sort(theRelays.begin(), theRelays.end(), relay_cmp);
+    theRelays = volatileRelayVector;  // have to copy this, so we can sort.
+    std::sort(theRelays.begin(), theRelays.end(), relay_cmp);       //sort
 
-    theStrings.clear();  // does get reused.
-    for (auto r : theRelays)
-        theStrings.push_back(NSifyRelayString(r, nomenclatureOnly));
+    theStrings.clear();              // does get reused.
+    for (auto r : theRelays)         //compute the strings and cache them
+        theStrings.push_back([self getRelayString:r]);
 
-    [self reloadData];
-
-    for (int i = 0; i < nColumns; i++) { // doesn't work for more than 9 . . .
-        NSTableColumn * col = [self tableColumns][i];
-        char cb[2] = {(char)('0' + i), 0};
-        [col setIdentifier:[[NSString alloc] initWithUTF8String:cb]];
-    }
+    [self reloadData];   //now get objectValueForTableColumn called to fill the cells
 }
 
 -(Relay*)getSelectedRelay{
     NSInteger row = [self selectedRow];
-    if (row < 0)
-        return NULL;
-    else
-        return theRelays[row];
+    assert(row >= 0);
+    return theRelays[row];
 }
-
-
 @end
