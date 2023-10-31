@@ -91,8 +91,7 @@ static bool relay_cmp(const Relay *r1, const Relay* r2) { //STL-compliant bool r
 {
     theRelays = volatileRelayVector;  // have to copy this, so we can sort.
     std::sort(theRelays.begin(), theRelays.end(), relay_cmp);       //sort
-    theStrings = ValuingMap(theRelays.begin(), theRelays.end(), //cache strings, sorted
-                            [self](auto r){return [self getRelayString:r];});
+    theStrings = ValuingMap(theRelays, [self](auto r){return [self getRelayString:r];});
 
     [self reloadData];   //now get objectValueForTableColumn called to fill the cells
     if (theRelays.size() > 0)

@@ -22,6 +22,18 @@ auto ValuingMap( IterClass start,
     return __result;
 }
 
+template <class IterableClass, class UnaryFunction>
+auto ValuingMap( IterableClass iterable,
+         UnaryFunction fcn) {
+    auto __start = iterable.cbegin();
+    auto __end = iterable.cend();
+    size_t __n = __end-__start;
+    std::vector<decltype(fcn(*__start))>__result(__n);
+    for (size_t __i = 0; __i < __n; __i++)
+        __result[__i] = fcn(*__start++);
+    return __result;
+}
+
 // to test
 // clang++ -ObjC++  -std=c++17 ValuingMap.hpp -o valmap_test -DVALMAP_TEST=1
 // ./valmap_test
@@ -39,7 +51,12 @@ int main(int argc, char**argv) {
 
     F = ValuingMap(A.begin(), A.end(), mapfn);
     for (auto f : F)
-	printf("%f\n", f);
+	printf("2arg form %f\n", f);
+    
+    F = ValuingMap(A, mapfn);
+    for (auto f : F)
+        printf("1arg form %f\n", f);
+
     return 0;
 }
     
