@@ -96,6 +96,8 @@ static bool relay_cmp(const Relay *r1, const Relay* r2) { //STL-compliant bool r
         theStrings.push_back([self getRelayString:r]);
 
     [self reloadData];   //now get objectValueForTableColumn called to fill the cells
+    if (theRelays.size() > 0)
+        [self scrollRowToVisible:0];
 }
 
 -(Relay*)getSelectedRelay{
