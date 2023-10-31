@@ -9,7 +9,7 @@
 #import "RelayListView.h"
 #include "MacRlyDlg.h"
 
-@interface RelayState : NSWindowController
+@interface RelayState : NSWindowController<NSWindowDelegate>
 {
     Relay * relay;
     std::vector<Relay*>dependents;
@@ -31,6 +31,7 @@
     [super windowDidLoad];
     
     assert(_listView != nil);
+    [self.window setDelegate: self];
     [_listView setDoubleAction:@selector(ListViewDoubleClick:)];
 }
 -(void)setForRelay:(Relay*)r
@@ -63,6 +64,10 @@
 {
     [NSApp stopModal];
     [self.window close];
+}
+-(void) windowWillClose:(NSNotification *)notification
+{
+    [NSApp stopModal];
 }
 
 -(void)showModal:(Relay*)r

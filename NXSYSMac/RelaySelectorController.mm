@@ -11,7 +11,7 @@
 #include "MacRlyDlg.h"
 #include "RelayListView.h"
 
-@interface RelaySelectorController : NSWindowController<NSTableViewDelegate>
+@interface RelaySelectorController : NSWindowController<NSTableViewDelegate, NSWindowDelegate>
 {
     Relay* chosenRelay;
     RelayListCallback callback;
@@ -58,6 +58,10 @@ extern unsigned NXGOHitX, NXGOHitY;
     [NSApp stopModal];
     [self.window close];
 }
+-(void) windowWillClose:(NSNotification *)notification
+{
+    [NSApp stopModal]; //apparentlyh not called when the above closes...
+}
 -(void) position
 {
     NSPoint p = NXViewToScreen(NSMakePoint(NXGOHitX, NXGOHitY));
@@ -86,6 +90,7 @@ extern unsigned NXGOHitX, NXGOHitY;
     [_theRelayListView setRelayContent:theRelays];
     [_Label setStringValue:tag];
     chosenRelay = NULL;
+    [self.window setTitle: [NSString stringWithFormat:@"%@ relay", op]];
     [self position];
     [getNXWindow() addChildWindow:self.window ordered:NSWindowAbove];
     [_okButton setTitle:op];
