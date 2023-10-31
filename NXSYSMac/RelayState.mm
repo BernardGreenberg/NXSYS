@@ -62,8 +62,7 @@
 }
 -(IBAction)OK:(id)sender
 {
-    [NSApp stopModal];
-    [self.window close];
+    [self.window performClose: self];
 }
 -(void) windowWillClose:(NSNotification *)notification
 {

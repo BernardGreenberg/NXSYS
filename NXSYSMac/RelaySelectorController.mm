@@ -55,12 +55,11 @@ extern unsigned NXGOHitX, NXGOHitY;
 
 - (IBAction)CancelHit:(id)sender
 {
-    [NSApp stopModal];
-    [self.window close];
+    [self.window performClose: self]; //caused WillClose to be invoked properly
 }
 -(void) windowWillClose:(NSNotification *)notification
 {
-    [NSApp stopModal]; //apparentlyh not called when the above closes...
+    [NSApp stopModal];
 }
 -(void) position
 {
