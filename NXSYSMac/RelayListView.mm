@@ -36,6 +36,7 @@
 #import "RelayListView.h"
 #include "relays.h"
 #include <algorithm> //sort
+#include "ValuingMap.hpp"
 
 @interface RelayListView ()
 {
@@ -90,10 +91,8 @@ static bool relay_cmp(const Relay *r1, const Relay* r2) { //STL-compliant bool r
 {
     theRelays = volatileRelayVector;  // have to copy this, so we can sort.
     std::sort(theRelays.begin(), theRelays.end(), relay_cmp);       //sort
-
-    theStrings.clear();              // does get reused.
-    for (auto r : theRelays)         //compute the strings and cache them
-        theStrings.push_back([self getRelayString:r]);
+    theStrings = ValuingMap(theRelays.begin(), theRelays.end(), //cache strings, sorted
+                            [self](auto r){return [self getRelayString:r];});
 
     [self reloadData];   //now get objectValueForTableColumn called to fill the cells
     if (theRelays.size() > 0)

@@ -1,0 +1,46 @@
+#ifndef VALMAP_TEST
+#pragma once
+#endif
+
+#include <vector>
+#include <functional>
+
+/* Goal is sort of to be like Swift "map". I do not want to have to set
+   up a receiver to pass in, I want a value returned in the modern C++ way.
+   Tested Mac only.
+   BSG 10/31/2023
+*/
+
+template <class IterClass, class UnaryFunction>
+auto ValuingMap( IterClass start,
+		 IterClass end,
+		 UnaryFunction fcn) {
+    size_t __n = end-start;
+    std::vector<decltype(fcn(*start))>__result(__n);
+    for (size_t __i = 0; __i < __n; __i++)
+	__result[__i] = fcn(*(start+__i));
+    return __result;
+}
+
+// to test
+// clang++ -ObjC++  -std=c++17 ValuingMap.hpp -o valmap_test -DVALMAP_TEST=1
+// ./valmap_test
+
+#if VALMAP_TEST
+
+double mapfn(int i) {
+    return (double)(i*i);
+}
+
+
+int main(int argc, char**argv) {
+    std::vector<int> A {2,4,8, 16, 32};
+    std::vector<double> F;
+
+    F = ValuingMap(A.begin(), A.end(), mapfn);
+    for (auto f : F)
+	printf("%f\n", f);
+    return 0;
+}
+    
+#endif

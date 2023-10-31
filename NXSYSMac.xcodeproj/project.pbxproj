@@ -581,6 +581,7 @@
 		5BD6200D19CD9E6E00DB8A8F /* TrackSegDialog.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TrackSegDialog.mm; sourceTree = "<group>"; };
 		5BD7ADA828454CE6000A1CF5 /* DocSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DocSource; sourceTree = "<group>"; };
 		5BD7ADA928481FFE000A1CF5 /* MenuUndoRedo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MenuUndoRedo.cpp; sourceTree = "<group>"; tabWidth = 4; };
+		5BDB65672AF18F3C003BF0D6 /* ValuingMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ValuingMap.hpp; sourceTree = "<group>"; };
 		5BE487CC199D0A5C007BD6BF /* NXSYSMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NXSYSMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE487CF199D0A5C007BD6BF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5BE487D2199D0A5C007BD6BF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -1235,6 +1236,7 @@
 				5BA5385227DF75DB00D39B28 /* ValidatingValue.h */,
 				5BAC2DA828025C8D000B43CF /* LoadFiascoMaps.h */,
 				5BC13700285CC12A007D52E1 /* AppBuildSignature.h */,
+				5BDB65672AF18F3C003BF0D6 /* ValuingMap.hpp */,
 			);
 			name = NewShared;
 			sourceTree = "<group>";
