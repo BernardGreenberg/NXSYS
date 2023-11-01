@@ -144,6 +144,13 @@ struct Rlysym {
 
     void DestroyRelayLogic();
     void DestroyRelay();
+    
+    bool operator < (const Rlysym& other) const {  // for UI's
+        if (n == other.n)
+            return strcmp(redeemRlsymId(type),  redeemRlsymId(other.type)) < 1 ;
+        else
+            return n < other.n;
+    }
 };
 
 #define CAR(X) X.u.l[0]

@@ -16,22 +16,26 @@
 //NSTable columns don't like to be used like that; they are user-repositionable horizontally.
 
 /*
- This required a serious rewrite, 28 Oct 2023, copying the relay pointers into an instance-local
- STL array because of an seeming change in Mac behavior;  the destruction of this list view object
- no longer happens at the time the dialog goes out of scope, but when command-level cleanup occurs.
- This caused the Mac code that attempts to clean up the strings to indirect through the
- supplied array, which was ingeniously done by reference to avoid precisely this kind of copying.
- Unfortunately, the calling code has deallocated that STL array, and this code would fault.
- 
- What it thinks it is doing by calling objectValueForTableColumn at DEALLOCATE time is not so clear,
- as this callback allocated string copies as NSStrings. Hopefully the previous ones would no longer
- be retained. But adding this copying does fix it.  Fixed harder by removing any reference through
- the array beyond init/reload time. The array is copied, anyway, for sorting. NSStrings are computed
- at init/reload time now, and cached in a separate STL array (theStrings).
- 
+ This required a near-total rewrite starting 28 Oct 2023, triggered by a seeming change in Mac
+ behavior:  the destruction of this TableView object no longer happens at the time the dialog goes
+ out of scope, but when the UI returns to "command-level". For some reason, it seemingly
+ began to call objectValueForTableColumn at that time.  Our implementation of the latter,
+ unsurprisingly, navigated the data structure supplied to this code at setRelayContent time,
+ which, unfortunately, no longer existed, having been very reasonably destroyed when the dialog
+ was dismissed and closed. This caused a fault when the dialog was no longer active!
+
+ What Mac thinks he is doing by calling objectValueForTableColumn at cleanup time is not so clear.
+ The old code allocated string copies as NSStrings at that time, and  hopefully the previous ones
+ would no longer be retained, but it did so by indirecting through a saved pointer to the
+ temporarily allocated array.  The new code is vigorously STL-exploiting, and passes only
+ first-class vectors, including a "volatileRelayVector" which is immediately copied to a
+ not-so-volatile instance variable vector, theRelays.  The strings are now computed at that time and
+ was cached as theStrings.  The code now references nothing outside the object past setRelayContent
+ time, although traffic in pure relay pointers is its calling (as it were).
+  
  That's a pretty serious needs-documentation state of affairs, that NSTableViews supplied with
- temporarily constructed pointer networks are going to come back to haunt them after they have
- been deallocated. Reported to Apple 10/28.  NXSYSMac 2.7.1 .
+ temporarily constructed data are going to come back to haunt it after they have been deallocated.
+ Reported to Apple 10/28.  NXSYSMac 2.7.1 .
  */
 #import "RelayListView.h"
 #include "relays.h"
@@ -45,20 +49,10 @@
 }
 @end
 
-static bool relay_cmp(const Relay *r1, const Relay* r2) { //STL-compliant bool result
-    Sexpr s1 = r1->RelaySym;
-    Sexpr s2 = r2->RelaySym;
-    long n1 = s1.u.r->n;
-    long n2 = s2.u.r->n;
-    if (n1 < n2) return true;
-    if (n1 > n2) return false;
-    const char * nom1 = redeemRlsymId(s1.u.r->type);
-    const char * nom2 = redeemRlsymId(s2.u.r->type);
-    return strcmp(nom1, nom2) < 1;
-}
-
 @implementation RelayListView
-@synthesize nomenclatureOnly;
+@synthesize nomenclatureOnly;  //bool set by callers wanting only alphabetic nomenclature (no $'s)
+
+/*     Apple AppKit API  */
 
 -(void)awakeFromNib
 {//https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CocoaViewsGuide/SubclassingNSView/SubclassingNSView.html
@@ -70,37 +64,42 @@ static bool relay_cmp(const Relay *r1, const Relay* r2) { //STL-compliant bool r
 {
     return theRelays.size();
 }
--(NSString*)getRelayString:(Relay*) relay
-{
-    auto rsp = relay->RelaySym.u.r;
-    if (nomenclatureOnly)
-        return [[NSString alloc] initWithUTF8String:redeemRlsymId(rsp->type)];
-    else
-        return [[NSString alloc] initWithUTF8String:rsp->PRep().c_str()];
-}
+
 -(id)tableView:(NSTableView *)tv objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    // This gets called very mysteriously at destruction time, which may be way after
-    // the call to the dialog has exited. It'd better not allocate or use data that
+    // This gets called very mysteriously at destruction time, too. See comment above. */
     // might not be there.
-    assert(row < theStrings.size());
     return theStrings[row];
 }
 
+/* NXSYS API */
+
+/* Supplies the relays to be listed (can be empty vector.  The vector is copied into
+   local storage, because it can disappear at the time Cocoa destroys the dialog. */
 -(void)setRelayContent:(const std::vector<Relay*>&)volatileRelayVector
 {
-    theRelays = volatileRelayVector;  // have to copy this, so we can sort.
-    std::sort(theRelays.begin(), theRelays.end(), relay_cmp);       //sort
+    theRelays = volatileRelayVector;  // We also have to copy so we can sort.
+    std::sort(theRelays.begin(), theRelays.end(),  //sort 'em. Rlysyms now sort!
+              [](Relay* r1, Relay*r2){return *(r1->RelaySym.u.r) < *(r2->RelaySym.u.r);});
+
+    /* Compute and cache as theStrings the relay-names to be displayed*/
     theStrings = ValuingMap(theRelays, [self](auto r){return [self getRelayString:r];});
 
     [self reloadData];   //now get objectValueForTableColumn called to fill the cells
-    if (theRelays.size() > 0)
+    if (theRelays.size() > 0)     //scroll to the top iff not empty...
         [self scrollRowToVisible:0];
 }
 
--(Relay*)getSelectedRelay{
-    NSInteger row = [self selectedRow];
-    assert(row >= 0);
-    return theRelays[row];
+-(NSString*)getRelayString:(Relay*) relay  //no longer called by objectValueForTableColumn!
+{
+    auto R = *(relay->RelaySym.u.r);  // "RelaySym" is a Sexpr, whose u.r is the Rlysym of interest.
+    return
+        [[NSString alloc] initWithUTF8String:
+         nomenclatureOnly ? redeemRlsymId(R.type) : R.PRep().c_str()];
 }
+
+-(Relay*)getSelectedRelay{                //returns the "answer"
+    return theRelays[[self selectedRow]];
+}
+
 @end
