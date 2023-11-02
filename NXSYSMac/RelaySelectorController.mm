@@ -14,8 +14,7 @@
 @interface RelaySelectorController : NSWindowController<NSTableViewDelegate, NSWindowDelegate>
 {
     Relay* chosenRelay;
-    RelayListCallback callback;
-}
+ }
 @property (weak) IBOutlet NSTextField *Label;
 @property (weak) IBOutlet RelayListView *theRelayListView;
 @property (weak) IBOutlet NSButton* okButton;
@@ -39,8 +38,6 @@ extern unsigned NXGOHitX, NXGOHitY;
 }
 - (IBAction)UseItHit:(id)sender {
     chosenRelay = [_theRelayListView getSelectedRelay];
-    if (chosenRelay != NULL && callback != NULL)
-        (*callback)(chosenRelay, "");
     [NSApp stopModal];
     [self.window close];
 }

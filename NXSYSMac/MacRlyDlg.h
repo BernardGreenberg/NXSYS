@@ -16,8 +16,6 @@ class Relay;
 
 typedef std::vector<Relay*>RelayVec;
 
-typedef void (*RelayListCallback)(Relay* theRelay, const char * tag);
-
 Relay* RelayListDialog(int objNo, const char* typeName,
                      const RelayVec& relays, const char* op);
 
