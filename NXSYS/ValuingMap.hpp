@@ -3,7 +3,6 @@
 #endif
 
 #include <vector>
-#include <functional>
 
 /* Goal is sort of to be like Swift "map". I do not want to have to set
    up a receiver to pass in, I want a value returned in the modern C++ way.
@@ -35,10 +34,10 @@ auto ValuingMap( IterableClass iterable,
 }
 
 // to test
-// clang++ -ObjC++  -std=c++17 ValuingMap.hpp -o valmap_test -DVALMAP_TEST=1
+// clang++ -ObjC++ -std=c++17 ValuingMap.hpp -o valmap_test -DVALMAP_TEST
 // ./valmap_test
 
-#if VALMAP_TEST
+#ifdef VALMAP_TEST
 
 double mapfn(int i) {
     return (double)(i*i);
@@ -48,7 +47,10 @@ double mapfn(int i) {
 int main(int argc, char**argv) {
     std::vector<int> A {2,4,8, 16, 32};
     std::vector<double> F;
-
+    /* Tracing .data pointers above and here shows that both these F=
+       assignments actually get RVO (return value optimization)!
+       Literature suggests that they shouldn't.
+      */
     F = ValuingMap(A.begin(), A.end(), mapfn);
     for (auto f : F)
 	printf("2arg form %f\n", f);

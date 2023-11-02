@@ -65,7 +65,7 @@ extern unsigned NXGOHitX, NXGOHitY;
     [self.window setFrameOrigin:p];
 }
 
--(Relay*)run: (const RelayVec)theRelays
+-(Relay*)run: (const RelayVec&)theRelays
  description:(NSString *)tag op:(NSString*)op
 {
     //By the first days of October, 2014, Bernie had discovered how to force
