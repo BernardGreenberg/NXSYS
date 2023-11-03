@@ -50,8 +50,7 @@ std::unique_ptr<T> make_unique(Args&&... args)
 
 template<class Iter>
 void pointer_sort(Iter istart, Iter iend) {
-    std::sort(istart, iend,
-              [](decltype(*istart) objp1,
-                 decltype(*istart) objp2) {return *objp1 < *objp2;});
+    using ET = decltype(*istart);
+    std::sort(istart, iend, [](ET p1, ET p2) {return *p1 < *p2;});
 }
 #endif /* STLExtensions_h */
