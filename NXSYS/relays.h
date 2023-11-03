@@ -64,6 +64,11 @@ public:
     void DestroyLogic();
     BOOL ComputeValue ();
     bool maybe_change_state(BOOL new_state);
+    
+    /* Sort by RelaySym order, i.e., 1A, 1B, 2A, 2B */
+    bool operator <(const Relay& other) const {
+        return *RelaySym.u.r < *(other.RelaySym.u.r);
+    }
 };
 
 class ReportingRelay : public Relay {

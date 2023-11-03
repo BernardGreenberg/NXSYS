@@ -37,10 +37,12 @@
  temporarily constructed data are going to come back to haunt it after they have been deallocated.
  Reported to Apple 10/28.  NXSYSMac 2.7.1 .
  */
-#import "RelayListView.h"
 #include "relays.h"
-#include <algorithm> //sort
+
+#import "RelayListView.h"
+
 #include "ValuingMap.hpp"
+#include "STLExtensions.h"
 
 @interface RelayListView ()
 {
@@ -79,10 +81,9 @@
 -(void)setRelayContent:(const std::vector<Relay*>&)volatileRelayVector
 {
     theRelays = volatileRelayVector;  // We also have to copy so we can sort.
-    std::sort(theRelays.begin(), theRelays.end(),  //sort 'em. Rlysyms now sort!
-              [](Relay* r1, Relay*r2){return *(r1->RelaySym.u.r) < *(r2->RelaySym.u.r);});
+    pointer_sort(theRelays.begin(), theRelays.end());  //sort 'em. Relays now sort!
 
-    /* Compute and cache as theStrings the relay-names to be displayed*/
+    /* Compute and cache as theStrings the relay-names to be displayed */
     theStrings = ValuingMap(theRelays, [self](auto r){return [self getRelayString:r];});
 
     [self reloadData];   //now get objectValueForTableColumn called to fill the cells

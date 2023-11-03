@@ -11,6 +11,7 @@
 #include <string>
 #include <cstdarg>
 #include <memory>
+#include <algorithm>
 
 std::string FormatStringVA(const char* fmt, va_list args);
 std::string FormatString(const char* fmt, ...);
@@ -42,5 +43,10 @@ std::unique_ptr<T> make_unique(Args&&... args)
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
-
+template<class Iter>
+void pointer_sort(Iter istart, Iter iend) {
+    std::sort(istart, iend,
+              [](decltype(*istart) objp1,
+                 decltype(*istart) objp2) { return *objp1 < *objp2;});
+}
 #endif /* STLExtensions_h */
