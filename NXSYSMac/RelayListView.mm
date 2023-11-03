@@ -17,8 +17,8 @@
 
 /*
  This required a near-total rewrite starting 28 Oct 2023, triggered by a seeming change in Mac
- behavior:  the destruction of this TableView object no longer happens at the time the dialog goes
- out of scope, but when the UI returns to "command-level". For some reason, it seemingly
+ behavior:  the destruction of this NSTableView object no longer happens at the time the dialog
+ goes out of scope, but when the UI returns to "command-level". For some reason, it seemingly
  began to call objectValueForTableColumn at that time.  Our implementation of the latter,
  unsurprisingly, navigated the data structure supplied to this code at setRelayContent time,
  which, unfortunately, no longer existed, having been very reasonably destroyed when the dialog
@@ -30,7 +30,7 @@
  temporarily allocated array.  The new code is vigorously STL-exploiting, and passes only
  first-class vectors, including a "volatileRelayVector" which is immediately copied to a
  not-so-volatile instance variable vector, theRelays.  The strings are now computed at that time and
- was cached as theStrings.  The code now references nothing outside the object past setRelayContent
+ cached as theStrings.  The code now references nothing outside the object past setRelayContent
  time, although traffic in pure relay pointers is its calling (as it were).
   
  That's a pretty serious needs-documentation state of affairs, that NSTableViews supplied with
