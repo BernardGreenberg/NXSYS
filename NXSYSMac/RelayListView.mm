@@ -76,18 +76,22 @@
 
 /* NXSYS API */
 
-/* Supplies the relays to be listed (can be empty vector.  The vector is copied into
-   local storage, because it can disappear at the time Cocoa destroys the dialog. */
+/* Supplies the relays to be listed (can be an empty vector).  Although passed by
+   const&, the vector is copied into local instance storage because
+   (a) we have to sort the relays for display order and
+   (b) supplied structure cannot be counted on to exist at the time Cocoa deigns
+    to destroy the dialog (see top comment). */
+
 -(void)setRelayContent:(const std::vector<Relay*>&)volatileRelayVector
 {
-    theRelays = volatileRelayVector;  // We also have to copy so we can sort.
+    theRelays = volatileRelayVector;                   //copy 'em.
     pointer_sort(theRelays.begin(), theRelays.end());  //sort 'em. Relays now sort!
 
     /* Compute and cache as theStrings the relay-names to be displayed */
     theStrings = ValuingMap(theRelays, [self](auto r){return [self getRelayString:r];});
 
-    [self reloadData];   //now get objectValueForTableColumn called to fill the cells
-    if (theRelays.size() > 0)     //scroll to the top iff not empty...
+    [self reloadData];   //now trigger reload. objectValueForTableColumn called to fill the cells
+    if (theRelays.size() > 0)     // ... and scroll to the top iff not empty
         [self scrollRowToVisible:0];
 }
 

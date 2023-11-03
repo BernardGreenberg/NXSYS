@@ -43,10 +43,15 @@ std::unique_ptr<T> make_unique(Args&&... args)
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
+/* You would think that STL would have something like this, but it doesn't. Sort
+   (a portion of) an array of pointers by the comparison operator of the objects
+   pointed to.  No form with user-supplied function - if you want to supply your
+   own function, just use std::sort and have your function do the dereferencing. */
+
 template<class Iter>
 void pointer_sort(Iter istart, Iter iend) {
     std::sort(istart, iend,
               [](decltype(*istart) objp1,
-                 decltype(*istart) objp2) { return *objp1 < *objp2;});
+                 decltype(*istart) objp2) {return *objp1 < *objp2;});
 }
 #endif /* STLExtensions_h */
