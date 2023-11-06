@@ -11,26 +11,19 @@
 */
 
 template <class IterClass, class UnaryFunction>
-auto ValuingMap( IterClass start,
-		 IterClass end,
-		 UnaryFunction fcn) {
-    size_t n = end-start;
-    std::vector<decltype(fcn(*start))>result(n);
-    for (size_t i = 0; i < n; i++)
-	result[i] = fcn(*(start+i));
+auto ValuingMap(IterClass start,
+                IterClass end,
+                UnaryFunction fcn) {
+    std::vector<decltype(fcn(*start))>result(end-start);
+    auto otter = result.begin();
+    while(start < end)
+        *otter++ = fcn(*start++);
     return result;
 }
 
 template <class IterableClass, class UnaryFunction>
-auto ValuingMap( IterableClass iterable,
-         UnaryFunction fcn) {
-    auto start = iterable.cbegin();
-    auto end = iterable.cend();
-    size_t n = end-start;
-    std::vector<decltype(fcn(*start))>result(n);
-    for (size_t i = 0; i < n; i++)
-        result[i] = fcn(*start++);
-    return result;
+auto ValuingMap(IterableClass iterable, UnaryFunction fcn) {
+    return ValuingMap(iterable.cbegin(), iterable.cend(), fcn);
 }
 
 // to test
