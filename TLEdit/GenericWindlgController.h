@@ -19,7 +19,8 @@ struct RIDPair {
 typedef const std::initializer_list<RIDPair> RIDVector;
 
 /* https://stackoverflow.com/questions/8945909/how-to-use-nsstring-as-key-in-objective-c-stdmap */
-struct CompareNSString: public std::binary_function<NSString*, NSString*, bool> {
+struct CompareNSString {
+//: public std::__binary_function<NSString*, NSString*, bool> { //out in C++17
     bool operator()(NSString* lhs, NSString* rhs) const {
         if (rhs != nil)
             return (lhs == nil) || ([lhs compare: rhs] == NSOrderedAscending);
