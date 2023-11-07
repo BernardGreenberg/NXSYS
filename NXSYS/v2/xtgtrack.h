@@ -4,6 +4,7 @@
 /* NXSYS Extended Geometry System  1 January 1997 */
 
 #include <vector>   // 27 Sept 2019 for SegArray
+#include <string>
 #include "nxgo.h"
 #ifndef TLEDIT
 #ifndef REALLY_NXSYS

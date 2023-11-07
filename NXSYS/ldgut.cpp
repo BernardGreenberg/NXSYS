@@ -8,6 +8,7 @@ class Relay;
 #include "RLYINDEX.H"
 #include "compat32.h"
 #include "PolyKludge.h"
+#include "MessageBox.h"
 #include <string>
 #include <vector>
 

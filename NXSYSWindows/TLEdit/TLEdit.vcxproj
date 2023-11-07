@@ -143,7 +143,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\TLEdit\tled</AdditionalIncludeDirectories>
     </ResourceCompile>
     <CustomBuildStep>
-      <Command>robocopy $(SolutionDir)..\TLEDocumentation $(OutDir)TLEDocumentation
+      <Command>robocopy "$(SolutionDir)..\TLEDocumentation" "$(OutDir)TLEDocumentation"
 if %errorlevel% geq 8 exit %errorlevel%
 exit 0</Command>
     </CustomBuildStep>

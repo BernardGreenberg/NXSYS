@@ -104,11 +104,11 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <CustomBuildStep>
-      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation /E
-robocopy $(SolutionDir)..\Documentation\HelpImages $(OutDir)Pages\HelpImages /E
-robocopy $(SolutionDir)..\Interlockings $(OutDir)Interlockings /E
-copy $(SolutionDir)..\Help.xml $(OutDir)Help.xml
-copy $(SolutionDir)..\InterlockingLibrary.xml $(OutDir)InterlockingLibrary.xml</Command>
+      <Command>robocopy "$(SolutionDir)..\Documentation" "$(OutDir)Documentation" /E
+robocopy "$(SolutionDir)..\Documentation\HelpImages" "$(OutDir)Pages\HelpImages" /E
+robocopy "$(SolutionDir)..\Interlockings" "$(OutDir)Interlockings" /E
+copy "$(SolutionDir)..\Help.xml" "$(OutDir)Help.xml"
+copy "$(SolutionDir)..\InterlockingLibrary.xml" "$(OutDir)InterlockingLibrary.xml"</Command>
       <Outputs>$(OutputDir)Pages</Outputs>
       <TreatOutputAsContent>true</TreatOutputAsContent>
     </CustomBuildStep>
@@ -153,10 +153,10 @@ copy $(SolutionDir)..\InterlockingLibrary.xml $(OutDir)InterlockingLibrary.xml</
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <CustomBuildStep>
-      <Command>robocopy $(SolutionDir)..\Documentation $(OutDir)Documentation /E
-copy $(SolutionDir)..\InterlockingLibrary.xml $(OutDir)\InterlockingLibrary /Y
-robocopy $(SolutionDir)..\Interlockings $(OutDir)\Interlockings /E
-copy $(SolutionDir)..\Help.xml $(OutDir)\ /Y</Command>
+      <Command>robocopy "$(SolutionDir)..\Documentation" "$(OutDir)Documentation" /E
+copy "$(SolutionDir)..\InterlockingLibrary.xml" "$(OutDir)\InterlockingLibrary" /Y
+robocopy "$(SolutionDir)..\Interlockings" "$(OutDir)\Interlockings" /E
+copy "$(SolutionDir)..\Help.xml" "$(OutDir)\" /Y</Command>
       <TreatOutputAsContent>true</TreatOutputAsContent>
       <Outputs>$(OutputDir)Documentation</Outputs>
     </CustomBuildStep>
