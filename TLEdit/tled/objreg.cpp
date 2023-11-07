@@ -6,6 +6,7 @@
 #include "objreg.h"
 #include "LoadFiascoMaps.h"
 #include <unordered_map>
+#include <string>
 
 /* Rewritten for dyn-create STL 4/9/2022 */
 
