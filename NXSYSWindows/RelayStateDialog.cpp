@@ -48,9 +48,9 @@ void RelayStateDialog::DoRelay() {
 		relay->Dependents.size(), (relay->Dependents.size()) == 1 ? "" : "s");
 	SetDlgItemTextS(hDlg, IDC_RLYQUERY_NDEPS, depmsg);
 	SendMessage(hLB, LB_RESETCONTENT, 0, 0);
-	std::vector<Relay*>relays_copy = relay->Dependents;
-	pointer_sort(relays_copy.begin(), relays_copy.end());
-	for (const Relay* dep : relays_copy) {
+	std::vector<Relay*>deps_copy = relay->Dependents;
+	pointer_sort(deps_copy.begin(), deps_copy.end());
+	for (const Relay* dep : deps_copy) {
 		std::string d2msg = FormatString("%s\t%d", dep->RelaySym.PRep().c_str(), dep->State);
 		int index = (int)SendMessage(hLB, LB_ADDSTRING, 0, (LPARAM)d2msg.c_str());
 		SendMessage (hLB, LB_SETITEMDATA, index, (LPARAM)dep);
