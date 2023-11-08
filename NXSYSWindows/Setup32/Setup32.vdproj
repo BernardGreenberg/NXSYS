@@ -51,6 +51,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_13A248766F6C4331947929AC47D88BA1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1586C450BBD34CDD9AAC39FF1EAC1292"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -124,12 +130,6 @@
         "Entry"
         {
         "MsmKey" = "8:_3A9A0B6371314E4E995E38D2463A7AB9"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3D2F7F30C2944C4F877CCB4AC29F7205"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -231,19 +231,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5E92893B9E334583A0AF614A792B97CF"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_6370725941884D97A47917DEC677A0C2"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6870AFF9FD594689B62F500A49FADD71"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -274,12 +262,6 @@
         "Entry"
         {
         "MsmKey" = "8:_6EC9FD4DA81C4A57952824AEF113762A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7523C5D5113C43ECB097FAC848A05DEE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -364,12 +346,6 @@
         "Entry"
         {
         "MsmKey" = "8:_9309E1FB6E04454781EF5FC0E89C35AB"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_955519328C96469BBD1BC74AEEC091F9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -471,18 +447,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C2FE9D4194464D81B34C0CA4CD3E8567"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C3B9FF931DA34FF78642211F9616DD86"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C4FAE4555FDD4EDE9F6647B25A437127"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -502,12 +466,6 @@
         "Entry"
         {
         "MsmKey" = "8:_D1B37F8D1D6341FEAADACDF2A46010F9"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D373117211604A78868AE62F53A5F176"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -544,12 +502,6 @@
         "Entry"
         {
         "MsmKey" = "8:_D6F83C1459824048A7DD2A7AA2522A7A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D800527A78254B5AB595E8E74F0B2C72"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -603,12 +555,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E21D883FB9114ABEBBF854F361653955"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_E28623EA062C40A0B114EBF7654A7ED6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -646,12 +592,6 @@
         "Entry"
         {
         "MsmKey" = "8:_ED3EDAB21DA44E20B59FF6B171FED428"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EE016CCC671346D4B76534A6DC7BB6A0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -742,6 +682,11 @@
                     {
                     "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x86"
+                    {
+                    "Name" = "8:Visual C++ \"14\" Runtime Libraries (x86)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x86"
                     }
                 }
             }
@@ -872,6 +817,26 @@
             "TargetName" = "8:ad.bmp"
             "Tag" = "8:"
             "Folder" = "8:_B33FB2D70AFD4CC88521B3BA3B582D31"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_13A248766F6C4331947929AC47D88BA1"
+            {
+            "SourcePath" = "8:..\\..\\TLEDocumentation\\TLEdit.pdf"
+            "TargetName" = "8:TLEdit.pdf"
+            "Tag" = "8:"
+            "Folder" = "8:_797A75C00CD248769232A4C5489DBC1F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1132,26 +1097,6 @@
             "TargetName" = "8:divrt.bmp"
             "Tag" = "8:"
             "Folder" = "8:_B33FB2D70AFD4CC88521B3BA3B582D31"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3D2F7F30C2944C4F877CCB4AC29F7205"
-            {
-            "SourcePath" = "8:..\\..\\Documentation\\CommonReleaseNotes.html"
-            "TargetName" = "8:CommonReleaseNotes.html"
-            "Tag" = "8:"
-            "Folder" = "8:_A94AE27ECA09476FA9AA25B8686C9AB5"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1486,52 +1431,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5E92893B9E334583A0AF614A792B97CF"
-            {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Redist\\MSVC\\14.31.31103\\x86\\Microsoft.VC143.CRT\\vcruntime140.dll"
-            "TargetName" = "8:vcruntime140.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6370725941884D97A47917DEC677A0C2"
             {
             "SourcePath" = "8:..\\..\\Interlockings\\Atlantic\\aatraffic.trk"
             "TargetName" = "8:aatraffic.trk"
             "Tag" = "8:"
             "Folder" = "8:_0AC0207A10D546D9BEE43335E9164FA4"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6870AFF9FD594689B62F500A49FADD71"
-            {
-            "SourcePath" = "8:..\\..\\TLEDocumentation\\TLEdit.html"
-            "TargetName" = "8:TLEdit.html"
-            "Tag" = "8:"
-            "Folder" = "8:_797A75C00CD248769232A4C5489DBC1F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1632,26 +1537,6 @@
             "TargetName" = "8:fsd.bmp"
             "Tag" = "8:"
             "Folder" = "8:_B33FB2D70AFD4CC88521B3BA3B582D31"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7523C5D5113C43ECB097FAC848A05DEE"
-            {
-            "SourcePath" = "8:..\\..\\TLEDocumentation\\tletoolb.png"
-            "TargetName" = "8:tletoolb.png"
-            "Tag" = "8:"
-            "Folder" = "8:_797A75C00CD248769232A4C5489DBC1F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1932,26 +1817,6 @@
             "TargetName" = "8:ledblx.bmp"
             "Tag" = "8:"
             "Folder" = "8:_B33FB2D70AFD4CC88521B3BA3B582D31"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_955519328C96469BBD1BC74AEEC091F9"
-            {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Redist\\MSVC\\14.31.31103\\x86\\Microsoft.VC143.CRT\\msvcp140.dll"
-            "TargetName" = "8:msvcp140.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2286,46 +2151,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C2FE9D4194464D81B34C0CA4CD3E8567"
-            {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Redist\\MSVC\\14.31.31103\\x86\\Microsoft.VC143.CRT\\vccorlib140.dll"
-            "TargetName" = "8:vccorlib140.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C3B9FF931DA34FF78642211F9616DD86"
-            {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Redist\\MSVC\\14.31.31103\\x86\\Microsoft.VC143.CRT\\msvcp140_atomic_wait.dll"
-            "TargetName" = "8:msvcp140_atomic_wait.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C4FAE4555FDD4EDE9F6647B25A437127"
             {
             "SourcePath" = "8:..\\..\\Documentation\\HelpImages\\nxgl2.bmp"
@@ -2390,26 +2215,6 @@
             {
             "SourcePath" = "8:..\\..\\InterlockingLibrary.xml"
             "TargetName" = "8:InterlockingLibrary.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D373117211604A78868AE62F53A5F176"
-            {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Redist\\MSVC\\14.31.31103\\x86\\Microsoft.VC143.CRT\\msvcp140_codecvt_ids.dll"
-            "TargetName" = "8:msvcp140_codecvt_ids.dll"
             "Tag" = "8:"
             "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
             "Condition" = "8:"
@@ -2532,26 +2337,6 @@
             "TargetName" = "8:myrtle.trk"
             "Tag" = "8:"
             "Folder" = "8:_FCE741E9B4D1486A8710B8F8C94F4AE7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D800527A78254B5AB595E8E74F0B2C72"
-            {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Redist\\MSVC\\14.31.31103\\x86\\Microsoft.VC143.CRT\\msvcp140_2.dll"
-            "TargetName" = "8:msvcp140_2.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2726,26 +2511,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E21D883FB9114ABEBBF854F361653955"
-            {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Redist\\MSVC\\14.31.31103\\x86\\Microsoft.VC143.CRT\\msvcp140_1.dll"
-            "TargetName" = "8:msvcp140_1.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E28623EA062C40A0B114EBF7654A7ED6"
             {
             "SourcePath" = "8:..\\..\\Interlockings\\Duckburg\\README.md"
@@ -2872,26 +2637,6 @@
             "TargetName" = "8:NXSYS.html"
             "Tag" = "8:"
             "Folder" = "8:_A94AE27ECA09476FA9AA25B8686C9AB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EE016CCC671346D4B76534A6DC7BB6A0"
-            {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Redist\\MSVC\\14.31.31103\\x86\\Microsoft.VC143.CRT\\concrt140.dll"
-            "TargetName" = "8:concrt140.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_CCBACE9A5AEC4F379B4F9CE83E5CF6CC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3164,7 +2909,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NXSYS32"
         "ProductCode" = "8:{46E87C6E-99B2-4C6F-B8E7-227506447649}"
-        "PackageCode" = "8:{490BBC47-2FE9-4C53-9185-0887127F05BF}"
+        "PackageCode" = "8:{358937E6-05F5-45C8-A14A-6E124620693A}"
         "UpgradeCode" = "8:{C6264AAB-9A86-4387-AD3D-A2999B412ADB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
