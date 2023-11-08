@@ -22,12 +22,12 @@ public:
 	static DLGPROC_DCL staticDlgProc(HWND hWnd, UINT message, WPARAM, LPARAM);
 	bool valid;
 private:
-	HWND hParent;
-	HINSTANCE app_instance;
+	HWND hParent = NULL;
+	HINSTANCE app_instance = NULL;
 	BOOL DlgProc(HWND, UINT, WPARAM, LPARAM);
-	HWND hDlg;
-	HWND hLB;
-	Relay* relay;
+	HWND hDlg = NULL;
+	HWND hLB = NULL;
+	Relay* relay = NULL;
 	Relay* GetSelRelayFromListDlg();
 	void DoRelay();
 
@@ -43,12 +43,14 @@ Relay* RelayStateDialog::GetSelRelayFromListDlg() {
 void RelayStateDialog::DoRelay() {
 	EnableWindow(GetDlgItem(hDlg, IDC_DRAW_RELAY), !(relay->Flags & LF_CCExp));;
 	SetDlgItemTextS(hDlg, IDC_RLYQUERY_NAME, "Relay " + relay->RelaySym.PRep());
-	SetDlgItemTextS(hDlg, IDC_RLYQUERY_STATE, std::string{"State is %s"} + (relay->State ? "PICKED" : "DROPPED"));
+	SetDlgItemTextS(hDlg, IDC_RLYQUERY_STATE, std::string{"State is "} + (relay->State ? "PICKED" : "DROPPED"));
 	std::string depmsg = FormatString("%d dependent%s:",
 		relay->Dependents.size(), (relay->Dependents.size()) == 1 ? "" : "s");
 	SetDlgItemTextS(hDlg, IDC_RLYQUERY_NDEPS, depmsg);
 	SendMessage(hLB, LB_RESETCONTENT, 0, 0);
-	for (const Relay* dep : relay->Dependents) {
+	std::vector<Relay*>relays_copy = relay->Dependents;
+	pointer_sort(relays_copy.begin(), relays_copy.end());
+	for (const Relay* dep : relays_copy) {
 		std::string d2msg = FormatString("%s\t%d", dep->RelaySym.PRep().c_str(), dep->State);
 		int index = (int)SendMessage(hLB, LB_ADDSTRING, 0, (LPARAM)d2msg.c_str());
 		SendMessage (hLB, LB_SETITEMDATA, index, (LPARAM)dep);

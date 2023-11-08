@@ -71,7 +71,7 @@ BEGIN
     LTEXT           "Relay 123XYZ",IDC_RLYQUERY_NAME,7,7,73,8
     LTEXT           "State is 0",IDC_RLYQUERY_STATE,95,7,61,8
     LTEXT           "14 Dependents:",IDC_RLYQUERY_NDEPS,7,28,59,8
-    LISTBOX         IDC_RLYQUERY_LIST,73,22,83,82,LBS_SORT | LBS_USETABSTOPS | 
+    LISTBOX         IDC_RLYQUERY_LIST,73,22,83,82, LBS_USETABSTOPS | 
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "Double-click to inspect",IDC_STATIC,7,64,44,20
     PUSHBUTTON      "&Draw",IDC_DRAW_RELAY,6,43,50,14
