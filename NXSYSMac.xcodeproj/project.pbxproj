@@ -582,6 +582,7 @@
 		5BD7ADA828454CE6000A1CF5 /* DocSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DocSource; sourceTree = "<group>"; };
 		5BD7ADA928481FFE000A1CF5 /* MenuUndoRedo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MenuUndoRedo.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BDB65672AF18F3C003BF0D6 /* ValuingMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ValuingMap.hpp; sourceTree = "<group>"; };
+		5BDB65692AFC0C13003BF0D6 /* README.Win2_7.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.Win2_7.txt; sourceTree = "<group>"; };
 		5BE487CC199D0A5C007BD6BF /* NXSYSMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NXSYSMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE487CF199D0A5C007BD6BF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5BE487D2199D0A5C007BD6BF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -1217,6 +1218,7 @@
 		5BB5802227C3329900FB0ED5 /* Installer */ = {
 			isa = PBXGroup;
 			children = (
+				5BDB65692AFC0C13003BF0D6 /* README.Win2_7.txt */,
 				5BB5802127C3328C00FB0ED5 /* Installer.vdproj */,
 			);
 			path = Installer;
