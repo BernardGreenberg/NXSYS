@@ -3,7 +3,7 @@
 
 The 32-bit build has been abandoned.  The very few conditionalizations and installer script have not been removed, but the distributed 32-bit will remain at Version 2.6.
 
-“You've had them all along; just click your magic slippers.” --- the DLL problem discussed below had an easy solution.  All that had to be changed is the installation instructions.  the **setup.exe** built by the installer script validates and loads (from the web) the correct set of DLL's prior to running the MSI.  The on-board DLL's have been removed from the Windows installer package, and a 64-bit installation (**setup.exe**, an MSI, and a brief text file explaining what to do) of 64-bit Windows 2.7.9, built by Ellis Shore (this time) have been posted to the distribution site.
+“You've had them all along; just click your magic slippers.” --- the DLL problem discussed below had an easy solution.  All that had to be changed is the installation instructions.  the **setup.exe** built by the installer script validates and loads (from the web) the correct set of DLL's prior to running the MSI.  The on-board DLL's have been removed from the Windows installer package, and a 64-bit installation (**setup.exe**, an MSI, and a brief text file explaining what to do with the two) of 64-bit Windows version 2.7.1 have been posted to the distribution page (https://BernardGreenberg.com/Subway).
 
 ## 27 February 2022
 
@@ -31,7 +31,7 @@ The top-level directory `NXSYSWindows` contains everything specific to Windows, 
 
 All of the pathnames in the project files are solution-relative; there are no references outside the repository tree. In fact, no references other than to the solution directory (`NXSYSWindows`) or its peers `NXSYS`, `TLEdit` and `Relay Index`.
 
-All you have to do is download and unzip, or clone, this repository, assure you have a VS 2022 at least as up-to-date as mine (described above, free Community Edition used) open the solution `NXSYSWindows.sln` its eponymous directory, select and build the three projects (`NXSYS`, `TLEdit` and `Relay Index`) and go to town.
+All you have to do is download and unzip, or clone, this repository, assure you have a VS 2022 at least as up-to-date as mine (described above, free Community Edition used -- it is wise to keep it up to date) open the solution `NXSYSWindows.sln` its eponymous directory, select and build the three projects (`NXSYS`, `TLEdit` and `Relay Index`) and go to town.
 
 Do read [this document here](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/CompilerFlags.md) about compiler (preprocessor) flags.
 
@@ -39,7 +39,7 @@ Do read [this document here](https://github.com/BernardGreenberg/NXSYS/blob/mast
 
 There are two installer projects, `Installer`, the 64-bit version, and `Setup32`, the 32-bit version (both installers are 32-bit programs, but they install different versions of the application.  While one installer might have been "cleaner", it would either preclude installing the 32-bit version on a 64-bit system, or require custom UI in the Installer).  **The 32-bit version is officially obsolete as of 9 November 2023, but can be built.**
 
-You will need the [MS Visual Studio Installer Project Extension](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects), which is freely available. Don’t be surprised if you have to fiddle with the installer projects to make them work on your system (especially if you try to modify them), requiring (sadly) knowledge of the MSI world.  The 64-bit output goes to `NXSYSWindows\x64\Release\NXSYS.msi`, and the 32-bit output to `NXSYSWindows\Release\NXSYS32.msi`.
+You will need the [MS Visual Studio Installer Project Extension](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects), which is freely available (keep that up to date, too!). Don’t be surprised if you have to fiddle with the installer projects to make them work on your system (especially if you try to modify them), requiring (sadly) knowledge of the MSI world.  The 64-bit output goes to `NXSYSWindows\Installer\Release\NXSYS.msi`, and the 32-bit output to `NXSYSWindows\Setup32\Release\NXSYS32.msi`.
 
 I have experienced difficulty making it accept shortcuts referencing “Primary Project Output”s as it seems to want. As a result, I package the output executables as ordinary .exe's, and point the desktop and Start menu shortcuts to them.
 
@@ -47,9 +47,9 @@ I have experienced difficulty making it accept shortcuts referencing “Primary 
 <a id="dlls"></a>
 (Decimated and upgraded 9 November 2023)
 
-Projects built with Visual Studio require the runtime subroutines required by its languages, which exist in executable "Dynamic Link Libraries" (DLL's') called the "Visual C++ 14 Runtime Libraries", that must be present on your machine to execute those built projects.  The developer (e.g., me) has these DLL's by virtue of having Visual Studio, but that does not supply them to the end-user; but solving that problem is now easy.
+Projects built with MS Visual Studio require the runtime subroutines required by its languages, which exist in executable "Dynamic Link Libraries" (DLL's') called the "Visual C++ 14 Runtime Libraries", that must be present on your machine to execute those built projects.  The developer (e.g., me) has these DLL's by virtue of having Visual Studio, but that does not supply them to the end-user; but solving that problem is now easy.
 
-This Microsoft page explains it.  The NXSYS installer project (**Installer**) now does this (thanks to Ellis Shore, who figured out the right strategy).  The installing user executing **setup.exe** causes that program to install these prerequisites on the user's machine.
+This Microsoft page explains it.  The NXSYS installer project (**Installer**) now does this (thanks to Ellis Shore, who figured out the right strategy).  The installing user executing our **setup.exe** causes that program to install these prerequisites on the user's machine.
 
 https://learn.microsoft.com/en-us/visualstudio/ide/reference/prerequisites-dialog-box?view=vs-2022
 
