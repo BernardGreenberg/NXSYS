@@ -9,6 +9,7 @@
 #import "HelpController.h"
 #import "AppDelegate.h"
 #include <string>
+#include <regex>
 
 @implementation HelpController
 
@@ -136,22 +137,8 @@ NSDictionary* helpFontDictionary;
 -(void)HelpSystemDisplay:(const char *) text
 {
     assert(text != NULL);
-    
-    std::string stext;;
-    stext.insert(0, "\n", 1); // first line seems to vanish off the top . . .
-    
-    /* There is some CRLF horseplay in the processing of interlocking help strings that may not
-     be appropriate in the Mac environment -- figure it out some other day */
-    
-    for (const char * sp = text; *sp != '\0'; sp++) { // quel Maus-Mikki
-        if (*sp == '\r' && sp[1] == '\n' && sp[2] == '\r' && sp[3] == '\n') {
-            sp += 3;
-        }
-        else if (*sp != '\r') {
-            stext += *sp;
-        }
-    }
-    
+    /* Get rid of Windows \r's  -- initial \n seems needed. */
+    std::string stext = "\n" + std::regex_replace(text, std::regex("\r"), "");
     [self log:[[NSString alloc] initWithUTF8String:stext.c_str()]];
 }
 
