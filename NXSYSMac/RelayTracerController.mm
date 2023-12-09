@@ -127,6 +127,14 @@ bool to_window = false;
     }
     return false;
 }
+- (IBAction)Clear:(id)sender {
+    if (more_stuck) {
+        [self MoreButton:nil];
+    }
+    NSTextStorage * ts = _textView.textStorage;
+    [ts deleteCharactersInRange:NSMakeRange(0, ts.length)];
+    lines = 0;
+}
 - (IBAction)MoreIngButton:(id)sender {
     if (more_stuck) {
         [self MoreButton:nil];
