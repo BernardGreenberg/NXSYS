@@ -16,7 +16,7 @@
 ;; Really should be "BB", of course, but NXSYS can't hack that  yet.
 ;; trains must be set to < 500' because of IJ's at 242st pockets (500')
 
-(route "Route 1/9 215th St to 242nd St    Version of 6 May 2021" #\B 95 north
+(route "Route 1/9 215th St to 242nd St    Version of 10 March 2024" #\B 95 north
 		:SIM-FEET-PER-SCREEN 2800
 		:CRUISING-FEET-PER-SECOND 75;50
 		:TRAIN-LENGTH-FEET 450
