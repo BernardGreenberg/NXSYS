@@ -6,7 +6,7 @@ NXSYS is quite stable right now, in both Windows and Mac versions. All of the kn
 
 Because relay-based fixed-block wayside color light signalling is basically obsolete in both function and technology, and targeted for eventual replacement with Communications-Based Train Control (CBTC) wherever it exists, interest in what NXSYS does decreases with every transportation failure in New York City, along with my incentive to address these issues.
 
-Here are what I considered the most significant problems, in descending order of importance.
+Here are what I considered the most significant problems, in descending order of importance.  There is a list of minor deficiencies/pipe dreams after them.
 
 ## Inadequate expressivity in IJAO naming
 
@@ -74,6 +74,8 @@ These are the challenges to topomorphic circuitry in NXSYS:
 + Were the Relay Draftsperson to be so enhanced, a new debugging feature (the "test lamp") would be necessary, with which you could click on any *wire* in an active circuit, and see if it is at supply voltage or not, i.e., "on or off". How this would work with pre-linearized circuits is "less than perfectly clear".
 
 This is, thus, of minimal priority.
+
+# Minor deficiencies and pipe dreams
 
 ## MSWindows: Better way to scroll
 
