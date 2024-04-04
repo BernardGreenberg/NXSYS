@@ -1,12 +1,12 @@
 #  NXSYS sources, complete
 ###  By and ©Copyright 1994-2022, Bernard S. Greenberg
-#### First Posted 4 February 2022 (last 21 Nov 2023)
+#### First Posted 4 February 2022 (last 04 April 2024)
 
 This is the buildable, runnable source code for **NXSYS** (*enn-ex-sys*) (Version 2), my New York City Subway relay-logic and interlocking panel simulator, and its six offered interlockings, as it stands.  It is mine, and mine alone, although Dave Barraza's contributions to its debugging and development deserve credit.  Feel free to continue it, improve it if you like, or just build it for yourself.  I want this repository to be its home.  I'm not soliciting or merging branches at this time.
 
 This application is posted and offered under the terms of the GNU General Public License Version 3. See the file `LICENSE` for details. These sources are offered "AS-IS", with no warranty or guarantee of operability or suitability for any purpose made or implied, and use is at your own risk — all the code is available here for inspection.  **Do not** attempt to use this code to control actual railroads with live crews and passengers (I would be *extremely* impressed and flattered, but not responsible for the outcome).
 
-The file [NXSYS.html.pdf](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/NXSYS.html.pdf) in the [Documentation folder](https://github.com/BernardGreenberg/NXSYS/tree/master/Documentation) is a comprehensive description of the application and its capabilities. See [Related Resources](#related-resources) below for a video demo.
+The file [NXSYS.html.pdf](https://github.com/BernardGreenberg/NXSYS/blob/master/Documentation/NXSYS.html.pdf) in the [Documentation folder](https://github.com/BernardGreenberg/NXSYS/tree/master/Documentation) is a comprehensive description of the application and its capabilities. See [Related Resources](#related-resources) below for a video demo. For a list and discussion of major bugs/things not done, see [Futures.md](https://github.com/BernardGreenberg/NXSYS/blob/master/Futures.md) in this directory.
 
 This codebase can build working Mac and Windows (the latter 64 bit; the 32-bit might build but is no longer supported as of 2.7) executables, without error or warning.  Although NXSYS was born on (16-bit!) Windows, the reference implementation is presently that on macOS, hosted and built in XCode.  See [the macOS Readme](https://github.com/BernardGreenberg/NXSYS/blob/master/DocSource/MacStatus.md) for particulars and status of the Mac version and [the Windows Readme](https://github.com/BernardGreenberg/NXSYS/blob/master/NXSYSWindows/WindowsStatus.md) for particulars and status of the Windows version.
 
