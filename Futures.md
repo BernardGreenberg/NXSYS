@@ -96,7 +96,7 @@ It's not at all clear how to make such a move, but I can't imagine that Apple wi
 This shouldn't be an issue, as Macs with Apple silicon can run Intel apps with Apple's simulation adapter (Rosetta), and, more significantly, NXSYSMac is built in XCode, which can certainly generate Apple silicon objects, but I don't have an Apple silicon Mac, so I cannot test this. It certainly *ought to* work without change.
 
 ## Linux port
-*Fuhgeddaboudit( (as they say in Brooklyn).  Much too large and disruptive.
+*Fuhgeddaboudit* (as they say in Brooklyn).  Much too large and disruptive.
 
 ## Video-game graphics ("Cab view")
 Forget that, too.  Way beyond the scope of the application.
