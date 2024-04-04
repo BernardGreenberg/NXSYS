@@ -33,7 +33,7 @@ Recognition of finite-state languages such as any proposed scheme for Relay Symb
 
 Closely related to the IJID problem is the train system's assumption that scaled distances on the right-of-way can be deduced from IJID's.  This would break down completely were multiple "route letters" and junctions of routes handled, but they are not now because of the just-described lacunae of IJID's.  But it already fails when "dishonest" IJID's are used, such as on the yard tracks at 240<sup>th</sup> St, where trains vanish off the map if routed to them.
 
-Optimally, IJ descriptions should contain reasonable physical right-of-way coordinates (possibly including vertically), at least when they do *not* coincide with that implied by the IJID, but the layout description language is not now expressive enough to accommodate such information. Of course, TLEdit would need be changed to author and edit it.  Track circuits might need independent ID's, too.
+Optimally, IJ descriptions should contain reasonable physical right-of-way coordinates (possibly including nonzero elevation), at least when they do *not* coincide with that implied by the IJID, but the layout description language is not now expressive enough to accommodate such information. Of course, TLEdit would need be changed to author and edit it.  Track circuits might need independent ID's, too.
 
 ## Relay network contact timing
 
@@ -83,7 +83,7 @@ NXSYS and TLEdit can only be scrolled on Windows with the ancient-origin scroll 
 
 Not all Windows machines have trackpads, and Windows is not trackpad oriented, but many Windows machines have touch-screens which would work as well, if the NXSYS windows system handled it, but it doesn't.  Having lived in the Mac world for the past 11 years, I detest Windows development, and don't have a touch-screen machine.
 
-Maybe reversing the direction of the scroll-bar response is all that is needed (i.e., would make it most Mac-like). Somebody who is competent in modern Windows versions and apps probably could do this, or whatever is "right". easily.
+Maybe reversing the direction of the scroll-bar response is all that is needed (i.e., would make it most Mac-like). Somebody who is competent in modern Windows versions and apps could do this, or whatever is "right", easily.
 
 ## macOS: Migrate Objective-C++ to Swift
 
