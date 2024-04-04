@@ -1,4 +1,4 @@
-#Major Deficiencies and Futures
+# Major Deficiencies and Futures
 
 3 April 2024
 
@@ -8,7 +8,7 @@ Because relay-based fixed-block wayside color light signalling is basically obso
 
 Here are what I considered the most significant problems, in descending order of importance.
 
-##Inadequate expressivity in IJAO naming
+## Inadequate expressivity in IJAO naming
 
 "IJAO" means "insulated joint associated object", meaning
 
@@ -29,7 +29,7 @@ While \#1 is the easiest to fix, it is hardly trivial. NXSYS currently uses inte
 
 Recognition of finite-state languages such as any proposed scheme for Relay Symbols can now be done with C++ regular expressions instead of the cumbersome go-to-laden state-machines in the extant code.
 
-###Train system kinematics vs geometry
+### Train system kinematics vs geometry
 
 Closely related to the IJID problem is the train system's assumption that scaled distances on the right-of-way can be deduced from IJID's.  This would break down completely were multiple "route letters" and junctions of routes handled, but they are not now because of the just-described lacunae of IJID's.  But it already fails when "dishonest" IJID's are used, such as on the yard tracks at 240<sup>th</sup> St, where trains vanish off the map if routed to them.
 
@@ -49,7 +49,7 @@ Fixing this comprises total redesign of the relay engine for three states (back 
 
 (Of course, by "timing" I mean "simulated timing" in NXSYS.)
 
-##Topomorphic and other shared-wire circuits
+## Topomorphic and other shared-wire circuits
 
 **Topomorphic** is my name for a beautiful and widespread circuitry technique used not only in "all-relay" interlocking in NYCT and elsewhere, but in electromechanical and electropneumatic-mechanical machines of old (and on mainline railroads as well), to conserve wires and contacts while enforcing certain safeties by virtue of topology.  It has no analogue (as it were) in logic gates and arrays.
 
@@ -75,7 +75,7 @@ These are the challenges to topomorphic circuitry in NXSYS:
 
 This is, thus, of minimal priority.
 
-##MSWindows: Better way to scroll
+## MSWindows: Better way to scroll
 
 NXSYS and TLEdit can only be scrolled on Windows with the ancient-origin scroll bars.  It is cumbersome and error-prone and counterintuitive (move scroll-bar to the right, panel moves to the left).  The Mac scrolling via the trackpad is completely intuitive and easy: just grab the panel with two fingers and put it where you want.
 
@@ -83,7 +83,7 @@ Not all Windows machines have trackpads, and Windows is not trackpad oriented, b
 
 Maybe reversing the direction of the scroll-bar response is all that is needed (i.e., would make it most Mac-like). Somebody who is competent in modern Windows versions and apps probably could do this, or whatever is "right". easily.
 
-##macOS: Migrate Objective-C++ to Swift
+## macOS: Migrate Objective-C++ to Swift
 
 Swift was first released at the time I was already creating the Mac version of NXSYS, and it had no C++ interoperability.  Ten years later, Swift 5.9 has plenty, but it's pretty new, and nowhere as smooth as Objective-C++'s.
 
@@ -91,14 +91,14 @@ It would be wonderful to replace the Objective-C++ components of NXSYSMac with S
 
 It's not at all clear how to make such a move, but I can't imagine that Apple will drop support for Objective-C++ any time soon.
 
-##Apple Silicon support
+## Apple Silicon support
 
 This shouldn't be an issue, as Macs with Apple silicon can run Intel apps with Apple's simulation adapter (Rosetta), and, more significantly, NXSYSMac is built in XCode, which can certainly generate Apple silicon objects, but I don't have an Apple silicon Mac, so I cannot test this. It certainly *ought to* work without change.
 
-##Linux port
-"Fuhgeddaboudit" (as they say in Brooklyn).  Much too large and disruptive.
+## Linux port
+*Fuhgeddaboudit( (as they say in Brooklyn).  Much too large and disruptive.
 
-##Video-game graphics ("Cab view")
+## Video-game graphics ("Cab view")
 Forget that, too.  Way beyond the scope of the application.
 
 
