@@ -53,7 +53,7 @@ Fixing this comprises total redesign of the relay engine for three states (back 
 
 **Topomorphic** is my name for a beautiful and widespread circuitry technique used not only in "all-relay" interlocking in NYCT and elsewhere, but in electromechanical and electropneumatic-mechanical machines of old (and on mainline railroads as well), to conserve wires and contacts while enforcing certain safeties by virtue of topology.  It has no analogue (as it were) in logic gates and arrays.
 
-Current NXSYS relay circuits are all **well-formed logical trees (WFLTs)**. that is, AND and OR expressions of individual relay contacts and contained WFLTs (including the ability to include a front contact of the relay being defined ("stick contact")) as avatars of series and parallel circuits, respectively.  These expressions are identical to, in fact, *are*, Lisp S-expressions in AND and OR.
+Current NXSYS relay circuits are all **well-formed logical trees (WFLTs)**. that is, recursively, AND and OR expressions of individual relay contacts and contained WFLTs (including the ability to include a front contact of the relay being defined ("stick contact")) as avatars of series and parallel circuits, respectively.  These expressions are identical to, in fact, *are*, Lisp S-expressions in AND and OR.
 
 A simple description of the topomorphic model is the use of circuits that are more complex than WFLTs because of sharing of wiring between multiple relays, often in ingenious ways that exploit opposing traffic (and current flow) directions.   There is a better description and simple examples in the Logic Design PDF document.  NXSYS currently cannot express this at all.
 
