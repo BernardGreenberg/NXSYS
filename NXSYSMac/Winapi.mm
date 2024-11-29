@@ -205,11 +205,11 @@ HFONT getHWNDFont(HWND hWnd) {
 void ShowWindow(HWND hWnd, int mode){
     redeemHWND(hWnd)->ShowWindow(mode);
 }
-
+#if 0
 void EnableWindow(HWND hw, BOOL B){
     redeemHWND(hw)->EnableWindow(B ? true : false);
 }
-
+#endif
 void EnableWindow(HWND hw, bool b){
     redeemHWND(hw)->EnableWindow(b);
 }

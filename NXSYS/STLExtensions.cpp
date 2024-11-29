@@ -40,18 +40,18 @@ std::string FormatString(const char* fmt, ...) {
 
 std::string stoupper( const std::string& s )
 {
-    std::string result( s );
-    std::transform(s.begin(), s.end(), result.begin(), std::toupper  // seems to work fine
-//                   std::function <int(int)> ( std::toupper )
-                   );
+    std::string result;
+    for (auto c : s) {
+        result += std::toupper(c);
+    }
     return result;
 }
 
 std::string stolower( const std::string& s )
 {
-    std::string result( s );
-    std::transform(s.begin(), s.end(), result.begin(), std::tolower
-//                   std::function <int(int)> ( std::tolower )
-                   );
+    std::string result;
+    for (auto c : s) {
+        result += std::tolower(c);
+    }
     return result;
 }
