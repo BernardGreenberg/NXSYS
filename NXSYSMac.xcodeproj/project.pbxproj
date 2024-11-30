@@ -139,7 +139,6 @@
 		5BAC935819C8FECC00673BDC /* xsignal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062D8199EDFE0008CDCA0 /* xsignal.cpp */; };
 		5BAC935919C8FECC00673BDC /* xstop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062F5199FAE4E008CDCA0 /* xstop.cpp */; };
 		5BAC935B19C8FECC00673BDC /* xtgload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF062D3199ECB62008CDCA0 /* xtgload.cpp */; };
-		5BAC936719C8FECC00673BDC /* NXSYSMac-Info.plist in Sources */ = {isa = PBXBuildFile; fileRef = 5BE487D7199D0A5C007BD6BF /* NXSYSMac-Info.plist */; };
 		5BAC936B19C8FFAA00673BDC /* tledit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC936A19C8FFAA00673BDC /* tledit.cpp */; };
 		5BAC936D19C8FFC600673BDC /* appwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC936C19C8FFC600673BDC /* appwin.cpp */; };
 		5BAC937119C9B63400673BDC /* assignid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC937019C9B63400673BDC /* assignid.cpp */; };
@@ -193,6 +192,8 @@
 		5BD064DF19CEE9E300564BD5 /* TLEditMainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BD064DE19CEE9E300564BD5 /* TLEditMainView.mm */; };
 		5BD6200C19CD997C00DB8A8F /* TrackSegProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BD6200B19CD997C00DB8A8F /* TrackSegProperties.xib */; };
 		5BD6200E19CD9E6E00DB8A8F /* TrackSegDialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6200D19CD9E6E00DB8A8F /* TrackSegDialog.mm */; };
+		5BE2A19F2CFB7EEA00F6DE2F /* NXSYSMac-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BE487D7199D0A5C007BD6BF /* NXSYSMac-Info.plist */; };
+		5BE2A1A02CFB7F1000F6DE2F /* TLEdit-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC930F19C8FE7200673BDC /* TLEdit-Info.plist */; };
 		5BE487D0199D0A5C007BD6BF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE487CF199D0A5C007BD6BF /* Cocoa.framework */; };
 		5BE487DA199D0A5C007BD6BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BE487D8199D0A5C007BD6BF /* InfoPlist.strings */; };
 		5BE487E3199D0A5C007BD6BF /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BE487E2199D0A5C007BD6BF /* AppDelegate.mm */; };
@@ -1670,6 +1671,7 @@
 				5BD064DB19CE44A600564BD5 /* SwitchProperties.xib in Resources */,
 				5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */,
 				5B4E62B2284AEA6A002A6C7E /* OpenIcon.png in Resources */,
+				5BE2A1A02CFB7F1000F6DE2F /* TLEdit-Info.plist in Resources */,
 				5BC13711285E219D007D52E1 /* AboutTLEdit.html in Resources */,
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
 				5BC1370D285E1288007D52E1 /* TLEdit256x256.png in Resources */,
@@ -1724,6 +1726,7 @@
 				5BA92A6919DC3BD90098DBEC /* Info.xib in Resources */,
 				5BE487DA199D0A5C007BD6BF /* InfoPlist.strings in Resources */,
 				5BB5803D27C5586000FB0ED5 /* Help.xml in Resources */,
+				5BE2A19F2CFB7EEA00F6DE2F /* NXSYSMac-Info.plist in Resources */,
 				5B54275127BD27C3006EEDEF /* Relay Index.vcxproj.filters in Resources */,
 				5B133A582649F5B800120B10 /* TrainWreck256.png in Resources */,
 				5BE487E8199D0A5C007BD6BF /* Images.xcassets in Resources */,
@@ -1884,7 +1887,6 @@
 				5BA7E74A19D9652E006F9A04 /* CanvasExtentDialogController.mm in Sources */,
 				5B5AE615230C505000348612 /* RelayLispSubstrate.cpp in Sources */,
 				5B5CB8551A0B949500010B8B /* MiscApi.mm in Sources */,
-				5BAC936719C8FECC00673BDC /* NXSYSMac-Info.plist in Sources */,
 				5BF7CEB319CA299400DF6ECE /* edtraflev.cpp in Sources */,
 				5BF7CEB919CA55CC00DF6ECE /* MessageBox.mm in Sources */,
 				5BF7CEBA19CA566800DF6ECE /* MainView.mm in Sources */,

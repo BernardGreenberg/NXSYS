@@ -34,9 +34,17 @@ struct AppBuildSignature {
             desc = "Build ";
         else
             desc += "build " + std::to_string(Build()) + " ";
-    #if defined(DEBUG) || defined(_DEBUG)
-        desc += "(DEBUG) ";
-    #endif
+#ifdef NXSYSMac
+     #if defined(__aarch64__) || defined(_M_ARM64)
+        desc += "(ARM64) ";
+      #else
+        desc += "(Intel) ";
+      #endif
+#endif
+      #if defined(DEBUG) || defined(_DEBUG)
+         desc += "(DEBUG) ";
+      #endif
+
         char out_time[100];
         strftime(out_time, sizeof(out_time)/sizeof(out_time[0]), "of %m/%d/%y %H:%M", localtime(&BuildTime));
         return desc + out_time;
