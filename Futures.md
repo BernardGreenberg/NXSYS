@@ -1,6 +1,6 @@
 # Major Deficiencies and Futures
 
-3 April 2024
+1 Decenber 2024
 
 NXSYS is quite stable right now, in both Windows and Mac versions. All of the known (to me) deficiencies and avenues for conceivable improvement are “major”, i.e., would require massive work (with resultant instability) to remedy.
 
@@ -92,10 +92,6 @@ Swift was first released at the time I was already creating the Mac version of N
 It would be wonderful to replace the Objective-C++ components of NXSYSMac with Swift code -- Swift is a much better language and free of many ugly historical macOS artifacts.
 
 It's not at all clear how to make such a move, but I can't imagine that Apple will drop support for Objective-C++ any time soon.
-
-## Apple Silicon support
-
-This shouldn't be an issue, as Macs with Apple silicon can run Intel apps with Apple's simulation adapter (Rosetta), and, more significantly, NXSYSMac is built in XCode, which can certainly generate Apple silicon objects, but I don't have an Apple silicon Mac, so I cannot test this. It certainly *ought to* work without change.
 
 ## Linux port
 *Fuhgeddaboudit* (as they say in Brooklyn).  Much too large and disruptive.
