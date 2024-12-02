@@ -304,6 +304,14 @@ int main (int argc, const char ** argv) {
 #ifdef _WIN64
     compdesc += " (64-bit)";
 #endif
+#ifdef NXSYSMac
+     #if defined(__aarch64__) || defined(_M_ARM64)
+        compdesc += " (ARM64) ";
+      #else
+        compdesc += " (Intel) ";
+      #endif
+#endif
+
     cout << compdesc << endl;
     
     argparse::ArgSet Aset (compdesc,
