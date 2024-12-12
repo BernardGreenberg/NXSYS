@@ -28,6 +28,7 @@
 #include <vector>
 #include <filesystem>
 #include <limits>
+#include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
 #include "STLExtensions.h"
@@ -88,16 +89,16 @@ static PCTR Pctr = 0;
 static int GensymCtr = 0;
 static PCTR Lowest_Fix8_Unresolved;
 
-static int dep_sorter (const DepPair& A, const DepPair& B) {
+static bool dep_sorter (const DepPair& A, const DepPair& B) {
     if (A.affector < B.affector)
-	return -1;
+	return true;
     if (A.affector > B.affector)
-	return 1;
+	return false;
     if (A.affected < B.affected)
-	return -1;
+	return true;
     if (A.affected > B.affected)
-	return 1;
-    return 0;
+        return false;
+    return false;
 }
 
 
@@ -275,20 +276,20 @@ struct _Ctxt {
 
 typedef struct _Ctxt Ctxt;
 
-static int dep_list_sorter( const DepPair&A, const DepPair& B) {
+static bool dep_list_sorter( const DepPair&A, const DepPair& B) {
     Rlysym *ar = RelayRefTable[A.affector];
     Rlysym *br = RelayRefTable[B.affector];
     if (ar->n < br->n)
-	return -1;
+	return true;
     if (ar->n > br->n)
-	return 1;
+	return false;
     if (ar->type != br->type)
-	return strcmp (redeemRlsymId (ar->type), redeemRlsymId (br->type));
+	return strcmp (redeemRlsymId (ar->type), redeemRlsymId (br->type)) < 0;
     if (A.affected < B.affected)
-	return -1;
+	return true;
     if (A.affected > B.affected)
-	return 1;
-    return 0;
+	return false;
+    return false;
 }
 
 RLID RelayId (Sexpr s) {
@@ -729,13 +730,14 @@ void RecordTimer (RLID id, int time) {
 void CompileExpr (Sexpr s, Ctxt* ctxt);
 
 static RLID DefiningRelay;
+static std::unordered_set<RLID> DefiningRelayDependents;
 
 void RecordDependent (RLID affector) {
 
     /* Elim duplicates - will speed up runtime and simplify obj seg writer. */
-    for (auto& dp : DependentPairTable)
-	if (dp.affector == affector)
-	    return;
+    if (DefiningRelayDependents.count(affector) > 0)
+        return;
+    DefiningRelayDependents.insert(affector);
     DependentPairTable.emplace_back(affector, DefiningRelay);
 }
 
@@ -928,6 +930,7 @@ void PushRelayDef (Sexpr rlysexpr) {
         RC_error (1, "Relay already defined: %s", relay_sym->PRep().c_str());
 
     DefiningRelay = (int)RelayDefTable.size();
+    DefiningRelayDependents.clear();
     RelayDefTable.emplace_back(relay_sym, Pctr);
     RelayDefQuickCheck.emplace(relay_sym);
     FixupTable.clear();
