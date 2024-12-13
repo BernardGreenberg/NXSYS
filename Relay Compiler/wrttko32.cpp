@@ -8,6 +8,9 @@
 #include "rcdcls.h"
 #include "tkov2.h"
 
+#include <unordered_map>
+#include <vector>
+
 typedef  struct _TKO_VERSION_2_COMPONENT_HEADER COMPHDR;
 
 const int N_RLTYPES = 100;
@@ -154,41 +157,32 @@ static void Write_ISD (FILE*f, TKO_INFO& inf) {
 }
 
 static void Write_DPD (FILE* f, TKO_INFO& inf) {
-    COMPHDR h;
-    h.compid = TKOI_DPD;
-    h.number_of_items = 0;
-    h.length_of_item = 0;
-    h.length_of_block = 0;
-    DepPair * Dpt = inf.Dpt;
+    COMPHDR h_comp;
+    h_comp.compid = TKOI_DPD;
+    h_comp.number_of_items = 0;
+    h_comp.length_of_item = 0;
+    h_comp.length_of_block = 0;
+    const auto *dpt = inf.Dpt;
     int Dpt_count = inf.dpt_count;
-    RLID last_affector = 0xFFFFFFFF;
-    int i, j;
-    for (i = 0; i < Dpt_count; i++) {
-	if (Dpt[i].affector != last_affector) {
-	    last_affector = Dpt[i].affector;
-	    h.number_of_items++;
-	    h.length_of_block += sizeof (TKO_DPTE_HEADER);
-	    for (j = i; j < Dpt_count && Dpt[j].affector ==last_affector;j++);
-	    h.length_of_block += sizeof (RLID)*(j - i);
-	}
+    std::unordered_map<RLID, std::vector<RLID>> depend_map;
+    for (int i = 0; i < Dpt_count; i++, dpt++) {
+        depend_map[dpt->affector].push_back(dpt->affected);
+        h_comp.length_of_block += sizeof(RLID);
     }
-    fwrite (&h, 1, sizeof(h), f);
-    last_affector = 0xFFFF;
-    for (i = 0; i < Dpt_count; i++) {
-	if (Dpt[i].affector != last_affector) {
-	    last_affector = Dpt[i].affector;
-	    TKO_DPTE_HEADER hh;
-	    hh.affector = last_affector;
-	    for (j = i; j <Dpt_count && Dpt[j].affector == last_affector; j++);
-	    hh.count = j - i;
-	    fwrite (&hh, 1, sizeof (TKO_DPTE_HEADER), f);
-	    for (j = i; j < i + hh.count; j++) {    
-		RLID x = Dpt[j].affected;
-		fwrite (&x, 1, sizeof (RLID), f);
-	    }
-	}
+    h_comp.number_of_items = (int) depend_map.size();
+    h_comp.length_of_block += h_comp.number_of_items * sizeof(TKO_DPTE_HEADER);
+    fwrite(&h_comp, 1, sizeof(COMPHDR), f);
+
+    for (const auto& e : depend_map) {
+        TKO_DPTE_HEADER h_dpte;
+        h_dpte.affector = e.first;
+        h_dpte.count = (int) e.second.size();
+        fwrite(&h_dpte, 1, sizeof(h_dpte), f);
+
+        for (RLID affected : e.second)
+            fwrite (&affected, 1, sizeof (RLID), f);
     }
-};
+}
 
 static void Write_TMR (FILE* f, TKO_INFO& inf) {
     COMPHDR h;
