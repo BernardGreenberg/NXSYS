@@ -90,6 +90,8 @@
 		5B87B31C284A5DB40002AB18 /* QuitIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B87B318284A5DB40002AB18 /* QuitIcon.pxd */; };
 		5B88FEA11DF71C0D00D8F8E0 /* SwitchConsistency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */; };
 		5B8E51D0286741290019B12F /* lispmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4419A0D171008CDCA0 /* lispmath.cpp */; };
+		5B8EDEE42D0BC22800F07ED0 /* DumpTko.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */; };
+		5B8EDEE52D0C908100F07ED0 /* argparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB49E727AC7682006BE311 /* argparse.cpp */; };
 		5B8FCBE9284B6D6100855897 /* HelpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBE8284B6D6100855897 /* HelpIcon.png */; };
 		5B8FCBEB284B6D9E00855897 /* HelpIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
@@ -281,6 +283,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		5B8EDEDB2D0BC1D700F07ED0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -440,6 +451,8 @@
 		5B87B31D284A707F0002AB18 /* tletoolb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tletoolb.cpp; sourceTree = "<group>"; };
 		5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = SwitchConsistency.cpp; sourceTree = "<group>"; };
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
+		5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTko.cpp; sourceTree = "<group>"; };
+		5B8EDEDD2D0BC1D700F07ED0 /* DumpTko */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DumpTko; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
 		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -691,6 +704,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5B8EDEDA2D0BC1D700F07ED0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5BAC930819C8FE7100673BDC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -803,6 +823,7 @@
 				5B7B02AA2314CB62000747A0 /* writetko.cpp */,
 				5B7B02AC2314D8C9000747A0 /* wrttko32.cpp */,
 				5B4DF3AD2314C957001FDE00 /* fasdump.cpp */,
+				5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */,
 			);
 			path = "Relay Compiler";
 			sourceTree = "<group>";
@@ -1306,6 +1327,7 @@
 				5B5AE61B230C77E800348612 /* BLISP */,
 				5B4DF3992314ABB5001FDE00 /* RelayCompiler */,
 				5B25511825B87D2B00A68D73 /* RelayIndex */,
+				5B8EDEDD2D0BC1D700F07ED0 /* DumpTko */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1565,6 +1587,25 @@
 			productReference = 5B5AE61B230C77E800348612 /* BLISP */;
 			productType = "com.apple.product-type.tool";
 		};
+		5B8EDEDC2D0BC1D700F07ED0 /* DumpTko */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B8EDEE12D0BC1D700F07ED0 /* Build configuration list for PBXNativeTarget "DumpTko" */;
+			buildPhases = (
+				5B8EDED92D0BC1D700F07ED0 /* Sources */,
+				5B8EDEDA2D0BC1D700F07ED0 /* Frameworks */,
+				5B8EDEDB2D0BC1D700F07ED0 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DumpTko;
+			packageProductDependencies = (
+			);
+			productName = DumpTko;
+			productReference = 5B8EDEDD2D0BC1D700F07ED0 /* DumpTko */;
+			productType = "com.apple.product-type.tool";
+		};
 		5BAC930A19C8FE7100673BDC /* TLEdit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5BAC933219C8FE7200673BDC /* Build configuration list for PBXNativeTarget "TLEdit" */;
@@ -1622,6 +1663,9 @@
 						CreatedOnToolsVersion = 10.3;
 						ProvisioningStyle = Automatic;
 					};
+					5B8EDEDC2D0BC1D700F07ED0 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 				};
 			};
 			buildConfigurationList = 5BE487C7199D0A5C007BD6BF /* Build configuration list for PBXProject "NXSYSMac" */;
@@ -1642,6 +1686,7 @@
 				5B5AE61A230C77E800348612 /* BLISP */,
 				5B4DF3982314ABB5001FDE00 /* Relay Compiler */,
 				5B25511725B87D2B00A68D73 /* RelayIndex */,
+				5B8EDEDC2D0BC1D700F07ED0 /* DumpTko */,
 			);
 		};
 /* End PBXProject section */
@@ -1824,6 +1869,15 @@
 				5B5AE625230C823600348612 /* lspmacro.cpp in Sources */,
 				5B5AE6712312BE7500348612 /* STLExtensions.cpp in Sources */,
 				5B5AE626230C834A00348612 /* RelayLispSubstrate.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5B8EDED92D0BC1D700F07ED0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B8EDEE52D0C908100F07ED0 /* argparse.cpp in Sources */,
+				5B8EDEE42D0BC22800F07ED0 /* DumpTko.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2172,6 +2226,58 @@
 			};
 			name = Release;
 		};
+		5B8EDEE22D0BC1D700F07ED0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = HW67WXVJGN;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5B8EDEE32D0BC1D700F07ED0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = HW67WXVJGN;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		5BAC933319C8FE7200673BDC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2438,6 +2544,15 @@
 			buildConfigurations = (
 				5B5AE620230C77E900348612 /* Debug */,
 				5B5AE621230C77E900348612 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B8EDEE12D0BC1D700F07ED0 /* Build configuration list for PBXNativeTarget "DumpTko" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B8EDEE22D0BC1D700F07ED0 /* Debug */,
+				5B8EDEE32D0BC1D700F07ED0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
