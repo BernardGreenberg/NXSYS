@@ -177,7 +177,7 @@ int main (int argc, const char ** argv) {
                         auto ddp = (TKO_DPTE_HEADER*) p;
                         string affector = ESD[ddp->affector];
                         int naffected = ddp->count;
-                        printf("%3d %-8s[%d]: ", i, affector.c_str(), naffected-8);
+                        printf("%3d %-8s[%d]: ", i, affector.c_str(), naffected);
 
                         p += sizeof(*ddp);
                         int* affp = (int*)p;
@@ -188,7 +188,7 @@ int main (int argc, const char ** argv) {
                                 printf(" ");
                             p += sizeof(int);
                         }
-                        printf(";\n");
+                        printf("\n");
                     }
                 }
 
