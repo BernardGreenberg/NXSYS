@@ -14,8 +14,11 @@
 #include <assert.h>
 #include <time.h>
 
+#include <vector>
 #include <unordered_set>
 #include "argparse.hpp"
+#include "STLExtensions.h"
+
 using std::string, std::unordered_set, std::vector;
 
 const char * TKOI_STRINGS[] = TKOV2_COMPID_STRINGS;
@@ -46,16 +49,16 @@ int main (int argc, const char ** argv) {
     argparse::ArgSet Aset ("DumpTko track object dumper",
                            {
         {"file", "help=Pathname of .tko file to be analyzed."},
-        {"-H", "--header", "help=Print header (if not summary mode)"},
+        {"-H", "--header", "help=Print header (if explicit sections given)"},
         {"-v", "--verbose", "boolean=", "help=Dump detail for everything"},
-        {"sections", "nargs=*", "help=Dump detail for only these sections"}});
+        {"sections", "nargs=*", "help=Dump detail for only these sections (lowercase ok)"}});
     
     auto args = Aset.Parse(argc, argv);
-    unordered_set<string> sections;
+    unordered_set<string> sections_wanted, sections_found;
     for (const auto& section : args.VectorArgs["sections"]) {
-        sections.insert(section);
+        sections_wanted.insert(stoupper(section));
     };
-    bool summary = sections.size() == 0;
+    bool summary = sections_wanted.size() == 0;
     bool verbose = args["verbose"];
     const char * path = args["file"];
     struct stat st;
@@ -108,8 +111,9 @@ int main (int argc, const char ** argv) {
 
     while(dp < file_data + file_length) {
         auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
-        const char * block_name = TKOI_STRINGS[chp->compid];
-        if (summary || sections.contains(block_name))
+        auto block_name = TKOI_STRINGS[chp->compid];
+        sections_found.insert(block_name);
+        if (summary || sections_wanted.contains(block_name))
             printf("Block %s len %d items %d, item_len %d, @file+0x%lX\n",
                    block_name,
                    chp->length_of_block,
@@ -118,7 +122,7 @@ int main (int argc, const char ** argv) {
                    (const char*)chp - file_data);
         auto rdp = dp + sizeof(*chp);
         auto next_block = rdp + chp->length_of_block;
-        bool print = sections.contains(block_name) || verbose;
+        bool print = sections_wanted.contains(block_name) || verbose;
         switch(chp->compid) {
             case TKOI_CID:
                 if (print)
@@ -199,7 +203,17 @@ int main (int argc, const char ** argv) {
 
         dp = next_block;
     }
+    unordered_set<string> unused_comp_args;
+    for (auto& arg : sections_wanted)
+        if (!sections_found.contains(arg))
+            unused_comp_args.insert(arg);
+    if (unused_comp_args.size() > 0) {
+        fprintf(stderr, "Section(s) not found in file: ");
+        for (auto& unarg : unused_comp_args)
+            fprintf(stderr, "%s ", unarg.c_str());
+        fprintf(stderr, "\n");
+        return 1;
+    }
     
     return 0;
-
 }

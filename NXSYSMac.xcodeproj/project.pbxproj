@@ -92,6 +92,7 @@
 		5B8E51D0286741290019B12F /* lispmath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4419A0D171008CDCA0 /* lispmath.cpp */; };
 		5B8EDEE42D0BC22800F07ED0 /* DumpTko.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */; };
 		5B8EDEE52D0C908100F07ED0 /* argparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB49E727AC7682006BE311 /* argparse.cpp */; };
+		5B8EDEE62D0DD47B00F07ED0 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B8FCBE9284B6D6100855897 /* HelpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBE8284B6D6100855897 /* HelpIcon.png */; };
 		5B8FCBEB284B6D9E00855897 /* HelpIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
@@ -1876,6 +1877,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B8EDEE62D0DD47B00F07ED0 /* STLExtensions.cpp in Sources */,
 				5B8EDEE52D0C908100F07ED0 /* argparse.cpp in Sources */,
 				5B8EDEE42D0BC22800F07ED0 /* DumpTko.cpp in Sources */,
 			);
