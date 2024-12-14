@@ -1238,7 +1238,7 @@ int main (int argc, char ** argv) {
     string opath;
     string lpath;
     string compdesc = "BSG Windows Relay Compiler Version 2 (";
-    compdesc += std::to_string(compiler_bits) + "-bit of " + __DATE__ + " " __TIME__;
+    compdesc += std::to_string(compiler_bits) + "-bit of " + __DATE__ + " " __TIME__ + ")";
     fprintf (stdout, "%s\n", compdesc.c_str());
     fprintf (stdout, "Copyright (c) Bernard S. Greenberg 1994, 1996, 2019\n");
 
