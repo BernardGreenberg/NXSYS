@@ -45,6 +45,15 @@ public:
     }
 };
 
+void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* chp) {
+    if (chp->length_of_item != 4)
+        return;
+    auto instp = (unsigned int*) (chp+1);
+    for (int i = 0; i < chp->number_of_items; i++) {
+        printf("%06X  %08X\n", i, *instp++);
+    }
+}
+
 int main (int argc, const char ** argv) {
     argparse::ArgSet Aset ("DumpTko track object dumper",
                            {
@@ -138,6 +147,9 @@ int main (int argc, const char ** argv) {
                         printf("%d: %s, ", i, S.RnamesTexts+S.RnamesTextPtrs[i]);
                     printf("\n");
                 }
+                break;
+            case TKOI_TXT:
+                DumpText(chp);
                 break;
             case TKOI_ISD:
                 ISD = S.maybe_dump_relay_list(rdp, chp->number_of_items, print);

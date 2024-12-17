@@ -576,96 +576,61 @@ unsigned int insert_arm_branch_addr(unsigned int inst, int displacement, int sta
 }
 
 void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
-    const char * mnem = "fluff";
+    const char * mnem = nullptr;
+    unsigned int inst;
     switch (op) {
         case MOP_RET:
             outarminst(0xD65F0000, "ret", str);
             return;
+            
         case MOP_CLZ:
             outarminst(0xD2400000, "movz", "x0, #0");
             return;
+            
         case MOP_STZ:
             /* means indicate low logic level in x0*/
             outarminst(0xD2400020, "movz", "x0, #1");
             return;
+            
         case MOP_JMPL:  /* "In arm64, there is neither long nor short, east nor west ...*/
         case MOP_JMP:
+            /*There actually shouldn't be any JMP's in Arm64 RLYCOMP output */
             outarminst(0x14000000, "b", str);
             return;
+            
         case MOP_JNZ:
-        {
             /* Jump-non-zero in the x86 dispensation means that the logic level is 0 ...*/
-            unsigned int inst = insert_arm_branch_addr(0x36000000, opd - Pctr, 18, 5, 2);
+            inst = insert_arm_branch_addr(0x36000000, opd - Pctr, 18, 5, 2);
             outarminst(inst, "tbz", (string("x0, #0, ") + str).c_str());
             return;
-        }
-        case MOP_AND:
-            mnem = "AND";
-            break;
-        case MOP_OR:
-            mnem = "OR";
-            break;
+            
         case MOP_JZ:
-        {
             /* Jump-zero in the x86 dispensation means that the logic level is 1 ...*/
-            unsigned int inst = insert_arm_branch_addr(0x37000000, opd - Pctr, 18, 5, 2);
+            inst = insert_arm_branch_addr(0x37000000, opd - Pctr, 18, 5, 2);
             outarminst(inst, "tbnz", (string("x0, #0, ") + str).c_str());
             return;
-        }
-        case MOP_RETF:
-            mnem="RETF";
-            break;
-        case MOP_NOJUMP:
-            mnem = "NOJUMP";
-            break;
+            
         case MOP_LDAL:  /* what luck! */
         case MOP_TST:
         {
-            typedef const unsigned int armint;
             string operand = string("x0, [x2, #+") + std::to_string(opd) +
             "]   ; v$" + str;
-            armint LDR_X0 = 0x58000000,
-             OPD_BY_4 = opd >> 2,
-             OPD_SHIFTED = OPD_BY_4 << 5,
-             inst = LDR_X0 | OPD_SHIFTED;
+            unsigned int LDR_X0 = 0x58000000,
+            OPD_BY_4 = opd >> 2,
+            OPD_SHIFTED = OPD_BY_4 << 5;
+            inst = LDR_X0 | OPD_SHIFTED;
             outarminst(inst, "ldr", operand.c_str());
-            armint LDRB = 0x39400000;
-            outarminst(LDRB, "ldrb", "x0, [x0, #0]");
+            outarminst(0x39400000, "ldrb", "x0, [x0, #0]");
             return;
         }
         case MOP_XOR:
             outarminst(0x52010000, "eor", "x0, x0, #1"); //...Balthasar
             return;
-        case MOP_RPUSH:
-            mnem = "RPUSH";
-            break;
-        case MOP_RPOP:
-            mnem = "RPOP";
-            break;
-        case MOP_LDBLI8:
-            mnem = "LDBLIB";
-            break;
-        case MOP_LOADWD:
-            mnem = "LOADWD";
-            break;
-        case MOP_CALLIND:
-            mnem = "CALLIND";
-            break;
-        case MOP_MOVZX8:
-            mnem = "MOVZX8";
-            break;
-        case MOP_LEAVE:
-            mnem = "LEAVE";
-            break;
-        case MOP_RRET:
-            mnem = "RRET";
-            break;
-        case MOP_SETNZ:
-            mnem = "SETNZ";
-            break;
-}
 
-    outarminst(0, mnem, str);
+        default:
+            RC_error(1, "Unknown internal op code for arm64: %d\n", op);
+            return;
+    }
 }
 
 void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
