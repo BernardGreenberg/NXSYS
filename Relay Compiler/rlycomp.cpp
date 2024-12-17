@@ -52,6 +52,7 @@ namespace fs = std::filesystem;
 
 #include "lisp.h"
 #include "rcdcls.h"
+#include "RCArm64.h"
 
 class Architecture {
 public:
@@ -581,33 +582,33 @@ void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
     unsigned int inst;
     switch (op) {
         case MOP_RET:
-            outarminst(0xD65F0000, "ret", str);
+            outarminst(ARM::ret, "ret", str);
             return;
             
         case MOP_CLZ:
-            outarminst(0xD2400000, "movz", "x0, #0");
+            outarminst(ARM::movz_0, "movz", "x0, #0");
             return;
             
         case MOP_STZ:
             /* means indicate low logic level in x0*/
-            outarminst(0xD2400020, "movz", "x0, #1");
+            outarminst(ARM::movz_1, "movz", "x0, #1");
             return;
             
-        case MOP_JMPL:  /* "In arm64, there is neither long nor short, east nor west ...*/
+        case MOP_JMPL:  /* "In arm64, there is neither long nor short, east nor west ..." */
         case MOP_JMP:
             /*There actually shouldn't be any JMP's in Arm64 RLYCOMP output */
-            outarminst(0x14000000, "b", str);
+            outarminst(ARM::b, "b", str);
             return;
             
         case MOP_JNZ:
             /* Jump-non-zero in the x86 dispensation means that the logic level is 0 ...*/
-            inst = insert_arm_branch_addr(0x36000000, opd - Pctr, 18, 5, 2);
+            inst = insert_arm_branch_addr(ARM::tbz, opd - Pctr, 18, 5, 2);
             outarminst(inst, "tbz", (string("x0, #0, ") + str).c_str());
             return;
             
         case MOP_JZ:
             /* Jump-zero in the x86 dispensation means that the logic level is 1 ...*/
-            inst = insert_arm_branch_addr(0x37000000, opd - Pctr, 18, 5, 2);
+            inst = insert_arm_branch_addr(ARM::tbnz, opd - Pctr, 18, 5, 2);
             outarminst(inst, "tbnz", (string("x0, #0, ") + str).c_str());
             return;
             
@@ -616,16 +617,16 @@ void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
         {
             string operand = string("x0, [x2, #+") + std::to_string(opd) +
             "]   ; v$" + str;
-            unsigned int LDR_X0 = 0x58000000,
-            OPD_BY_4 = opd >> 2,
-            OPD_SHIFTED = OPD_BY_4 << 5;
+            unsigned int LDR_X0 = ARM::ldr_storage,
+            OPD_BY_8 = opd >> 3,
+            OPD_SHIFTED = OPD_BY_8 << 10;
             inst = LDR_X0 | OPD_SHIFTED;
             outarminst(inst, "ldr", operand.c_str());
-            outarminst(0x39400000, "ldrb", "x0, [x0, #0]");
+            outarminst(ARM::ldrb_reg, "ldrb", "x0, [x0, #0]");
             return;
         }
         case MOP_XOR:
-            outarminst(0x52010000, "eor", "x0, x0, #1"); //...Balthasar
+            outarminst(ARM::eor_imm, "eor", "x0, x0, #1"); //...Balthasar
             return;
 
         default:
@@ -1106,7 +1107,7 @@ void CompileRelayDef (Sexpr s) {
     DefineTagPC(t);
     Ctxt ctxt (&RetCF, CT_VAL);
     if (IS_ARM64)
-        outarminst(0xAA000372, "mov", "x2, x0          ;linkage"); /* move single arg (linkage) to x2 */
+        outarminst(ARM::mov_rr, "mov", "x2, x0          ;linkage"); /* move single arg (linkage) to x2 */
     CompileAndOr (CDR(s), CT_AND, &ctxt);
     outinst (MOP_JMP, LRET, 0);
     RelayDef& rdef = RelayDefTable.back();

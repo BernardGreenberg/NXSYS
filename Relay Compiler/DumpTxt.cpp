@@ -9,15 +9,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tkov2.h"
+#include "RCArm64.h"
 
 #include <vector>
 #include <map>
 
-
+#define TOPBYTE(w32) ((w32 >> 24) & 0xFF)
 using std::string, std::unordered_map, std::vector;
 
 static std::map<unsigned int, string> ESD;  //link_offset->relay name
 static std::map<unsigned int, string> ISD; //text offset->relay name
+
+static unsigned int extract_bits(unsigned int data, int high, int low) {
+    int answer = data >> low;
+    int bits = high - low + 1;
+    int mask = (1 << bits) - 1;
+    return answer & mask;
+}
 
 static vector<string> CalculateRelayTypeArray(const char* texts, const short* textptrs, int nitems) {
     vector<string> Types;
@@ -85,26 +93,59 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
         if (ISD.count(Pctr))
             printf("\n%s:\n", ISD[Pctr].c_str());
         printf("%06X  %08X", Pctr, inst);
-        char unsigned opcode = inst >> (32-8);
+        char unsigned opcode = TOPBYTE(inst);
+        
         switch (opcode) {
-        case 0x36:
-        case 0x37:
+            case TOPBYTE(ARM::tbz):
+            case TOPBYTE(ARM::tbnz):
             {
                 int fld = ((inst >> 5) << 2) & 0x0000FFFF;
                 if (fld &  0x00008000)
                     fld |= 0xFFFF0000;
                 int target = (int)Pctr+fld;
                 const char * opstr = (opcode == 0x37) ? "tbnz" : "tbz ";
-                printf ("   %s %06X", opstr, target);
+                printf ("   %-4s    x0, #0, %06X", opstr, target);
+            }
+                break;
+                
+            case TOPBYTE(ARM::ret):
+                printf ("   ret\n");    /* extra \n ... */
+                break;
+            case TOPBYTE(ARM::movz_0):
+                printf ("   mov     x0, #%d", (inst >> 5) & 1);
+                break;
+                
+            case TOPBYTE(ARM::ldr_storage):
+            {
+                int ptrdisp = extract_bits(inst, 21, 10) * 8;
+                printf("   ldr     x0, [x2, #+%d]   ; %s", ptrdisp, ESD[ptrdisp].c_str());
+                break;
             }
                 
-            break;
-        default:
-            break;
+            case TOPBYTE(ARM::ldrb_reg):
+                printf("   ldrb    x0, [x0, #0]");
+                break;
+                
+            case TOPBYTE(ARM::mov_rr):
+                printf("   mov     x%d, x%d", extract_bits(inst, 4, 0), extract_bits(inst, 20, 16));
+                break;
+
+            case TOPBYTE(ARM::eor_imm):
+            {
+                int imms = extract_bits(inst, 15, 10);
+                int immr = extract_bits(inst, 21, 16);
+                int imm = (imms << 6) | immr;
+                printf("   eor     x%d, x%d, #%d",
+                       extract_bits(inst, 4, 0),
+                       extract_bits(inst, 9, 5),
+                       imm);
+            }
+                break;
+            default:
+                break;
         }
         
         printf("\n");
-        if (i >= 200) break;
         instp++;
         Pctr += 4;
     }

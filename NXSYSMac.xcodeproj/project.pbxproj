@@ -456,6 +456,7 @@
 		5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTko.cpp; sourceTree = "<group>"; };
 		5B8EDEDD2D0BC1D700F07ED0 /* DumpTko */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DumpTko; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTxt.cpp; sourceTree = "<group>"; };
+		5B8EDEE92D1216E200F07ED0 /* RCArm64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCArm64.h; sourceTree = "<group>"; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
 		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -835,6 +836,7 @@
 		5B4DF3A22314ADDC001FDE00 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				5B8EDEE92D1216E200F07ED0 /* RCArm64.h */,
 				5BFB49EC27AC794F006BE311 /* FASL.H */,
 				5BFB49ED27AC794F006BE311 /* tkov1.h */,
 				5BFB49EB27AC7837006BE311 /* rcdcls.h */,
