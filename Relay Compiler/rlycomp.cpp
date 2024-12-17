@@ -14,6 +14,10 @@
    replaced vandalizing relay ptrs with longs by an std::unordered_map,
    made to compile on run on 64-bit Macintosh, but uselessly produce and list
    32-bit Windows code.  Sigh.  26 August 2019. */
+/* Produce actual arm64 ("Apple Silicon") code, with architecture management 16 December 2024
+   This V3 assumes that the static linkage is an array of pointers to relay value cells, not
+   actual relays as in V2.
+ */
 
 #include <string.h>
 #include <stdio.h>
@@ -34,7 +38,7 @@
 #include "STLExtensions.h"
 #include "replace_filename.h"
 
-using std::string;
+using std::string, std::vector;
 
 namespace fs = std::filesystem;
 
@@ -49,16 +53,69 @@ namespace fs = std::filesystem;
 #include "lisp.h"
 #include "rcdcls.h"
 
+class Architecture {
+public:
+    string CanonToken;
+    vector<string> Synonyms;
+    int Bits;
+    enum OS {WINDOWS, MAC} Os;
+    int RelayBlockSize;
+
+    static vector<Architecture*> alist;
+    bool IsMe(const string& s) {
+        string upc = stoupper(s);
+        if (upc == stoupper(CanonToken))
+            return true;
+        for(const auto& ts : Synonyms)
+            if (ts == upc)
+                return true;
+        return false;
+    }
+    string DescString() {
+        string osname = (Os == MAC) ? "Mac" : "Windows";
+        return osname + " (" + std::to_string(Bits) + " bits, " + CanonToken + ")";
+    }
+    static Architecture* find(const string item) {
+        for (auto ap : alist)
+            if (ap->IsMe(item))
+                return ap;
+        fprintf (stderr, "Unknown architecture: %s\n", item.c_str());
+        return nullptr;
+    }
+    static void print_known(Architecture* dft) {
+        fprintf(stderr, "Known architectures (default %s): ", dft->CanonToken.c_str());
+        for (auto ap : Architecture::alist)
+            fprintf(stderr, "%s ", ap->CanonToken.c_str());
+        fprintf(stderr, "\n");
+    }
+    bool operator == (Architecture* otherp) const {
+        return otherp == this;
+    }
+};
+
+
+static Architecture Intel16 {"x86-16", {"8086"}, 16, Architecture::OS::WINDOWS, 28};
+static Architecture Intel32 {"x86", {"INTEL X86", "X86", "X86-32"}, 32, Architecture::OS::WINDOWS, 32};
+static Architecture macARM {"arm64", {"ARM64"}, 64, Architecture::OS::MAC, 8};
+
+vector<Architecture*> Architecture::alist {&Intel32, &Intel16, &macARM};
+
+
+
+static Architecture* Arch;
+
+#define COMPILER_VERSION 3
+#define COMPILER_COPYRIGHT "Copyright (c) Bernard S. Greenberg 1994, 1996, 2019, 2024"
+
 #define ENTRY_THUNK_NAME "_entry_thunk"
 
-/* Variables that change value for 16/32 bit compilations */
+/* Variables that change value for architecture */
 #define SINGLE_WIDTH 1
-static int Bits;
-static int B32p;
+
 static int FullWidth;
 static const char * Ltabs;
 static int Ahex;
-static int RelayBlockSize;
+unsigned int insert_arm_branch_addr(unsigned int inst, int displacement, int start_bit, int end_bit, int shift_down);
 
 enum REG_X {X_AL = 0, X_CL, X_DL, X_BL, X_AH, X_CH, X_DY, X_BH, X_NONE,
             X_EAX= 0, X_ECX,X_EDX,X_EBX,X_ESP,X_EBP,X_ESI,X_EDI};
@@ -212,18 +269,29 @@ void FixupFixup (Fixup & F, PCTR pc) {
     int d;
     if (F.width == FullWidth) {
 	d = pc-F.pc-FullWidth;
-	list (B32p ?
+	list (Arch->Bits == 32 ?
 	      ";  FIXUP 32-bit %08X to %s = %08X, disp %08X\n"
 	      : ";  FIXUP 16-bit %04X to %s = %04X, disp %04X\n",
 	      F.pc, F.tag->lab, pc, d);
 	*((PCTR *) &Code[F.pc]) = d;
 	F.tag = NULL;
     }
+    else if (macARM == Arch) {
+        int d = pc - F.pc;
+        list (";  Arm Fixup @%0*X to %s = %0*X, disp %04X\n",
+              Ahex, F.pc, F.tag->lab, Ahex, pc, d);
+        unsigned int* iptr = ((unsigned int*) &(Code[F.pc]));
+        unsigned int inst = *iptr;
+        char unsigned opcode = inst >> (32-8);
+        assert(opcode == 0x36 || opcode == 0x37);
+        inst = insert_arm_branch_addr(inst, d, 18, 5, 2);
+        *iptr = inst;
+    }
     else {
 	d = pc-F.pc-1;
 	Jtag& tag = *F.tag;
-	list (";  FIXUP  8-bit %0*X to %s = %0*X, disp %02X\n",
-	      Ahex, F.pc, tag.lab, Ahex, pc, d);
+        list (";  FIXUP  8-bit %0*X to %s = %0*X, disp %02X\n",
+              Ahex, F.pc, tag.lab, Ahex, pc, d);
 	if (disp_ok (pc, F.pc))
 	    Code[F.pc] = d;
 	else {
@@ -301,32 +369,39 @@ RLID RelayId (Sexpr s) {
     RelayRefTable.emplace_back(rlptr);
     RIDMap[rlptr] = relay_id;
 
-    list ("%sv$%s\tequ\tbyte ptr 0%Xh\n",
-          Ltabs, s.PRep().c_str(), relay_id * RelayBlockSize);
+    if (macARM == Arch)
+        list ("%sv$%s\tequ\t0x0%X\n",
+              Ltabs, s.PRep().c_str(), relay_id * Arch->RelayBlockSize);
+    else
+        list ("%sv$%s\tequ\tbyte ptr 0%Xh\n",
+              Ltabs, s.PRep().c_str(), relay_id * Arch->RelayBlockSize);
     return relay_id;
 }
 
 
 PCTR RlsymOffset (Rlysym * r) {	/* called from writetko */
-    return RelayBlockSize*RIDMap[r];
+    return Arch->RelayBlockSize*RIDMap[r];
 }
 
 static PCTR RelayOffset (Sexpr s) {
-    return RelayBlockSize*RelayId(s);
+    return Arch->RelayBlockSize*RelayId(s);
 }
 
 void OutputListingLine
    (const char* opmnem, const char unsigned * bytes, int bytect, const char* opd) {
 again:
 
-    int tcol = B32p ? 24 : 16;
+    int tcol = Arch->Bits == 16 ? 16 : 24;
     size_t llen = Label_Pending[0] ? strlen (Label_Pending+1) : 0;
     int cc = Ahex+2;
 
     list ("%0*X  ", Ahex, Pctr);
     if (llen < 8)
 	for (int i = 0; i < bytect; i++) {
-	    list ("%02X", bytes[i]);
+            int j = i;
+            if (macARM == Arch)
+                j = bytect - i - 1;
+	    list ("%02X", bytes[j]);
 	    cc+=2;
 	}
 
@@ -354,7 +429,7 @@ void outbytes_raw (const char* opmnem, char unsigned * bytes, int bytect, const 
     if (ListOpt)
 	OutputListingLine (opmnem, bytes, bytect, opd);
     unsigned long end = Pctr + bytect;
-    if (Bits == 16 && end >= (unsigned long) 0xFFFF)
+    if (Arch->Bits == 16 && end >= (unsigned long) 0xFFFF)
 	RC_error (2, "Code size exceeds 65K limit for 16-bit compilation.");
     Code.insert(Code.end(), bytes, bytes+bytect); //poor man's iterators
     Pctr += bytect;
@@ -376,8 +451,8 @@ int EncodeOpd (unsigned char * b, int opd, REG_X R1, REG_X R2, int immed) {
 	mod = OPMOD_IMMED;
     else if (opd == 0)
 	/* we dont do absolute number yet. */
-	if (    (B32p && (R2 == X_EBP || R2 == X_ESP))
-	     || (!B32p && (R2 != X_ESI && R2 != X_EDI && R2 != X_EBX)))
+	if (    (Arch->Bits == 32 && (R2 == X_EBP || R2 == X_ESP))
+	     || (Arch->Bits == 16 && (R2 != X_ESI && R2 != X_EDI && R2 != X_EBX)))
 	    mod = OPMOD_RP_DISP8;
 	else 
 	    mod = OPMOD_RPTR;
@@ -385,7 +460,7 @@ int EncodeOpd (unsigned char * b, int opd, REG_X R1, REG_X R2, int immed) {
 	mod = OPMOD_RP_DISP8;
     else mod = OPMOD_RP_DISPLONG;
     
-    if (!B32p && !immed) {
+    if (Arch->Bits == 16 && !immed) {
 	enum OPREG16 reg16 = MAPMOD1632 [R2];
 	if (reg16 == OR16_NONE)
 	    RC_error (2, "[%s] addressing not supported in 16-bit mode.",
@@ -417,9 +492,9 @@ void DisasOpd (MACH_OP op, std::string& buf, unsigned char * b,
     int R2 = rmbyte &  7;
     int op8bit = !!(flags & OPF_8BIT);
 
-    if (!B32p && mode != OPMOD_IMMED)
+    if (Arch->Bits == 16 && mode != OPMOD_IMMED)
 	R2 = MAPMOD3216[(int)R2];
-    const char *r2name = REG_NAMES[B32p][R2];
+    const char *r2name = REG_NAMES[(int)(Arch->Bits == 32)][R2];
 
     switch (mode) {
 	case OPMOD_IMMED:
@@ -444,7 +519,7 @@ void DisasOpd (MACH_OP op, std::string& buf, unsigned char * b,
 		if (mode == OPMOD_RP_DISP8)
 		    disp = (char) *b;
 		else
-		    if (B32p)
+		    if (Arch->Bits > 16)
 			disp = *((long *)b);	/* low-endian platform assumption! */
 		    else
 			disp = *((short *)b);/* low-endian platform assumption!*/
@@ -458,7 +533,7 @@ void DisasOpd (MACH_OP op, std::string& buf, unsigned char * b,
     if (flags & OPF_NOREGOP)
         buf = memopd;
     else {
-	int r1bp = B32p;
+	int r1bp = (int)(Arch->Bits == 32);
 	if (op8bit && op != MOP_MOVZX8)
 	    r1bp = 2;
 	const char * r1name = REG_NAMES[r1bp][R1];
@@ -486,8 +561,120 @@ void outinst_general (MACH_OP op, int immed,
     outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf.c_str());
 }
 
+void outarminst (unsigned int w, const char * mnem, const char* str) {
+    auto p = (unsigned char *)&w;
+    outbytes_raw (mnem, p, 4, str);
+}
+
+unsigned int insert_arm_branch_addr(unsigned int inst, int displacement, int start_bit, int end_bit, int shift_down) {
+    displacement >>= shift_down;
+    int fld_len = start_bit - end_bit + 1;
+    int mask = (1 << fld_len)-1;
+    displacement &= mask;
+    displacement <<=  end_bit;
+    unsigned int result = inst |= displacement;
+    return result;
+}
+
+void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
+    const char * mnem = "fluff";
+    switch (op) {
+        case MOP_RET:
+            outarminst(0xD65F0000, "ret", str);
+            return;
+        case MOP_CLZ:
+            outarminst(0xD2400000, "movz", "x0, #0");
+            return;
+        case MOP_STZ:
+            /* means indicate low logic level in x0*/
+            outarminst(0xD2400020, "movz", "x0, #1");
+            return;
+        case MOP_JMPL:  /* "In arm64, there is neither long nor short, east nor west ...*/
+        case MOP_JMP:
+            outarminst(0x14000000, "b", str);
+            return;
+        case MOP_JNZ:
+        {
+            /* Jump-non-zero in the x86 dispensation means that the logic level is 0 ...*/
+            unsigned int inst = insert_arm_branch_addr(0x36000000, opd - Pctr, 18, 5, 2);
+            outarminst(inst, "tbz", (string("x0, #0, ") + str).c_str());
+            return;
+        }
+        case MOP_AND:
+            mnem = "AND";
+            break;
+        case MOP_OR:
+            mnem = "OR";
+            break;
+        case MOP_JZ:
+        {
+            /* Jump-zero in the x86 dispensation means that the logic level is 1 ...*/
+            unsigned int inst = insert_arm_branch_addr(0x37000000, opd - Pctr, 18, 5, 2);
+            outarminst(inst, "tbnz", (string("x0, #0, ") + str).c_str());
+            return;
+        }
+        case MOP_RETF:
+            mnem="RETF";
+            break;
+        case MOP_NOJUMP:
+            mnem = "NOJUMP";
+            break;
+        case MOP_LDAL:  /* what luck! */
+        case MOP_TST:
+        {
+            typedef const unsigned int armint;
+            string operand = string("x0, [x2, #+") + std::to_string(opd) +
+            "]   ; v$" + str;
+            armint LDR_X0 = 0x58000000,
+             OPD_BY_4 = opd >> 2,
+             OPD_SHIFTED = OPD_BY_4 << 5,
+             inst = LDR_X0 | OPD_SHIFTED;
+            outarminst(inst, "ldr", operand.c_str());
+            armint LDRB = 0x39400000;
+            outarminst(LDRB, "ldrb", "x0, [x0, #0]");
+            return;
+        }
+        case MOP_XOR:
+            outarminst(0x52010000, "eor", "x0, x0, #1"); //...Balthasar
+            return;
+        case MOP_RPUSH:
+            mnem = "RPUSH";
+            break;
+        case MOP_RPOP:
+            mnem = "RPOP";
+            break;
+        case MOP_LDBLI8:
+            mnem = "LDBLIB";
+            break;
+        case MOP_LOADWD:
+            mnem = "LOADWD";
+            break;
+        case MOP_CALLIND:
+            mnem = "CALLIND";
+            break;
+        case MOP_MOVZX8:
+            mnem = "MOVZX8";
+            break;
+        case MOP_LEAVE:
+            mnem = "LEAVE";
+            break;
+        case MOP_RRET:
+            mnem = "RRET";
+            break;
+        case MOP_SETNZ:
+            mnem = "SETNZ";
+            break;
+}
+
+    outarminst(0, mnem, str);
+}
 
 void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
+    if (macARM == Arch) {
+        outinst_raw_arm (op, str, opd);
+        return;
+    }
+        
     unsigned char bytes[12];
     std::string dbuf;
     int bc = 0;
@@ -531,7 +718,7 @@ void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
 	case MOP_RPUSH:
 	case MOP_RPOP:
 	    bytes[0] |=  opd;
-            dbuf = REG_NAMES[B32p][opd];
+            dbuf = REG_NAMES[(int)(Arch->Bits == 32)][opd];
 	    break;
 
 	case MOP_RRET:
@@ -596,7 +783,8 @@ top:
 
 void outinst (MACH_OP op, Sexpr s, PCTR opd) {
     std::string str;
-    check_fix8_overflows();
+    if (Arch->Bits < 64)
+        check_fix8_overflows();
     if (s.type == Lisp::RLYSYM)
         str = s.PRep();
     else if (s == T_ATOM)
@@ -672,7 +860,7 @@ void TrampJump (MACH_OP op, Jtag& tag, int jumparound) {
     strcpy (tag.tramp_lab, tramp.lab);
     tag.tramp_defined = 1;
     tag.tramp_pc = Pctr;
-    outinst_raw (MOP_JMPL, tag.lab, (Bits==32) ? 0xFFFFFFFF : 0xFFFF);
+    outinst_raw (MOP_JMPL, tag.lab, (Arch->Bits==32) ? 0xFFFFFFFF : 0xFFFF);
     RecordFixup (tag, Pctr - FullWidth, FullWidth);
     if (op != MOP_JMP && jumparound)
 	DefineTagPC (jump);
@@ -708,7 +896,10 @@ dot:	    if (disp_ok (Pctr, tag.tramp_pc)) {
 	goto dot;
     if (!tag.have_pc && !tag.tramp_defined) {
 	outinst_raw (op, tag.lab, Pctr+1);
-	RecordFixup (tag, Pctr - 1, SINGLE_WIDTH);
+        if (macARM == Arch)
+            RecordFixup (tag, Pctr - 4, 0);
+        else
+            RecordFixup (tag, Pctr - 1, SINGLE_WIDTH);
 	return;
     }
     TrampJump (op, tag, 1);
@@ -946,6 +1137,8 @@ void CompileRelayDef (Sexpr s) {
     list ("\n%s\tpublic\t%s\n", Ltabs, t.lab);
     DefineTagPC(t);
     Ctxt ctxt (&RetCF, CT_VAL);
+    if (macARM == Arch)
+        outarminst(0xAA000372, "mov", "x2, x0          ;linkage"); /* move single arg (linkage) to x2 */
     CompileAndOr (CDR(s), CT_AND, &ctxt);
     outinst (MOP_JMP, LRET, 0);
     RelayDef& rdef = RelayDefTable.back();
@@ -1040,7 +1233,7 @@ void PrintRelayTable () {
     }
     list ("\n");
     list ("Code seg size %04X = %ud\n", Pctr, Pctr);
-    auto rblock_size = RelayBlockSize*RelayRefTable.size();
+    auto rblock_size = Arch->RelayBlockSize*RelayRefTable.size();
     list ("Relay DS size %04X = %ud\n", rblock_size, rblock_size);
     int col = 0;
 #ifdef print_fixups
@@ -1163,7 +1356,7 @@ void CompileFile (FILE* f, const char * fname) {
 
 void CompileLayout (FILE* f, const char * fname) {
     InitRelayCompiler();
-    if (B32p)
+    if (Arch->Bits == 32)
 	CompileEntryThunk();
     CompileFile (f, fname);
     list ("%s  end	\n", Ltabs);
@@ -1191,7 +1384,7 @@ void CallWtko (const char * path, const char * opath, time_t timer,
     tki.esd_count = (int)RelayRefTable.size();
     tki.Tmr = Timers.data();
     tki.tmr_count = (int)Timers.size();
-    tki.static_len = tki.esd_count*RelayBlockSize;
+    tki.static_len = tki.esd_count*Arch->RelayBlockSize;
     tki.code_len = Pctr;
     tki.time = timer;
     tki.Frm = fasd_data (tki.frm_count);
@@ -1205,7 +1398,7 @@ void CallWtko (const char * path, const char * opath, time_t timer,
 	merged_path = opath;
     else
         merged_path = merge_ext(path, ".tko", true);
-    if (B32p)
+    if (Arch->Bits > 16)
 	write_tko32 (merged_path.c_str(), tki);
     else
 	write_tko (merged_path.c_str(), tki);
@@ -1233,96 +1426,98 @@ int main (int argc, char ** argv) {
 #else
     int compiler_bits = sizeof(int) * 8;
 #endif
-    B32p = (compiler_bits > 16);
-
+    
+#if defined(__aarch64__) || defined(_M_ARM64)
+    Arch = &macARM;
+#else
+    Arch = &Intel32;
+#endif
+    Arch->Bits = Arch->Bits;
+    
     string opath;
     string lpath;
-    string compdesc = "BSG Windows Relay Compiler Version 2 (";
+    string compdesc = string("BSG NXSYS Relay Compiler Version ") + std::to_string(COMPILER_VERSION) + " (";
     compdesc += std::to_string(compiler_bits) + "-bit of " + __DATE__ + " " __TIME__ + ")";
     fprintf (stdout, "%s\n", compdesc.c_str());
-    fprintf (stdout, "Copyright (c) Bernard S. Greenberg 1994, 1996, 2019\n");
-
+    fprintf (stdout, COMPILER_COPYRIGHT "\n");
+    
 #if NXSYSMac
-    fprintf(stdout, "Macintosh MacOS clang++ implementation\n");
+    fprintf(stdout, "MacOS clang++ implementation\n");
 #endif
-
+    
+    
     if (argc < 2) {
-usage:
+        usage:
         auto execpath = fs::path(argv[0]);
         fprintf (stderr, "Usage: %s source{.trk} {args}\nArgs:\n", execpath.string().c_str());
-	fprintf (stderr,
-		 "  -L    Make listing to source.lst\n"
-		 "  -32   Produce 32-bit object file%s\n"
-		 "  -16   Produce 16-bit Version 1 object file%s\n"
-		 "  -Fo:nondefault_outputpath (default is source.tko)\n"
-		 "  -Fl:nondefault_listingpath (default is source.lst)\n"
-		 "  -C    Special debug checking\n"
-		 "  -T    Internal compiler tracing to listing\n",
-		 B32p  ? " (default)" : "",
-		 !B32p ? " (default)" : "");
-	exit(2);
+        fprintf (stderr,
+                 "  -L    Make listing to source.lst\n"
+                 "  -Fo:nondefault_outputpath (default is source.tko)\n"
+                 "  -Fl:nondefault_listingpath (default is source.lst)\n"
+                 "  -arch:ARCH, ARCH as below (default as per cmplr env)\n"
+                 "  -C    Special debug checking\n"
+                 "  -T    Internal compiler tracing to listing\n");
+        Architecture::print_known(Arch);
+        exit(2);
     }
     
-
+    
     const char * fpath = NULL;
     for (int argno = 1; argno < argc; argno++) {
-	const char * arg = argv[argno];
-	if (
+        const char * arg = argv[argno];
+        if (
 #if _MSC_VER       // Slashes in pathnames don't work as control arg introducers
             arg[0] == '/' ||
 #endif
             arg[0] == '-') {
-            string argval= stoupper(arg+1);
-	    if (argval == "L")
-		ListOpt = 1;
-	    else if (argval == "T")
-		TraceOpt = 1;
-	    else if (argval == "C")
-		CheckOpt = 1;
-	    else if (argval == "16")
-		B32p = 0;
-	    else if (argval == "32")
-		B32p = 1;
-	    else if (!strncmp(argval.c_str(), "FO:", 3)) {
-		if (arg[3] == '\0') {
-		    fprintf (stderr, "Output pathname missing after /Fo:\n");
-		    goto usage;
-		}
-                opath = arg+4;
-	    }
-	    else if (!strncmp (argval.c_str(), "FL:", 3)) {
-		if (arg[3] == '\0') {
-		    fprintf (stderr, "Listing pathname missing after /Fl:\n");
-		    goto usage;
-		}
-                lpath = arg+4;
-		ListOpt = 1;
-	    }
-	    else goto usage;
-	}
-	else fpath = arg;
-
+                string argval= stoupper(arg+1);
+                if (argval == "L")
+                    ListOpt = 1;
+                else if (argval == "T")
+                    TraceOpt = 1;
+                else if (argval == "C")
+                    CheckOpt = 1;
+                else if (!strncmp(argval.c_str(), "FO:", 3)) {
+                    if (arg[3] == '\0') {
+                        fprintf (stderr, "Output pathname missing after /Fo:\n");
+                        goto usage;
+                    }
+                    opath = arg+4;
+                }
+                else if (!strncmp (argval.c_str(), "FL:", 3)) {
+                    if (arg[3] == '\0') {
+                        fprintf (stderr, "Listing pathname missing after /Fl:\n");
+                        goto usage;
+                    }
+                    lpath = arg+4;
+                    ListOpt = 1;
+                }
+                else if (argval.find("ARCH:") == 0) {
+                    auto ap = Architecture::find(argval.substr(5));
+                    if (ap == nullptr) {
+                        Architecture::print_known(Arch);
+                        exit(6);
+                    }
+                    Arch = ap;
+                }
+                else {
+                    fprintf(stderr, "Unrecognized arg: %s\n", argval.c_str());
+                    goto usage;
+                }
+            }
+        else fpath = arg;
+        
     }
     if (fpath == NULL)
-	goto usage;
+        goto usage;
+    
+    
+    printf ("Target architecture: %s\n", Arch->DescString().c_str());
 
-    if (B32p) {
-	Bits = 32;
-	Ltabs = "\t\t\t";
-	RetOp = MOP_RET;
-	RelayBlockSize = 32;
-        printf("Output for 32-bit Windows environment.\n");
-    }
-    else {
-	Bits = 16;
-	FullWidth = 2;
-	Ltabs = "\t\t";
-	RetOp = MOP_RETF;
-	RelayBlockSize = 28;
-        printf("Output for 16-bit Windows environment. Good luck.\n");
-    }
-    FullWidth = Bits/8;
-    Ahex = Bits/4;
+    RetOp = MOP_RET;
+    Ltabs = (Arch->Bits == 16) ? "\t\t" : "\t\t\t";
+    FullWidth = Arch->Bits/8;
+    Ahex = std::min(Arch->Bits/4,8);
 
     string input_path = merge_ext(fpath, ".trk", false);
 
@@ -1332,17 +1527,19 @@ usage:
         return 3;
     }
 
-    time_t timer;
     struct tm *tblock;
-    timer = time(NULL);
-    tblock = localtime (&timer);
+    time_t now = time(NULL);
+    tblock = localtime (&now);
     if (ListOpt)
 	if (!OpenListing (input_path.c_str(), lpath))
             return 2;
 
-    list ("; %d-bit compilation of %s at %s", Bits, fpath, asctime(tblock));
+    list ("; Compilation of %s at %s", fpath, asctime(tblock));
+    list (";  for architecture %s\n", Arch->DescString().c_str());
     list (";  by %s\n", compdesc.c_str());
-    list (";  Copyright Bernard S. Greenberg (c) 1994, 1996\n\n");
+    list (";  " COMPILER_COPYRIGHT  "\n");
+    list (";  Bytes/Relay-linkage %d\n", Arch->RelayBlockSize);
+    list ("\n");
     list ("%s\tideal\n%s\tsegment\tcode\n", Ltabs, Ltabs);
 
     CompileLayout (f, fpath);
@@ -1364,7 +1561,7 @@ usage:
 	fclose(ListFile);
     }
     std::sort(DependentPairTable.begin(), DependentPairTable.end(), dep_sorter);
-    CallWtko (input_path.c_str(), opath.c_str(), timer, 2, compdesc.c_str());
+    CallWtko (input_path.c_str(), opath.c_str(), now, COMPILER_VERSION, compdesc.c_str());
     return 0;
 };
 
