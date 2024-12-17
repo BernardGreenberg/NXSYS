@@ -93,6 +93,7 @@
 		5B8EDEE42D0BC22800F07ED0 /* DumpTko.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */; };
 		5B8EDEE52D0C908100F07ED0 /* argparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB49E727AC7682006BE311 /* argparse.cpp */; };
 		5B8EDEE62D0DD47B00F07ED0 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
+		5B8EDEE82D11B20200F07ED0 /* DumpTxt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */; };
 		5B8FCBE9284B6D6100855897 /* HelpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBE8284B6D6100855897 /* HelpIcon.png */; };
 		5B8FCBEB284B6D9E00855897 /* HelpIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
@@ -454,6 +455,7 @@
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
 		5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTko.cpp; sourceTree = "<group>"; };
 		5B8EDEDD2D0BC1D700F07ED0 /* DumpTko */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DumpTko; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTxt.cpp; sourceTree = "<group>"; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
 		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -825,6 +827,7 @@
 				5B7B02AC2314D8C9000747A0 /* wrttko32.cpp */,
 				5B4DF3AD2314C957001FDE00 /* fasdump.cpp */,
 				5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */,
+				5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */,
 			);
 			path = "Relay Compiler";
 			sourceTree = "<group>";
@@ -1879,6 +1882,7 @@
 			files = (
 				5B8EDEE62D0DD47B00F07ED0 /* STLExtensions.cpp in Sources */,
 				5B8EDEE52D0C908100F07ED0 /* argparse.cpp in Sources */,
+				5B8EDEE82D11B20200F07ED0 /* DumpTxt.cpp in Sources */,
 				5B8EDEE42D0BC22800F07ED0 /* DumpTko.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

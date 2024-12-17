@@ -76,6 +76,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "/Users/bsg/XcodeProjects/NX2/Interlockings/Progman/Progman.tko"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/users/bsg/hax/arm64/Progman.tko"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

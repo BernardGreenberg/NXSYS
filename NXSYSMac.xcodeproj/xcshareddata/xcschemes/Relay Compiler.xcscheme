@@ -65,8 +65,12 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-arch:arm64"
+            argument = "-arch:x86"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-arch:arm64"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-Fl:./xxx.lst"

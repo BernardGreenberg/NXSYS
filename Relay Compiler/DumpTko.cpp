@@ -23,6 +23,8 @@ using std::string, std::unordered_set, std::vector;
 
 const char * TKOI_STRINGS[] = TKOV2_COMPID_STRINGS;
 
+void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* chp, unsigned char* fdp, size_t flen);
+
 class State {
     
 public:
@@ -45,14 +47,6 @@ public:
     }
 };
 
-void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* chp) {
-    if (chp->length_of_item != 4)
-        return;
-    auto instp = (unsigned int*) (chp+1);
-    for (int i = 0; i < chp->number_of_items; i++) {
-        printf("%06X  %08X\n", i, *instp++);
-    }
-}
 
 int main (int argc, const char ** argv) {
     argparse::ArgSet Aset ("DumpTko track object dumper",
@@ -85,7 +79,7 @@ int main (int argc, const char ** argv) {
     vector<string> ESD;
     vector<string> ISD;
 
-    auto const file_data = new char[file_length];
+    auto const file_data = new unsigned char[file_length];
     auto dp = file_data;
     auto f = fopen (path, "rb");
     if (f == nullptr) {
@@ -106,7 +100,7 @@ int main (int argc, const char ** argv) {
         printf("  Header size %d = 0x%X\n", hp->header_size, hp->header_size);
         printf("  Compat code len %d\n", hp->compat_code_len);
         printf("  Compat static len %d\n", hp->compat_code_len);
-        printf("  Time %s", ctime(&hp->time));
+        printf("  Compilation time %s", ctime(&hp->time));
         printf("  User \"%s\"\n", hp->user);
         printf("  Arch \"%s\"\n", hp->arch);
         printf("  Bits %d\n", hp->bits);
@@ -116,8 +110,9 @@ int main (int argc, const char ** argv) {
         printf("  Compiler Version %d.\n\n", hp->compiler_version);
     }
 
-    dp += hp->header_size;
+    auto start_dp = dp;
 
+    dp += hp->header_size;
     while(dp < file_data + file_length) {
         auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
         auto block_name = TKOI_STRINGS[chp->compid];
@@ -128,7 +123,7 @@ int main (int argc, const char ** argv) {
                    chp->length_of_block,
                    chp->number_of_items,
                    chp->length_of_item,
-                   (const char*)chp - file_data);
+                   (const unsigned char*)chp - file_data);
         auto rdp = dp + sizeof(*chp);
         auto next_block = rdp + chp->length_of_block;
         bool print = sections_wanted.contains(block_name) || verbose;
@@ -138,7 +133,7 @@ int main (int argc, const char ** argv) {
                     printf("  Compiler ID: %s\n", (char*)rdp);
                 break;
             case TKOI_RTT:
-                S.RnamesTexts = rdp;
+                S.RnamesTexts = (const char *)rdp;
                 break;
             case TKOI_RTD:
                 S.RnamesTextPtrs = (const short*)rdp;
@@ -149,7 +144,8 @@ int main (int argc, const char ** argv) {
                 }
                 break;
             case TKOI_TXT:
-                DumpText(chp);
+                if (print)
+                    DumpText(chp, start_dp, file_length);
                 break;
             case TKOI_ISD:
                 ISD = S.maybe_dump_relay_list(rdp, chp->number_of_items, print);
@@ -166,9 +162,9 @@ int main (int argc, const char ** argv) {
                 break;
             case TKOI_ATS:
                 if (print) {
-                    const char * p = rdp;
+                    auto p = (const char*)rdp;
                     printf("  Atsyms: ");
-                    while (p < next_block) {
+                    while (p < (const char *)next_block) {
                         size_t len = (unsigned char)(*p++);
                         string s(p, p+len);
                         printf("%s ", s.c_str());

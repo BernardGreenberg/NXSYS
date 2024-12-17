@@ -254,6 +254,8 @@ void DefineTag (Jtag& tg) {
 }
 
 int disp_ok (PCTR pc, PCTR v) {
+ //   if (IS_ARM64)
+//        return 1;
     int disp;
     if (v < pc) {
 	disp = pc - v;
@@ -576,7 +578,6 @@ unsigned int insert_arm_branch_addr(unsigned int inst, int displacement, int sta
 }
 
 void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
-    const char * mnem = nullptr;
     unsigned int inst;
     switch (op) {
         case MOP_RET:
@@ -787,13 +788,16 @@ void outinst (MACH_OP op, Sexpr s, PCTR opd) {
 	    outinst_raw (RetOp, "", 0);
 	}
 	else if (tag.have_pc && disp_ok (Pctr+2, tag.pctr))
-	    outinst_raw (op, tag.lab, tag.pctr);
+            outinst_raw (op, tag.lab, tag.pctr);
 	else {
 	    Jtag t;
 	    GensymTag(t);
 	    t.defined = t.have_pc = 1;
 	    t.tramp_defined = 0;
-	    t.pctr = Pctr+5;
+            if (IS_ARM64)
+                t.pctr = Pctr + 3*4;
+            else
+                t.pctr = Pctr+5;
 
 	    outinst_raw (invert_jump (op), t.lab, t.pctr);
 	    DefineTag (tag);
