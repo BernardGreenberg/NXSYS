@@ -66,6 +66,9 @@ struct _TKO_INFO {
     int frm_count;
     int ats_count;
     int unsigned code_len;
+    int unsigned code_ct;
+    int unsigned code_item_len;
+    int bits;
     const char * Architecture;
     int arch_characterization;
     int compiler_version;

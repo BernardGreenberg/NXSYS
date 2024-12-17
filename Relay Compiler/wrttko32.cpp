@@ -34,7 +34,7 @@ static void Write_Header (FILE* f, TKO_INFO& inf) {
     h.archindex = inf.arch_characterization;
     h.compiler_version = inf.compiler_version;
     strcpy (h.arch, inf.Architecture);
-    h.bits = 32;
+    h.bits = inf.bits;
     const char * g = getenv("user");
     if (g == NULL)
 	 g = getenv("USER");
@@ -57,8 +57,8 @@ static void Write_CID (FILE* f, TKO_INFO& inf) {
 static void Write_Text (FILE* f, TKO_INFO& inf) {
     COMPHDR h;
     h.compid = TKOI_TXT;
-    h.number_of_items = inf.code_len;
-    h.length_of_item = 1;
+    h.number_of_items = inf.code_ct;
+    h.length_of_item = inf.code_item_len;
     h.length_of_block = inf.code_len;
     fwrite (&h, 1, sizeof(h), f);    
     fwrite (inf.Code, 1, inf.code_len, f);

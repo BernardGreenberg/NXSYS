@@ -100,9 +100,8 @@ static Architecture macARM {"arm64", {"ARM64"}, 64, Architecture::OS::MAC, 8};
 
 vector<Architecture*> Architecture::alist {&Intel32, &Intel16, &macARM};
 
-
-
 static Architecture* Arch;
+#define IS_ARM64 (macARM == Arch)
 
 #define COMPILER_VERSION 3
 #define COMPILER_COPYRIGHT "Copyright (c) Bernard S. Greenberg 1994, 1996, 2019, 2024"
@@ -276,9 +275,9 @@ void FixupFixup (Fixup & F, PCTR pc) {
 	*((PCTR *) &Code[F.pc]) = d;
 	F.tag = NULL;
     }
-    else if (macARM == Arch) {
+    else if (IS_ARM64) {
         int d = pc - F.pc;
-        list (";  Arm Fixup @%0*X to %s = %0*X, disp %04X\n",
+        list (";  ARM Fixup @%0*X to %s = %0*X, disp %04X\n",
               Ahex, F.pc, F.tag->lab, Ahex, pc, d);
         unsigned int* iptr = ((unsigned int*) &(Code[F.pc]));
         unsigned int inst = *iptr;
@@ -369,7 +368,7 @@ RLID RelayId (Sexpr s) {
     RelayRefTable.emplace_back(rlptr);
     RIDMap[rlptr] = relay_id;
 
-    if (macARM == Arch)
+    if (IS_ARM64)
         list ("%sv$%s\tequ\t0x0%X\n",
               Ltabs, s.PRep().c_str(), relay_id * Arch->RelayBlockSize);
     else
@@ -399,7 +398,7 @@ again:
     if (llen < 8)
 	for (int i = 0; i < bytect; i++) {
             int j = i;
-            if (macARM == Arch)
+            if (IS_ARM64)
                 j = bytect - i - 1;
 	    list ("%02X", bytes[j]);
 	    cc+=2;
@@ -670,7 +669,7 @@ void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
 }
 
 void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
-    if (macARM == Arch) {
+    if (IS_ARM64) {
         outinst_raw_arm (op, str, opd);
         return;
     }
@@ -896,7 +895,7 @@ dot:	    if (disp_ok (Pctr, tag.tramp_pc)) {
 	goto dot;
     if (!tag.have_pc && !tag.tramp_defined) {
 	outinst_raw (op, tag.lab, Pctr+1);
-        if (macARM == Arch)
+        if (IS_ARM64)
             RecordFixup (tag, Pctr - 4, 0);
         else
             RecordFixup (tag, Pctr - 1, SINGLE_WIDTH);
@@ -1137,7 +1136,7 @@ void CompileRelayDef (Sexpr s) {
     list ("\n%s\tpublic\t%s\n", Ltabs, t.lab);
     DefineTagPC(t);
     Ctxt ctxt (&RetCF, CT_VAL);
-    if (macARM == Arch)
+    if (IS_ARM64)
         outarminst(0xAA000372, "mov", "x2, x0          ;linkage"); /* move single arg (linkage) to x2 */
     CompileAndOr (CDR(s), CT_AND, &ctxt);
     outinst (MOP_JMP, LRET, 0);
@@ -1389,7 +1388,17 @@ void CallWtko (const char * path, const char * opath, time_t timer,
     tki.time = timer;
     tki.Frm = fasd_data (tki.frm_count);
     tki.Ats = fasd_atsym_data (tki.ats_count);
-    tki.Architecture = "INTEL x86";
+    tki.bits = Arch->Bits;
+    if (IS_ARM64) {
+        tki.Architecture = "ARM64";
+        tki.code_item_len = 4;
+        tki.code_ct = Pctr/tki.code_item_len;
+    }
+    else {
+        tki.Architecture = "INTEL x86";
+        tki.code_item_len = 1;
+        tki.code_ct = Pctr;
+    }
     tki.arch_characterization = 0;
     tki.compiler = compdesc;
     tki.compiler_version = cversion;

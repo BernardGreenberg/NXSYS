@@ -104,6 +104,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-v"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "TXT"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
