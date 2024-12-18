@@ -41,7 +41,12 @@ namespace fs = std::filesystem;
 static NSString * FullSigKey = @"FullSignalDisplaysAreViews";
 static NSString * LastPathnameKey = @"LastInterlockingPathname";
 static NSString * ShowStopsKey = @"LastShowStopsPolicy";
-static NSArray* allowedFileTypes = [NSArray arrayWithObject:@"trk"];
+static NSArray* allowedFileTypes =
+#ifdef NXCMPOBJ
+    @[@"trk", @"tko"];
+#else
+  [NSArray arrayWithObjects:(@"trk", @"tko")];
+#endif
 
 #include <stdarg.h>
 #if 0
