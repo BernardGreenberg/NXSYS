@@ -115,7 +115,7 @@ static Architecture* Arch;
 static int FullWidth;
 static const char * Ltabs;
 static int Ahex;
-unsigned int insert_arm_branch_addr(unsigned int inst, int displacement, int start_bit, int end_bit, int shift_down);
+ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int end_bit, int shift_down);
 
 enum REG_X {X_AL = 0, X_CL, X_DL, X_BL, X_AH, X_CH, X_DY, X_BH, X_NONE,
             X_EAX= 0, X_ECX,X_EDX,X_EBX,X_ESP,X_EBP,X_ESI,X_EDI};
@@ -286,7 +286,7 @@ void FixupFixup (Fixup & F, PCTR pc) {
         unsigned int inst = *iptr;
         char unsigned opcode = inst >> (32-8);
         assert(opcode == 0x36 || opcode == 0x37);
-        inst = insert_arm_branch_addr(inst, d, 18, 5, 2);
+        inst = insert_arm_bitfield(inst, d, 18, 5, 2);
         *iptr = inst;
     }
     else {
@@ -568,7 +568,7 @@ void outarminst (unsigned int w, const char * mnem, const char* str) {
     outbytes_raw (mnem, p, 4, str);
 }
 
-unsigned int insert_arm_branch_addr(unsigned int inst, int displacement, int start_bit, int end_bit, int shift_down) {
+ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int end_bit, int shift_down) {
     displacement >>= shift_down;
     int fld_len = start_bit - end_bit + 1;
     int mask = (1 << fld_len)-1;
@@ -596,29 +596,25 @@ void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
             
         case MOP_JMPL:  /* "In arm64, there is neither long nor short, east nor west ..." */
         case MOP_JMP:
-            /*There actually shouldn't be any JMP's in Arm64 RLYCOMP output */
+            RC_error(1, "Attempt to generate uncond jump in Arm compilation.");
             outarminst(ARM::b, "b", str);
             return;
             
         case MOP_JNZ:
-            inst = insert_arm_branch_addr(ARM::tbnz, opd - Pctr, 18, 5, 2);
+            inst = insert_arm_bitfield(ARM::tbnz, opd - Pctr, 18, 5, 2);
             outarminst(inst, "tbnz", (string("x0, #0, ") + str).c_str());
             return;
             
         case MOP_JZ:
-            inst = insert_arm_branch_addr(ARM::tbz, opd - Pctr, 18, 5, 2);
+            inst = insert_arm_bitfield(ARM::tbz, opd - Pctr, 18, 5, 2);
             outarminst(inst, "tbz", (string("x0, #0, ") + str).c_str());
             return;
             
         case MOP_LDAL:  /* what luck! */
         case MOP_TST:
         {
-            string operand = string("x0, [x2, #+") + std::to_string(opd) +
-            "]   ; v$" + str;
-            unsigned int LDR_X0 = ARM::ldr_storage,
-            OPD_BY_8 = opd >> 3,
-            OPD_SHIFTED = OPD_BY_8 << 10;
-            inst = LDR_X0 | OPD_SHIFTED;
+            string operand = string("x0, [x2, #+") + std::to_string(opd) + "]   ; v$" + str;
+            inst = insert_arm_bitfield(ARM::ldr_storage, opd, 21, 10, 3);
             outarminst(inst, "ldr", operand.c_str());
             outarminst(ARM::ldrb_reg, "ldrb", "x0, [x0, #0]");
             return;

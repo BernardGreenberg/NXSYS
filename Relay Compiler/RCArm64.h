@@ -10,6 +10,7 @@
 /* Source of all knowledge -
  https://developer.arm.com/documentation/ddi0602/2024-09/Base-Instructions?lang=en
  */
+#include <cstdint>
 
 enum ARM {
     ret      = 0xD65F0000,
@@ -23,3 +24,7 @@ enum ARM {
     eor_imm  = 0x52010000,
     mov_rr   = 0xAA0003E2
 };
+
+using ArmInst = uint32_t;
+#define TOPBYTE(u32) ((u32 >> 24) &0xFF)
+

@@ -14,12 +14,12 @@
 #include <vector>
 #include <map>
 
-#define TOPBYTE(w32) ((w32 >> 24) & 0xFF)
 using std::string, std::unordered_map, std::vector;
 
 static std::map<unsigned int, string> ESD;  //link_offset->relay name
 static std::map<unsigned int, string> ISD; //text offset->relay name
 
+/* Bits number in arm documentation style, 31 to 0 left to right in 32-bit dword */
 static unsigned int extract_bits(unsigned int data, int high, int low) {
     int answer = data >> low;
     int bits = high - low + 1;
@@ -89,7 +89,7 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
     
     unsigned int Pctr = 0;
     for (int i = 0; i < txtchp->number_of_items; i++) {
-        unsigned int inst = *instp;
+        ArmInst inst = *instp;
         if (ISD.count(Pctr))
             printf("\n%s:\n", ISD[Pctr].c_str());
         printf("%06X  %08X", Pctr, inst);
