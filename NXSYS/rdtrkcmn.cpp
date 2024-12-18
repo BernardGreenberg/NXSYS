@@ -283,8 +283,8 @@ forms:
 	return 1;
 #if NXCMPOBJ
     else if (symcmp (fn, "LOAD")) {
-	return LoadRelayObjectFile
-                (STLincexppath(fname, CADR(s).u.s).c_str());
+        (replace_filename(fname, CADR(s).u.s).c_str());
+    }
 #endif
     else if (symcmp (fn, "INCLUDE"))
         return LoadExprcodeFile (replace_filename(fname, CADR(s).u.s).c_str());
