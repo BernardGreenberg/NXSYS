@@ -45,7 +45,7 @@ static NSArray* allowedFileTypes =
 #ifdef NXCMPOBJ
     @[@"trk", @"tko"];
 #else
-  [NSArray arrayWithObjects:(@"trk", @"tko")];
+  [NSArray arrayWithObject:(@"trk")];
 #endif
 
 #include <stdarg.h>
