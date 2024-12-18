@@ -255,8 +255,8 @@ void DefineTag (Jtag& tg) {
 }
 
 int disp_ok (PCTR pc, PCTR v) {
- //   if (IS_ARM64)
-//        return 1;
+    if (IS_ARM64)   //In ARM, there is nothing BUT disp, and all disp's are OK.
+        return 1;
     int disp;
     if (v < pc) {
 	disp = pc - v;
