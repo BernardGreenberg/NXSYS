@@ -247,10 +247,11 @@ void Outtag (Jtag& tg) {
 }
 
 void DefineTag (Jtag& tg) {
-    tg.defined = tg.have_pc =1;
-    tg.tramp_defined = 0;
+    tg.defined = tg.have_pc = true;
+    tg.tramp_defined = false;
     tg.pctr = Pctr;
-    GensymTag(tg);
+    if(tg.lab[0] == 0)
+        GensymTag(tg);
     Outtag (tg);
 }
 
@@ -721,8 +722,8 @@ top:
 			      F.tag->lab, F.pc);
 			if (jumps++ == 0) {
 			    GensymTag(jump);
-			    jump.defined = jump.have_pc = 0;
-			    jump.tramp_defined = 0;
+			    jump.defined = jump.have_pc = false;
+			    jump.tramp_defined = false;
 			    outinst_raw (MOP_JMP, jump.lab, Pctr+1);
 			    RecordFixup (jump, Pctr - 1, SINGLE_WIDTH);
 			}
@@ -760,8 +761,8 @@ void outinst (MACH_OP op, Sexpr s, PCTR opd) {
 	else {
 	    Jtag t;
 	    GensymTag(t);
-	    t.defined = t.have_pc = 1;
-	    t.tramp_defined = 0;
+	    t.defined = t.have_pc = true;
+	    t.tramp_defined = false;
 	    t.pctr = Pctr+3;
 
 	    outinst_raw (invert_jump (op), t.lab, t.pctr);
@@ -786,8 +787,8 @@ void outinst (MACH_OP op, Sexpr s, PCTR opd) {
 	else {
 	    Jtag t;
 	    GensymTag(t);
-	    t.defined = t.have_pc = 1;
-	    t.tramp_defined = 0;
+	    t.defined = t.have_pc = true;
+	    t.tramp_defined = false;
             if (IS_ARM64)
                 t.pctr = Pctr + 3*4;
             else
@@ -954,15 +955,15 @@ void CompileAndOr (Sexpr args, CtxtOp op, Ctxt* ctxt) {
     Ctxt newctxt(nullptr, CT_VAL);
 
     int same = (op == ctxt->op);
-    Et.defined = 0;
+    Et.defined = false;
     if (!same) {
 	if (ctxt->op == CT_VAL)
 	    newctxt.tag = ctxt->tag;
 	else {
 	    GensymTag(Et);
-	    Et.defined = 1;
-	    Et.tramp_defined = 0;
-	    Et.have_pc = 0;
+	    Et.defined = true;
+	    Et.tramp_defined = false;
+	    Et.have_pc = false;
 	    newctxt.tag = &Et;
 	}
 	newctxt.op = op;
@@ -1168,7 +1169,12 @@ void CleanUpRelaySys () {
 void InitRelayCompiler () {
     
     SetLispBarfString ("Relay Compiler");
-    RetCF.defined = RetOne.defined = RetZero.defined = 0;
+    snprintf(RetZero.lab, sizeof(RetZero.lab), "ret_0");
+    RetZero.defined = true;
+    snprintf(RetOne.lab, sizeof(RetOne.lab), "ret_1");
+    RetOne.defined = true;
+    snprintf(RetCF.lab, sizeof(RetOne.lab), "retval");
+    RetCF.defined = true;
     RetCF.have_pc = RetOne.have_pc = RetZero.have_pc = 0;
     RetCF.tramp_defined = RetOne.tramp_defined = RetZero.tramp_defined = 0;
     Pctr = 0;

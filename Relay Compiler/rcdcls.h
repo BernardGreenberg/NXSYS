@@ -11,7 +11,7 @@ struct Jtag {
     PCTR pctr, tramp_pc;
     char lab[10];
     char tramp_lab[10];
-    char defined, have_pc, tramp_defined;
+    bool defined, have_pc, tramp_defined;
 };
 
 struct Timer {
