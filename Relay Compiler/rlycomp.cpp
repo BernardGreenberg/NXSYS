@@ -574,12 +574,11 @@ ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int e
     int mask = (1 << fld_len)-1;
     displacement &= mask;
     displacement <<=  end_bit;
-    unsigned int result = inst |= displacement;
-    return result;
+    return inst |= displacement;
 }
 
 void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
-    unsigned int inst;
+    ArmInst inst;
     switch (op) {
         case MOP_RET:
             outarminst(ARM::ret, "ret", str);
