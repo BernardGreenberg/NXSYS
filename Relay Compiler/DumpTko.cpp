@@ -109,6 +109,9 @@ int main (int argc, const char ** argv) {
         printf("  Static len %d = 0x%X\n", hp->static_len, hp->static_len);
         printf("  Compiler Version %d.\n\n", hp->compiler_version);
     }
+    else {
+        printf("Compiled at %s", ctime(&hp->time));
+    }
 
     auto start_dp = dp;
 

@@ -601,15 +601,13 @@ void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
             return;
             
         case MOP_JNZ:
-            /* Jump-non-zero in the x86 dispensation means that the logic level is 0 ...*/
-            inst = insert_arm_branch_addr(ARM::tbz, opd - Pctr, 18, 5, 2);
-            outarminst(inst, "tbz", (string("x0, #0, ") + str).c_str());
+            inst = insert_arm_branch_addr(ARM::tbnz, opd - Pctr, 18, 5, 2);
+            outarminst(inst, "tbnz", (string("x0, #0, ") + str).c_str());
             return;
             
         case MOP_JZ:
-            /* Jump-zero in the x86 dispensation means that the logic level is 1 ...*/
-            inst = insert_arm_branch_addr(ARM::tbnz, opd - Pctr, 18, 5, 2);
-            outarminst(inst, "tbnz", (string("x0, #0, ") + str).c_str());
+            inst = insert_arm_branch_addr(ARM::tbz, opd - Pctr, 18, 5, 2);
+            outarminst(inst, "tbz", (string("x0, #0, ") + str).c_str());
             return;
             
         case MOP_LDAL:  /* what luck! */
