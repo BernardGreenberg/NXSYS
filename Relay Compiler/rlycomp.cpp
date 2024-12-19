@@ -578,11 +578,18 @@ ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int e
     return inst |= displacement;
 }
 
+static string pfmt(unsigned int x, const char* fmt) {
+    char buf[24];
+    snprintf(buf, sizeof(buf), fmt, x);
+    return string(buf);
+}
+
 void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
     ArmInst inst;
     switch (op) {
         case MOP_RET:
-            outarminst(ARM::ret, "ret", str);
+            inst = insert_arm_bitfield(ARM::ret, ARM::bl_return_reg, 9, 5, 0);
+            outarminst(inst, "ret", "x30");
             return;
             
         case MOP_CLZ:
@@ -613,8 +620,8 @@ void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
         case MOP_LDAL:  /* what luck! */
         case MOP_TST:
         {
-            string operand = string("x0, [x2, #+") + std::to_string(opd) + "]   ; v$" + str;
-            inst = insert_arm_bitfield(ARM::ldr_storage, opd, 21, 10, 3);
+            string operand = string("x0, [x2, #0x") + pfmt(opd, "%04X") + "]   ; v$" + str;
+            inst = insert_arm_bitfield(ARM::ldr_storage, opd, 20, 10, 3);
             outarminst(inst, "ldr", operand.c_str());
             outarminst(ARM::ldrb_reg, "ldrb", "x0, [x0, #0]");
             return;

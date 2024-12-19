@@ -19,10 +19,12 @@ enum ARM {
     b        = 0x14000000,
     tbz      = 0x36000000,
     tbnz     = 0x37000000,
-    ldr_storage = 0x58000000,
+    ldr_storage = 0xF9400040,
     ldrb_reg = 0x39400000,
     eor_imm  = 0x52010000,
-    mov_rr   = 0xAA0003E2
+    mov_rr   = 0xAA0003E2,
+    
+    bl_return_reg = 30
 };
 
 using ArmInst = uint32_t;

@@ -11,8 +11,15 @@ extern CCC_Thunkptrtype CCC_Thunkptr;
 #define CallCompiledCode (*CCC_Thunkptr)
 
 #else
+#if NXSYSMac
 
-extern "C" {int CallCompiledCode (void* linkage_base, void* code_addr);};
+typedef  unsigned char(CompiledFunction)(void*);
+
+#define CallCompiledCode(linkptr,codeaddr) (reinterpret_cast<CompiledFunction*>(codeaddr))(linkptr)
+
+#endif
+
+//extern "C" {int CallCompiledCode (void* linkage_base, void* code_addr);};
 
 #endif
 

@@ -94,6 +94,7 @@
 		5B8EDEE52D0C908100F07ED0 /* argparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB49E727AC7682006BE311 /* argparse.cpp */; };
 		5B8EDEE62D0DD47B00F07ED0 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B8EDEE82D11B20200F07ED0 /* DumpTxt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */; };
+		5B8EDEED2D14BEF800F07ED0 /* ReadFASL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */; };
 		5B8FCBE9284B6D6100855897 /* HelpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBE8284B6D6100855897 /* HelpIcon.png */; };
 		5B8FCBEB284B6D9E00855897 /* HelpIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
@@ -457,6 +458,7 @@
 		5B8EDEDD2D0BC1D700F07ED0 /* DumpTko */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DumpTko; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTxt.cpp; sourceTree = "<group>"; };
 		5B8EDEE92D1216E200F07ED0 /* RCArm64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCArm64.h; sourceTree = "<group>"; };
+		5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ReadFASL.cpp; sourceTree = "<group>"; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
 		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -1414,6 +1416,7 @@
 				5BABBE6F27B7F6E400AED491 /* WinApiSTL.h */,
 				5BF062C4199D4B00008CDCA0 /* compat32.h */,
 				5BF06F5419A10D03008CDCA0 /* CompiledCodeInterface.cpp */,
+				5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */,
 				5B2B337923045D5C004007A9 /* DynmenuMacCalls.h */,
 				5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */,
 				5B93AB8319B208D700F70DDB /* MacRlyDlg.h */,
@@ -1971,6 +1974,7 @@
 				5BF06F4319A0CF9F008CDCA0 /* trafficlever.cpp in Sources */,
 				5BF062EC199F774D008CDCA0 /* traincmn.cpp in Sources */,
 				5B54429E19B148D300FB5537 /* RelaySelectorController.mm in Sources */,
+				5B8EDEED2D14BEF800F07ED0 /* ReadFASL.cpp in Sources */,
 				5BA92A7519DD72690098DBEC /* NXMessageBox.mm in Sources */,
 				5B54429319B004ED00FB5537 /* ContextMenu.mm in Sources */,
 				5BA92A7119DC5E120098DBEC /* StatusReport.cpp in Sources */,
@@ -2476,6 +2480,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"NXSYSMac=1",
+					"NXCMPOBJ=1",
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = (
 					"DEBUG=1",

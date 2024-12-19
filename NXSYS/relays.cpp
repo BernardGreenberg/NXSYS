@@ -7,7 +7,7 @@
 #include <exception>
 #include "MessageBox.h"
 
-#if ! NXSYSMac
+#if NXSYSMac
 #define CALL_COMPILED 1
 #endif
 
@@ -284,7 +284,10 @@ static void Run (Relay * top_level_relay, BOOL force_new_state) {
     while (!UpdateQueue.empty() && !Halted) {
         Relay * r = UpdateQueue.take();
         for (auto dependent : r->Dependents) {
+            assert(dependent);
             assert(dependent->exp);
+            printf("Of %s dep %s\n", top_level_relay->RelaySym.PRep().c_str(),
+                   dependent->RelaySym.PRep().c_str());
             if (dependent->maybe_change_state(dependent->ComputeValue()))
                 if (++run_transition_count > RCT_MAX)
                     NxsysAppAbort (0, "RELAY RACE! Apparent relay logic instability.");
@@ -334,8 +337,10 @@ static void ExtRun (Relay * r, BOOL state) {
 void GooseRelay (Relay * rr) {
     int state;
 #if defined(CALL_COMPILED) && defined(NXCMPOBJ)
-    if (rr->Flags & LF_CCExp)
-	state = CallCompiledCode (Compiled_Linkage_Sptr, rr->exp);
+    if (rr->Flags & LF_CCExp) {
+        state = 0; //for setting breakpoints on this line.
+        state = CallCompiledCode (Compiled_Linkage_Sptr, rr->exp);
+    }
 
     else
 #endif
