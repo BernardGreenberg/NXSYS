@@ -61,7 +61,6 @@ void LoadRelayObjectFile(const char*path, const char*) {
         auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
         auto rdp = dp + sizeof(*chp);
         auto next_block = rdp + chp->length_of_block;
-        bool print = false;
         switch(chp->compid) {
             case TKOI_CID:
                 break;

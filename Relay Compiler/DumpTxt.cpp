@@ -109,7 +109,8 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
                 break;
                 
             case TOPBYTE(ARM::ret):
-                printf ("   ret\n");    /* extra \n ... */
+                printf ("   ret     x%d", extract_bits(inst, 9, 5));
+                printf ("\n");
                 break;
             case TOPBYTE(ARM::movz_0):
                 printf ("   mov     x0, #%d", (inst >> 5) & 1);
@@ -117,8 +118,8 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
                 
             case TOPBYTE(ARM::ldr_storage):
             {
-                int ptrdisp = extract_bits(inst, 21, 10) * 8;
-                printf("   ldr     x0, [x2, #+%d]   ; %s", ptrdisp, ESD[ptrdisp].c_str());
+                int ptrdisp = extract_bits(inst, 20, 10) * 8;
+                printf("   ldr     x0, [x2, #0x%04x]   ; %s", ptrdisp, ESD[ptrdisp].c_str());
                 break;
             }
                 
