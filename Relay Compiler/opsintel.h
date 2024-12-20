@@ -15,6 +15,7 @@ struct OPDEF {
 #define OPF_NOREGOP    0x0004
 #define OPF_0F         0x0008
 
+#if INCLUDE_INTEL_OPS_TABLE
 struct OPDEF Ops[] = {
     {"and",	0x24,	OPF_8BIT},
     {"or",	0x26,	OPF_8BIT},
@@ -40,4 +41,4 @@ struct OPDEF Ops[] = {
     {"ret",	0xC2,	0},		/* MOP_RRET */
     {"setnz",   0x95,   OPF_0F|OPF_8BIT|OPF_NOREGOP}
 };
-
+#endif

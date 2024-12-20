@@ -38,7 +38,7 @@
 #include "STLExtensions.h"
 #include "replace_filename.h"
 
-using std::string, std::vector;
+using std::string, std::vector, std::unordered_set, std::unordered_map;
 
 namespace fs = std::filesystem;
 
@@ -114,8 +114,9 @@ static Architecture* Arch;
 
 static int FullWidth;
 static const char * Ltabs;
-static int Ahex;
+int Ahex;
 ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int end_bit, int shift_down);
+void verify_arm_bitfield_zero(ArmInst inst, int start_bit, int end_bit, int shift_down, PCTR target);
 
 enum REG_X {X_AL = 0, X_CL, X_DL, X_BL, X_AH, X_CH, X_DY, X_BH, X_NONE,
             X_EAX= 0, X_ECX,X_EDX,X_EBX,X_ESP,X_EBP,X_ESI,X_EDI};
@@ -134,44 +135,85 @@ const char *REG_NAMES[3][9]
       {"al", "cl", "dl", "bl", "ah", "dh", "ch", "bh", "???"}};
 
 
-
+#define INCLUDE_INTEL_OPS_TABLE 1
 #include "opsintel.h"
 
 
 static enum MACH_OP RetOp;
 
-static std::vector<unsigned char> Code;
+vector<unsigned char> Code;
 
-static PCTR Pctr = 0;
+PCTR Pctr = 0;
 static int GensymCtr = 0;
 static PCTR Lowest_Fix8_Unresolved;
 
+static vector<RelayDef> RelayDefTable;
+static unordered_set<Rlysym*> RelayDefQuickCheck;
+
+//These two maps are inverses of each other
+vector<Rlysym*> RelayRefTable ;
+static unordered_map<Rlysym*, RLID> RIDMap;
+
+vector<Timer> Timers ;
+
+static vector<DepPair> DependentPairTable;
+static vector<struct Fixup> FixupTable;
+static vector<LabelEntry> LabelTable;
+
+static int TraceOpt = 0;
+static int CheckOpt = 0;
+static int ListOpt = 0;
+static FILE *ListFile;
+static char Label_Pending[20] = {0};
+static Jtag RetCF, RetOne, RetZero;
+
+void CHECK();
+
+Sexpr read_sexp (FILE * f);
+
+DEFLSYM(AND);
+DEFLSYM(OR);
+DEFLSYM(NOT);
+DEFLSYM2(T_ATOM,T);
+DEFLSYM(LABEL);
+DEFLSYM(RELAY);
+DEFLSYM(LRET);
+DEFLSYM(TIMER);
+DEFLSYM(ZRET);
+DEFLSYM(TRET);
+
+DEFLSYM(INCLUDE);
+DEFLSYM(COMMENT);
+DEFLSYM2(EVAL_WHEN,EVAL-WHEN);
+DEFLSYM(LOAD);
+
+enum _Ctxt_Op {CT_VAL, CT_OR, CT_AND};
+static char CTVAL[6] = "VOA??";
+typedef enum _Ctxt_Op CtxtOp;
+
+/*should be h, but needs too much help */
+void ARM64FixupFixup (Fixup & F, PCTR pc);
+void OutputARMFunctionPrologue();
+void outinst_raw_arm(MACH_OP op, const char * str, PCTR opd);
+
+struct _Ctxt {
+    _Ctxt(Jtag* j_, CtxtOp o_) : tag(j_), op(o_) {}
+    Jtag * tag;
+    CtxtOp op;
+};
+
+
 static bool dep_sorter (const DepPair& A, const DepPair& B) {
     if (A.affector < B.affector)
-	return true;
+    return true;
     if (A.affector > B.affector)
-	return false;
+    return false;
     if (A.affected < B.affected)
-	return true;
+    return true;
     if (A.affected > B.affected)
         return false;
     return false;
 }
-
-
-std::vector<RelayDef> RelayDefTable ;//(350, 1.5f); //Internal definitions
-std::unordered_set<Rlysym*> RelayDefQuickCheck;
-
-//These two maps are inverses of each other
-std::vector<Rlysym*> RelayRefTable ;// (500, 1.5f);  //External references
-std::unordered_map<Rlysym*, RLID> RIDMap;
-
-std::vector<Timer> Timers ;//(50, 1.5f);
-
-std::vector<DepPair> DependentPairTable;// (2000, 1.5f);
-std::vector<struct Fixup> FixupTable;// (100, 1.5f);
-std::vector<LabelEntry> LabelTable;
-
 
 
 void RC_error (int fatal, const char* s, ...) {
@@ -192,11 +234,7 @@ size_t get_file_size(const char* filename) {
         return -1;
 }
 
-static int TraceOpt = 0;
-static int CheckOpt = 0;
-static int ListOpt = 0;
-static FILE *ListFile;
-
+//extern used in armgen stuff
 void list (const char* s, ...) {
     if (ListOpt) {
 	va_list ap;
@@ -205,8 +243,6 @@ void list (const char* s, ...) {
     }
 }
 
-
-Jtag RetCF, RetOne, RetZero;
 
 void RecordFixup (Jtag& tag, PCTR pc, int width) {
 
@@ -225,6 +261,7 @@ void RecordFixup (Jtag& tag, PCTR pc, int width) {
 }
 
 void ComputeLowestFix8Unresolved() {
+    assert(!IS_ARM64);
     Lowest_Fix8_Unresolved = std::numeric_limits<PCTR>::max();
     for (Fixup& F : FixupTable) {
 	if (F.tag != NULL && F.width == SINGLE_WIDTH && F.pc < Lowest_Fix8_Unresolved)
@@ -238,7 +275,6 @@ void GensymTag(Jtag& tg) {
     snprintf (tg.lab, sizeof(tg.lab), "g%04d", GensymCtr++);
 }
 
-static char Label_Pending[20] = {0};
 
 void Outtag (Jtag& tg) {
     if (Label_Pending[0])
@@ -268,82 +304,7 @@ int disp_ok (PCTR pc, PCTR v) {
 //    return (-32 < disp && disp < 32);
 }
 
-void FixupFixup (Fixup & F, PCTR pc) {
-    int d;
-    if (F.width == FullWidth) {
-	d = pc-F.pc-FullWidth;
-	list (Arch->Bits == 32 ?
-	      ";  FIXUP 32-bit %08X to %s = %08X, disp %08X\n"
-	      : ";  FIXUP 16-bit %04X to %s = %04X, disp %04X\n",
-	      F.pc, F.tag->lab, pc, d);
-	*((PCTR *) &Code[F.pc]) = d;
-	F.tag = NULL;
-    }
-    else if (IS_ARM64) {
-        int d = pc - F.pc;
-        list (";  ARM Fixup @%0*X to %s = %0*X, disp %04X\n",
-              Ahex, F.pc, F.tag->lab, Ahex, pc, d);
-        unsigned int* iptr = ((unsigned int*) &(Code[F.pc]));
-        unsigned int inst = *iptr;
-        char unsigned opcode = inst >> (32-8);
-        assert(opcode == 0x36 || opcode == 0x37);
-        inst = insert_arm_bitfield(inst, d, 18, 5, 2);
-        *iptr = inst;
-    }
-    else {
-	d = pc-F.pc-1;
-	Jtag& tag = *F.tag;
-        list (";  FIXUP  8-bit %0*X to %s = %0*X, disp %02X\n",
-              Ahex, F.pc, tag.lab, Ahex, pc, d);
-	if (disp_ok (pc, F.pc))
-	    Code[F.pc] = d;
-	else {
-	    RC_error (0, "Fixup overflow at 0x%0*X", Ahex, pc);
-	    list (";*****Fixup overflow at 0x%0*X\n", Ahex, pc);
-	}
-	F.tag = NULL;
-	ComputeLowestFix8Unresolved();
-    }
-}
 
-void DefineTagPC (Jtag& tag) {
-    tag.pctr = Pctr;
-    tag.tramp_defined = 0;
-    tag.have_pc = 1;
-    Outtag (tag);
-    for (Fixup& F : FixupTable) {
-	if (&tag == F.tag)
-	    FixupFixup (F, Pctr);
-    }
-}
-
-Sexpr read_sexp (FILE * f);
-
-DEFLSYM(AND);
-DEFLSYM(OR);
-DEFLSYM(NOT);
-DEFLSYM2(T_ATOM,T);
-DEFLSYM(LABEL);
-DEFLSYM(RELAY);
-DEFLSYM(LRET);
-DEFLSYM(TIMER);
-DEFLSYM(ZRET);
-DEFLSYM(TRET);
-
-DEFLSYM(INCLUDE);
-DEFLSYM(COMMENT);
-DEFLSYM2(EVAL_WHEN,EVAL-WHEN);
-DEFLSYM(LOAD);
-
-enum _Ctxt_Op {CT_VAL, CT_OR, CT_AND};
-static char CTVAL[6] = "VOA??";
-typedef enum _Ctxt_Op CtxtOp;
-
-struct _Ctxt {
-    _Ctxt(Jtag* j_, CtxtOp o_) : tag(j_), op(o_) {}
-    Jtag * tag;
-    CtxtOp op;
-};
 
 typedef struct _Ctxt Ctxt;
 
@@ -428,15 +389,30 @@ again:
     list ("%s\t%s\n", opmnem, opd);
 }
 
-void outbytes_raw (const char* opmnem, char unsigned * bytes, int bytect, const char* opd) {
+void CHECK() {
+#if 0
+    if (Code.size() >=0x8938) {
+        auto testptr = Code.data() + 0x8934;
+        auto wtestptr = (uint32_t*)testptr;
+        if (*wtestptr ==  0x360001C0 ){
+            printf("Pctr = %04x\n", Pctr);
+            printf ("trap\n");
+
+        }}
+#endif
+}
+
+void outbytes_raw (const char* opmnem, const char unsigned * bytes, int bytect, const char* opd) {
+    CHECK();
     if (ListOpt)
-	OutputListingLine (opmnem, bytes, bytect, opd);
+        OutputListingLine (opmnem, bytes, bytect, opd);
     unsigned long end = Pctr + bytect;
     if (Arch->Bits == 16 && end >= (unsigned long) 0xFFFF)
-	RC_error (2, "Code size exceeds 65K limit for 16-bit compilation.");
+        RC_error (2, "Code size exceeds 65K limit for 16-bit compilation.");
     Code.insert(Code.end(), bytes, bytes+bytect); //poor man's iterators
     Pctr += bytect;
 }
+
 
 int Outdata (int opd, int ct, unsigned char * b) {
     for (int x = ct; x > 0; x--) {
@@ -446,7 +422,53 @@ int Outdata (int opd, int ct, unsigned char * b) {
     return ct;
 }
 
+void FixupFixup (Fixup & F, PCTR pc) {
+    int d;
+    if (IS_ARM64) {
+        ARM64FixupFixup(F, pc);
+    }
+    else if (F.width == FullWidth) {
+        assert(!IS_ARM64);
+    d = pc-F.pc-FullWidth;
+    list (Arch->Bits == 32 ?
+          ";  FIXUP 32-bit %08X to %s = %08X, disp %08X\n"
+          : ";  FIXUP 16-bit %04X to %s = %04X, disp %04X\n",
+          F.pc, F.tag->lab, pc, d);
+    *((PCTR *) &Code[F.pc]) = d;
+    F.tag = NULL;
+    }
+    else {
+    d = pc-F.pc-1;
+    Jtag& tag = *F.tag;
+        list (";  FIXUP  8-bit %0*X to %s = %0*X, disp %02X\n",
+              Ahex, F.pc, tag.lab, Ahex, pc, d);
+    if (disp_ok (pc, F.pc))
+        Code[F.pc] = d;
+    else {
+        RC_error (0, "Fixup overflow at 0x%0*X", Ahex, pc);
+        list (";*****Fixup overflow at 0x%0*X\n", Ahex, pc);
+    }
+    F.tag = NULL;
+    ComputeLowestFix8Unresolved();
+    }
+}
+
+void DefineTagPC (Jtag& tag) {
+    tag.pctr = Pctr;
+    tag.tramp_defined = 0;
+    tag.have_pc = 1;
+    Outtag (tag);
+    list(";****Defining %s as %06X\n", tag.lab, Pctr);
+    for (Fixup& F : FixupTable) {
+    if (&tag == F.tag)
+        FixupFixup (F, Pctr);
+    }
+    CHECK();
+}
+
+
 int EncodeOpd (unsigned char * b, int opd, REG_X R1, REG_X R2, int immed) {
+    assert(!IS_ARM64);
     int bc = 0;
     enum OP_MOD mod;
 
@@ -482,6 +504,7 @@ int EncodeOpd (unsigned char * b, int opd, REG_X R1, REG_X R2, int immed) {
 
 void DisasOpd (MACH_OP op, std::string& buf, unsigned char * b,
 	       const char *opd, const char *prefix) {
+    assert (!IS_ARM64);
     if (!ListOpt)
 	return;
 
@@ -551,6 +574,7 @@ void DisasOpd (MACH_OP op, std::string& buf, unsigned char * b,
 
 void outinst_general (MACH_OP op, int immed,
 		      REG_X r_accum, REG_X r_base, int opd, const char * listopd) {
+    assert(!IS_ARM64);
     unsigned char bytes[12];
     std::string dbuf;
     int bc = 0;
@@ -561,144 +585,6 @@ void outinst_general (MACH_OP op, int immed,
     unsigned char * osave = bytes+bc;
     bc += EncodeOpd (bytes+bc, opd, r_accum, r_base, immed);
     DisasOpd (op, dbuf, osave, listopd, NULL);
-    outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf.c_str());
-}
-
-void outarminst (unsigned int w, const char * mnem, const char* str) {
-    auto p = (unsigned char *)&w;
-    outbytes_raw (mnem, p, 4, str);
-}
-
-ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int end_bit, int shift_down) {
-    displacement >>= shift_down;
-    int fld_len = start_bit - end_bit + 1;
-    int mask = (1 << fld_len)-1;
-    displacement &= mask;
-    displacement <<=  end_bit;
-    return inst |= displacement;
-}
-
-static string pfmt(unsigned int x, const char* fmt) {
-    char buf[24];
-    snprintf(buf, sizeof(buf), fmt, x);
-    return string(buf);
-}
-
-void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
-    ArmInst inst;
-    switch (op) {
-        case MOP_RET:
-            inst = insert_arm_bitfield(ARM::ret, ARM::bl_return_reg, 9, 5, 0);
-            outarminst(inst, "ret", "x30");
-            return;
-            
-        case MOP_CLZ:
-            outarminst(ARM::movz_0, "movz", "x0, #0");
-            return;
-            
-        case MOP_STZ:
-            /* means indicate low logic level in x0*/
-            outarminst(ARM::movz_1, "movz", "x0, #1");
-            return;
-            
-        case MOP_JMPL:  /* "In arm64, there is neither long nor short, east nor west ..." */
-        case MOP_JMP:
-            RC_error(1, "Attempt to generate uncond jump in Arm compilation.");
-            outarminst(ARM::b, "b", str);
-            return;
-            
-        case MOP_JNZ:
-            inst = insert_arm_bitfield(ARM::tbnz, opd - Pctr, 18, 5, 2);
-            outarminst(inst, "tbnz", (string("x0, #0, ") + str).c_str());
-            return;
-            
-        case MOP_JZ:
-            inst = insert_arm_bitfield(ARM::tbz, opd - Pctr, 18, 5, 2);
-            outarminst(inst, "tbz", (string("x0, #0, ") + str).c_str());
-            return;
-            
-        case MOP_LDAL:  /* what luck! */
-        case MOP_TST:
-        {
-            string operand = string("x0, [x2, #0x") + pfmt(opd, "%04X") + "]   ; v$" + str;
-            inst = insert_arm_bitfield(ARM::ldr_storage, opd, 20, 10, 3);
-            outarminst(inst, "ldr", operand.c_str());
-            outarminst(ARM::ldrb_reg, "ldrb", "x0, [x0, #0]");
-            return;
-        }
-        case MOP_XOR:
-            outarminst(ARM::eor_imm, "eor", "x0, x0, #1"); //...Balthasar
-            return;
-
-        default:
-            RC_error(1, "Unknown internal op code for arm64: %d\n", op);
-            return;
-    }
-}
-
-void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
-    if (IS_ARM64) {
-        outinst_raw_arm (op, str, opd);
-        return;
-    }
-        
-    unsigned char bytes[12];
-    std::string dbuf;
-    int bc = 0;
-    if (Ops[op].flags & OPF_0F)
-	bytes[bc++] = 0x0F;
-    bytes[bc++] = Ops[op].opcode;
-    switch (op) {
-
-	case MOP_AND:
-	case MOP_OR:
-	case MOP_LDAL:
-	case MOP_TST:
-	    bc += EncodeOpd (bytes+bc, (int) opd,
-			     (op == MOP_TST) ? X_BL : X_AL, X_ESI, 0);
-	    DisasOpd (op, dbuf, bytes+1, str, "v$");
-	    break;
-
-	case MOP_JZ:
-	case MOP_JNZ:
-	case MOP_JMP:
-	    bytes[bc++] = (opd-Pctr-2) &0xFF;
-            dbuf = str;
-	    break;
-
-	case MOP_JMPL:
-	    bc += Outdata ((int) opd, FullWidth, bytes+bc);
-            dbuf = "long " + std::string(str);
-	    break;
-
-	case MOP_XOR:
-	case MOP_CLZ:
-	case MOP_STZ:
-	    bytes[bc++] = opd;
-            dbuf = "al," + std::to_string(opd);
-	    break;
-	case MOP_LDBLI8:
-	    bytes[bc++] = opd;
-            dbuf = "bl," + std::to_string(opd);
-	    break;
-
-	case MOP_RPUSH:
-	case MOP_RPOP:
-	    bytes[0] |=  opd;
-            dbuf = REG_NAMES[(int)(Arch->Bits == 32)][opd];
-	    break;
-
-	case MOP_RRET:
-	    bc += Outdata ((int) opd, 2, bytes+bc);
-            dbuf = std::to_string(opd);
-	    break;
-
-	case MOP_RETF:
-	case MOP_RET:
-	case MOP_LEAVE:
-	default:
-	    break;
-    }
     outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf.c_str());
 }
 
@@ -715,8 +601,76 @@ void TrampJump (MACH_OP, Jtag&, int jumparound);
 
 void outjmp (MACH_OP op, Jtag& tag);
 
+void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
+    if (IS_ARM64) {
+        outinst_raw_arm (op, str, opd);
+        return;
+    }
+        
+    unsigned char bytes[12];
+    std::string dbuf;
+    int bc = 0;
+    if (Ops[op].flags & OPF_0F)
+    bytes[bc++] = 0x0F;
+    bytes[bc++] = Ops[op].opcode;
+    switch (op) {
+
+    case MOP_AND:
+    case MOP_OR:
+    case MOP_LDAL:
+    case MOP_TST:
+        bc += EncodeOpd (bytes+bc, (int) opd,
+                 (op == MOP_TST) ? X_BL : X_AL, X_ESI, 0);
+        DisasOpd (op, dbuf, bytes+1, str, "v$");
+        break;
+
+    case MOP_JZ:
+    case MOP_JNZ:
+    case MOP_JMP:
+        bytes[bc++] = (opd-Pctr-2) &0xFF;
+            dbuf = str;
+        break;
+
+    case MOP_JMPL:
+        bc += Outdata ((int) opd, FullWidth, bytes+bc);
+            dbuf = "long " + std::string(str);
+        break;
+
+    case MOP_XOR:
+    case MOP_CLZ:
+    case MOP_STZ:
+        bytes[bc++] = opd;
+            dbuf = "al," + std::to_string(opd);
+        break;
+    case MOP_LDBLI8:
+        bytes[bc++] = opd;
+            dbuf = "bl," + std::to_string(opd);
+        break;
+
+    case MOP_RPUSH:
+    case MOP_RPOP:
+        bytes[0] |=  opd;
+            dbuf = REG_NAMES[(int)(Arch->Bits == 32)][opd];
+        break;
+
+    case MOP_RRET:
+        bc += Outdata ((int) opd, 2, bytes+bc);
+            dbuf = std::to_string(opd);
+        break;
+
+    case MOP_RETF:
+    case MOP_RET:
+    case MOP_LEAVE:
+    default:
+        break;
+    }
+    outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf.c_str());
+}
+
+
 
 void check_fix8_overflows() {
+    assert(!IS_ARM64);
     int jumps = 0;
     Jtag jump;
 top:
@@ -749,6 +703,7 @@ top:
 
 
 void outinst (MACH_OP op, Sexpr s, PCTR opd) {
+    CHECK();
     std::string str;
     if (Arch->Bits < 64)
         check_fix8_overflows();
@@ -777,6 +732,7 @@ void outinst (MACH_OP op, Sexpr s, PCTR opd) {
 	    outinst_raw (RetOp, "", 0);
 	    Outtag (t);
 	}
+        CHECK();
 	return;
     }
     else if (s == ZRET || s == TRET) {
@@ -810,13 +766,16 @@ void outinst (MACH_OP op, Sexpr s, PCTR opd) {
 	    outinst_raw (RetOp, "", 0);
 	    Outtag (t);
 	}
+        CHECK();
 	return;
     }
-
+    CHECK();
     outinst_raw (op, str.c_str(), opd);
+    CHECK();
 }
 
 void TrampJump (MACH_OP op, Jtag& tag, int jumparound) {
+    assert(!IS_ARM64);
     Jtag jump;
     if (op != MOP_JMP && jumparound) {
 	GensymTag(jump);
@@ -837,7 +796,8 @@ void TrampJump (MACH_OP op, Jtag& tag, int jumparound) {
 }
 
 void outjmp (MACH_OP op, Jtag& tag) {
-    check_fix8_overflows();
+    if (!IS_ARM64)
+        check_fix8_overflows();
     if (&tag == &RetCF){
 	outinst (op, LRET, 0);
 	return;
@@ -864,12 +824,14 @@ dot:	    if (disp_ok (Pctr, tag.tramp_pc)) {
 	else;
     else if (tag.tramp_defined)
 	goto dot;
+    CHECK();
     if (!tag.have_pc && !tag.tramp_defined) {
 	outinst_raw (op, tag.lab, Pctr+1);
         if (IS_ARM64)
-            RecordFixup (tag, Pctr - 4, 0);
+            RecordFixup (tag, Pctr - 4, 4);
         else
             RecordFixup (tag, Pctr - 1, SINGLE_WIDTH);
+        CHECK();
 	return;
     }
     TrampJump (op, tag, 1);
@@ -909,6 +871,7 @@ void CompileRlysym (Sexpr s, Ctxt * ctxt, int backf) {
     RecordDependent (RelayId(s));
     Jtag* tag = ctxt->tag;
     PCTR offset = RelayOffset(s);
+    CHECK();
     if (backf) {
 	switch (ctxt->op) {
 	    case CT_VAL:
@@ -944,6 +907,7 @@ void CompileRlysym (Sexpr s, Ctxt * ctxt, int backf) {
 	    outjmp (MOP_JNZ, *tag);
 	    break;
     }
+    CHECK();
     return;
 }
 
@@ -1095,7 +1059,8 @@ void PushRelayDef (Sexpr rlysexpr) {
     RelayDefTable.emplace_back(relay_sym, Pctr);
     RelayDefQuickCheck.emplace(relay_sym);
     FixupTable.clear();
-    ComputeLowestFix8Unresolved();
+    if (!IS_ARM64)
+        ComputeLowestFix8Unresolved();
 }
 
 
@@ -1108,7 +1073,7 @@ void CompileRelayDef (Sexpr s) {
     DefineTagPC(t);
     Ctxt ctxt (&RetCF, CT_VAL);
     if (IS_ARM64)
-        outarminst(ARM::mov_rr, "mov", "x2, x0          ;linkage"); /* move single arg (linkage) to x2 */
+        OutputARMFunctionPrologue();
     CompileAndOr (CDR(s), CT_AND, &ctxt);
     outinst (MOP_JMP, LRET, 0);
     RelayDef& rdef = RelayDefTable.back();

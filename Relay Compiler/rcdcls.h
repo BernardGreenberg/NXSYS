@@ -86,6 +86,10 @@ unsigned char * fasd_data (int &fasd_count);
 const char* * fasd_atsym_data (int &fasd_atsym_count);
 PCTR RlsymOffset (Rlysym * r);
 RLID RelayId (Sexpr s);
+void list(const char *, ...);
+
+#include <vector>
+extern std::vector<unsigned char> Code;
 
 
 #endif

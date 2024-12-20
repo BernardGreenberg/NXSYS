@@ -19,7 +19,7 @@ enum ARM {
     b        = 0x14000000,
     tbz      = 0x36000000,
     tbnz     = 0x37000000,
-    ldr_storage = 0xF9400040,
+    ldr_storage = 0xF9400000,
     ldrb_reg = 0x39400000,
     eor_imm  = 0x52010000,
     mov_rr   = 0xAA0003E2,
