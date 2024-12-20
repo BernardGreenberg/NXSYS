@@ -15,11 +15,10 @@ extern CCC_Thunkptrtype CCC_Thunkptr;
 
 typedef  unsigned char(CompiledFunction)(void*);
 
-#define CallCompiledCode(linkptr,codeaddr) (reinterpret_cast<CompiledFunction*>(codeaddr))(linkptr)
+#define CallCompiledCode(codeptr) (reinterpret_cast<CompiledFunction*>(codeptr))(Compiled_Linkage_Sptr)
 
 #endif
 
-//extern "C" {int CallCompiledCode (void* linkage_base, void* code_addr);};
 
 #endif
 

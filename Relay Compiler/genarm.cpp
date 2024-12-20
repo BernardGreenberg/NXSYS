@@ -100,6 +100,7 @@ void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
         {
             string operand = string("x0, [x2, #0x") + pfmt(opd, "%04X") + "]   ; v$" + str;
             inst = insert_arm_bitfield(ARM::ldr_storage, opd, 20, 10, 3);
+            inst = insert_arm_bitfield(inst, 2, 9, 5, 0);  // register number
             outarminst(inst, "ldr", operand.c_str());
             outarminst(ARM::ldrb_reg, "ldrb", "x0, [x0, #0]");
             return;
