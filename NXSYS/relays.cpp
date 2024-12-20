@@ -284,10 +284,12 @@ static void Run (Relay * top_level_relay, BOOL force_new_state) {
     while (!UpdateQueue.empty() && !Halted) {
         Relay * r = UpdateQueue.take();
         for (auto dependent : r->Dependents) {
-            assert(dependent);
+#if 0
+            assert(dependent);S
             assert(dependent->exp);
             printf("Of %s dep %s\n", top_level_relay->RelaySym.PRep().c_str(),
                    dependent->RelaySym.PRep().c_str());
+#endif
             if (dependent->maybe_change_state(dependent->ComputeValue()))
                 if (++run_transition_count > RCT_MAX)
                     NxsysAppAbort (0, "RELAY RACE! Apparent relay logic instability.");
@@ -338,7 +340,7 @@ void GooseRelay (Relay * rr) {
     int state;
 #if defined(CALL_COMPILED) && defined(NXCMPOBJ)
     if (rr->Flags & LF_CCExp) {
-         printf("Goose honking %s\n", rr->RelaySym.PRep().c_str());
+//         printf("Goose honking %s\n", rr->RelaySym.PRep().c_str());
         state = CallCompiledCode (rr->exp);
     }
 
