@@ -252,7 +252,7 @@ static BOOL REval (LNode * exp) {
 BOOL inline Relay::ComputeValue() {
 #if defined(CALL_COMPILED) && defined(NXCMPOBJ)
     if (Flags & LF_CCExp)
-        return CallCompiledCode (Compiled_Linkage_Sptr, exp);
+        return CallCompiledCode (exp);
 #endif
     return REval (exp);
 }
@@ -338,8 +338,8 @@ void GooseRelay (Relay * rr) {
     int state;
 #if defined(CALL_COMPILED) && defined(NXCMPOBJ)
     if (rr->Flags & LF_CCExp) {
-        state = 0; //for setting breakpoints on this line.
-        state = CallCompiledCode (Compiled_Linkage_Sptr, rr->exp);
+         printf("Goose honking %s\n", rr->RelaySym.PRep().c_str());
+        state = CallCompiledCode (rr->exp);
     }
 
     else

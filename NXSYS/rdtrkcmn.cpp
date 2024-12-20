@@ -193,7 +193,7 @@ const char * ReadLayout (const char* fname) {
     InitTrafficLeverData();
 
     if (stoupper(fs::path(fname).extension().string()) == ".TKO") {
-#if 1 or (NXSYSMac & !NXCMPOBJ)
+#if  (NXSYSMac & !NXCMPOBJ)
         std::string em;
         em += fname;
         em += "\n";
