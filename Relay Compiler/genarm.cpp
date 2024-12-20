@@ -43,7 +43,7 @@ ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int e
 bool verify_arm_bitfield_zero(ArmInst inst, int start_bit, int end_bit, int shift_down, PCTR target){
     int fld_len = start_bit - end_bit + 1;
     int mask = (1 << fld_len)-1;
-    mask <<=  end_bit;
+    mask <<= end_bit;
     if (inst & mask) {
         int unsigned val = (inst & mask) >> end_bit;
         int unsigned rval = val << shift_down;
@@ -120,15 +120,15 @@ void OutputARMFunctionPrologue() {
 
 void ARM64FixupFixup(Fixup &F, PCTR pc) {
     int d = pc - F.pc;
-    list (";  ARM Fixup @%0*X to %s = %0*X, disp %04X sum %0*X\n",
-          Ahex, F.pc, F.tag->lab, Ahex, pc, d, Ahex, F.pc + d);
-    unsigned int* iptr = ((unsigned int*) &(Code[F.pc]));
-    unsigned int inst = *iptr;
+    list (";  ARM Fixup @%0*X to %s = %0*X, disp %04X\n",
+          Ahex, F.pc, F.tag->lab, Ahex, pc, d, Ahex);
+    ArmInst * iptr = (ArmInst*) &(Code[F.pc]);
+    ArmInst inst = *iptr;
     char unsigned opcode = TOPBYTE(inst);
-    assert(opcode == 0x36 || opcode == 0x37);
+    assert(opcode == TOPBYTE(ARM::tbz) || opcode == TOPBYTE(ARM::tbnz));
     CHECK();
-    verify_arm_bitfield_zero(inst, 18, 5, 2, F.pc);
-    inst = insert_arm_bitfield(inst, d, 18, 5, 2);
+    if (verify_arm_bitfield_zero(inst, 18, 5, 2, F.pc)) // kludge until better understood
+        inst = insert_arm_bitfield(inst, d, 18, 5, 2);
     *iptr = inst;
     CHECK();
 }

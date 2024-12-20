@@ -53,6 +53,7 @@ namespace fs = std::filesystem;
 #include "lisp.h"
 #include "rcdcls.h"
 #include "RCArm64.h"
+#include "opsintel.h"
 
 class Architecture {
 public:
@@ -128,22 +129,21 @@ enum OPREG16 MAPMOD1632[] = {OR16_NONE, OR16_NONE, OR16_NONE, OR16_BX,
 enum REG_X   MAPMOD3216[] = {X_NONE, X_NONE, X_NONE, X_NONE,
 			     X_ESI, X_EDI, X_NONE, X_EBX};
 
+
+static struct OPDEF Ops[] INTEL_OP_INFO_DATA;
+
 const char *REG_NAMES[3][9]
    =
     { {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di", "???"},
       {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "???"},
       {"al", "cl", "dl", "bl", "ah", "dh", "ch", "bh", "???"}};
 
-
-#define INCLUDE_INTEL_OPS_TABLE 1
-#include "opsintel.h"
-
-
 static enum MACH_OP RetOp;
 
+/* global */
 vector<unsigned char> Code;
-
 PCTR Pctr = 0;
+
 static int GensymCtr = 0;
 static PCTR Lowest_Fix8_Unresolved;
 
@@ -154,7 +154,7 @@ static unordered_set<Rlysym*> RelayDefQuickCheck;
 vector<Rlysym*> RelayRefTable ;
 static unordered_map<Rlysym*, RLID> RIDMap;
 
-vector<Timer> Timers ;
+static vector<Timer> Timers ;
 
 static vector<DepPair> DependentPairTable;
 static vector<struct Fixup> FixupTable;
@@ -168,7 +168,6 @@ static char Label_Pending[20] = {0};
 static Jtag RetCF, RetOne, RetZero;
 
 void CHECK();
-
 Sexpr read_sexp (FILE * f);
 
 DEFLSYM(AND);
@@ -191,7 +190,7 @@ enum _Ctxt_Op {CT_VAL, CT_OR, CT_AND};
 static char CTVAL[6] = "VOA??";
 typedef enum _Ctxt_Op CtxtOp;
 
-/*should be h, but needs too much help */
+/*should be .h, but needs too much help */
 void ARM64FixupFixup (Fixup & F, PCTR pc);
 void OutputARMFunctionPrologue();
 void outinst_raw_arm(MACH_OP op, const char * str, PCTR opd);
