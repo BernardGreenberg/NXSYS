@@ -74,7 +74,8 @@ int RelayGraphicsLeftClick(int x, int y) {
 /* Called from miscellaneous UI functions that want to draw a relay-in-hand */
 void DrawRelayAPI(Relay* r) {
     DrawRelayFromRelay(r);
-    drAPIcommon();
+    if ((r->Flags & LF_CCExp) == 0) // already complained
+        drAPIcommon();
 }
 
 /* Called by demo system CIRCUIT command */
