@@ -7,39 +7,64 @@
 #include "tkov2.h"
 #include "RCArm64.h"
 #include "relays.h"
+#include "usermsg.h"
 
 #include <string>
 #include <vector>
-
-#include <sys/mman.h>
-
-
 using std::vector, std::string;
 
-void ReadFaslForms(unsigned char *);
+#ifdef NXSYSMac
+#include <sys/mman.h>
+#endif
+#define MINIMUM_RELAY_COMPILER_VERSION 3
+
 ArmInst*CodeText = nullptr;
+static size_t CodeSize = 0;
+
 static const char * RnamesTexts = nullptr;
 static const short * RnamesTextPtrs = nullptr;
-vector<string>FASLAtsyms;
 static vector<string>RTypeNames;
+
+vector<string>FASLAtsyms;  //referenced by FASL decoder
 vector<Relay*>ESD;
-char** Compiled_Linkage_Sptr; //points to State cells.
+
+char** Compiled_Linkage_Sptr = nullptr;; //points to State cells.  Referenced by relay engine
+
 void ReadFaslForms(unsigned char * data);
+void CleanupObjectMemory(); //below
+
+static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path) {
+    if ((H.magic != TKO_VERSION_2_MAGIC) ||
+        !!memcmp(TKO_VERSION_2_STRING, &H.magic_string, strlen(TKO_VERSION_2_STRING)+1)) {
+        usermsgstop("%s is not a version 2 NXSYS Relay Compiler output file.", path);
+        return false;
+    }
+    if (H.compiler_version < MINIMUM_RELAY_COMPILER_VERSION ) {
+        usermsgstop("%s was not produced by version %d or better of the Relay Compiler.", path,
+                    MINIMUM_RELAY_COMPILER_VERSION);
+        return false;
+    }
+#if defined(__aarch64__) || defined(_M_ARM64)
+    if (string (H.arch) != "ARM64") {
+        usermsgstop("%s was not compiled for the ARM64 Apple Silicon architecture, but for %s",
+                    path, H.arch);
+        return false;
+    }
+#endif
+    return true;
+}
+
+
 
 void LoadRelayObjectFile(const char*path, const char*) {
-    RnamesTexts = nullptr;
-    RnamesTextPtrs = nullptr;
-    FASLAtsyms.clear();
-    RTypeNames.clear();
-    ESD.clear();
+    CleanupObjectMemory();
 
     struct stat st;
     size_t file_length = 0;
-    if (stat(path, &st) == 0) {
+    if (stat(path, &st) == 0)
         file_length = st.st_size;
-    }
     else {
-        fprintf(stderr, "Can't get length of file: %s\n", path);
+        usermsgstop ("Can't get length track object of file: %s", path);
         exit(3);
     }
     vector<Relay*> ISD;
@@ -49,7 +74,7 @@ void LoadRelayObjectFile(const char*path, const char*) {
     auto dp = file_data;
     auto f = fopen (path, "rb");
     if (f == nullptr) {
-        fprintf(stderr, "Can't open file: %s\n", path);
+        usermsgstop("Can't open track object file: %s", path);
         exit(4);
     }
     fread (file_data, 1, file_length, f);
@@ -57,6 +82,9 @@ void LoadRelayObjectFile(const char*path, const char*) {
 
     auto hp = (_TKO_VERSION_2_HEADER*) dp;
     dp += hp->header_size;
+    if (!verify_header_ids(*hp, path)) //diagnoses extensively
+        exit(5);
+
     while(dp < file_data + file_length) {
         auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
         auto rdp = dp + sizeof(*chp);
@@ -84,6 +112,8 @@ void LoadRelayObjectFile(const char*path, const char*) {
                                           MAP_ANON | MAP_PRIVATE | MAP_JIT,
                                           -1, 0
                                           );
+                assert(CodeText != nullptr);
+                CodeSize = code_bytes;
 
                 if (__builtin_available(macOS 11.0, *)) {
                     pthread_jit_write_protect_np(0);
@@ -149,7 +179,7 @@ void LoadRelayObjectFile(const char*path, const char*) {
             }
                 break;
             case TKOI_DPD:
-            {
+                 {
                     auto p = (char unsigned*)rdp;
                     for (int i = 0; i < chp->number_of_items;i++) {
                         auto ddp = (TKO_DPTE_HEADER*) p;
@@ -173,12 +203,25 @@ void LoadRelayObjectFile(const char*path, const char*) {
 
         dp = next_block;
     }
-    
+    RnamesTexts = nullptr; //points into vector
+    RnamesTextPtrs = nullptr; //ditto
 }
 
 
-
-
 void CleanupObjectMemory() {
+    RnamesTexts = nullptr;
+    RnamesTextPtrs = nullptr;
+    FASLAtsyms.clear();
+    RTypeNames.clear();
+    ESD.clear();
     /* dum vivimus speramus */
+#if NXSYSMac
+    if (CodeText != nullptr)
+        munmap(CodeText, CodeSize);
+#endif
+    CodeText = nullptr;
+    CodeSize = 0;
+    if (Compiled_Linkage_Sptr)
+        delete Compiled_Linkage_Sptr;
+    Compiled_Linkage_Sptr = nullptr;
 }

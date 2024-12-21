@@ -250,10 +250,11 @@ static BOOL REval (LNode * exp) {
 }
 
 BOOL inline Relay::ComputeValue() {
-#if defined(CALL_COMPILED) && defined(NXCMPOBJ)
+#if CALL_COMPILED && NXCMPOBJ
     if (Flags & LF_CCExp)
         return CallCompiledCode (exp);
 #endif
+
     return REval (exp);
 }
 
