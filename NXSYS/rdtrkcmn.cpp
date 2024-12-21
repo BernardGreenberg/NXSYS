@@ -210,7 +210,7 @@ const char * ReadLayout (const char* fname) {
 	    return NULL;
 	}
 	SetCursor (hc);
-	InterlockingName= INameRetval;
+        InterlockingName= INameRetval + "(Compiled)";
 	InterpretedP = 0;
 #else
 	std::string em;
