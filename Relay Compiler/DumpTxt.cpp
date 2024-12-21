@@ -136,10 +136,16 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
                 int imms = extract_bits(inst, 15, 10);
                 int immr = extract_bits(inst, 21, 16);
                 int imm = (imms << 6) | immr;
-                printf("   eor     x%d, x%d, #%d",
+                string v = "#1";
+                if (imm != 0) {
+                    char buf [10];
+                    snprintf(buf, sizeof(buf), "0x%06X", imm);
+                    v = string("(value enc as) ") + buf;
+                }
+                printf("   eor     x%d, x%d, %s",
                        extract_bits(inst, 4, 0),
                        extract_bits(inst, 9, 5),
-                       imm);
+                       v.c_str());
             }
                 break;
             default:

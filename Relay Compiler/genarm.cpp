@@ -16,8 +16,6 @@ using std::string;
 #include "rcdcls.h"
 #include "opsintel.h" //needed for MOP_foo definitions
 
-//void CHECK();
-#define CHECK()
 extern int Ahex;
 extern PCTR Pctr;
 void outbytes_raw (const char * mnemonic, const unsigned char * bytes, int count, const char* comment);
@@ -30,16 +28,23 @@ void outarminst (ArmInst w, const char * mnem, const char* str) {
 /* Yer bits are number 35 to 0 left-to-right, as in https://developer.arm.com/documentation/ddi0602/2024-09/Base-Instructions?lang=en
  */
 ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int end_bit, int shift_down) {
+    assert (displacement >= -32767 && displacement < 36727);
     displacement >>= shift_down;
     int fld_len = start_bit - end_bit + 1;
     int mask = (1 << fld_len)-1;
+
     displacement &= mask;
     displacement <<=  end_bit;
    // assert ((inst & mask) == 0);
+    mask <<= end_bit;
     inst &= ~mask;  //override with later one.
     return inst | displacement;
 }
 
+
+/* the x86 code generator simply plopped subsequent versions over the first.  I did not get to
+ determine why there were more than 1 fixup for the same place, but doing the same thing seems doesn't work
+ correctly, but with this check in place, it does. */
 bool verify_arm_bitfield_zero(ArmInst inst, int start_bit, int end_bit, int shift_down, PCTR target){
     int fld_len = start_bit - end_bit + 1;
     int mask = (1 << fld_len)-1;
@@ -47,9 +52,11 @@ bool verify_arm_bitfield_zero(ArmInst inst, int start_bit, int end_bit, int shif
     if (inst & mask) {
         int unsigned val = (inst & mask) >> end_bit;
         int unsigned rval = val << shift_down;
+#if 0
         RC_error(0, "\nBUG *****: Arm instruction field %d-%d (len %d) nonzero before insert,"
                  " currently 0x%X, shifted up (by %d) = 0x%X. Pctr = 0x%06X, target location %06X, full inst as is %08x\n",
                  start_bit, end_bit, fld_len, val, shift_down, rval, Pctr, target, inst);
+#endif
         return false;
     }
     return true;
@@ -62,7 +69,6 @@ static string pfmt(unsigned int x, const char* fmt) {
 }
 
 void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
-    CHECK();
     ArmInst inst;
     switch (op) {
         case MOP_RET:
@@ -106,6 +112,7 @@ void outinst_raw_arm (MACH_OP op, const char * str, PCTR opd) {
             return;
         }
         case MOP_XOR:
+            assert(opd == 1);
             outarminst(ARM::eor_imm, "eor", "x0, x0, #1"); //...Balthasar
             return;
 
@@ -127,10 +134,8 @@ void ARM64FixupFixup(Fixup &F, PCTR pc) {
     ArmInst inst = *iptr;
     char unsigned opcode = TOPBYTE(inst);
     assert(opcode == TOPBYTE(ARM::tbz) || opcode == TOPBYTE(ARM::tbnz));
-    CHECK();
     if (verify_arm_bitfield_zero(inst, 18, 5, 2, F.pc)) // kludge until better understood
         inst = insert_arm_bitfield(inst, d, 18, 5, 2);
     *iptr = inst;
-    CHECK();
 }
 

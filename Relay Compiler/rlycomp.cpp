@@ -291,8 +291,11 @@ void DefineTag (Jtag& tg) {
 }
 
 int disp_ok (PCTR pc, PCTR v) {
-    if (IS_ARM64)   //In ARM, there is nothing BUT disp, and all disp's are OK.
-        return 1;
+    if (IS_ARM64)  {
+        int d = v - pc;
+        bool ok =(d >= -32768) && (d <= 32767);
+        return (int)ok;
+    }
     int disp;
     if (v < pc) {
 	disp = pc - v;
@@ -744,8 +747,10 @@ void outinst (MACH_OP op, Sexpr s, PCTR opd) {
 	    DefineTag (RetCF);
 	    outinst_raw (RetOp, "", 0);
 	}
-	else if (tag.have_pc && disp_ok (Pctr+2, tag.pctr))
+        else if (tag.have_pc && ((IS_ARM64 && disp_ok (Pctr, tag.pctr))
+                                 || (!IS_ARM64 && disp_ok (Pctr+2, tag.pctr)))) {
             outinst_raw (op, tag.lab, tag.pctr);
+        }
 	else {
 	    Jtag t;
 	    GensymTag(t);
