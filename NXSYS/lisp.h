@@ -146,8 +146,9 @@ struct Rlysym {
     void DestroyRelay();
     
     bool operator < (const Rlysym& other) const {  // for UI's
+        //must be LESS THAN to be true, not <=
         if (n == other.n)
-            return strcmp(redeemRlsymId(type),  redeemRlsymId(other.type)) < 1 ;
+            return strcmp(redeemRlsymId(type),  redeemRlsymId(other.type)) < 0 ;
         else
             return n < other.n;
     }
