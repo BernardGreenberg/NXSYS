@@ -13,6 +13,9 @@
 
 #include "STLExtensions.h"
 
+static void InternalConsoleRelayTracer(const char* name, int state) {
+    printf("%-8s  %s\n", name, state ? "PICK" : "DROP");
+}
 
 
 /* This is relay steps before the simulator quiesces when a relay
@@ -107,8 +110,8 @@ DEFLSYM2(T_ATOM,T);
 
 static RelayUpdateQueue UpdateQueue;
 
-static int Trace = 0;
-static tRelayTracer Tracer;
+static bool Trace = false;
+static tRelayTracer Tracer = InternalConsoleRelayTracer;
 
 class Label {
 public:
@@ -271,6 +274,34 @@ bool Relay::maybe_change_state(BOOL new_state) {
     return true;
 }
 
+/* "You may well wonder what we are doing in your garden,", said Andrew, the elder of the two."
+   The call to this silly function in "Run" below had been "printf", put there to trace a problem
+   in the Mac Release build(to be described) (Windows status not known yet). But when the printf
+   was there, the problem went away.  As grinchf proves, it is not what the printf was actually doing,
+   but just the presence of the call and the optimizer side effects of the two method-calls
+   in its argument lists that seem to be the active agents here. Note that it must be noinline
+   (__declspec((noinline)) on Windows) to prevent the optimizer from discarding the call entirely
+   "Don't give me any arguments!", it might say.
+ 
+   The manifestation occurs in (at least) the compiled version of Progman St., which works
+   perfectly in the Debug (non-optimized) build. Without printf or grinchf below, with Trace=true,
+   above, the release and debug builds produce very slightly (initially) relay transition traces,
+   enough to cause a major railroad accident, i.e., crashes on almost any attempt to set up a route
+   because the locking relays get wrong answer (22KXL starts it, I think, then all of the NWZ's
+   start to drop, and ... kaboom, and relay races and the app crashes with a message.
+ 
+   Note that ComputeResult is inline -- it calls the relay-compiled code in a way that the
+   compiler won't understand, but nothing in the relay-compiled code changes any C++ state.
+   To reproduce the failure, (take out the call to grinchf) and try to complete almost
+   any route, e.g, 4 to 14.  The bad relay states can be viewed with Relays | Query Relay.
+
+ */
+#if NXSYSMac  // we don't know if MSVC has a similar bug; I assume not.
+static __attribute__((noinline)) const char * grinchf(const char * a, ...) {
+    return a;
+}
+#endif
+
 static void Run (Relay * top_level_relay, BOOL force_new_state) {
 
     class RunLevelSet {
@@ -285,10 +316,10 @@ static void Run (Relay * top_level_relay, BOOL force_new_state) {
     while (!UpdateQueue.empty() && !Halted) {
         Relay * r = UpdateQueue.take();
         for (auto dependent : r->Dependents) {
-#if 0
-            assert(dependent);S
+#if NXSYSMac
+            assert(dependent);
             assert(dependent->exp);
-            printf("Of %s dep %s\n", top_level_relay->RelaySym.PRep().c_str(),
+            grinchf("Of %s dep %s\n", top_level_relay->RelaySym.PRep().c_str(),
                    dependent->RelaySym.PRep().c_str());
 #endif
             if (dependent->maybe_change_state(dependent->ComputeValue()))
@@ -728,9 +759,9 @@ int RelayState (Relay* rr) {
 
 void SetRelayTrace (tRelayTracer function)  {
     if (function == NULL)
-	Trace = 0;
+        Trace = false;
     else {
-	Trace = 1;
+	Trace = true;
 	Tracer = function;
     }
 }
