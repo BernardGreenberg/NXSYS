@@ -1,3 +1,18 @@
+
+//
+//  CompiledCodeInterface.cpp
+//  NXSYSMac (hope for Windows, too
+//
+//  Created by Bernard Greenberg December 2024
+//  Copyright © 2024 BernardGreenberg. All rights reserved.
+//
+//  Inspired by 1994 LoadOb32, but not copied from it, much more modern.
+//  This compiles and works on an M3 Mac (_M_ARM64_).
+//  It should run well enough to
+
+
+
+
 #include <stdlib.h>
 #include <string.h>
 #include "windows.h"
@@ -50,13 +65,18 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
                     path, H.arch);
         return false;
     }
+#else
+    if (string (H.arch) == "ARM64") {
+        usermsgstop("%s was compiled for the ARM64 Apple Silicon architecture, not for this CPU",
+                    path, H.arch);
+        return false;
+    }
 #endif
+        
     return true;
 }
 
-
-
-void LoadRelayObjectFile(const char*path, const char*) {
+bool LoadRelayObjectFile(const char*path, const char*) {
     CleanupObjectMemory();
 
     struct stat st;
@@ -64,10 +84,10 @@ void LoadRelayObjectFile(const char*path, const char*) {
     if (stat(path, &st) == 0)
         file_length = st.st_size;
     else {
-        usermsgstop ("Can't get length track object of file: %s", path);
-        exit(3);
+        usermsgstop ("Can't get length of track object file: %s", path);
+        return false;
     }
-    vector<Relay*> ISD;
+
 
     vector<unsigned char> FileCtnr(file_length);
     auto const file_data = FileCtnr.data();
@@ -75,7 +95,7 @@ void LoadRelayObjectFile(const char*path, const char*) {
     auto f = fopen (path, "rb");
     if (f == nullptr) {
         usermsgstop("Can't open track object file: %s", path);
-        exit(4);
+        return false;
     }
     fread (file_data, 1, file_length, f);
     fclose(f);
@@ -83,7 +103,8 @@ void LoadRelayObjectFile(const char*path, const char*) {
     auto hp = (_TKO_VERSION_2_HEADER*) dp;
     dp += hp->header_size;
     if (!verify_header_ids(*hp, path)) //diagnoses extensively
-        exit(5);
+        return false;
+    vector<Relay*> ISD;
 
     while(dp < file_data + file_length) {
         auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
@@ -205,6 +226,7 @@ void LoadRelayObjectFile(const char*path, const char*) {
     }
     RnamesTexts = nullptr; //points into vector
     RnamesTextPtrs = nullptr; //ditto
+    return true;
 }
 
 

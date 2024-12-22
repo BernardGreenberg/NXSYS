@@ -59,7 +59,7 @@ std::string INameRetval;
 Sexpr read_sexp (FILE* f);
 void ReportAllTrackSecsClear ();
 void ReportAllTrafficLeversNormal();
-int LoadRelayObjectFile (const char * ref, const char * fn);
+bool LoadRelayObjectFile (const char * ref, const char * fn);
 void CreateSwitchKeys();
 void InitSwitchKeyData();
 void InitTrafficLeverData();
