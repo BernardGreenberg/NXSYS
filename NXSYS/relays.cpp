@@ -274,35 +274,40 @@ bool Relay::maybe_change_state(BOOL new_state) {
     return true;
 }
 
-/* "You may well wonder what we are doing in your garden,", said Andrew, the elder of the two."
-   The call to this silly function in "Run" below had been "printf", put there to trace a problem
-   in the Mac Release build(to be described) (Windows status not known yet). But when the printf
-   was there, the problem went away.  As grinchf proves, it is not what the printf was actually doing,
-   but just the presence of the call and the optimizer side effects of the two method-calls
-   in its argument lists that seem to be the active agents here. Note that it must be noinline
-   (__declspec((noinline)) on Windows) to prevent the optimizer from discarding the call entirely
-   "Don't give me any arguments!", it might say.
+/*
+   The peculiar __attribute__((optnone)) declaration (on the Mac) is there to suppress a seeming
+   bug in the clang++ optimizer that I can't narrow down to anything more specific than that without
+   it, this function, in a Release build, causes a specific failure under a specific circumstance to be
+   described.  It is not at all clear what misapprehension the compiler suffers, and probably not
+   worth the time to figure it out.
+  
+   The bug occurs in (at least) when running the compiled version of Progman St., which works
+   perfectly in the Debug (non-optimized) build. Without the optnone attribute, the release and debug builds
+   produce very slightly (initially) relay transition traces, enough to cause a major railroad accident,
+   i.e., crashes on almost any attempt to set up a route because the locking relays get wrong answers
+   (22KXL starts it, I think), then all of the NWZ's start to drop, the *WK's never pick and ... kaboom,
+   and relay races and the app crashes with a message. With the optnone, traces are identical and
+   the relay-compiled interlocking works perfectly in both builds.
  
-   The manifestation occurs in (at least) the compiled version of Progman St., which works
-   perfectly in the Debug (non-optimized) build. Without printf or grinchf below, with Trace=true,
-   above, the release and debug builds produce very slightly (initially) relay transition traces,
-   enough to cause a major railroad accident, i.e., crashes on almost any attempt to set up a route
-   because the locking relays get wrong answer (22KXL starts it, I think, then all of the NWZ's
-   start to drop, and ... kaboom, and relay races and the app crashes with a message.
+   Alternatively, the printf in the code below can be enabled, which seems to derail the optimizer
+   enough to make the code work. Or a null function with the same arguments can be substituted
+   for it, if declared __attribute__((noinline)), for it seems the activity in the argument
+   preparation is the actual derail (as in track device), so to speak.
  
-   Note that ComputeResult is inline -- it calls the relay-compiled code in a way that the
+   Note that ComputeValue is inline -- it calls the relay-compiled code in a way that the
    compiler won't understand, but nothing in the relay-compiled code changes any C++ state.
-   To reproduce the failure, (take out the call to grinchf) and try to complete almost
+   To reproduce the failure, (comment out the call to printf) and try to complete almost
    any route, e.g, 4 to 14.  The bad relay states can be viewed with Relays | Query Relay.
+   Or compile with Trace=true above, invoke NXSYS from a console and capture the standard output.
+   There is no data yet on Mac Intel (which I assume would be similar) or Windows compiation
+   (because usable relay-compiled objects do not yet exist).
 
  */
 #if NXSYSMac  // we don't know if MSVC has a similar bug; I assume not.
-static __attribute__((noinline)) const char * grinchf(const char * a, ...) {
-    return a;
-}
+#define DISABLE_OPT_FCN __attribute__((optnone))
 #endif
 
-static void Run (Relay * top_level_relay, BOOL force_new_state) {
+static DISABLE_OPT_FCN void Run (Relay * top_level_relay, BOOL force_new_state) {
 
     class RunLevelSet {
     public:
@@ -316,10 +321,10 @@ static void Run (Relay * top_level_relay, BOOL force_new_state) {
     while (!UpdateQueue.empty() && !Halted) {
         Relay * r = UpdateQueue.take();
         for (auto dependent : r->Dependents) {
-#if NXSYSMac
+#if 0
             assert(dependent);
             assert(dependent->exp);
-            grinchf("Of %s dep %s\n", top_level_relay->RelaySym.PRep().c_str(),
+            printf("Of %s dep %s\n", top_level_relay->RelaySym.PRep().c_str(),
                    dependent->RelaySym.PRep().c_str());
 #endif
             if (dependent->maybe_change_state(dependent->ComputeValue()))
