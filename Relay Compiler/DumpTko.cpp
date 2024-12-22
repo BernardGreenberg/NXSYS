@@ -90,8 +90,14 @@ int main (int argc, const char ** argv) {
     fread (file_data, 1, file_length, f);
     fclose(f);
 
+    auto hp = (_TKO_VERSION_2_HEADER*) dp;    
+    if ((hp->magic != TKO_VERSION_2_MAGIC) ||
+        !!memcmp(TKO_VERSION_2_STRING, &(hp->magic_string), strlen(TKO_VERSION_2_STRING)+1)) {
+        fprintf(stderr, "%s is not a version 2 NXSYS Relay Compiler output file.\n", path);
+        exit(4);
+    }
     printf("File %s, len %ld=0x%lX\n", path, file_length, file_length);
-    auto hp = (_TKO_VERSION_2_HEADER*) dp;
+
     if (summary || args["header"]) {
         printf("Header\n");
         printf("  Magic %4X\n", hp->magic);
