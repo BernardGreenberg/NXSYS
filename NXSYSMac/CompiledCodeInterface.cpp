@@ -1,15 +1,18 @@
 
 //
 //  CompiledCodeInterface.cpp
-//  NXSYSMac (hope for Windows, too
+//  NXSYSMac (hope for Windows, too)
 //
 //  Created by Bernard Greenberg December 2024
 //  Copyright © 2024 BernardGreenberg. All rights reserved.
 //
 //  Inspired by 1994 LoadOb32, but not copied from it, much more modern.
 //  This compiles and works on an M3 Mac (_M_ARM64_).
-//  It should run well enough to
-
+//  It should run well enough in the Intel half of the Universal to
+//  gracefully refuse to load .tko's compiled for ARM.  TKO's compiled
+//  for Intel (-arch:X86) won't work yet; there isn't enough detail done, but
+//  they are not (yet) rejected cleanly, either.  Windows should act the same.
+//
 
 
 
