@@ -62,7 +62,7 @@ public:
     Relay(Sexpr s);
     void AddDependent(Relay*dependent);
     void DestroyLogic();
-    BOOL ComputeValue ();
+    BOOL ComputeValue () volatile;
     bool maybe_change_state(BOOL new_state);
     
     /* Sort by RelaySym order, i.e., 1A, 1B, 2A, 2B */

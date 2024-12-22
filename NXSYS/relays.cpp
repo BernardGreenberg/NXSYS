@@ -252,7 +252,7 @@ static BOOL REval (LNode * exp) {
     }
 }
 
-BOOL inline Relay::ComputeValue() {
+BOOL inline Relay::ComputeValue() volatile {
 #if CALL_COMPILED && NXCMPOBJ
     if (Flags & LF_CCExp)
         return CallCompiledCode (exp);
