@@ -26,11 +26,8 @@ int LastDrawingRise;
 
 #define mIn(a,b) (((a) < (b)) ? (a) : (b))
 #define mAx(a,b) (((a) > (b)) ? (a) : (b))
-#ifdef NXSYSMac
+
 const char SSNAME[] = "NXSYS Relay Draftsperson";
-#else
-const char SSNAME[] = "NXSYS Relay Draftsman";
-#endif
 
 enum cell_types {CT_NULL, CT_FRONT, CT_BACK, CT_COIL, CT_CX,
 		 CT_BX, CT_AND, CT_OR, CT_CONST, CT_COILTIMER, CT_LAST};
@@ -66,8 +63,8 @@ public:
 
 std::vector<Drawing*> Drawings;
 
-char * Darray = NULL;
-char * Parray = NULL;
+static char * Darray = NULL;
+static char * Parray = NULL;
 
 const GNode* LocateRelayFromXY (int x, int y);
 
@@ -175,10 +172,6 @@ GNode * CreateGNode (LNode * ln, GNode * parent, Drawing& d) {
 
     if (f & LF_Not) {
 	GNode * n = CreateGNode (((LNot *) ln)->opd, parent, d);
-        if (n == NULL) {
-	    FatalAppExit (0, "LDRAW Node alloc fails.");
-            return NULL; /* placate flow analyzer, doesn't know FAE doesn't return */
-        }
         n->width = n->height = 1;
 	n->type = CT_BACK;
 	return n;
@@ -186,8 +179,6 @@ GNode * CreateGNode (LNode * ln, GNode * parent, Drawing& d) {
 
     if (f & LF_const) {
 	GNode * n = new GNode;
-	if (n == NULL)
-	    FatalAppExit (0, "LDRAW Node alloc fails.");
 	n->Statep = &(ln->State);
 	n->type = CT_CONST;
 	n->text = *n->Statep ? "TRUE" : "FALSE";
@@ -198,8 +189,6 @@ GNode * CreateGNode (LNode * ln, GNode * parent, Drawing& d) {
 
     if (f & LF_Terminal ) {
 	GNode * n = new GNode;
-	if (n == NULL)
-	    FatalAppExit (0, "LDRAW Node alloc fails.");
 	n->type = CT_FRONT;
 	n->Statep = &(ln->State);
         n->text = ((Relay *) ln)->RelaySym.u.r->PRep();
@@ -210,8 +199,6 @@ GNode * CreateGNode (LNode * ln, GNode * parent, Drawing& d) {
     }
 
     GNode * n = new GNode;
-    if (n == NULL)
-	FatalAppExit (0, "LDRAW Node alloc fails.");
     n->Thread(parent);
     
     Logop * lo = (Logop *) ln;
@@ -276,13 +263,9 @@ void DrawCircuit (LNode * ln, LNode* exp, int tmr){
     if (Darray == NULL)
 	Darray = new char [DNCellH*NCellW];
     GNode* pRoot = new GNode;
-    if (pRoot == NULL)
-raf:	FatalAppExit (0, "LDRAW root alloc fails.");
     GNode& root = *pRoot;
     root.type = CT_AND;
     GNode* pRelay = new GNode;
-	if (pRelay == NULL)
-	    goto raf;
     GNode& relay = *pRelay;
     Relay * r = (Relay *) ln;
     relay.text = r->RelaySym.u.r->PRep().c_str();
@@ -292,8 +275,6 @@ raf:	FatalAppExit (0, "LDRAW root alloc fails.");
     relay.Thread (&root);
     relay.Statep = &(r->State);
     Drawing * D = new Drawing;
-    if (D == NULL)
-	goto raf;
     D->yorg = DNCellH/2;
     D->relay = r;
     GNode * gn = CreateGNode (exp, pRoot, *D);
@@ -836,7 +817,7 @@ int DrawRelayFromName (const char * rnm) {
     }
     Relay * r = s.u.r->rly;
     if (r->exp == NULL) {
-	MessageBox (0, "Quisling relay, no autonomous code.", SSNAME,
+	MessageBox (0, "Simulator-provided relay, no autonomous code.", SSNAME,
 		    MB_OK|MB_ICONEXCLAMATION);
 	return 0;
     }
@@ -855,7 +836,7 @@ c:	MessageBox (0, "Compiled code (subr) relay.  Load interlocking "
 	Sexpr controlse = ZAppendRlysym(s);
 	Relay * control = controlse.u.r->rly;
 	if (control->exp == NULL) {
-            MessageBox (0, "Quisling relay, no autonomous code.", SSNAME,
+            MessageBox (0, "Simulator-provided relay, no autonomous code.", SSNAME,
                         MB_OK|MB_ICONEXCLAMATION);
             return 0;
         }
