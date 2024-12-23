@@ -92,7 +92,8 @@ int main (int argc, const char ** argv) {
 
     auto hp = (_TKO_VERSION_2_HEADER*) dp;    
     if ((hp->magic != TKO_VERSION_2_MAGIC) ||
-        !!memcmp(TKO_VERSION_2_STRING, &(hp->magic_string), strlen(TKO_VERSION_2_STRING)+1)) {
+        !! memcmp(TKO_VERSION_2_STRING, &(hp->magic_string), strlen(TKO_VERSION_2_STRING)+1)
+        || hp->version != TKO_VERSION_2) {
         fprintf(stderr, "%s is not a version 2 NXSYS Relay Compiler output file.\n", path);
         exit(4);
     }

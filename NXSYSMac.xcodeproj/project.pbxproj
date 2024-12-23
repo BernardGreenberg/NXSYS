@@ -244,7 +244,7 @@
 		5BF06F4B19A0D6BC008CDCA0 /* pswitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */; };
 		5BF06F5119A0E5B4008CDCA0 /* rlyindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F5019A0E5B4008CDCA0 /* rlyindex.cpp */; };
 		5BF06F5319A10AA3008CDCA0 /* dynmenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F5219A10AA3008CDCA0 /* dynmenu.cpp */; };
-		5BF06F5519A10D03008CDCA0 /* CompiledCodeInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F5419A10D03008CDCA0 /* CompiledCodeInterface.cpp */; };
+		5BF06F5519A10D03008CDCA0 /* LoadCompiledCode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F5419A10D03008CDCA0 /* LoadCompiledCode.cpp */; };
 		5BF06F5719A12322008CDCA0 /* MacNxldwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */; };
 		5BF06F5D19A12727008CDCA0 /* MacRelayGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */; };
 		5BF4F08019CB79A50089B3E4 /* TLEdit.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC931C19C8FE7200673BDC /* TLEdit.xib */; };
@@ -663,7 +663,7 @@
 		5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pswitch.cpp; path = ../pswitch.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F5019A0E5B4008CDCA0 /* rlyindex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rlyindex.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F5219A10AA3008CDCA0 /* dynmenu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dynmenu.cpp; sourceTree = "<group>"; tabWidth = 8; };
-		5BF06F5419A10D03008CDCA0 /* CompiledCodeInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompiledCodeInterface.cpp; path = NXSYSMac/CompiledCodeInterface.cpp; sourceTree = SOURCE_ROOT; };
+		5BF06F5419A10D03008CDCA0 /* LoadCompiledCode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LoadCompiledCode.cpp; path = NXSYSMac/LoadCompiledCode.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacNxldwin.cpp; path = NXSYSMac/MacNxldwin.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacRelayGraphics.cpp; path = ../NXSYSMac/MacRelayGraphics.cpp; sourceTree = "<group>"; };
 		5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = edtraflev.cpp; sourceTree = "<group>"; };
@@ -1418,7 +1418,7 @@
 			children = (
 				5BABBE6F27B7F6E400AED491 /* WinApiSTL.h */,
 				5BF062C4199D4B00008CDCA0 /* compat32.h */,
-				5BF06F5419A10D03008CDCA0 /* CompiledCodeInterface.cpp */,
+				5BF06F5419A10D03008CDCA0 /* LoadCompiledCode.cpp */,
 				5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */,
 				5B2B337923045D5C004007A9 /* DynmenuMacCalls.h */,
 				5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */,
@@ -2045,7 +2045,7 @@
 				5BCD1F0419BE3D9E007B0447 /* LittleYellowView.mm in Sources */,
 				5BF06F5719A12322008CDCA0 /* MacNxldwin.cpp in Sources */,
 				5BF062D4199ECB62008CDCA0 /* xtgload.cpp in Sources */,
-				5BF06F5519A10D03008CDCA0 /* CompiledCodeInterface.cpp in Sources */,
+				5BF06F5519A10D03008CDCA0 /* LoadCompiledCode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,7 @@
 
 //
-//  CompiledCodeInterface.cpp
+//  LoadCompiledCode.cpp
+//  formerly CompiledCodeInterface.cpp
 //  NXSYSMac (hope for Windows, too)
 //
 //  Created by Bernard Greenberg December 2024
@@ -53,7 +54,8 @@ void CleanupObjectMemory(); //below
 
 static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path) {
     if ((H.magic != TKO_VERSION_2_MAGIC) ||
-        !!memcmp(TKO_VERSION_2_STRING, &H.magic_string, strlen(TKO_VERSION_2_STRING)+1)) {
+        !! memcmp(TKO_VERSION_2_STRING, &H.magic_string, strlen(TKO_VERSION_2_STRING)+1)
+        || H.version != TKO_VERSION_2) {
         usermsgstop("%s is not a version 2 NXSYS Relay Compiler output file.", path);
         return false;
     }
