@@ -42,6 +42,7 @@ static NSString * FullSigKey = @"FullSignalDisplaysAreViews";
 static NSString * LastPathnameKey = @"LastInterlockingPathname";
 static NSString * ShowStopsKey = @"LastShowStopsPolicy";
 static NSString * RecentsCountKey = @"RecentsCount";
+static NSString * RecentFileKeyFormat = @"Recent%ld";
 static NSArray* allowedFileTypes =
 #ifdef NXCMPOBJ
     @[@"trk", @"tko"];
@@ -162,7 +163,7 @@ static HelpDirectory helpDirectory;
     unsigned long count = recents.count;
     //printf("SaveDefaultPath. recents.count = %ld\n", count);
     for (unsigned long i = 0; i < count; i++) {
-        NSString * key = [[NSString alloc] initWithFormat:@"Recent%ld", i];
+        NSString * key = [[NSString alloc] initWithFormat:RecentFileKeyFormat, i];
         NSURL * url = [recents objectAtIndex:i];
         [dfts setURL:url forKey:key];
     //    printf("SDP recording path %ld: %s\n", i, url.absoluteString.UTF8String);
@@ -304,13 +305,14 @@ static HelpDirectory helpDirectory;
     return NO;
 }
 -(void)PopulateRecentsMenu {
+    APDTRACE(("PopulateRecentsMenu"));
     NSUserDefaults * dfts = [NSUserDefaults standardUserDefaults];
-    NSInteger ncount = [dfts integerForKey:@"RecentsCount"];
+    NSInteger ncount = [dfts integerForKey:RecentsCountKey];
     for (auto i = 0; i < ncount; i++) {
         long lj = ncount - i - 1;
-        NSString * key = [[NSString alloc] initWithFormat:@"Recent%ld", lj];
+        NSString * key = [[NSString alloc] initWithFormat:RecentFileKeyFormat, lj];
         NSURL * url = [dfts URLForKey:key];
-    //    printf("Populating URL %d : %s\n", j, url.absoluteString.UTF8String);
+    //  printf("Populating URL %d : %s\n", j, url.absoluteString.UTF8String);
         [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:url];
     }
 }
