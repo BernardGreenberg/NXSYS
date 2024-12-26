@@ -13,6 +13,7 @@
 
 #include <vector>
 #include <map>
+#include "STLextensions.h"
 
 using std::string, std::unordered_map, std::vector;
 
@@ -33,6 +34,9 @@ static vector<string> CalculateRelayTypeArray(const char* texts, const short* te
         Types.push_back(texts + textptrs[i]);
     return Types;
 }
+
+
+string DisassembleARM (ArmInst inst, uint64_t pctr);
 
 void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_t file_length) {
     auto start_dp = fdp;
@@ -93,68 +97,65 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
         if (ISD.count(Pctr))
             printf("\n%s:\n", ISD[Pctr].c_str());
         printf("%06X  %08X", Pctr, inst);
-        char unsigned opcode = TOPBYTE(inst);
-        
-        switch (opcode) {
-            case TOPBYTE(ARM::tbz):
-            case TOPBYTE(ARM::tbnz):
-            {
-                int fld = ((inst >> 5) << 2) & 0x0000FFFF;
-                if (fld &  0x00008000)
-                    fld |= 0xFFFF0000;
-                int target = (int)Pctr+fld;
-                const char * opstr = (opcode == 0x37) ? "tbnz" : "tbz ";
-                printf ("   %-4s    x0, #0, %06X", opstr, target);
-            }
-                break;
-                
-            case TOPBYTE(ARM::ret):
-                printf ("   ret     x%d", extract_bits(inst, 9, 5));
-                printf ("\n");
-                break;
-            case TOPBYTE(ARM::movz_0):
-                printf ("   mov     x0, #%d", (inst >> 5) & 1);
-                break;
-                
-            case TOPBYTE(ARM::ldr_storage):
-            {
-                int ptrdisp = extract_bits(inst, 20, 10) * 8;
-                printf("   ldr     x0, [x2, #0x%04x]   ; %s", ptrdisp, ESD[ptrdisp].c_str());
-                break;
-            }
-                
-            case TOPBYTE(ARM::ldrb_reg):
-                printf("   ldrb    x0, [x0, #0]");
-                break;
-                
-            case TOPBYTE(ARM::mov_rr):
-                printf("   mov     x%d, x%d", extract_bits(inst, 4, 0), extract_bits(inst, 20, 16));
-                break;
-
-            case TOPBYTE(ARM::eor_imm):
-            {
-                int imms = extract_bits(inst, 15, 10);
-                int immr = extract_bits(inst, 21, 16);
-                int imm = (imms << 6) | immr;
-                string v = "#1";
-                if (imm != 0) {
-                    char buf [10];
-                    snprintf(buf, sizeof(buf), "0x%06X", imm);
-                    v = string("(value enc as) ") + buf;
-                }
-                printf("   eor     x%d, x%d, %s",
-                       extract_bits(inst, 4, 0),
-                       extract_bits(inst, 9, 5),
-                       v.c_str());
-            }
-                break;
-            default:
-                break;
-        }
-        
-        printf("\n");
+        puts( DisassembleARM(inst, Pctr).c_str());
+        //printf("\n");
         instp++;
         Pctr += 4;
     }
 }
 
+string DisassembleARM (ArmInst inst, uint64_t pctr) {
+    char unsigned opcode = TOPBYTE(inst);
+    switch (opcode) {
+
+        case TOPBYTE(ARM::tbz):
+        case TOPBYTE(ARM::tbnz):
+        {
+            uint64_t fld = ((inst >> 5) << 2) & 0x0000FFFF;
+            if (fld &  0x8000)
+                fld |= 0xFFFFFFFFFFFF0000;
+            uint64_t target = pctr+fld;
+            const char * opstr = (opcode == 0x37) ? "tbnz" : "tbz ";
+            int w = ((target & 0xFFFFFFFFFF000000) == 0) ? 6 : 12;
+            return FormatString ("   %-4s    x0, #0, %0*lX", opstr, w, target);
+        }
+            
+        case TOPBYTE(ARM::ret):
+            return FormatString ("   ret     x%d\n", extract_bits(inst, 9, 5));
+
+        case TOPBYTE(ARM::movz_0):
+            return FormatString ("   mov     x0, #%d", (inst >> 5) & 1);
+            
+        case TOPBYTE(ARM::ldr_storage):
+        {
+            int ptrdisp = extract_bits(inst, 20, 10) * 8;
+            return FormatString("   ldr     x0, [x2, #0x%04x]   ; %s", ptrdisp, ESD[ptrdisp].c_str());
+        }
+            
+        case TOPBYTE(ARM::ldrb_reg):
+            return FormatString("   ldrb    x0, [x0, #0]");
+            
+        case TOPBYTE(ARM::mov_rr):
+            return FormatString("   mov     x%d, x%d", extract_bits(inst, 4, 0), extract_bits(inst, 20, 16));
+
+        case TOPBYTE(ARM::eor_imm):
+        {
+            int imms = extract_bits(inst, 15, 10);
+            int immr = extract_bits(inst, 21, 16);
+            int imm = (imms << 6) | immr;
+            string v = "#1";
+            if (imm != 0) {
+                char buf [10];
+                snprintf(buf, sizeof(buf), "0x%06X", imm);
+                v = string("(value enc as) ") + buf;
+            }
+            return FormatString("   eor     x%d, x%d, %s",
+                                extract_bits(inst, 4, 0),
+                                extract_bits(inst, 9, 5),
+                                v.c_str());
+        }
+
+        default:
+            return "";
+    }
+}
