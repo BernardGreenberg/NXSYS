@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "tkov2.h"
 #include "RCArm64.h"
+#include "DisasUtil.h"
 
 #include <vector>
 #include <map>
@@ -21,7 +22,7 @@ static std::map<unsigned int, string> ESD;  //link_offset->relay name
 static std::map<unsigned int, string> ISD; //text offset->relay name
 
 /* Bits number in arm documentation style, 31 to 0 left to right in 32-bit dword */
-static unsigned int extract_bits(unsigned int data, int high, int low) {
+int extract_bits(unsigned int data, int high, int low) { /*global*/
     int answer = data >> low;
     int bits = high - low + 1;
     int mask = (1 << bits) - 1;
@@ -34,9 +35,6 @@ static vector<string> CalculateRelayTypeArray(const char* texts, const short* te
         Types.push_back(texts + textptrs[i]);
     return Types;
 }
-
-
-string DisassembleARM (ArmInst inst, uint64_t pctr);
 
 void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_t file_length) {
     auto start_dp = fdp;
@@ -104,20 +102,19 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
     }
 }
 
-string DisassembleARM (ArmInst inst, uint64_t pctr) {
+string DisassembleARM (ArmInst inst, LPCTR pctr) {
     char unsigned opcode = TOPBYTE(inst);
     switch (opcode) {
 
         case TOPBYTE(ARM::tbz):
         case TOPBYTE(ARM::tbnz):
         {
-            uint64_t fld = ((inst >> 5) << 2) & 0x0000FFFF;
-            if (fld &  0x8000)
-                fld |= 0xFFFFFFFFFFFF0000;
-            uint64_t target = pctr+fld;
+            int64_t disp = extract_bits(inst, 18, 5) * sizeof(ArmInst);
+            if (disp &  0x8000)
+                disp |= 0xFFFFFFFFFFFF0000;
+            LPCTR target = pctr+disp;
             const char * opstr = (opcode == 0x37) ? "tbnz" : "tbz ";
-            int w = ((target & 0xFFFFFFFFFF000000) == 0) ? 6 : 12;
-            return FormatString ("   %-4s    x0, #0, %0*lX", opstr, w, target);
+            return FormatString ("   %-4s    x0, #0, 0x%4lX", opstr, target);
         }
             
         case TOPBYTE(ARM::ret):
@@ -129,7 +126,11 @@ string DisassembleARM (ArmInst inst, uint64_t pctr) {
         case TOPBYTE(ARM::ldr_storage):
         {
             int ptrdisp = extract_bits(inst, 20, 10) * 8;
-            return FormatString("   ldr     x0, [x2, #0x%04x]   ; %s", ptrdisp, ESD[ptrdisp].c_str());
+            string s = FormatString("   ldr     x0, [x2, #0x%04x]   ;", ptrdisp);
+            if (ESD.empty())
+                return s;
+            else
+                return s + " " + ESD[ptrdisp];
         }
             
         case TOPBYTE(ARM::ldrb_reg):

@@ -9,42 +9,29 @@
 
 #include <vector>
 #include <string>
+#include <set>  /* ordered */
 #include "STLExtensions.h"
 
 #include "windows.h"
 #include "ldgDisassemble.hpp"
+#include "DisasUtil.h"
 #include "relays.h"
 #include "cccint.h"
 
 #include "RCarm64.h"
-using std::vector, std::string;
+using std::vector, std::string, std::set;
 
-static vector<string> Lines;
+bool haveDisassembly = false; /* globally addressible */
 static int Top = 0;
-string DisassembleARM (ArmInst inst, uint64_t pctr);
-
-
-bool haveDisassembly = false;
+static vector<string> Lines;
+static set<LPCTR> ForwardJumps;
 
 void InitLdgDisassembly() {
     Lines.clear();
+    ForwardJumps.clear();
     haveDisassembly = false;
     Top = 0;
 }
-
-/* Bits number in arm documentation style, 31 to 0 left to right in 32-bit dword */
-static unsigned int extract_bits(unsigned int data, int high, int low) {
-    int answer = data >> low;
-    int bits = high - low + 1;
-    int mask = (1 << bits) - 1;
-    return answer & mask;
-}
-
-
-
-#include <set>
-
-std::set<int64_t> ForwardJumps;
 
 void ldgDisassemble(Relay* r) {
     ForwardJumps.clear();
@@ -53,27 +40,25 @@ void ldgDisassemble(Relay* r) {
     unsigned char * p = (unsigned char*) (r->exp);
     /* We stop when we find a RET with no forward jumps pending. */
     for (int i = 0; i < 300; i++ ){
-        int64_t pctr = (int64_t)p;
+        LPCTR pctr = (LPCTR)p;
         ArmInst inst = *((ArmInst*)p);
         string addr = FormatString("%p %8X  ",p, inst);
         
-        string S = addr + DisassembleARM(inst, (unsigned long)(p));
+        string S = addr + DisassembleARM(inst, (LPCTR)p);
         unsigned int opcode = TOPBYTE(inst);
         if (opcode == TOPBYTE(ARM::ldr_storage)) {
-            int stat_disp = extract_bits(inst, 20, 10);
-            Relay**rptrarray = (Relay**)Compiled_Linkage_Sptr;
-            Relay * r = rptrarray[stat_disp];
+            int stat_index = extract_bits(inst, 20, 10);
+            Relay** rptrarray = (Relay**)Compiled_Linkage_Sptr;
+            Relay * r = rptrarray[stat_index];
             S += r->RelaySym.PRep();
             if (r->State == 0)
                 S += "   (DROPPED)";
             else
                 S += "   (PICKED)";
         } else if ((opcode == TOPBYTE(ARM::tbz)) || (opcode == TOPBYTE(ARM::tbnz))) {
-            int fld = ((inst >> 5) << 2) & 0x0000FFFF;
-            if ((fld &  0x00008000) == 0) { //forward!  No "sign bit".
-                int64_t target = pctr+fld;
-                ForwardJumps.insert(target); //note that duplicates are eliminated!
-            }
+            int disp = extract_bits(inst, 18, 5) * sizeof(ArmInst);
+            if ((disp & 0x8000) == 0) //forward!  No "sign bit".
+                ForwardJumps.insert(pctr + disp); //note that duplicates are eliminated!
         }
         Lines.push_back(S);
 

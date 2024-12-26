@@ -466,6 +466,7 @@
 		5B8EDEF22D1A283900F07ED0 /* .h */ = {isa = PBXFileReference; lastKnownFileType = text; path = .h; sourceTree = "<group>"; };
 		5B8EDEF52D1CBDE300F07ED0 /* ldgDisassemble.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ldgDisassemble.hpp; sourceTree = "<group>"; };
 		5B8EDEF62D1CBDE300F07ED0 /* ldgDisassemble.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ldgDisassemble.cpp; sourceTree = "<group>"; };
+		5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisasUtil.h; sourceTree = "<group>"; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
 		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -852,6 +853,7 @@
 				5BFB49EB27AC7837006BE311 /* rcdcls.h */,
 				5B7B02AE2314DCCD000747A0 /* opsintel.h */,
 				5B4DF3AC2314C872001FDE00 /* tkov2.h */,
+				5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
