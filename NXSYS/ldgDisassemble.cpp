@@ -50,7 +50,7 @@ void ldgDisassemble(Relay* r) {
             int stat_index = extract_bits(inst, 20, 10);
             Relay** rptrarray = (Relay**)Compiled_Linkage_Sptr;
             Relay * r = rptrarray[stat_index];
-            S += r->RelaySym.PRep();
+            S += " " + r->RelaySym.PRep();
             if (r->State == 0)
                 S += "   (DROPPED)";
             else

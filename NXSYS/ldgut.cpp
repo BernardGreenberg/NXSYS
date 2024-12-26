@@ -832,33 +832,30 @@ int DrawRelayFromName (const char * rnm) {
 
 int DrawRelayFromRelay(Relay* r) {
     Sexpr s = r->RelaySym;
-    if (r->Flags & LF_CCExp) {
-c:	
-        ldgDisassemble(r);
-        return 1;
- 
-#if 0
-        MessageBox (0, "Compiled code (subr) relay.  Load interlocking "
-		    "from expr-code (.trk) and try again.", SSNAME,
-		    MB_OK|MB_ICONEXCLAMATION);
-
-	return 0;
-#endif
-    }
+    int tmr = 0;
     if (r->Flags & LF_Timer) {
-	Sexpr controlse = ZAppendRlysym(s);
-	Relay * control = controlse.u.r->rly;
-	if (control->exp == NULL) {
+        Sexpr controlse = ZAppendRlysym(s);
+        Relay * control = controlse.u.r->rly;
+        if (control->exp == nullptr) {
             MessageBox (0, "Simulator-provided relay, no autonomous code.", SSNAME,
                         MB_OK|MB_ICONEXCLAMATION);
             return 0;
         }
-	if (control->Flags & LF_CCExp)
-	    goto c;
-	DrawCircuit(r, control->exp, 1);
+        r = control;
+        tmr = 1;
+    }
+    if (r->Flags & LF_CCExp) {
+        ldgDisassemble(r);
+#if 0
+        MessageBox (0, "Compiled code (subr) relay.  Load interlocking "
+                    "from expr-code (.trk) and try again.", SSNAME,
+                    MB_OK|MB_ICONEXCLAMATION);
+        
+        return 0;
+#endif
     }
     else
-	DrawCircuit (r, r->exp, 0);
+        DrawCircuit (r, r->exp, tmr);
     return 1;
 }
 
