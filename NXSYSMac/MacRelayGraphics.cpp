@@ -58,9 +58,11 @@ void PlaceDrawing () {
     InvalidateRelayDrafter();
 }
 
+extern bool haveDisassembly;
 
 static void drAPIcommon () {
-    TryToPlaceRelayDrawing();
+    if (!haveDisassembly)
+        TryToPlaceRelayDrawing();
     InvalidateRelayDrafter();
     ShowWindow(getRelayDrafterHWND(true), SW_SHOWNORMAL);
 }
@@ -74,8 +76,7 @@ int RelayGraphicsLeftClick(int x, int y) {
 /* Called from miscellaneous UI functions that want to draw a relay-in-hand */
 void DrawRelayAPI(Relay* r) {
     DrawRelayFromRelay(r);
-    if ((r->Flags & LF_CCExp) == 0) // already complained
-        drAPIcommon();
+    drAPIcommon();
 }
 
 /* Called by demo system CIRCUIT command */

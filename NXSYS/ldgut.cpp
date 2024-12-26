@@ -12,6 +12,8 @@ class Relay;
 #include <string>
 #include <vector>
 
+#include "ldgDisassemble.hpp"
+
 extern LNode ONE;
 extern LNode ZERO;
 extern HWND G_mainwindow;
@@ -94,6 +96,7 @@ void DrawingSetPageSize (int width, int height, int canonm, int flags) {
     DNCellH = 2*NCellH;
     for (auto d : Drawings)
 	d->PlaceOnPage();
+    InitLdgDisassembly();
 }
 
 
@@ -770,6 +773,8 @@ void Drawing::PlaceOnPage () {
 }
 
 void RenderRelayPage (HDC dc) {
+    if (haveDisassembly)
+        ldgDisassembleDraw(dc);
     for (auto d : Drawings)
 	d->root->Draw(dc, *d);
 }
@@ -806,6 +811,7 @@ void CleanUpDrawing () {
     delete Darray;
     Parray = Darray = NULL;
     ClearRelayIndex();
+    InitLdgDisassembly();
 }
 
 
@@ -827,10 +833,17 @@ int DrawRelayFromName (const char * rnm) {
 int DrawRelayFromRelay(Relay* r) {
     Sexpr s = r->RelaySym;
     if (r->Flags & LF_CCExp) {
-c:	MessageBox (0, "Compiled code (subr) relay.  Load interlocking "
+c:	
+        ldgDisassemble(r);
+        return 1;
+ 
+#if 0
+        MessageBox (0, "Compiled code (subr) relay.  Load interlocking "
 		    "from expr-code (.trk) and try again.", SSNAME,
 		    MB_OK|MB_ICONEXCLAMATION);
+
 	return 0;
+#endif
     }
     if (r->Flags & LF_Timer) {
 	Sexpr controlse = ZAppendRlysym(s);
@@ -915,6 +928,8 @@ void ClearRelayGraphics() {
 	}
     }
     Drawings.clear();
+    if (haveDisassembly)
+        InitLdgDisassembly();
     delete Parray;
     Parray = NULL;
 }

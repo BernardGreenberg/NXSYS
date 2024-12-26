@@ -96,6 +96,8 @@
 		5B8EDEE82D11B20200F07ED0 /* DumpTxt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */; };
 		5B8EDEED2D14BEF800F07ED0 /* ReadFASL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */; };
 		5B8EDEF12D15EA1100F07ED0 /* genarm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDEF02D15EA0600F07ED0 /* genarm.cpp */; };
+		5B8EDEF72D1CBDE300F07ED0 /* ldgDisassemble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDEF62D1CBDE300F07ED0 /* ldgDisassemble.cpp */; };
+		5B8EDEF82D1CD1F000F07ED0 /* DumpTxt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */; };
 		5B8FCBE9284B6D6100855897 /* HelpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBE8284B6D6100855897 /* HelpIcon.png */; };
 		5B8FCBEB284B6D9E00855897 /* HelpIcon.pxd in Resources */ = {isa = PBXBuildFile; fileRef = 5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */; };
 		5BA6F72819CC61CC002551F7 /* Help.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B47F34319AE70AB00CBB80A /* Help.xib */; };
@@ -461,6 +463,9 @@
 		5B8EDEE92D1216E200F07ED0 /* RCArm64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCArm64.h; sourceTree = "<group>"; };
 		5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ReadFASL.cpp; sourceTree = "<group>"; };
 		5B8EDEF02D15EA0600F07ED0 /* genarm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = genarm.cpp; sourceTree = "<group>"; };
+		5B8EDEF22D1A283900F07ED0 /* .h */ = {isa = PBXFileReference; lastKnownFileType = text; path = .h; sourceTree = "<group>"; };
+		5B8EDEF52D1CBDE300F07ED0 /* ldgDisassemble.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ldgDisassemble.hpp; sourceTree = "<group>"; };
+		5B8EDEF62D1CBDE300F07ED0 /* ldgDisassemble.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ldgDisassemble.cpp; sourceTree = "<group>"; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
 		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -938,6 +943,7 @@
 		5B5AE6632311763800348612 /* V2 Headers */ = {
 			isa = PBXGroup;
 			children = (
+				5B8EDEF52D1CBDE300F07ED0 /* ldgDisassemble.hpp */,
 				5BABBE6D27B7F4F300AED491 /* MessageBox.h */,
 				5BABBE6E27B7F4F300AED491 /* NXSYSMinMax.h */,
 				5BFB4A0127ADD738006BE311 /* xtgload.h */,
@@ -1464,6 +1470,7 @@
 				5BF062EE199FA8A4008CDCA0 /* V1V2Compat */,
 				5BF0630319A028A8008CDCA0 /* fullsig.cpp */,
 				5BF06F4019A0C727008CDCA0 /* ldgut.cpp */,
+				5B8EDEF62D1CBDE300F07ED0 /* ldgDisassemble.cpp */,
 				5BF062C8199E73F1008CDCA0 /* lspmacro.cpp */,
 				5BF06F4419A0D171008CDCA0 /* lispmath.cpp */,
 				5BF062DA199EE3E7008CDCA0 /* nxgo.cpp */,
@@ -1510,6 +1517,7 @@
 		5BF062EE199FA8A4008CDCA0 /* V1V2Compat */ = {
 			isa = PBXGroup;
 			children = (
+				5B8EDEF22D1A283900F07ED0 /* .h */,
 				5BF06F3C19A0395B008CDCA0 /* demo.cpp */,
 				5B5AE616230C57B300348612 /* RelayLispSubstrate.h */,
 				5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */,
@@ -2009,6 +2017,7 @@
 				5BF06F3F19A03E4E008CDCA0 /* swkey.cpp in Sources */,
 				5BF062D7199EDAAB008CDCA0 /* signal.cpp in Sources */,
 				5B5AE614230C4C5400348612 /* RelayLispSubstrate.cpp in Sources */,
+				5B8EDEF82D1CD1F000F07ED0 /* DumpTxt.cpp in Sources */,
 				5BB5802D27C3D3CA00FB0ED5 /* InterlockingLibrary.cpp in Sources */,
 				5BC911C019DEE5EA006C590E /* Preferences.mm in Sources */,
 				5BF06F5D19A12727008CDCA0 /* MacRelayGraphics.cpp in Sources */,
@@ -2035,6 +2044,7 @@
 				5BABB8A119A8EB9900ECA09A /* MacFullSignals.mm in Sources */,
 				5B50EE4719BA549B004CAABE /* TrainDlgController.mm in Sources */,
 				5BF06F4519A0D171008CDCA0 /* lispmath.cpp in Sources */,
+				5B8EDEF72D1CBDE300F07ED0 /* ldgDisassemble.cpp in Sources */,
 				5BF062DB199EE3E7008CDCA0 /* nxgo.cpp in Sources */,
 				5BE49432199D0B2D007BD6BF /* readsexp.cpp in Sources */,
 				5B2B336923021CDF004007A9 /* STLExtensions.cpp in Sources */,

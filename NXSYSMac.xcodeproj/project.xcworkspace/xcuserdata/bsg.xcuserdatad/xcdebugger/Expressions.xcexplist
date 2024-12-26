@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "outinst_raw_arm:genarm.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "Pctr">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "GooseRelay:relays.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "outjmp:rlycomp.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "FixupFixup:rlycomp.cpp">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
