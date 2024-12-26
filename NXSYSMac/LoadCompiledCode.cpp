@@ -49,7 +49,7 @@ vector<Relay*>ESD;
 
 char** Compiled_Linkage_Sptr = nullptr;; //points to State cells.  Referenced by relay engine
 
-void ReadFaslForms(unsigned char * data);
+void ReadFaslForms(unsigned char * data, const char* fname);
 void CleanupObjectMemory(); //below
 
 static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path) {
@@ -221,7 +221,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
                 }
                 break;
             case TKOI_FRM:
-                ReadFaslForms((unsigned char *)rdp);
+                ReadFaslForms((unsigned char *)rdp, path);
                 break;
             default:
                 break;

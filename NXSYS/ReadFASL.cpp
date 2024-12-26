@@ -96,13 +96,13 @@ Sexpr FaslForm (PBYTE * pp) {
     return s;
 }
 
-void ReadFaslForms (PBYTE p) {
+void ReadFaslForms (PBYTE p, const char * fname) {
     for (;;) {
         Sexpr s = FaslForm (&p);
         if (s.type == Lisp::tNULL)
             return;
         else if (!(s == NIL)) {
-            int success = InterpretTopLevelForm (NULL, s);
+            int success = InterpretTopLevelForm (fname, s);
             dealloc_ncyclic_sexp (s);
             if (!success)
                 break;
