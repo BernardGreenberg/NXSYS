@@ -14,7 +14,7 @@ interpretive evaluation of Lisp expressions of logic, and a considerable amount 
 obviated.  Interestingly, the compiled code files seem 30 to 50 percent *larger* that the source code that produced it. One can see
 a typical logic term takes about 7 or 8 bytes, e.g., "561RWZ " (including the space), while any logic term on arm4 takes three
 instructions (each of which is 4 bytes), hence 12 bytes.  x86 code is considerably more space-efficient, but arm4 gains speed and
-lookahead by this move.
+lookahead by this choice.
 
 With compiled code, it is more difficult to debug interlockings, as there are no more circuits to be drawn or seen, but we have a
 partial solution for that.  When the simulator is asked to draw a relay which is implemented by compiled code, it now produces,
@@ -25,13 +25,10 @@ It has been tested with Progman St., Atlantic Avenue, and IRT 240th St, which is
 repository, but no built (Mac) application has been uploaded to my site yet.
 
 Either Mac build will offer to load **.tko** compiled objects, but the Intel Mac build will complain that they were (of necessity)
-compiled for the wrong architecture, and go no further.  (The executable is "universal" and supplies its corresponding "personality"
-on either architecture.
+compiled for the wrong architecture, and go no further.  (The Mac app executables are "universal", supplying their corresponding "personality" on either (Mac) architecture).
 
 There is a new console application, **DumpTko**, which can be used to inspect the sections of a compiled object, including the **TXT**
-section, which contains the machine code (the others are needed symbol dictionaries and so forth).  Ask it for its help info. 
-The **DumpTko** listings are superior ton those produced by the compiler itself, because the latter operates in one pass, and forward
-branches are incompletely compiled until their targets are found, and appear so in the listing, with "fixups" later down
+section, which contains the machine code (the others are needed symbol dictionaries, identification, and so forth).  Ask it for its help info. The **DumpTko** listings are superior to those produced by the compiler itself, because the latter operates in one pass, and forward branches are incompletely compiled until their targets are found, and appear so in the listing, with "fixups" later down
 the assembly.  **DumpTko** knows exactly what things are referenced (its disassembly skills are limited to the operations
 emitted by the compiler).
 
