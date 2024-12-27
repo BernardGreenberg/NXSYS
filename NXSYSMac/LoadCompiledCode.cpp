@@ -30,7 +30,8 @@
 
 #include <string>
 #include <vector>
-using std::vector, std::string;
+#include <unordered_map>
+using std::vector, std::string, std::unordered_map;
 
 #ifdef NXSYSMac
 #include <sys/mman.h>
@@ -43,9 +44,12 @@ static size_t CodeSize = 0;
 static const char * RnamesTexts = nullptr;
 static const short * RnamesTextPtrs = nullptr;
 static vector<string>RTypeNames;
+static unordered_map<Relay*, unsigned int>RelayFunctionLengths;
 
 vector<string>FASLAtsyms;  //referenced by FASL decoder
 vector<Relay*>ESD;
+
+
 
 char** Compiled_Linkage_Sptr = nullptr;; //points to State cells.  Referenced by relay engine
 
@@ -146,7 +150,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
                 } else {
                     // Fallback on earlier versions
                 } // Turn off so it is RW- (Apple only)
-                memcpy(CodeText, rdp, chp->length_of_block);
+                memcpy(CodeText, rdp, code_bytes);
                 if (__builtin_available(macOS 11.0, *)) {
                     pthread_jit_write_protect_np(1);
                 } else {
@@ -231,15 +235,28 @@ bool LoadRelayObjectFile(const char*path, const char*) {
     }
     RnamesTexts = nullptr; //points into vector
     RnamesTextPtrs = nullptr; //ditto
+    
+    for (auto i = 0; i < ISD.size(); i++) {
+        Relay* r = ISD[i];
+        uint64_t next = (i == (ISD.size() - 1)) ? (uint64_t)((unsigned char*)CodeText + CodeSize) : (uint64_t)(ISD[i+1]->exp);
+        int len = (int)(next - (uint64_t)(r->exp));
+        RelayFunctionLengths[r] = len;
+    }
     return true;
 }
 
+int GetRelayFunctionLength(Relay* r) {
+    if(!RelayFunctionLengths.count(r))
+        return -1;
+    return RelayFunctionLengths[r];
+}
 
 void CleanupObjectMemory() {
     RnamesTexts = nullptr;
     RnamesTextPtrs = nullptr;
     FASLAtsyms.clear();
     RTypeNames.clear();
+    RelayFunctionLengths.clear();
     ESD.clear();
     /* dum vivimus speramus */
 #if NXSYSMac

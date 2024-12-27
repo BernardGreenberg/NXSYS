@@ -17,5 +17,5 @@ void InitLdgDisassembly();
 void ldgDisassemble(Relay* r);
 void ldgDisassembleDraw(HDC dc);
 
-
+int GetRelayFunctionLength(Relay* r);
 #endif /* ldgDisassemble_hpp */

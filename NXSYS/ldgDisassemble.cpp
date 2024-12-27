@@ -13,8 +13,9 @@
 #include "STLExtensions.h"
 
 #include "windows.h"
+#include "DisasUtil.h" // must precede next one
 #include "ldgDisassemble.hpp"
-#include "DisasUtil.h"
+
 #include "relays.h"
 #include "cccint.h"
 
@@ -36,7 +37,7 @@ struct RelayUpdateRecord {
 bool haveDisassembly = false; /* globally addressible */
 static int Top = 0;
 static vector<string> Lines;
-static set<LPCTR> ForwardJumps;
+
 static vector<TbzUpdateRecord> UpdateSchedule;
 static vector<RelayUpdateRecord>ShownRelays;
 
@@ -44,7 +45,6 @@ void InitLdgDisassembly() {
     Lines.clear();
     UpdateSchedule.clear();
     ShownRelays.clear();
-    ForwardJumps.clear();
     haveDisassembly = false;
     Top = 0;
 }
@@ -73,40 +73,29 @@ static string GenerateUpdatableLine(LPCTR pctr, bool record) {
     return S;
 }
 
-string GenerateHeaderLine(Relay * r, bool record) {
+string GenerateHeaderLine(Relay * r, int lenb, bool record) {
     if (record)
         ShownRelays.emplace_back(r, Lines.size());
-    return (string(" ") + r->RelaySym.PRep() + ":          (compiled relay)   " + InterpretState(r));
+    int lenw = lenb / sizeof(ArmInst);
+    return (string(" ") + r->RelaySym.PRep() + ":          (compiled relay)   " +
+            FormatString(" length %d(%d wds) = 0x%x(0x%02x) ", lenb, lenw, lenb, lenw) +
+            InterpretState(r));
 }
 
+
+
 void ldgDisassemble(Relay* r) {
-    ForwardJumps.clear();
+    int lenb = GetRelayFunctionLength(r);
+    assert(lenb >= 0);
+    int lenw = lenb/sizeof(ArmInst);
     haveDisassembly = true;
-    Lines.push_back(GenerateHeaderLine(r, true));
+    Lines.push_back(GenerateHeaderLine(r, lenb, true));
     unsigned char * p = (unsigned char*) (r->exp);
-    /* We stop when we find a RET with no forward jumps pending. */
-    for (int i = 0; i < 300; i++ ){
+
+    for (int i = 0; i < lenw; i++ ){
         LPCTR pctr = (LPCTR)p;
-        ArmInst inst = *((ArmInst*)p);
-        unsigned char opcode = TOPBYTE(inst);
-        string S = GenerateUpdatableLine(pctr, true);
-        Lines.push_back(S);
-
-        /* Maintain the finding-end-of-relay/function heuristic ... */
-        if ((opcode == TOPBYTE(ARM::tbz)) || (opcode == TOPBYTE(ARM::tbnz))) {
-            int disp = extract_bits(inst, 18, 5) * sizeof(ArmInst);
-            if ((disp & 0x8000) == 0) //forward!  No "sign bit".
-                ForwardJumps.insert(pctr + disp); //note that duplicates are eliminated!
-        }
-        /* a RET is not really the end of function unless there are no pending forward jumps*/
-        else if (opcode == TOPBYTE(ARM::ret) && ForwardJumps.size() == 0) {
-            break;
-        }
-
-        if (ForwardJumps.count(pctr))
-            ForwardJumps.erase(pctr);
-
-        p += 4;
+        Lines.push_back(GenerateUpdatableLine(pctr, true));
+        p += sizeof(ArmInst);
     }
 }
 
@@ -140,7 +129,9 @@ void ldgDisassembleDraw(HDC dc) {
     ensureFont();
     SelectObject(dc, Font);
     for (const auto& e : ShownRelays)
-        Lines[e.lineIndex] = GenerateHeaderLine(e.relay, false);
+        Lines[e.lineIndex] = GenerateHeaderLine(e.relay,
+                                                GetRelayFunctionLength(e.relay),
+                                                false);
     for (const auto& e : UpdateSchedule)
         Lines[e.lineIndex] = GenerateUpdatableLine(e.pctr, false);
 
