@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <vector>
 
-/* stl'ed 26 Dec 2026 */
+/* stl'ed 26 Dec 2024 */
 typedef  struct _TKO_VERSION_2_COMPONENT_HEADER COMPHDR;
 
 
@@ -78,12 +78,12 @@ static void Write_Fixup_Table (FILE* f, TKO_INFO &inf) {
     }
 }
 
-static void RegisterLispRelayID (int rlid) {
-    if (type_translate_table.count(rlid))
+static void RegisterLispTypeID (int type_id) {
+    if (type_translate_table.count(type_id))
 	return; /* it's already "registered" */
     int x = RLTypes++;
-    type_translate_table[rlid] = x;
-    const char * s = redeemRlsymId (rlid);
+    type_translate_table[type_id] = x;
+    const char * s = redeemRlsymId (type_id);
     type_name_table.push_back(s);
     RTypeHeapSize+= strlen(s) + 1;
     assert(RLTypes == type_name_table.size());
@@ -93,9 +93,9 @@ static void Compute_Relay_Types (TKO_INFO& inf) {
     type_translate_table.clear();
     type_name_table.clear();
     for (int i = 0; i < inf.isd_count;i++)
-	RegisterLispRelayID (inf.Isd[i].sym->type);
+	RegisterLispTypeID (inf.Isd[i].sym->type);
     for (int i = 0; i < inf.esd_count;i++)
-	RegisterLispRelayID (inf.Esd[i]->type);
+	RegisterLispTypeID (inf.Esd[i]->type);
 }
 
 static void Write_Relay_Types (FILE* f) {
