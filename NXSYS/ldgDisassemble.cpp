@@ -23,13 +23,13 @@
 using std::vector, std::string, std::set;
 
 struct TbzUpdateRecord {
-    TbzUpdateRecord(LPCTR _L, int _index) {pctr = _L, lineIndex = _index;}
+    TbzUpdateRecord(LPCTR _L, int _index) {pctr = _L; lineIndex = _index;}
     LPCTR  pctr;
     int    lineIndex;
 };
 
 struct RelayUpdateRecord {
-    RelayUpdateRecord(Relay* _r, int _index) {relay = _r, lineIndex = _index;}
+    RelayUpdateRecord(Relay* _r, int _index) {relay = _r; lineIndex = _index;}
     Relay*  relay;
     int    lineIndex;
 };
