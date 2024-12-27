@@ -12,13 +12,11 @@
 #include <vector>
 
 /* stl'ed 26 Dec 2024 */
+
 typedef  struct _TKO_VERSION_2_COMPONENT_HEADER COMPHDR;
 
-
-static std::unordered_map<int,int> type_translate_table;
-static std::vector <const char *>type_name_table;
-static int RLTypes = 0;
-static unsigned int RTypeHeapSize = 0;
+static std::unordered_map<int, int> TypeMap; /* mapping needed in WriteRlysym, not dicts! */
+static std::string NameHeap;
 
 static void Write_Header (FILE* f, TKO_INFO& inf) {
     struct _TKO_VERSION_2_HEADER h;
@@ -79,19 +77,20 @@ static void Write_Fixup_Table (FILE* f, TKO_INFO &inf) {
 }
 
 static void RegisterLispTypeID (int type_id) {
-    if (type_translate_table.count(type_id))
+    if (TypeMap.count(type_id))
 	return; /* it's already "registered" */
-    int x = RLTypes++;
-    type_translate_table[type_id] = x;
+
+    /* It's not a linear array, but the size() will still equal the index
+       in the linear arrays in the object file. */
+
+    TypeMap[type_id] = (int)TypeMap.size(); /* trce trce trce */
     const char * s = redeemRlsymId (type_id);
-    type_name_table.push_back(s);
-    RTypeHeapSize+= strlen(s) + 1;
-    assert(RLTypes == type_name_table.size());
+    NameHeap.insert(NameHeap.size(), s, strlen(s) + 1);
 }
 
 static void Compute_Relay_Types (TKO_INFO& inf) {
-    type_translate_table.clear();
-    type_name_table.clear();
+    TypeMap.clear();
+    NameHeap.clear();
     for (int i = 0; i < inf.isd_count;i++)
 	RegisterLispTypeID (inf.Isd[i].sym->type);
     for (int i = 0; i < inf.esd_count;i++)
@@ -101,30 +100,28 @@ static void Compute_Relay_Types (TKO_INFO& inf) {
 static void Write_Relay_Types (FILE* f) {
     COMPHDR h;
     h.compid = TKOI_RTT;
-    h.number_of_items = RLTypes;
+    h.number_of_items = (int)TypeMap.size();
     h.length_of_item = 1;
-    h.length_of_block = RTypeHeapSize;
+    h.length_of_block = (int)NameHeap.size();
     fwrite (&h, 1, sizeof(h), f);
-    for (int i = 0; i < RLTypes; i++) {
-	const char * s = type_name_table [i];
-	fwrite (s, 1, strlen(s)+1, f);
-    }
+    fwrite (NameHeap.data(), 1, NameHeap.size(), f);
+
     h.compid = TKOI_RTD;
-    h.number_of_items = RLTypes;
+    /* number_of_items   keep same! */
     h.length_of_item = sizeof(short);
-    h.length_of_block = RLTypes*h.length_of_item;
+    h.length_of_block = h.number_of_items * h.length_of_item;
     fwrite (&h, 1, sizeof(h), f);
     short off = 0;
-    for (int i = 0; i < RLTypes; i++) {
+    for (int i = 0; i < h.number_of_items; i++) {
 	fwrite (&off, sizeof(short), 1, f);
-	off += strlen (type_name_table [i]) + 1;
+	off += strlen (NameHeap.data()+off) + 1;
     }
 }
 
 static void WriteRlysym (FILE* f, Rlysym* r, unsigned int data) {
     TKO_DEFBLOCK b;    
     b.n = r->n;
-    b.type = type_translate_table [r->type];
+    b.type = TypeMap [r->type];
     b.data = data;
     fwrite (&b, sizeof(b), 1, f);
 }
