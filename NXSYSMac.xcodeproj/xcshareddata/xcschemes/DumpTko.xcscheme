@@ -79,7 +79,11 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/users/bsg/hax/arm64/Progman.tko"
+            argument = "~/XcodeProjects/NX2/Interlockings/irt240/irt.240tl.trk"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/users/bsg/hax/arm64/irt240.tko"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

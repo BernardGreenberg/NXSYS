@@ -11,12 +11,12 @@
 #include <unordered_map>
 #include <vector>
 
+/* stl'ed 26 Dec 2026 */
 typedef  struct _TKO_VERSION_2_COMPONENT_HEADER COMPHDR;
 
-const int N_RLTYPES = 100;
-static int type_translate_table[N_RLTYPES];
-//static int rltypet[N_RLTYPES];
-static const char *type_name_table[N_RLTYPES];
+
+static std::unordered_map<int,int> type_translate_table;
+static std::vector <const char *>type_name_table;
 static int RLTypes = 0;
 static unsigned int RTypeHeapSize = 0;
 
@@ -79,20 +79,19 @@ static void Write_Fixup_Table (FILE* f, TKO_INFO &inf) {
 }
 
 static void RegisterLispRelayID (int rlid) {
-    if (type_translate_table[rlid] >= 0)
-	return;
-    if (RLTypes >= N_RLTYPES)
-	RC_error (1, "Object Relay Type overflow.");
+    if (type_translate_table.count(rlid))
+	return; /* it's already "registered" */
     int x = RLTypes++;
     type_translate_table[rlid] = x;
     const char * s = redeemRlsymId (rlid);
-    type_name_table [x] = s;
+    type_name_table.push_back(s);
     RTypeHeapSize+= strlen(s) + 1;
+    assert(RLTypes == type_name_table.size());
 }
 
 static void Compute_Relay_Types (TKO_INFO& inf) {
-    for (int i = 0; i < N_RLTYPES; i++)
-	type_translate_table[i] = -1;
+    type_translate_table.clear();
+    type_name_table.clear();
     for (int i = 0; i < inf.isd_count;i++)
 	RegisterLispRelayID (inf.Isd[i].sym->type);
     for (int i = 0; i < inf.esd_count;i++)

@@ -62,7 +62,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-Fo:./xxx.obj"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-arch:x86"
@@ -74,10 +74,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-Fl:/Users/bsg/hax/arm64/xxxarm.list"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-Fo:/Users/bsg/hax/arm64/xxxarm.tko"
+            argument = "-Fo:/Users/bsg/hax/arm64/irt240.tko"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -85,7 +85,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "$(PROJECT_DIR)/Interlockings/Progman/Progman.trk"
+            argument = "/Users/bsg/XcodeProjects/NX2/Interlockings/irt240/irt.240tl.trk"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

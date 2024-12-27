@@ -3,31 +3,21 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <memory.h>
+#include <vector>
 
 #include "lisp.h"
 #include "rcdcls.h"
 #include "FASL.H"
 
-#ifdef _WIN32
-const int FasdBufSize = 32000;
-#else
-const int FasdBufSize = 8000;
-#endif
+/* stupid arrays changed to STL 26 December 2024, about time ...*/
 
-static int FasdCount = 0;
-static unsigned char FasdBuffer[FasdBufSize];
-
-const int AtsymArraySize = 75;
-static int AtsymArrayCount = 0;
-static const char *AtsymArray[AtsymArraySize];
-static int FasdDid = 0;
-
+static std::vector<unsigned char> FasdBuffer;
+static std::vector<const char*> AtsymTable;
+static bool FasdDid = false;
 
 static void fasd_putb (int j) {
-    if (FasdCount >= FasdBufSize)
-	RC_error (1, "Relay compiler Fasd buffer overflow.\n");
-    FasdBuffer[FasdCount++] = j & 0xFF;
-    FasdDid = 1;
+    FasdBuffer.push_back (j & 0xFF);
+    FasdDid = true;
 }
 
 static void fasd_putw (int j) {
@@ -36,11 +26,11 @@ static void fasd_putw (int j) {
 }
     
 void fasd_init () {
-    FasdCount = 0;
-    AtsymArrayCount = 0;
+    FasdBuffer.clear();
+    AtsymTable.clear();
     fasd_putb (FASD_VERSION);
     fasd_putb (1);
-    FasdDid = 0;
+    FasdDid = false;
 }
 
 void fasd_finish() {
@@ -48,29 +38,14 @@ void fasd_finish() {
 	fasd_putb (FASD_EOF);
 }
 
-unsigned char * fasd_data (int & count) {
-    if (!FasdDid) {
-	count = 0;
-	return NULL;
-    }
-    count = FasdCount;
-    return FasdBuffer;
-}
-
-const char** fasd_atsym_data (int &fasd_atsym_count) {
-    fasd_atsym_count = AtsymArrayCount;
-    return AtsymArray;
-}
-
 static int FasdAtsymLookup (Sexpr s) {
-    for (int j = 0; j < AtsymArrayCount; j++)
-	if (s.u.a == AtsymArray[j])
-	    return j;
-    if (AtsymArrayCount >= AtsymArraySize)
-	RC_error (1, "Fasdump Atomic Symbol Heap meltdown.");
-    int x = AtsymArrayCount++;
-    AtsymArray[x] = s.u.a;
-    return x;
+    /* remember, the "Lisp reader" interns STRINGS, too.*/
+    for (size_t j = 0; j < AtsymTable.size(); j++)
+	if (s.u.a == AtsymTable[j])
+	    return (int)j;
+    /* else, make new entry */
+    AtsymTable.push_back(s.u.a);
+    return (int)AtsymTable.size() - 1;
 }
 
 
@@ -123,3 +98,19 @@ void fasd_form (Sexpr s) {
 	    RC_error (1, "Can't fasdump type %d objects yet.", s.type);
     }
 }
+
+/* external APIs */
+unsigned char * fasd_data (int & count) {
+    if (!FasdDid) {
+        count = 0;
+        return NULL;
+    }
+    count = (int)FasdBuffer.size();
+    return FasdBuffer.data();
+}
+
+const char** fasd_atsym_data (int &fasd_atsym_count) {
+    fasd_atsym_count = (int)AtsymTable.size();
+    return AtsymTable.data();
+}
+
