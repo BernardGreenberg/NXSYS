@@ -63,7 +63,7 @@ static string GenerateUpdatableLine(LPCTR pctr, bool record) {
     string S = prefix + DisassembleARM(inst, pctr);
     unsigned char opcode = TOPBYTE(inst);
     if (opcode == TOPBYTE(ARM::ldr_storage)) {
-        int stat_index = extract_bits(inst, 20, 10);
+        int stat_index = extract_bits(inst, 21, 10);
         Relay** rptrarray = (Relay**)Compiled_Linkage_Sptr;
         Relay * r = rptrarray[stat_index];
         S += " " + r->RelaySym.PRep() + "    " + InterpretState(r);

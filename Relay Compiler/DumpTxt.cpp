@@ -125,7 +125,7 @@ string DisassembleARM (ArmInst inst, LPCTR pctr) {
             
         case TOPBYTE(ARM::ldr_storage):
         {
-            int ptrdisp = extract_bits(inst, 20, 10) * 8;
+            int ptrdisp = extract_bits(inst, 21, 10) * 8;
             string s = FormatString("   ldr     x0, [x2, #0x%04x]   ;", ptrdisp);
             if (ESD.empty())
                 return s;
