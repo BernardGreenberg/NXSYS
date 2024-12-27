@@ -17,6 +17,7 @@ typedef  struct _TKO_VERSION_2_COMPONENT_HEADER COMPHDR;
 
 static std::unordered_map<int, int> TypeMap; /* mapping needed in WriteRlysym, not dicts! */
 static std::string NameHeap;
+static std::vector<short> NameHeapOffsets;
 
 static void Write_Header (FILE* f, TKO_INFO& inf) {
     struct _TKO_VERSION_2_HEADER h;
@@ -85,12 +86,14 @@ static void RegisterLispTypeID (int type_id) {
 
     TypeMap[type_id] = (int)TypeMap.size(); /* trce trce trce */
     const char * s = redeemRlsymId (type_id);
+    NameHeapOffsets.push_back((short)NameHeap.size());
     NameHeap.insert(NameHeap.size(), s, strlen(s) + 1);
 }
 
 static void Compute_Relay_Types (TKO_INFO& inf) {
     TypeMap.clear();
     NameHeap.clear();
+    NameHeapOffsets.clear();
     for (int i = 0; i < inf.isd_count;i++)
 	RegisterLispTypeID (inf.Isd[i].sym->type);
     for (int i = 0; i < inf.esd_count;i++)
@@ -111,11 +114,7 @@ static void Write_Relay_Types (FILE* f) {
     h.length_of_item = sizeof(short);
     h.length_of_block = h.number_of_items * h.length_of_item;
     fwrite (&h, 1, sizeof(h), f);
-    short off = 0;
-    for (int i = 0; i < h.number_of_items; i++) {
-	fwrite (&off, sizeof(short), 1, f);
-	off += strlen (NameHeap.data()+off) + 1;
-    }
+    fwrite (NameHeapOffsets.data(), sizeof(short), NameHeapOffsets.size(), f);
 }
 
 static void WriteRlysym (FILE* f, Rlysym* r, unsigned int data) {
