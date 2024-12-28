@@ -59,7 +59,7 @@ static string InterpretState(Relay * r) {
 static string GenerateUpdatableLine(LPCTR pctr, bool record) {
     ArmInst inst = *((ArmInst*)pctr);
 
-    string prefix = FormatString(" %l012X  %8X  ", pctr, inst);
+    string prefix = FormatString(" %012lX  %8X  ", pctr, inst);
     string S = prefix + DisassembleARM(inst, pctr);
     unsigned char opcode = TOPBYTE(inst);
     if (opcode == TOPBYTE(ARM::ldr_storage)) {
