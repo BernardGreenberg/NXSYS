@@ -26,9 +26,9 @@ enough for almost all relays (33 logic terms); the lack of a way to exceed this 
 
 Reading the object code is not rocket science ; each logic term generates a three-instruction sequence consisting of a **ldr** instruction which loads a pointer to a referenced relay into register **x0**, a **ldrb** instruction that loads into **x0** the "State" byte of that relay, and a **tbz** or **tbnz** instruction that tests **x0**'s low bit and branches or not as asked. It is quite easy to reconcile it with S-expression code (or its circuit image) from which it was compiled.
 
-    0000069ECAC4 F95BF840    ldr     x0, [x2, #0x37f0]        ; 357BNS  (DROPPED)
-    0000069ECAC8 39400000    ldrb    x0, [x0, #0]
-    0000069ECACC 37043320    tbnz    x0, #0, 0x1069E5130
+    0001069ECAC4 F95BF840    ldr     x0, [x2, #0x37f0]        ; 357BNS  (DROPPED)
+    0001069ECAC8 39400000    ldrb    x0, [x0, #0]
+    0001069ECACC 37043320    tbnz    x0, #0, 0x1069E5130
 
 *Ursus in mente* that **.tko**'s are code-containing files; the whole point is that the simulator executes machine instructions provided by them.  They are thus as corruptible and "dangerous" as any executable application, including the simulator, and must be treated with the same degree of caution and trust.  (It is not known if such activity is available on Windows; it once was, and stopped at one point.)
 
