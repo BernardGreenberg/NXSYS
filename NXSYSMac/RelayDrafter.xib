@@ -71,7 +71,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0nW-dv-77t" customClass="RelayDrafterView">
-                                    <rect key="frame" x="0.0" y="0.0" width="890" height="1680"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="890" height="4680"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
