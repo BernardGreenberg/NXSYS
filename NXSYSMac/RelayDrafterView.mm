@@ -97,3 +97,8 @@ void DrafterMakeScrollVisible (void* hwnd, int x, int  y, int h) {
     
     [view MakeScrollVisible:y];
 }
+
+void DraftViewScroll(NSView* vv, int pos) {
+    RelayDrafterView* rdv = (RelayDrafterView*) vv;
+    [rdv MakeScrollVisible:pos];
+}

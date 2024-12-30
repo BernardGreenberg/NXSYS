@@ -13,6 +13,7 @@
 
 void ClearRelayGraphics();
 void AskForAndDrawRelay(void*);
+void DraftViewScroll(NSView* view, int pos);
 
 static NSString* SourceLocatorScriptKey = @"SourceLocatorScript";
 @interface RelayDrafterController ()
@@ -62,6 +63,9 @@ NSString* savedSourceString = nullptr;
 -(IBAction)clear:(id)sender
 {
     ClearRelayGraphics();
+    /*Doesn't work*/
+    DraftViewScroll(_theView, 0);
+
     [_theView setNeedsDisplay:YES];
 }
 -(IBAction)drawNew:(id)sender
