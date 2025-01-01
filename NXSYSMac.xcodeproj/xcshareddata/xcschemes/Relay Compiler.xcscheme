@@ -65,19 +65,19 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-arch:x86"
-            isEnabled = "NO">
+            argument = "-arch:X86"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-arch:arm64"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-Fl:/Users/bsg/hax/arm64/xxxarm.list"
-            isEnabled = "NO">
+            argument = "-Fl:/Users/bsg/hax/arm64/xxxarm.x86.list"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-Fo:/Users/bsg/hax/arm64/irt240.tko"
+            argument = "-Fo:/Users/bsg/hax/arm64/irt240.x86.tko"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

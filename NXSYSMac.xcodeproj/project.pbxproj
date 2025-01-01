@@ -466,6 +466,7 @@
 		5B8EDEF52D1CBDE300F07ED0 /* ldgDisassemble.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ldgDisassemble.hpp; sourceTree = "<group>"; };
 		5B8EDEF62D1CBDE300F07ED0 /* ldgDisassemble.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ldgDisassemble.cpp; sourceTree = "<group>"; };
 		5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisasUtil.h; sourceTree = "<group>"; };
+		5B8EDEFC2D258AF100F07ED0 /* TASKS.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TASKS.txt; sourceTree = "<group>"; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
 		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -831,6 +832,7 @@
 		5B4DF39A2314ABB5001FDE00 /* Relay Compiler */ = {
 			isa = PBXGroup;
 			children = (
+				5B8EDEFC2D258AF100F07ED0 /* TASKS.txt */,
 				5B4DF3A22314ADDC001FDE00 /* Headers */,
 				5B4DF3A02314AC24001FDE00 /* rlycomp.cpp */,
 				5B8EDEF02D15EA0600F07ED0 /* genarm.cpp */,

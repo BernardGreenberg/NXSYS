@@ -60,8 +60,9 @@ public:
     string CanonToken;
     vector<string> Synonyms;
     int Bits;
-    enum OS {WINDOWS, MAC} Os;
+    enum OS {WINDOWS, MAC, UNIVERSAL} Os;
     int RelayBlockSize;
+    const char * Description;
 
     static vector<Architecture*> alist;
     bool IsMe(const string& s) {
@@ -72,10 +73,6 @@ public:
             if (ts == upc)
                 return true;
         return false;
-    }
-    string DescString() {
-        string osname = (Os == MAC) ? "Mac" : "Windows";
-        return osname + " (" + std::to_string(Bits) + " bits, " + CanonToken + ")";
     }
     static Architecture* find(const string item) {
         for (auto ap : alist)
@@ -96,11 +93,16 @@ public:
 };
 
 
-static Architecture Intel16 {"x86-16", {"8086"}, 16, Architecture::OS::WINDOWS, 28};
-static Architecture Intel32 {"x86", {"INTEL X86", "X86", "X86-32"}, 32, Architecture::OS::WINDOWS, 32};
-static Architecture macARM {"arm64", {"ARM64"}, 64, Architecture::OS::MAC, 8};
+static Architecture Intel16 {"X86-16", {"8086"}, 16, Architecture::OS::WINDOWS, 28,
+"Intel 8086 on MS-Windows"};
+static Architecture Intel32 {"X86-32", {"80386", "IA32"}, 32, Architecture::OS::WINDOWS, 32,
+"Intel 32-bit 80x86 on MS-Windows"};
+static Architecture macARM {"ARM64", {"ARM64"}, 64, Architecture::OS::MAC, 8,
+"64-bit Apple M1/...Mn on macOS"};
+static Architecture Intel64 {"X86-64", {"X86"}, 64, Architecture::OS::UNIVERSAL, 8,
+"64-bit Intel X86 on Apple macOS or MS-Windows (compatible)"};
 
-vector<Architecture*> Architecture::alist {&Intel32, &Intel16, &macARM};
+vector<Architecture*> Architecture::alist {&Intel32, &Intel16, &macARM, &Intel64};
 
 static Architecture* Arch;
 #define IS_ARM64 (macARM == Arch)
@@ -108,7 +110,8 @@ static Architecture* Arch;
 #define COMPILER_VERSION 3
 #define COMPILER_COPYRIGHT "Copyright (c) Bernard S. Greenberg 1994, 1996, 2019, 2024"
 
-#define ENTRY_THUNK_NAME "_entry_thunk"
+#define WINDOWS_ENTRY_THUNK_NAME "_windows_entry_thunk"
+#define MAC_ENTRY_THUNK_NAME "_macos_entry_thunk"
 
 /* Variables that change value for architecture */
 #define SINGLE_WIDTH 1
@@ -120,7 +123,9 @@ ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int e
 void verify_arm_bitfield_zero(ArmInst inst, int start_bit, int end_bit, int shift_down, PCTR target);
 
 enum REG_X {X_AL = 0, X_CL, X_DL, X_BL, X_AH, X_CH, X_DY, X_BH, X_NONE,
-            X_EAX= 0, X_ECX,X_EDX,X_EBX,X_ESP,X_EBP,X_ESI,X_EDI};
+    X_EAX= 0, X_ECX,X_EDX,X_EBX,X_ESP, X_EBP,X_ESI,X_EDI,
+    X_RAX,  X_RCX, X_RDX, X_RBX,X_RSP, X_RBP,X_RSI, X_RDI,
+    X_R8, X_R9, X_R10, X_R11, X_R12, X_R13, X_R14, X_R15};
 enum OP_MOD {OPMOD_RPTR = 0, OPMOD_RP_DISP8, OPMOD_RP_DISPLONG, OPMOD_IMMED};
 enum OPREG16 {OR16_BXSI=0, OR16_BXDI, OR16_BPSI, OR16_BPDI,
 	    OR16_SI, OR16_DI, OR16_BP, OR16_BX, OR16_NONE};
@@ -132,10 +137,12 @@ enum REG_X   MAPMOD3216[] = {X_NONE, X_NONE, X_NONE, X_NONE,
 
 static struct OPDEF Ops[] INTEL_OP_INFO_DATA;
 
-const char *REG_NAMES[3][9]
+const char *REG_NAMES[3][24]
    =
     { {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di", "???"},
-      {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi", "???"},
+        {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi",
+            "rax", "rcx",  "rdx", "rbx", "rsp", "rbp", "rsi", "rdi",
+            "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15"},
       {"al", "cl", "dl", "bl", "ah", "dh", "ch", "bh", "???"}};
 
 static enum MACH_OP RetOp;
@@ -160,14 +167,13 @@ static vector<DepPair> DependentPairTable;
 static vector<struct Fixup> FixupTable;
 static vector<LabelEntry> LabelTable;
 
-static int TraceOpt = 0;
-static int CheckOpt = 0;
-static int ListOpt = 0;
+static bool TraceOpt = false;
+static bool CheckOpt = false;
+static bool ListOpt = false;
 static FILE *ListFile;
 static char Label_Pending[20] = {0};
 static Jtag RetCF, RetOne, RetZero;
 
-void CHECK();
 Sexpr read_sexp (FILE * f);
 
 DEFLSYM(AND);
@@ -391,21 +397,8 @@ again:
     list ("%s\t%s\n", opmnem, opd);
 }
 
-void CHECK() {
-#if 0
-    if (Code.size() >=0x8938) {
-        auto testptr = Code.data() + 0x8934;
-        auto wtestptr = (uint32_t*)testptr;
-        if (*wtestptr ==  0x360001C0 ){
-            printf("Pctr = %04x\n", Pctr);
-            printf ("trap\n");
-
-        }}
-#endif
-}
 
 void outbytes_raw (const char* opmnem, const char unsigned * bytes, int bytect, const char* opd) {
-    CHECK();
     if (ListOpt)
         OutputListingLine (opmnem, bytes, bytect, opd);
     unsigned long end = Pctr + bytect;
@@ -415,6 +408,9 @@ void outbytes_raw (const char* opmnem, const char unsigned * bytes, int bytect, 
     Pctr += bytect;
 }
 
+void outbytes_raw(const char* opmnem, const vector<unsigned char> bytes, const char* list_opd) {
+    outbytes_raw(opmnem, bytes.data(), (int)bytes.size(), list_opd);
+}
 
 int Outdata (int opd, int ct, unsigned char * b) {
     for (int x = ct; x > 0; x--) {
@@ -431,27 +427,27 @@ void FixupFixup (Fixup & F, PCTR pc) {
     }
     else if (F.width == FullWidth) {
         assert(!IS_ARM64);
-    d = pc-F.pc-FullWidth;
-    list (Arch->Bits == 32 ?
-          ";  FIXUP 32-bit %08X to %s = %08X, disp %08X\n"
-          : ";  FIXUP 16-bit %04X to %s = %04X, disp %04X\n",
-          F.pc, F.tag->lab, pc, d);
-    *((PCTR *) &Code[F.pc]) = d;
-    F.tag = NULL;
+        d = pc-F.pc-FullWidth;
+        list ((Arch->Bits >= 32) ? //64 significa 32...
+              ";  FIXUP 32-bit %08X to %s = %08X, disp %08X\n"
+              : ";  FIXUP 16-bit %04X to %s = %04X, disp %04X\n",
+              F.pc, F.tag->lab, pc, d);
+        *((PCTR *) &Code[F.pc]) = d;
+        F.tag = NULL;
     }
     else {
-    d = pc-F.pc-1;
-    Jtag& tag = *F.tag;
+        d = pc-F.pc-1;
+        Jtag& tag = *F.tag;
         list (";  FIXUP  8-bit %0*X to %s = %0*X, disp %02X\n",
               Ahex, F.pc, tag.lab, Ahex, pc, d);
-    if (disp_ok (pc, F.pc))
-        Code[F.pc] = d;
-    else {
-        RC_error (0, "Fixup overflow at 0x%0*X", Ahex, pc);
-        list (";*****Fixup overflow at 0x%0*X\n", Ahex, pc);
-    }
-    F.tag = NULL;
-    ComputeLowestFix8Unresolved();
+        if (disp_ok (pc, F.pc))
+            Code[F.pc] = d;
+        else {
+            RC_error (0, "Fixup overflow at 0x%0*X, d = 0x%X", Ahex, pc, d);
+            list (";*!*!*!*!*Fixup overflow at 0x%0*X d = 0x%X\n", Ahex, pc, d);
+        }
+        F.tag = NULL;
+        ComputeLowestFix8Unresolved();
     }
 }
 
@@ -460,12 +456,11 @@ void DefineTagPC (Jtag& tag) {
     tag.tramp_defined = 0;
     tag.have_pc = 1;
     Outtag (tag);
-    list(";****Defining %s as %06X\n", tag.lab, Pctr);
+    list("%s:    ;****Defining %s as %06X\n", tag.lab, tag.lab, Pctr);
     for (Fixup& F : FixupTable) {
-    if (&tag == F.tag)
-        FixupFixup (F, Pctr);
+        if (&tag == F.tag)
+            FixupFixup (F, Pctr);
     }
-    CHECK();
 }
 
 
@@ -705,7 +700,6 @@ top:
 
 
 void outinst (MACH_OP op, Sexpr s, PCTR opd) {
-    CHECK();
     std::string str;
     if (Arch->Bits < 64)
         check_fix8_overflows();
@@ -734,7 +728,6 @@ void outinst (MACH_OP op, Sexpr s, PCTR opd) {
 	    outinst_raw (RetOp, "", 0);
 	    Outtag (t);
 	}
-        CHECK();
 	return;
     }
     else if (s == ZRET || s == TRET) {
@@ -770,12 +763,9 @@ void outinst (MACH_OP op, Sexpr s, PCTR opd) {
 	    outinst_raw (RetOp, "", 0);
 	    Outtag (t);
 	}
-        CHECK();
 	return;
     }
-    CHECK();
     outinst_raw (op, str.c_str(), opd);
-    CHECK();
 }
 
 void TrampJump (MACH_OP op, Jtag& tag, int jumparound) {
@@ -828,14 +818,12 @@ dot:	    if (disp_ok (Pctr, tag.tramp_pc)) {
 	else;
     else if (tag.tramp_defined)
 	goto dot;
-    CHECK();
     if (!tag.have_pc && !tag.tramp_defined) {
 	outinst_raw (op, tag.lab, Pctr+1);
         if (IS_ARM64)
             RecordFixup (tag, Pctr - 4, 4);
         else
             RecordFixup (tag, Pctr - 1, SINGLE_WIDTH);
-        CHECK();
 	return;
     }
     TrampJump (op, tag, 1);
@@ -875,7 +863,6 @@ void CompileRlysym (Sexpr s, Ctxt * ctxt, int backf) {
     RecordDependent (RelayId(s));
     Jtag* tag = ctxt->tag;
     PCTR offset = RelayOffset(s);
-    CHECK();
     if (backf) {
 	switch (ctxt->op) {
 	    case CT_VAL:
@@ -911,7 +898,6 @@ void CompileRlysym (Sexpr s, Ctxt * ctxt, int backf) {
 	    outjmp (MOP_JNZ, *tag);
 	    break;
     }
-    CHECK();
     return;
 }
 
@@ -1098,17 +1084,18 @@ void CompileRelayDef (Sexpr s) {
 
 short get_relay_type_index(const char * name);
 
-void CompileEntryThunk () {
-
-    const char * name = ENTRY_THUNK_NAME;
+void DefineBogoThunkRelay (const char * name) {
     int rtx = get_relay_type_index (name); // flushed "noncanonical" case-sensitive stuff
     Rlysym * r = new Rlysym(0, rtx, NULL);
-
     Sexpr rly;
     rly.u.r = r;
     PushRelayDef (rly);
-
     list ("\n%s\tpublic\t%s\n%s%s:\n", Ltabs, name, Ltabs, name);
+}
+void CompileIA32EntryThunk () {
+
+    DefineBogoThunkRelay("_ENTRY_THUNK");
+
     outinst         (MOP_RPUSH,  NIL, X_EBP);
     outinst_general (MOP_LOADWD, 1,   X_EBP, X_ESP, 0, NULL);
     /* vc4 generated "sub esp,4" here: why? */
@@ -1123,6 +1110,28 @@ void CompileEntryThunk () {
     outinst         (MOP_RPOP,   NIL, X_EBX);
     outinst         (MOP_LEAVE,  NIL, 0);
     outinst         (MOP_RRET,   NIL, 8);
+}
+
+
+void CompileMacX86EntryThunk() {
+    DefineBogoThunkRelay("_macos_entry_thunk");
+
+    outinst_general (MOP_LOADWD, 1,   X_R8, X_RDI, 0, NULL);
+    outinst         (MOP_LDRCXI32, NIL, 1);
+    outinst_general (MOP_CALLREG,0, (REG_X) 2, X_RSI, 12, "code_ptr");
+    outinst_general (MOP_SETNZ,  1,   X_RAX, X_AL, 0, NULL);
+    outinst_general (MOP_MOVZX64,1,   X_RAX, X_AL, 0, NULL);
+    outinst         (MOP_RET,   NIL, 0);
+}
+void CompileWindowsX86EntryThunk() {
+    DefineBogoThunkRelay("_windows_entry_thunk");
+
+    outinst_general (MOP_LOADWD, 1,   X_R8, X_RCX, 0, NULL);
+    outinst         (MOP_LDRCXI32, NIL, 1);
+    outinst_general (MOP_CALLREG,0, (REG_X) 2, X_RDX, 12, "code_ptr");
+    outinst_general (MOP_SETNZ,  1,   X_RAX, X_AL, 0, NULL);
+    outinst_general (MOP_MOVZX64,1,   X_RAX, X_AL, 0, NULL);
+    outinst         (MOP_RET,   NIL, 0);
 }
 
 
@@ -1301,7 +1310,11 @@ void CompileFile (FILE* f, const char * fname) {
 void CompileLayout (FILE* f, const char * fname) {
     InitRelayCompiler();
     if (Arch->Bits == 32)
-	CompileEntryThunk();
+	CompileIA32EntryThunk();
+    if (!IS_ARM64 && Arch->Bits == 64) {
+        CompileMacX86EntryThunk();
+        CompileWindowsX86EntryThunk();
+    }
     CompileFile (f, fname);
     list ("%s  end	\n", Ltabs);
 }
@@ -1384,7 +1397,7 @@ int main (int argc, char ** argv) {
 #if defined(__aarch64__) || defined(_M_ARM64)
     Arch = &macARM;
 #else
-    Arch = &Intel32;
+    Arch = &Intel64;
 #endif
     Arch->Bits = Arch->Bits;
     
@@ -1426,11 +1439,11 @@ int main (int argc, char ** argv) {
             arg[0] == '-') {
                 string argval= stoupper(arg+1);
                 if (argval == "L")
-                    ListOpt = 1;
+                    ListOpt = true;
                 else if (argval == "T")
-                    TraceOpt = 1;
+                    TraceOpt = true;
                 else if (argval == "C")
-                    CheckOpt = 1;
+                    CheckOpt = true;
                 else if (!strncmp(argval.c_str(), "FO:", 3)) {
                     if (arg[3] == '\0') {
                         fprintf (stderr, "Output pathname missing after /Fo:\n");
@@ -1444,7 +1457,7 @@ int main (int argc, char ** argv) {
                         goto usage;
                     }
                     lpath = arg+4;
-                    ListOpt = 1;
+                    ListOpt = true;
                 }
                 else if (argval.find("ARCH:") == 0) {
                     auto ap = Architecture::find(argval.substr(5));
@@ -1466,11 +1479,11 @@ int main (int argc, char ** argv) {
         goto usage;
     
     
-    printf ("Target architecture: %s\n", Arch->DescString().c_str());
+    printf ("Target architecture: %s\n", Arch->Description);
 
     RetOp = MOP_RET;
     Ltabs = (Arch->Bits == 16) ? "\t\t" : "\t\t\t";
-    FullWidth = Arch->Bits/8;
+    FullWidth = std::min(4, Arch->Bits/8);
     Ahex = std::min(Arch->Bits/4,8);
 
     string input_path = merge_ext(fpath, ".trk", false);
@@ -1489,7 +1502,7 @@ int main (int argc, char ** argv) {
             return 2;
 
     list ("; Compilation of %s at %s", fpath, asctime(tblock));
-    list (";  for architecture %s\n", Arch->DescString().c_str());
+    list (";  for %s\n", Arch->Description);
     list (";  by %s\n", compdesc.c_str());
     list (";  " COMPILER_COPYRIGHT  "\n");
     list (";  Bytes/Relay-linkage %d\n", Arch->RelayBlockSize);

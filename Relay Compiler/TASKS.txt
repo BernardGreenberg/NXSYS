@@ -1,0 +1,10 @@
+//
+//  TASKS.txt
+//  NXSYSMac
+//
+//  Created by Bernard Greenberg on 1/1/25.
+//  Copyright © 2025 BernardGreenberg. All rights reserved.
+//
+
+1/1/25  Fixup overflow problem - diagnose, design does not happen in arch:IA32
+1/1/25  
