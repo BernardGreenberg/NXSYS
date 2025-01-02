@@ -54,16 +54,25 @@ namespace fs = std::filesystem;
 #include "rcdcls.h"
 #include "RCArm64.h"
 #include "opsintel.h"
-
+enum OS {WINDOWS, MAC, UNIVERSAL};
 class Architecture {
 public:
+    Architecture (string ct, vector<string>syn, int bits, OS o, int rbs, const char* de) {
+        CanonToken = ct;
+        Synonyms = syn;
+        Bits = bits;
+        Os = o;
+        RelayBlockSize = rbs;
+        Description = de;
+        alist.push_back(this);
+    }
     string CanonToken;
     vector<string> Synonyms;
     int Bits;
-    enum OS {WINDOWS, MAC, UNIVERSAL} Os;
+    enum OS Os;
     int RelayBlockSize;
     const char * Description;
-
+    
     static vector<Architecture*> alist;
     bool IsMe(const string& s) {
         string upc = stoupper(s);
@@ -92,23 +101,24 @@ public:
     }
 };
 
+vector<Architecture*> Architecture::alist;
 
-static Architecture Intel16 {"X86-16", {"8086"}, 16, Architecture::OS::WINDOWS, 28,
+static Architecture Intel16 {"X86-16", {"8086"}, 16, OS::WINDOWS, 28,
 "Intel 8086 on MS-Windows"};
-static Architecture Intel32 {"X86-32", {"80386", "IA32"}, 32, Architecture::OS::WINDOWS, 32,
+static Architecture Intel32 {"X86-32", {"80386", "IA32"}, 32, OS::WINDOWS, 32,
 "Intel 32-bit 80x86 on MS-Windows"};
-static Architecture macARM {"ARM64", {"ARM64"}, 64, Architecture::OS::MAC, 8,
+static Architecture macARM {"ARM64", {"ARM64"}, 64, OS::MAC, 8,
 "64-bit Apple M1/...Mn on macOS"};
-static Architecture Intel64 {"X86-64", {"X86"}, 64, Architecture::OS::UNIVERSAL, 8,
+static Architecture Intel64 {"X86-64", {"X86"}, 64, OS::UNIVERSAL, 8,
 "64-bit Intel X86 on Apple macOS or MS-Windows (compatible)"};
 
-vector<Architecture*> Architecture::alist {&Intel32, &Intel16, &macARM, &Intel64};
+
 
 static Architecture* Arch;
 #define IS_ARM64 (macARM == Arch)
 
 #define COMPILER_VERSION 3
-#define COMPILER_COPYRIGHT "Copyright (c) Bernard S. Greenberg 1994, 1996, 2019, 2024"
+#define COMPILER_COPYRIGHT "Copyright (c) Bernard S. Greenberg 1994, 1996, 2019, 2024, 2025"
 
 #define WINDOWS_ENTRY_THUNK_NAME "_windows_entry_thunk"
 #define MAC_ENTRY_THUNK_NAME "_macos_entry_thunk"
@@ -421,30 +431,32 @@ int Outdata (int opd, int ct, unsigned char * b) {
 }
 
 void FixupFixup (Fixup & F, PCTR pc) {
-    int d;
     if (IS_ARM64) {
         ARM64FixupFixup(F, pc);
+        return;
     }
-    else if (F.width == FullWidth) {
+    int d = pc - F.pc - F.width;
+    if (F.width == FullWidth) {
         assert(!IS_ARM64);
-        d = pc-F.pc-FullWidth;
         list ((Arch->Bits >= 32) ? //64 significa 32...
               ";  FIXUP 32-bit %08X to %s = %08X, disp %08X\n"
               : ";  FIXUP 16-bit %04X to %s = %04X, disp %04X\n",
               F.pc, F.tag->lab, pc, d);
-        *((PCTR *) &Code[F.pc]) = d;
+        *((uint32_t *) &Code[F.pc]) = d;
         F.tag = NULL;
     }
     else {
-        d = pc-F.pc-1;
+        assert(F.width == 1);
         Jtag& tag = *F.tag;
         list (";  FIXUP  8-bit %0*X to %s = %0*X, disp %02X\n",
               Ahex, F.pc, tag.lab, Ahex, pc, d);
-        if (disp_ok (pc, F.pc))
-            Code[F.pc] = d;
+//        if (disp_ok (pc, F.pc))//  F this baloney
+        if ((d >= -128) && (d <= 127)) {
+            Code[F.pc] = (unsigned char) d;
+        }
         else {
-            RC_error (0, "Fixup overflow at 0x%0*X, d = 0x%X", Ahex, pc, d);
-            list (";*!*!*!*!*Fixup overflow at 0x%0*X d = 0x%X\n", Ahex, pc, d);
+            RC_error (0, "Fixup8 failure at 0x%0*X, d = 0x%X", Ahex, pc, d);
+            list (";*!*!*!*!*Fixup8 failure at 0x%0*X d = 0x%X\n", Ahex, pc, d);
         }
         F.tag = NULL;
         ComputeLowestFix8Unresolved();
@@ -783,7 +795,7 @@ void TrampJump (MACH_OP op, Jtag& tag, int jumparound) {
     strcpy (tag.tramp_lab, tramp.lab);
     tag.tramp_defined = 1;
     tag.tramp_pc = Pctr;
-    outinst_raw (MOP_JMPL, tag.lab, (Arch->Bits==32) ? 0xFFFFFFFF : 0xFFFF);
+    outinst_raw (MOP_JMPL, tag.lab, (Arch->Bits==16) ? 0xFFFF: 0xFFFFFFFF);
     RecordFixup (tag, Pctr - FullWidth, FullWidth);
     if (op != MOP_JMP && jumparound)
 	DefineTagPC (jump);
@@ -1399,7 +1411,6 @@ int main (int argc, char ** argv) {
 #else
     Arch = &Intel64;
 #endif
-    Arch->Bits = Arch->Bits;
     
     string opath;
     string lpath;
@@ -1411,7 +1422,6 @@ int main (int argc, char ** argv) {
 #if NXSYSMac
     fprintf(stdout, "MacOS clang++ implementation\n");
 #endif
-    
     
     if (argc < 2) {
         usage:
@@ -1475,9 +1485,11 @@ int main (int argc, char ** argv) {
         else fpath = arg;
         
     }
-    if (fpath == NULL)
+    if (fpath == NULL) {
+        fprintf(stderr, "No input pathname supplied.\n");
         goto usage;
-    
+    }
+
     
     printf ("Target architecture: %s\n", Arch->Description);
 
