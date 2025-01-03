@@ -8,6 +8,12 @@ typedef unsigned int RLID;
 typedef unsigned int PCTR;
 
 struct Jtag {
+    Jtag() {
+        pctr = tramp_pc = 0;
+        memset(lab, 0, sizeof(lab));
+        memset(tramp_lab, 0, sizeof(lab));
+        defined = tramp_pc = tramp_defined = false;
+    }
     PCTR pctr, tramp_pc;
     char lab[10];
     char tramp_lab[10];
@@ -89,7 +95,25 @@ RLID RelayId (Sexpr s);
 void list(const char *, ...);
 
 #include <vector>
-extern std::vector<unsigned char> Code;
 
+using CodeByte = unsigned char;
+
+class CodeVector : public std::vector<CodeByte> {
+    public:
+    CodeVector() {
+        reserve(12);
+    }
+    void Append(const std::vector<CodeByte> addendum) {
+        insert(end(), addendum.begin(), addendum.end());
+    }
+    void operator += (const std::vector<CodeByte> addendum) {
+        insert(end(), addendum.begin(), addendum.end());
+    }
+    void operator += (CodeByte c) {
+        push_back(c);
+    }
+};
+
+extern CodeVector Code;
 
 #endif

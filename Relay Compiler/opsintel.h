@@ -19,6 +19,7 @@ struct OPDEF {
 #define OPF_0F         0x0008
 #define OPF_32BIT      0x0010
 #define OPF_XMAGIC     0x0020
+#define OPF_48         0x0040
 
 #define INTEL_OP_INFO_DATA { \
     {"and",	0x24,	OPF_8BIT}, \
@@ -45,7 +46,7 @@ struct OPDEF {
     {"ret",	0xC2,	0}, 		/* MOP_RRET */\
     {"setnz",   0x95,   OPF_0F|OPF_8BIT|OPF_NOREGOP}, \
     {"mov",     0xB9,   OPF_32BIT},     /* MOP_LDRCXI32 */ \
-    {"movzx",   0x48,   OPF_XMAGIC},    /* MOP_MOVZX64 */ \
+    {"movzx",   0xB6,   OPF_XMAGIC | OPF_48},    /* MOP_MOVZX64 */ \
     {"callreg", 0xFF,   OPF_XMAGIC}  \
 }
 

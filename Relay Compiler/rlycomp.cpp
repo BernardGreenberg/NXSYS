@@ -134,7 +134,7 @@ void verify_arm_bitfield_zero(ArmInst inst, int start_bit, int end_bit, int shif
 
 enum REG_X {X_AL = 0, X_CL, X_DL, X_BL, X_AH, X_CH, X_DY, X_BH, X_NONE,
     X_EAX= 0, X_ECX,X_EDX,X_EBX,X_ESP, X_EBP,X_ESI,X_EDI,
-    X_RAX,  X_RCX, X_RDX, X_RBX,X_RSP, X_RBP,X_RSI, X_RDI,
+    X_RAX=16,  X_RCX, X_RDX, X_RBX,X_RSP, X_RBP,X_RSI, X_RDI,
     X_R8, X_R9, X_R10, X_R11, X_R12, X_R13, X_R14, X_R15};
 enum OP_MOD {OPMOD_RPTR = 0, OPMOD_RP_DISP8, OPMOD_RP_DISPLONG, OPMOD_IMMED};
 enum OPREG16 {OR16_BXSI=0, OR16_BXDI, OR16_BPSI, OR16_BPDI,
@@ -158,7 +158,7 @@ const char *REG_NAMES[3][24]
 static enum MACH_OP RetOp;
 
 /* global */
-vector<unsigned char> Code;
+CodeVector Code;
 PCTR Pctr = 0;
 
 static int GensymCtr = 0;
@@ -411,23 +411,24 @@ again:
 void outbytes_raw (const char* opmnem, const char unsigned * bytes, int bytect, const char* opd) {
     if (ListOpt)
         OutputListingLine (opmnem, bytes, bytect, opd);
-    unsigned long end = Pctr + bytect;
-    if (Arch->Bits == 16 && end >= (unsigned long) 0xFFFF)
+    auto end = Pctr + bytect;
+    if (Arch->Bits == 16 && end >= (__decltype(end)) 0xFFFF)
         RC_error (2, "Code size exceeds 65K limit for 16-bit compilation.");
     Code.insert(Code.end(), bytes, bytes+bytect); //poor man's iterators
     Pctr += bytect;
 }
 
-void outbytes_raw(const char* opmnem, const vector<unsigned char> bytes, const char* list_opd) {
-    outbytes_raw(opmnem, bytes.data(), (int)bytes.size(), list_opd);
+void outbytes_raw(const char* opmnem, const CodeVector code, const char* list_opd) {
+    outbytes_raw(opmnem, code.data(), (int)code.size(), list_opd);
 }
 
-int Outdata (int opd, int ct, unsigned char * b) {
+CodeVector OutWord (int opd, int ct) {
+    CodeVector code;
     for (int x = ct; x > 0; x--) {
-	*b++ = opd & 0xFF;
+        code += (CodeByte)(opd & 0xFF);
 	opd >>= 8;
     }
-    return ct;
+    return code;
 }
 
 void FixupFixup (Fixup & F, PCTR pc) {
@@ -476,10 +477,10 @@ void DefineTagPC (Jtag& tag) {
 }
 
 
-int EncodeOpd (unsigned char * b, int opd, REG_X R1, REG_X R2, int immed) {
+CodeVector EncodeOpd (int opd, REG_X R1, REG_X R2, int immed) {
     assert(!IS_ARM64);
-    int bc = 0;
     enum OP_MOD mod;
+    CodeVector code;
 
     if (immed)
 	mod = OPMOD_IMMED;
@@ -502,22 +503,21 @@ int EncodeOpd (unsigned char * b, int opd, REG_X R1, REG_X R2, int immed) {
 	R2 = (REG_X) reg16;
     }
 
-    b[bc++] = ((int) mod << 6) | ((int) R1 << 3) | (int) R2;
+    code += ((int) mod << 6) | ((int) R1 << 3) | (int) R2;
 
     if (mod != OPMOD_IMMED && mod != OPMOD_RPTR)
-	bc += Outdata ((int) opd,
-		       (mod == OPMOD_RP_DISP8) ? SINGLE_WIDTH : FullWidth,
-		       b+bc);
-    return bc;
+        Code += OutWord ((int) opd, (mod == OPMOD_RP_DISP8) ? SINGLE_WIDTH : FullWidth);
+    return code;
 }
 
-void DisasOpd (MACH_OP op, std::string& buf, unsigned char * b,
-	       const char *opd, const char *prefix) {
+std::string DisasOpd (MACH_OP op, vector<unsigned char>& code,
+                      const char *opd, const char *prefix) {
     assert (!IS_ARM64);
     if (!ListOpt)
-	return;
-
+	return "";
+    const CodeByte* b = code.data();
     std::string memopd;
+    std::string buf;
 
     unsigned char rmbyte = *b++;
     int flags = Ops[op].flags;
@@ -578,25 +578,27 @@ void DisasOpd (MACH_OP op, std::string& buf, unsigned char * b,
 	else
             buf = std::string(r1name) + "," + memopd;
     }
+    return buf;
 }
 
 
 void outinst_general (MACH_OP op, int immed,
-		      REG_X r_accum, REG_X r_base, int opd, const char * listopd) {
+                      REG_X r_accum, REG_X r_base, int opd, const char * listopd) {
     assert(!IS_ARM64);
-    unsigned char bytes[12];
-    std::string dbuf;
-    int bc = 0;
+    CodeVector code;
+
+    if (Ops[op].flags & OPF_48)
+        code += 0x48;
     if (Ops[op].flags & OPF_0F)
-	bytes[bc++] = 0x0F;
-    bytes[bc++] = Ops[op].opcode;
+        code += 0x0F;
 
-    unsigned char * osave = bytes+bc;
-    bc += EncodeOpd (bytes+bc, opd, r_accum, r_base, immed);
-    DisasOpd (op, dbuf, osave, listopd, NULL);
-    outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf.c_str());
+    code += Ops[op].opcode;
+    
+    auto encoded_opd = EncodeOpd (opd, r_accum, r_base, immed);
+    auto disassed_opd = DisasOpd(op, encoded_opd, listopd, NULL);
+    code += encoded_opd;
+    outbytes_raw (Ops[op].mnemonic, code, disassed_opd.c_str());
 }
-
 
 MACH_OP invert_jump (MACH_OP op) {
     if (op == MOP_JZ)
@@ -616,54 +618,57 @@ void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
         return;
     }
         
-    unsigned char bytes[12];
+    CodeVector code;
     std::string dbuf;
-    int bc = 0;
+    
     if (Ops[op].flags & OPF_0F)
-    bytes[bc++] = 0x0F;
-    bytes[bc++] = Ops[op].opcode;
+        code += 0x0F;
+    code += Ops[op].opcode;
+    size_t xl = code.size();
     switch (op) {
 
     case MOP_AND:
     case MOP_OR:
     case MOP_LDAL:
     case MOP_TST:
-        bc += EncodeOpd (bytes+bc, (int) opd,
-                 (op == MOP_TST) ? X_BL : X_AL, X_ESI, 0);
-        DisasOpd (op, dbuf, bytes+1, str, "v$");
-        break;
+        {
+            code += EncodeOpd ((int) opd, (op == MOP_TST) ? X_BL : X_AL, X_ESI, 0);
+            auto tail = vector<CodeByte>(code.begin()+xl, code.end());
+            dbuf = DisasOpd (op, tail, str, "v$");
+            break;
+        }
 
     case MOP_JZ:
     case MOP_JNZ:
     case MOP_JMP:
-        bytes[bc++] = (opd-Pctr-2) &0xFF;
+            code += (opd-Pctr-2) & 0xFF;
             dbuf = str;
-        break;
+            break;
 
     case MOP_JMPL:
-        bc += Outdata ((int) opd, FullWidth, bytes+bc);
+            code += OutWord ((int) opd, FullWidth);
             dbuf = "long " + std::string(str);
-        break;
+            break;
 
     case MOP_XOR:
     case MOP_CLZ:
     case MOP_STZ:
-        bytes[bc++] = opd;
+            code += opd & 0xFF;
             dbuf = "al," + std::to_string(opd);
-        break;
+            break;
     case MOP_LDBLI8:
-        bytes[bc++] = opd;
+            code += opd & 0xFF;
             dbuf = "bl," + std::to_string(opd);
         break;
 
     case MOP_RPUSH:
     case MOP_RPOP:
-        bytes[0] |=  opd;
+        code[0] |=  opd;
             dbuf = REG_NAMES[(int)(Arch->Bits == 32)][opd];
         break;
 
     case MOP_RRET:
-        bc += Outdata ((int) opd, 2, bytes+bc);
+            code += OutWord ((int) opd, 2);
             dbuf = std::to_string(opd);
         break;
 
@@ -673,7 +678,7 @@ void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
     default:
         break;
     }
-    outbytes_raw (Ops[op].mnemonic, bytes, bc, dbuf.c_str());
+    outbytes_raw (Ops[op].mnemonic, code, dbuf.c_str());
 }
 
 
@@ -686,6 +691,7 @@ top:
     if (Lowest_Fix8_Unresolved < Pctr)
 	if (!disp_ok (Pctr+5+FullWidth, Lowest_Fix8_Unresolved))
             for (Fixup & F : FixupTable) {
+                Jtag * ftag = F.tag;
 		if (F.tag != NULL)
 		    if (F.pc == Lowest_Fix8_Unresolved) {
 			list ("; TRAMP OUT %s, ref pc = %04X\n",
@@ -695,10 +701,10 @@ top:
 			    jump.defined = jump.have_pc = false;
 			    jump.tramp_defined = false;
 			    outinst_raw (MOP_JMP, jump.lab, Pctr+1);
-			    RecordFixup (jump, Pctr - 1, SINGLE_WIDTH);
+			    RecordFixup (jump, Pctr - 1, SINGLE_WIDTH); // destroys iteration.
 			}
-			TrampJump (MOP_NOJUMP, *F.tag, 0);
-			Jtag *t = F.tag;
+			TrampJump (MOP_NOJUMP, *ftag, 0);
+                        Jtag *t = ftag;
                         for (Fixup& f1 : FixupTable) {
 			    if (f1.tag == t && f1.width == SINGLE_WIDTH)
 				FixupFixup(f1, t->tramp_pc);
@@ -713,7 +719,7 @@ top:
 
 void outinst (MACH_OP op, Sexpr s, PCTR opd) {
     std::string str;
-    if (Arch->Bits < 64)
+    if (!IS_ARM64)
         check_fix8_overflows();
     if (s.type == Lisp::RLYSYM)
         str = s.PRep();
@@ -1091,6 +1097,9 @@ void CompileRelayDef (Sexpr s) {
    and restoring such registers as the compiled code uses, and doing any
    other setup or cleanup or value conversion that the compiled code expects.
    This should reduce all architecture-dependence to this relay compiler.
+ 
+   This works for the 64-bit Intel, Mac and windows, architecture as well
+   (with different thunk names).
 
 */
 
