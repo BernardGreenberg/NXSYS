@@ -7,6 +7,9 @@
 //
 
 1/1/25  Fixup overflow problem - diagnose, design. Does not happen in arch:IA32  DONE.
+        Problem was discord of "warning" estimates, and a fcn iterating down an array that
+        it sometimes reallocates, saving pointers.
 1/2/25  API to fetch header info. Report compilation date in title, all in File | Info.
-
+1/3/25  Thunk size in listings.
+1/3/25  Listing tab overflow for long imm data.
 

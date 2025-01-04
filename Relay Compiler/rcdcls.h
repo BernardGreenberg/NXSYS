@@ -119,5 +119,6 @@ class CodeVector : public std::vector<CodeByte> {
 };
 
 extern CodeVector Code;
-
+void out_code(const char* mnemonic, const CodeVector& code, const char* list_operand);
+CodeVector OutWord (int opd, int ct);
 #endif

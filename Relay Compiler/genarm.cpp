@@ -18,11 +18,9 @@ using std::string;
 
 extern int Ahex;
 extern PCTR Pctr;
-void outbytes_raw (const char * mnemonic, const unsigned char * bytes, int count, const char* comment);
 
 void outarminst (ArmInst w, const char * mnem, const char* str) {
-    auto p = (unsigned char *)&w;
-    outbytes_raw (mnem, p, 4, str);
+    out_code (mnem, OutWord(w, 4), str);
 }
 
 /* Yer bits are number 35 to 0 left-to-right, as in https://developer.arm.com/documentation/ddi0602/2024-09/Base-Instructions?lang=en

@@ -16,8 +16,9 @@
    32-bit Windows code.  Sigh.  26 August 2019. */
 /* Produce actual arm64 ("Apple Silicon") code, with architecture management 16 December 2024
    This V3 assumes that the static linkage is an array of pointers to relay value cells, not
-   actual relays as in V2.
- */
+   actual relays as in V2. */
+/* Produce compatible Win/Mac X86-64 code, 3 January 2025 */
+
 
 #include <string.h>
 #include <stdio.h>
@@ -55,6 +56,7 @@ namespace fs = std::filesystem;
 #include "RCArm64.h"
 #include "opsintel.h"
 enum OS {WINDOWS, MAC, UNIVERSAL};
+
 class Architecture {
 public:
     Architecture (string ct, vector<string>syn, int bits, OS o, int rbs, const char* de) {
@@ -351,11 +353,11 @@ RLID RelayId (Sexpr s) {
     RelayRefTable.emplace_back(rlptr);
     RIDMap[rlptr] = relay_id;
 
-    if (IS_ARM64)
-        list ("%sv$%s\tequ\t0x0%X\n",
+    if (Arch->Bits == 64)
+        list ("%sv$%s equ\t0x0%X\n",
               Ltabs, s.PRep().c_str(), relay_id * Arch->RelayBlockSize);
     else
-        list ("%sv$%s\tequ\tbyte ptr 0%Xh\n",
+        list ("%sv$%s equ\tbyte ptr 0%Xh\n",
               Ltabs, s.PRep().c_str(), relay_id * Arch->RelayBlockSize);
     return relay_id;
 }
@@ -386,6 +388,11 @@ again:
 	    list ("%02X", bytes[j]);
 	    cc+=2;
 	}
+    bool oflw = false;
+    if (tcol >= 24) {
+        list(" ");
+        oflw = true;
+    }
 
     while (cc < tcol) {
 	list ("\t");
@@ -401,25 +408,20 @@ again:
 	cc+= llen;
     }
     if (cc < tcol+8) {
-	list ("\t");
-	cc = tcol+8;
+        list ("\t");
+        cc = tcol+8;
     }
     list ("%s\t%s\n", opmnem, opd);
 }
 
 
-void outbytes_raw (const char* opmnem, const char unsigned * bytes, int bytect, const char* opd) {
+void out_code (const char* opmnem, const CodeVector& code, const char* opd) {
     if (ListOpt)
-        OutputListingLine (opmnem, bytes, bytect, opd);
-    auto end = Pctr + bytect;
-    if (Arch->Bits == 16 && end >= (__decltype(end)) 0xFFFF)
+        OutputListingLine (opmnem, code.data(), (int)code.size(), opd);
+    if (Arch->Bits == 16 && Code.size() + code.size() > 0xFFFF)
         RC_error (2, "Code size exceeds 65K limit for 16-bit compilation.");
-    Code.insert(Code.end(), bytes, bytes+bytect); //poor man's iterators
-    Pctr += bytect;
-}
-
-void outbytes_raw(const char* opmnem, const CodeVector code, const char* list_opd) {
-    outbytes_raw(opmnem, code.data(), (int)code.size(), list_opd);
+    Code += code;
+    Pctr += code.size();
 }
 
 CodeVector OutWord (int opd, int ct) {
@@ -599,7 +601,7 @@ void outinst_general (MACH_OP op, int immed,
     auto encoded_opd = EncodeOpd (opd, r_accum, r_base, immed);
     auto disassed_opd = DisasOpd(op, encoded_opd, listopd, NULL);
     code += encoded_opd;
-    outbytes_raw (Ops[op].mnemonic, code, disassed_opd.c_str());
+    out_code (Ops[op].mnemonic, code, disassed_opd.c_str());
 }
 
 MACH_OP invert_jump (MACH_OP op) {
@@ -637,7 +639,7 @@ void out64_alop(MACH_OP op) {
         break;
     }
 
-    outbytes_raw(Ops[op].mnemonic, code, opd);
+    out_code(Ops[op].mnemonic, code, opd);
 
 }
 
@@ -711,7 +713,7 @@ void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
     default:
         break;
     }
-    outbytes_raw (Ops[op].mnemonic, code, dbuf.c_str());
+    out_code (Ops[op].mnemonic, code, dbuf.c_str());
 }
 
 
@@ -909,10 +911,11 @@ void RecordDependent (RLID affector) {
 
 
 void outinstLDQW(int destr, int baser, PCTR offset, const char * opd_str) {
+    assert(destr == X_RDX && baser == X_R8);  // for now...
     CodeVector code{0x49, 0x8B, 0x90};
-    (void)baser; (void)destr;
+
     code += OutWord((uint32_t)offset, 4);
-    outbytes_raw("mov", code, opd_str);
+    out_code("mov", code, opd_str);
 }
 
 void CompileRlysym (Sexpr s, Ctxt * ctxt, int backf) {
@@ -1152,7 +1155,7 @@ void outCallReg64 (int, int reg, const char * str_opd) {
     if (reg >= X_RAX && reg < X_R8) {
         code[1] += (reg - X_RAX);
     }
-    outbytes_raw("call", code, str_opd);
+    out_code("call", code, str_opd);
 }
 
 void outMovRR64(int, int regdest, int regsource, const char * str_opd) {
@@ -1173,20 +1176,22 @@ void outMovRR64(int, int regdest, int regsource, const char * str_opd) {
     if (regsource & 1)
         code[2] |= 8;
     /* qué michegas */
-    outbytes_raw("mov", code, str_opd);
+    out_code("mov", code, str_opd);
 }
 
 void outMovI32R64 (int, int reg, uint32_t val, const char * str_opd) {
     CodeVector code {0xB8};
-    auto prefix = (reg >= X_R8) ? CodeVector{0x41} : CodeVector{};
+
+    auto save_reg = reg;
     if (reg >= X_R8)
         reg -= X_R8;
     else
         reg -= X_RAX;
     code[0] |= reg & 7;
-    code.insert(code.begin(), prefix.begin(), prefix.end());
+    if (save_reg >= X_R8)
+        code.insert(code.begin(), 0x41);
     code += OutWord(val, 4);
-    outbytes_raw("mov", code, str_opd);
+    out_code("mov", code, str_opd);
 }
 
 short get_relay_type_index(const char * name);
@@ -1202,7 +1207,7 @@ void DefineBogoThunkRelay (const char * name) {
 void CompileIA32EntryThunk () {
 
     DefineBogoThunkRelay("_ENTRY_THUNK");
-
+    list("%s;;;\targs = EBP+8, EBP+1 (linkage array, code ptr)\n", Ltabs);
     outinst         (MOP_RPUSH,  NIL, X_EBP);
     outinst_general (MOP_LOADWD, 1,   X_EBP, X_ESP, 0, NULL);
     /* vc4 generated "sub esp,4" here: why? */
