@@ -27,6 +27,7 @@
 #include "RCArm64.h"
 #include "relays.h"
 #include "usermsg.h"
+#include "cccint.h"
 
 #include <string>
 #include <vector>
@@ -52,6 +53,11 @@ vector<Relay*>ESD;
 
 
 char** Compiled_Linkage_Sptr = nullptr;; //points to State cells.  Referenced by relay engine
+#if WIN32 | !((defined(__aarch64__)) || defined(_M_ARM64))
+CCC_Thunkptrtype CCC_Thunkptr;
+#endif
+
+
 
 void ReadFaslForms(unsigned char * data, const char* fname);
 void CleanupObjectMemory(); //below
@@ -70,13 +76,13 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
     }
 #if defined(__aarch64__) || defined(_M_ARM64)
     if (string (H.arch) != "ARM64") {
-        usermsgstop("%s was not compiled for the ARM64 Apple Silicon architecture, but for %s",
+        usermsgstop("%s was not compiled for the ARM64 Apple Silicon architecture, but for %s.",
                     path, H.arch);
         return false;
     }
 #else
-    if (string (H.arch) == "ARM64") {
-        usermsgstop("%s was compiled for the ARM64 Apple Silicon architecture, not for this CPU",
+    if ((string (H.arch) != "INTEL x86") || H.bits != 64) {
+        usermsgstop("%s was not compiled for this Intel CPU, but for %s.",
                     path, H.arch);
         return false;
     }
@@ -233,8 +239,6 @@ bool LoadRelayObjectFile(const char*path, const char*) {
 
         dp = next_block;
     }
-    RnamesTexts = nullptr; //points into vector
-    RnamesTextPtrs = nullptr; //ditto
     
     for (auto i = 0; i < ISD.size(); i++) {
         Relay* r = ISD[i];
@@ -242,6 +246,15 @@ bool LoadRelayObjectFile(const char*path, const char*) {
         int len = (int)(next - (uint64_t)(r->exp));
         RelayFunctionLengths[r] = len;
     }
+#if WIN32
+    CCC_Thunkptr = (CCC_Thunkptrtype)(ISD[0]->exp);
+#elif !(((defined(__aarch64__)) || defined(_M_ARM64)))
+    CCC_Thunkptr = (CCC_Thunkptrtype)(ISD[0]->exp);
+#endif
+
+    RnamesTexts = nullptr; //points into vector
+    RnamesTextPtrs = nullptr; //ditto
+
     return true;
 }
 
