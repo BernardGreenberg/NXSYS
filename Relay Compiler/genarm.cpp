@@ -52,6 +52,7 @@ bool verify_arm_bitfield_zero(ArmInst inst, int start_bit, int end_bit, int shif
     if (inst & mask) {
         int unsigned val = (inst & mask) >> end_bit;
         int unsigned rval = val << shift_down;
+        (void)rval;  // use up until this settled.++++++++++++
 #if 0
         RC_error(0, "\nBUG *****: Arm instruction field %d-%d (len %d) nonzero before insert,"
                  " currently 0x%X, shifted up (by %d) = 0x%X. Pctr = 0x%06X, target location %06X, full inst as is %08x\n",

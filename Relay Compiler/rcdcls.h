@@ -95,6 +95,7 @@ RLID RelayId (Sexpr s);
 void list(const char *, ...);
 
 #include <vector>
+#include <initializer_list>
 
 using CodeByte = unsigned char;
 
@@ -103,6 +104,9 @@ class CodeVector : public std::vector<CodeByte> {
     CodeVector() {
         reserve(12);
     }
+
+    CodeVector(std::initializer_list<CodeByte> il) : std::vector<CodeByte>(il) {};
+    
     void Append(const std::vector<CodeByte> addendum) {
         insert(end(), addendum.begin(), addendum.end());
     }

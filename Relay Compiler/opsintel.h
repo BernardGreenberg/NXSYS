@@ -5,7 +5,7 @@ enum MACH_OP {      MOP_AND, MOP_OR, MOP_JZ, MOP_JNZ, MOP_RETF, MOP_NOJUMP,
 		    MOP_STZ, MOP_RET, MOP_RPUSH, MOP_RPOP, MOP_LDBLI8,
 		    MOP_LOADWD, MOP_CALLIND, MOP_MOVZX8, MOP_LEAVE, MOP_RRET,
 		    MOP_SETNZ,
-                    MOP_LDRCXI32, MOP_MOVZX64, MOP_CALLREG};
+                    MOP_MOVRR64, MOP_LDR64I32, MOP_MOVZX64, MOP_CALLREG};
 
 struct OPDEF {
     const char * mnemonic;
@@ -45,9 +45,11 @@ struct OPDEF {
     {"leave",	0xC9,	0},              /* MOP_LEAVE */ \
     {"ret",	0xC2,	0}, 		/* MOP_RRET */\
     {"setnz",   0x95,   OPF_0F|OPF_8BIT|OPF_NOREGOP}, \
-    {"mov",     0xB9,   OPF_32BIT},     /* MOP_LDRCXI32 */ \
+    {"mov",     0xB6,   OPF_0F}, /* MOP_MOVRR64 */ \
+    {"mov",     0xB9,   OPF_32BIT},     /* MOP_LDR64I32 */ \
     {"movzx",   0xB6,   OPF_XMAGIC | OPF_48},    /* MOP_MOVZX64 */ \
-    {"callreg", 0xFF,   OPF_XMAGIC}  \
+    {"call",    0xD0,  0}, /* MOP_CALLREG */ \
+      \
 }
 
 

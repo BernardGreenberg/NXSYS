@@ -515,6 +515,8 @@ std::string DisasOpd (MACH_OP op, vector<unsigned char>& code,
     assert (!IS_ARM64);
     if (!ListOpt)
 	return "";
+    if (op == MOP_MOVZX64)
+        return opd;
     const CodeByte* b = code.data();
     std::string memopd;
     std::string buf;
@@ -1103,6 +1105,48 @@ void CompileRelayDef (Sexpr s) {
 
 */
 
+void outCallReg64 (int, int reg, const char * str_opd) {
+    CodeVector code {0xFF, 0xD0};
+    if (reg >= X_RAX && reg < X_R8) {
+        code[1] += (reg - X_RAX);
+    }
+    outbytes_raw("call", code, str_opd);
+}
+
+void outMovRR64(int, int regdest, int regsource, const char * str_opd) {
+    CodeVector code {0x48, 0x89, 0xC0};
+    if (regdest < X_R8)
+        code[2] |= regdest - X_RAX;
+    else {
+        code[2] |= regdest - X_R8;
+        code[0] |= 1;
+    }
+    if (regsource >= X_R8) {
+        regsource -= X_R8;
+        code[0] |= 4;
+    } else {
+        regsource -= X_RAX;
+    }
+    code[2] |= (regsource >> 1) << 4;
+    if (regsource & 1)
+        code[2] |= 8;
+    /* qué michegas */
+    outbytes_raw("mov", code, str_opd);
+}
+
+void outMovI32R64 (int, int reg, uint32_t val, const char * str_opd) {
+    CodeVector code {0xB8};
+    auto prefix = (reg >= X_R8) ? CodeVector{0x41} : CodeVector{};
+    if (reg >= X_R8)
+        reg -= X_R8;
+    else
+        reg -= X_RAX;
+    code[0] |= reg & 7;
+    code.insert(code.begin(), prefix.begin(), prefix.end());
+    code += OutWord(val, 4);
+    outbytes_raw("mov", code, str_opd);
+}
+
 short get_relay_type_index(const char * name);
 
 void DefineBogoThunkRelay (const char * name) {
@@ -1137,21 +1181,21 @@ void CompileIA32EntryThunk () {
 void CompileMacX86EntryThunk() {
     DefineBogoThunkRelay("_macos_entry_thunk");
 
-    outinst_general (MOP_LOADWD, 1,   X_R8, X_RDI, 0, NULL);
-    outinst         (MOP_LDRCXI32, NIL, 1);
-    outinst_general (MOP_CALLREG,0, (REG_X) 2, X_RSI, 12, "code_ptr");
+    outMovRR64      (MOP_MOVRR64, X_R8, X_RDI, "r8,rdi     ;Arg 1 = linkage array");
+    outMovI32R64    (MOP_LDR64I32, X_RCX, 1, "rcx,0x00000001");
+    outCallReg64    (MOP_CALLREG, X_RSI, "rsi        ;Arg 2 = relay code");
     outinst_general (MOP_SETNZ,  1,   X_RAX, X_AL, 0, NULL);
-    outinst_general (MOP_MOVZX64,1,   X_RAX, X_AL, 0, NULL);
+    outinst_general (MOP_MOVZX64,1,   X_RAX, X_AL, 0, "rax,al");
     outinst         (MOP_RET,   NIL, 0);
 }
 void CompileWindowsX86EntryThunk() {
     DefineBogoThunkRelay("_windows_entry_thunk");
 
-    outinst_general (MOP_LOADWD, 1,   X_R8, X_RCX, 0, NULL);
-    outinst         (MOP_LDRCXI32, NIL, 1);
-    outinst_general (MOP_CALLREG,0, (REG_X) 2, X_RDX, 12, "code_ptr");
+    outMovRR64      (MOP_MOVRR64, X_R8, X_RCX, "r8,rcx     ;Arg 1 = linkage array");
+    outMovI32R64    (MOP_LDR64I32, X_RCX, 1, "rcx,0x00000001");
+    outCallReg64    (MOP_CALLREG, X_RDX, "rdx        ;Arg 2 = relay code");
     outinst_general (MOP_SETNZ,  1,   X_RAX, X_AL, 0, NULL);
-    outinst_general (MOP_MOVZX64,1,   X_RAX, X_AL, 0, NULL);
+    outinst_general (MOP_MOVZX64,1,   X_RAX, X_AL, 0, "rax,al");
     outinst         (MOP_RET,   NIL, 0);
 }
 
