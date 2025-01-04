@@ -6,7 +6,7 @@
 //  Copyright © 2025 BernardGreenberg. All rights reserved.
 //
 
-1/1/25  Fixup overflow problem - diagnose, design. Does not happen in arch:IA32
+1/1/25  Fixup overflow problem - diagnose, design. Does not happen in arch:IA32  DONE.
 1/2/25  API to fetch header info. Report compilation date in title, all in File | Info.
 
 

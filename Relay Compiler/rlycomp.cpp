@@ -614,6 +614,33 @@ void TrampJump (MACH_OP, Jtag&, int jumparound);
 
 void outjmp (MACH_OP op, Jtag& tag);
 
+void out64_alop(MACH_OP op) {
+    /* thought that rdx is loaded, but we don't have register color management here.*/
+    CodeVector code {0, 0x02};
+    const char * opd = "al,[rdx]";
+    switch (op) {
+    case MOP_AND:
+        code[0] = 0x22;
+        break;
+    case MOP_OR:
+        code[0]= 0x0A;
+        break;
+    case MOP_LDAL:
+        code[0] = 0x8A;
+        break;
+    case MOP_TST:
+        code[0] = 0x84;
+        code[1] = 0x0A;
+        opd = "cl,[rdx]";
+        break;
+    default:
+        break;
+    }
+
+    outbytes_raw(Ops[op].mnemonic, code, opd);
+
+}
+
 void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
     if (IS_ARM64) {
         outinst_raw_arm (op, str, opd);
@@ -633,13 +660,17 @@ void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
     case MOP_OR:
     case MOP_LDAL:
     case MOP_TST:
-        {
+        if (Intel64 == Arch) {
+            out64_alop(op);
+            return;
+        }
+        else
+        {  /* this is all broken */
             code += EncodeOpd ((int) opd, (op == MOP_TST) ? X_BL : X_AL, X_ESI, 0);
             auto tail = vector<CodeByte>(code.begin()+xl, code.end());
             dbuf = DisasOpd (op, tail, str, "v$");
-            break;
         }
-
+            break;
     case MOP_JZ:
     case MOP_JNZ:
     case MOP_JMP:
@@ -877,12 +908,23 @@ void RecordDependent (RLID affector) {
 }
 
 
+void outinstLDQW(int destr, int baser, PCTR offset, const char * opd_str) {
+    CodeVector code{0x49, 0x8B, 0x90};
+    (void)baser; (void)destr;
+    code += OutWord((uint32_t)offset, 4);
+    outbytes_raw("mov", code, opd_str);
+}
+
 void CompileRlysym (Sexpr s, Ctxt * ctxt, int backf) {
     if (s.type != Lisp::RLYSYM)
 	RC_error (3, "Non-Rlysym handed to CompileRlysym.");
     RecordDependent (RelayId(s));
     Jtag* tag = ctxt->tag;
     PCTR offset = RelayOffset(s);
+    if (Intel64 == Arch) {
+        string rname = s.PRep();
+        outinstLDQW(X_RDX, X_R8, offset, FormatString("rdx,[r8+v$%s]", rname.c_str()).c_str());
+    }
     if (backf) {
 	switch (ctxt->op) {
 	    case CT_VAL:
@@ -1180,7 +1222,7 @@ void CompileIA32EntryThunk () {
 
 void CompileMacX86EntryThunk() {
     DefineBogoThunkRelay("_macos_entry_thunk");
-
+    list("%s;;;\targs = RDI, RSI (linkage array, code ptr)\n", Ltabs);
     outMovRR64      (MOP_MOVRR64, X_R8, X_RDI, "r8,rdi     ;Arg 1 = linkage array");
     outMovI32R64    (MOP_LDR64I32, X_RCX, 1, "rcx,0x00000001");
     outCallReg64    (MOP_CALLREG, X_RSI, "rsi        ;Arg 2 = relay code");
@@ -1190,7 +1232,7 @@ void CompileMacX86EntryThunk() {
 }
 void CompileWindowsX86EntryThunk() {
     DefineBogoThunkRelay("_windows_entry_thunk");
-
+    list("%s;;;\targs = RCX, RDX (linkage array, code ptr)\n", Ltabs);
     outMovRR64      (MOP_MOVRR64, X_R8, X_RCX, "r8,rcx     ;Arg 1 = linkage array");
     outMovI32R64    (MOP_LDR64I32, X_RCX, 1, "rcx,0x00000001");
     outCallReg64    (MOP_CALLREG, X_RDX, "rdx        ;Arg 2 = relay code");
@@ -1572,6 +1614,8 @@ int main (int argc, char ** argv) {
     list (";  " COMPILER_COPYRIGHT  "\n");
     list (";  Bytes/Relay-linkage %d\n", Arch->RelayBlockSize);
     list ("\n");
+    if (Arch->Bits == 64)
+        list ("%s\tbits\t%d\n", Ltabs, Arch->Bits);
     list ("%s\tideal\n%s\tsegment\tcode\n", Ltabs, Ltabs);
 
     CompileLayout (f, fpath);
