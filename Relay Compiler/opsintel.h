@@ -47,7 +47,7 @@ struct OPDEF {
     {"setnz",   0x95,   OPF_0F|OPF_8BIT|OPF_NOREGOP}, \
     {"mov",     0xB6,   OPF_0F}, /* MOP_MOVRR64 */ \
     {"mov",     0xB9,   OPF_32BIT},     /* MOP_LDR64I32 */ \
-    {"movzx",   0xB6,   OPF_XMAGIC | OPF_48},    /* MOP_MOVZX64 */ \
+    {"movzx",   0xB6,   OPF_0F | OPF_48},    /* MOP_MOVZX64 */ \
     {"call",    0xD0,  0}, /* MOP_CALLREG */ \
       \
 }
