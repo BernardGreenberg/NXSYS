@@ -619,7 +619,7 @@ void outjmp (MACH_OP op, Jtag& tag);
 void out64_alop(MACH_OP op) {
     /* thought that rdx is loaded, but we don't have register color management here.*/
     CodeVector code {0, 0x02};
-    const char * opd = "al,[rdx]";
+    const char * opd = "al,BYTE PTR [rdx]";
     switch (op) {
     case MOP_AND:
         code[0] = 0x22;
@@ -633,7 +633,7 @@ void out64_alop(MACH_OP op) {
     case MOP_TST:
         code[0] = 0x84;
         code[1] = 0x0A;
-        opd = "cl,[rdx]";
+        opd = "BYTE PTR [rdx],cl";
         break;
     default:
         break;
@@ -930,7 +930,7 @@ void CompileRlysym (Sexpr s, Ctxt * ctxt, int backf) {
     PCTR offset = RelayOffset(s);
     if (Intel64 == Arch) {
         string rname = s.PRep();
-        outinstLDQW(X_RDX, X_R8, offset, FormatString("rdx,[r8+v$%s]", rname.c_str()).c_str());
+        outinstLDQW(X_RDX, X_R8, offset, FormatString("rdx,QWORD PTR [r8+v$%s]", rname.c_str()).c_str());
     }
     if (backf) {
 	switch (ctxt->op) {
