@@ -110,6 +110,7 @@ DEFLSYM2(T_ATOM,T);
 
 static RelayUpdateQueue UpdateQueue;
 
+/* CHANGE TO true TO BUILD AN EXECUTABLE THAT WILL RELAY-TRACE TO STDOUT FROM THE GETGO */
 static bool Trace = false;
 static tRelayTracer Tracer = InternalConsoleRelayTracer;
 
