@@ -83,7 +83,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/users/bsg/hax/arm64/irt240.tko"
+            argument = "/users/bsg/hax/arm64/irt240.x86.tko"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

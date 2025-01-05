@@ -39,14 +39,14 @@ static vector<string> CalculateRelayTypeArray(const char* texts, const short* te
 void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_t file_length) {
     auto start_dp = fdp;
     auto dp = start_dp + ((_TKO_VERSION_2_HEADER*)fdp)->header_size;
-    if (txtchp->length_of_item != 4)
+    if (txtchp->length_of_item != 4 && txtchp->length_of_item != 1)
         return;
     auto instp = (unsigned int*) (txtchp+1);
     const short * RnamesTextPtrs = nullptr;
     const char *  RnamesTexts = nullptr;
     vector<string>Types;
     int nstrings = 0;
-
+    
     while(dp < fdp + file_length) {
         auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
         auto rdp = dp + sizeof(*chp);
@@ -62,7 +62,7 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
                 }
             }
                 break;
-                    
+                
             case TKOI_ESD:
             {
                 for (int i = 0; i < chp->number_of_items; i++) {
@@ -90,16 +90,31 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
     }
     
     unsigned int Pctr = 0;
-    for (int i = 0; i < txtchp->number_of_items; i++) {
-        ArmInst inst = *instp;
-        if (ISD.count(Pctr))
-            printf("\n%s:\n", ISD[Pctr].c_str());
-        printf("%06X  %08X", Pctr, inst);
-        puts( DisassembleARM(inst, Pctr).c_str());
-        //printf("\n");
-        instp++;
-        Pctr += 4;
+    auto nitems = txtchp->number_of_items;
+    if (txtchp->length_of_item == 1) {
+        auto charp = (unsigned char *)instp;
+
+        while (Pctr  < nitems) {
+            if ((Pctr % 8) == 0)
+                printf("%06X   ", (int)Pctr);
+            printf("%02X ", charp[Pctr++]);
+            if ((Pctr % 8) == 0)
+                printf("\n");
+        }
+        printf("\n");
+    } else {
+        for (int i = 0; i < nitems; i++) {
+            ArmInst inst = *instp;
+            if (ISD.count(Pctr))
+                printf("\n%s:\n", ISD[Pctr].c_str());
+            printf("%06X  %08X", Pctr, inst);
+            puts( DisassembleARM(inst, Pctr).c_str());
+            //printf("\n");
+            instp++;
+            Pctr += 4;
+        }
     }
+    
 }
 
 string DisassembleARM (ArmInst inst, LPCTR pctr) {
