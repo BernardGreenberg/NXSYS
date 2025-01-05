@@ -467,6 +467,7 @@
 		5B8EDEF62D1CBDE300F07ED0 /* ldgDisassemble.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ldgDisassemble.cpp; sourceTree = "<group>"; };
 		5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisasUtil.h; sourceTree = "<group>"; };
 		5B8EDEFC2D258AF100F07ED0 /* TASKS.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TASKS.txt; sourceTree = "<group>"; };
+		5B8EDF002D29D43B00F07ED0 /* NXSYSMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NXSYSMac.entitlements; path = NXSYSMac/NXSYSMac.entitlements; sourceTree = "<group>"; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
 		5B8FCBEA284B6D9E00855897 /* HelpIcon.pxd */ = {isa = PBXFileReference; lastKnownFileType = file; path = HelpIcon.pxd; sourceTree = "<group>"; };
 		5B93AB8319B208D700F70DDB /* MacRlyDlg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MacRlyDlg.h; path = ../NXSYSMac/MacRlyDlg.h; sourceTree = "<group>"; };
@@ -1317,6 +1318,7 @@
 		5BE487C3199D0A5C007BD6BF = {
 			isa = PBXGroup;
 			children = (
+				5B8EDF002D29D43B00F07ED0 /* NXSYSMac.entitlements */,
 				5B3754A8286D344E00A35C97 /* MacPackagingTool */,
 				5BD7ADA828454CE6000A1CF5 /* DocSource */,
 				5BB5803C27C5586000FB0ED5 /* Help.xml */,
@@ -2488,8 +2490,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NXSYSMac/NXSYSMac.entitlements;
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = HW67WXVJGN;
+				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NXSYSMac/NXSYSMac-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2526,8 +2532,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NXSYSMac/NXSYSMac.entitlements;
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = HW67WXVJGN;
+				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NXSYSMac/NXSYSMac-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (

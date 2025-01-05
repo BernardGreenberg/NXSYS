@@ -913,8 +913,12 @@ void RecordDependent (RLID affector) {
 void outinstLDQW(int destr, int baser, PCTR offset, const char * opd_str) {
     assert(destr == X_RDX && baser == X_R8);  // for now...
     CodeVector code{0x49, 0x8B, 0x90};
-
-    code += OutWord((uint32_t)offset, 4);
+    if (offset < 0x80) {
+        code[2] = 0x50;
+        code += CodeByte(offset);
+    }
+    else
+        code += OutWord((uint32_t)offset, 4);
     out_code("mov", code, opd_str);
 }
 
