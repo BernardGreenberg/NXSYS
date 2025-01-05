@@ -43,11 +43,12 @@ Intel code is a bit simpler, because it does not need the arcane **ldrb**. **cl*
 **JIT** stands for "just in time", which is jargon for the technique, usually used by a debugger, of generating new machine instructions, and having them executed, usually not immediately, but more often in the instruction stream of the program being debugged.  Of course, this can be very dangerous if a malicious program generates such instructions and patches them into your instruction stream, but the malicious program could simply wreak the intended havoc without generating instructions.  For this reason, modern operating systems impose roadblocks to writing executable code.  The MS-Windows API for doing this stopped working for me in 2003 (11 years before the first Mac version), and that occasioned the decommissioning of the relay compiler at that time.  The Mac APIs for this work perfectly for me om my Apple Silicon Mac, but fail silently (the attempt to write takes a fault) on my Intel Mac running the same OS.
 
 The archival 32-bit Windows **.tko** loader contains this commented-out code:
-    #if 0
-    /* STarted complaining in Win2k 11 August 2003 */
-        if (!VirtualProtect (Text_ptr, Text_len, PAGE_EXECUTE_READ, &oldacc))
-	    barff ("VirtualProtect of code area fails: 0x%X", GetLastError());
-    #endif
+
+	#if 0
+ 		/* STarted complaining in Win2k 11 August 2003 */
+		if (!VirtualProtect (Text_ptr, Text_len, PAGE_EXECUTE_READ, &oldacc))
+		    barff ("VirtualProtect of code area fails: 0x%X", GetLastError());
+	#endif
 
 ## Current deficiences
 
