@@ -1,6 +1,6 @@
 # Relay Compiler Status -- Christmas 2024
 
-## Last update 5 Jan 2025
+## Last update 6 Jan 2025 - *El día de los Tres Reyes*
 
 The NXSYS Relay Compiler has been resurrected, but "certain restrictions apply". It can generate operative compiled interlockings (tested as complex as 240th St.) for both 64-bit architectures, Intel X86 (aka X86-64, X64 etc.) and Apple Silicon (ARM).  "Intel X86" applies to both "older Macs" and 64-bit MS-Windows (Windows 10, Windows 11) -- one binary serves for both the latter! -- but Windows has not yet been tested (simulator not yet built. See below.).  There is residual 32-bit (and even 16-bit,as the compiler was born in 1994) Windows code generation available, but it is mainly a joke, because there are no longer any 32- or 16-bit builds of NXSYS with the loading code extant. 
 
@@ -30,17 +30,17 @@ Reading the object code is not rocket science ; each logic term generates (on AR
     0001069ECAC8 39400000    ldrb    x0, [x0, #0]
     0001069ECACC 37043320    tbnz    x0, #0, 0x1069E5130
 
-*Ursus in mente* that **.tko**'s are code-containing files; the whole point is that the simulator executes machine instructions provided by them.  They are thus as corruptible and "dangerous" as any executable application, including the simulator, and must be treated with the same degree of caution and trust.  (It is not known if such activity is available on Windows; it once was, and stopped at one point.)
-
 Intel code is a bit simpler, because it does not need the arcane **ldrb**. **cl** alwas has **1** in it.  Windows and Mac use different 17-word "entry thunks" to compiled code, which account for differing ABI (Application Binary Interface) calling sequences, but the relay functions are identical.
 
     00000139 498B9088000000 c$267RWK: mov     rdx,QWORD PTR [r8+v$267RWC]
     00000137 840A                     test    BYTE PTR [rdx],cl
     00000139 74F4                     jz      retval
 
+*Ursus in mente* that **.tko**'s are code-containing files; the whole point is that the simulator executes machine instructions provided by them.  They are thus as corruptible and "dangerous" as any executable application, including the simulator, and must be treated with the same degree of caution and trust. See below --
+
 ## What is "JIT" and why is it relevant?
 
-**JIT** stands for "just in time", which is jargon for the technique, usually used by a debugger, of generating new machine instructions, and having them executed, usually not immediately, but more often in the instruction stream of the program being debugged.  Of course, this can be very dangerous if a malicious program generates such instructions and patches them into your instruction stream, but the malicious program could simply wreak the intended havoc without generating instructions.  For this reason, modern operating systems impose roadblocks to writing executable code.  The MS-Windows API for doing this stopped working for me in 2003 (11 years before the first Mac version), which occasioned the "dormition" of the relay compiler at that time.  The Mac APIs for this work perfectly for me on my Apple Silicon Mac, but fail silently (the attempt to write takes a fault) on my Intel Mac running the same OS.
+**JIT** stands for "just in time", which is jargon for the technique, usually used by a debugger, of generating new machine instructions, and having them executed, usually not immediately, but more often in the instruction stream of the program being debugged.  Of course, this can be very dangerous if a malicious program generates such instructions and patches them into your instruction stream, but the malicious program could simply wreak the intended havoc without generating instructions.  For this reason, modern operating systems impose roadblocks to writing executable code.  The MS-Windows API for doing this stopped working for me in 2003 (11 years before the first Mac version), which precipitated the "dormition" of the relay compiler at that time. While the Mac APIs for this work perfectly for me on my new Apple Silicon Mac, they fail silently (the attempt to write takes a fault) on my Intel Mac running the exact same OS version.
 
 The archival 32-bit Windows **.tko** loader contains this commented-out code:
 
@@ -54,12 +54,14 @@ The archival 32-bit Windows **.tko** loader contains this commented-out code:
 
 **MS-WINDOWS** Lack of building/testing on platform; generated code is expected to work flawlessly, but the current JIT status and issues have neither been investigated, addressed, nor coded for.
 
-The situation may or may not be better now.  It is unreasonable for this feature to require special user action or configuation.
+The JIT situation may or may not be better now.  It is unreasonable for this feature to require special user action or configuation.
 
-**Intel Mac** As noted, the JIT API (**pthread_jit_write_protect_np**) fails silently. It does not have a return value.  I have tried all nature of tomfoolery with Capabilities and Entitlements and logging in Admin, but have not been able to overcome this, and some wisdom on the web even suggests that Apple disables this feature for Intel Macs, although I can find no documentation attesting to this or ways of dealing with it.  Research continues, but anyone with knowledge of this, please contact me via GitHub here.
+**INTEL MAC** As noted, the JIT API (**pthread_jit_write_protect_np**) fails silently. It does not have a return value.  I have tried all nature of tomfoolery with Capabilities and Entitlements and logging in Admin, but have not been able to overcome this, and some wisdom on the web even suggests that Apple disables this feature for Intel Macs, although I can find no documentation attesting to this or ways of dealing with it.  Research continues, but anyone with knowledge of this, please contact me via GitHub here.
 
-It is possible to demonstrate the X86 compiler and correct functioning of X86-compiled interlockings on an Apple Silicon Mac.  It is silly, but it actually works, and demonstrates this path!  The compiler will compile for any supported architecture on any supported platform:  **-arch:X86-64** will request a compilation for that platform.  To run the resultant track object file, use the Apple-suppled **arch** command to run the (Universal!) NXSYS executable directly (**../NXSYSMac/Contents/MacOS/NXSYSMac**) by pathname,specifying as a first argument **X86_64**, and the title bar will confirm that is running the **(Intel)** build!  From there, you can load Intel-compiled track objects, but not native ARM ones! (Note that debugging executables are not universal; you must use **Product | Archive**).
+It is possible to demonstrate the X86 compiler and correct functioning of X86-compiled interlockings on an Apple Silicon Mac.  It is silly, but it actually works, and demonstrates this path!  The compiler will compile for any supported architecture on any supported platform:  **-arch:X86-64** will request a compilation for that platform.
+
+To run the resultant track object file, use the Apple-suppled **arch** command to run the (Universal!) NXSYS executable under Rosetta2 simulation directly (**../NXSYSMac/Contents/MacOS/NXSYSMac**) by pathname,specifying as a first argument **-X86_64**, (leading hyphen, middle underscore) and the title bar will confirm that is running the **(Intel)** build!  From there, you can load Intel-compiled track objects, but not native ARM ones! (Note that debugging executables are not universal; you must use **Product | Archive** to build a universal executable).
 
 It is possible to imagine creating **.dylib**s whose guts are replaced by compiled code, but this is an awful lot to ask for a feature which is basically useless...
 
-**ARM Mac** Works like a charm, in all respects, but there is a current hard limit on 4K (4096) relays because of a 14-bit addressing limit on ARM to an array 8-byte (64 bit) pointers. Fixing this limit to be twice as large (8192), leveraging the signed nature of this 14-bit instruction field, would require a more complex strategy for the array of pointers by which compiled code references other relays, but the largest interlocking (240th St) today has only half that many (~2K).  Removing the limit entirely would require a serious redesign of the code strategy which will undoubtably incur costs in all compilations (e.g., additional instructions per logic term).  Like many ancient architectures, ARM64 draws a distinction between "easy" references to storage and "difficult" ones in order to optimize instruction bits.
+**ARM MAC** Works like a charm, in all respects, but there is a current hard limit on 4K (4096) relays because of a 14-bit addressing limit on ARM to an array 8-byte (64 bit) pointers. Fixing this limit to be twice as large (8192), leveraging the signed nature of this 14-bit instruction field, would require a more complex strategy for the array of pointers by which compiled code references other relays, but the largest interlocking (240th St) today has only half that many (~2K).  Removing the limit entirely would require a serious redesign of the code strategy which will undoubtably incur costs in all compilations (e.g., additional instructions per logic term).  Like many ancient architectures, ARM64 draws a distinction between "easy" references to storage and "difficult" ones in order to optimize instruction bits.
