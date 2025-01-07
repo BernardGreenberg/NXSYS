@@ -206,8 +206,8 @@ static uint32_t collect_32(unsigned char* p) {
     return acc;
 }
 
-static string FmtAB(unsigned char * ip, uint32_t Pctr, int nbytes) {
-    string display = FormatString("%08X  ", Pctr);
+static string FmtAB(unsigned char * ip, int nbytes) {
+    string display;
     for (unsigned int i = 0; i < 7; i++) {
         if (i < nbytes)
             display += FormatString("%02X", ip[i]);
@@ -223,56 +223,56 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems
         return RV;
 
     if (ip[0] == 0xC3) {
-        RV.disassembly = FmtAB(ip, Pctr, 1) + "ret";
+        RV.disassembly = FmtAB(ip, 1) + "ret";
         RV.byte_count = 1;
         return RV;
     }
         
     if (Pctr + 1 >= nitems) {
       unclear:
-        RV.disassembly = FmtAB(ip, Pctr, 1) + "NOT KNOWN 1";
+        RV.disassembly = FmtAB(ip, 1) + "NOT KNOWN 1";
         RV.byte_count = 1;
         return RV;
     }
 
     if (ip[0] == 0xFF && ip[1] == 0xD6) {
-        RV.disassembly = FmtAB(ip, Pctr, 2) + "call\trsi";
+        RV.disassembly = FmtAB(ip, 2) + "call\trsi";
         RV.byte_count = 2;
         return RV;
     }
     
     if (ip[0] == 0xFF && ip[1] == 0xD2) {
-        RV.disassembly = FmtAB(ip, Pctr, 2) + "call\trdx";
+        RV.disassembly = FmtAB(ip, 2) + "call\trdx";
         RV.byte_count = 2;
         return RV;
     }
 
     if (ip[0] == 0x24 && ip[1] == 0x00) {
-        RV.disassembly = FmtAB(ip, Pctr, 2) + "and\tal,0";
+        RV.disassembly = FmtAB(ip, 2) + "and\tal,0";
         RV.byte_count = 2;
         return RV;
     }
 
     if (ip[0] == 0x34 && ip[1] == 0x01) {
-        RV.disassembly = FmtAB(ip, Pctr, 2) + "xor\tal,1";
+        RV.disassembly = FmtAB(ip, 2) + "xor\tal,1";
         RV.byte_count = 2;
         return RV;
     }
     
     if (ip[0] == 0x0C && ip[1] == 0x01) {
-        RV.disassembly = FmtAB(ip, Pctr, 2) + "or\tal,1";
+        RV.disassembly = FmtAB(ip,  2) + "or\tal,1";
         RV.byte_count = 2;
         return RV;
     }
     
     if (ip[0] == 0x84 && ip[1] == 0x0A) {
-        RV.disassembly = FmtAB(ip, Pctr, 2) + "test\tBYTE PTR [rdx],cl";
+        RV.disassembly = FmtAB(ip, 2) + "test\tBYTE PTR [rdx],cl";
         RV.byte_count = 2;
         return RV;
     }
     
     if (ip[0] == 0x8A && ip[1] == 0x02) {
-        RV.disassembly = FmtAB(ip, Pctr, 2) + "mov\tal, BYTE PTR [rdx]";
+        RV.disassembly = FmtAB(ip, 2) + "mov\tal, BYTE PTR [rdx]";
         RV.byte_count = 2;
         return RV;
     }
@@ -280,7 +280,7 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems
     if (ip[0] == 0x74) {
         int disp = (char)ip[1];
         uint32_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip, Pctr, 2) + FormatString("jz\t0x%X", ea);
+        RV.disassembly = FmtAB(ip, 2) + FormatString("jz\t0x%X", ea);
         RV.byte_count = 2;
         return RV;
     }
@@ -288,7 +288,7 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems
     if (ip[0] == 0x75) {
         int disp = (char)ip[1];
         uint32_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip, Pctr, 2) + FormatString("jnz\t0x%X", ea);
+        RV.disassembly = FmtAB(ip, 2) + FormatString("jnz\t0x%X", ea);
         RV.byte_count = 2;
         return RV;
     }
@@ -296,42 +296,42 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems
     if (ip[0] == 0xEB) {
         int disp = (char)ip[1];
         uint32_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip, Pctr, 2) + FormatString("jmp\t0x%X", ea);
+        RV.disassembly = FmtAB(ip,  2) + FormatString("jmp\t0x%X", ea);
         RV.byte_count = 2;
         return RV;
     }
     
     if (Pctr + 2 >= nitems) {
-        RV.disassembly = FmtAB(ip, Pctr, 2) + "NOT KNOWN 2";
+        RV.disassembly = FmtAB(ip, 2) + "NOT KNOWN 2";
         RV.byte_count = 2;
         return RV;
     }
 
     if (ip[0] == 0x0F && ip[1] == 0x95 && ip[2] == 0xC0) {
-        RV.disassembly = FmtAB(ip, Pctr, 3) + "setnz\tal";
+        RV.disassembly = FmtAB(ip, 3) + "setnz\tal";
         RV.byte_count = 3;
         return RV;
     }
     if (ip[0] == 0x49 && ip[1] == 0x89) {
         if (ip[2] == 0xC8) {
-            RV.disassembly = FmtAB(ip, Pctr, 3) + "mov\tr8,rcx";
+            RV.disassembly = FmtAB(ip, 3) + "mov\tr8,rcx";
             RV.byte_count = 3;
             return RV;
         }
         else if (ip[2] == 0xF8){
-            RV.disassembly = FmtAB(ip, Pctr, 3) + "mov\tr8,rdi";
+            RV.disassembly = FmtAB(ip, 3) + "mov\tr8,rdi";
             RV.byte_count = 3;
             return RV;
         }
     }
     if (Pctr + 4 <= nitems && ip[0] == 0x48 && ip[1] == 0x0F && ip[2] == 0xB6 && ip[3] == 0xC0) {
-        RV.disassembly = FmtAB(ip, Pctr, 4) + "movzx\trax,al";
+        RV.disassembly = FmtAB(ip, 4) + "movzx\trax,al";
         RV.byte_count = 4;
         return RV;
     }
     if (ip[0] == 0xB9 && Pctr+5 <= nitems) {
         uint32_t constant = collect_32(ip+1);
-        RV.disassembly = FmtAB(ip, Pctr, 5) + FormatString("mov\trcx,0x%X", constant);
+        RV.disassembly = FmtAB(ip, 5) + FormatString("mov\trcx,0x%X", constant);
         RV.byte_count = 5;
         return RV;
     }
@@ -340,7 +340,7 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems
         RV.relay_ref_index = disp;
         RV.have_ref_relay = true;
         RV.byte_count = 4;
-        RV.disassembly = FmtAB(ip, Pctr, 4) + FormatString("mov\trdx,QWORD PTR [r8+0x%X]", disp);
+        RV.disassembly = FmtAB(ip, 4) + FormatString("mov\trdx,QWORD PTR [r8+0x%X]", disp);
         return RV;
     }
     if (Pctr + 7 <= nitems && ip[0] == 0x49 && ip[1] == 0x8B && ip[2] == 0x90) {
@@ -348,7 +348,7 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems
         uint32_t disp = collect_32(ip + 3);
         RV.relay_ref_index = disp;
         RV.have_ref_relay = true;
-        RV.disassembly = FmtAB(ip, Pctr, 7) + FormatString("mov\trdx,QWORD PTR [r8+0x%X]", disp);
+        RV.disassembly = FmtAB(ip,  7) + FormatString("mov\trdx,QWORD PTR [r8+0x%X]", disp);
         return RV;
     }
     if (Pctr + 5 <= nitems && ip[0] == 0xE9) {
@@ -356,11 +356,11 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems
         int64_t ldisp = (int64_t)disp;
         int64_t ea = ldisp + Pctr + 5;
         RV.byte_count = 5;
-        RV.disassembly = FmtAB(ip, Pctr, 5) + FormatString("jmp\tlong\t0x%X", ea);
+        RV.disassembly = FmtAB(ip, 5) + FormatString("jmp\tlong\t0x%X", ea);
         return RV;
     }
 
     RV.byte_count = 3;
-    RV.disassembly = FmtAB(ip, Pctr, 3) + "NOT KNOWN 3";
+    RV.disassembly = FmtAB(ip, 3) + "NOT KNOWN 3";
     return RV;
 }
