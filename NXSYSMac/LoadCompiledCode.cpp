@@ -91,6 +91,18 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
     return true;
 }
 
+static int FindThunkIndex(const vector<Relay*>& ISD, const char * s) {
+    Sexpr Rsym = intern_rlysym_nocreate(0, s);
+    if (Rsym != NIL) {
+        int i = 0;
+        for (int i = 0; i < (int)ISD.size(); i++)
+            if (ISD[i]->RelaySym == Rsym)
+                return i;
+    }
+    assert(!"Cant find thunk"); // Can't find symbol
+    return -1;
+}
+
 bool LoadRelayObjectFile(const char*path, const char*) {
     CleanupObjectMemory();
 
@@ -247,9 +259,11 @@ bool LoadRelayObjectFile(const char*path, const char*) {
         RelayFunctionLengths[r] = len;
     }
 #if WIN32
-    CCC_Thunkptr = (CCC_Thunkptrtype)(ISD[0]->exp);
+    int winthunk_index = FindThunkIndex(ISD, "_WINDOWS_ENTRY_THUNK");
+    CCC_Thunkptr = (CCC_Thunkptrtype)(ISD[winthunk_index]->exp);
 #elif !(((defined(__aarch64__)) || defined(_M_ARM64)))
-    CCC_Thunkptr = (CCC_Thunkptrtype)(ISD[0]->exp);
+    int macthunk_index = FindThunkIndex(ISD, "_MACOS_ENTRY_THUNK");
+    CCC_Thunkptr = (CCC_Thunkptrtype)(ISD[macthunk_index]->exp);
 #endif
 
     RnamesTexts = nullptr; //points into vector
