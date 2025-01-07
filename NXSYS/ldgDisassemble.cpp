@@ -68,7 +68,7 @@ static string GenerateUpdatableLineX86(LPCTR pctr, bool record, int& bytes) {
         int stat_index = RV.relay_ref_index / sizeof(Relay*);
         Relay** rptrarray = (Relay**)Compiled_Linkage_Sptr;
         Relay * r = rptrarray[stat_index];
-        D += " " + r->RelaySym.PRep() + "    " + InterpretState(r);
+        D += " ;" + r->RelaySym.PRep() + "   " + InterpretState(r);
         if (record)
             UpdateSchedule.emplace_back(pctr, Lines.size());
     }
