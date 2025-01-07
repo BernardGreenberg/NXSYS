@@ -326,6 +326,7 @@
 		5B30B10727E4FDCC000D59C8 /* salvager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = salvager.hpp; sourceTree = "<group>"; };
 		5B30B10927E929C5000D59C8 /* nxproduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxproduct.h; sourceTree = "<group>"; };
 		5B3754A8286D344E00A35C97 /* MacPackagingTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MacPackagingTool; sourceTree = "<group>"; };
+		5B38456C2D2CB24F006BAD71 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5B43834B19C4B47600BEECDC /* AppDelegateGlobals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegateGlobals.h; sourceTree = "<group>"; };
 		5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BigYellowXView.mm; sourceTree = "<group>"; };
 		5B46B9FD19A9188F0041C4FE /* FullSignalView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FullSignalView.h; sourceTree = "<group>"; };
@@ -833,6 +834,7 @@
 		5B4DF39A2314ABB5001FDE00 /* Relay Compiler */ = {
 			isa = PBXGroup;
 			children = (
+				5B38456C2D2CB24F006BAD71 /* README.md */,
 				5B8EDEFC2D258AF100F07ED0 /* TASKS.txt */,
 				5B4DF3A22314ADDC001FDE00 /* Headers */,
 				5B4DF3A02314AC24001FDE00 /* rlycomp.cpp */,
