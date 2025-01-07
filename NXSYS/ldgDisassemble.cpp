@@ -22,8 +22,12 @@
 #include "RCarm64.h"
 using std::vector, std::string, std::set;
 
-struct TbzUpdateRecord {
-    TbzUpdateRecord(LPCTR _L, int _index) {pctr = _L; lineIndex = _index;}
+#if (defined(__aarch64__) || defined(_M_ARM64))
+#define ISARM 1
+#endif
+
+struct DisasUpdateRecord {
+    DisasUpdateRecord(LPCTR _L, int _index) {pctr = _L; lineIndex = _index;}
     LPCTR  pctr;
     int    lineIndex;
 };
@@ -34,11 +38,11 @@ struct RelayUpdateRecord {
     int    lineIndex;
 };
 
-bool haveDisassembly = false; /* globally addressible */
+bool haveDisassembly = false; /* globally addressible, needed by Draftsperson window control */
 static int Top = 0;
 static vector<string> Lines;
 
-static vector<TbzUpdateRecord> UpdateSchedule;
+static vector<DisasUpdateRecord> UpdateSchedule;
 static vector<RelayUpdateRecord>ShownRelays;
 
 void InitLdgDisassembly() {
@@ -55,8 +59,24 @@ static string InterpretState(Relay * r) {
     else
         return "(PICKED)";
 }
+static string GenerateUpdatableLineX86(LPCTR pctr, bool record, int& bytes) {
 
-static string GenerateUpdatableLine(LPCTR pctr, bool record) {
+    auto RV = DisassembleX86((unsigned char *)pctr, pctr, 1LL << 60);
+    string D = FormatString(" %012lX  ", pctr) + RV.disassembly;
+
+    if (RV.have_ref_relay) {
+        int stat_index = RV.relay_ref_index / sizeof(Relay*);
+        Relay** rptrarray = (Relay**)Compiled_Linkage_Sptr;
+        Relay * r = rptrarray[stat_index];
+        D += " " + r->RelaySym.PRep() + "    " + InterpretState(r);
+        if (record)
+            UpdateSchedule.emplace_back(pctr, Lines.size());
+    }
+    bytes = RV.byte_count;
+    return D;
+}
+
+static string GenerateUpdatableLineARM(LPCTR pctr, bool record, int& bytes) {
     ArmInst inst = *((ArmInst*)pctr);
 
     string prefix = FormatString(" %012lX  %8X  ", pctr, inst);
@@ -70,32 +90,42 @@ static string GenerateUpdatableLine(LPCTR pctr, bool record) {
         if (record)
             UpdateSchedule.emplace_back(pctr, Lines.size());
     }
+    bytes = sizeof(ArmInst);
     return S;
 }
 
 string GenerateHeaderLine(Relay * r, int lenb, bool record) {
     if (record)
         ShownRelays.emplace_back(r, Lines.size());
+#if ISARM
     int lenw = lenb / sizeof(ArmInst);
+#endif
     return (string(" ") + r->RelaySym.PRep() + ":          (compiled relay)   " +
+#if ISARM
             FormatString(" length %d(%d wds) = 0x%x(0x%02x) ", lenb, lenw, lenb, lenw) +
+#else
+            FormatString(" length %d = 0x%x bytes ", lenb, lenb) +
+#endif
             InterpretState(r));
 }
-
-
 
 void ldgDisassemble(Relay* r) {
     int lenb = GetRelayFunctionLength(r);
     assert(lenb >= 0);
-    int lenw = lenb/sizeof(ArmInst);
     haveDisassembly = true;
     Lines.push_back(GenerateHeaderLine(r, lenb, true));
     unsigned char * p = (unsigned char*) (r->exp);
 
-    for (int i = 0; i < lenw; i++ ){
+    for (int i = 0; i < lenb; ){
         LPCTR pctr = (LPCTR)p;
-        Lines.push_back(GenerateUpdatableLine(pctr, true));
-        p += sizeof(ArmInst);
+        int bytes = 0;
+#if ISARM
+        Lines.push_back(GenerateUpdatableLineARM(pctr, true, bytes));
+#else
+        Lines.push_back(GenerateUpdatableLineX86(pctr, true, bytes));
+#endif
+        p += bytes;
+        i += bytes;
     }
 }
 
@@ -132,8 +162,13 @@ void ldgDisassembleDraw(HDC dc) {
         Lines[e.lineIndex] = GenerateHeaderLine(e.relay,
                                                 GetRelayFunctionLength(e.relay),
                                                 false);
+    int bytes = 0;  //dummy
     for (const auto& e : UpdateSchedule)
-        Lines[e.lineIndex] = GenerateUpdatableLine(e.pctr, false);
+#if ISARM
+        Lines[e.lineIndex] = GenerateUpdatableLineARM(e.pctr, false, bytes);
+#else
+        Lines[e.lineIndex] = GenerateUpdatableLineX86(e.pctr, false, bytes);
+#endif
 
     int y = Top;
     for (auto& s : Lines) {

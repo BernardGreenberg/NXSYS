@@ -217,7 +217,7 @@ static string FmtAB(unsigned char * ip, int nbytes) {
     display += " ";
     return display;
 }
-struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems) {
+struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems) {
     struct X86DisRV RV;
     if (Pctr >= nitems)
         return RV;
@@ -279,24 +279,24 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint32_t Pctr, uint32_t nitems
     
     if (ip[0] == 0x74) {
         int disp = (char)ip[1];
-        uint32_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip, 2) + FormatString("jz\t0x%X", ea);
+        uint64_t ea = Pctr+2+disp;
+        RV.disassembly = FmtAB(ip, 2) + FormatString("jz \t0x%lX", ea); //need extra space
         RV.byte_count = 2;
         return RV;
     }
     
     if (ip[0] == 0x75) {
         int disp = (char)ip[1];
-        uint32_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip, 2) + FormatString("jnz\t0x%X", ea);
+        uint64_t ea = Pctr+2+disp;
+        RV.disassembly = FmtAB(ip, 2) + FormatString("jnz\t0x%lX", ea);
         RV.byte_count = 2;
         return RV;
     }
     
     if (ip[0] == 0xEB) {
         int disp = (char)ip[1];
-        uint32_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip,  2) + FormatString("jmp\t0x%X", ea);
+        uint64_t ea = Pctr+2+disp;
+        RV.disassembly = FmtAB(ip,  2) + FormatString("jmp\t0x%lX", ea);
         RV.byte_count = 2;
         return RV;
     }

@@ -23,7 +23,7 @@ struct X86DisRV {
     bool have_ref_relay = false;
 };
 
-struct X86DisRV DisassembleX86(unsigned char * base, uint32_t start_pctr, uint32_t limit);
+struct X86DisRV DisassembleX86(unsigned char * base, uint64_t start_pctr, uint64_t limit);
 
 
 

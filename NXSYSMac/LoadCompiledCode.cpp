@@ -94,7 +94,6 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
 static int FindThunkIndex(const vector<Relay*>& ISD, const char * s) {
     Sexpr Rsym = intern_rlysym_nocreate(0, s);
     if (Rsym != NIL) {
-        int i = 0;
         for (int i = 0; i < (int)ISD.size(); i++)
             if (ISD[i]->RelaySym == Rsym)
                 return i;
