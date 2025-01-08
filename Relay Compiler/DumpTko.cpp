@@ -117,7 +117,9 @@ int main (int argc, const char ** argv) {
         printf("  Compiler Version %d.\n\n", hp->compiler_version);
     }
     else {
-        printf("Compiled at %s", ctime(&hp->time));
+        string sctime(ctime(&hp->time));
+        if (sctime.back() == '\n') sctime.pop_back();
+        printf("Compiled at %s for %s (%d bits)\n", sctime.c_str(), hp->arch, hp->bits);
     }
 
     auto start_dp = dp;
