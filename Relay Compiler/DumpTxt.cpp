@@ -1,13 +1,21 @@
 //
-//  Untitled.h
+//  DumpTxt.h
 //  NXSYSMac
 //
 //  Created by Bernard Greenberg on 12/17/24.
 //  Copyright © 2024 BernardGreenberg. All rights reserved.
 //
+//  "Limited disassemble" of both architectures.  The complete encodings for both
+//   architectures are very, very complicated, and involve optional features, and
+//   apparently, at the outer limits, "professional" disassemblers even show
+//   discrepancies.  These disassemblers only disassemble things RelayCompiler is
+//   known to produce, and all else is "unknown", which on X86 also includes mistaking
+//   its length (always "3" for unknown).
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <memory.h>
+#include <cassert>
 #include "tkov2.h"
 #include "RCArm64.h"
 #include "DisasUtil.h"
@@ -178,23 +186,27 @@ string DisassembleARM (ArmInst inst, LPCTR pctr) {
     }
 }
 /*
- *2400            and   al,0
- *0C01            or    al,1
- *3401          xor    al,1
- *0F95C0         setnz    al
- *480FB6C0       movzx    rax,al
+ TKS - "Table of Known Stuff".  All else is "unknown"
+ 
+ *2400           and    al,0
+ *0C01           or     al,1
+ *3401           xor    al,1
+ *0F95C0         setnz  al
+ *480FB6C0       movzx  rax,al
  *4989C8         mov    r8,rcx
  *4989F8         mov    r8,rdi
  *498B5000       mov    rdx,QWORD PTR [r8+v$265NWZ]
- *498B9000040000     mov    rdx,QWORD PTR [r8+v$266PBS]
- *74FF         jz    g0000
- *7503         jnz    g0001
- *840A         test    BYTE PTR [rdx],cl
- *8A02         mov    al,BYTE PTR [rdx]
+ *498B9000040000 mov    rdx,QWORD PTR [r8+v$266PBS]
+ *74FF           jz     g0000
+ *7503           jnz    g0001
+ *840A           test   BYTE PTR [rdx],cl
+ *8A02           mov    al,BYTE PTR [rdx]
  *B901000000     mov    rcx,0x00000001
- E9FFFFFFFF     jmp    long g0508
- *C3            ret
- *FFD6         call    rsi
+ *E9FFFFFFFF     jmp    long g0508
+ *FFD2           call    rdx
+ *FFD6           call    rsi
+ *C3             ret
+
 */
 
 static uint32_t collect_32(unsigned char* p) {
@@ -217,150 +229,115 @@ static string FmtAB(unsigned char * ip, int nbytes) {
     display += " ";
     return display;
 }
+
+#define IMM_1B 1
+#define IMM_4B 2
+#define JMPDISP 4
+#define RLYDISP 8
+#define IMM_CONSTANT 0x10
+
+struct eltdef {
+    std::vector<unsigned char> Data;
+    int min_bytes;
+    const char * disassembly;
+    unsigned int flags = 0;
+    unsigned char next = 0;
+
+    /* Can't skimp on the declaration of "howmany" -- it can be very, very big
+       and "int"ing it can reduce it to zero and cause infinite looping.
+       This happens in the "live" case. */
+    bool match(unsigned char* p, uint64_t howmany) const {
+        if (howmany < min_bytes)
+            return false;
+        for (auto u : Data)
+            if (u != *p++)
+                return false;
+        return true;
+    }
+};
+
+static char unsigned dispatch[256];
+
+/* Scheme = expect less than 256 known items; at any rate, this is effectively a hash table
+   on the first byte.  The value of dispatch[first_byte] is the INDEX into eltdef of the
+   appropriate entry (hash-siblings threaded by "next"). Note that 0 means "no entry", not entry 0. */
+
+struct eltdef defs [] {
+    {{}, 0, "null entry 1DUMY ---  can't have 0"},
+    {{0xc3}, 1, "ret" },
+    {{0xff, 0xd6}, 2, "call\trsi" },
+    {{0xff, 0xd2}, 2, "call\trdx"},
+    {{0x24, 0x00}, 2, "and\tal,0"},
+    {{0x34, 0x01}, 2, "xor\tal,1"},
+    {{0x0C, 0x01}, 2, "or\tal,1"},
+    {{0x84, 0x0A}, 2, "test\tBYTE PTR [rdx],cl"},
+    {{0x8A, 0x02}, 2, "mov\tal, BYTE PTR [rdx]"},
+    {{0x49, 0x89, 0xF8}, 3, "mov\tr8,rdi"},
+    {{0x49, 0x89, 0xC8}, 3, "mov\tr8,rcx"},
+    {{0x48, 0x0F, 0xB6, 0xC0}, 4, "movzx\trax,al"},
+    {{0x0F, 0x95, 0xC0}, 3, "setnz\tal"},
+    {{0x74}, 2, "jz \t0x%lX", IMM_1B | JMPDISP},
+    {{0x75}, 2, "jnz\t0x%lX", IMM_1B | JMPDISP},
+    {{0xEB}, 2, "jmp\t0x%lx", IMM_1B | JMPDISP},
+    {{0xE9}, 5, "jmp\tlong\t0x%lX", IMM_4B | JMPDISP},
+    {{0xB9}, 5, "mov\trcx,0x%X", IMM_4B | IMM_CONSTANT},
+    {{0x49, 0x8B, 0x50}, 4, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_1B | RLYDISP},
+    {{0x49, 0x8B, 0x90}, 7, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_4B | RLYDISP},
+};
+
+static void setup_x86_dispatch() {
+    memset(dispatch, 0, sizeof(dispatch));
+    int i = 0;
+    for (eltdef& e : defs) {
+        if (i != 0) {
+            auto b = e.Data[0];
+            e.next = dispatch[b];
+            dispatch[b] = (unsigned char)i;
+        }
+        i++;
+    }
+}
+
 struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems) {
     struct X86DisRV RV;
-    if (Pctr >= nitems)
-        return RV;
-
-    if (ip[0] == 0xC3) {
-        RV.disassembly = FmtAB(ip, 1) + "ret";
-        RV.byte_count = 1;
-        return RV;
+    static bool initted = false;
+    assert(nitems > 0);
+    if (!initted) {
+        setup_x86_dispatch();
+        initted = true;
     }
-        
-    if (Pctr + 1 >= nitems) {
-      unclear:
-        RV.disassembly = FmtAB(ip, 1) + "NOT KNOWN 1";
-        RV.byte_count = 1;
-        return RV;
-    }
-
-    if (ip[0] == 0xFF && ip[1] == 0xD6) {
-        RV.disassembly = FmtAB(ip, 2) + "call\trsi";
-        RV.byte_count = 2;
-        return RV;
-    }
-    
-    if (ip[0] == 0xFF && ip[1] == 0xD2) {
-        RV.disassembly = FmtAB(ip, 2) + "call\trdx";
-        RV.byte_count = 2;
-        return RV;
-    }
-
-    if (ip[0] == 0x24 && ip[1] == 0x00) {
-        RV.disassembly = FmtAB(ip, 2) + "and\tal,0";
-        RV.byte_count = 2;
-        return RV;
-    }
-
-    if (ip[0] == 0x34 && ip[1] == 0x01) {
-        RV.disassembly = FmtAB(ip, 2) + "xor\tal,1";
-        RV.byte_count = 2;
-        return RV;
-    }
-    
-    if (ip[0] == 0x0C && ip[1] == 0x01) {
-        RV.disassembly = FmtAB(ip,  2) + "or\tal,1";
-        RV.byte_count = 2;
-        return RV;
-    }
-    
-    if (ip[0] == 0x84 && ip[1] == 0x0A) {
-        RV.disassembly = FmtAB(ip, 2) + "test\tBYTE PTR [rdx],cl";
-        RV.byte_count = 2;
-        return RV;
-    }
-    
-    if (ip[0] == 0x8A && ip[1] == 0x02) {
-        RV.disassembly = FmtAB(ip, 2) + "mov\tal, BYTE PTR [rdx]";
-        RV.byte_count = 2;
-        return RV;
-    }
-    
-    if (ip[0] == 0x74) {
-        int disp = (char)ip[1];
-        uint64_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip, 2) + FormatString("jz \t0x%lX", ea); //need extra space
-        RV.byte_count = 2;
-        return RV;
-    }
-    
-    if (ip[0] == 0x75) {
-        int disp = (char)ip[1];
-        uint64_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip, 2) + FormatString("jnz\t0x%lX", ea);
-        RV.byte_count = 2;
-        return RV;
-    }
-    
-    if (ip[0] == 0xEB) {
-        int disp = (char)ip[1];
-        uint64_t ea = Pctr+2+disp;
-        RV.disassembly = FmtAB(ip,  2) + FormatString("jmp\t0x%lX", ea);
-        RV.byte_count = 2;
-        return RV;
-    }
-    
-    if (Pctr + 2 >= nitems) {
-        RV.disassembly = FmtAB(ip, 2) + "NOT KNOWN 2";
-        RV.byte_count = 2;
-        return RV;
-    }
-
-    if (ip[0] == 0x0F && ip[1] == 0x95 && ip[2] == 0xC0) {
-        RV.disassembly = FmtAB(ip, 3) + "setnz\tal";
-        RV.byte_count = 3;
-        return RV;
-    }
-    if (ip[0] == 0x49 && ip[1] == 0x89) {
-        if (ip[2] == 0xC8) {
-            RV.disassembly = FmtAB(ip, 3) + "mov\tr8,rcx";
-            RV.byte_count = 3;
+    auto b = *ip;
+    auto d = dispatch[b];
+    while (d != 0) {
+        const eltdef& E = defs[d];
+        if (E.match(ip, nitems)) {
+            RV.disassembly = FmtAB(ip, E.min_bytes) + E.disassembly;
+            RV.byte_count = E.min_bytes;
+            int32_t accum = 0;
+            if (E.flags & IMM_1B)
+                accum = (int)(char)ip[E.Data.size()];
+            else if (E.flags & IMM_4B)
+                accum = collect_32(ip+E.Data.size());
+            /* Note that both jumps and relay references come in 8 and 32 bit immediates. */
+            if (E.flags & JMPDISP){
+                LPCTR ea = Pctr + E.min_bytes + (int64_t)accum; // accum is signed 32
+                RV.disassembly = FormatString(RV.disassembly.c_str(), ea);
+                return RV;
+            }
+            if (E.flags & RLYDISP){
+                RV.have_ref_relay = true;
+                RV.relay_ref_index = accum;
+                RV.disassembly = FormatString(RV.disassembly.c_str(), accum);
+                return RV;
+            }
+            if (E.flags & IMM_CONSTANT)
+                RV.disassembly = FormatString(RV.disassembly.c_str(), accum);
             return RV;
         }
-        else if (ip[2] == 0xF8){
-            RV.disassembly = FmtAB(ip, 3) + "mov\tr8,rdi";
-            RV.byte_count = 3;
-            return RV;
-        }
+        d = E.next;
     }
-    if (Pctr + 4 <= nitems && ip[0] == 0x48 && ip[1] == 0x0F && ip[2] == 0xB6 && ip[3] == 0xC0) {
-        RV.disassembly = FmtAB(ip, 4) + "movzx\trax,al";
-        RV.byte_count = 4;
-        return RV;
-    }
-    if (ip[0] == 0xB9 && Pctr+5 <= nitems) {
-        uint32_t constant = collect_32(ip+1);
-        RV.disassembly = FmtAB(ip, 5) + FormatString("mov\trcx,0x%X", constant);
-        RV.byte_count = 5;
-        return RV;
-    }
-    if (Pctr + 4 <= nitems && ip[0] == 0x49 && ip[1] == 0x8B && ip[2] == 0x50) {
-        uint32_t disp = ip[3];
-        RV.relay_ref_index = disp;
-        RV.have_ref_relay = true;
-        RV.byte_count = 4;
-        RV.disassembly = FmtAB(ip, 4) + FormatString("mov\trdx,QWORD PTR [r8+0x%X]", disp);
-        return RV;
-    }
-    if (Pctr + 7 <= nitems && ip[0] == 0x49 && ip[1] == 0x8B && ip[2] == 0x90) {
-        RV.byte_count = 7;
-        uint32_t disp = collect_32(ip + 3);
-        RV.relay_ref_index = disp;
-        RV.have_ref_relay = true;
-        RV.disassembly = FmtAB(ip,  7) + FormatString("mov\trdx,QWORD PTR [r8+0x%X]", disp);
-        return RV;
-    }
-    if (Pctr + 5 <= nitems && ip[0] == 0xE9) {
-        int32_t disp = (int)collect_32(ip+1);  // signed!
-        int64_t ldisp = (int64_t)disp;
-        int64_t ea = ldisp + Pctr + 5;
-        RV.byte_count = 5;
-        RV.disassembly = FmtAB(ip, 5) + FormatString("jmp\tlong\t0x%X", ea);
-        return RV;
-    }
-
-    RV.byte_count = 3;
-    RV.disassembly = FmtAB(ip, 3) + "NOT KNOWN 3";
+    RV.byte_count = std::min((unsigned)nitems, (unsigned)3);
+    RV.disassembly = FmtAB(ip, RV.byte_count) + "Unknown";
     return RV;
+
 }
