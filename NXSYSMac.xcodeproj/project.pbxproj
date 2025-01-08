@@ -21,6 +21,9 @@
 		5B2B336B230220B4004007A9 /* STLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336723021CDF004007A9 /* STLExtensions.cpp */; };
 		5B2B336D2302E13F004007A9 /* plight_apponly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B336C2302E13F004007A9 /* plight_apponly.cpp */; };
 		5B30B10827E4FDCC000D59C8 /* salvager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B30B10627E4FDCC000D59C8 /* salvager.cpp */; };
+		5B38456E2D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */; };
+		5B38456F2D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */; };
+		5B3845702D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */; };
 		5B3AE7682313619700E5779E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B47F34819AFAFE800CBB80A /* WebKit.framework */; };
 		5B43834E19C4C38A00BEECDC /* BigYellowXView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */; };
 		5B46B9FF19A9188F0041C4FE /* FullSignalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B46B9FE19A9188F0041C4FE /* FullSignalView.mm */; };
@@ -327,6 +330,7 @@
 		5B30B10927E929C5000D59C8 /* nxproduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxproduct.h; sourceTree = "<group>"; };
 		5B3754A8286D344E00A35C97 /* MacPackagingTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MacPackagingTool; sourceTree = "<group>"; };
 		5B38456C2D2CB24F006BAD71 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DisasX86Subset.cpp; sourceTree = "<group>"; };
 		5B43834B19C4B47600BEECDC /* AppDelegateGlobals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegateGlobals.h; sourceTree = "<group>"; };
 		5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BigYellowXView.mm; sourceTree = "<group>"; };
 		5B46B9FD19A9188F0041C4FE /* FullSignalView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FullSignalView.h; sourceTree = "<group>"; };
@@ -844,6 +848,7 @@
 				5B4DF3AD2314C957001FDE00 /* fasdump.cpp */,
 				5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */,
 				5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */,
+				5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */,
 			);
 			path = "Relay Compiler";
 			sourceTree = "<group>";
@@ -1884,6 +1889,7 @@
 				5B4DF3A52314C41E001FDE00 /* readsexp.cpp in Sources */,
 				5B8EDEF12D15EA1100F07ED0 /* genarm.cpp in Sources */,
 				5B4DF3AE2314C958001FDE00 /* fasdump.cpp in Sources */,
+				5B38456E2D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1907,6 +1913,7 @@
 				5B8EDEE52D0C908100F07ED0 /* argparse.cpp in Sources */,
 				5B8EDEE82D11B20200F07ED0 /* DumpTxt.cpp in Sources */,
 				5B8EDEE42D0BC22800F07ED0 /* DumpTko.cpp in Sources */,
+				5B3845702D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2002,6 +2009,7 @@
 				5BABB89719A829CE00ECA09A /* RelayTracerController.mm in Sources */,
 				5BF062F0199FAB49008CDCA0 /* xexlight.cpp in Sources */,
 				5BF062E8199F72C3008CDCA0 /* Winapi.mm in Sources */,
+				5B38456F2D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */,
 				5B88FEA11DF71C0D00D8F8E0 /* SwitchConsistency.cpp in Sources */,
 				5BAD55FF1A011BE2006AEEAB /* DeviceContext.mm in Sources */,
 				5BF062DD199EE7CB008CDCA0 /* xturnout.cpp in Sources */,
