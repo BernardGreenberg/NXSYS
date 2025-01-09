@@ -25,7 +25,8 @@ extern CCC_Thunkptrtype CCC_Thunkptr;
 #define CallCompiledCode(codeptr)  (*CCC_Thunkptr)(Compiled_Linkage_Sptr, codeptr)
 
 #endif
-
+extern bool RunningSimulatedCompiledCode;
+int32_t SimulateX86(void* codeptr);
 
 
 #endif

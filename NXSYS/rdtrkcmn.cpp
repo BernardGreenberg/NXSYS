@@ -32,6 +32,7 @@
 #include "helpdlg.h"
 #include "STLExtensions.h"
 #include "ValidatingValue.h"
+#include "cccint.h"
 
 
 
@@ -211,6 +212,8 @@ const char * ReadLayout (const char* fname) {
 	}
 	SetCursor (hc);
         InterlockingName= INameRetval + "(Compiled)";
+        if (RunningSimulatedCompiledCode)
+            InterlockingName += "[X86 Sim]";
 	InterpretedP = 0;
 #else
 	std::string em;

@@ -98,15 +98,21 @@ string GenerateHeaderLine(Relay * r, int lenb, bool record) {
     if (record)
         ShownRelays.emplace_back(r, Lines.size());
 #if ISARM
-    int lenw = lenb / sizeof(ArmInst);
-#endif
-    return (string(" ") + r->RelaySym.PRep() + ":          (compiled relay)   " +
-#if ISARM
-            FormatString(" length %d(%d wds) = 0x%x(0x%02x) ", lenb, lenw, lenb, lenw) +
+    if (RunningSimulatedCompiledCode) {
+        return (string(" ") + r->RelaySym.PRep() + ":    (Intel) (compiled relay)" +
+                FormatString(" length %d = 0x%x bytes ", lenb, lenb) + InterpretState(r));
+
+    } else {
+        int lenw = lenb / sizeof(ArmInst);
+        return (string(" ") + r->RelaySym.PRep() + ":    (arm64) (compiled relay)" +
+                FormatString(" length %d(%d wds) = 0x%x(0x%02x) ", lenb, lenw, lenb, lenw) +
+                InterpretState(r));
+    }
 #else
-            FormatString(" length %d = 0x%x bytes ", lenb, lenb) +
-#endif
+    return (string(" ") + r->RelaySym.PRep() + ":          (compiled relay)" +
+            FormatString(" (Intel) length %d = 0x%x bytes ", lenb, lenb) +
             InterpretState(r));
+#endif
 }
 
 void ldgDisassemble(Relay* r) {
@@ -120,7 +126,10 @@ void ldgDisassemble(Relay* r) {
         LPCTR pctr = (LPCTR)p;
         int bytes = 0;
 #if ISARM
-        Lines.push_back(GenerateUpdatableLineARM(pctr, true, bytes));
+        if (RunningSimulatedCompiledCode)
+            Lines.push_back(GenerateUpdatableLineX86(pctr, true, bytes));
+        else
+            Lines.push_back(GenerateUpdatableLineARM(pctr, true, bytes));
 #else
         Lines.push_back(GenerateUpdatableLineX86(pctr, true, bytes));
 #endif
@@ -163,13 +172,16 @@ void ldgDisassembleDraw(HDC dc) {
                                                 GetRelayFunctionLength(e.relay),
                                                 false);
     int bytes = 0;  //dummy
-    for (const auto& e : UpdateSchedule)
+    for (const auto& e : UpdateSchedule) {
 #if ISARM
-        Lines[e.lineIndex] = GenerateUpdatableLineARM(e.pctr, false, bytes);
+        if (RunningSimulatedCompiledCode)
+            Lines[e.lineIndex] = GenerateUpdatableLineX86(e.pctr, false, bytes);
+        else
+            Lines[e.lineIndex] = GenerateUpdatableLineARM(e.pctr, false, bytes);
 #else
         Lines[e.lineIndex] = GenerateUpdatableLineX86(e.pctr, false, bytes);
 #endif
-
+    }
     int y = Top;
     for (auto& s : Lines) {
         int height = DrawLine(s, y, dc);

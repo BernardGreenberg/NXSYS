@@ -23,6 +23,7 @@ using std::vector, std::string;
 
 #include "STLExtensions.h"
 #include "DisasUtil.h"
+#include "cccint.h"
 
 /*
  KST - "Kmown Stuff Table" -- values copied from NASM assembler listing.
@@ -198,7 +199,7 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems
 #define STACKLASTNO (NSTACK-1)
 #define STACKLAST STACK+STACKLASTNO
 
-uint64_t SimulateX86(void* linkptr, void* codeptr) {
+int32_t SimulateX86(void* codeptr) {
 
     /* Simulated X866_64 registers and zero indicator */
 
@@ -209,12 +210,11 @@ uint64_t SimulateX86(void* linkptr, void* codeptr) {
     EnsureDispatch();
 
     /* bypass Grand Thunk Railroad */
-    unsigned char * pc = (unsigned char*)codeptr;
-    R8 = (uint64_t)linkptr;
-    RCX = 1;
     /* must take care to do address arithmetic in bytes (unsigned chars)*/
-    pc = (unsigned char*)codeptr;
-    
+    unsigned char * pc = (unsigned char*)codeptr;
+    R8 = (uint64_t)Compiled_Linkage_Sptr;
+    RCX = 1;
+
     *SP-- = 0; /* set a trap for a RET out of the whole function to be recognized */
     
     while (SP < STACKLAST) {
@@ -306,7 +306,7 @@ uint64_t SimulateX86(void* linkptr, void* codeptr) {
     }
     /* Since we dispensed with the thunk, convert the (non)-zero flag into AL 0 or 1 here in C++. */
     RAX = ZI ? 0 : 1;
-    return RAX;
+    return (int32_t) RAX;
 }
        
 

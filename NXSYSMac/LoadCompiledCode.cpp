@@ -28,6 +28,7 @@
 #include "relays.h"
 #include "usermsg.h"
 #include "cccint.h"
+#include "messagebox.h"
 
 #include <string>
 #include <vector>
@@ -58,7 +59,7 @@ CCC_Thunkptrtype CCC_Thunkptr;
 #endif
 
 
-
+bool RunningSimulatedCompiledCode = false;
 void ReadFaslForms(unsigned char * data, const char* fname);
 void CleanupObjectMemory(); //below
 
@@ -75,7 +76,18 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
         return false;
     }
 #if defined(__aarch64__) || defined(_M_ARM64)
-    if (string (H.arch) != "ARM64") {
+    if (string(H.arch) =="INTEL x86") {
+        int response = MessageBox(nullptr,
+                                  "This file was compiled for the Intel X86, but this Mac is "
+                                  "running on an ARM64 processor. We can run this interlocking code "
+                                  "in simulation; there should be no difference. Do you want to?",
+                                  "Compiled file for wrong CPU type",
+                                  MB_YESNOCANCEL);
+        if (response != IDYES)
+            return false;
+        RunningSimulatedCompiledCode = true;
+    }
+    else if (string (H.arch) != "ARM64") {
         usermsgstop("%s was not compiled for the ARM64 Apple Silicon architecture, but for %s.",
                     path, H.arch);
         return false;
@@ -86,6 +98,16 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
                     path, H.arch);
         return false;
     }
+  
+    int response = MessageBox(nullptr,
+                              "This file was compiled for the Intel X86, but Intel Macs "
+                              "have a problem running app-generated code. We can run this interlocking ØØ"
+                              "code in simulation; there should be no difference. Do you want to?",
+                              "Intel Mac JIT problem requires simulation",
+                              MB_YESNOCANCEL);
+    if (response != IDYES)
+        return false;
+    RunningSimulatedCompiledCode = true;
 #endif
         
     return true;
@@ -126,6 +148,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
     fread (file_data, 1, file_length, f);
     fclose(f);
 
+    RunningSimulatedCompiledCode = false; // until we know we are
     auto hp = (_TKO_VERSION_2_HEADER*) dp;
     dp += hp->header_size;
     if (!verify_header_ids(*hp, path)) //diagnoses extensively
@@ -153,26 +176,36 @@ bool LoadRelayObjectFile(const char*path, const char*) {
             {
                 size_t code_bytes = chp->number_of_items * sizeof(ArmInst);
 #if NXSYSMac
-                CodeText = (ArmInst*)mmap(NULL,
-                                          code_bytes,
-                                          PROT_WRITE | PROT_READ | PROT_EXEC,
-                                          MAP_ANON | MAP_PRIVATE | MAP_JIT,
-                                          -1, 0
-                                          );
-                assert(CodeText != nullptr);
-                CodeSize = code_bytes;
+                if (RunningSimulatedCompiledCode) {
+                    CodeSize = code_bytes;
+                    size_t narminst = (code_bytes + sizeof(ArmInst) - 1) / sizeof(ArmInst);
+                    CodeText = new ArmInst[narminst];
 
-                if (__builtin_available(macOS 11.0, *)) {
-                    pthread_jit_write_protect_np(0);
-                } else {
-                    // Fallback on earlier versions
-                } // Turn off so it is RW- (Apple only)
-                memcpy(CodeText, rdp, code_bytes);
-                if (__builtin_available(macOS 11.0, *)) {
-                    pthread_jit_write_protect_np(1);
-                } else {
-                    // Fallback on earlier versions
-                } // Turn on so it is R-X (Apple only)
+                    memcpy(CodeText, rdp, code_bytes);
+                }
+                else {
+                    CodeText = (ArmInst*)mmap(NULL,
+                                              code_bytes,
+                                              PROT_WRITE | PROT_READ | PROT_EXEC,
+                                              MAP_ANON | MAP_PRIVATE | MAP_JIT,
+                                              -1, 0
+                                              );
+                    assert(CodeText != nullptr);
+                    CodeSize = code_bytes;
+                    
+                    if (__builtin_available(macOS 11.0, *)) {
+                        pthread_jit_write_protect_np(0);
+                    } else {
+                        // Fallback on earlier versions
+                    } // Turn off so it is RW- (Apple only)
+                    /* FAILS on Intel Mac (can't write, no way to trap) */
+                    memcpy(CodeText, rdp, code_bytes);
+                    if (__builtin_available(macOS 11.0, *)) {
+                        pthread_jit_write_protect_np(1);
+                    } else {
+                        // Fallback on earlier versions
+                    } // Turn on so it is R-X (Apple only)
+                }
 #endif
                 break;
             }
@@ -287,7 +320,10 @@ void CleanupObjectMemory() {
     /* dum vivimus speramus */
 #if NXSYSMac
     if (CodeText != nullptr)
-        munmap(CodeText, CodeSize);
+        if (RunningSimulatedCompiledCode)
+            delete CodeText;
+        else
+            munmap(CodeText, CodeSize);
 #endif
     CodeText = nullptr;
     CodeSize = 0;

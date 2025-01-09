@@ -255,8 +255,12 @@ static BOOL REval (LNode * exp) {
 
 BOOL inline Relay::ComputeValue() volatile {
 #if CALL_COMPILED && NXCMPOBJ
-    if (Flags & LF_CCExp)
-        return CallCompiledCode (exp);
+    if (Flags & LF_CCExp) {
+        if (RunningSimulatedCompiledCode)
+            return SimulateX86(exp);
+        else
+            return CallCompiledCode (exp);
+    }
 #endif
 
     return REval (exp);
@@ -379,7 +383,10 @@ void GooseRelay (Relay * rr) {
 #if defined(CALL_COMPILED) && defined(NXCMPOBJ)
     if (rr->Flags & LF_CCExp) {
 //         printf("Goose honking %s\n", rr->RelaySym.PRep().c_str());
-        state = CallCompiledCode (rr->exp);
+        if (RunningSimulatedCompiledCode)
+            state = SimulateX86(rr->exp);
+        else
+            state = CallCompiledCode (rr->exp);
     }
 
     else
