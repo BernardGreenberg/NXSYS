@@ -74,7 +74,16 @@ static string FmtInst(unsigned char * ip, int nbytes) {
 #define RLYDISP 8
 #define IMM_CONSTANT 0x10
 
+enum ICODE {I_NULL, I_RET, I_CRSI, I_CRDX, I_ANDAL, I_XORAL, I_ORAL, I_TEST, I_LMOV,
+    I_M8DI, I_M8CX, I_MVZXA, I_SETNZ, I_JZ, I_JNZ, I_JMPS, I_JMPL,
+    I_C2CX, I_LDX1B, I_LDX4B};
+
 struct X86Pattern {
+
+
+
+
+    enum ICODE icode;
     vector<unsigned char> Data;       /* Bytes that must match exectly */
     int must_exist_bytes;             /* count of bytes that have to exist, incl above */
     const char * disassembly;         /* The "answer" string */
@@ -103,26 +112,26 @@ struct X86Pattern {
 static char unsigned dispatch[256] = {}; /* guaranteed init to 0's */
 
 static struct X86Pattern KnownPatterns [] {
-    {{}, 0, "null entry 1DUMY ---  can't have 0"},
-    {{0xc3}, 1, "ret" },
-    {{0xff, 0xd6}, 2, "call\trsi" },
-    {{0xff, 0xd2}, 2, "call\trdx"},
-    {{0x24, 0x00}, 2, "and\tal,0"},
-    {{0x34, 0x01}, 2, "xor\tal,1"},
-    {{0x0C, 0x01}, 2, "or\tal,1"},
-    {{0x84, 0x0A}, 2, "test\tBYTE PTR [rdx],cl"},
-    {{0x8A, 0x02}, 2, "mov\tal, BYTE PTR [rdx]"},
-    {{0x49, 0x89, 0xF8}, 3, "mov\tr8,rdi"},
-    {{0x49, 0x89, 0xC8}, 3, "mov\tr8,rcx"},
-    {{0x48, 0x0F, 0xB6, 0xC0}, 4, "movzx\trax,al"},
-    {{0x0F, 0x95, 0xC0}, 3, "setnz\tal"},
-    {{0x74}, 2, "jz \t0x%lX", IMM_1B | JMPDISP},
-    {{0x75}, 2, "jnz\t0x%lX", IMM_1B | JMPDISP},
-    {{0xEB}, 2, "jmp\t0x%lx", IMM_1B | JMPDISP},
-    {{0xE9}, 5, "jmp\tlong\t0x%lX", IMM_4B | JMPDISP},
-    {{0xB9}, 5, "mov\trcx,0x%X", IMM_4B | IMM_CONSTANT},
-    {{0x49, 0x8B, 0x50}, 4, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_1B | RLYDISP},
-    {{0x49, 0x8B, 0x90}, 7, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_4B | RLYDISP},
+    {I_NULL, {}, 0, "null entry 1DUMY ---  can't have 0"},
+    {I_RET,  {0xc3}, 1, "ret" },
+    {I_CRSI, {0xff, 0xd6}, 2, "call\trsi" },
+    {I_CRDX, {0xff, 0xd2}, 2, "call\trdx"},
+    {I_ANDAL,{0x24, 0x00}, 2, "and\tal,0"},
+    {I_XORAL,{0x34, 0x01}, 2, "xor\tal,1"},
+    {I_ORAL, {0x0C, 0x01}, 2, "or\tal,1"},
+    {I_TEST, {0x84, 0x0A}, 2, "test\tBYTE PTR [rdx],cl"},
+    {I_LMOV, {0x8A, 0x02}, 2, "mov\tal, BYTE PTR [rdx]"},
+    {I_M8DI, {0x49, 0x89, 0xF8}, 3, "mov\tr8,rdi"},
+    {I_M8CX, {0x49, 0x89, 0xC8}, 3, "mov\tr8,rcx"},
+    {I_MVZXA,{0x48, 0x0F, 0xB6, 0xC0}, 4, "movzx\trax,al"},
+    {I_SETNZ,{0x0F, 0x95, 0xC0}, 3, "setnz\tal"},
+    {I_JZ,   {0x74}, 2, "jz \t0x%lX", IMM_1B | JMPDISP},
+    {I_JNZ,  {0x75}, 2, "jnz\t0x%lX", IMM_1B | JMPDISP},
+    {I_JMPS, {0xEB}, 2, "jmp\t0x%lx", IMM_1B | JMPDISP},
+    {I_JMPL, {0xE9}, 5, "jmp\tlong\t0x%lX", IMM_4B | JMPDISP},
+    {I_C2CX, {0xB9}, 5, "mov\trcx,0x%X", IMM_4B | IMM_CONSTANT},
+    {I_LDX1B,{0x49, 0x8B, 0x50}, 4, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_1B | RLYDISP},
+    {I_LDX4B, {0x49, 0x8B, 0x90}, 7, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_4B | RLYDISP},
 };
 
 static void setup_x86_dispatch() {
@@ -183,3 +192,109 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems
     return RV;
 
 }
+
+#define NSTACK 10
+#define STACKLAST (NSTACK-1)
+
+uint64_t SimulateX86(void* linkptr, void* codeptr) {
+    uint64_t RAX=0, RCX=0, RDX=0, RSI=0, RDI=0, R8=0, STACK[NSTACK];
+    uint64_t *SP = STACK + STACKLAST;
+    bool ZI = false;
+    
+    unsigned char * pc = (unsigned char*)codeptr;
+    /* assume mac calling sequence */
+    RDI = (uint64_t)linkptr;
+    RCX = (uint64_t)codeptr;
+    
+    *SP-- = 0;
+    
+    while (SP < STACK+STACKLAST) {
+        X86Pattern * Ep = nullptr;
+        for (auto d = dispatch[*pc]; d != 0; d = KnownPatterns[d].next) {
+            Ep = &(KnownPatterns[d]);
+            if (Ep->match(pc, 1LL<<61))
+                break;
+        }
+        assert(Ep != nullptr); // Can't decode
+        
+        pc += Ep->must_exist_bytes;
+        
+        switch(Ep->icode) {
+            case I_NULL:
+                assert(!"Null icode in interpreter");
+                continue;
+            case I_RET:
+                assert(SP < STACK+STACKLAST);
+                pc = (unsigned char*)(*++SP);
+                continue;
+            case I_CRSI:
+                *SP-- = (uint64_t)pc;
+                pc = (unsigned char*)RSI;
+                continue;
+            case I_CRDX:
+                *SP-- = (uint64_t)pc;
+                pc = (unsigned char*)RDX;
+                continue;
+            case I_ANDAL:
+                RAX &= 0xFFFFFFFFFFFFFF00;
+                ZI = true;
+                continue;
+            case I_XORAL:
+                RAX = RAX ^ 1;
+                ZI = (RAX == 0);
+                continue;
+            case I_ORAL:
+                RAX |= 1;
+                ZI = false;
+                continue;
+            case I_TEST: //test    BYTE PTR [rdx],cl
+                ZI = ((*(unsigned char*)RDX) & (unsigned char)RCX) == 0;
+                continue;
+            case I_LMOV:
+                RAX = (*(unsigned char*)RDX);
+                continue;
+            case I_M8CX:
+                R8 = RCX;
+                continue;
+            case I_M8DI:
+                R8 = RDI;
+                continue;
+            case I_MVZXA:
+                RAX &= 0xFFFFFFFFFFFF00;
+                continue;
+            case I_SETNZ:
+                ZI = (RAX & 0xFF) == 0;
+                continue;
+
+            case I_JZ:
+                if (ZI)
+                    pc += (int64_t)(char)(pc[-1]);
+                continue;
+            case I_JNZ:
+                if (!ZI)
+                    pc += (int64_t)(char)(pc[-1]);
+                continue;
+            case I_JMPS:
+                pc += (int64_t)(char)(pc[-1]);
+                continue;
+            case I_JMPL:
+                pc += (int64_t)collect_32(pc - 4);
+                continue;
+                
+            case I_C2CX:
+                RCX = collect_32(pc - 4);
+                continue;
+            case I_LDX1B:
+                RDX = *(((uint64_t*)R8) + (int64_t)(char)(pc[-1]));
+                continue;
+            case I_LDX4B:
+                RDX = *(((uint64_t*)R8) + (int64_t)collect_32(pc - 4));
+                continue;
+        }
+    }
+    return RAX;
+}
+       
+
+
+
