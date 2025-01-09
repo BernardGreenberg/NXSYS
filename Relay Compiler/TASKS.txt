@@ -15,4 +15,5 @@
 1/5/25  Look up thunk names legitimately.  DONE, checked working in Intel Mac case (rosetta2)
 1/6/25  --relay_trace_to_console ctl arg
 1/8/25  --disable_relays ctl arg
+1/8/25  Fixup pass through assembly listings
 

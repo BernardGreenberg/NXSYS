@@ -42,8 +42,8 @@ using std::vector, std::string;
  8A02           mov    al,BYTE PTR [rdx]
  B901000000     mov    rcx,0x00000001
  E9FFFFFFFF     jmp    long g0508
- FFD2           call    rdx
- FFD6           call    rsi
+ FFD2           call   rdx
+ FFD6           call   rsi
  C3             ret
 */
 
@@ -138,45 +138,46 @@ static void setup_x86_dispatch() {
     }
 }
 
+static struct X86DisRV DisassembleDecodedX86(unsigned char* ip, uint64_t Pctr, const X86Pattern& E) {
+    X86DisRV RV;
+    RV.disassembly = FmtInst(ip, E.must_exist_bytes) + E.disassembly;
+    RV.byte_count = E.must_exist_bytes;
+    int32_t accum = 0;
+    if (E.flags & IMM_1B)
+        accum = (int)(char)ip[E.Data.size()];
+    else if (E.flags & IMM_4B)
+        accum = collect_32(ip+E.Data.size());
+    /* Note that both jumps and relay references come in 8 and 32 bit immediates. */
+    if (E.flags & JMPDISP){
+        LPCTR ea = Pctr + E.must_exist_bytes + (int64_t)accum; // accum is signed 32
+        RV.disassembly = FormatString(RV.disassembly.c_str(), ea);
+        return RV;
+    }
+    if (E.flags & RLYDISP){
+        RV.have_ref_relay = true;
+        RV.relay_ref_index = accum;
+        RV.disassembly = FormatString(RV.disassembly.c_str(), accum);
+        return RV;
+    }
+    if (E.flags & IMM_CONSTANT)
+        RV.disassembly = FormatString(RV.disassembly.c_str(), accum);
+    return RV;
+}
+
 struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems) {
     static bool initted = false;
     if (!initted) {
         setup_x86_dispatch();
         initted = true;
     }
-
-    struct X86DisRV RV;
     assert(nitems > 0);
-    auto b = *ip;
-    auto d = dispatch[b];
-    while (d != 0) {
+
+    for (auto d = dispatch[*ip]; d != 0; d = KnownPatterns[d].next) {
         const X86Pattern& E = KnownPatterns[d];
-        if (E.match(ip, nitems)) {
-            RV.disassembly = FmtInst(ip, E.must_exist_bytes) + E.disassembly;
-            RV.byte_count = E.must_exist_bytes;
-            int32_t accum = 0;
-            if (E.flags & IMM_1B)
-                accum = (int)(char)ip[E.Data.size()];
-            else if (E.flags & IMM_4B)
-                accum = collect_32(ip+E.Data.size());
-            /* Note that both jumps and relay references come in 8 and 32 bit immediates. */
-            if (E.flags & JMPDISP){
-                LPCTR ea = Pctr + E.must_exist_bytes + (int64_t)accum; // accum is signed 32
-                RV.disassembly = FormatString(RV.disassembly.c_str(), ea);
-                return RV;
-            }
-            if (E.flags & RLYDISP){
-                RV.have_ref_relay = true;
-                RV.relay_ref_index = accum;
-                RV.disassembly = FormatString(RV.disassembly.c_str(), accum);
-                return RV;
-            }
-            if (E.flags & IMM_CONSTANT)
-                RV.disassembly = FormatString(RV.disassembly.c_str(), accum);
-            return RV;
-        }
-        d = E.next;
+        if (E.match(ip, nitems))
+            return DisassembleDecodedX86(ip, Pctr, E);
     }
+    struct X86DisRV RV;
     RV.byte_count = std::min((unsigned)nitems, (unsigned)3);
     RV.disassembly = FmtInst(ip, RV.byte_count) + "Unknown";
     return RV;
