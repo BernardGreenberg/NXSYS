@@ -204,7 +204,7 @@ uint64_t SimulateX86(void* linkptr, void* codeptr) {
     unsigned char * pc = (unsigned char*)codeptr;
     /* assume mac calling sequence */
     RDI = (uint64_t)linkptr;
-    RCX = (uint64_t)codeptr;
+    RSI = (uint64_t)codeptr;
     
     *SP-- = 0;
     
