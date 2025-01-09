@@ -25,6 +25,6 @@ struct X86DisRV {
 
 struct X86DisRV DisassembleX86(unsigned char * base, uint64_t start_pctr, uint64_t limit);
 
-
+uint64_t SimulateX86(void* linkptr, void* codeptr);
 
 #endif /* DisasUtil_h */

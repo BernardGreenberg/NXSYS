@@ -8,7 +8,7 @@
 //  Disassembles 1 X86-64 (64-bit mode assumed) instruction, returning interpretation and length
 //  in the X86DisRV resturn value structure.  Note that only the specific patterns generated
 //  by the Relay Compiler are recognized and understood.  If the relay compiler is substantially
-//  augmented, this table, or the whole strategy, may need to change.
+//  augmented, this table, or the whole strategy, will need to change.
 //
 //  Note that this is used by both DumpTko when applied to an X86 TKO, or the simulator itself
 //  on an X86 platform, having loaded one.
@@ -79,10 +79,6 @@ enum ICODE {I_NULL, I_RET, I_CRSI, I_CRDX, I_ANDAL, I_XORAL, I_ORAL, I_TEST, I_L
     I_C2CX, I_LDX1B, I_LDX4B};
 
 struct X86Pattern {
-
-
-
-
     enum ICODE icode;
     vector<unsigned char> Data;       /* Bytes that must match exectly */
     int must_exist_bytes;             /* count of bytes that have to exist, incl above */
@@ -131,10 +127,13 @@ static struct X86Pattern KnownPatterns [] {
     {I_JMPL, {0xE9}, 5, "jmp\tlong\t0x%lX", IMM_4B | JMPDISP},
     {I_C2CX, {0xB9}, 5, "mov\trcx,0x%X", IMM_4B | IMM_CONSTANT},
     {I_LDX1B,{0x49, 0x8B, 0x50}, 4, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_1B | RLYDISP},
-    {I_LDX4B, {0x49, 0x8B, 0x90}, 7, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_4B | RLYDISP},
+    {I_LDX4B,{0x49, 0x8B, 0x90}, 7, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_4B | RLYDISP},
 };
 
-static void setup_x86_dispatch() {
+static void EnsureDispatch() {
+    static bool done = false;
+    if (done)
+        return;
     /* guaranteed zeros in static array */
     int i = 0;
     for (X86Pattern& e : KnownPatterns) {
@@ -145,6 +144,7 @@ static void setup_x86_dispatch() {
         }
         i++;
     }
+    done = true;
 }
 
 static struct X86DisRV DisassembleDecodedX86(unsigned char* ip, uint64_t Pctr, const X86Pattern& E) {
@@ -174,11 +174,7 @@ static struct X86DisRV DisassembleDecodedX86(unsigned char* ip, uint64_t Pctr, c
 }
 
 struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems) {
-    static bool initted = false;
-    if (!initted) {
-        setup_x86_dispatch();
-        initted = true;
-    }
+    EnsureDispatch();
     assert(nitems > 0);
 
     for (auto d = dispatch[*ip]; d != 0; d = KnownPatterns[d].next) {
@@ -193,22 +189,35 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems
 
 }
 
+/* This stoopid interpreter, which actually works, is here in order to execute X86 instructions
+ on an actual X86 Mac, where JIT seems not to be able to be turned on.  What, then, is the
+ advantage of using compilation at all, there?  Amusingly, it allows execution of X86 code
+ on arm also -- remember, Windows is X86. */
+
 #define NSTACK 10
-#define STACKLAST (NSTACK-1)
+#define STACKLASTNO (NSTACK-1)
+#define STACKLAST STACK+STACKLASTNO
 
 uint64_t SimulateX86(void* linkptr, void* codeptr) {
+
+    /* Simulated X866_64 registers and zero indicator */
+
     uint64_t RAX=0, RCX=0, RDX=0, RSI=0, RDI=0, R8=0, STACK[NSTACK];
-    uint64_t *SP = STACK + STACKLAST;
+    uint64_t *SP = STACKLAST;
     bool ZI = false;
-    
+
+    EnsureDispatch();
+
+    /* bypass Grand Thunk Railroad */
     unsigned char * pc = (unsigned char*)codeptr;
-    /* assume mac calling sequence */
-    RDI = (uint64_t)linkptr;
-    RSI = (uint64_t)codeptr;
+    R8 = (uint64_t)linkptr;
+    RCX = 1;
+    /* must take care to do address arithmetic in bytes (unsigned chars)*/
+    pc = (unsigned char*)codeptr;
     
-    *SP-- = 0;
+    *SP-- = 0; /* set a trap for a RET out of the whole function to be recognized */
     
-    while (SP < STACK+STACKLAST) {
+    while (SP < STACKLAST) {
         X86Pattern * Ep = nullptr;
         for (auto d = dispatch[*pc]; d != 0; d = KnownPatterns[d].next) {
             Ep = &(KnownPatterns[d]);
@@ -216,7 +225,11 @@ uint64_t SimulateX86(void* linkptr, void* codeptr) {
                 break;
         }
         assert(Ep != nullptr); // Can't decode
-        
+
+        /* uncomment to watch the interpreter in action */
+        //  printf("%p %s\n", pc, Ep->disassembly);
+
+        /* Move the PC FIRST so that rel refs are meaningful*/
         pc += Ep->must_exist_bytes;
         
         switch(Ep->icode) {
@@ -224,7 +237,7 @@ uint64_t SimulateX86(void* linkptr, void* codeptr) {
                 assert(!"Null icode in interpreter");
                 continue;
             case I_RET:
-                assert(SP < STACK+STACKLAST);
+                assert(SP < STACKLAST);
                 pc = (unsigned char*)(*++SP);
                 continue;
             case I_CRSI:
@@ -251,7 +264,7 @@ uint64_t SimulateX86(void* linkptr, void* codeptr) {
                 ZI = ((*(unsigned char*)RDX) & (unsigned char)RCX) == 0;
                 continue;
             case I_LMOV:
-                RAX = (*(unsigned char*)RDX);
+                RAX = *(unsigned char*)RDX;
                 continue;
             case I_M8CX:
                 R8 = RCX;
@@ -260,12 +273,11 @@ uint64_t SimulateX86(void* linkptr, void* codeptr) {
                 R8 = RDI;
                 continue;
             case I_MVZXA:
-                RAX &= 0xFFFFFFFFFFFF00;
+                RAX &= 0xFF;
                 continue;
             case I_SETNZ:
-                ZI = (RAX & 0xFF) == 0;
+                RAX = ZI ? 0 : 1;
                 continue;
-
             case I_JZ:
                 if (ZI)
                     pc += (int64_t)(char)(pc[-1]);
@@ -285,13 +297,15 @@ uint64_t SimulateX86(void* linkptr, void* codeptr) {
                 RCX = collect_32(pc - 4);
                 continue;
             case I_LDX1B:
-                RDX = *(((uint64_t*)R8) + (int64_t)(char)(pc[-1]));
+                RDX = *(uint64_t*)((unsigned char*)R8 + (int64_t)(char)(pc[-1]));
                 continue;
             case I_LDX4B:
-                RDX = *(((uint64_t*)R8) + (int64_t)collect_32(pc - 4));
+                RDX = *(uint64_t*)(((unsigned char*)R8) + (int64_t)collect_32(pc - 4));
                 continue;
         }
     }
+    /* Since we dispensed with the thunk, convert the (non)-zero flag into AL 0 or 1 here in C++. */
+    RAX = ZI ? 0 : 1;
     return RAX;
 }
        
