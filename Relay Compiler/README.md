@@ -27,8 +27,8 @@ Reading the object code is not rocket science ; each logic term generates (on AR
 Intel code is a bit simpler, because it does not need the arcane **ldrb**. **cl** alwas has **1** in it.  Windows and Mac use different 17-word "entry thunks" to compiled code, which account for differing ABI (Application Binary Interface) calling sequences, but the relay functions are identical.
 
     00000139 498B9088000000 c$267RWK: mov     rdx,QWORD PTR [r8+v$267RWC]
-    00000137 840A                     test    BYTE PTR [rdx],cl
-    00000139 74F4                     jz      retval
+    00000140 840A                     test    BYTE PTR [rdx],cl
+    00000142 74F4                     jz      retval
 
 *Ursus in mente* that **.tko**'s are code-containing files; the whole point is that the simulator executes machine instructions provided by them.  They are thus as corruptible and "dangerous" as any executable application, including the simulator, and must be treated with the same degree of caution and trust. See below --
 
