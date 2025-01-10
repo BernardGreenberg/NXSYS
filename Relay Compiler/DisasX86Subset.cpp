@@ -194,7 +194,7 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems
  on an actual X86 Mac, where JIT seems not to be able to be turned on.  What, then, is the
  advantage of using compilation at all, there?  Amusingly, it allows execution of X86 code
  on arm also -- remember, Windows is X86. */
-
+#if REALLY_NXSYS
 #define NSTACK 10
 #define STACKLASTNO (NSTACK-1)
 #define STACKLAST STACK+STACKLASTNO
@@ -309,6 +309,6 @@ int32_t SimulateX86(void* codeptr) {
     return (int32_t) RAX;
 }
        
-
+#endif
 
 

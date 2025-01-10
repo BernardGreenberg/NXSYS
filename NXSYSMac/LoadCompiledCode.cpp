@@ -73,7 +73,6 @@ int processIsTranslated() {
    size_t size = sizeof(ret);
    if (sysctlbyname("sysctl.proc_translated", &ret, &size, NULL, 0) == -1)
    {
-       printf("errno %d\n", errno);
       if (errno == ENOENT)
          return 0;
       return -1;
@@ -122,6 +121,8 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
         RunningSimulatedCompiledCode = false;
         return true;
     }
+    RunningSimulatedCompiledCode = false;
+#if 0
     auto msg = "This interlocking definition  was compiled for the Intel X86, but Intel Macs " \
     "have a problem running app-generated code. We can run this interlocking " \
     "code in simulation; there should be no difference. Do you want to? " \
@@ -135,6 +136,8 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
         RunningSimulatedCompiledCode = true;
     else
         RunningSimulatedCompiledCode = false;
+#endif
+
 #endif
         
     return true;

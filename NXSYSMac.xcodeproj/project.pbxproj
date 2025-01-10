@@ -2512,6 +2512,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"NXSYSMac=1",
+					"REALLY_NXSYS=1",
 					"NXCMPOBJ=1",
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = (
@@ -2553,6 +2554,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NXSYSMac=1",
 					"NXCMPOBJ=1",
+					"REALLY_NXSYS=1",
 				);
 				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
 				"HEADER_SEARCH_PATHS[arch=*]" = (
