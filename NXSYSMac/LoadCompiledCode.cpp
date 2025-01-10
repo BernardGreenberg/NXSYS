@@ -205,7 +205,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
                 break;
             case TKOI_TXT:
             {
-                size_t code_bytes = chp->number_of_items * chp->number_of_items;
+                size_t code_bytes = chp->number_of_items * chp->length_of_item;
 #if NXSYSMac   // Windows TBD, but this handles all Mac cases...
                 if (RunningSimulatedCompiledCode) {
                     CodeSize = code_bytes;
