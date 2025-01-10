@@ -122,7 +122,8 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
         return true;
     }
     RunningSimulatedCompiledCode = false;
-#if 0
+#if 0  //this was useful once;  Comment it out.  A bug at TKDI_TXT: (first line) caused this
+      //problem.
     auto msg = "This interlocking definition  was compiled for the Intel X86, but Intel Macs " \
     "have a problem running app-generated code. We can run this interlocking " \
     "code in simulation; there should be no difference. Do you want to? " \
@@ -204,8 +205,8 @@ bool LoadRelayObjectFile(const char*path, const char*) {
                 break;
             case TKOI_TXT:
             {
-                size_t code_bytes = chp->number_of_items * sizeof(ArmInst);
-#if NXSYSMac
+                size_t code_bytes = chp->number_of_items * chp->number_of_items;
+#if NXSYSMac   // Windows TBD, but this handles all Mac cases...
                 if (RunningSimulatedCompiledCode) {
                     CodeSize = code_bytes;
                     size_t narminst = (code_bytes + sizeof(ArmInst) - 1) / sizeof(ArmInst);
