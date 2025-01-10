@@ -63,6 +63,25 @@ bool RunningSimulatedCompiledCode = false;
 void ReadFaslForms(unsigned char * data, const char* fname);
 void CleanupObjectMemory(); //below
 
+#if NXSYSMac
+
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
+int processIsTranslated() {
+   int ret = 0;
+   size_t size = sizeof(ret);
+   if (sysctlbyname("sysctl.proc_translated", &ret, &size, NULL, 0) == -1)
+   {
+       printf("errno %d\n", errno);
+      if (errno == ENOENT)
+         return 0;
+      return -1;
+   }
+   return ret;
+}
+#endif
+
 static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path) {
     if ((H.magic != TKO_VERSION_2_MAGIC) ||
         !! memcmp(TKO_VERSION_2_STRING, &H.magic_string, strlen(TKO_VERSION_2_STRING)+1)
@@ -78,7 +97,7 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
 #if defined(__aarch64__) || defined(_M_ARM64)
     if (string(H.arch) =="INTEL x86") {
         int response = MessageBox(nullptr,
-                                  "This file was compiled for the Intel X86, but this Mac is "
+                                  "This interlocking definition was compiled for the Intel X86, but this Mac is "
                                   "running on an ARM64 processor. We can run this interlocking code "
                                   "in simulation; there should be no difference. Do you want to?",
                                   "Compiled file for wrong CPU type",
@@ -98,16 +117,24 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
                     path, H.arch);
         return false;
     }
-  
-    int response = MessageBox(nullptr,
-                              "This file was compiled for the Intel X86, but Intel Macs "
-                              "have a problem running app-generated code. We can run this interlocking ØØ"
-                              "code in simulation; there should be no difference. Do you want to?",
-                              "Intel Mac JIT problem requires simulation",
-                              MB_YESNOCANCEL);
-    if (response != IDYES)
+    // https://forums.developer.apple.com/forums/thread/659846
+    if (processIsTranslated() == 1) {  // If Rosetta2ing, "this is fine."
+        RunningSimulatedCompiledCode = false;
+        return true;
+    }
+    auto msg = "This interlocking definition  was compiled for the Intel X86, but Intel Macs " \
+    "have a problem running app-generated code. We can run this interlocking " \
+    "code in simulation; there should be no difference. Do you want to? " \
+    "Intel Mac JIT problem requires simulation.  \"Yes\" will simulate, " \
+    "\"No\" will take the JIT path (probably crash), \"Cancel\" will do so.";
+    
+    int response = MessageBox(nullptr, msg, "Compiled Interlocking JIT issue", MB_YESNOCANCEL);
+    if (response == IDCANCEL)
         return false;
-    RunningSimulatedCompiledCode = true;
+    if (response == IDYES)
+        RunningSimulatedCompiledCode = true;
+    else
+        RunningSimulatedCompiledCode = false;
 #endif
         
     return true;
@@ -319,11 +346,12 @@ void CleanupObjectMemory() {
     ESD.clear();
     /* dum vivimus speramus */
 #if NXSYSMac
-    if (CodeText != nullptr)
+    if (CodeText != nullptr) {
         if (RunningSimulatedCompiledCode)
             delete CodeText;
         else
             munmap(CodeText, CodeSize);
+    }
 #endif
     CodeText = nullptr;
     CodeSize = 0;

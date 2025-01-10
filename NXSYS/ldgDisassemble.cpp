@@ -131,6 +131,7 @@ void ldgDisassemble(Relay* r) {
         else
             Lines.push_back(GenerateUpdatableLineARM(pctr, true, bytes));
 #else
+        (void)GenerateUpdatableLineARM;
         Lines.push_back(GenerateUpdatableLineX86(pctr, true, bytes));
 #endif
         p += bytes;
