@@ -54,13 +54,13 @@ The archival 32-bit Windows **.tko** loader contains this commented-out code:
 
 ## Simulation
 
-There are two forms of Intel-simulation available to arm64 NXSYS, one provided by Apple ("Rosetta2") and one provided by the application itself.  The compiler will cross-compile for any supported architecture on any supported platform:  **-arch:X86-64** will request a compilation for that platform.
+There are two forms of Intel-simulation available to arm64 NXSYS, one provided by Apple ("Rosetta2") and one provided by the application itself.  The compiler will cross-compile for any supported architecture on any supported platform:  **-arch:X86-64** will request a compilation for that platform.  Either will allow you to run X86-compiled TKO's on arm64 NXSYS.
 
-To run an X86 track object file under Rosetta2, use the Apple-suppled **arch** command to run the (Universal!) NXSYS executable under Rosetta2 simulation directly (**../NXSYSMac.app/Contents/MacOS/NXSYSMac**) by pathname,specifying as a first argument **-X86_64**, (leading hyphen, middle underscore). The title bar will confirm that is running the **(Intel)** build!  From there, you can load Intel-compiled track objects, but not native ARM ones! (Note that XCode debugging executables are not universal; you must use **Product | Archive** to build a universal executable).
+First, you can run NXSYS itself in simulation  with Rosetta2. Use the Apple-suppled **arch** command to run the (Universal!) NXSYS executable under Rosetta2 simulation directly (**../NXSYSMac.app/Contents/MacOS/NXSYSMac**) by pathname,specifying as a first argument **-X86_64**, (leading hyphen, middle underscore). The NXSYS title bar will confirm that is running the **(Intel)** build!  From there, you can load Intel-compiled track objects, but not native ARM ones! (Note that XCode debugging executables are not "Universal" (i.e., two executables packed as one); you must use **Product | Archive** to build a universal executable).
 
-It also possible to ***run X86-compiled relay code in the Arm application in native simulation***. If you try to load such an interlocking into it (the Arm build) NXSYS will ask you if you want to do run it in simulation (or just give up).  The simulation is extremely efficient, and robust, as both the simulator and the two disassemblers are acutely aware of the restricted output vocabulary of the compiler, and exploit it in time and space.
+It also possible to ***run X86-compiled relay code in the Arm application version with its native simulation***. If you try to load such an interlocking into NXSYS (i.e., the Arm build) it will ask you if you want to run it in simulation (or just give up).  The simulation is extremely efficient, and robust, as both the simulator and the two disassemblers are acutely aware of the restricted output vocabulary of the compiler, and exploit it in time and space.
 
-Under either kind of simulation, NXSYS **Draw Relay** will show X86 code, just as in the Intel build.
+Under either kind of simulation, NXSYS **Draw Relay** will show X86 code, just as in the Intel build. Note that such displays use the Intel notation (e.g., **mov rdx,rsi**) not the AT&T notation preferred by Apple (**movq %rsi,%rdx** -- note reversed operands!).
 
 The Intel build does not offer access to the simulator (which only simulates Intel, not ARM).  Remember that the normal way to use NXSYS is with interpreted list-structure code (**.trk**), not compiled objects.
 
