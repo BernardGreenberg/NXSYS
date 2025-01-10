@@ -62,5 +62,5 @@ Second, it is possible to ***run X86-compiled relay code in the Arm application 
 
 Under either kind of simulation, NXSYS **Draw Relay** will show X86 code, just as in the Intel build. Note that such displays use the Intel notation (e.g., **mov rdx,rsi**) not the AT&T notation preferred by Apple (**movq %rsi,%rdx** -- note reversed operands!).
 
-The Intel build does not offer access to the simulator (which only simulates Intel, not ARM).  Remember that the traditional way to use NXSYS is with interpreted list-structure code (**.trk**), not compiled objects at all.
+The Intel build does not offer access to the simulator (which only simulates Intel, not ARM -- Apple doesn't supply a "2attesoR", either).  Remember that the traditional way to use NXSYS is with interpreted list-structure code (**.trk**), not compiled objects at all.
 
