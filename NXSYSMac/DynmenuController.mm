@@ -92,8 +92,11 @@ void DynmenuButtonPushCallback(void * actor, int control_id);
     frame.size.width = 15;
     frame.size.height = 15;
     [button setFrame:frame];
+    //https://stackoverflow.com/questions/1017468/change-background-color-of-nsbutton
+    [button setBordered:false];
+    [button setWantsLayer:true];
     [[button cell] setBackgroundColor:NSColor.redColor];
-    // [button setBezelStyle:NSCircularBezelStyle];  /* makes color unusable */
+    [button setBezelStyle:NSBezelStyleCircular];
     [button setTarget:self];
     [button setAction:@selector(NXMenuSelectAction:)];
     [button setTag:control_id];
