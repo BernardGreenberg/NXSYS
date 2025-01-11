@@ -8,13 +8,8 @@
 //  Copyright © 2024 BernardGreenberg. All rights reserved.
 //
 //  Inspired by 1994 LoadOb32, but not copied from it, much more modern.
-//  This compiles and works on an M3 Mac (_M_ARM64_).
-//  It should run well enough in the Intel half of the Universal to
-//  gracefully refuse to load .tko's compiled for ARM.  TKO's compiled
-//  for Intel (-arch:X86) won't work yet; there isn't enough detail done, but
-//  they are not (yet) rejected cleanly, either.  Windows should act the same.
+//  This compiles and works on an M3 Mac (_M_ARM64_) and Intel Mac now.
 //
-
 
 
 #include <stdlib.h>
@@ -95,6 +90,7 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
     }
 #if defined(__aarch64__) || defined(_M_ARM64)
     if (string(H.arch) =="INTEL x86") {
+#if 0  // aimply assume simulation works
         int response = MessageBox(nullptr,
                                   "This interlocking definition was compiled for the Intel X86, but this Mac is "
                                   "running on an ARM64 processor. We can run this interlocking code "
@@ -103,6 +99,7 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
                                   MB_YESNOCANCEL);
         if (response != IDYES)
             return false;
+#endif
         RunningSimulatedCompiledCode = true;
     }
     else if (string (H.arch) != "ARM64") {

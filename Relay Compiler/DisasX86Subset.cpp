@@ -115,7 +115,7 @@ static struct X86Pattern KnownPatterns [] {
     {I_CRDX, {0xff, 0xd2}, 2, "call\trdx"},
     {I_ANDAL,{0x24, 0x00}, 2, "and\tal,0"},
     {I_XORAL,{0x34, 0x01}, 2, "xor\tal,1"},
-    {I_ORAL, {0x0C, 0x01}, 2, "or\tal,1"},
+    {I_ORAL, {0x0C, 0x01}, 2, "or \tal,1"},
     {I_TEST, {0x84, 0x0A}, 2, "test\tBYTE PTR [rdx],cl"},
     {I_LMOV, {0x8A, 0x02}, 2, "mov\tal, BYTE PTR [rdx]"},
     {I_M8DI, {0x49, 0x89, 0xF8}, 3, "mov\tr8,rdi"},
