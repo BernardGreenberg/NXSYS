@@ -24,6 +24,7 @@
 #include "usermsg.h"
 #include "cccint.h"
 #include "messagebox.h"
+#include "CompiledReportInfo.h"
 
 #include <string>
 #include <vector>
@@ -46,7 +47,8 @@ static unordered_map<Relay*, unsigned int>RelayFunctionLengths;
 vector<string>FASLAtsyms;  //referenced by FASL decoder
 vector<Relay*>ESD;
 
-
+static bool CRPpresent = false;
+static CompiledReportInfo TheCompiledReportInfo;
 
 char** Compiled_Linkage_Sptr = nullptr;; //points to State cells.  Referenced by relay engine
 #if WIN32 | !((defined(__aarch64__)) || defined(_M_ARM64))
@@ -329,8 +331,28 @@ bool LoadRelayObjectFile(const char*path, const char*) {
 
     RnamesTexts = nullptr; //points into vector
     RnamesTextPtrs = nullptr; //ditto
-
+    
+    auto& T = TheCompiledReportInfo;
+    T.HeaderVersion = hp->version;
+    T.Architecture = hp->arch;
+    T.CompilationTime = hp->time;
+    T.CompilerVersion = hp->compiler_version;
+    T. CodeLen = hp->code_len;
+    T.StaticLen = hp->static_len;
+    T.Bits = hp->bits;
+    T.User = hp->user;
+    T.ISDCount = (int)ISD.size();
+    T.ESDCount = (int)ESD.size();
+    CRPpresent = true;
+    
     return true;
+}
+
+const CompiledReportInfo* GetCompiledReportInfo() {
+    if (CRPpresent)
+        return &TheCompiledReportInfo;
+    else
+        return nullptr;
 }
 
 int GetRelayFunctionLength(Relay* r) {
@@ -360,4 +382,5 @@ void CleanupObjectMemory() {
     if (Compiled_Linkage_Sptr)
         delete Compiled_Linkage_Sptr;
     Compiled_Linkage_Sptr = nullptr;
+    CRPpresent = false;
 }

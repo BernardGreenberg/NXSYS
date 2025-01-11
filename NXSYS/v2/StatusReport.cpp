@@ -14,6 +14,7 @@
 #include "MapperThunker.h"
 
 #include "StatusReport.h"
+#include "CompiledReportInfo.h"
 #if NXSYSMac
 #define CRLF "\n"
 #else
@@ -132,6 +133,25 @@ std::string InterlockingFileStatus::Report () {
             report += e.label + CRLF + CRLF;
         else
             report += FormatString("%5d  ", e.count) + e.label + CRLF;
+    }
+    const CompiledReportInfo* Cp = GetCompiledReportInfo();
+    if (Cp != nullptr) {
+        std::vector<std::string> A;
+        const auto& C = *Cp;
+        A.push_back("\n\n");
+        A.push_back("Compiled file compilation info:");
+        A.push_back(FormatString("Header version: %d, compiler version %d", C.HeaderVersion, C.CompilerVersion));
+        A.push_back(FormatString("Compiled for %s (%d bits) by %s", C.Architecture.c_str(), C.Bits, C.User.c_str()));
+        A.push_back("  at " + std::string(ctime(&C.CompilationTime)));
+        A.push_back(FormatString("Relays defined %d, referenced %d.", C.ISDCount, C.ESDCount));
+        A.push_back(FormatString("Code length %d = 0x%X bytes", C.CodeLen, C.CodeLen));
+        A.push_back(FormatString("Required static \"linkage section\" length %d = 0x%X bytes", C.StaticLen, C.StaticLen));
+
+        for (auto line : A) {
+            if (line.back() == '\n')
+                line.pop_back();
+            report += line + CRLF;
+        }
     }
     return report;
 }

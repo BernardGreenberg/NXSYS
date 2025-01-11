@@ -331,6 +331,7 @@
 		5B3754A8286D344E00A35C97 /* MacPackagingTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MacPackagingTool; sourceTree = "<group>"; };
 		5B38456C2D2CB24F006BAD71 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DisasX86Subset.cpp; sourceTree = "<group>"; };
+		5B3845712D32E60D006BAD71 /* CompiledReportInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompiledReportInfo.h; sourceTree = "<group>"; };
 		5B43834B19C4B47600BEECDC /* AppDelegateGlobals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegateGlobals.h; sourceTree = "<group>"; };
 		5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BigYellowXView.mm; sourceTree = "<group>"; };
 		5B46B9FD19A9188F0041C4FE /* FullSignalView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FullSignalView.h; sourceTree = "<group>"; };
@@ -970,6 +971,7 @@
 				5B5AE65E23116A0C00348612 /* xturnout.h */,
 				5B1BE71728317E560015F847 /* propedit.h */,
 				5BB30A8C283927DE00788BEC /* ijid.h */,
+				5B3845712D32E60D006BAD71 /* CompiledReportInfo.h */,
 			);
 			name = "V2 Headers";
 			sourceTree = "<group>";
