@@ -140,7 +140,7 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
         
     return true;
 }
-
+#if !(defined(__aarch64__) || defined(_M_ARM64))
 static int FindThunkIndex(const vector<Relay*>& ISD, const char * s) {
     Sexpr Rsym = intern_rlysym_nocreate(0, s);
     if (Rsym != NIL) {
@@ -151,6 +151,7 @@ static int FindThunkIndex(const vector<Relay*>& ISD, const char * s) {
     assert(!"Cant find thunk"); // Can't find symbol
     return -1;
 }
+#endif
 
 bool LoadRelayObjectFile(const char*path, const char*) {
     CleanupObjectMemory();
