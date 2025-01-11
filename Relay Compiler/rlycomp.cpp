@@ -1211,7 +1211,7 @@ void DefineBogoThunkRelay (const char * name) {
 void CompileIA32EntryThunk () {
 
     DefineBogoThunkRelay("_ENTRY_THUNK");
-    list("%s;;;\targs = EBP+8, EBP+1 (linkage array, code ptr)\n", Ltabs);
+    list("%s;;;\targs = EBP+8, EBP+12 (linkage array, code ptr)\n", Ltabs);
     outinst         (MOP_RPUSH,  NIL, X_EBP);
     outinst_general (MOP_LOADWD, 1,   X_EBP, X_ESP, 0, NULL);
     /* vc4 generated "sub esp,4" here: why? */
