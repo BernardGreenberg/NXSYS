@@ -34,6 +34,15 @@ short fasl_getw(PBYTE * p) {
     return (bhigh << 8) | blow;
 }
 
+static decltype(Sexpr().u.n) fasl_getmb(PBYTE* p, int n) {
+    decltype(Sexpr().u.n) v = 0;
+    for (int i = 0; i < n; i++) {
+        v <<= 8;
+        v |= *(*p)++;
+    }
+    return v;
+}
+
 Sexpr FaslForm (PBYTE * pp) {
     PBYTE p = *pp;
     int ctlb, w;
@@ -73,6 +82,14 @@ Sexpr FaslForm (PBYTE * pp) {
         case FASD_2BNUM:
             s.type = Lisp::NUM;
             s.u.n = fasl_getw (&p);
+            break;
+        case FASD_4BNUM:
+            s.type = Lisp::NUM;
+            s.u.n = fasl_getmb(&p, 4);
+            break;
+        case FASD_8BNUM:
+            s.type = Lisp::NUM;
+            s.u.n = fasl_getmb(&p, 8);
             break;
         case FASD_LIST:
             w = fasl_getw (&p);

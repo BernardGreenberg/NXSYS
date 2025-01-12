@@ -11,6 +11,8 @@ const int
    FASD_LONG   =      7,
    FASD_STRING =      8,
    FASD_CHAR   =      9,
+   FASD_4BNUM  =     10,
+   FASD_8BNUM  =     11,
    FASD_VERSION  =    254,
    FASD_EOF      =    255;
 

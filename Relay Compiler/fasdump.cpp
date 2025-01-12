@@ -49,6 +49,13 @@ static int FasdAtsymLookup (Sexpr s) {
 }
 
 
+static void fasd_putmb(uint64_t v, int n) {
+    for (int j = 0; j < n; j++) {
+        fasd_putb(v & 0xFF);
+        v >>= 8;
+    }
+}
+
 void fasd_form (Sexpr s) {
     switch (s.type) {
         case Lisp::NUM:
@@ -56,12 +63,19 @@ void fasd_form (Sexpr s) {
 		fasd_putb (FASD_1BNUM);
 		fasd_putb ((short) (s.u.n));
 	    }
-	    else if (s.u.n >= -65536L && s.u.n <= 65535L) {
-		fasd_putb (FASD_2BNUM);
+            else if (s.u.n >= -65536L && s.u.n <= 65535L) {
+                fasd_putb (FASD_2BNUM);
 		fasd_putw ((short)(s.u.n));
 	    }
-	    else RC_error (1, "Long nums not fasdumped yet.");
-	    break;
+            else if (s.u.n >= -(1L<<32) && s.u.n <=1L<<31) {
+                fasd_putb (FASD_4BNUM);
+                fasd_putmb((uint64_t)s.u.n, 4);
+            }
+            else {
+                fasd_putb (FASD_8BNUM);
+                fasd_putmb((uint64_t)s.u.n, 8);
+            }
+            break;
         case Lisp::STRING:
 	    fasd_putb (FASD_STRING);
 	    {
