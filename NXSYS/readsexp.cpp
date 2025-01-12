@@ -370,7 +370,12 @@ colnum:
 	for (num = 0; isdigit (ch); ch = f.Getc()) {
 	    if (cct < sizeof(SymBuf)/sizeof(SymBuf[0])-1)
 		SymBuf[cct++] = ch;
-	    num = num * 10 + ch - '0';
+            int newdig = ch - '0';
+            if (num > std::numeric_limits<long>::max()/10) {
+                LispBarf("Number in Lisp source too big.");
+                return NIL;
+            }
+	    num = num * 10 + newdig;
 	}
 #if ! _RELAYS
 	if (Goodsymchar[ch] && ch != FRACTION_BAR)
