@@ -65,7 +65,7 @@ void CleanupObjectMemory(); //below
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-int processIsTranslated() {
+int processIsTranslated() { // = "are we running under Rosetta?"
    int ret = 0;
    size_t size = sizeof(ret);
    if (sysctlbyname("sysctl.proc_translated", &ret, &size, NULL, 0) == -1)
@@ -76,6 +76,37 @@ int processIsTranslated() {
    }
    return ret;
 }
+
+static void MacAllocCodeText(void* data, size_t count) {
+    unsigned int map_flags = MAP_ANON | MAP_PRIVATE;
+    unsigned int prot_flags = PROT_READ | PROT_WRITE;
+
+    if (!RunningSimulatedCompiledCode) {
+        map_flags |= MAP_JIT; // We will do the "JIT" jusu---
+        prot_flags |= PROT_EXEC;
+    }
+
+    CodeText = (ArmInst*)mmap(NULL,
+                              count,
+                              prot_flags,
+                              map_flags,
+                              -1, 0
+                              );
+    assert(CodeText != nullptr);
+    CodeSize = count;
+    
+    if (!RunningSimulatedCompiledCode)
+        if (__builtin_available(macOS 11.0, *))
+            pthread_jit_write_protect_np(0);
+
+    memcpy(CodeText, data, count);
+    
+    if (!RunningSimulatedCompiledCode)
+        if (__builtin_available(macOS 11.0, *))
+            pthread_jit_write_protect_np(1);
+    
+}
+
 #endif
 
 static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path) {
@@ -207,36 +238,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
             {
                 size_t code_bytes = chp->number_of_items * chp->length_of_item;
 #if NXSYSMac   // Windows TBD, but this handles all Mac cases...
-                if (RunningSimulatedCompiledCode) {
-                    CodeSize = code_bytes;
-                    size_t narminst = (code_bytes + sizeof(ArmInst) - 1) / sizeof(ArmInst);
-                    CodeText = new ArmInst[narminst];
-
-                    memcpy(CodeText, rdp, code_bytes);
-                }
-                else {
-                    CodeText = (ArmInst*)mmap(NULL,
-                                              code_bytes,
-                                              PROT_WRITE | PROT_READ | PROT_EXEC,
-                                              MAP_ANON | MAP_PRIVATE | MAP_JIT,
-                                              -1, 0
-                                              );
-                    assert(CodeText != nullptr);
-                    CodeSize = code_bytes;
-                    
-                    if (__builtin_available(macOS 11.0, *)) {
-                        pthread_jit_write_protect_np(0);
-                    } else {
-                        // Fallback on earlier versions
-                    } // Turn off so it is RW- (Apple only)
-                    /* FAILS on Intel Mac (can't write, no way to trap) */
-                    memcpy(CodeText, rdp, code_bytes);
-                    if (__builtin_available(macOS 11.0, *)) {
-                        pthread_jit_write_protect_np(1);
-                    } else {
-                        // Fallback on earlier versions
-                    } // Turn on so it is R-X (Apple only)
-                }
+                MacAllocCodeText(rdp, code_bytes);
 #endif
                 break;
             }
@@ -371,10 +373,7 @@ void CleanupObjectMemory() {
     /* dum vivimus speramus */
 #if NXSYSMac
     if (CodeText != nullptr) {
-        if (RunningSimulatedCompiledCode)
-            delete CodeText;
-        else
-            munmap(CodeText, CodeSize);
+        munmap(CodeText, CodeSize);
     }
 #endif
     CodeText = nullptr;
