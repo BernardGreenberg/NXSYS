@@ -508,7 +508,7 @@ CodeVector EncodeOpd (int opd, REG_X R1, REG_X R2, int immed) {
     code += ((int) mod << 6) | ((int) R1 << 3) | (int) R2;
 
     if (mod != OPMOD_IMMED && mod != OPMOD_RPTR)
-        Code += OutWord ((int) opd, (mod == OPMOD_RP_DISP8) ? SINGLE_WIDTH : FullWidth);
+        code += OutWord ((int) opd, (mod == OPMOD_RP_DISP8) ? SINGLE_WIDTH : FullWidth);
     return code;
 }
 
@@ -666,8 +666,7 @@ void outinst_raw (MACH_OP op, const char * str, PCTR opd) {
             out64_alop(op);
             return;
         }
-        else
-        {  /* this is all broken */
+        else {
             code += EncodeOpd ((int) opd, (op == MOP_TST) ? X_BL : X_AL, X_ESI, 0);
             auto tail = vector<CodeByte>(code.begin()+xl, code.end());
             dbuf = DisasOpd (op, tail, str, "v$");
