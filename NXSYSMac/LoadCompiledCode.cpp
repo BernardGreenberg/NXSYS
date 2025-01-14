@@ -121,6 +121,10 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
                     MINIMUM_RELAY_COMPILER_VERSION);
         return false;
     }
+    if (H.bits != 64 ) {
+        usermsgstop("%s was compiled for a %d bit environment, not 64 as required.", path, H.bits);
+        return false;
+    }
 #if defined(__aarch64__) || defined(_M_ARM64)
     if (string(H.arch) =="INTEL x86") {
 #if 0  // aimply assume simulation works
