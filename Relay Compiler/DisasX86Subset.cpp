@@ -191,9 +191,8 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems
 }
 
 /* This stoopid interpreter, which actually works, is here in order to execute X86 instructions
- on an actual X86 Mac, where JIT seems not to be able to be turned on.  What, then, is the
- advantage of using compilation at all, there?  Amusingly, it allows execution of X86 code
- on arm also -- remember, Windows is X86. */
+ on either Mac.  Intel Macs don't need it, but following a certain bug, they did, once.
+ Currently it allows ARM Macs to emulate Intel. Note that Win64 is Intel, too. */
 #if REALLY_NXSYS
 #define NSTACK 10
 #define STACKLASTNO (NSTACK-1)
