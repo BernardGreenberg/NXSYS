@@ -257,7 +257,7 @@ BOOL inline Relay::ComputeValue() volatile {
 #if CALL_COMPILED && NXCMPOBJ
     if (Flags & LF_CCExp) {
         if (RunningSimulatedCompiledCode)
-            return SimulateX86(exp);
+            return NXX86::SimulateX86(exp);
         else
             return CallCompiledCode (exp);
     }
@@ -384,7 +384,7 @@ void GooseRelay (Relay * rr) {
     if (rr->Flags & LF_CCExp) {
 //         printf("Goose honking %s\n", rr->RelaySym.PRep().c_str());
         if (RunningSimulatedCompiledCode)
-            state = SimulateX86(rr->exp);
+            state = NXX86::SimulateX86(rr->exp);
         else
             state = CallCompiledCode (rr->exp);
     }

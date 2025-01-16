@@ -61,7 +61,7 @@ static string InterpretState(Relay * r) {
 }
 static string GenerateUpdatableLineX86(LPCTR pctr, bool record, int& bytes) {
 
-    auto RV = DisassembleX86((unsigned char *)pctr, pctr, 1LL << 60);
+    auto RV = NXX86::DisassembleX86((unsigned char *)pctr, pctr, 1LL << 60);
     string D = FormatString(" %012lX  ", pctr) + RV.disassembly;
 
     if (RV.have_ref_relay) {

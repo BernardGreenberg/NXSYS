@@ -22,9 +22,8 @@ struct X86DisRV {
     uint32_t relay_ref_index;
     bool have_ref_relay = false;
 };
-
+namespace NXX86{
 struct X86DisRV DisassembleX86(unsigned char * base, uint64_t start_pctr, uint64_t limit);
-
 int32_t SimulateX86(void* codeptr);
-
+}
 #endif /* DisasUtil_h */

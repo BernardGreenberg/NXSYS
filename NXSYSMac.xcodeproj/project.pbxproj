@@ -24,6 +24,7 @@
 		5B38456E2D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */; };
 		5B38456F2D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */; };
 		5B3845702D2F179B006BAD71 /* DisasX86Subset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */; };
+		5B3845752D38620B006BAD71 /* SimulateX86Subset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3845732D38620B006BAD71 /* SimulateX86Subset.cpp */; };
 		5B3AE7682313619700E5779E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B47F34819AFAFE800CBB80A /* WebKit.framework */; };
 		5B43834E19C4C38A00BEECDC /* BigYellowXView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */; };
 		5B46B9FF19A9188F0041C4FE /* FullSignalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B46B9FE19A9188F0041C4FE /* FullSignalView.mm */; };
@@ -332,6 +333,8 @@
 		5B38456C2D2CB24F006BAD71 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DisasX86Subset.cpp; sourceTree = "<group>"; };
 		5B3845712D32E60D006BAD71 /* CompiledReportInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompiledReportInfo.h; sourceTree = "<group>"; };
+		5B3845722D38620B006BAD71 /* NXX86.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NXX86.h; sourceTree = "<group>"; };
+		5B3845732D38620B006BAD71 /* SimulateX86Subset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SimulateX86Subset.cpp; sourceTree = "<group>"; };
 		5B43834B19C4B47600BEECDC /* AppDelegateGlobals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegateGlobals.h; sourceTree = "<group>"; };
 		5B43834D19C4C38A00BEECDC /* BigYellowXView.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = BigYellowXView.mm; sourceTree = "<group>"; };
 		5B46B9FD19A9188F0041C4FE /* FullSignalView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = FullSignalView.h; sourceTree = "<group>"; };
@@ -468,7 +471,6 @@
 		5B8EDEE92D1216E200F07ED0 /* RCArm64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCArm64.h; sourceTree = "<group>"; };
 		5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ReadFASL.cpp; sourceTree = "<group>"; };
 		5B8EDEF02D15EA0600F07ED0 /* genarm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = genarm.cpp; sourceTree = "<group>"; };
-		5B8EDEF22D1A283900F07ED0 /* .h */ = {isa = PBXFileReference; lastKnownFileType = text; path = .h; sourceTree = "<group>"; };
 		5B8EDEF52D1CBDE300F07ED0 /* ldgDisassemble.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ldgDisassemble.hpp; sourceTree = "<group>"; };
 		5B8EDEF62D1CBDE300F07ED0 /* ldgDisassemble.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ldgDisassemble.cpp; sourceTree = "<group>"; };
 		5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisasUtil.h; sourceTree = "<group>"; };
@@ -850,6 +852,8 @@
 				5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */,
 				5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */,
 				5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */,
+				5B3845722D38620B006BAD71 /* NXX86.h */,
+				5B3845732D38620B006BAD71 /* SimulateX86Subset.cpp */,
 			);
 			path = "Relay Compiler";
 			sourceTree = "<group>";
@@ -1531,7 +1535,6 @@
 		5BF062EE199FA8A4008CDCA0 /* V1V2Compat */ = {
 			isa = PBXGroup;
 			children = (
-				5B8EDEF22D1A283900F07ED0 /* .h */,
 				5BF06F3C19A0395B008CDCA0 /* demo.cpp */,
 				5B5AE616230C57B300348612 /* RelayLispSubstrate.h */,
 				5B5AE612230C4C5400348612 /* RelayLispSubstrate.cpp */,
@@ -2005,6 +2008,7 @@
 				5BA92A7519DD72690098DBEC /* NXMessageBox.mm in Sources */,
 				5B54429319B004ED00FB5537 /* ContextMenu.mm in Sources */,
 				5BA92A7119DC5E120098DBEC /* StatusReport.cpp in Sources */,
+				5B3845752D38620B006BAD71 /* SimulateX86Subset.cpp in Sources */,
 				5B5AE62F230D74D000348612 /* WinApiSTL.cpp in Sources */,
 				5BF06300199FB8DD008CDCA0 /* nxsys.cpp in Sources */,
 				5BB5804127C55CF400FB0ED5 /* HelpDirectory.cpp in Sources */,

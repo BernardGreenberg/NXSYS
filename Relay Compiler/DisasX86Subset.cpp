@@ -22,11 +22,36 @@
 using std::vector, std::string;
 
 #include "STLExtensions.h"
+
+#include "NXX86.h"
 #include "DisasUtil.h"
 #include "cccint.h"
 
+namespace NXX86 {
+
+string FmtInst(unsigned char * ip, int nbytes) {
+    string result;
+    for (unsigned int i = 0; i < 7; i++) {
+        if (i < nbytes)
+            result += FormatString("%02X", ip[i]);
+        else
+            result += "  ";
+    }
+    result += " ";
+    return result;
+}
+
+uint32_t collect_32(unsigned char* p) { //collect low-endian-stored 32-bit number
+    uint32_t acc = 0;
+    for (int i = 0; i < 4; i++) {
+        acc <<= 8;
+        acc |= p[3-i];
+    }
+    return acc;
+}
+
 /*
- KST - "Kmown Stuff Table" -- values copied from NASM assembler listing.
+ KST - "Known Stuff Table" -- values copied from NASM assembler listing.
  
  2400           and    al,0
  0C01           or     al,1
@@ -46,69 +71,16 @@ using std::vector, std::string;
  FFD2           call   rdx
  FFD6           call   rsi
  C3             ret
-*/
+ */
 
-static uint32_t collect_32(unsigned char* p) { //collect low-endian-stored 32-bit number
-    uint32_t acc = 0;
-    for (int i = 0; i < 4; i++) {
-        acc <<= 8;
-        acc |= p[3-i];
-    }
-    return acc;
-}
-
-static string FmtInst(unsigned char * ip, int nbytes) {
-    string result;
-    for (unsigned int i = 0; i < 7; i++) {
-        if (i < nbytes)
-            result += FormatString("%02X", ip[i]);
-        else
-            result += "  ";
-    }
-    result += " ";
-    return result;
-}
-
-#define IMM_1B 1
-#define IMM_4B 2
-#define JMPDISP 4
-#define RLYDISP 8
-#define IMM_CONSTANT 0x10
-
-enum ICODE {I_NULL, I_RET, I_CRSI, I_CRDX, I_ANDAL, I_XORAL, I_ORAL, I_TEST, I_LMOV,
-    I_M8DI, I_M8CX, I_MVZXA, I_SETNZ, I_JZ, I_JNZ, I_JMPS, I_JMPL,
-    I_C2CX, I_LDX1B, I_LDX4B};
-
-struct X86Pattern {
-    enum ICODE icode;
-    vector<unsigned char> Data;       /* Bytes that must match exectly */
-    int must_exist_bytes;             /* count of bytes that have to exist, incl above */
-    const char * disassembly;         /* The "answer" string */
-    unsigned int flags = 0;           /* see #defines above */
-    unsigned char next = 0;           /* table index of next X86Pattern with same leading byte*/
-
-    /* Can't skimp on the declaration of "count_left" -- it can be very, very big
-       and casting it can reduce it to zero and cause infinite looping.
-       This happens in the "live" case. */
-
-    /* "Does the byte seq at p match this pattern, in the length left?" */
-    bool match(unsigned char* p, uint64_t count_left) const {
-        if (count_left < must_exist_bytes)
-            return false;
-        for (auto u : Data)
-            if (u != *p++)
-                return false;
-        return true;
-    }
-};
 
 /* Scheme - expect somewhat fewer than 256 known items; at any rate, this is effectively a hash table
-   on the first byte.  The value of dispatch[first_byte] is the INDEX into KnownPatterns of the
-   appropriate entry (hash-siblings threaded by "next"). Note that 0 means "no entry", not entry 0. */
+ on the first byte.  The value of dispatch[first_byte] is the INDEX into KnownPatterns of the
+ appropriate entry (hash-siblings threaded by "next"). Note that 0 means "no entry", not entry 0. */
 
-static char unsigned dispatch[256] = {}; /* guaranteed init to 0's */
+char unsigned dispatch[256] = {}; /* guaranteed init to 0's */
 
-static struct X86Pattern KnownPatterns [] {
+struct X86Pattern KnownPatterns [] {
     {I_NULL, {}, 0, "null entry 1DUMY ---  can't have 0"},
     {I_RET,  {0xc3}, 1, "ret" },
     {I_CRSI, {0xff, 0xd6}, 2, "call\trsi" },
@@ -131,7 +103,7 @@ static struct X86Pattern KnownPatterns [] {
     {I_LDX4B,{0x49, 0x8B, 0x90}, 7, "mov\trdx,QWORD PTR [r8+0x%X]", IMM_4B | RLYDISP},
 };
 
-static void EnsureDispatch() {
+void EnsureDispatch() {
     static bool done = false;
     if (done)
         return;
@@ -148,7 +120,7 @@ static void EnsureDispatch() {
     done = true;
 }
 
-static struct X86DisRV DisassembleDecodedX86(unsigned char* ip, uint64_t Pctr, const X86Pattern& E) {
+struct X86DisRV DisassembleDecodedX86(unsigned char* ip, uint64_t Pctr, const X86Pattern& E) {
     X86DisRV RV;
     RV.disassembly = FmtInst(ip, E.must_exist_bytes) + E.disassembly;
     RV.byte_count = E.must_exist_bytes;
@@ -177,7 +149,7 @@ static struct X86DisRV DisassembleDecodedX86(unsigned char* ip, uint64_t Pctr, c
 struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems) {
     EnsureDispatch();
     assert(nitems > 0);
-
+    
     for (auto d = dispatch[*ip]; d != 0; d = KnownPatterns[d].next) {
         const X86Pattern& E = KnownPatterns[d];
         if (E.match(ip, nitems))
@@ -187,127 +159,7 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems
     RV.byte_count = std::min((unsigned)nitems, (unsigned)3);
     RV.disassembly = FmtInst(ip, RV.byte_count) + "Unknown";
     return RV;
-
-}
-
-/* This stoopid interpreter, which actually works, is here in order to execute X86 instructions
- on either Mac.  Intel Macs don't need it, but following a certain bug, they did, once.
- Currently it allows ARM Macs to emulate Intel. Note that Win64 is Intel, too. */
-#if REALLY_NXSYS
-#define NSTACK 10
-#define STACKLASTNO (NSTACK-1)
-#define STACKLAST STACK+STACKLASTNO
-
-int32_t SimulateX86(void* codeptr) {
-
-    /* Simulated X866_64 registers and zero indicator */
-
-    uint64_t RAX=0, RCX=0, RDX=0, RSI=0, RDI=0, R8=0, STACK[NSTACK];
-    uint64_t *SP = STACKLAST;
-    bool ZI = false;
-
-    EnsureDispatch();
-
-    /* bypass Grand Thunk Railroad */
-    /* must take care to do address arithmetic in bytes (unsigned chars)*/
-    unsigned char * pc = (unsigned char*)codeptr;
-    R8 = (uint64_t)Compiled_Linkage_Sptr;
-    RCX = 1;
-
-    *SP-- = 0; /* set a trap for a RET out of the whole function to be recognized */
     
-    while (SP < STACKLAST) {
-        X86Pattern * Ep = nullptr;
-        for (auto d = dispatch[*pc]; d != 0; d = KnownPatterns[d].next) {
-            Ep = &(KnownPatterns[d]);
-            if (Ep->match(pc, 1LL<<61))
-                break;
-        }
-        assert(Ep != nullptr); // Can't decode
-
-        /* uncomment to watch the interpreter in action */
-        //  printf("%p %s\n", pc, Ep->disassembly);
-
-        /* Move the PC FIRST so that rel refs are meaningful*/
-        pc += Ep->must_exist_bytes;
-        
-        switch(Ep->icode) {
-            case I_NULL:
-                assert(!"Null icode in interpreter");
-                continue;
-            case I_RET:
-                assert(SP < STACKLAST);
-                pc = (unsigned char*)(*++SP);
-                continue;
-            case I_CRSI:
-                *SP-- = (uint64_t)pc;
-                pc = (unsigned char*)RSI;
-                continue;
-            case I_CRDX:
-                *SP-- = (uint64_t)pc;
-                pc = (unsigned char*)RDX;
-                continue;
-            case I_ANDAL:
-                RAX &= 0xFFFFFFFFFFFFFF00;
-                ZI = true;
-                continue;
-            case I_XORAL:
-                RAX = RAX ^ 1;
-                ZI = (RAX == 0);
-                continue;
-            case I_ORAL:
-                RAX |= 1;
-                ZI = false;
-                continue;
-            case I_TEST: //test    BYTE PTR [rdx],cl
-                ZI = ((*(unsigned char*)RDX) & (unsigned char)RCX) == 0;
-                continue;
-            case I_LMOV:
-                RAX = *(unsigned char*)RDX;
-                continue;
-            case I_M8CX:
-                R8 = RCX;
-                continue;
-            case I_M8DI:
-                R8 = RDI;
-                continue;
-            case I_MVZXA:
-                RAX &= 0xFF;
-                continue;
-            case I_SETNZ:
-                RAX = ZI ? 0 : 1;
-                continue;
-            case I_JZ:
-                if (ZI)
-                    pc += (int64_t)(char)(pc[-1]);
-                continue;
-            case I_JNZ:
-                if (!ZI)
-                    pc += (int64_t)(char)(pc[-1]);
-                continue;
-            case I_JMPS:
-                pc += (int64_t)(char)(pc[-1]);
-                continue;
-            case I_JMPL:
-                pc += (int64_t)collect_32(pc - 4);
-                continue;
-                
-            case I_C2CX:
-                RCX = collect_32(pc - 4);
-                continue;
-            case I_LDX1B:
-                RDX = *(uint64_t*)((unsigned char*)R8 + (int64_t)(char)(pc[-1]));
-                continue;
-            case I_LDX4B:
-                RDX = *(uint64_t*)(((unsigned char*)R8) + (int64_t)collect_32(pc - 4));
-                continue;
-        }
-    }
-    /* Since we dispensed with the thunk, convert the (non)-zero flag into AL 0 or 1 here in C++. */
-    RAX = ZI ? 0 : 1;
-    return (int32_t) RAX;
 }
-       
-#endif
 
-
+} //namespace NXX86

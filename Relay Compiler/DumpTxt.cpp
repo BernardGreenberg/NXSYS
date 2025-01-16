@@ -104,7 +104,7 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
         while (Pctr  < nitems) {
             if (ISD.count(Pctr))
                 printf("\n%s:\n", ISD[Pctr].c_str());
-            auto RV = DisassembleX86(charp+Pctr, Pctr, nitems);
+            auto RV = NXX86::DisassembleX86(charp+Pctr, Pctr, nitems);
             printf("%06X   %s", (int)Pctr, RV.disassembly.c_str());
             if (RV.have_ref_relay)
                 printf("    ; %s", ESD[RV.relay_ref_index].c_str());
