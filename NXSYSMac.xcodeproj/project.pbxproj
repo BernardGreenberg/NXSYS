@@ -204,7 +204,6 @@
 		5BD064DF19CEE9E300564BD5 /* TLEditMainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BD064DE19CEE9E300564BD5 /* TLEditMainView.mm */; };
 		5BD6200C19CD997C00DB8A8F /* TrackSegProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BD6200B19CD997C00DB8A8F /* TrackSegProperties.xib */; };
 		5BD6200E19CD9E6E00DB8A8F /* TrackSegDialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6200D19CD9E6E00DB8A8F /* TrackSegDialog.mm */; };
-		5BE2A1A02CFB7F1000F6DE2F /* TLEdit-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BAC930F19C8FE7200673BDC /* TLEdit-Info.plist */; };
 		5BE487D0199D0A5C007BD6BF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE487CF199D0A5C007BD6BF /* Cocoa.framework */; };
 		5BE487DA199D0A5C007BD6BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BE487D8199D0A5C007BD6BF /* InfoPlist.strings */; };
 		5BE487E3199D0A5C007BD6BF /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5BE487E2199D0A5C007BD6BF /* AppDelegate.mm */; };
@@ -1753,7 +1752,6 @@
 				5BD064DB19CE44A600564BD5 /* SwitchProperties.xib in Resources */,
 				5BAC931219C8FE7200673BDC /* InfoPlist.strings in Resources */,
 				5B4E62B2284AEA6A002A6C7E /* OpenIcon.png in Resources */,
-				5BE2A1A02CFB7F1000F6DE2F /* TLEdit-Info.plist in Resources */,
 				5BC13711285E219D007D52E1 /* AboutTLEdit.html in Resources */,
 				5BA7E72619D1F421006F9A04 /* crxl.png in Resources */,
 				5BC1370D285E1288007D52E1 /* TLEdit256x256.png in Resources */,
@@ -1852,6 +1850,7 @@
 			files = (
 			);
 			inputFileListPaths = (
+				"$(SRCROOT)/newInputFile.xcfilelist",
 			);
 			inputPaths = (
 			);
@@ -1859,6 +1858,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/newOutputFile",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
