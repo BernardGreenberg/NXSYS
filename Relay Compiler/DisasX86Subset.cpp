@@ -25,7 +25,6 @@ using std::vector, std::string;
 
 #include "NXX86.h"
 #include "DisasUtil.h"
-#include "cccint.h"
 
 namespace NXX86 {
 
@@ -51,7 +50,7 @@ uint32_t collect_32(unsigned char* p) { //collect low-endian-stored 32-bit numbe
 }
 
 /*
- KST - "Known Stuff Table" -- values copied from NASM assembler listing.
+ KST - "Known Stuff Table" -- values copied from NASM assembler listing. Processor 64-bit mode assumed.
  
  2400           and    al,0
  0C01           or     al,1
@@ -78,7 +77,7 @@ uint32_t collect_32(unsigned char* p) { //collect low-endian-stored 32-bit numbe
  on the first byte.  The value of dispatch[first_byte] is the INDEX into KnownPatterns of the
  appropriate entry (hash-siblings threaded by "next"). Note that 0 means "no entry", not entry 0. */
 
-char unsigned dispatch[256] = {}; /* guaranteed init to 0's */
+char unsigned DispatchArray[256] = {}; /* guaranteed init to 0's */
 
 struct X86Pattern KnownPatterns [] {
     {I_NULL, {}, 0, "null entry 1DUMY ---  can't have 0"},
@@ -112,8 +111,8 @@ void EnsureDispatch() {
     for (X86Pattern& e : KnownPatterns) {
         if (i != 0) {
             auto b = e.Data[0];
-            e.next = dispatch[b];
-            dispatch[b] = (unsigned char)i;
+            e.next = DispatchArray[b];
+            DispatchArray[b] = (unsigned char)i;
         }
         i++;
     }
@@ -150,11 +149,13 @@ struct X86DisRV DisassembleX86(unsigned char* ip, uint64_t Pctr, uint64_t nitems
     EnsureDispatch();
     assert(nitems > 0);
     
-    for (auto d = dispatch[*ip]; d != 0; d = KnownPatterns[d].next) {
+    for (auto d = DispatchArray[*ip]; d != 0; d = KnownPatterns[d].next) {
         const X86Pattern& E = KnownPatterns[d];
         if (E.match(ip, nitems))
             return DisassembleDecodedX86(ip, Pctr, E);
     }
+
+    /* We get here if code is not in our array/map */
     struct X86DisRV RV;
     RV.byte_count = std::min((unsigned)nitems, (unsigned)3);
     RV.disassembly = FmtInst(ip, RV.byte_count) + "Unknown";

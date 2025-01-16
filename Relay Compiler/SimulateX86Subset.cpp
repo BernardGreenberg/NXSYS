@@ -28,7 +28,7 @@ int32_t SimulateX86(void* codeptr) {
     uint64_t *SP = STACKLAST;
     bool ZI = false;
 
-    EnsureDispatch();
+    EnsureDispatch();  //Get the dispatch array filled, if it's not done yet.
 
     /* bypass Grand Thunk Railroad */
     /* must take care to do address arithmetic in bytes (unsigned chars)*/
@@ -41,17 +41,20 @@ int32_t SimulateX86(void* codeptr) {
     
     while (SP < STACKLAST) {
         X86Pattern * Ep = nullptr;
-        for (auto d = dispatch[*pc]; d != 0; d = KnownPatterns[d].next) {
-            Ep = &(KnownPatterns[d]);
-            if (Ep->match(pc, 1LL<<61))
+        for (auto d = DispatchArray[*pc]; d != 0; d = KnownPatterns[d].next) {
+            auto tEp = &(KnownPatterns[d]);
+            if (tEp->match(pc, 1LL<<61)) {
+                Ep = tEp;
                 break;
+            }
         }
         assert(Ep != nullptr); // Can't decode
 
         /* uncomment to watch the interpreter in action */
         //  printf("%p %s\n", pc, Ep->disassembly);
 
-        /* Move the PC FIRST so that rel refs are meaningful*/
+        /* Advance the PC FIRST, so that rel refs are meaningful*/
+
         pc += Ep->must_exist_bytes;
         
         switch(Ep->icode) {
@@ -82,7 +85,7 @@ int32_t SimulateX86(void* codeptr) {
                 RAX |= 1;
                 ZI = false;
                 continue;
-            case I_TEST: //test    BYTE PTR [rdx],cl
+            case I_TEST:
                 ZI = ((*(unsigned char*)RDX) & (unsigned char)RCX) == 0;
                 continue;
             case I_LMOV:

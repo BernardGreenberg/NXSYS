@@ -12,20 +12,20 @@
 #include <vector>
 #include <string>
 
-#include <stdio.h>
-
 namespace NXX86 {
 
 uint32_t collect_32(unsigned char* p); //collect low-endian-stored 32-bit number
 std::string FmtInst(unsigned char * ip, int nbytes);
 void EnsureDispatch();
-extern unsigned char dispatch[256];
+extern unsigned char DispatchArray[256];
 
-#define IMM_1B 1
-#define IMM_4B 2
-#define JMPDISP 4
-#define RLYDISP 8
-#define IMM_CONSTANT 0x10
+#define IMM_1B 1       // Immediate signed char quantity in last byte
+#define IMM_4B 2       // Immediate signed low-endian quantity in last 4 bytes
+#define JMPDISP 4      // The immediate quantity is a signed PC-relative offset to a branch target
+#define RLYDISP 8      // The immediate quantity is signed offset off selected register
+#define IMM_CONSTANT 0x10  // The immediate quantity is data to be used as operand.
+
+/* See KnownPatterns (in Disas) for meanings */
 
 enum ICODE {I_NULL, I_RET, I_CRSI, I_CRDX, I_ANDAL, I_XORAL, I_ORAL, I_TEST, I_LMOV,
     I_M8DI, I_M8CX, I_MVZXA, I_SETNZ, I_JZ, I_JNZ, I_JMPS, I_JMPL,
@@ -54,7 +54,7 @@ struct X86Pattern {
     }
 };
 
-extern struct X86Pattern KnownPatterns[];
+extern struct X86Pattern KnownPatterns[]; //Defined in disassembler, but used there & in simulator
 
 } // namespace NXX86
 
