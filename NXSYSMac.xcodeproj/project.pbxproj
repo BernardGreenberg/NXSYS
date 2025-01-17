@@ -851,7 +851,6 @@
 				5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */,
 				5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */,
 				5B38456D2D2F179B006BAD71 /* DisasX86Subset.cpp */,
-				5B3845722D38620B006BAD71 /* NXX86.h */,
 				5B3845732D38620B006BAD71 /* SimulateX86Subset.cpp */,
 			);
 			path = "Relay Compiler";
@@ -867,6 +866,7 @@
 				5B7B02AE2314DCCD000747A0 /* opsintel.h */,
 				5B4DF3AC2314C872001FDE00 /* tkov2.h */,
 				5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */,
+				5B3845722D38620B006BAD71 /* NXX86.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";

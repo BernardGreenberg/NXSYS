@@ -26,7 +26,7 @@ void outarminst (ArmInst w, const char * mnem, const char* str) {
 /* Yer bits are number 35 to 0 left-to-right, as in https://developer.arm.com/documentation/ddi0602/2024-09/Base-Instructions?lang=en
  */
 ArmInst insert_arm_bitfield(ArmInst inst, int displacement, int start_bit, int end_bit, int shift_down) {
-    assert (displacement >= -32767 && displacement < 36727);
+    assert (displacement >= -32767 && displacement < 32767);
     displacement >>= shift_down;
     int fld_len = start_bit - end_bit + 1;
     int mask = (1 << fld_len)-1;
