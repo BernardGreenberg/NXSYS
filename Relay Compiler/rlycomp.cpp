@@ -245,10 +245,10 @@ void RC_error (int fatal, const char* s, ...) {
 	exit(3);
 }
 
-size_t get_file_size(const char* filename) {
+size_t get_file_size(const std::string& fname) {
     struct stat st;
 
-    if (stat(filename, &st) == 0)
+    if (stat(fname.c_str(), &st) == 0)
         return st.st_size;
     else
         return -1;
@@ -1487,11 +1487,12 @@ void CallWtko (const char * path, const char * opath, time_t timer,
 	write_tko32 (merged_path.c_str(), tki);
     else
 	write_tko (merged_path.c_str(), tki);
-    printf ("%d (0x%x) code bytes generated.\n", Pctr, Pctr);
-    printf ("%ld relay%s defined, %ld referenced.\n",
-	    RelayDefTable.size(), (RelayDefTable.size() == 1) ? "" : "s",
+    cout << std::format("{0} (0x{0:X}) code bytes generated\n", Pctr);
+    cout << std::format("{} relay{} defined, {} referenced.\n",
+            RelayDefTable.size(),
+            (RelayDefTable.size() == 1) ? "" : "s",
 	    RelayRefTable.size());
-    cout << merged_path << " written, " << get_file_size(merged_path.c_str()) << " bytes." << endl;
+    cout << merged_path << " written, " << get_file_size(merged_path) << " bytes." << endl;
 }
 
 static bool OpenListing (const char * path, string& lpath) {
