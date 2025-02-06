@@ -34,12 +34,15 @@
 #include <filesystem>
 #include <limits>
 #include <algorithm>
+#include <iostream>
+#include <format>
 #include <unordered_map>
 #include <unordered_set>
 #include "STLExtensions.h"
 #include "replace_filename.h"
 
 using std::string, std::vector, std::unordered_set, std::unordered_map;
+using std::cout, std::cerr, std::endl;
 
 namespace fs = std::filesystem;
 
@@ -89,14 +92,14 @@ public:
         for (auto ap : alist)
             if (ap->IsMe(item))
                 return ap;
-        fprintf (stderr, "Unknown architecture: %s\n", item.c_str());
+        cerr << "Unknown architecture: " << item <<endl;
         return nullptr;
     }
     static void print_known(Architecture* dft) {
-        fprintf(stderr, "Known architectures (default %s): ", dft->CanonToken.c_str());
+        cerr << "Known architectures (default " << dft->CanonToken << "):" << endl;
         for (auto ap : Architecture::alist)
-            fprintf(stderr, "%s ", ap->CanonToken.c_str());
-        fprintf(stderr, "\n");
+            cerr << ap->CanonToken << " ";
+        cerr << endl;
     }
     bool operator == (Architecture* otherp) const {
         return otherp == this;
@@ -1488,7 +1491,7 @@ void CallWtko (const char * path, const char * opath, time_t timer,
     printf ("%ld relay%s defined, %ld referenced.\n",
 	    RelayDefTable.size(), (RelayDefTable.size() == 1) ? "" : "s",
 	    RelayRefTable.size());
-    printf ("%s written, %ld bytes.\n", merged_path.c_str(), get_file_size(merged_path.c_str()));
+    cout << merged_path << " written, " << get_file_size(merged_path.c_str()) << " bytes." << endl;
 }
 
 static bool OpenListing (const char * path, string& lpath) {
@@ -1496,9 +1499,10 @@ static bool OpenListing (const char * path, string& lpath) {
         lpath = merge_ext(path, ".lst", true);
     ListFile = fopen (lpath.c_str(), "w");
     if (ListFile == NULL) {
-	fprintf (stderr, "Can't open listing file %s for output.\n", lpath.c_str());
+        cerr << "Can't open listing file " << lpath << " for output." <<endl;
         return false;
     }
+    cout << "Listing to " << lpath <<endl;
     return true;
 }
 
@@ -1519,24 +1523,24 @@ int main (int argc, char ** argv) {
     string lpath;
     string compdesc = string("BSG NXSYS Relay Compiler Version ") + std::to_string(COMPILER_VERSION) + " (";
     compdesc += std::to_string(compiler_bits) + "-bit of " + __DATE__ + " " __TIME__ + ")";
-    fprintf (stdout, "%s\n", compdesc.c_str());
-    fprintf (stdout, COMPILER_COPYRIGHT "\n");
+    cout << compdesc << endl;
+    cout << COMPILER_COPYRIGHT <<endl;
     
 #if NXSYSMac
-    fprintf(stdout, "MacOS clang++ implementation\n");
+    cout << "MacOS clang++ implementation\n";
 #endif
     
     if (argc < 2) {
         usage:
         auto execpath = fs::path(argv[0]);
-        fprintf (stderr, "Usage: %s source{.trk} {args}\nArgs:\n", execpath.string().c_str());
-        fprintf (stderr,
+        cerr << "Usage: " << execpath << " source{.trk} {args}\nArgs:\n";
+        cerr <<
                  "  -L    Make listing to source.lst\n"
                  "  -Fo:nondefault_outputpath (default is source.tko)\n"
                  "  -Fl:nondefault_listingpath (default is source.lst)\n"
                  "  -arch:ARCH, ARCH as below (default as per cmplr env)\n"
                  "  -C    Special debug checking\n"
-                 "  -T    Internal compiler tracing to listing\n");
+                 "  -T    Internal compiler tracing to listing\n";
         Architecture::print_known(Arch);
         exit(2);
     }
@@ -1559,14 +1563,14 @@ int main (int argc, char ** argv) {
                     CheckOpt = true;
                 else if (!strncmp(argval.c_str(), "FO:", 3)) {
                     if (arg[3] == '\0') {
-                        fprintf (stderr, "Output pathname missing after /Fo:\n");
+                        cerr << "Output pathname missing after /Fo:\n";
                         goto usage;
                     }
                     opath = arg+4;
                 }
                 else if (!strncmp (argval.c_str(), "FL:", 3)) {
                     if (arg[3] == '\0') {
-                        fprintf (stderr, "Listing pathname missing after /Fl:\n");
+                        cerr << "Listing pathname missing after /Fl:\n";
                         goto usage;
                     }
                     lpath = arg+4;
@@ -1581,7 +1585,7 @@ int main (int argc, char ** argv) {
                     Arch = ap;
                 }
                 else {
-                    fprintf(stderr, "Unrecognized arg: %s\n", argval.c_str());
+                    cerr << "Unrecognized arg: " << argval <<endl;
                     goto usage;
                 }
             }
@@ -1589,12 +1593,11 @@ int main (int argc, char ** argv) {
         
     }
     if (fpath == NULL) {
-        fprintf(stderr, "No input pathname supplied.\n");
+        cerr << "No input pathname supplied." <<endl;
         goto usage;
     }
 
-    
-    printf ("Target architecture: %s\n", Arch->Description);
+    cout << "Target architecture: " << Arch->Description <<endl;
 
     RetOp = MOP_RET;
     Ltabs = (Arch->Bits == 16) ? "\t\t" : "\t\t\t";
@@ -1605,7 +1608,7 @@ int main (int argc, char ** argv) {
 
     FILE* f = fopen (input_path.c_str(), "r");
     if (f == NULL) {
-	fprintf (stderr, "Cannot open %s for reading.", input_path.c_str());
+        cerr << "Cannot open " << input_path <<  " for reading." <<endl;
         return 3;
     }
 
@@ -1651,5 +1654,5 @@ int main (int argc, char ** argv) {
 
 // I suppose this is right even on Windows.
 void MessageBox(void*, const char* msg, const char* title, int) {
-    fprintf(stderr, "%s: %s\n",msg, title);
+    cerr << msg << ": " << title <<endl;
 }
