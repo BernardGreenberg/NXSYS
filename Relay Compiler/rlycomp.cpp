@@ -255,7 +255,8 @@ size_t get_file_size(const std::string& fname) {
 }
 
 //extern used in armgen stuff
-void list (const char* s, ...) {
+// __GNUC__ arg checking in rcdcls.h
+void list (const char* s, ...){
     if (ListOpt) {
 	va_list ap;
 	va_start (ap, s);
@@ -1286,7 +1287,7 @@ void InitRelayCompiler () {
 }
 
 void PrintRelayTable () {
-    list ("\f%d relays defined by code:    "
+    list ("\f%zu relays defined by code:    "
 	    "ISD (Internal symbol dictionary)\n\nIndex\tPC\tFn Size\tRelay\n",
 	    RelayDefTable.size());
     int i = 0;
@@ -1295,7 +1296,7 @@ void PrintRelayTable () {
               i++, rdte.pc, rdte.size , rdte.sym->PRep().c_str());
     }
     list ("\n");
-    list ("\fRelay Table (%d relays referenced):    "
+    list ("\fRelay Table (%zu relays referenced):    "
 	  "ESD (External symbol dictionary)\nIndex\tOffset\tRelay\n\n",
 	  RelayRefTable.size());
     i = 0;
@@ -1303,9 +1304,9 @@ void PrintRelayTable () {
         list ("%4d\t%04X\t%s\n", i++, RlsymOffset (rte), rte->PRep().c_str());
     }
     list ("\n");
-    list ("Code seg size %04X = %ud\n", Pctr, Pctr);
+    list ("Code seg size 0x%04X = %u\n", Pctr, Pctr);
     auto rblock_size = Arch->RelayBlockSize*RelayRefTable.size();
-    list ("Relay DS size %04X = %ud\n", rblock_size, rblock_size);
+    list ("Relay DS size 0x%04lX = %ld\n", rblock_size, rblock_size);
     int col = 0;
 #ifdef print_fixups
     list ("\n%d fixups generated.\n", FixupCount);
@@ -1326,7 +1327,7 @@ void PrintRelayTable () {
 	list ("\n");
     }
 #endif
-    list ("\n%d dependent pairs:\n", DependentPairTable.size());
+    list ("\n%zu dependent pairs:\n", DependentPairTable.size());
     RLID lastid = (RLID)-1;
     col = 0;
     for (auto& D : DependentPairTable) {

@@ -92,6 +92,10 @@ unsigned char * fasd_data (int &fasd_count);
 const char* * fasd_atsym_data (int &fasd_atsym_count);
 PCTR RlsymOffset (Rlysym * r);
 RLID RelayId (Sexpr s);
+
+#ifdef __GNUC__
+__attribute__((format(printf, 1, 2)))
+#endif
 void list(const char *, ...);
 
 #include <vector>

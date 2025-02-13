@@ -128,7 +128,7 @@ void OutputARMFunctionPrologue() {
 void ARM64FixupFixup(Fixup &F, PCTR pc) {
     int d = pc - F.pc;
     list (";  ARM Fixup @%0*X to %s = %0*X, disp %04X\n",
-          Ahex, F.pc, F.tag->lab, Ahex, pc, d, Ahex);
+          Ahex, F.pc, F.tag->lab, Ahex, pc, d);
     ArmInst * iptr = (ArmInst*) &(Code[F.pc]);
     ArmInst inst = *iptr;
     char unsigned opcode = TOPBYTE(inst);
