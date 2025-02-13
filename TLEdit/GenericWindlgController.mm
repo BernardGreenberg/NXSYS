@@ -294,7 +294,7 @@ static LoadFiascoProtectedUnorderedMap<int, dlgInitData> InitDataMap;
 -(HWND)GetControlHWND:(NSInteger)ctlid
 {
     if (CtlidToHWND.count(ctlid) == 0)
-        [self barf: FormatString("Received action from Cocoa control tagged %d, for which no emulation exists.", ctlid)];
+        [self barf: FormatString("Received action from Cocoa control tagged %d, for which no emulation exists.", (int)ctlid)];
     return CtlidToHWND[ctlid];
 }
 -(NSView*)GetControlView:(NSInteger)ctlid

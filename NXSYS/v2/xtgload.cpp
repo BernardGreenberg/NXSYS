@@ -200,7 +200,7 @@ int ProcessLayoutForm (Sexpr f) {
             if (J.TSA[i] == nullptr) {
                 std::string msg =
                 FormatString("Corrupt layout. "
-                             "Joint/switch #%ld (%d) claims %d branches, but TSA[%ld] is null. "
+                             "Joint/switch #%ld (%d) claims %d branches, but TSA[%d] is null. "
                              "Editing and and re-save in TLEdit may or may not help.",
                              J.Nomenclature, J.SwitchAB0, J.TSCount, i);
                 LispBarf(msg.c_str());

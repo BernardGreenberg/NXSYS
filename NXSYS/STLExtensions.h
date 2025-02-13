@@ -14,6 +14,9 @@
 #include <algorithm>
 
 std::string FormatStringVA(const char* fmt, va_list args);
+#ifdef __GNUC__
+__attribute__ ((format(printf, 1, 2)))
+#endif
 std::string FormatString(const char* fmt, ...);
 std::string stoupper( const std::string& s );
 std::string stolower( const std::string& s );

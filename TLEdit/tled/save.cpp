@@ -199,7 +199,7 @@ static int ReportCorruptedJoints(GraphicObject *g) {
     }
     for (int x = 0; x < J.TSCount; x++) {
         if (J.TSA[x] == NULL) {
-            usererr(FormatString("Dumper finds TJ#%d with TSCount %d, TSA[%d] null.",
+            usererr(FormatString("Dumper finds TJ#%ld with TSCount %d, TSA[%d] null.",
                                  J.Nomenclature, J.TSCount, x).c_str());
             J.TSCount = x;
             J.Select();

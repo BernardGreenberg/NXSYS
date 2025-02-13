@@ -139,7 +139,7 @@ string DisassembleARM (ArmInst inst, LPCTR pctr) {
                 disp |= 0xFFFFFFFFFFFF0000;
             LPCTR target = pctr+disp;
             const char * opstr = (opcode == 0x37) ? "tbnz" : "tbz ";
-            return FormatString ("   %-4s    x0, #0, 0x%4lX", opstr, target);
+            return FormatString ("   %-4s    x0, #0, 0x%4llX", opstr, target);
         }
             
         case TOPBYTE(ARM::ret):

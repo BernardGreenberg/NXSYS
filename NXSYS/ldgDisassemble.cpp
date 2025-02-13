@@ -62,7 +62,7 @@ static string InterpretState(Relay * r) {
 static string GenerateUpdatableLineX86(LPCTR pctr, bool record, int& bytes) {
 
     auto RV = NXX86::DisassembleX86((unsigned char *)pctr, pctr, 1LL << 60);
-    string D = FormatString(" %012lX  ", pctr) + RV.disassembly;
+    string D = FormatString(" %012llX  ", pctr) + RV.disassembly;
 
     if (RV.have_ref_relay) {
         int stat_index = RV.relay_ref_index / sizeof(Relay*);
@@ -79,7 +79,7 @@ static string GenerateUpdatableLineX86(LPCTR pctr, bool record, int& bytes) {
 static string GenerateUpdatableLineARM(LPCTR pctr, bool record, int& bytes) {
     ArmInst inst = *((ArmInst*)pctr);
 
-    string prefix = FormatString(" %012lX  %8X  ", pctr, inst);
+    string prefix = FormatString(" %012llX  %8X  ", pctr, inst);
     string S = prefix + DisassembleARM(inst, pctr);
     unsigned char opcode = TOPBYTE(inst);
     if (opcode == TOPBYTE(ARM::ldr_storage)) {
