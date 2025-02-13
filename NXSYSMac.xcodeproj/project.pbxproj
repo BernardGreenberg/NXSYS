@@ -1850,7 +1850,6 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"$(SRCROOT)/newInputFile.xcfilelist",
 			);
 			inputPaths = (
 			);
