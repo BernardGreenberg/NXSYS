@@ -1846,6 +1846,7 @@
 		};
 		5B8FCBEC2850030400855897 /* Record Build Data */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
