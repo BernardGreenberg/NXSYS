@@ -30,7 +30,7 @@ namespace NXX86 {
 
 string FmtInst(unsigned char * ip, int nbytes) {
     string result;
-    for (unsigned int i = 0; i < 7; i++) {
+    for (int i = 0; i < 7; i++) {
         if (i < nbytes)
             result += FormatString("%02X", ip[i]);
         else

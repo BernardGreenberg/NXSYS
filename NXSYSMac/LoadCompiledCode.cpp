@@ -151,10 +151,12 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
         return false;
     }
     // https://forums.developer.apple.com/forums/thread/659846
+#if NXSYSMac
     if (processIsTranslated() == 1) {  // If Rosetta2ing, "this is fine."
         RunningSimulatedCompiledCode = false;
         return true;
     }
+#endif
     RunningSimulatedCompiledCode = false;
 #if 0  //this was useful once;  Comment it out.  A bug at TKDI_TXT: (first line) caused this
       //problem.
