@@ -26,9 +26,6 @@
 #include <stdarg.h>
 #include <time.h>
 #include <sys/stat.h>
-#ifdef _MSC_VER
-#include "dircmpat.h"
-#endif
 #include <string>
 #include <vector>
 #include <filesystem>
@@ -1512,7 +1509,7 @@ int main (int argc, char ** argv) {
 #if NXSYSMac
     int compiler_bits = 64;   //not running on same platform as the object.
 #else
-    int compiler_bits = sizeof(int) * 8;
+    int compiler_bits = sizeof(int*) * 8;
 #endif
     
 #if defined(__aarch64__) || defined(_M_ARM64)
