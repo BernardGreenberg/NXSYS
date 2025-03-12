@@ -142,13 +142,13 @@ void ldgDisassemble(Relay* r) {
 static int DrawLine(const string& S, int y, HDC dc) {
     RECT txr;
     txr.left = txr.right =  txr.top = txr.bottom = 0;
-    DrawText (dc, S.c_str(), (int)S.size(), &txr,
-              DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP|DT_CALCRECT);
+    DrawText (dc, S.c_str(), (int)S.size(), &txr, /*expandtabs is ignored (default) on Mac */
+              DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP| DT_EXPANDTABS | DT_CALCRECT);
     int height = txr.bottom - txr.top; // windows orientation
     txr.top = y;
     txr.bottom = height+y;
     DrawText (dc, S.c_str(), (int)S.size(), &txr,
-              DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP);
+              DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP | DT_EXPANDTABS);
     return height;
 }
     

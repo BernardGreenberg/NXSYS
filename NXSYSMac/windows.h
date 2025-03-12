@@ -230,6 +230,7 @@ BOOL GetDlgItemCheckState (HWND hDlg, UINT id);
 #define DT_RIGHT 64
 #define DT_CENTER 128
 #define DT_VCENTER 256
+#define DT_EXPANDTABS 0  /* fake fake fake -- want to ignore on Mac */
 
 #define SB_PAGEUP       0x0001
 #define SB_PAGEDOWN     0x0002
