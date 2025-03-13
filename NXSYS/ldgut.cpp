@@ -96,7 +96,6 @@ void DrawingSetPageSize (int width, int height, int canonm, int flags) {
     DNCellH = 2*NCellH;
     for (auto d : Drawings)
 	d->PlaceOnPage();
-    InitLdgDisassembly();
 }
 
 
