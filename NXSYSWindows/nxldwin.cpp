@@ -18,7 +18,11 @@
 #include "NXRegistry.h"
 
 static HWND S_RelayGraphicsWindow = nullptr;
-static const char RelayGraphicsWindow_Class [] = PRODUCT_NAME ":Relayg";
+
+static const DWORD RelayGraphicsWindowStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_BORDER | WS_VSCROLL |
+    WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SIZEBOX;
+static const char* RelayGraphicsWindow_Class = "NXSYS:Relayg";
+static const char* RelayGraphicsWindowName = "NXSYS Relay Draftsperson";
 
 static void PlaceDrawing (HWND window) {
     if (!PlaceRelayDrawing()) {
@@ -26,7 +30,7 @@ static void PlaceDrawing (HWND window) {
 	if (!PlaceRelayDrawing()) {
 	    MessageBox (0, "Requested relay circuit too big for "
 			"current size of relay graphics window.  Make it longer and "
-			"maybe NARROWER.", PRODUCT_NAME " Relay Graphics",
+			"maybe NARROWER.", RelayGraphicsWindowName,
 			MB_OK | MB_ICONSTOP);
 	    return;
 	}
@@ -80,10 +84,10 @@ static void SetLocatorPath(HWND window) {
 		    AskForAndDrawRelay(window);
 		    break;
 		case CmSetLctrPath:
-			SetLocatorPath(window);
-			break;
+		    SetLocatorPath(window);
+		    break;
 		default:
-			break;
+		    break;
 	    }
 	    return 0;
 
@@ -124,15 +128,16 @@ int CreateRelayGraphicsWindow () {
     GetWindowRect (GetDesktopWindow(), &rc);
     int dtw = rc.right-rc.left;
     int dth = rc.bottom-rc.top;
-    int main_width = (7*dtw)/8;
+
+    int x = dtw / 16 + dtw / 64;
+    int y = dth / 2;
+    int width = (7 * dtw) / 8;
+    int height = (2 * dth) / 3;
     S_RelayGraphicsWindow = CreateWindow
-			    (RelayGraphicsWindow_Class,
-			     PRODUCT_NAME " Relay Draftsman",
-			     WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_BORDER |
-			     WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SIZEBOX,
-			     /* style */
-			     dtw/16 + dtw/64,dth/2,main_width, (2*dth)/3,
-			     G_mainwindow, NULL, app_instance, NULL);
+			    (RelayGraphicsWindow_Class, RelayGraphicsWindowName,
+				RelayGraphicsWindowStyle,
+				x, y, width, height,
+			        G_mainwindow, NULL, app_instance, NULL);
     if (!S_RelayGraphicsWindow){
 	MessageBox (0, "Can't create Relay Graphics Window.",
 		    app_name, MB_OK | MB_ICONEXCLAMATION);
@@ -146,15 +151,18 @@ int CreateRelayGraphicsWindow () {
     return 1;
 }
 
+extern bool haveDisassembly;
 
-void RelayShowString (const char *rnm) {
-
+void RelayShowString(const char* rnm) {
+    bool first_time = (S_RelayGraphicsWindow == NULL);
     if (!S_RelayGraphicsWindow && !CreateRelayGraphicsWindow())
-	return ;
-    if (!DrawRelayFromName (rnm))
-	return ;
-    PlaceDrawing(S_RelayGraphicsWindow);
-    ShowWindow (S_RelayGraphicsWindow, SW_SHOWNORMAL);
+	return;
+    if (!DrawRelayFromName(rnm))
+	return;
+    if (!haveDisassembly)
+	PlaceDrawing(S_RelayGraphicsWindow);
+    ShowWindow(S_RelayGraphicsWindow, SW_SHOWNORMAL);
+    InvalidateRect(S_RelayGraphicsWindow, NULL, FALSE);
 }
 
 void CheckRelayDisplay() {
