@@ -109,6 +109,21 @@ static void MacAllocCodeText(void* data, size_t count) {
 
 #endif
 
+#if WIN32
+static void WinAllocCodeText(void* code, size_t length) {
+    CodeText = (ArmInst*)VirtualAlloc(NULL, length, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    assert(CodeText != NULL);
+
+// Copy code to new memory.
+    memcpy(CodeText, code, length);
+
+// Change protection.
+// We remove the write flag and set the execute flag on that page.
+    DWORD oldProtection;
+    assert(VirtualProtect(CodeText, length, PAGE_EXECUTE, &oldProtection));
+}
+#endif
+
 static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path) {
     if ((H.magic != TKO_VERSION_2_MAGIC) ||
         !! memcmp(TKO_VERSION_2_STRING, &H.magic_string, strlen(TKO_VERSION_2_STRING)+1)
@@ -150,8 +165,8 @@ static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path)
                     path, H.arch);
         return false;
     }
-    // https://forums.developer.apple.com/forums/thread/659846
 #if NXSYSMac
+    // https://forums.developer.apple.com/forums/thread/659846
     if (processIsTranslated() == 1) {  // If Rosetta2ing, "this is fine."
         RunningSimulatedCompiledCode = false;
         return true;
@@ -245,6 +260,8 @@ bool LoadRelayObjectFile(const char*path, const char*) {
                 size_t code_bytes = chp->number_of_items * chp->length_of_item;
 #if NXSYSMac   // Windows TBD, but this handles all Mac cases...
                 MacAllocCodeText(rdp, code_bytes);
+#else
+                WinAllocCodeText(rdp, code_bytes);
 #endif
                 break;
             }
@@ -345,7 +362,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
     T.Architecture = hp->arch;
     T.CompilationTime = hp->time;
     T.CompilerVersion = hp->compiler_version;
-    T. CodeLen = hp->code_len;
+    T.CodeLen = hp->code_len;
     T.StaticLen = hp->static_len;
     T.Bits = hp->bits;
     T.User = hp->user;
@@ -372,16 +389,19 @@ int GetRelayFunctionLength(Relay* r) {
 void CleanupObjectMemory() {
     RnamesTexts = nullptr;
     RnamesTextPtrs = nullptr;
-    FASLAtsyms.clear();
+        FASLAtsyms.clear();
     RTypeNames.clear();
     RelayFunctionLengths.clear();
     ESD.clear();
     /* dum vivimus speramus */
-#if NXSYSMac
     if (CodeText != nullptr) {
+#if NXSYSMac    
         munmap(CodeText, CodeSize);
-    }
+#else
+        BOOL didit = VirtualFree(CodeText, 0, MEM_RELEASE);
+        assert(didit);
 #endif
+    }
     CodeText = nullptr;
     CodeSize = 0;
     if (Compiled_Linkage_Sptr)
