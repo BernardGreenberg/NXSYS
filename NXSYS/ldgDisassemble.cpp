@@ -22,24 +22,32 @@
 #include "RCarm64.h"
 using std::vector, std::string, std::set;
 
+#if WIN32  //no sé por qué
+#define LDGD_FONT_HEIGHT 16
+#else
+#define LDGD_FONT_HEIGHT 20
+#endif
+
 #if (defined(__aarch64__) || defined(_M_ARM64))
 #define ISARM 1
 #endif
 
 struct DisasUpdateRecord {
     DisasUpdateRecord(LPCTR _L, int _index) {pctr = _L; lineIndex = _index;}
+    DisasUpdateRecord(LPCTR _L, size_t _index) { pctr = _L; lineIndex = static_cast<int>(_index); }
     LPCTR  pctr;
     int    lineIndex;
 };
 
 struct RelayUpdateRecord {
     RelayUpdateRecord(Relay* _r, int _index) {relay = _r; lineIndex = _index;}
+    RelayUpdateRecord(Relay* _r, size_t _index) { relay = _r; lineIndex = static_cast<int>(_index); }
     Relay*  relay;
     int    lineIndex;
 };
 
 bool haveDisassembly = false; /* globally addressible, needed by Draftsperson window control */
-static int Top = 0;
+static const int Top = 0;
 static vector<string> Lines;
 
 static vector<DisasUpdateRecord> UpdateSchedule;
@@ -50,7 +58,6 @@ void InitLdgDisassembly() {
     UpdateSchedule.clear();
     ShownRelays.clear();
     haveDisassembly = false;
-    Top = 0;
 }
 
 static string InterpretState(Relay * r) {
@@ -76,7 +83,7 @@ static string GenerateUpdatableLineX86(LPCTR pctr, bool record, int& bytes) {
     return D;
 }
 
-static string GenerateUpdatableLineARM(LPCTR pctr, bool record, int& bytes) {
+[[maybe_unused]] static string  GenerateUpdatableLineARM(LPCTR pctr, bool record, int& bytes) {
     ArmInst inst = *((ArmInst*)pctr);
 
     string prefix = FormatString(" %012llX  %8X  ", pctr, inst);
@@ -131,7 +138,6 @@ void ldgDisassemble(Relay* r) {
         else
             Lines.push_back(GenerateUpdatableLineARM(pctr, true, bytes));
 #else
-        (void)GenerateUpdatableLineARM;
         Lines.push_back(GenerateUpdatableLineX86(pctr, true, bytes));
 #endif
         p += bytes;
@@ -142,8 +148,8 @@ void ldgDisassemble(Relay* r) {
 static int DrawLine(const string& S, int y, HDC dc) {
     RECT txr;
     txr.left = txr.right =  txr.top = txr.bottom = 0;
-    DrawText (dc, S.c_str(), (int)S.size(), &txr, /*expandtabs is ignored (default) on Mac */
-              DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP| DT_EXPANDTABS | DT_CALCRECT);
+    DrawText (dc, S.c_str(), (int)S.size(), &txr,
+              DT_TOP | DT_LEFT |DT_SINGLELINE| DT_NOCLIP | DT_EXPANDTABS |DT_CALCRECT);
     int height = txr.bottom - txr.top; // windows orientation
     txr.top = y;
     txr.bottom = height+y;
@@ -158,7 +164,7 @@ static void ensureFont() {
     if (Font == NULL) {
         LOGFONT lf;
         memset(&lf, 0, sizeof(LOGFONT));
-        lf.lfHeight = 20;
+        lf.lfHeight = LDGD_FONT_HEIGHT;
         strcpy(lf.lfFaceName, "Courier");
         lf.lfWeight = FW_BOLD;
         Font = CreateFontIndirect(&lf);
