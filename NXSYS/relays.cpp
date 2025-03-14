@@ -7,9 +7,7 @@
 #include <exception>
 #include "MessageBox.h"
 
-#if NXSYSMac
 #define CALL_COMPILED 1
-#endif
 
 #include "STLExtensions.h"
 
@@ -257,7 +255,11 @@ BOOL inline Relay::ComputeValue() volatile {
 #if CALL_COMPILED && NXCMPOBJ
     if (Flags & LF_CCExp) {
         if (RunningSimulatedCompiledCode)
+#if WIN32
+            return FALSE;
+#else
             return NXX86::SimulateX86(exp);
+#endif
         else
             return CallCompiledCode (exp);
     }
@@ -310,6 +312,8 @@ bool Relay::maybe_change_state(BOOL new_state) {
  */
 #if NXSYSMac  // we don't know if MSVC has a similar bug; I assume not.
 #define DISABLE_OPT_FCN __attribute__((optnone))
+#else
+#define DISABLE_OPT_FCN 
 #endif
 
 static DISABLE_OPT_FCN void Run (Relay * top_level_relay, BOOL force_new_state) {
@@ -384,9 +388,13 @@ void GooseRelay (Relay * rr) {
     if (rr->Flags & LF_CCExp) {
 //         printf("Goose honking %s\n", rr->RelaySym.PRep().c_str());
         if (RunningSimulatedCompiledCode)
+#if WIN32
+            state = 0;
+#else
             state = NXX86::SimulateX86(rr->exp);
+#endif
         else
-            state = CallCompiledCode (rr->exp);
+            state = CallCompiledCode ((void*)rr->exp);
     }
 
     else

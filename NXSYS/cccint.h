@@ -8,7 +8,7 @@ extern char** Compiled_Linkage_Sptr;
 typedef int (WINAPI *CCC_Thunkptrtype) (void* linkage_base, void* code_addr);
 
 extern CCC_Thunkptrtype CCC_Thunkptr;
-#define CallCompiledCode (*CCC_Thunkptr)
+#define CallCompiledCode(exp) (*CCC_Thunkptr) (Compiled_Linkage_Sptr, (void*)exp)
 
 #elif NXSYSMac && (defined(__aarch64__) || defined(_M_ARM64))
 
