@@ -371,7 +371,7 @@ colnum:
 	    if (cct < sizeof(SymBuf)/sizeof(SymBuf[0])-1)
 		SymBuf[cct++] = ch;
             int newdig = ch - '0';
-            if (num > std::numeric_limits<long>::max()/10) {
+            if (num > 1844674407379955) { // std::numeric_limits<long>::max()/10) {
                 LispBarf("Number in Lisp source too big.");
                 return NIL;
             }
