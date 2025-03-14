@@ -51,25 +51,28 @@ SigWinStopWidth = 15;
 static HFONT Font = NULL, SFont = NULL;
 
 #if WIN32
-HWND SigWins[100];
-int  SigWinCount = 0;
-static int LastX = 0;
+#include <unordered_set>
+static std::unordered_set<HWND> AllFullSigWins;
+static int Lastx = 0;  //for horizontal array (optional)F
 #endif
 
 void DestroySigWins() {
 #if WIN32
-	LastX = 0;
-	for (int i = 0; i < SigWinCount; i++) {
-		HWND win = SigWins[i];
-		((Signal*)GetWindowLongPtr(win, 0))->Window = NULL;
-		DestroyWindow(win);
+retry:
+    for (HWND fswin : AllFullSigWins) {
+        Signal* sp = (Signal*)GetWindowLongPtr(fswin, 0);
+        if (sp)
+		    sp->Window = NULL; /* check not fully understood, but necessary*/
+		DestroyWindow(fswin);
+        AllFullSigWins.extract(fswin);
+        goto retry;
 	}
 	if (Font != NULL)
 		DeleteObject(Font);
 	if (SFont != NULL)
 		DeleteObject(SFont);
 	Font = SFont = NULL;
-	SigWinCount = 0;
+    AllFullSigWins.clear();
 #endif
 }
 
@@ -142,7 +145,7 @@ HWND MakeSigWin(Signal * s, int x, int y) {
         strcpy(plate, s->CompactName().c_str());
     SetWindowText(window, plate);
 #if WIN32
-    SigWins[SigWinCount++] = window;
+    AllFullSigWins.insert(window);
 #endif
     return window;
 }
