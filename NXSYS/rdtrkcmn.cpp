@@ -211,7 +211,7 @@ const char * ReadLayout (const char* fname) {
 	    return NULL;
 	}
 	SetCursor (hc);
-        InterlockingName= INameRetval + "(Compiled)";
+        INameRetval = InterlockingName = INameRetval + "(Compiled)";
         if (RunningSimulatedCompiledCode)
             InterlockingName += "[X86 Sim]";
 	InterpretedP = 0;
