@@ -15,7 +15,9 @@
 #include <time.h>
 
 #include <vector>
+#include <string>
 #include <unordered_set>
+#include <unordered_map>
 #include "argparse.hpp"
 #include "STLExtensions.h"
 
@@ -47,6 +49,17 @@ public:
     }
 };
 
+class longtime {
+    std::string s;
+public:
+    time_t T;
+    const char* cs;
+    longtime(long L) {
+        T = L;
+        s = ctime(&T);
+        cs = s.c_str();
+    }
+};
 
 int main (int argc, const char ** argv) {
     argparse::ArgSet Aset ("DumpTko track object dumper",
@@ -97,7 +110,7 @@ int main (int argc, const char ** argv) {
         fprintf(stderr, "%s is not a version 2 NXSYS Relay Compiler output file.\n", path);
         exit(4);
     }
-    printf("File %s, len %ld=0x%lX\n", path, file_length, file_length);
+    printf("File %s, len %zd=0x%zX\n", path, file_length, file_length);
 
     if (summary || args["header"]) {
         printf("Header\n");
@@ -107,7 +120,7 @@ int main (int argc, const char ** argv) {
         printf("  Header size %d = 0x%X\n", hp->header_size, hp->header_size);
         printf("  Compat code len %d\n", hp->compat_code_len);
         printf("  Compat static len %d\n", hp->compat_code_len);
-        printf("  Compilation time %s", ctime(&hp->time));
+        printf("  Compilation time %s", longtime(hp->time).cs);
         printf("  User \"%s\"\n", hp->user);
         printf("  Arch \"%s\"\n", hp->arch);
         printf("  Bits %d\n", hp->bits);
@@ -117,7 +130,7 @@ int main (int argc, const char ** argv) {
         printf("  Compiler Version %d.\n\n", hp->compiler_version);
     }
     else {
-        string sctime(ctime(&hp->time));
+        string sctime(longtime(hp->time).cs);
         if (sctime.back() == '\n') sctime.pop_back();
         printf("Compiled at %s for %s (%d bits)\n", sctime.c_str(), hp->arch, hp->bits);
     }
@@ -132,10 +145,10 @@ int main (int argc, const char ** argv) {
         if (summary || sections_wanted.contains(block_name))
             printf("Block %s len %d items %d, item_len %d, @file+0x%lX\n",
                    block_name,
-                   chp->length_of_block,
-                   chp->number_of_items,
-                   chp->length_of_item,
-                   (const unsigned char*)chp - file_data);
+                   static_cast<int>(chp->length_of_block),
+                   static_cast<int>(chp->number_of_items),
+                   static_cast<int>(chp->length_of_item),
+                   static_cast<long>((const unsigned char*)chp - file_data));
         auto rdp = dp + sizeof(*chp);
         auto next_block = rdp + chp->length_of_block;
         bool print = sections_wanted.contains(block_name) || verbose;
@@ -167,7 +180,7 @@ int main (int argc, const char ** argv) {
                 if (summary || print) {
                     if ((hp->static_len % ESD.size()) != 0)
                         printf("   Static len not a multiple of ESD count.\n");
-                    printf("  Inferred static bytes per ESD element %ld\n",
+                    printf("  Inferred static bytes per ESD element %zd\n",
                            hp->static_len / ESD.size()
                            );
                 }
