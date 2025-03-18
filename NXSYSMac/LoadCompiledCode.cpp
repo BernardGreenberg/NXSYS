@@ -120,7 +120,8 @@ static void WinAllocCodeText(void* code, size_t length) {
 // Change protection.
 // We remove the write flag and set the execute flag on that page.
     DWORD oldProtection;
-    assert(VirtualProtect(CodeText, length, PAGE_EXECUTE, &oldProtection));
+    BOOL pastafazool = VirtualProtect(CodeText, length, PAGE_EXECUTE, &oldProtection);
+    assert(pastafazool);
 }
 #endif
 
