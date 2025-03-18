@@ -6,7 +6,9 @@
 //  Copyright © 2024 BernardGreenberg. All rights reserved.
 //  Almost all ancient 1994 pre-STL code.
 //
-
+#ifdef WIN32
+#include <windows.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <cassert>
@@ -26,7 +28,7 @@ using std::string, std::vector;
 extern vector<Relay*>ESD;
 extern vector<string> FASLAtsyms;
 int InterpretTopLevelForm (const char* fname, Sexpr s);
-void FatalAppExit(int, const char * text);
+//void FatalAppExit_(int, const char * text);
 
 short fasl_getw(PBYTE * p) {
     int blow = *(*p)++;
@@ -43,6 +45,10 @@ static decltype(Sexpr().u.n) fasl_getmb(PBYTE* p, int n) {
     return v;
 }
 
+static void FatalAppExit_(UINT code, const char* text) {
+    FatalAppExit(code, text);
+}
+
 Sexpr FaslForm (PBYTE * pp) {
     PBYTE p = *pp;
     int ctlb, w;
@@ -56,7 +62,7 @@ Sexpr FaslForm (PBYTE * pp) {
             break;
         case FASD_VERSION:
             if (*p++ != 1)
-                FatalAppExit (0, "FASD version not 1.");
+                FatalAppExit_ (0, "FASD version not 1.");
             s = NIL;
             break;
         case FASD_CHAR:
@@ -107,7 +113,7 @@ Sexpr FaslForm (PBYTE * pp) {
             s = ESD[fasl_getw(&p)]->RelaySym;
             break;
         default:
-            FatalAppExit (0, "Non-understood FASL object.");
+            FatalAppExit_ (0, "Non-understood FASL object.");
     }
     *pp = p;
     return s;
