@@ -139,10 +139,10 @@ copy "$(SolutionDir)..\InterlockingLibrary.xml" "$(OutDir)InterlockingLibrary.xm
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;WINDOWS;WIN32;REALLY_NXSYS;NXV2;XTG;_CRT_SECURE_NO_WARNINGS;PRODUCT_NAME="NXSYS64";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WINDOWS;WIN32;REALLY_NXSYS;NXV2;XTG;_CRT_SECURE_NO_WARNINGS;PRODUCT_NAME="NXSYS64";NXCMPOBJ=1;CALL_COMPILED=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)..\NXSYS\v2;$(SolutionDir)..\NXSYS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -191,8 +191,10 @@ copy "$(SolutionDir)..\Help.xml" "$(OutDir)\" /Y</Command>
     <ClCompile Include="..\..\NXSYS\fullsig.cpp" />
     <ClCompile Include="..\..\NXSYS\HelpDirectory.cpp" />
     <ClCompile Include="..\..\NXSYS\InterlockingLibrary.cpp" />
+    <ClCompile Include="..\..\NXSYS\ldgDisassemble.cpp" />
     <ClCompile Include="..\..\NXSYS\ldgut.cpp" />
     <ClCompile Include="..\..\NXSYS\lispmath.cpp" />
+    <ClCompile Include="..\..\NXSYS\LoadCompiledCode.cpp" />
     <ClCompile Include="..\..\NXSYS\lspmacro.cpp" />
     <ClCompile Include="..\..\NXSYS\nxgo.cpp" />
     <ClCompile Include="..\..\NXSYS\NXGOLabel.cpp" />
@@ -202,6 +204,7 @@ copy "$(SolutionDir)..\Help.xml" "$(OutDir)\" /Y</Command>
     <ClCompile Include="..\..\NXSYS\pswitch.cpp" />
     <ClCompile Include="..\..\NXSYS\pugixml.cpp" />
     <ClCompile Include="..\..\NXSYS\rdtrkcmn.cpp" />
+    <ClCompile Include="..\..\NXSYS\ReadFASL.cpp" />
     <ClCompile Include="..\..\NXSYS\readsexp.cpp" />
     <ClCompile Include="..\..\NXSYS\RelayLispSubstrate.cpp" />
     <ClCompile Include="..\..\NXSYS\relays.cpp" />
@@ -228,6 +231,7 @@ copy "$(SolutionDir)..\Help.xml" "$(OutDir)\" /Y</Command>
     <ClCompile Include="..\..\NXSYS\v2\xtgload.cpp" />
     <ClCompile Include="..\..\NXSYS\v2\xtrains.cpp" />
     <ClCompile Include="..\..\NXSYS\v2\xturnout.cpp" />
+    <ClCompile Include="..\..\Relay Compiler\DisasX86Subset.cpp" />
     <ClCompile Include="..\dialogs.cpp" />
     <ClCompile Include="..\getmodtm.c" />
     <ClCompile Include="..\helpdlg.cpp" />
@@ -257,6 +261,7 @@ copy "$(SolutionDir)..\Help.xml" "$(OutDir)\" /Y</Command>
     <Image Include="..\tracetb.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Relay Compiler\DisasUtil.h" />
     <ClInclude Include="..\LDRightClick.h" />
     <ClInclude Include="..\NXRegistry.h" />
     <ClInclude Include="..\NXSYSWinApp.h" />

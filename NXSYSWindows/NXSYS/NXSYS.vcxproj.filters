@@ -189,6 +189,21 @@
     <ClCompile Include="..\..\NXSYS\HelpDirectory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\WinAppBuildSignature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\NXSYS\ldgDisassemble.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\NXSYS\LoadCompiledCode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\NXSYS\ReadFASL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Relay Compiler\DisasX86Subset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\nx.rc">
@@ -229,6 +244,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\NXSYSWinApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Relay Compiler\DisasUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
