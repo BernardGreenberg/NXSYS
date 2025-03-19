@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <cassert>
-#include "tkov2.h"
+#include "tkov3.h"
 #include "RCArm64.h"
 #include "DisasUtil.h"
 
@@ -44,9 +44,9 @@ static vector<string> CalculateRelayTypeArray(const char* texts, const short* te
     return Types;
 }
 
-void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_t file_length) {
+void DumpText(_TKO_VERSION_3_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_t file_length) {
     auto start_dp = fdp;
-    auto dp = start_dp + ((_TKO_VERSION_2_HEADER*)fdp)->header_size;
+    auto dp = start_dp + ((_TKO_VERSION_3_HEADER*)fdp)->header_size;
     if (txtchp->length_of_item != 4 && txtchp->length_of_item != 1)
         return;
     auto instp = (unsigned int*) (txtchp+1);
@@ -56,10 +56,10 @@ void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
     int nstrings = 0;
     
     while(dp < fdp + file_length) {
-        auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
+        auto chp = (_TKO_VERSION_3_COMPONENT_HEADER*) dp;
         auto rdp = dp + sizeof(*chp);
         auto next_block = rdp + chp->length_of_block;
-        auto dbp = (TKO_DEFBLOCK*)rdp;
+        auto dbp = (TKO_DEFBLOCK_3*)rdp;
         switch(chp->compid) {
             case TKOI_ISD:
             {

@@ -6,30 +6,28 @@
 
 #include "lisp.h"
 #include "rcdcls.h"
-#include "tkov2.h"
+#include "tkov3.h"
 
 #include <unordered_map>
 #include <vector>
 
 /* stl'ed 26 Dec 2024 */
 
-typedef  struct _TKO_VERSION_2_COMPONENT_HEADER COMPHDR;
+typedef  struct _TKO_VERSION_3_COMPONENT_HEADER COMPHDR;
 
 static std::unordered_map<int, int> TypeMap; /* mapping needed in WriteRlysym, not dicts! */
 static std::string NameHeap;
 static std::vector<short> NameHeapOffsets;
 
 static void Write_Header (FILE* f, TKO_INFO& inf) {
-    struct _TKO_VERSION_2_HEADER h;
-    h.magic = TKO_VERSION_2_MAGIC;
-    strcpy (h.magic_string, TKO_VERSION_2_STRING);
-    h.version = TKO_VERSION_2;
+    struct _TKO_VERSION_3_HEADER h;
+    h.magic = TKO_VERSION_3_MAGIC;
+    strcpy (h.magic_string, TKO_VERSION_3_STRING);
+    h.version = TKO_VERSION_3;
     h.header_size = sizeof (h);
     h.code_len = inf.code_len;
     h.static_len = inf.static_len;
-    h.time = inf.time;
-    h.compat_code_len = 0;
-    h.compat_static_len = 0;
+    h.time = (uint32_t)inf.time;
     h.archindex = inf.arch_characterization;
     h.compiler_version = inf.compiler_version;
     strcpy (h.arch, inf.Architecture);
@@ -118,8 +116,8 @@ static void Write_Relay_Types (FILE* f) {
 }
 
 static void WriteRlysym (FILE* f, Rlysym* r, unsigned int data) {
-    TKO_DEFBLOCK b;    
-    b.n = r->n;
+    TKO_DEFBLOCK_3 b;
+    b.n = (int32_t)r->n;
     b.type = TypeMap [r->type];
     b.data = data;
     fwrite (&b, sizeof(b), 1, f);
@@ -129,7 +127,7 @@ static void Write_ESD (FILE*f, TKO_INFO& inf) {
     COMPHDR h;
     h.compid = TKOI_ESD;
     h.number_of_items = inf.esd_count;
-    h.length_of_item = sizeof (TKO_DEFBLOCK);
+    h.length_of_item = sizeof (TKO_DEFBLOCK_3);
     h.length_of_block = h.length_of_item * h.number_of_items;
     fwrite (&h, 1, sizeof(h), f);
     for (int i = 0; i < inf.esd_count; i++) {
@@ -142,7 +140,7 @@ static void Write_ISD (FILE*f, TKO_INFO& inf) {
     COMPHDR h;
     h.compid = TKOI_ISD;
     h.number_of_items = inf.isd_count;
-    h.length_of_item = sizeof (TKO_DEFBLOCK);
+    h.length_of_item = sizeof (TKO_DEFBLOCK_3);
     h.length_of_block = h.length_of_item * h.number_of_items;
     fwrite (&h, 1, sizeof(h), f);
     for (int i = 0; i < inf.isd_count; i++) {

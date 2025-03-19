@@ -18,7 +18,7 @@
 #include <sys/stat.h>
 #include <cassert>
 
-#include "tkov2.h"
+#include "tkov3.h"
 #include "RCArm64.h"
 #include "relays.h"
 #include "usermsg.h"
@@ -125,11 +125,11 @@ static void WinAllocCodeText(void* code, size_t length) {
 }
 #endif
 
-static bool verify_header_ids(const _TKO_VERSION_2_HEADER& H, const char * path) {
-    if ((H.magic != TKO_VERSION_2_MAGIC) ||
-        !! memcmp(TKO_VERSION_2_STRING, &H.magic_string, strlen(TKO_VERSION_2_STRING)+1)
-        || H.version != TKO_VERSION_2) {
-        usermsgstop("%s is not a version 2 NXSYS Relay Compiler output file.", path);
+static bool verify_header_ids(const _TKO_VERSION_3_HEADER& H, const char * path) {
+    if ((H.magic != TKO_VERSION_3_MAGIC) ||
+        !! memcmp(TKO_VERSION_3_STRING, &H.magic_string, strlen(TKO_VERSION_3_STRING)+1)
+        || H.version != TKO_VERSION_3) {
+        usermsgstop("%s is not a version 3 NXSYS Relay Compiler output file.", path);
         return false;
     }
     if (H.compiler_version < MINIMUM_RELAY_COMPILER_VERSION ) {
@@ -233,14 +233,14 @@ bool LoadRelayObjectFile(const char*path, const char*) {
     fclose(f);
 
     RunningSimulatedCompiledCode = false; // until we know we are
-    auto hp = (_TKO_VERSION_2_HEADER*) dp;
+    auto hp = (_TKO_VERSION_3_HEADER*) dp;
     dp += hp->header_size;
     if (!verify_header_ids(*hp, path)) //diagnoses extensively
         return false;
     vector<Relay*> ISD;
 
     while(dp < file_data + file_length) {
-        auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
+        auto chp = (_TKO_VERSION_3_COMPONENT_HEADER*) dp;
         auto rdp = dp + sizeof(*chp);
         auto next_block = rdp + chp->length_of_block;
         switch(chp->compid) {
@@ -268,7 +268,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
             }
             case TKOI_ISD:
             {
-                auto dtbp = (TKO_DEFBLOCK*)rdp;
+                auto dtbp = (TKO_DEFBLOCK_3*)rdp;
                 for (int i = 0; i < chp->number_of_items; i++, dtbp++){
                     string rlytype = RTypeNames[dtbp->type];
                     Sexpr rlysym = intern_rlysym(dtbp->n, rlytype.c_str());
@@ -284,7 +284,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
                 assert(sizeof(char*) == 8);
                 //This is the new "pointer" way...v3.
                 Compiled_Linkage_Sptr = new char*[chp->number_of_items];
-                auto dtbp = (TKO_DEFBLOCK*)rdp;
+                auto dtbp = (TKO_DEFBLOCK_3*)rdp;
                 for (int i = 0; i < chp->number_of_items; i++, dtbp++){
                     string rlytype = RTypeNames[dtbp->type];
                     Sexpr rlysym = intern_rlysym(dtbp->n, rlytype.c_str());

@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "tkov2.h"
+#include "tkov3.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <assert.h>
@@ -23,9 +23,9 @@
 
 using std::string, std::unordered_set, std::vector;
 
-const char * TKOI_STRINGS[] = TKOV2_COMPID_STRINGS;
+const char * TKOI_STRINGS[] = TKOV3_COMPID_STRINGS;
 
-void DumpText(_TKO_VERSION_2_COMPONENT_HEADER* chp, unsigned char* fdp, size_t flen);
+void DumpText(_TKO_VERSION_3_COMPONENT_HEADER* chp, unsigned char* fdp, size_t flen);
 
 class State {
     
@@ -34,7 +34,7 @@ public:
     const char * RnamesTexts = nullptr;
     vector<string> maybe_dump_relay_list(void* vrdp, int nitems, bool print) {
         vector<string>D;
-        auto dbp = (const TKO_DEFBLOCK*) vrdp;
+        auto dbp = (const TKO_DEFBLOCK_3*) vrdp;
         for (int i = 0; i < nitems; i++) {
             auto tdbp = dbp+i;
             D.emplace_back(std::to_string(tdbp->n) + (RnamesTexts+RnamesTextPtrs[tdbp->type]));
@@ -103,11 +103,11 @@ int main (int argc, const char ** argv) {
     fread (file_data, 1, file_length, f);
     fclose(f);
 
-    auto hp = (_TKO_VERSION_2_HEADER*) dp;    
-    if ((hp->magic != TKO_VERSION_2_MAGIC) ||
-        !! memcmp(TKO_VERSION_2_STRING, &(hp->magic_string), strlen(TKO_VERSION_2_STRING)+1)
-        || hp->version != TKO_VERSION_2) {
-        fprintf(stderr, "%s is not a version 2 NXSYS Relay Compiler output file.\n", path);
+    auto hp = (_TKO_VERSION_3_HEADER*) dp;
+    if ((hp->magic != TKO_VERSION_3_MAGIC) ||
+        !! memcmp(TKO_VERSION_3_STRING, &(hp->magic_string), strlen(TKO_VERSION_3_STRING)+1)
+        || hp->version != TKO_VERSION_3) {
+        fprintf(stderr, "%s is not a version 3 NXSYS Relay Compiler output file.\n", path);
         exit(4);
     }
     printf("File %s, len %zd=0x%zX\n", path, file_length, file_length);
@@ -118,8 +118,6 @@ int main (int argc, const char ** argv) {
         printf("  Magic string \"%s\"\n", hp->magic_string);
         printf("  Version %d\n", hp->version);
         printf("  Header size %d = 0x%X\n", hp->header_size, hp->header_size);
-        printf("  Compat code len %d\n", hp->compat_code_len);
-        printf("  Compat static len %d\n", hp->compat_code_len);
         printf("  Compilation time %s", longtime(hp->time).cs);
         printf("  User \"%s\"\n", hp->user);
         printf("  Arch \"%s\"\n", hp->arch);
@@ -139,7 +137,7 @@ int main (int argc, const char ** argv) {
 
     dp += hp->header_size;
     while(dp < file_data + file_length) {
-        auto chp = (_TKO_VERSION_2_COMPONENT_HEADER*) dp;
+        auto chp = (_TKO_VERSION_3_COMPONENT_HEADER*) dp;
         auto block_name = TKOI_STRINGS[chp->compid];
         sections_found.insert(block_name);
         if (summary || sections_wanted.contains(block_name))
