@@ -2,7 +2,7 @@
 
 ## Last update 18 Mar 2025
 
-##Prefatory Notes
+## Prefatory Notes
 
 1. This feature, although first dating from 1994, **adds no useful functionality to the NXSYS application at all**.  It is all for "fun".  There are no relays with hundreds or thousands of logic terms in their formulae that would stand to benefit significantly in computation speed from compilation.
 
@@ -10,7 +10,7 @@
 
 3. Note that this stuff all works in the checked-in Github tree right now; if you clone the tree and build the apps, which works for both platforms, this is all usable.  This affects the NXSYS app proper (henceforth, "the simulator"), and the "new" apps **Relay Compiler** and **DumpTko**, which are Schemes on the Mac and VC projects on Windows. There are no built executables or installers yet.
 
-##NXSYS Compiled Code system
+## NXSYS Compiled Code system
 
 
 The NXSYS Relay Compiler has been resurrected. It can generate operative compiled interlockings for both 64-bit architectures, Intel X86 (aka X86-64, X64 etc.) and Apple Silicon (ARM), thus, Mac and Windows.  "Intel X86" applies to both "older Macs" and 64-bit MS-Windows (Windows 10, Windows 11) -- one binary serves for both the latter! -- but due to a minor lacuna can't actually be interchanged **yet** (TBD).  There is residual 32-bit (and even 16-bit,as the compiler was born in 1994) Windows code generation available, but it is mainly a joke, because there are no longer any 32- or 16-bit builds of NXSYS extant with the requisite loading code. Interlockings as complex as 240th St and Atlantic Avenue work properly compiled.
