@@ -259,7 +259,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
             case TKOI_TXT:
             {
                 size_t code_bytes = chp->number_of_items * chp->length_of_item;
-#if NXSYSMac   // Windows TBD, but this handles all Mac cases...
+#if NXSYSMac
                 MacAllocCodeText(rdp, code_bytes);
 #else
                 WinAllocCodeText(rdp, code_bytes);
@@ -354,6 +354,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
     int macthunk_index = FindThunkIndex(ISD, "_MACOS_ENTRY_THUNK");
     CCC_Thunkptr = (CCC_Thunkptrtype)(ISD[macthunk_index]->exp);
 #endif
+    /* If ARM, there is no thunk and no thunkptr */
 
     RnamesTexts = nullptr; //points into vector
     RnamesTextPtrs = nullptr; //ditto
@@ -403,6 +404,9 @@ void CleanupObjectMemory() {
         assert(didit);
 #endif
     }
+#if WIN32 | !((defined(__aarch64__)) || defined(_M_ARM64))
+    CCC_Thunkptr = nullptr;
+#endif
     CodeText = nullptr;
     CodeSize = 0;
     if (Compiled_Linkage_Sptr)
