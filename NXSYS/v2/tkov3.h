@@ -11,6 +11,8 @@
 #define TKO_VERSION_3 3
 #define TKA_VERSION_3_EXPECTED_HEADER_SIZE 96
 
+#include <cstdint>  /* needed on Windows to get uintXX... defined... */
+
 enum _TKO_VERSION_3_COMPID
   {TKOI_NULL, TKOI_SOURCEID, TKOI_ISD, TKOI_ESD, TKOI_RLD, TKOI_TXT,
    TKOI_DPD, TKOI_RTD, TKOI_RTT, TKOI_EOF, TKOI_TMR, TKOI_ATS, TKOI_FRM,
