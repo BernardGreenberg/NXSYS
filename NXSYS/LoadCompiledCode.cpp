@@ -23,7 +23,7 @@
 #include "relays.h"
 #include "usermsg.h"
 #include "cccint.h"
-#include "messagebox.h"
+#include "MessageBox.h"
 #include "CompiledReportInfo.h"
 
 #include <string>
