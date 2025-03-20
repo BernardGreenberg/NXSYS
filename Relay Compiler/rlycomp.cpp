@@ -377,7 +377,7 @@ void OutputListingLine
 again:
 
     int tcol = Arch->Bits == 16 ? 16 : 24;
-    size_t llen = Label_Pending[0] ? strlen (Label_Pending+1) : 0;
+    int llen = Label_Pending[0] ? (int)strlen (Label_Pending+1) : 0;
     int cc = Ahex+2;
 
     list ("%0*X  ", Ahex, Pctr);
@@ -422,7 +422,7 @@ void out_code (const char* opmnem, const CodeVector& code, const char* opd) {
     if (Arch->Bits == 16 && Code.size() + code.size() > 0xFFFF)
         RC_error (2, "Code size exceeds 65K limit for 16-bit compilation.");
     Code += code;
-    Pctr += code.size();
+    Pctr += static_cast<PCTR>(code.size());
 }
 
 CodeVector OutWord (int opd, int ct) {
@@ -1447,7 +1447,7 @@ void CallWtko (const char * path, const char * opath, time_t timer,
     
     TKO_INFO tki;
     tki.Isd = RelayDefTable.data();
-    tki.isd_count = RelayDefTable.size();
+    tki.isd_count = static_cast<int>(RelayDefTable.size());
     tki.Fxt = FixupTable.data();
     tki.fixup_count = 0;
     tki.Code = Code.data();
@@ -1459,7 +1459,7 @@ void CallWtko (const char * path, const char * opath, time_t timer,
     tki.tmr_count = (int)Timers.size();
     tki.static_len = tki.esd_count*Arch->RelayBlockSize;
     tki.code_len = Pctr;
-    tki.time = timer;
+    tki.time = static_cast<long>(timer);
     tki.Frm = fasd_data (tki.frm_count);
     tki.Ats = fasd_atsym_data (tki.ats_count);
     tki.bits = Arch->Bits;

@@ -80,7 +80,7 @@ static void RegisterLispRelayID (short rlid) {
     type_translate_table[rlid] = x;
     const char * s = redeemRlsymId (rlid);
     type_name_table [x] = s;
-    RTypeHeapSize+= strlen(s) + 1;
+    RTypeHeapSize+= (unsigned short)strlen(s) + 1;
 }
 
 static void Compute_Relay_Types (TKO_INFO& inf) {
@@ -111,7 +111,7 @@ static void Write_Relay_Types (FILE* f) {
     short off = 0;
     for (int i = 0; i < RLTypes; i++) {
 	fwrite (&off, sizeof(short), 1, f);
-	off += strlen (type_name_table [i]) + 1;
+	off += (short)strlen (type_name_table [i]) + 1;
     }
 }
 
@@ -163,9 +163,9 @@ static void Write_DPD (FILE* f, TKO_INFO& inf) {
 	if (Dpt[i].affector != last_affector) {
 	    last_affector = Dpt[i].affector;
 	    h.number_of_items++;
-	    h.length_of_block += sizeof (TKO_DPTE_HEADER);
+	    h.length_of_block += static_cast<int>(sizeof (TKO_DPTE_HEADER));
 	    for (j = i; j < Dpt_count && Dpt[j].affector ==last_affector;j++);
-	    h.length_of_block += sizeof (short)*(j - i);
+	    h.length_of_block += (short)sizeof (short)*(j - i);
 	}
     }
     fwrite (&h, 1, sizeof(h), f);
@@ -208,7 +208,7 @@ static void Write_ATS (FILE* f, TKO_INFO& inf) {
     h.length_of_item = 1;
     h.length_of_block = 0;
     for (int i = 0; i < inf.ats_count; i++)
-	h.length_of_block += strlen(inf.Ats[i]) + 1;
+	h.length_of_block += static_cast<int>(strlen(inf.Ats[i]) + 1);
     fwrite (&h, 1, sizeof(h), f);
     for (int j = 0; j < inf.ats_count; j++) {
 	int sl = (int)strlen(inf.Ats[j]);

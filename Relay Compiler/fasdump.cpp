@@ -67,7 +67,7 @@ void fasd_form (Sexpr s) {
                 fasd_putb (FASD_2BNUM);
 		fasd_putw ((short)(s.u.n));
 	    }
-            else if (s.u.n >= -(1L<<32) && s.u.n <=1L<<31) {
+            else if (s.u.n >= -(1LL<<32) && s.u.n <=1L<<31) {
                 fasd_putb (FASD_4BNUM);
                 fasd_putmb((uint64_t)s.u.n, 4);
             }
