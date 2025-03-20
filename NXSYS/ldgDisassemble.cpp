@@ -19,7 +19,7 @@
 #include "relays.h"
 #include "cccint.h"
 
-#include "RCarm64.h"
+#include "RCArm64.h"
 using std::vector, std::string, std::set;
 
 #if WIN32  //no sé por qué

@@ -16,6 +16,7 @@
 typedef struct {
     int HeaderVersion;
     std::string Architecture;
+    std::string Compiler;
     time_t CompilationTime;
     int CompilerVersion;
     unsigned int CodeLen;

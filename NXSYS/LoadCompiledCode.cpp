@@ -49,6 +49,7 @@ vector<Relay*>ESD;
 
 static bool CRPpresent = false;
 static CompiledReportInfo TheCompiledReportInfo;
+static string CompilerId{""};
 
 char** Compiled_Linkage_Sptr = nullptr;; //points to State cells.  Referenced by relay engine
 #if WIN32 | !((defined(__aarch64__)) || defined(_M_ARM64))
@@ -238,6 +239,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
     if (!verify_header_ids(*hp, path)) //diagnoses extensively
         return false;
     vector<Relay*> ISD;
+    CompilerId.clear();
 
     while(dp < file_data + file_length) {
         auto chp = (_TKO_VERSION_3_COMPONENT_HEADER*) dp;
@@ -245,6 +247,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
         auto next_block = rdp + chp->length_of_block;
         switch(chp->compid) {
             case TKOI_CID:
+                CompilerId = (const char *)rdp;
                 break;
             case TKOI_RTT:
                 RnamesTexts = (const char *)rdp;
@@ -362,6 +365,7 @@ bool LoadRelayObjectFile(const char*path, const char*) {
     auto& T = TheCompiledReportInfo;
     T.HeaderVersion = hp->version;
     T.Architecture = hp->arch;
+    T.Compiler = CompilerId;
     T.CompilationTime = hp->time;
     T.CompilerVersion = hp->compiler_version;
     T.CodeLen = hp->code_len;
@@ -412,5 +416,6 @@ void CleanupObjectMemory() {
     if (Compiled_Linkage_Sptr)
         delete Compiled_Linkage_Sptr;
     Compiled_Linkage_Sptr = nullptr;
+    CompilerId.clear();
     CRPpresent = false;
 }

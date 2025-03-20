@@ -45,9 +45,9 @@ static void Write_CID (FILE* f, TKO_INFO& inf) {
     COMPHDR h;
     h.compid = TKOI_CID;
     h.number_of_items = 1;
-    h.length_of_item = (int)strlen (inf.compiler);
+    h.length_of_item = (int)strlen (inf.compiler) + 1;
     h.length_of_block = h.length_of_item;
-    fwrite (&h, 1, sizeof(h), f);    
+    fwrite (&h, 1, sizeof(h), f);
     fwrite (inf.compiler, 1, h.length_of_item, f);
 };
 

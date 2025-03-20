@@ -143,6 +143,8 @@ std::string InterlockingFileStatus::Report () {
         A.push_back(FormatString("Header version: %d, compiler version %d", C.HeaderVersion, C.CompilerVersion));
         A.push_back(FormatString("Compiled for %s (%d bits) by %s", C.Architecture.c_str(), C.Bits, C.User.c_str()));
         A.push_back("  at " + std::string(ctime(&C.CompilationTime)));
+        if (!C.Compiler.empty())
+            A.push_back("Compiler: " + C.Compiler);
         A.push_back(FormatString("Relays defined %d, referenced %d.", C.ISDCount, C.ESDCount));
         A.push_back(FormatString("Code length %d = 0x%X bytes", C.CodeLen, C.CodeLen));
         A.push_back(FormatString("Required static \"linkage section\" length %d = 0x%X bytes", C.StaticLen, C.StaticLen));
