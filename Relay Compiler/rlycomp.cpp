@@ -1507,8 +1507,10 @@ static bool OpenListing (const char * path, string& lpath) {
 
 int main (int argc, char ** argv) {
 #if NXSYSMac
+    auto OS_CHAR = "macOS";
     int compiler_bits = 64;   //not running on same platform as the object.
 #else
+    auto OS_CHAR = "Windows";
     int compiler_bits = sizeof(int*) * 8;
 #endif
     
@@ -1521,7 +1523,8 @@ int main (int argc, char ** argv) {
     string opath;
     string lpath;
     string compdesc = string("BSG NXSYS Relay Compiler Version ") + std::to_string(COMPILER_VERSION) + " (";
-    compdesc += std::to_string(compiler_bits) + "-bit of " + __DATE__ + " " __TIME__ + ")";
+    compdesc += std::to_string(compiler_bits) + "-bit of " + __DATE__ + " " __TIME__ + ")" +
+       " (" + OS_CHAR + ")";
     cout << compdesc << endl;
     cout << COMPILER_COPYRIGHT <<endl;
     
