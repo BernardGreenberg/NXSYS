@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include "STLextensions.h"
 
 using std::string, std::unordered_map, std::vector;
