@@ -268,12 +268,12 @@ bool LoadRelayObjectFile(const char*path, const char*) {
             }
             case TKOI_ISD:
             {
-                auto dtbp = (TKO_DEFBLOCK_3*)rdp;
+                auto dtbp = (TKO_ISDENTRY*)rdp;
                 for (int i = 0; i < chp->number_of_items; i++, dtbp++){
-                    string rlytype = RTypeNames[dtbp->type];
+                    string rlytype = RTypeNames[dtbp->type_index];
                     Sexpr rlysym = intern_rlysym(dtbp->n, rlytype.c_str());
                     Relay* relay = CreateReportingRelay(rlysym);  //"never know if reporting is needed"
-                    relay->exp = (LNode*)((unsigned char*)CodeText + dtbp->data);
+                    relay->exp = (LNode*)((unsigned char*)CodeText + dtbp->code_offset);
                     relay->Flags |= LF_CCExp;
                     ISD.push_back(relay);
                 }
@@ -284,9 +284,9 @@ bool LoadRelayObjectFile(const char*path, const char*) {
                 assert(sizeof(char*) == 8);
                 //This is the new "pointer" way...v3.
                 Compiled_Linkage_Sptr = new char*[chp->number_of_items];
-                auto dtbp = (TKO_DEFBLOCK_3*)rdp;
+                auto dtbp = (TKO_ESDENTRY*)rdp;
                 for (int i = 0; i < chp->number_of_items; i++, dtbp++){
-                    string rlytype = RTypeNames[dtbp->type];
+                    string rlytype = RTypeNames[dtbp->type_index];
                     Sexpr rlysym = intern_rlysym(dtbp->n, rlytype.c_str());
                     Relay* relay = CreateReportingRelay(rlysym);  //"never know if reporting is needed"
                     ESD.push_back(relay);

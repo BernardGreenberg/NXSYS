@@ -32,21 +32,34 @@ class State {
 public:
     const short * RnamesTextPtrs = nullptr;
     const char * RnamesTexts = nullptr;
-    vector<string> maybe_dump_relay_list(void* vrdp, int nitems, bool print) {
+    vector<string> dump_ISD(const TKO_ISDENTRY* dbp, int nitems, bool print) {
         vector<string>D;
-        auto dbp = (const TKO_DEFBLOCK_3*) vrdp;
         for (int i = 0; i < nitems; i++) {
             auto tdbp = dbp+i;
-            D.emplace_back(std::to_string(tdbp->n) + (RnamesTexts+RnamesTextPtrs[tdbp->type]));
+            D.emplace_back(std::to_string(tdbp->n) + (RnamesTexts+RnamesTextPtrs[tdbp->type_index]));
         }
         if (print) {
             for (int i = 0; i < nitems; i++) {
                 auto tdbp = dbp+i;
-                printf("%3d %-8s 0x%04X\n", i, D[i].c_str(), tdbp->data);
+                printf("%3d %-8s 0x%04X\n", i, D[i].c_str(), tdbp->code_offset);
             }
         }
         return D;
     }
+    vector<string> dump_ESD(const TKO_ESDENTRY* dbp, int nitems, bool print) {
+        vector<string>D;
+        for (int i = 0; i < nitems; i++) {
+            auto tdbp = dbp+i;
+            D.emplace_back(std::to_string(tdbp->n) + (RnamesTexts+RnamesTextPtrs[tdbp->type_index]));
+        }
+        if (print) {
+            for (int i = 0; i < nitems; i++) {
+                printf("%3d %-8s\n", i, D[i].c_str());
+            }
+        }
+        return D;
+    }
+
 };
 
 class longtime {
@@ -171,10 +184,10 @@ int main (int argc, const char ** argv) {
                     DumpText(chp, start_dp, file_length);
                 break;
             case TKOI_ISD:
-                ISD = S.maybe_dump_relay_list(rdp, chp->number_of_items, print);
+                ISD = S.dump_ISD((const TKO_ISDENTRY*)rdp, chp->number_of_items, print);
                 break;
             case TKOI_ESD:
-                ESD = S.maybe_dump_relay_list(rdp, chp->number_of_items, print);
+                ESD = S.dump_ESD((const TKO_ESDENTRY*)rdp, chp->number_of_items, print);
                 if (summary || print) {
                     if ((hp->static_len % ESD.size()) != 0)
                         printf("   Static len not a multiple of ESD count.\n");

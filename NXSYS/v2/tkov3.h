@@ -9,14 +9,26 @@
 #define TKO_VERSION_3_MAGIC 0xA753
 #define TKO_VERSION_3_STRING "RLYCOMP"
 #define TKO_VERSION_3 3
-#define TKA_VERSION_3_EXPECTED_HEADER_SIZE 96
+static constexpr int BITS_PER_BYTE = 8;
 
 #include <cstdint>  /* needed on Windows to get uintXX... defined... */
 
 enum _TKO_VERSION_3_COMPID
-  {TKOI_NULL, TKOI_SOURCEID, TKOI_ISD, TKOI_ESD, TKOI_RLD, TKOI_TXT,
-   TKOI_DPD, TKOI_RTD, TKOI_RTT, TKOI_EOF, TKOI_TMR, TKOI_ATS, TKOI_FRM,
-   TKOI_CID, TKOI_LAST};
+  {TKOI_NULL,         /* not used */
+   TKOI_SOURCEID,     /* not used currently */
+   TKOI_ISD,          /* internal symbol dict - ISDENTRY's for each relay defined here */
+   TKOI_ESD,          /* external symbol dict - ESDENTRY's for each relay referenced OR defined */
+   TKOI_RLD,          /* not used currently */
+   TKOI_TXT,          /* machine instruction code */
+   TKOI_DPD,          /* dependent pairs - in groups of DPTE_HEADER 1 per affector */
+   TKOI_RTD,          /* relay type data- a heap of strings */
+   TKOI_RTT,          /* relay type table- indices into RTT */
+   TKOI_EOF,          /* end of file entry -no data */
+   TKOI_TMR,          /* timer relay definitions */
+   TKOI_ATS,          /* atomic symbols not relays */
+   TKOI_FRM,          /* encoded pseudoLisp forms to be evaluated at load time */
+   TKOI_CID,          /* compiler ID - offset in file of C string */
+   TKOI_LAST};        /* limit on ID's */
    
 #define TKOV3_COMPID_STRINGS {"NUL", "SRC", "ISD", "ESD", "RLD", "TXT", \
    "DPD", "RTD", "RTT", "EOF", "TMR", "ATS", "FRM", "CID"}
@@ -39,33 +51,37 @@ struct _TKO_VERSION_3_HEADER {
  /*88*/   uint32_t static_len;
  /*92*/   uint32_t compiler_version;
  /*96*/
+#define TKO_VERSION_3_EXPECTED_HEADER_SIZE 96
 };
+static_assert(sizeof(_TKO_VERSION_3_HEADER) == TKO_VERSION_3_EXPECTED_HEADER_SIZE);
+static_assert(sizeof(enum _TKO_VERSION_3_COMPID) * BITS_PER_BYTE == 32);
+
+
 
 struct _TKO_VERSION_3_COMPONENT_HEADER {
     enum _TKO_VERSION_3_COMPID compid;
-    int number_of_items;
-    int unsigned length_of_item;
-    int unsigned length_of_block;
+    uint32_t number_of_items;
+    uint32_t length_of_item;
+    uint32_t length_of_block;
 };
 
-struct _TKO_VERSION_3_DEP_TABLE {
-    int esize;
-    int esdx;
-    int n_entries;
+struct TKO_ISDENTRY {
+    uint32_t n;  /* lever or track sec # -- leaves a lot to be desired */
+    uint32_t type_index;  /* index in RTT of relay nomenclature */
+    uint32_t code_offset; /* location in TXT where code begins */
 };
 
-struct TKO_DEFBLOCK_3 {
-    int32_t n;
-    int type;
-    int data;
+struct TKO_ESDENTRY {
+    uint32_t n;  /* lever or track sec # -- leaves a lot to be desired */
+    uint32_t type_index;  /* index in RTT of relay nomenclature */
 };
 
 struct TKO_DPTE_HEADER {
-    int affector;
-    int count;
+    uint32_t affector;    // index into ESD
+    uint32_t count;       //followed by that many 32-bit indices into ISD.
 };
 
 struct TKO_TIMER_DEF {
-    int rlyisdid;
-    int time;
+    uint32_t rlyisdid;
+    uint32_t time;
 };

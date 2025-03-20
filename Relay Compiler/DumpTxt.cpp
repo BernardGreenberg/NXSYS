@@ -59,24 +59,26 @@ void DumpText(_TKO_VERSION_3_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
         auto chp = (_TKO_VERSION_3_COMPONENT_HEADER*) dp;
         auto rdp = dp + sizeof(*chp);
         auto next_block = rdp + chp->length_of_block;
-        auto dbp = (TKO_DEFBLOCK_3*)rdp;
         switch(chp->compid) {
             case TKOI_ISD:
             {
+                auto isdp = (TKO_ISDENTRY*)rdp;
                 for (int i = 0; i < chp->number_of_items; i++) {
-                    string rname = std::to_string(dbp->n)+Types[dbp->type];
-                    ISD[dbp->data] = rname;
-                    dbp++;
+                    string rname = std::to_string(isdp->n)+Types[isdp->type_index];
+                    ISD[isdp->code_offset] = rname;
+                    isdp++;
                 }
             }
                 break;
                 
             case TKOI_ESD:
             {
+                auto esdp = (TKO_ISDENTRY*)rdp;
                 for (int i = 0; i < chp->number_of_items; i++) {
-                    string rname = std::to_string(dbp->n)+Types[dbp->type];
-                    ESD[dbp->data] = rname;
-                    dbp++;
+                    string rname = std::to_string(esdp->n)+Types[esdp->type_index];
+                    unsigned int link_offset = i * sizeof(void*);
+                    ESD[link_offset] = rname;
+                    esdp++;
                 }
             }
                 break;

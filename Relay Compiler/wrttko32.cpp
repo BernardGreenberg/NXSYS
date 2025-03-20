@@ -115,39 +115,41 @@ static void Write_Relay_Types (FILE* f) {
     fwrite (NameHeapOffsets.data(), sizeof(short), NameHeapOffsets.size(), f);
 }
 
-static void WriteRlysym (FILE* f, Rlysym* r, unsigned int data) {
-    TKO_DEFBLOCK_3 b;
-    b.n = (int32_t)r->n;
-    b.type = TypeMap [r->type];
-    b.data = data;
-    fwrite (&b, sizeof(b), 1, f);
-}
-
 static void Write_ESD (FILE*f, TKO_INFO& inf) {
     COMPHDR h;
     h.compid = TKOI_ESD;
-    h.number_of_items = inf.esd_count;
-    h.length_of_item = sizeof (TKO_DEFBLOCK_3);
+    h.number_of_items = (uint32_t)inf.esd_count;
+    h.length_of_item = (uint32_t)sizeof (TKO_ESDENTRY);
     h.length_of_block = h.length_of_item * h.number_of_items;
     fwrite (&h, 1, sizeof(h), f);
     for (int i = 0; i < inf.esd_count; i++) {
 	Rlysym * r = inf.Esd[i];
-	WriteRlysym (f, r, RlsymOffset(r));
+        TKO_ESDENTRY entry;
+        entry.n = (int32_t)r->n;
+        entry.type_index = TypeMap [r->type];
+        fwrite(&entry, sizeof(entry), 1, f);
     }
 }
     
 static void Write_ISD (FILE*f, TKO_INFO& inf) {
     COMPHDR h;
     h.compid = TKOI_ISD;
-    h.number_of_items = inf.isd_count;
-    h.length_of_item = sizeof (TKO_DEFBLOCK_3);
+    h.number_of_items = (uint32_t)inf.isd_count;
+    h.length_of_item = (uint32_t)sizeof (TKO_ISDENTRY);
     h.length_of_block = h.length_of_item * h.number_of_items;
     fwrite (&h, 1, sizeof(h), f);
     for (int i = 0; i < inf.isd_count; i++) {
-	RelayDef *r = &inf.Isd[i];
-	WriteRlysym (f, r->sym, r->pc);
+	RelayDef *rd = &inf.Isd[i];
+        Rlysym * rs = rd->sym;
+        TKO_ISDENTRY entry;
+        entry.type_index = TypeMap[rs->type];
+        entry.n = (int32_t)rs->n;
+        entry.code_offset = rd->pc;
+        fwrite(&entry, sizeof(entry), 1, f);
     }
 }
+
+static_assert(sizeof(RLID) * BITS_PER_BYTE == 32);
 
 static void Write_DPD (FILE* f, TKO_INFO& inf) {
     COMPHDR h_comp;
@@ -171,9 +173,13 @@ static void Write_DPD (FILE* f, TKO_INFO& inf) {
         h_dpte.affector = e.first;
         h_dpte.count = (int) e.second.size();
         fwrite(&h_dpte, 1, sizeof(h_dpte), f);
-
-        for (RLID affected : e.second)
+        //std::string AFOR = inf.Esd[h_dpte.affector]->PRep();
+        for (RLID affected : e.second) {
+            //std::string AFED = inf.Isd[affected].sym->PRep();
+            //printf("DP %5d %s %5d %s\n", h_dpte.affector, AFOR.c_str(), affected, AFED.c_str());
             fwrite (&affected, 1, sizeof (RLID), f);
+
+        }
     }
 }
 
