@@ -1,6 +1,6 @@
 # Relay Compiler Status -- Christmas 2024
 
-## Last update 18 Mar 2025
+## Last update 21 Mar 2025
 
 ## Prefatory Notes
 
@@ -8,7 +8,7 @@
 
 2. In the present document I use the term **simulator** to refer to the application NXSYS proper, that simulates electrical interlocking panels, relay systems, and signalling, to distinguish it from other parts of NXSYS, e.g., **TLEdit** or the relay compiler or disassembler (**DumpTko**). I use the term **emulator** (and **emulation**) to refer to the software code, or its action, that simulates one processor through instructions for another. There are three such involved here, one written by Apple on MacOS (**Rosetta2**), one by Microsoft in Windows 11 (**Prism**), and one inside the simulator.  In all three cases, the architecture being emulated is the Intel 64-bit X86 by code running in the ARM architecture.
 
-3. Note that this stuff all works in the checked-in Github tree right now; if you clone the tree and build the apps, which works for both platforms, this is all usable.  This affects the NXSYS app proper (henceforth, "the simulator"), and the "new" apps **Relay Compiler** and **DumpTko**, which are Schemes on the Mac and VC projects on Windows. There are no built executables or installers yet.
+3. Note that this stuff all works in the checked-in Github tree right now; if you clone the tree and build the apps, Debug or Release, which works for both platforms, this is all usable.  This enhancement affects the simulator and the "new" apps **Relay Compiler** and **DumpTko**, which are all Schemes on the Mac and VC projects on Windows. There are no built executables or installers as of this writing.
 
 ## NXSYS Compiled Code system
 
@@ -49,7 +49,7 @@ Intel code is a bit simpler, because it does not need the arcane **ldrb**. **cl*
 
 **JIT** stands for "just in time", which is jargon for the technique, usually used by a debugger, of generating new machine instructions, and having them executed, usually not immediately, but more often in the instruction stream of the program being debugged.  Of course, this can be very dangerous if a malicious program generates such instructions and patches them into your instruction stream, but the malicious program could simply wreak the intended havoc without generating instructions. NXSYS uses JIT techniques (JIT-jiusu?) to run its compiled code.
 
-## Current restritions
+## Current restrictions
 
 **INTEL MAC** Intel-compiled (compiled *for* Intel) interlockings will run on the Intel NXSYS build when loaded from the **Open** dialog or **Recent Files** menu. It cannot run arm64-compiled interlockings, and will complain if you try to load one.  There are no known problems in this path.  Windows won't load them, either.
 
@@ -68,4 +68,6 @@ Second, it is possible to ***run X86-compiled relay code in the Mac Arm applicat
 Under either kind of emulation, NXSYS **Draw Relay** will show X86 code, just as in the Intel build. Note that such displays use the Intel notation (e.g., **mov rdx,rsi**) not the AT&T notation preferred by Apple (**movq %rsi,%rdx** -- note the reversed operands!).
 
 The Intel builds (Mac or Windows) do not offer access to the emulator (which only emulates Intel, not ARM -- Apple doesn't supply a "2attesoR", either).  Remember that the traditional way to use NXSYS is with interpreted list-structure code (**.trk**), not compiled objects at all!
+
+**In summary**, X86-compiled **.tko**s can be built or used on any NXSYS build on Windows or macOS, but ARM **.tko**s can only be used on ARM Macs, although they can be built on any platform or architecture.
 
