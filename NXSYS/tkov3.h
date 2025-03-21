@@ -22,7 +22,7 @@ enum _TKO_VERSION_3_COMPID
    TKOI_TXT,          /* machine instruction code */
    TKOI_DPD,          /* dependent pairs - in groups of DPTE_HEADER 1 per affector */
    TKOI_RTD,          /* relay type data- a heap of strings */
-   TKOI_RTT,          /* relay type table- indices into RTT */
+   TKOI_RTT,          /* relay type table- indices into RTD */
    TKOI_EOF,          /* end of file entry -no data */
    TKOI_TMR,          /* timer relay definitions */
    TKOI_ATS,          /* atomic symbols not relays */
