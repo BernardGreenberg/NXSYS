@@ -101,7 +101,7 @@ void DumpText(_TKO_VERSION_3_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
     }
     
     unsigned int Pctr = 0;
-    auto nitems = txtchp->number_of_items;
+    unsigned nitems = txtchp->number_of_items;
     if (txtchp->length_of_item == 1) {
         auto charp = (unsigned char *)instp;
         while (Pctr  < nitems) {
@@ -116,7 +116,7 @@ void DumpText(_TKO_VERSION_3_COMPONENT_HEADER* txtchp, unsigned char* fdp, size_
         }
         printf("\n");
     } else {
-        for (int i = 0; i < nitems; i++) {
+        for (unsigned i = 0; i < nitems; i++) {
             ArmInst inst = *instp;
             if (ISD.count(Pctr))
                 printf("\n%s:\n", ISD[Pctr].c_str());

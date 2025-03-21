@@ -60,28 +60,28 @@ static_assert(sizeof(enum _TKO_VERSION_3_COMPID) * BITS_PER_BYTE == 32);
 
 struct _TKO_VERSION_3_COMPONENT_HEADER {
     enum _TKO_VERSION_3_COMPID compid;
-    uint32_t number_of_items;
-    uint32_t length_of_item;
+    int32_t  number_of_items;
+    int32_t  length_of_item;
     uint32_t length_of_block;
 };
 
 struct TKO_ISDENTRY {
     uint32_t n;  /* lever or track sec # -- leaves a lot to be desired */
-    uint32_t type_index;  /* index in RTT of relay nomenclature */
+    int32_t  type_index;  /* index in RTT of relay nomenclature */
     uint32_t code_offset; /* location in TXT where code begins */
 };
 
 struct TKO_ESDENTRY {
     uint32_t n;  /* lever or track sec # -- leaves a lot to be desired */
-    uint32_t type_index;  /* index in RTT of relay nomenclature */
+    int32_t type_index;  /* index in RTT of relay nomenclature */
 };
 
 struct TKO_DPTE_HEADER {
-    uint32_t affector;    // index into ESD
-    uint32_t count;       //followed by that many 32-bit indices into ISD.
+    int32_t affector;    // index into ESD
+    int32_t count;       //followed by that many 32-bit indices into ISD.
 };
 
 struct TKO_TIMER_DEF {
-    uint32_t rlyisdid;
+    int32_t rlyisdid;
     uint32_t time;
 };

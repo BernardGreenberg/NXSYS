@@ -286,7 +286,8 @@ forms:
 	return 1;
 #if NXCMPOBJ
     else if (symcmp (fn, "LOAD")) {
-        (replace_filename(fname, CADR(s).u.s).c_str());
+        (void)replace_filename(fname, CADR(s).u.s).c_str();
+        // This cannot be right (not reading anything)
     }
 #endif
     else if (symcmp (fn, "INCLUDE"))
