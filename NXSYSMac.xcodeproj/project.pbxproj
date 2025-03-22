@@ -324,7 +324,9 @@
 		5B2B337723036B52004007A9 /* pswitch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pswitch.h; sourceTree = "<group>"; };
 		5B2B337923045D5C004007A9 /* DynmenuMacCalls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DynmenuMacCalls.h; path = NXSYSMac/DynmenuMacCalls.h; sourceTree = SOURCE_ROOT; };
 		5B2B337A2306FE94004007A9 /* rlyapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlyapi.h; sourceTree = "<group>"; };
-		5B30B10527E16383000D59C8 /* Setup32 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Setup32; sourceTree = "<group>"; };
+		5B2C18932D83ACAA00F9827E /* tkov3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = tkov3.h; path = ../tkov3.h; sourceTree = "<group>"; };
+		5B2C18962D8F71B500F9827E /* Setup.aip */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Setup.aip; sourceTree = "<group>"; };
+		5B2C18972D8F71B500F9827E /* Setup.aiproj */ = {isa = PBXFileReference; lastKnownFileType = text; path = Setup.aiproj; sourceTree = "<group>"; };
 		5B30B10627E4FDCC000D59C8 /* salvager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = salvager.cpp; sourceTree = "<group>"; };
 		5B30B10727E4FDCC000D59C8 /* salvager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = salvager.hpp; sourceTree = "<group>"; };
 		5B30B10927E929C5000D59C8 /* nxproduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxproduct.h; sourceTree = "<group>"; };
@@ -467,12 +469,12 @@
 		5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTko.cpp; sourceTree = "<group>"; };
 		5B8EDEDD2D0BC1D700F07ED0 /* DumpTko */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DumpTko; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTxt.cpp; sourceTree = "<group>"; };
-		5B8EDEE92D1216E200F07ED0 /* RCArm64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCArm64.h; sourceTree = "<group>"; };
-		5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ReadFASL.cpp; sourceTree = "<group>"; };
+		5B8EDEE92D1216E200F07ED0 /* RCArm64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RCArm64.h; path = ../RCArm64.h; sourceTree = "<group>"; };
+		5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ReadFASL.cpp; path = ../ReadFASL.cpp; sourceTree = "<group>"; };
 		5B8EDEF02D15EA0600F07ED0 /* genarm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = genarm.cpp; sourceTree = "<group>"; };
 		5B8EDEF52D1CBDE300F07ED0 /* ldgDisassemble.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ldgDisassemble.hpp; sourceTree = "<group>"; };
 		5B8EDEF62D1CBDE300F07ED0 /* ldgDisassemble.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ldgDisassemble.cpp; sourceTree = "<group>"; };
-		5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisasUtil.h; sourceTree = "<group>"; };
+		5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DisasUtil.h; path = ../DisasUtil.h; sourceTree = "<group>"; };
 		5B8EDEFC2D258AF100F07ED0 /* TASKS.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TASKS.txt; sourceTree = "<group>"; };
 		5B8EDF002D29D43B00F07ED0 /* NXSYSMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NXSYSMac.entitlements; path = NXSYSMac/NXSYSMac.entitlements; sourceTree = "<group>"; };
 		5B8FCBE8284B6D6100855897 /* HelpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelpIcon.png; sourceTree = "<group>"; };
@@ -578,7 +580,6 @@
 		5BB5801E27C1DB1500FB0ED5 /* RecentFileMan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecentFileMan.h; sourceTree = "<group>"; };
 		5BB5801F27C32E7900FB0ED5 /* WinApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WinApp.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BB5802027C32E7900FB0ED5 /* NXSYSWinApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NXSYSWinApp.h; sourceTree = "<group>"; };
-		5BB5802127C3328C00FB0ED5 /* Installer.vdproj */ = {isa = PBXFileReference; lastKnownFileType = text; path = Installer.vdproj; sourceTree = "<group>"; };
 		5BB5802327C3CFFD00FB0ED5 /* InterlockingLibrary.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = InterlockingLibrary.xml; sourceTree = "<group>"; };
 		5BB5802727C3D36D00FB0ED5 /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugixml.hpp; sourceTree = "<group>"; };
 		5BB5802827C3D36D00FB0ED5 /* pugixml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pugixml.cpp; sourceTree = "<group>"; };
@@ -618,7 +619,6 @@
 		5BD7ADA828454CE6000A1CF5 /* DocSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DocSource; sourceTree = "<group>"; };
 		5BD7ADA928481FFE000A1CF5 /* MenuUndoRedo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MenuUndoRedo.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BDB65672AF18F3C003BF0D6 /* ValuingMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ValuingMap.hpp; sourceTree = "<group>"; };
-		5BDB65692AFC0C13003BF0D6 /* README.Win2_7.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.Win2_7.txt; sourceTree = "<group>"; };
 		5BE487CC199D0A5C007BD6BF /* NXSYSMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NXSYSMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE487CF199D0A5C007BD6BF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5BE487D2199D0A5C007BD6BF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -677,7 +677,7 @@
 		5BF06F4A19A0D6BC008CDCA0 /* pswitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pswitch.cpp; path = ../pswitch.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F5019A0E5B4008CDCA0 /* rlyindex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rlyindex.cpp; sourceTree = "<group>"; tabWidth = 8; };
 		5BF06F5219A10AA3008CDCA0 /* dynmenu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dynmenu.cpp; sourceTree = "<group>"; tabWidth = 8; };
-		5BF06F5419A10D03008CDCA0 /* LoadCompiledCode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LoadCompiledCode.cpp; path = NXSYSMac/LoadCompiledCode.cpp; sourceTree = SOURCE_ROOT; };
+		5BF06F5419A10D03008CDCA0 /* LoadCompiledCode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LoadCompiledCode.cpp; path = NXSYS/LoadCompiledCode.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacNxldwin.cpp; path = NXSYSMac/MacNxldwin.cpp; sourceTree = SOURCE_ROOT; };
 		5BF06F5C19A12727008CDCA0 /* MacRelayGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MacRelayGraphics.cpp; path = ../NXSYSMac/MacRelayGraphics.cpp; sourceTree = "<group>"; };
 		5BF7CEB219CA299400DF6ECE /* edtraflev.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = edtraflev.cpp; sourceTree = "<group>"; };
@@ -695,7 +695,7 @@
 		5BFB49E727AC7682006BE311 /* argparse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = argparse.cpp; sourceTree = "<group>"; };
 		5BFB49EA27AC76AE006BE311 /* argparse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = argparse.hpp; sourceTree = "<group>"; };
 		5BFB49EB27AC7837006BE311 /* rcdcls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rcdcls.h; sourceTree = "<group>"; };
-		5BFB49EC27AC794F006BE311 /* FASL.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FASL.H; sourceTree = "<group>"; };
+		5BFB49EC27AC794F006BE311 /* FASL.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FASL.H; path = ../FASL.H; sourceTree = "<group>"; };
 		5BFB49ED27AC794F006BE311 /* tkov1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tkov1.h; sourceTree = "<group>"; };
 		5BFB49FA27AD6147006BE311 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5BFB49FB27AD8187006BE311 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -787,6 +787,15 @@
 			path = V1Only;
 			sourceTree = "<group>";
 		};
+		5B2C18982D8F71B500F9827E /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+				5B2C18962D8F71B500F9827E /* Setup.aip */,
+				5B2C18972D8F71B500F9827E /* Setup.aiproj */,
+			);
+			path = Setup;
+			sourceTree = "<group>";
+		};
 		5B43834A19C45C7700BEECDC /* Demo Window */ = {
 			isa = PBXGroup;
 			children = (
@@ -859,13 +868,9 @@
 		5B4DF3A22314ADDC001FDE00 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				5B8EDEE92D1216E200F07ED0 /* RCArm64.h */,
-				5BFB49EC27AC794F006BE311 /* FASL.H */,
 				5BFB49ED27AC794F006BE311 /* tkov1.h */,
 				5BFB49EB27AC7837006BE311 /* rcdcls.h */,
 				5B7B02AE2314DCCD000747A0 /* opsintel.h */,
-				5B4DF3AC2314C872001FDE00 /* tkov2.h */,
-				5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */,
 				5B3845722D38620B006BAD71 /* NXX86.h */,
 			);
 			name = Headers;
@@ -1127,13 +1132,12 @@
 		5BABBE0B27B7143100AED491 /* NXSYSWindows */ = {
 			isa = PBXGroup;
 			children = (
+				5B2C18982D8F71B500F9827E /* Setup */,
 				5BC13707285D31A5007D52E1 /* WinAppBuildSignature.cpp */,
 				5BC1370A285D3AE6007D52E1 /* tlehelp.cpp */,
 				5BE940FD2853941A00B3FD4A /* nx2.ico */,
 				5BE940FB2853941A00B3FD4A /* relay.ico */,
 				5BE940FC2853941A00B3FD4A /* WinReadResText.h */,
-				5B30B10527E16383000D59C8 /* Setup32 */,
-				5BB5802227C3329900FB0ED5 /* Installer */,
 				5BB5802027C32E7900FB0ED5 /* NXSYSWinApp.h */,
 				5BD7ADA928481FFE000A1CF5 /* MenuUndoRedo.cpp */,
 				5BB5801F27C32E7900FB0ED5 /* WinApp.cpp */,
@@ -1268,15 +1272,6 @@
 				5B50EE4B19BA95A7004CAABE /* ChooseTrackController.mm */,
 			);
 			name = Train;
-			sourceTree = "<group>";
-		};
-		5BB5802227C3329900FB0ED5 /* Installer */ = {
-			isa = PBXGroup;
-			children = (
-				5BDB65692AFC0C13003BF0D6 /* README.Win2_7.txt */,
-				5BB5802127C3328C00FB0ED5 /* Installer.vdproj */,
-			);
-			path = Installer;
 			sourceTree = "<group>";
 		};
 		5BB5802627C3D34400FB0ED5 /* NewShared */ = {
@@ -1441,8 +1436,6 @@
 			children = (
 				5BABBE6F27B7F6E400AED491 /* WinApiSTL.h */,
 				5BF062C4199D4B00008CDCA0 /* compat32.h */,
-				5BF06F5419A10D03008CDCA0 /* LoadCompiledCode.cpp */,
-				5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */,
 				5B2B337923045D5C004007A9 /* DynmenuMacCalls.h */,
 				5BF06F5619A12322008CDCA0 /* MacNxldwin.cpp */,
 				5B93AB8319B208D700F70DDB /* MacRlyDlg.h */,
@@ -1473,6 +1466,13 @@
 				5BF062D3199ECB62008CDCA0 /* xtgload.cpp */,
 				5BF0630119A02803008CDCA0 /* xtrains.cpp */,
 				5BF062DC199EE7CB008CDCA0 /* xturnout.cpp */,
+				5BF06F5419A10D03008CDCA0 /* LoadCompiledCode.cpp */,
+				5B8EDEEC2D14BEE500F07ED0 /* ReadFASL.cpp */,
+				5B8EDEE92D1216E200F07ED0 /* RCArm64.h */,
+				5BFB49EC27AC794F006BE311 /* FASL.H */,
+				5B4DF3AC2314C872001FDE00 /* tkov2.h */,
+				5B2C18932D83ACAA00F9827E /* tkov3.h */,
+				5B8EDEF92D1D95D800F07ED0 /* DisasUtil.h */,
 			);
 			name = NXV2;
 			path = v2;
