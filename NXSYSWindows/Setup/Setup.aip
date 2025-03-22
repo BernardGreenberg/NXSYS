@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="22.5" version="22.5" Modules="simple" RootPath="." Language="en" Id="{9FB27BB5-CA31-47A6-A95B-439B200AEEAB}">
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_DOTNET_CORE_VERSION;AI_DETECTED_DOTNET_VERSION"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_DumpTko.exe" Value="..\x64\Release"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_NXSYS.exe_1" Value="..\x64\Release"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_RelayCompiler.exe_1" Value="..\x64\Release"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_RelayIndex.exe_1" Value="..\x64\Release"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_TLEdit.exe_1" Value="..\x64\Release"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_DumpTko.exe" Value="DumpTko.exe"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_NXSYS.exe_1" Value="NXSYS.exe"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_RelayCompiler.exe_1" Value="RelayCompiler.exe"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_RelayIndex.exe_1" Value="RelayIndex.exe"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_TLEdit.exe_1" Value="TLEdit.exe"/>
+    <ROW Property="AI_REQUIRED_DOTNET_CORE_DISPLAY" MultiBuildValue="DefaultBuild:9.0" ValueLocId="-"/>
+    <ROW Property="AI_REQUIRED_DOTNET_CORE_VERSION" MultiBuildValue="DefaultBuild:9.0" ValueLocId="-"/>
+    <ROW Property="AI_REQUIRED_DOTNET_DISPLAY" MultiBuildValue="DefaultBuild:4.8.1" ValueLocId="-"/>
+    <ROW Property="AI_REQUIRED_DOTNET_VERSION" MultiBuildValue="DefaultBuild:4.8.1" ValueLocId="-"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPHELPLINK" Value="https://github.com/BernardGreenberg/NXSYS"/>
+    <ROW Property="ARPPRODUCTICON" Value="nx2.exe" Type="8"/>
+    <ROW Property="Manufacturer" Value="Bernard Greenberg"/>
+    <ROW Property="ProductCode" Value="1033:{3E9E826A-B7AC-4908-9CCC-3745CF06177D} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="NXSYS Interlocking Simulator"/>
+    <ROW Property="ProductVersion" Value="2.8.0" Options="32"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
+    <ROW Property="UpgradeCode" Value="{26131470-7540-42CA-AA14-166D80FE476B}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT" MultiBuildValue="DefaultBuild:Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT60Display" MultiBuildValue="DefaultBuild:Windows Vista/Server 2008" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT64" MultiBuildValue="DefaultBuild:Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64, Windows Server 2012 R2 x64, Windows Server x64" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT64Display" MultiBuildValue="DefaultBuild:Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64, Windows Server 2012 R2 x64, Windows Server x64" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNTDisplay" MultiBuildValue="DefaultBuild:32-bit Windows versions" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1" DirectoryOptions="3"/>
+    <ROW Directory="Atlantic_Dir" Directory_Parent="Interlockings_Dir" DefaultDir="Atlantic" DirectoryOptions="3"/>
+    <ROW Directory="Documentation_Dir" Directory_Parent="APPDIR" DefaultDir="DOCUME~1|Documentation" DirectoryOptions="3"/>
+    <ROW Directory="Duckburg_Dir" Directory_Parent="Interlockings_Dir" DefaultDir="Duckburg" DirectoryOptions="3"/>
+    <ROW Directory="DumpTko_Dir" Directory_Parent="APPDIR" DefaultDir="DumpTko" DirectoryOptions="3"/>
+    <ROW Directory="HelpImages_Dir" Directory_Parent="Documentation_Dir" DefaultDir="HELPIM~1|HelpImages" DirectoryOptions="3"/>
+    <ROW Directory="Interlockings_Dir" Directory_Parent="APPDIR" DefaultDir="INTERL~1|Interlockings" DirectoryOptions="3"/>
+    <ROW Directory="Islington_Dir" Directory_Parent="Interlockings_Dir" DefaultDir="ISLING~1|Islington" DirectoryOptions="3"/>
+    <ROW Directory="Myrtle_Dir" Directory_Parent="Interlockings_Dir" DefaultDir="Myrtle" DirectoryOptions="3"/>
+    <ROW Directory="NXSYS_Dir" Directory_Parent="APPDIR" DefaultDir="NXSYS" DirectoryOptions="3"/>
+    <ROW Directory="Progman_Dir" Directory_Parent="Interlockings_Dir" DefaultDir="Progman" DirectoryOptions="3"/>
+    <ROW Directory="RelayCompiler_Dir" Directory_Parent="APPDIR" DefaultDir="RELAYC~1|RelayCompiler" DirectoryOptions="3"/>
+    <ROW Directory="RelayIndex_Dir" Directory_Parent="APPDIR" DefaultDir="RELAYI~1|Relay Index" DirectoryOptions="3"/>
+    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="TLEdit_Dir" Directory_Parent="APPDIR" DefaultDir="TLEdit" DirectoryOptions="3"/>
+    <ROW Directory="irt240_Dir" Directory_Parent="Interlockings_Dir" DefaultDir="irt240" DirectoryOptions="3"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SideBySideGuidComponent">
+    <ROW Component="APPDIR" Value="{4D95F7EE-53CE-45E8-8392-7AC67FA2A727}"/>
+    <ROW Component="ProductInformation" Value="{DC489491-4B7B-4DEE-9422-EB133E7053A8}"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="APPDIR" ComponentId="{4D95F7EE-53CE-45E8-8392-7AC67FA2A727}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="DumpTko.exe" ComponentId="{7A9B9FBA-C66D-46A8-B72B-78E8E1C6806C}" Directory_="APPDIR" Attributes="256" KeyPath="DumpTko.exe_2"/>
+    <ROW Component="DumpTko_PrimaryOutput" ComponentId="{4967417E-583D-465A-BCF0-0479656A034C}" Directory_="DumpTko_Dir" Attributes="256" KeyPath="DumpTko.exe"/>
+    <ROW Component="Help.xml" ComponentId="{24ED31CD-A132-4933-AB17-385A45D14119}" Directory_="APPDIR" Attributes="0" KeyPath="Help.xml" Type="0"/>
+    <ROW Component="NXSYS.exe" ComponentId="{13136BE2-E300-4E3F-89CA-1E6C89AEC6E6}" Directory_="APPDIR" Attributes="256" KeyPath="NXSYS.exe"/>
+    <ROW Component="NXSYS_PrimaryOutput" ComponentId="{1C0EBE00-F5D6-4530-9643-8B5B0E1F9B89}" Directory_="NXSYS_Dir" Attributes="256" KeyPath="NXSYS.exe_1"/>
+    <ROW Component="ProductInformation" ComponentId="{DC489491-4B7B-4DEE-9422-EB133E7053A8}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="RelayCompiler.exe" ComponentId="{029B9FF3-73BF-4C84-824F-CE86F644404E}" Directory_="APPDIR" Attributes="256" KeyPath="RelayCompiler.exe"/>
+    <ROW Component="RelayCompiler_PrimaryOutput" ComponentId="{64D4BA9F-5C46-4171-9701-581C9ADD6D5F}" Directory_="RelayCompiler_Dir" Attributes="256" KeyPath="RelayCompiler.exe_1"/>
+    <ROW Component="RelayIndex.exe" ComponentId="{358ECC0D-11DD-4C4D-87AF-BE59CCB70934}" Directory_="APPDIR" Attributes="256" KeyPath="RelayIndex.exe"/>
+    <ROW Component="RelayIndex_PrimaryOutput" ComponentId="{D5B48760-FB17-43AC-9B0D-526E5E612D06}" Directory_="RelayIndex_Dir" Attributes="256" KeyPath="RelayIndex.exe_1"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{55074882-515D-487B-A61E-F8004FD13A87}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="TLEdit.exe" ComponentId="{AEEDF4D4-09EB-4871-8242-87FEA3A411B9}" Directory_="APPDIR" Attributes="256" KeyPath="TLEdit.exe"/>
+    <ROW Component="TLEdit_PrimaryOutput" ComponentId="{F2AF7421-482A-4381-B711-715BCC13C0CB}" Directory_="TLEdit_Dir" Attributes="256" KeyPath="TLEdit.exe_1"/>
+    <ROW Component="_0TL.png" ComponentId="{C305F6D6-2C24-490F-8318-A98EC56951AF}" Directory_="Documentation_Dir" Attributes="0" KeyPath="_0TL.png" Type="0"/>
+    <ROW Component="aalayout.trk" ComponentId="{87A604B0-050A-4F1F-8033-5C124D46FF9F}" Directory_="Atlantic_Dir" Attributes="0" KeyPath="aalayout.trk" Type="0"/>
+    <ROW Component="db1.trk" ComponentId="{8C66F6F7-3DB0-47C0-B051-2BC82FBBFEC5}" Directory_="Duckburg_Dir" Attributes="0" KeyPath="db1.trk" Type="0"/>
+    <ROW Component="irt.215R.trk" ComponentId="{E47B1FA3-F2E5-4604-829C-B72ED05E4C55}" Directory_="irt240_Dir" Attributes="0" KeyPath="irt.215R.trk" Type="0"/>
+    <ROW Component="islingtn.trk" ComponentId="{4FBD5920-3A98-4CF3-9CCA-4A76259C6116}" Directory_="Islington_Dir" Attributes="0" KeyPath="islingtn.trk" Type="0"/>
+    <ROW Component="myrautop.trk" ComponentId="{6E316042-B676-40C2-AF32-79AAE0C89129}" Directory_="Myrtle_Dir" Attributes="0" KeyPath="myrautop.trk" Type="0"/>
+    <ROW Component="progman.trk" ComponentId="{A6CB8331-CCC3-4E00-88BA-593FDA624D1C}" Directory_="Progman_Dir" Attributes="0" KeyPath="progman.trk" Type="0"/>
+    <ROW Component="th.png" ComponentId="{79CFA9F2-986E-4C39-896A-36ED2B6704B6}" Directory_="HelpImages_Dir" Attributes="0" KeyPath="th.png" Type="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="_0TL.png" Component_="_0TL.png" FileName="5_0TL.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\5_0TL.png" SelfReg="false"/>
+    <ROW File="th.png" Component_="th.png" FileName="240th.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\240th.png" SelfReg="false"/>
+    <ROW File="ad.bmp" Component_="th.png" FileName="ad.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\ad.bmp" SelfReg="false"/>
+    <ROW File="aplock.bmp" Component_="th.png" FileName="aplock.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\aplock.bmp" SelfReg="false"/>
+    <ROW File="auto.bmp" Component_="th.png" FileName="auto.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\auto.bmp" SelfReg="false"/>
+    <ROW File="auxkeys.bmp" Component_="th.png" FileName="auxkeys.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\auxkeys.bmp" SelfReg="false"/>
+    <ROW File="bmyrt.bmp" Component_="th.png" FileName="bmyrt.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\bmyrt.bmp" SelfReg="false"/>
+    <ROW File="btob.bmp" Component_="th.png" FileName="btob.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\btob.bmp" SelfReg="false"/>
+    <ROW File="clbogus.bmp" Component_="th.png" FileName="clbogus.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\clbogus.bmp" SelfReg="false"/>
+    <ROW File="clen.bmp" Component_="th.png" FileName="clen.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\clen.bmp" SelfReg="false"/>
+    <ROW File="crotch.bmp" Component_="th.png" FileName="crotch.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\crotch.bmp" SelfReg="false"/>
+    <ROW File="divrt.bmp" Component_="th.png" FileName="divrt.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\divrt.bmp" SelfReg="false"/>
+    <ROW File="Duckburg.png" Component_="th.png" FileName="Duckburg.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\Duckburg.png" SelfReg="false"/>
+    <ROW File="dwarf.bmp" Component_="th.png" FileName="dwarf.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\dwarf.bmp" SelfReg="false"/>
+    <ROW File="dynmenu.png" Component_="th.png" FileName="dynmenu.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\dynmenu.png" SelfReg="false"/>
+    <ROW File="exit.bmp" Component_="th.png" FileName="exit.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\exit.bmp" SelfReg="false"/>
+    <ROW File="fleeted.png" Component_="th.png" FileName="fleeted.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\fleeted.png" SelfReg="false"/>
+    <ROW File="fpsw.bmp" Component_="th.png" FileName="fpsw.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\fpsw.bmp" SelfReg="false"/>
+    <ROW File="fsd.bmp" Component_="th.png" FileName="fsd.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\fsd.bmp" SelfReg="false"/>
+    <ROW File="gk.bmp" Component_="th.png" FileName="gk.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\gk.bmp" SelfReg="false"/>
+    <ROW File="home.bmp" Component_="th.png" FileName="home.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\home.bmp" SelfReg="false"/>
+    <ROW File="ledblx.bmp" Component_="th.png" FileName="ledblx.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\ledblx.bmp" SelfReg="false"/>
+    <ROW File="lunar.bmp" Component_="th.png" FileName="lunar.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\lunar.bmp" SelfReg="false"/>
+    <ROW File="marker.bmp" Component_="th.png" FileName="marker.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\marker.bmp" SelfReg="false"/>
+    <ROW File="mnet.bmp" Component_="th.png" FileName="mnet.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\mnet.bmp" SelfReg="false"/>
+    <ROW File="nxgl.bmp" Component_="th.png" FileName="nxgl.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\nxgl.bmp" SelfReg="false"/>
+    <ROW File="nxgl2.bmp" Component_="th.png" FileName="nxgl2.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\nxgl2.bmp" SelfReg="false"/>
+    <ROW File="RBoard.png" Component_="th.png" FileName="RBoard.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\RBoard.png" SelfReg="false"/>
+    <ROW File="relay.bmp" Component_="th.png" FileName="relay.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\relay.bmp" SelfReg="false"/>
+    <ROW File="st.bmp" Component_="th.png" FileName="st.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\st.bmp" SelfReg="false"/>
+    <ROW File="stop.png" Component_="th.png" FileName="stop.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\stop.png" SelfReg="false"/>
+    <ROW File="sts.bmp" Component_="th.png" FileName="sts.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\sts.bmp" SelfReg="false"/>
+    <ROW File="swdiv.bmp" Component_="th.png" FileName="swdiv.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\swdiv.bmp" SelfReg="false"/>
+    <ROW File="TrafficLever.png" Component_="th.png" FileName="TRAFFI~1.PNG|TrafficLever.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\TrafficLever.png" SelfReg="false"/>
+    <ROW File="trkij.bmp" Component_="th.png" FileName="trkij.bmp" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\HelpImages\trkij.bmp" SelfReg="false"/>
+    <ROW File="InterlockingLogicDesign.pdf" Component_="_0TL.png" FileName="INTERL~1.PDF|Interlocking Logic Design.pdf" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\Interlocking Logic Design.pdf" SelfReg="false"/>
+    <ROW File="LICENSE" Component_="_0TL.png" FileName="LICENSE" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\LICENSE" SelfReg="false"/>
+    <ROW File="MacReleaseNotes.html" Component_="_0TL.png" FileName="MACREL~1.HTM|MacReleaseNotes.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\MacReleaseNotes.html" SelfReg="false"/>
+    <ROW File="nxdoc.css" Component_="_0TL.png" FileName="nxdoc.css" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\nxdoc.css" SelfReg="false"/>
+    <ROW File="NXSYS.html" Component_="_0TL.png" FileName="NXSYS~1.HTM|NXSYS.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\NXSYS.html" SelfReg="false"/>
+    <ROW File="NXSYS.html.pdf" Component_="_0TL.png" FileName="NXSYSH~1.PDF|NXSYS.html.pdf" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\NXSYS.html.pdf" SelfReg="false"/>
+    <ROW File="RelayIndex.html" Component_="_0TL.png" FileName="RELAYI~1.HTM|RelayIndex.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\RelayIndex.html" SelfReg="false"/>
+    <ROW File="RelayLanguage.html" Component_="_0TL.png" FileName="RELAYL~1.HTM|RelayLanguage.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\RelayLanguage.html" SelfReg="false"/>
+    <ROW File="ReleaseNotes.html" Component_="_0TL.png" FileName="RELEAS~1.HTM|ReleaseNotes.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\ReleaseNotes.html" SelfReg="false"/>
+    <ROW File="TrafficKnob.png" Component_="_0TL.png" FileName="TRAFFI~1.PNG|TrafficKnob.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\TrafficKnob.png" SelfReg="false"/>
+    <ROW File="TrafficLevers2_5.html" Component_="_0TL.png" FileName="TRAFFI~1.HTM|TrafficLevers2_5.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Documentation\TrafficLevers2_5.html" SelfReg="false"/>
+    <ROW File="aalayout.trk" Component_="aalayout.trk" FileName="aalayout.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\aalayout.trk" SelfReg="false"/>
+    <ROW File="aanonvital.trk" Component_="aalayout.trk" FileName="AANONV~1.TRK|aanonvital.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\aanonvital.trk" SelfReg="false"/>
+    <ROW File="aapanel.trk" Component_="aalayout.trk" FileName="aapanel.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\aapanel.trk" SelfReg="false"/>
+    <ROW File="aatraffic.trk" Component_="aalayout.trk" FileName="AATRAF~1.TRK|aatraffic.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\aatraffic.trk" SelfReg="false"/>
+    <ROW File="aavital.trk" Component_="aalayout.trk" FileName="aavital.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\aavital.trk" SelfReg="false"/>
+    <ROW File="atlantic.html" Component_="aalayout.trk" FileName="ATLANT~1.HTM|atlantic.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\atlantic.html" SelfReg="false"/>
+    <ROW File="atlantic.trk" Component_="aalayout.trk" FileName="atlantic.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\atlantic.trk" SelfReg="false"/>
+    <ROW File="atlantic.txt" Component_="aalayout.trk" FileName="atlantic.txt" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\atlantic.txt" SelfReg="false"/>
+    <ROW File="README.txt" Component_="aalayout.trk" FileName="README.txt" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\README.txt" SelfReg="false"/>
+    <ROW File="stdmacs.trk" Component_="aalayout.trk" FileName="stdmacs.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Atlantic\stdmacs.trk" SelfReg="false"/>
+    <ROW File="db1.trk" Component_="db1.trk" FileName="db1.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\db1.trk" SelfReg="false"/>
+    <ROW File="db2.trk" Component_="db1.trk" FileName="db2.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\db2.trk" SelfReg="false"/>
+    <ROW File="db3.trk" Component_="db1.trk" FileName="db3.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\db3.trk" SelfReg="false"/>
+    <ROW File="db4.trk" Component_="db1.trk" FileName="db4.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\db4.trk" SelfReg="false"/>
+    <ROW File="db5.trk" Component_="db1.trk" FileName="db5.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\db5.trk" SelfReg="false"/>
+    <ROW File="db6.trk" Component_="db1.trk" FileName="db6.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\db6.trk" SelfReg="false"/>
+    <ROW File="db7.trk" Component_="db1.trk" FileName="db7.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\db7.trk" SelfReg="false"/>
+    <ROW File="dburg.trk" Component_="db1.trk" FileName="dburg.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\dburg.trk" SelfReg="false"/>
+    <ROW File="README.md" Component_="db1.trk" FileName="README.md" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\README.md" SelfReg="false"/>
+    <ROW File="stdmacs.trk_1" Component_="db1.trk" FileName="stdmacs.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Duckburg\stdmacs.trk" SelfReg="false"/>
+    <ROW File="irt.215R.trk" Component_="irt.215R.trk" FileName="IRT215~1.TRK|irt.215R.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.215R.trk" SelfReg="false"/>
+    <ROW File="irt.238R.trk" Component_="irt.215R.trk" FileName="IRT238~1.TRK|irt.238R.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.238R.trk" SelfReg="false"/>
+    <ROW File="irt.240L.trk" Component_="irt.215R.trk" FileName="IRT240~1.TRK|irt.240L.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.240L.trk" SelfReg="false"/>
+    <ROW File="irt.240R.trk" Component_="irt.215R.trk" FileName="IRT240~2.TRK|irt.240R.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.240R.trk" SelfReg="false"/>
+    <ROW File="irt.240tl.trk" Component_="irt.215R.trk" FileName="IRT240~3.TRK|irt.240tl.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.240tl.trk" SelfReg="false"/>
+    <ROW File="irt.242R.trk" Component_="irt.215R.trk" FileName="IRT242~1.TRK|irt.242R.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.242R.trk" SelfReg="false"/>
+    <ROW File="irt.bridge.trk" Component_="irt.215R.trk" FileName="IRTBRI~1.TRK|irt.bridge.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.bridge.trk" SelfReg="false"/>
+    <ROW File="irt.flash.trk" Component_="irt.215R.trk" FileName="IRTFLA~1.TRK|irt.flash.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.flash.trk" SelfReg="false"/>
+    <ROW File="irt.traffic.trk" Component_="irt.215R.trk" FileName="IRTTRA~1.TRK|irt.traffic.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.traffic.trk" SelfReg="false"/>
+    <ROW File="irt.yard.trk" Component_="irt.215R.trk" FileName="IRTYAR~1.TRK|irt.yard.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt.yard.trk" SelfReg="false"/>
+    <ROW File="irt240.html" Component_="irt.215R.trk" FileName="IRT240~1.HTM|irt240.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\irt240.html" SelfReg="false"/>
+    <ROW File="README.txt_1" Component_="irt.215R.trk" FileName="README.txt" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\README.txt" SelfReg="false"/>
+    <ROW File="stdmacs.trk_2" Component_="irt.215R.trk" FileName="stdmacs.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\stdmacs.trk" SelfReg="false"/>
+    <ROW File="TAGS" Component_="irt.215R.trk" FileName="TAGS" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\irt240\TAGS" SelfReg="false"/>
+    <ROW File="islingtn.trk" Component_="islingtn.trk" FileName="islingtn.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Islington\islingtn.trk" SelfReg="false"/>
+    <ROW File="Islington.html" Component_="islingtn.trk" FileName="ISLING~1.HTM|Islington.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Islington\Islington.html" SelfReg="false"/>
+    <ROW File="Islington.pdf" Component_="islingtn.trk" FileName="ISLING~1.PDF|Islington.pdf" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Islington\Islington.pdf" SelfReg="false"/>
+    <ROW File="Islington_Layout.trk" Component_="islingtn.trk" FileName="ISLING~1.TRK|Islington_Layout.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Islington\Islington_Layout.trk" SelfReg="false"/>
+    <ROW File="README.txt_2" Component_="islingtn.trk" FileName="README.txt" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Islington\README.txt" SelfReg="false"/>
+    <ROW File="stdmacs.trk_3" Component_="islingtn.trk" FileName="stdmacs.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Islington\stdmacs.trk" SelfReg="false"/>
+    <ROW File="myrautop.trk" Component_="myrautop.trk" FileName="myrautop.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Myrtle\myrautop.trk" SelfReg="false"/>
+    <ROW File="myrthlptxt.txt" Component_="myrautop.trk" FileName="MYRTHL~1.TXT|myrthlptxt.txt" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Myrtle\myrthlptxt.txt" SelfReg="false"/>
+    <ROW File="myrtlayt.trk" Component_="myrautop.trk" FileName="myrtlayt.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Myrtle\myrtlayt.trk" SelfReg="false"/>
+    <ROW File="myrtle.html" Component_="myrautop.trk" FileName="MYRTLE~1.HTM|myrtle.html" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Myrtle\myrtle.html" SelfReg="false"/>
+    <ROW File="myrtle.trk" Component_="myrautop.trk" FileName="myrtle.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Myrtle\myrtle.trk" SelfReg="false"/>
+    <ROW File="Myrtle.xdo" Component_="myrautop.trk" FileName="Myrtle.xdo" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Myrtle\Myrtle.xdo" SelfReg="false"/>
+    <ROW File="README.txt_3" Component_="myrautop.trk" FileName="README.txt" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Myrtle\README.txt" SelfReg="false"/>
+    <ROW File="stdmacs.trk_4" Component_="myrautop.trk" FileName="stdmacs.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Myrtle\stdmacs.trk" SelfReg="false"/>
+    <ROW File="progman.trk" Component_="progman.trk" FileName="progman.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Progman\progman.trk" SelfReg="false"/>
+    <ROW File="Progman_Layt.trk" Component_="progman.trk" FileName="PROGMA~1.TRK|Progman_Layt.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Progman\Progman_Layt.trk" SelfReg="false"/>
+    <ROW File="README.txt_4" Component_="progman.trk" FileName="README.txt" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Progman\README.txt" SelfReg="false"/>
+    <ROW File="stdmacs.trk_5" Component_="progman.trk" FileName="stdmacs.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Progman\stdmacs.trk" SelfReg="false"/>
+    <ROW File="Help.xml" Component_="Help.xml" FileName="Help.xml" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Help.xml" SelfReg="false"/>
+    <ROW File="InterlockingLibrary.xml" Component_="Help.xml" FileName="INTERL~1.XML|InterlockingLibrary.xml" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\InterlockingLibrary.xml" SelfReg="false"/>
+    <ROW File="DumpTko.exe_2" Component_="DumpTko.exe" FileName="DumpTko.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\DumpTko.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="NXSYS.exe" Component_="NXSYS.exe" FileName="NXSYS.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\NXSYS.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="TLEdit.exe" Component_="TLEdit.exe" FileName="TLEdit.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\TLEdit.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="RelayCompiler.exe" Component_="RelayCompiler.exe" FileName="RELAYC~1.EXE|RelayCompiler.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\RelayCompiler.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="RelayIndex.exe" Component_="RelayIndex.exe" FileName="RELAYI~1.EXE|RelayIndex.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\RelayIndex.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="DumpTko.exe" Component_="DumpTko_PrimaryOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_DumpTko.exe]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_DumpTko.exe&gt;" SelfReg="false" DigSign="true"/>
+    <ROW File="RelayIndex.exe_1" Component_="RelayIndex_PrimaryOutput" FileName="RELAYI~2.EXE|[|AI_PROPPATH_FILENAME_PERBUILD_RelayIndex.exe_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_RelayIndex.exe_1&gt;" SelfReg="false" DigSign="true"/>
+    <ROW File="RelayCompiler.exe_1" Component_="RelayCompiler_PrimaryOutput" FileName="RELAYC~2.EXE|[|AI_PROPPATH_FILENAME_PERBUILD_RelayCompiler.exe_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_RelayCompiler.exe_1&gt;" SelfReg="false" DigSign="true"/>
+    <ROW File="TLEdit.exe_1" Component_="TLEdit_PrimaryOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_TLEdit.exe_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_TLEdit.exe_1&gt;" SelfReg="false" DigSign="true"/>
+    <ROW File="NXSYS.exe_1" Component_="NXSYS_PrimaryOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_NXSYS.exe_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_NXSYS.exe_1&gt;" SelfReg="false" DigSign="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.AppPathsComponent">
+    <ROW Name="AI_APPPATH_PERBUILD_DumpTko.exe" Path="[|AI_PROPPATH_DIR_PERBUILD_DumpTko.exe]\[|AI_PROPPATH_FILENAME_PERBUILD_DumpTko.exe]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_NXSYS.exe_1" Path="[|AI_PROPPATH_DIR_PERBUILD_NXSYS.exe_1]\[|AI_PROPPATH_FILENAME_PERBUILD_NXSYS.exe_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_RelayCompiler.exe_1" Path="[|AI_PROPPATH_DIR_PERBUILD_RelayCompiler.exe_1]\[|AI_PROPPATH_FILENAME_PERBUILD_RelayCompiler.exe_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_RelayIndex.exe_1" Path="[|AI_PROPPATH_DIR_PERBUILD_RelayIndex.exe_1]\[|AI_PROPPATH_FILENAME_PERBUILD_RelayIndex.exe_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_TLEdit.exe_1" Path="[|AI_PROPPATH_DIR_PERBUILD_TLEdit.exe_1]\[|AI_PROPPATH_FILENAME_PERBUILD_TLEdit.exe_1]" Type="2" Content="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
+    <ROW Action="AI_DetectSoftware" Sequence="151"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" Languages="en" InstallationType="4" UseLargeSchema="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="SoftwareDetector.dll" SourcePath="&lt;AI_CUSTACTS&gt;SoftwareDetector.dll"/>
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DetectSoftware" Type="257" Source="SoftwareDetector.dll" Target="OnDetectSoftware"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="_0TL.png"/>
+    <ROW Feature_="MainFeature" Component_="th.png"/>
+    <ROW Feature_="MainFeature" Component_="aalayout.trk"/>
+    <ROW Feature_="MainFeature" Component_="db1.trk"/>
+    <ROW Feature_="MainFeature" Component_="irt.215R.trk"/>
+    <ROW Feature_="MainFeature" Component_="islingtn.trk"/>
+    <ROW Feature_="MainFeature" Component_="myrautop.trk"/>
+    <ROW Feature_="MainFeature" Component_="progman.trk"/>
+    <ROW Feature_="MainFeature" Component_="Help.xml"/>
+    <ROW Feature_="MainFeature" Component_="DumpTko.exe"/>
+    <ROW Feature_="MainFeature" Component_="NXSYS.exe"/>
+    <ROW Feature_="MainFeature" Component_="TLEdit.exe"/>
+    <ROW Feature_="MainFeature" Component_="RelayCompiler.exe"/>
+    <ROW Feature_="MainFeature" Component_="RelayIndex.exe"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+    <ROW Feature_="MainFeature" Component_="DumpTko_PrimaryOutput"/>
+    <ROW Feature_="MainFeature" Component_="RelayIndex_PrimaryOutput"/>
+    <ROW Feature_="MainFeature" Component_="RelayCompiler_PrimaryOutput"/>
+    <ROW Feature_="MainFeature" Component_="TLEdit_PrimaryOutput"/>
+    <ROW Feature_="MainFeature" Component_="NXSYS_PrimaryOutput"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="nx2.exe" SourcePath="..\nx2.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="( Version9X OR ( NOT VersionNT64 ) OR ( VersionNT64 AND ((VersionNT64 &lt;&gt; 601) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 601) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 602) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 602) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 603) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 603) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 1000 AND VersionNT64 &lt;&gt; 1100) OR (MsiNTProductType = 1)) ) )" Description="[ProductName] cannot be installed on the following Windows versions: [WindowsTypeNT64Display]." DescriptionLocId="AI.LaunchCondition.NoSpecificNT64" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="( Version9X OR VersionNT64 )" Description="[ProductName] cannot be installed on [WindowsTypeNTDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 600)" Description="[ProductName] cannot be installed on [WindowsTypeNT60Display]." DescriptionLocId="AI.LaunchCondition.NoNT60" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="AI_DETECTED_DOTNET_CORE_VERSION &gt;= AI_REQUIRED_DOTNET_CORE_VERSION" Description="[ProductName] cannot be installed on systems with .NET Core version lower than [AI_REQUIRED_DOTNET_CORE_DISPLAY]." DescriptionLocId="AI.LaunchCondition.DotNETCore" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="AI_DETECTED_DOTNET_VERSION &gt;= AI_REQUIRED_DOTNET_VERSION" Description="[ProductName] cannot be installed on systems with .NET Framework version lower than [AI_REQUIRED_DOTNET_DISPLAY]." DescriptionLocId="AI.LaunchCondition.DotNET" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="NXSYS" Directory_="SHORTCUTDIR" Name="NXSYS" Component_="NXSYS.exe" Target="[#NXSYS.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="NXSYS_1" Directory_="SHORTCUTDIR" Name="NXSYS" Component_="NXSYS_PrimaryOutput" Target="[#NXSYS.exe_1]" Hotkey="0" IconIndex="0" ShowCmd="1"/>
+    <ROW Shortcut="TLEdit" Directory_="SHORTCUTDIR" Name="TLEdit" Component_="TLEdit.exe" Target="[#TLEdit.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="TLEdit_1" Directory_="SHORTCUTDIR" Name="TLEdit" Component_="TLEdit_PrimaryOutput" Target="[#TLEdit.exe_1]" Hotkey="0" IconIndex="0" ShowCmd="1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.VsProjectComponent">
+    <ROW ProjectId="{574282aa-ddd0-4a14-b9de-b81b169b735a}" ProjectName="DumpTko" OutputGroup="PrimaryOutput" OutputFile="DumpTko.exe"/>
+    <ROW ProjectId="{54a752ea-a346-4b5b-8bd3-6d0381a09add}" ProjectName="Relay Index" OutputGroup="PrimaryOutput" OutputFile="RelayIndex.exe_1"/>
+    <ROW ProjectId="{8a8e18d7-4673-4f89-86d8-d5c3383c553e}" ProjectName="RelayCompiler" OutputGroup="PrimaryOutput" OutputFile="RelayCompiler.exe_1"/>
+    <ROW ProjectId="{8e291d18-8597-4636-bc7c-94b28c3a7888}" ProjectName="TLEdit" OutputGroup="PrimaryOutput" OutputFile="TLEdit.exe_1" OutputFileShortcut="TLEdit_1"/>
+    <ROW ProjectId="{de5fabdd-7eb6-4af0-b06e-6253260aaa18}" ProjectName="NXSYS" OutputGroup="PrimaryOutput" OutputFile="NXSYS.exe_1" OutputFileShortcut="NXSYS_1"/>
+  </COMPONENT>
+</DOCUMENT>
