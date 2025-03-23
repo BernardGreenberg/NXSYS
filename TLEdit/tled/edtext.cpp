@@ -248,6 +248,10 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
 	case WM_COMMAND:
 	    switch (wParam) {
 		case IDOK:
+#if WIN32
+		    new_wp_x = wp_x;
+		    new_wp_y = wp_y;
+#else   //el maco
                     new_wp_x = GetDlgItemInt (hDlg, IDC_ETEXT_WPX, &es, FALSE);
                     if (!es) {
                         uerr (hDlg, "Bad number in Panel X coordinate.");
@@ -258,6 +262,7 @@ BOOL_DLG_PROC_QUAL TextString::DlgProc  (HWND hDlg, UINT message, WPARAM wParam,
                         uerr (hDlg, "Bad number in Panel Y coordinate.");
                         return TRUE;
                     }
+#endif
 		    Invalidate();
 		    
                     S.String = GetDlgItemText (hDlg, IDC_TEXT_TEXT);
