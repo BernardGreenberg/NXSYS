@@ -14,6 +14,10 @@ string GMFN() {
 	return string(mpath.data());
 }
 
+string GetResDir() {
+    return replace_filename(GMFN(), "..\\file.ext");
+}
+
 bool WinBrowseResource(const char* ename) {
 	string target(ename);
 	if (target.find("http:", 0) == 0 ||
@@ -24,7 +28,7 @@ bool WinBrowseResource(const char* ename) {
 		target = target.substr(7);
 	}
 	else {
-	  target = replace_filename(GMFN(), ename);
+	  target = replace_filename(GetResDir(), ename);
 	}
 	ShellExecute(NULL, "open", target.c_str(), NULL, NULL, SW_SHOW);
 	return true;
