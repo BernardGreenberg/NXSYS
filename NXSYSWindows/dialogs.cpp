@@ -79,8 +79,7 @@ BOOL FileOpenDlg(HWND hwnd, LPSTR lpstrFileName, LPSTR lpstrTitleName, int bufl,
 		break;
 	default:
 		ofn.lpstrFilter = szFilter;
-		if (!strcmp(ext, ".trk"))
-			ofn.nFilterIndex = 2;
+        ofn.nFilterIndex = 3; //1-based; = "both (.trk, .tko)"
 		break;
 	}
 
