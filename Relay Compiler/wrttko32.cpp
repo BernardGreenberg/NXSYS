@@ -205,7 +205,7 @@ static void Write_ATS (FILE* f, TKO_INFO& inf) {
     h.length_of_item = 1;
     h.length_of_block = 0;
     for (int i = 0; i < inf.ats_count; i++)
-	h.length_of_block += strlen(inf.Ats[i]) + 1;
+	h.length_of_block += (int)strlen(inf.Ats[i]) + 1;
     fwrite (&h, 1, sizeof(h), f);
     for (int j = 0; j < inf.ats_count; j++) {
 	int sl = (int)strlen(inf.Ats[j]);
