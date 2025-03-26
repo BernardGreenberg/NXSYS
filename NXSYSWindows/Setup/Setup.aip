@@ -59,6 +59,7 @@
     <ROW Directory="RelayIndex_Dir" Directory_Parent="APPDIR" DefaultDir="RELAYI~1|Relay Index" DirectoryOptions="3"/>
     <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="TLEDocumentation_Dir" Directory_Parent="APPDIR" DefaultDir="TLEDOC~1|TLEDocumentation" DirectoryOptions="3"/>
     <ROW Directory="TLEdit_Dir" Directory_Parent="APPDIR" DefaultDir="TLEdit" DirectoryOptions="3"/>
     <ROW Directory="irt240_Dir" Directory_Parent="Interlockings_Dir" DefaultDir="irt240" DirectoryOptions="3"/>
   </COMPONENT>
@@ -68,19 +69,15 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{4D95F7EE-53CE-45E8-8392-7AC67FA2A727}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="DumpTko.exe" ComponentId="{7A9B9FBA-C66D-46A8-B72B-78E8E1C6806C}" Directory_="APPDIR" Attributes="256" KeyPath="DumpTko.exe_2"/>
-    <ROW Component="DumpTko_PrimaryOutput" ComponentId="{4967417E-583D-465A-BCF0-0479656A034C}" Directory_="DumpTko_Dir" Attributes="256" KeyPath="DumpTko.exe"/>
-    <ROW Component="Help.xml" ComponentId="{24ED31CD-A132-4933-AB17-385A45D14119}" Directory_="APPDIR" Attributes="0" KeyPath="Help.xml" Type="0"/>
-    <ROW Component="NXSYS.exe" ComponentId="{13136BE2-E300-4E3F-89CA-1E6C89AEC6E6}" Directory_="APPDIR" Attributes="256" KeyPath="NXSYS.exe"/>
-    <ROW Component="NXSYS_PrimaryOutput" ComponentId="{1C0EBE00-F5D6-4530-9643-8B5B0E1F9B89}" Directory_="NXSYS_Dir" Attributes="256" KeyPath="NXSYS.exe_1"/>
-    <ROW Component="ProductInformation" ComponentId="{DC489491-4B7B-4DEE-9422-EB133E7053A8}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="RelayCompiler.exe" ComponentId="{029B9FF3-73BF-4C84-824F-CE86F644404E}" Directory_="APPDIR" Attributes="256" KeyPath="RelayCompiler.exe"/>
-    <ROW Component="RelayCompiler_PrimaryOutput" ComponentId="{64D4BA9F-5C46-4171-9701-581C9ADD6D5F}" Directory_="RelayCompiler_Dir" Attributes="256" KeyPath="RelayCompiler.exe_1"/>
-    <ROW Component="RelayIndex.exe" ComponentId="{358ECC0D-11DD-4C4D-87AF-BE59CCB70934}" Directory_="APPDIR" Attributes="256" KeyPath="RelayIndex.exe"/>
-    <ROW Component="RelayIndex_PrimaryOutput" ComponentId="{D5B48760-FB17-43AC-9B0D-526E5E612D06}" Directory_="RelayIndex_Dir" Attributes="256" KeyPath="RelayIndex.exe_1"/>
+    <ROW Component="DumpTko_PrimaryOutput" ComponentId="{EBBACC9D-422B-4533-AFE7-9A099B84FDDF}" Directory_="DumpTko_Dir" Attributes="256" KeyPath="DumpTko.exe"/>
+    <ROW Component="Help.xml" ComponentId="{7A777B9E-DBC6-42CD-8D50-930C1780ADF9}" Directory_="APPDIR" Attributes="0" KeyPath="Help.xml" Type="0"/>
+    <ROW Component="NXSYS_PrimaryOutput" ComponentId="{D8A62FFA-8C81-42F0-98F2-1B4BC6B56B8E}" Directory_="NXSYS_Dir" Attributes="256" KeyPath="NXSYS.exe_1"/>
+    <ROW Component="ProductInformation" ComponentId="{DC489491-4B7B-4DEE-9422-EB133E7053A8}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
+    <ROW Component="RelayCompiler_PrimaryOutput" ComponentId="{83D650A5-4944-420C-86A5-D4B95751FC21}" Directory_="RelayCompiler_Dir" Attributes="256" KeyPath="RelayCompiler.exe_1"/>
+    <ROW Component="RelayIndex_PrimaryOutput" ComponentId="{D51B6F80-ABF2-4460-91A1-69F1F3E0D185}" Directory_="RelayIndex_Dir" Attributes="256" KeyPath="RelayIndex.exe_1"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{55074882-515D-487B-A61E-F8004FD13A87}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="TLEdit.exe" ComponentId="{AEEDF4D4-09EB-4871-8242-87FEA3A411B9}" Directory_="APPDIR" Attributes="256" KeyPath="TLEdit.exe"/>
-    <ROW Component="TLEdit_PrimaryOutput" ComponentId="{F2AF7421-482A-4381-B711-715BCC13C0CB}" Directory_="TLEdit_Dir" Attributes="256" KeyPath="TLEdit.exe_1"/>
+    <ROW Component="TLEdit.pdf" ComponentId="{6EAD7435-A323-4170-A7C9-8AB30CD3A6BE}" Directory_="TLEDocumentation_Dir" Attributes="0" KeyPath="TLEdit.pdf" Type="0"/>
+    <ROW Component="TLEdit_PrimaryOutput" ComponentId="{AE282418-E396-4179-A2CB-7BC636466479}" Directory_="TLEdit_Dir" Attributes="256" KeyPath="TLEdit.exe_1"/>
     <ROW Component="_0TL.png" ComponentId="{C305F6D6-2C24-490F-8318-A98EC56951AF}" Directory_="Documentation_Dir" Attributes="0" KeyPath="_0TL.png" Type="0"/>
     <ROW Component="aalayout.trk" ComponentId="{87A604B0-050A-4F1F-8033-5C124D46FF9F}" Directory_="Atlantic_Dir" Attributes="0" KeyPath="aalayout.trk" Type="0"/>
     <ROW Component="db1.trk" ComponentId="{8C66F6F7-3DB0-47C0-B051-2BC82FBBFEC5}" Directory_="Duckburg_Dir" Attributes="0" KeyPath="db1.trk" Type="0"/>
@@ -195,16 +192,12 @@
     <ROW File="stdmacs.trk_5" Component_="progman.trk" FileName="stdmacs.trk" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Interlockings\Progman\stdmacs.trk" SelfReg="false"/>
     <ROW File="Help.xml" Component_="Help.xml" FileName="Help.xml" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\Help.xml" SelfReg="false"/>
     <ROW File="InterlockingLibrary.xml" Component_="Help.xml" FileName="INTERL~1.XML|InterlockingLibrary.xml" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\InterlockingLibrary.xml" SelfReg="false"/>
-    <ROW File="DumpTko.exe_2" Component_="DumpTko.exe" FileName="DumpTko.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\DumpTko.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="NXSYS.exe" Component_="NXSYS.exe" FileName="NXSYS.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\NXSYS.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="TLEdit.exe" Component_="TLEdit.exe" FileName="TLEdit.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\TLEdit.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="RelayCompiler.exe" Component_="RelayCompiler.exe" FileName="RELAYC~1.EXE|RelayCompiler.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\RelayCompiler.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="RelayIndex.exe" Component_="RelayIndex.exe" FileName="RELAYI~1.EXE|RelayIndex.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\x64\Release\RelayIndex.exe" SelfReg="false" DigSign="true"/>
     <ROW File="DumpTko.exe" Component_="DumpTko_PrimaryOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_DumpTko.exe]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_DumpTko.exe&gt;" SelfReg="false" DigSign="true"/>
     <ROW File="RelayIndex.exe_1" Component_="RelayIndex_PrimaryOutput" FileName="RELAYI~2.EXE|[|AI_PROPPATH_FILENAME_PERBUILD_RelayIndex.exe_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_RelayIndex.exe_1&gt;" SelfReg="false" DigSign="true"/>
     <ROW File="RelayCompiler.exe_1" Component_="RelayCompiler_PrimaryOutput" FileName="RELAYC~2.EXE|[|AI_PROPPATH_FILENAME_PERBUILD_RelayCompiler.exe_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_RelayCompiler.exe_1&gt;" SelfReg="false" DigSign="true"/>
     <ROW File="TLEdit.exe_1" Component_="TLEdit_PrimaryOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_TLEdit.exe_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_TLEdit.exe_1&gt;" SelfReg="false" DigSign="true"/>
     <ROW File="NXSYS.exe_1" Component_="NXSYS_PrimaryOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_NXSYS.exe_1]" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_NXSYS.exe_1&gt;" SelfReg="false" DigSign="true"/>
+    <ROW File="TLEdit.pdf" Component_="TLEdit.pdf" FileName="TLEdit.pdf" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\..\TLEDocumentation\TLEdit.pdf" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AppPathsComponent">
     <ROW Name="AI_APPPATH_PERBUILD_DumpTko.exe" Path="[|AI_PROPPATH_DIR_PERBUILD_DumpTko.exe]\[|AI_PROPPATH_FILENAME_PERBUILD_DumpTko.exe]" Type="2" Content="0"/>
@@ -217,7 +210,7 @@
     <ROW Action="AI_DetectSoftware" Sequence="151"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" Languages="en" InstallationType="4" UseLargeSchema="true"/>
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" Languages="en" InstallationType="4" SummInfoMetadata="Page Count:450" UseLargeSchema="true" MsiPackageType="x64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -282,7 +275,7 @@
     <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
-    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][Manufacturer]\[ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
@@ -297,18 +290,14 @@
     <ROW Feature_="MainFeature" Component_="islingtn.trk"/>
     <ROW Feature_="MainFeature" Component_="myrautop.trk"/>
     <ROW Feature_="MainFeature" Component_="progman.trk"/>
-    <ROW Feature_="MainFeature" Component_="Help.xml"/>
-    <ROW Feature_="MainFeature" Component_="DumpTko.exe"/>
-    <ROW Feature_="MainFeature" Component_="NXSYS.exe"/>
-    <ROW Feature_="MainFeature" Component_="TLEdit.exe"/>
-    <ROW Feature_="MainFeature" Component_="RelayCompiler.exe"/>
-    <ROW Feature_="MainFeature" Component_="RelayIndex.exe"/>
     <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
     <ROW Feature_="MainFeature" Component_="DumpTko_PrimaryOutput"/>
     <ROW Feature_="MainFeature" Component_="RelayIndex_PrimaryOutput"/>
     <ROW Feature_="MainFeature" Component_="RelayCompiler_PrimaryOutput"/>
     <ROW Feature_="MainFeature" Component_="TLEdit_PrimaryOutput"/>
     <ROW Feature_="MainFeature" Component_="NXSYS_PrimaryOutput"/>
+    <ROW Feature_="MainFeature" Component_="Help.xml"/>
+    <ROW Feature_="MainFeature" Component_="TLEdit.pdf"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="nx2.exe" SourcePath="..\nx2.ico" Index="0"/>
@@ -349,9 +338,7 @@
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="NXSYS" Directory_="SHORTCUTDIR" Name="NXSYS" Component_="NXSYS.exe" Target="[#NXSYS.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
     <ROW Shortcut="NXSYS_1" Directory_="SHORTCUTDIR" Name="NXSYS" Component_="NXSYS_PrimaryOutput" Target="[#NXSYS.exe_1]" Hotkey="0" IconIndex="0" ShowCmd="1"/>
-    <ROW Shortcut="TLEdit" Directory_="SHORTCUTDIR" Name="TLEdit" Component_="TLEdit.exe" Target="[#TLEdit.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
     <ROW Shortcut="TLEdit_1" Directory_="SHORTCUTDIR" Name="TLEdit" Component_="TLEdit_PrimaryOutput" Target="[#TLEdit.exe_1]" Hotkey="0" IconIndex="0" ShowCmd="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
