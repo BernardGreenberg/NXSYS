@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BundleBuildDate</key>
-	<date>2024-11-30T17:17:32Z</date>
+	<date>2025-03-27T22:00:05Z</date>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -14,6 +14,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>trk</string>
+				<string>tko</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>AppIcon.icns</string>
@@ -23,6 +24,23 @@
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Compiled Track Definitions</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+		</dict>
+		<dict/>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string></string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -38,17 +56,17 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.7.3</string>
+	<string>2.8.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1753</string>
+	<string>2283</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.education</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright ©1994-2001, 2014, 2016, 2019, 2021-2  Bernard Greenberg. All rights reserved.</string>
+	<string>Copyright ©1994-2001, 2014, 2016, 2019, 2021-24  Bernard Greenberg. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
