@@ -75,16 +75,20 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/bsg/XcodeProjects/NX2/Interlockings/Progman/Progman.tko"
+            argument = "/Users/bsg/XcodeProjects/NX2/Interlockings/Atlantic/atlantic.tko"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "~/XcodeProjects/NX2/Interlockings/irt240/irt.240tl.trk"
+            argument = "/Users/bsg/hax/arm64/irt240.arm.tko"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "~/XcodeProjects/NX2/Interlockings/irt240/irt240.arm.tko"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/users/bsg/hax/arm64/irt240.x86.tko"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-h"
@@ -92,7 +96,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "CID"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "ATS"
@@ -104,11 +108,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "ISD"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "ESD"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-v"
@@ -116,7 +120,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "TXT"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "TMR"
@@ -124,7 +128,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "DPD"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

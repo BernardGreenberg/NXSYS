@@ -40,7 +40,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -66,18 +66,22 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-arch:X86"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-arch:arm64"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-Fl:/Users/bsg/hax/arm64/irt240.x86,lst"
+            argument = "-arch:arm64"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-Fl:/Users/bsg/hax/arm64/irt240.arm.lst"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-Fo:/Users/bsg/hax/arm64/irt240.x86.tko"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-Fo:/Users/bsg/hax/arm64/irt240.arm.tko"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
