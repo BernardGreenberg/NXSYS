@@ -11,8 +11,8 @@ class utf8er {
     static constexpr char16_t SUB = 0xFFFD;
     static constexpr char32_t LEGAL_BASES[3]{0x80, 0x800, 0x10000};
 public:
-    template<class InputCharType>
-    static std::string to_utf8 (const InputCharType& input) { /* anything iterable */
+    template<class InputStringType>
+    static std::string to_utf8 (const InputStringType& input) { /* anything iterable */
         std::string output;
         for (uint32_t  IC : input) {
             if (IC < 0x80)
