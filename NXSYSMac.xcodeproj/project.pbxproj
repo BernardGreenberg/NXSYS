@@ -466,7 +466,7 @@
 		5B87B31D284A707F0002AB18 /* tletoolb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tletoolb.cpp; sourceTree = "<group>"; };
 		5B88FEA01DF71C0D00D8F8E0 /* SwitchConsistency.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = SwitchConsistency.cpp; sourceTree = "<group>"; };
 		5B8A10CF25BF7DF8007857A8 /* rlymenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rlymenu.h; sourceTree = "<group>"; };
-		5B8D04FE2ECA8EC2003F87A8 /* utf8er.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utf8er.hpp; sourceTree = "<group>"; };
+		5B8D05002ECD28B5003F87A8 /* ParseCommandLine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ParseCommandLine.cpp; sourceTree = "<group>"; };
 		5B8EDED82D0BC07600F07ED0 /* DumpTko.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTko.cpp; sourceTree = "<group>"; };
 		5B8EDEDD2D0BC1D700F07ED0 /* DumpTko */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DumpTko; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B8EDEE72D11B1D200F07ED0 /* DumpTxt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DumpTxt.cpp; sourceTree = "<group>"; };
@@ -576,7 +576,6 @@
 		5BB30A8D283A686000788BEC /* Limbo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Limbo.cpp; sourceTree = "<group>"; };
 		5BB30A8F283A687400788BEC /* Limbo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Limbo.h; sourceTree = "<group>"; };
 		5BB5801A27C072B600FB0ED5 /* ParseCommandLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseCommandLine.h; sourceTree = "<group>"; };
-		5BB5801B27C072B600FB0ED5 /* ParseCommandLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseCommandLine.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BB5801D27C1DB1500FB0ED5 /* RecentFileMan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecentFileMan.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		5BB5801E27C1DB1500FB0ED5 /* RecentFileMan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecentFileMan.h; sourceTree = "<group>"; };
 		5BB5801F27C32E7900FB0ED5 /* WinApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WinApp.cpp; sourceTree = "<group>"; tabWidth = 4; };
@@ -1144,8 +1143,7 @@
 				5BB5801F27C32E7900FB0ED5 /* WinApp.cpp */,
 				5BB5801D27C1DB1500FB0ED5 /* RecentFileMan.cpp */,
 				5BB5801E27C1DB1500FB0ED5 /* RecentFileMan.h */,
-				5BB5801B27C072B600FB0ED5 /* ParseCommandLine.cpp */,
-				5B8D04FE2ECA8EC2003F87A8 /* utf8er.hpp */,
+				5B8D05002ECD28B5003F87A8 /* ParseCommandLine.cpp */,
 				5BB5801A27C072B600FB0ED5 /* ParseCommandLine.h */,
 				5B54274D27BD27C3006EEDEF /* Relay Index */,
 				5BABBE1327B7143100AED491 /* NXSYSWindows.sln */,

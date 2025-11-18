@@ -8,13 +8,15 @@
 ParsedCommandLine ParseCommandLineToVector(const char* command_line) {
     //Note that this is not Unicode, but CP_1251 or whatever.
   //  command_line = "phu -ébaz";
+   // command_line = "x";
 	if (command_line == nullptr)
 		return ParsedCommandLine{};
-	int nwide = MultiByteToWideChar(CP_ACP, 0, command_line, -1, NULL, 0);
+	int nbcl = (int)strlen(command_line);
+	if (nbcl == 0)
+	    return ParsedCommandLine{}; //doc behavior is to get exe path.
+	int nwide = MultiByteToWideChar(CP_ACP, 0, command_line, nbcl, NULL, 0);
 	std::wstring W(nwide, 0);
-	MultiByteToWideChar(CP_ACP, 0, command_line, -1, W.data(), nwide);
-	if (W.size() == 0)
-		return ParsedCommandLine{};  /* avoid buggy documented behavior of returning exe path*/
+	MultiByteToWideChar(CP_ACP, 0, command_line, nbcl, W.data(), nwide);
 	int numArgs;
 	LPWSTR* args = CommandLineToArgvW(W.c_str(), &numArgs);
 	ParsedCommandLine pcl{};
